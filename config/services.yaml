@@ -6,6 +6,10 @@
 parameters:
     app_site_name: 'Camp'
 
+    # Route names
+    app_route_names:
+        admin_home: 'Dashboard'
+
 services:
     # default configuration for services in *this* file
     _defaults:

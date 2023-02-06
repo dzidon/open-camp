@@ -32,7 +32,7 @@
         </nav>
 
         <!-- Page content-->
-        <div class="container">
+        <div class="container pt-4 pt-4">
             <!-- Flash messages -->
             {% if app.session.flashbag.peekAll|length > 0 %}
                 <div class="row mt-4">
@@ -49,9 +49,11 @@
             {% endif %}
 
             <!-- Heading -->
-            <div class="row mt-4">
-                <h1>Nadpis</h1>
-            </div>
+            {% if is_route_name_set() %}
+                <div class="row">
+                    <h1>{{ route_name() }}</h1>
+                </div>
+            {% endif %}
 
             {% block main %}{% endblock %}
         </div>
