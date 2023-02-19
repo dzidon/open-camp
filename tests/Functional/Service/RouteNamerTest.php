@@ -3,7 +3,7 @@
 namespace App\Tests\Functional\Service;
 
 use App\Service\RouteNamer;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 /**
  * Tests the route namer.
  */
-class RouteNamerTest extends KernelTestCase
+class RouteNamerTest extends TestCase
 {
     const TEST_ROUTES = [
         'product_overview' => 'Products',
@@ -113,7 +113,7 @@ class RouteNamerTest extends KernelTestCase
     }
 
     /**
-     * Test appending to the current route name.
+     * Tests appending to the current route name.
      *
      * @return void
      */
@@ -142,7 +142,7 @@ class RouteNamerTest extends KernelTestCase
     }
 
     /**
-     * Test prepending to the current route name.
+     * Tests prepending to the current route name.
      *
      * @return void
      */

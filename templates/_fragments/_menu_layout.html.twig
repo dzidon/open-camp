@@ -1,0 +1,36 @@
+{% block admin_navbar_root %}
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        {% for menu_child in menu_type.children %}
+            {% with {'menu_type': menu_child} %}
+                {{ block(menu_child.templateBlock, '_fragments/_menu_layout.html.twig') }}
+            {% endwith %}
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block admin_navbar %}
+    <li class="nav-item">
+        <a href="{{ menu_type.url }}" class="nav-link{% if menu_type.active %} active{% endif %}">
+            {% if menu_type.icon is not null %}
+                <i class="nav-icon {{ menu_type.icon }}"></i>
+            {% endif %}
+
+            <p>
+                {{ menu_type.text }}
+                {% if menu_type.children is not empty %}
+                    <i class="right fas fa-angle-left"></i>
+                {% endif %}
+            </p>
+        </a>
+
+        {% if menu_type.children is not empty %}
+            <ul class="nav nav-treeview">
+                {% for menu_child in menu_type.children %}
+                    {% with {'menu_type': menu_child} %}
+                        {{ block(menu_child.templateBlock, '_fragments/_menu_layout.html.twig') }}
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endblock %}
