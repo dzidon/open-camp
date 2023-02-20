@@ -6,10 +6,15 @@ use App\DataStructure\Stack;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test a basic stack data structure (LIFO).
+ * Test a basic stack data structure.
  */
 class StackTest extends TestCase
 {
+    /**
+     * Tests the LIFO policy of a stack.
+     *
+     * @return void
+     */
     public function testStack(): void
     {
         $stack = new Stack();
