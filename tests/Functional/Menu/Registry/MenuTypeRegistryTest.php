@@ -2,7 +2,7 @@
 
 namespace App\Tests\Functional\Menu\Registry;
 
-use App\Menu\Registry\MenuRegistry;
+use App\Menu\Registry\MenuTypeRegistry;
 use App\Menu\Type\MenuType;
 use App\Tests\Functional\Menu\Factory\MenuTypeFactoryMock;
 use PHPUnit\Framework\TestCase;
@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the central menu registry.
  */
-class MenuRegistryTest extends TestCase
+class MenuTypeRegistryTest extends TestCase
 {
     /**
      * Tests that a factory properly instantiates its menu type and that the menu registry caches it.
@@ -19,7 +19,7 @@ class MenuRegistryTest extends TestCase
      */
     public function testGetMenuTypeUsingFactory(): void
     {
-        $menuRegistry = $this->createMenuRegistry();
+        $menuRegistry = $this->createMenuTypeRegistry();
         $menuType = $menuRegistry->getMenuType('menu_mock');
         $this->assertNotNull($menuType);
         $this->assertSame('menu_mock', $menuType->getIdentifier());
@@ -45,7 +45,7 @@ class MenuRegistryTest extends TestCase
     public function testGetMenuTypeUsingMenuType(): void
     {
         // create the menu registry, check that it contains the manually added menu
-        $menuRegistry = $this->createMenuRegistry();
+        $menuRegistry = $this->createMenuTypeRegistry();
         $menuType = $menuRegistry->getMenuType('manually_added_menu');
         $this->assertNotNull($menuType);
         $this->assertSame('manually_added_menu', $menuType->getIdentifier());
@@ -70,7 +70,7 @@ class MenuRegistryTest extends TestCase
      */
     public function testRemoveRecord(): void
     {
-        $menuRegistry = $this->createMenuRegistry();
+        $menuRegistry = $this->createMenuTypeRegistry();
         $menuType = $menuRegistry->getMenuType('manually_added_menu');
         $this->assertNotNull($menuType);
 
@@ -80,13 +80,13 @@ class MenuRegistryTest extends TestCase
     }
 
     /**
-     * Creates and returns a menu registry.
+     * Creates and returns a menu type registry.
      *
-     * @return MenuRegistry
+     * @return MenuTypeRegistry
      */
-    private function createMenuRegistry(): MenuRegistry
+    private function createMenuTypeRegistry(): MenuTypeRegistry
     {
-        $menuRegistry = new MenuRegistry();
+        $menuRegistry = new MenuTypeRegistry();
         $menuRegistry->registerFactory(new MenuTypeFactoryMock());
         $menuRegistry->registerMenuType(new MenuType('manually_added_menu', 'menu_block'));
         return $menuRegistry;

@@ -6,6 +6,8 @@
 parameters:
     app_site_name: 'Camp'
 
+    app_menu_theme: '_fragment/_menu_theme/_main.html.twig'
+
     # Route names
     app_route_names:
         admin_home: 'Dashboard'
@@ -27,3 +29,7 @@ services:
             - '../src/Menu/Type/'
             - '../src/Menu/Registry/MenuRegistryRecord.php'
             - '../src/Kernel.php'
+
+when@test:
+    parameters:
+        app_menu_theme: '_fragment/_menu_theme/_test.html.twig'

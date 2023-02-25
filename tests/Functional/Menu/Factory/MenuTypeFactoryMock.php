@@ -24,6 +24,6 @@ class MenuTypeFactoryMock implements MenuTypeFactoryInterface
      */
     public function buildMenuType(): MenuTypeInterface
     {
-        return new MenuType(self::getMenuIdentifier(), 'menu_block');
+        return new MenuType(self::getMenuIdentifier(), 'test_root');
     }
 }

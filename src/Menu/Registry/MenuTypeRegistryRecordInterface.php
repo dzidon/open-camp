@@ -8,7 +8,7 @@ use App\Menu\Type\MenuTypeInterface;
 /**
  * Data structure used by a menu registry. A central menu registry uses records that consist of factory & menu pairs.
  */
-interface MenuRegistryRecordInterface
+interface MenuTypeRegistryRecordInterface
 {
     /**
      * Returns the factory used for later menu creation.

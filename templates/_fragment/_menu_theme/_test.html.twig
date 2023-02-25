@@ -1,0 +1,28 @@
+{# Menu theme used in the test environment #}
+{% block test_root %}
+    <ul>
+        {% for menu_child in menu_type.children %}
+            {% with {'menu_type': menu_child} %}
+                {{ block(menu_child.templateBlock, app_menu_theme) }}
+            {% endwith %}
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block test_item %}
+    <li>
+        <a href="{{ menu_type.url }}"{% if menu_type.active %} class="active"{% endif %}>
+            {{ menu_type.text }}
+        </a>
+
+        {% if menu_type.children is not empty %}
+            <ul>
+                {% for menu_child in menu_type.children %}
+                    {% with {'menu_type': menu_child} %}
+                        {{ block(menu_child.templateBlock, app_menu_theme) }}
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endblock %}

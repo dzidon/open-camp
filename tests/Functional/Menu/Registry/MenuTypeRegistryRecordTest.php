@@ -2,7 +2,7 @@
 
 namespace App\Tests\Functional\Menu\Registry;
 
-use App\Menu\Registry\MenuRegistryRecord;
+use App\Menu\Registry\MenuTypeRegistryRecord;
 use App\Menu\Type\MenuType;
 use App\Tests\Functional\Menu\Factory\MenuTypeFactoryMock;
 use PHPUnit\Framework\TestCase;
@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests one record used in a central menu registry.
  */
-class MenuRegistryRecordTest extends TestCase
+class MenuTypeRegistryRecordTest extends TestCase
 {
     /**
      * Tests factory getter and setter.
@@ -19,7 +19,7 @@ class MenuRegistryRecordTest extends TestCase
      */
     public function testFactory(): void
     {
-        $menuRegistryRecord = $this->createMenuRegistryRecord();
+        $menuRegistryRecord = $this->createMenuTypeRegistryRecord();
         $factory = $menuRegistryRecord->getFactory();
         $this->assertNull($factory);
 
@@ -40,7 +40,7 @@ class MenuRegistryRecordTest extends TestCase
      */
     public function testMenuType(): void
     {
-        $menuRegistryRecord = $this->createMenuRegistryRecord();
+        $menuRegistryRecord = $this->createMenuTypeRegistryRecord();
         $menuType = $menuRegistryRecord->getMenuType();
         $this->assertNull($menuType);
 
@@ -57,10 +57,10 @@ class MenuRegistryRecordTest extends TestCase
     /**
      * Creates and returns a menu registry record.
      *
-     * @return MenuRegistryRecord
+     * @return MenuTypeRegistryRecord
      */
-    private function createMenuRegistryRecord(): MenuRegistryRecord
+    private function createMenuTypeRegistryRecord(): MenuTypeRegistryRecord
     {
-        return new MenuRegistryRecord();
+        return new MenuTypeRegistryRecord();
     }
 }

@@ -8,10 +8,10 @@ use App\Menu\Type\MenuTypeInterface;
 /**
  * @inheritDoc
  */
-class MenuRegistry implements MenuRegistryInterface
+class MenuTypeRegistry implements MenuTypeRegistryInterface
 {
     /**
-     * @var MenuRegistryRecord[]
+     * @var MenuTypeRegistryRecord[]
      */
     private array $records = [];
 
@@ -30,7 +30,7 @@ class MenuRegistry implements MenuRegistryInterface
     /**
      * @inheritDoc
      */
-    public function registerMenuType(MenuTypeInterface $menuType): MenuRegistryInterface
+    public function registerMenuType(MenuTypeInterface $menuType): MenuTypeRegistryInterface
     {
         $identifier = $menuType->getIdentifier();
         $record = $this->findExistingRecordOrCreateNew($identifier);
@@ -85,9 +85,9 @@ class MenuRegistry implements MenuRegistryInterface
      * a new record is returned.
      *
      * @param string $identifier
-     * @return MenuRegistryRecord
+     * @return MenuTypeRegistryRecord
      */
-    private function findExistingRecordOrCreateNew(string $identifier): MenuRegistryRecord
+    private function findExistingRecordOrCreateNew(string $identifier): MenuTypeRegistryRecord
     {
         if (array_key_exists($identifier, $this->records))
         {
@@ -95,7 +95,7 @@ class MenuRegistry implements MenuRegistryInterface
         }
         else
         {
-            return new MenuRegistryRecord();
+            return new MenuTypeRegistryRecord();
         }
     }
 }

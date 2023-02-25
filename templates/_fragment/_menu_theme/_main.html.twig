@@ -1,14 +1,15 @@
-{% block admin_navbar_root %}
+{# Admin navigation #}
+{% block navbar_admin_root %}
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         {% for menu_child in menu_type.children %}
             {% with {'menu_type': menu_child} %}
-                {{ block(menu_child.templateBlock, '_fragments/_menu_layout.html.twig') }}
+                {{ block(menu_child.templateBlock, app_menu_theme) }}
             {% endwith %}
         {% endfor %}
     </ul>
 {% endblock %}
 
-{% block admin_navbar %}
+{% block navbar_admin_item %}
     <li class="nav-item">
         <a href="{{ menu_type.url }}" class="nav-link{% if menu_type.active %} active{% endif %}">
             {% if menu_type.icon is not null %}
@@ -27,7 +28,7 @@
             <ul class="nav nav-treeview">
                 {% for menu_child in menu_type.children %}
                     {% with {'menu_type': menu_child} %}
-                        {{ block(menu_child.templateBlock, '_fragments/_menu_layout.html.twig') }}
+                        {{ block(menu_child.templateBlock, app_menu_theme) }}
                     {% endwith %}
                 {% endfor %}
             </ul>

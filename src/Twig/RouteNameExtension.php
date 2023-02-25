@@ -20,6 +20,9 @@ class RouteNameExtension extends AbstractExtension
         $this->routeNamer = $routeNamer;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getFunctions(): array
     {
         return [

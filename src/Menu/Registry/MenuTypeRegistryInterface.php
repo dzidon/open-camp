@@ -8,7 +8,7 @@ use App\Menu\Type\MenuTypeInterface;
 /**
  * A central menu registry works as a cache for all menus used in the app.
  */
-interface MenuRegistryInterface
+interface MenuTypeRegistryInterface
 {
     /**
      * Registers a menu factory for later menu instantiation.

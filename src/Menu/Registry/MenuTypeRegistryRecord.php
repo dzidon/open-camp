@@ -8,7 +8,7 @@ use App\Menu\Type\MenuTypeInterface;
 /**
  * @inheritDoc
  */
-class MenuRegistryRecord implements MenuRegistryRecordInterface
+class MenuTypeRegistryRecord implements MenuTypeRegistryRecordInterface
 {
     private ?MenuTypeFactoryInterface $factory = null;
     private ?MenuTypeInterface $menuType = null;
