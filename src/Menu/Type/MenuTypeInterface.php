@@ -2,12 +2,12 @@
 
 namespace App\Menu\Type;
 
-use App\DataStructure\TreeNodeInterface;
+use App\DataStructure\GraphNodeInterface;
 
 /**
  * Interface for all menus and menu links. Menu types can form a tree structure.
  */
-interface MenuTypeInterface extends TreeNodeInterface
+interface MenuTypeInterface extends GraphNodeInterface
 {
     /**
      * Returns the displayed text.
@@ -56,6 +56,21 @@ interface MenuTypeInterface extends TreeNodeInterface
     public function setActive(bool $active = true, bool $ancestorsToo = true): self;
 
     /**
+     * Returns the priority of the item among its siblings.
+     *
+     * @return int
+     */
+    public function getPriority(): int;
+
+    /**
+     * Sets the priority of the item among its siblings.
+     *
+     * @param int $priority
+     * @return $this
+     */
+    public function setPriority(int $priority): self;
+
+    /**
      * Sets the parent menu type.
      *
      * @param MenuTypeInterface|null $parent
@@ -94,6 +109,13 @@ interface MenuTypeInterface extends TreeNodeInterface
      * @return bool
      */
     public function hasChild(string $identifier): bool;
+
+    /**
+     * Sorts its children using the priority attribute in descending order.
+     *
+     * @return $this
+     */
+    public function sortChildren(): self;
 
     /**
      * Returns the template block name.

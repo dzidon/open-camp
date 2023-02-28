@@ -3,6 +3,7 @@
 namespace App\Tests\Functional\Menu\Type;
 
 use App\Menu\Type\MenuType;
+use App\Menu\Type\MenuTypeInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -87,6 +88,20 @@ class MenuTypeTest extends TestCase
     }
 
     /**
+     * Tests setting and getting the priority.
+     *
+     * @return void
+     */
+    public function testPriority(): void
+    {
+        $menuType = $this->createMenuType(false, false);
+        $this->assertSame(0, $menuType->getPriority());
+
+        $menuType->setPriority(1);
+        $this->assertSame(1, $menuType->getPriority());
+    }
+
+    /**
      * Tests setting and getting the parent menu type. Also tests the relationship consistency.
      *
      * @return void
@@ -140,6 +155,42 @@ class MenuTypeTest extends TestCase
     }
 
     /**
+     * Tests that child nodes can be rewritten safely.
+     *
+     * @return void
+     */
+    public function testChildRewriting(): void
+    {
+        $menuType = $this->createMenuType(false, true);
+        $oldChildButton1 = $menuType->getChild('child_button1');
+        $newChildButton1 = new MenuType('child_button1', 'child_button_block_name');
+        $menuType->addChild($newChildButton1);
+
+        $this->assertSame($newChildButton1, $menuType->getChild('child_button1'));
+        $this->assertSame($menuType, $newChildButton1->getParent());
+        $this->assertSame(null, $oldChildButton1->getParent());
+        $this->assertSame(false, in_array($oldChildButton1, $menuType->getChildren(), true));
+    }
+
+    /**
+     * Tests that child menu types can be sorted using the priority attribute.
+     *
+     * @return void
+     */
+    public function testSortChildren(): void
+    {
+        $menuType = $this->createMenuType(false, true);
+        $this->assertSame(['child_button1', 'child_button2'], $this->getMenuTypeChildrenIdentifiers($menuType));
+
+        $button1 = $menuType->getChild('child_button1');
+        $button1->setPriority(1);
+        $button2 = $menuType->getChild('child_button2');
+        $button2->setPriority(2);
+        $menuType->sortChildren();
+        $this->assertSame(['child_button2', 'child_button1'], $this->getMenuTypeChildrenIdentifiers($menuType));
+    }
+
+    /**
      * Tests setting and getting the template block name.
      *
      * @return void
@@ -176,5 +227,22 @@ class MenuTypeTest extends TestCase
         }
 
         return $menuType;
+    }
+
+    /**
+     * Returns an array containing identifiers of children of a given menu type.
+     *
+     * @param MenuTypeInterface $menuType
+     * @return array
+     */
+    private function getMenuTypeChildrenIdentifiers(MenuTypeInterface $menuType): array
+    {
+        $identifiers = [];
+        foreach ($menuType->getChildren() as $child)
+        {
+            $identifiers[] = $child->getIdentifier();
+        }
+
+        return $identifiers;
     }
 }

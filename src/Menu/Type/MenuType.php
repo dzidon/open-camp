@@ -10,6 +10,7 @@ class MenuType implements MenuTypeInterface
     private string $identifier;
     private ?string $text;
     private string $url;
+    private int $priority = 0;
     private ?MenuTypeInterface $parent = null;
     private array $children = [];
     private bool $active = false;
@@ -98,6 +99,24 @@ class MenuType implements MenuTypeInterface
     /**
      * @inheritDoc
      */
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setPriority(int $priority): self
+    {
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function setParent(?MenuTypeInterface $parent): self
     {
         if ($this->parent === $parent)
@@ -133,8 +152,25 @@ class MenuType implements MenuTypeInterface
      */
     public function addChild(MenuTypeInterface $child): self
     {
-        $childName = $child->getIdentifier();
-        $this->children[$childName] = $child;
+        $identifier = $child->getIdentifier();
+
+        /** @var MenuTypeInterface $existingChild */
+        foreach ($this->children as $key => $existingChild)
+        {
+            if ($child === $existingChild)
+            {
+                return $this;
+            }
+
+            if ($existingChild->getIdentifier() === $identifier)
+            {
+                $existingChild->setParent(null);
+                unset($this->children[$key]);
+                break;
+            }
+        }
+
+        $this->children[] = $child;
         $child->setParent($this);
         return $this;
     }
@@ -146,21 +182,24 @@ class MenuType implements MenuTypeInterface
     {
         if (is_string($child))
         {
-            $key = $child;
+            $identifier = $child;
         }
         else
         {
-            $key = $child->getIdentifier();
+            $identifier = $child->getIdentifier();
         }
 
-        if (!array_key_exists($key, $this->children))
+        /** @var MenuTypeInterface $existingChild */
+        foreach ($this->children as $key => $existingChild)
         {
-            return $this;
+            if ($existingChild->getIdentifier() === $identifier)
+            {
+                $existingChild->setParent(null);
+                unset($this->children[$key]);
+                break;
+            }
         }
 
-        $childItem = $this->children[$key];
-        $childItem->setParent(null);
-        unset($this->children[$key]);
         return $this;
     }
 
@@ -177,9 +216,13 @@ class MenuType implements MenuTypeInterface
      */
     public function getChild(string $identifier): ?MenuTypeInterface
     {
-        if (array_key_exists($identifier, $this->children))
+        /** @var MenuTypeInterface $existingChild */
+        foreach ($this->children as $existingChild)
         {
-            return $this->children[$identifier];
+            if ($existingChild->getIdentifier() === $identifier)
+            {
+                return $existingChild;
+            }
         }
 
         return null;
@@ -197,6 +240,22 @@ class MenuType implements MenuTypeInterface
         }
 
         return true;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function sortChildren(): self
+    {
+        if (!empty($this->children))
+        {
+            usort($this->children, function (MenuTypeInterface $a, MenuTypeInterface $b)
+            {
+                return $b->getPriority() <=> $a->getPriority();
+            });
+        }
+
+        return $this;
     }
 
     /**

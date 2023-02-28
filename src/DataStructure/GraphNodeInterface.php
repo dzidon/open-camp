@@ -3,9 +3,9 @@
 namespace App\DataStructure;
 
 /**
- * Interface for all tree nodes.
+ * Interface for all graph nodes.
  */
-interface TreeNodeInterface
+interface GraphNodeInterface
 {
     /**
      * Returns a unique identifier of the node.
@@ -17,14 +17,14 @@ interface TreeNodeInterface
     /**
      * Returns null or the parent node.
      *
-     * @return TreeNodeInterface|null
+     * @return GraphNodeInterface|null
      */
-    public function getParent(): ?TreeNodeInterface;
+    public function getParent(): ?GraphNodeInterface;
 
     /**
      * Returns all child nodes.
      *
-     * @return TreeNodeInterface[]
+     * @return GraphNodeInterface[]
      */
     public function getChildren(): array;
 }
