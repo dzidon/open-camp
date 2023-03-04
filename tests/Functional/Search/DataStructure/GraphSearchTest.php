@@ -68,7 +68,7 @@ class GraphSearchTest extends TestCase
         ];
 
         $graph = $this->createMenuType(true);
-        $treeSearch = $this->createGraphSearch();
+        $graphSearch = $this->createGraphSearch();
         $dispatcher = new EventDispatcher();
 
         foreach ($eventsDispatched as $eventName => $dispatched)
@@ -79,7 +79,7 @@ class GraphSearchTest extends TestCase
             });
         }
 
-        $treeSearch->depthFirstSearch($graph, $dispatcher);
+        $graphSearch->depthFirstSearch($graph, $dispatcher);
         $this->assertSame([
             ChildIterationEndEvent::NAME => true,
             ChildIterationStartEvent::NAME => true,

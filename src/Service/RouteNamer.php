@@ -72,7 +72,7 @@ class RouteNamer implements RouteNamerInterface
     public function setCurrentRouteNameByRoute(string $route, string $variation = null): void
     {
         $routeNames = $this->parameterBag->get('app_route_names');
-        if (array_key_exists($route, $routeNames))
+        if ($routeNames !== null && array_key_exists($route, $routeNames))
         {
             // has multiple variations
             if (is_array($routeNames[$route]))

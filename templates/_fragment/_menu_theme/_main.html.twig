@@ -35,3 +35,26 @@
         {% endif %}
     </li>
 {% endblock %}
+
+{# Breadcrumbs #}
+{% block breadcrumbs %}
+    {% if menu_type.children|length > 1 %}
+        <ol class="breadcrumb">
+            {% for menu_child in menu_type.children %}
+                {% with {'menu_type': menu_child} %}
+                    {{ block(menu_child.templateBlock, app_menu_theme) }}
+                {% endwith %}
+            {% endfor %}
+        </ol>
+    {% endif %}
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item{% if menu_type.active %} active{% endif %}">
+        {% if menu_type.active %}
+            {{ menu_type.text }}
+        {% else %}
+            <a href="{{ menu_type.url }}">{{ menu_type.text }}</a>
+        {% endif %}
+    </li>
+{% endblock %}

@@ -4,7 +4,6 @@ namespace App\Twig;
 
 use App\Menu\Registry\MenuTypeRegistryInterface;
 use App\Menu\Renderer\MenuTypeRendererInterface;
-use LogicException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -45,9 +44,7 @@ class MenuTypeRendererExtension extends AbstractExtension
         $menuType = $this->menuRegistry->getMenuType($menuIdentifier, $forceRebuild);
         if ($menuType === null)
         {
-            throw new LogicException(
-                sprintf('Unable to render "%s". This menu type is not present in the menu type registry.', $menuType)
-            );
+            return '';
         }
 
         return $this->menuRenderer->renderMenuType($menuType);

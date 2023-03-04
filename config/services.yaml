@@ -11,6 +11,7 @@ parameters:
     # Route names
     app_route_names:
         admin_home: 'Dashboard'
+        admin_profile: 'Profile'
 
 services:
     # default configuration for services in *this* file

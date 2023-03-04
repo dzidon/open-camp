@@ -51,18 +51,25 @@
 
         <!-- Content -->
         <div class="content-wrapper">
-            <!-- Heading -->
-            {% if is_route_name_set() %}
-                <div class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <!-- Heading -->
+                            {% if is_route_name_set() %}
                                 <h1 class="m-0">{{ route_name() }}</h1>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="float-sm-right">
+                                <!-- Breadcrumbs -->
+                                {{ menu_from_registry('breadcrumbs') }}
                             </div>
                         </div>
                     </div>
                 </div>
-            {% endif %}
+            </div>
 
             <section class="content">
                 <div class="container-fluid">

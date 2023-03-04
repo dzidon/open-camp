@@ -20,14 +20,11 @@ class MenuTypeRendererTest extends KernelTestCase
      */
     public function testRenderMenuType(): void
     {
-        $menuType = $this->createMenuType();
         $renderer = $this->createMenuTypeRenderer();
-
-        $pattern = '/\s\s+/';
-        $replaceWith = '';
+        $menuType = $this->createMenuType();
         $menuTypeHtml = $renderer->renderMenuType($menuType);
 
-        $this->assertSame(trim(preg_replace($pattern, $replaceWith, '
+        $this->assertSame($this->htmlToOneLine('
             <ul>
                 <li>
                     <a href="url1">
@@ -51,8 +48,19 @@ class MenuTypeRendererTest extends KernelTestCase
                         Item 2
                     </a>
                 </li>
-            </ul>')),
-        trim(preg_replace($pattern, $replaceWith, $menuTypeHtml)));
+            </ul>'),
+        $this->htmlToOneLine($menuTypeHtml));
+    }
+
+    /**
+     * Removes unnecessary spaces from a string.
+     *
+     * @param string $html
+     * @return string
+     */
+    private function htmlToOneLine(string $html): string
+    {
+        return trim(preg_replace('/\s\s+/', '', $html));
     }
 
     /**
