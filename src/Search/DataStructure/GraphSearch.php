@@ -12,6 +12,7 @@ use App\EventDispatcher\Event\DepthFirstSearch\InitialPushEvent;
 use App\EventDispatcher\Event\DepthFirstSearch\NodeMarkAsExpandedEvent;
 use App\EventDispatcher\Event\DepthFirstSearch\StackIterationEndEvent;
 use App\EventDispatcher\Event\DepthFirstSearch\StackPopEvent;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -81,6 +82,22 @@ class GraphSearch implements GraphSearchInterface
         }
 
         $eventDispatcher->dispatch(new FinishEvent($stack, $expandedNodes), FinishEvent::NAME);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function containsCycle(GraphNodeInterface $start): bool
+    {
+        $found = false;
+        $dispatcher = new EventDispatcher();
+        $dispatcher->addListener(CycleFoundEvent::NAME, function () use (&$found)
+        {
+            $found = true;
+        });
+
+        $this->depthFirstSearch($start, $dispatcher);
+        return $found;
     }
 
     /**

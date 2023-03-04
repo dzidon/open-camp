@@ -93,6 +93,21 @@ class GraphSearchTest extends TestCase
     }
 
     /**
+     * Tests the method for detecting a cycle in a graph.
+     *
+     * @return void
+     */
+    public function testContainsCycle(): void
+    {
+        $menuWithoutCycle = $this->createMenuType();
+        $menuWithCycle = $this->createMenuType(true);
+        $graphSearch = $this->createGraphSearch();
+
+        $this->assertSame(false, $graphSearch->containsCycle($menuWithoutCycle));
+        $this->assertSame(true, $graphSearch->containsCycle($menuWithCycle));
+    }
+
+    /**
      * Tests that descendents can be looked up using string paths.
      *
      * @return void
@@ -100,21 +115,21 @@ class GraphSearchTest extends TestCase
     public function testGetDescendentByPath(): void
     {
         $menu = $this->createMenuType();
-        $treeSearch = $this->createGraphSearch();
+        $graphSearch = $this->createGraphSearch();
 
-        $itemC = $treeSearch->getDescendentByPath($menu, 'a/b/c');
+        $itemC = $graphSearch->getDescendentByPath($menu, 'a/b/c');
         $this->assertNotNull($itemC);
         $this->assertSame('c', $itemC->getIdentifier());
 
-        $itemB = $treeSearch->getDescendentByPath($menu, 'a/b');
+        $itemB = $graphSearch->getDescendentByPath($menu, 'a/b');
         $this->assertNotNull($itemB);
         $this->assertSame('b', $itemB->getIdentifier());
 
-        $itemC = $treeSearch->getDescendentByPath($itemB, 'c');
+        $itemC = $graphSearch->getDescendentByPath($itemB, 'c');
         $this->assertNotNull($itemC);
         $this->assertSame('c', $itemC->getIdentifier());
 
-        $item = $treeSearch->getDescendentByPath($menu, 'a/y');
+        $item = $graphSearch->getDescendentByPath($menu, 'a/y');
         $this->assertSame(null, $item);
     }
 
