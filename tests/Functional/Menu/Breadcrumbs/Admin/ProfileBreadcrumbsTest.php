@@ -3,28 +3,28 @@
 namespace App\Tests\Functional\Menu\Breadcrumbs\Admin;
 
 use App\Menu\Breadcrumbs\Admin\ProfileBreadcrumbs;
-use App\Tests\Functional\Menu\Breadcrumbs\AbstractBreadcrumbsTest;
+use App\Tests\Functional\Menu\Breadcrumbs\BreadcrumbsTestCase;
+use Exception;
 
 /**
  * Tests breadcrumbs of the admin profile controller.
  */
-class ProfileBreadcrumbsTest extends AbstractBreadcrumbsTest
+class ProfileBreadcrumbsTest extends BreadcrumbsTestCase
 {
+    private ProfileBreadcrumbs $breadcrumbs;
+
     /**
      * Tests the admin profile breadcrumbs.
      *
      * @return void
+     * @throws Exception
      */
     public function testIndex(): void
     {
-        /** @var ProfileBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->getBreadcrumbs(ProfileBreadcrumbs::class);
-        $menuTypeRegistry = $this->getMenuTypeRegistry();
+        $this->assertSame(null, $this->menuTypeRegistry->getMenuType('breadcrumbs'));
 
-        $this->assertSame(null, $menuTypeRegistry->getMenuType('breadcrumbs'));
-
-        $breadcrumbs->initializeIndex();
-        $breadcrumbsMenu = $menuTypeRegistry->getMenuType('breadcrumbs');
+        $this->breadcrumbs->initializeIndex();
+        $breadcrumbsMenu = $this->menuTypeRegistry->getMenuType('breadcrumbs');
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_profile'], $this->getChildrenIdentifiers($breadcrumbsMenu));
 
@@ -37,5 +37,17 @@ class ProfileBreadcrumbsTest extends AbstractBreadcrumbsTest
         $this->assertSame(true, $profileButton->isActive());
         $this->assertSame('Profile', $profileButton->getText());
         $this->assertSame('/admin/profile', $profileButton->getUrl());
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        /** @var ProfileBreadcrumbs $breadcrumbs */
+        $breadcrumbs = $this->container->get(ProfileBreadcrumbs::class);
+        $this->breadcrumbs = $breadcrumbs;
     }
 }

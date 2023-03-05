@@ -3,7 +3,7 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         {% for menu_child in menu_type.children %}
             {% with {'menu_type': menu_child} %}
-                {{ block(menu_child.templateBlock, app_menu_theme) }}
+                {{ block(menu_child.templateBlock, menu_theme) }}
             {% endwith %}
         {% endfor %}
     </ul>
@@ -28,7 +28,7 @@
             <ul class="nav nav-treeview">
                 {% for menu_child in menu_type.children %}
                     {% with {'menu_type': menu_child} %}
-                        {{ block(menu_child.templateBlock, app_menu_theme) }}
+                        {{ block(menu_child.templateBlock, menu_theme) }}
                     {% endwith %}
                 {% endfor %}
             </ul>
@@ -42,7 +42,7 @@
         <ol class="breadcrumb">
             {% for menu_child in menu_type.children %}
                 {% with {'menu_type': menu_child} %}
-                    {{ block(menu_child.templateBlock, app_menu_theme) }}
+                    {{ block(menu_child.templateBlock, menu_theme) }}
                 {% endwith %}
             {% endfor %}
         </ol>

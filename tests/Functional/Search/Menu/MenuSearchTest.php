@@ -4,24 +4,25 @@ namespace App\Tests\Functional\Search\Menu;
 
 use App\Menu\Type\MenuType;
 use App\Menu\Type\MenuTypeInterface;
-use App\Search\DataStructure\GraphSearch;
 use App\Search\Menu\MenuSearch;
-use PHPUnit\Framework\TestCase;
+use Exception;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Tests the menu search class.
  */
-class MenuSearchTest extends TestCase
+class MenuSearchTest extends KernelTestCase
 {
     /**
      * Tests that all child nodes in a menu type tree can be sorted using their priority attribute.
      *
      * @return void
+     * @throws Exception
      */
     public function testSortRecursively(): void
     {
         $menuType = $this->createMenuType();
-        $search = $this->createMenuSearch();
+        $search = $this->getMenuSearch();
         $button1 = $menuType->getChild('button1');
 
         $this->assertSame(['button1', 'button2'], $this->getMenuTypeChildrenIdentifiers($menuType));
@@ -33,13 +34,19 @@ class MenuSearchTest extends TestCase
     }
 
     /**
-     * Instantiates the search class.
+     * Returns an instance of the menu search service from the service container.
      *
      * @return MenuSearch
+     * @throws Exception
      */
-    private function createMenuSearch(): MenuSearch
+    private function getMenuSearch(): MenuSearch
     {
-        return new MenuSearch(new GraphSearch());
+        self::bootKernel();
+        $container = static::getContainer();
+
+        /** @var MenuSearch $menuSearch */
+        $menuSearch = $container->get(MenuSearch::class);
+        return $menuSearch;
     }
 
     /**

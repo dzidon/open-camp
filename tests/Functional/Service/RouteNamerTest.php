@@ -3,32 +3,25 @@
 namespace App\Tests\Functional\Service;
 
 use App\Service\RouteNamer;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Exception;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Tests the route namer.
  */
-class RouteNamerTest extends TestCase
+class RouteNamerTest extends KernelTestCase
 {
-    const TEST_ROUTES = [
-        'product_overview' => 'Products',
-        'user' => [
-            'new' => 'New user',
-            'existing' => 'Existing user',
-        ],
-    ];
-
     /**
-     * Tests that "isCurrentRouteNameSet" returns the right boolean values.
+     * Tests that the method "isCurrentRouteNameSet" returns the right boolean values.
      *
      * @return void
+     * @throws Exception
      */
     public function testIsCurrentRouteNameSet(): void
     {
-        $routeNamer = $this->getMockedRouteNamer(null);
+        $routeNamer = $this->createRouteNamer(null);
         $routeNamer->setCurrentRouteName(null);
         $this->assertSame(false, $routeNamer->isCurrentRouteNameSet());
 
@@ -43,10 +36,11 @@ class RouteNamerTest extends TestCase
      * Tests the current route name setter and getter.
      *
      * @return void
+     * @throws Exception
      */
     public function testSetAndGetCurrentRouteName(): void
     {
-        $routeNamer = $this->getMockedRouteNamer(null);
+        $routeNamer = $this->createRouteNamer(null);
         $routeNamer->setCurrentRouteName('Route Name');
         $this->assertSame('Route Name', $routeNamer->getCurrentRouteName());
     }
@@ -55,10 +49,11 @@ class RouteNamerTest extends TestCase
      * Tests that the current page title is set correctly.
      *
      * @return void
+     * @throws Exception
      */
     public function testGetCurrentTitle(): void
     {
-        $routeNamer = $this->getMockedRouteNamer(null);
+        $routeNamer = $this->createRouteNamer(null);
         $this->assertSame('Site Name', $routeNamer->getCurrentTitle());
 
         $routeNamer->setCurrentRouteName('Route Name');
@@ -69,14 +64,15 @@ class RouteNamerTest extends TestCase
      * Tests that the current route name is set correctly using the "_route" request attribute.
      *
      * @return void
+     * @throws Exception
      */
     public function testSetCurrentRouteNameByRequest(): void
     {
-        $routeNamer = $this->getMockedRouteNamer('product_overview');
+        $routeNamer = $this->createRouteNamer('product_overview');
         $routeNamer->setCurrentRouteNameByRequest();
         $this->assertSame('Products', $routeNamer->getCurrentRouteName());
 
-        $routeNamer = $this->getMockedRouteNamer('user');
+        $routeNamer = $this->createRouteNamer('user');
         $routeNamer->setCurrentRouteNameByRequest();
         $this->assertSame('New user', $routeNamer->getCurrentRouteName());
 
@@ -91,10 +87,11 @@ class RouteNamerTest extends TestCase
      * Tests that the current route name is set correctly using the route identifier and its variation (if it has any).
      *
      * @return void
+     * @throws Exception
      */
     public function testSetCurrentRouteNameByRoute(): void
     {
-        $routeNamer = $this->getMockedRouteNamer(null);
+        $routeNamer = $this->createRouteNamer(null);
         $routeNamer->setCurrentRouteNameByRoute('nonexistent');
         $this->assertSame(null, $routeNamer->getCurrentRouteName());
         $this->assertSame('Site Name', $routeNamer->getCurrentTitle());
@@ -116,10 +113,11 @@ class RouteNamerTest extends TestCase
      * Tests appending to the current route name.
      *
      * @return void
+     * @throws Exception
      */
     public function testAppendToCurrentRouteName(): void
     {
-        $routeNamer = $this->getMockedRouteNamer(null);
+        $routeNamer = $this->createRouteNamer(null);
         $routeNamer->setCurrentRouteName('Name');
         $routeNamer->appendToCurrentRouteName('');
         $this->assertSame('Name', $routeNamer->getCurrentRouteName());
@@ -145,10 +143,11 @@ class RouteNamerTest extends TestCase
      * Tests prepending to the current route name.
      *
      * @return void
+     * @throws Exception
      */
     public function testPrependToCurrentRouteName(): void
     {
-        $routeNamer = $this->getMockedRouteNamer(null);
+        $routeNamer = $this->createRouteNamer(null);
         $routeNamer->setCurrentRouteName('Name');
         $routeNamer->prependToCurrentRouteName('');
         $this->assertSame('Name', $routeNamer->getCurrentRouteName());
@@ -171,49 +170,33 @@ class RouteNamerTest extends TestCase
     }
 
     /**
-     * Returns an instance of RouteNamer which uses mocked dependencies.
+     * Returns an instance of the RouteNamer service.
      *
      * @param string|null $requestRoute Route identifier used as the request's "_route" attribute.
      * @return RouteNamer
+     * @throws Exception
      */
-    private function getMockedRouteNamer(null|string $requestRoute): RouteNamer
+    private function createRouteNamer(null|string $requestRoute): RouteNamer
     {
-        // parameter bag mock
-        $parameterBag = $this->getMockBuilder(ParameterBagInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        self::bootKernel();
+        $container = static::getContainer();
 
-        $parameterBag->expects($this->any())
-            ->method('get')
-            ->with($this->isType('string'))
-            ->will($this->returnCallback(function($argument) {
-                if ($argument === 'app_route_names')
-                {
-                    return RouteNamerTest::TEST_ROUTES;
-                }
-                else if ($argument === 'app_site_name')
-                {
-                    return 'Site Name';
-                }
+        /** @var RequestStack $requestStack */
+        $requestStack = $container->get(RequestStack::class);
+        $requestStack->push(new Request([], [], [
+            '_route' => $requestRoute
+        ]));
 
-                return null;
-            }))
-        ;
+        // config
+        $siteName = 'Site Name';
+        $routeNames = [
+            'product_overview' => 'Products',
+            'user' => [
+                'new' => 'New user',
+                'existing' => 'Existing user',
+            ],
+        ];
 
-        // request stack mock
-        $requestStack = $this->getMockBuilder(RequestStack::class)
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-
-        $requestStack->expects($this->any())
-            ->method('getCurrentRequest')
-            ->willReturn(new Request([], [], [
-                '_route' => $requestRoute
-            ]))
-        ;
-
-        return new RouteNamer($requestStack, $parameterBag);
+        return new RouteNamer($requestStack, $siteName, $routeNames);
     }
 }

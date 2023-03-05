@@ -12,23 +12,25 @@ use App\EventDispatcher\Event\DepthFirstSearch\StackIterationEndEvent;
 use App\EventDispatcher\Event\DepthFirstSearch\StackPopEvent;
 use App\Menu\Type\MenuType;
 use App\Search\DataStructure\GraphSearch;
-use PHPUnit\Framework\TestCase;
+use Exception;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
  * Tests the graph search class.
  */
-class GraphSearchTest extends TestCase
+class GraphSearchTest extends KernelTestCase
 {
     /**
      * Tests that the depth first search algorithm iterates over graph nodes in the right order.
      *
      * @return void
+     * @throws Exception
      */
     public function testDepthFirstSearchOrder(): void
     {
         $tree = $this->createMenuType();
-        $treeSearch = $this->createGraphSearch();
+        $treeSearch = $this->getGraphSearch();
         $dispatcher = new EventDispatcher();
         $visitedLog = '';
 
@@ -53,6 +55,7 @@ class GraphSearchTest extends TestCase
      * Tests that the depth first search algorithm dispatches all events.
      *
      * @return void
+     * @throws Exception
      */
     public function testDepthFirstSearchEvents(): void
     {
@@ -68,7 +71,7 @@ class GraphSearchTest extends TestCase
         ];
 
         $graph = $this->createMenuType(true);
-        $graphSearch = $this->createGraphSearch();
+        $graphSearch = $this->getGraphSearch();
         $dispatcher = new EventDispatcher();
 
         foreach ($eventsDispatched as $eventName => $dispatched)
@@ -96,12 +99,13 @@ class GraphSearchTest extends TestCase
      * Tests the method for detecting a cycle in a graph.
      *
      * @return void
+     * @throws Exception
      */
     public function testContainsCycle(): void
     {
         $menuWithoutCycle = $this->createMenuType();
         $menuWithCycle = $this->createMenuType(true);
-        $graphSearch = $this->createGraphSearch();
+        $graphSearch = $this->getGraphSearch();
 
         $this->assertSame(false, $graphSearch->containsCycle($menuWithoutCycle));
         $this->assertSame(true, $graphSearch->containsCycle($menuWithCycle));
@@ -111,11 +115,12 @@ class GraphSearchTest extends TestCase
      * Tests that descendents can be looked up using string paths.
      *
      * @return void
+     * @throws Exception
      */
     public function testGetDescendentByPath(): void
     {
         $menu = $this->createMenuType();
-        $graphSearch = $this->createGraphSearch();
+        $graphSearch = $this->getGraphSearch();
 
         $itemC = $graphSearch->getDescendentByPath($menu, 'a/b/c');
         $this->assertNotNull($itemC);
@@ -134,13 +139,19 @@ class GraphSearchTest extends TestCase
     }
 
     /**
-     * Creates an instance of the graph search class.
+     * Returns an instance of the graph search service from the service container.
      *
      * @return GraphSearch
+     * @throws Exception
      */
-    private function createGraphSearch(): GraphSearch
+    private function getGraphSearch(): GraphSearch
     {
-        return new GraphSearch();
+        self::bootKernel();
+        $container = static::getContainer();
+
+        /** @var GraphSearch $graphSearch */
+        $graphSearch = $container->get(GraphSearch::class);
+        return $graphSearch;
     }
 
     /**

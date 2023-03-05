@@ -7,13 +7,13 @@ use App\Menu\Registry\MenuTypeRegistry;
 use App\Menu\Registry\MenuTypeRegistryInterface;
 use App\Tests\Functional\Menu\Factory\MenuTypeFactoryMock;
 use Exception;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Tests the menu type registry compiler pass.
  */
-class MenuTypeRegistryPassTest extends TestCase
+class MenuTypeRegistryPassTest extends KernelTestCase
 {
     /**
      * Tests that the compiler pass properly registers menu factories tagged with 'app.menu_factory'
@@ -35,8 +35,9 @@ class MenuTypeRegistryPassTest extends TestCase
             ->setPublic(true)
         ;
 
+        $registry = $this->getMenuTypeRegistry();
         $container
-            ->register(MenuTypeRegistryInterface::class, MenuTypeRegistry::class)
+            ->register(MenuTypeRegistryInterface::class, $registry::class)
             ->setPublic(true)
         ;
 
@@ -51,5 +52,21 @@ class MenuTypeRegistryPassTest extends TestCase
         $menuType = $registry->getMenuType('menu_mock');
         $this->assertNotNull($menuType);
         $this->assertSame('menu_mock', $menuType->getIdentifier());
+    }
+
+    /**
+     * Returns an instance of the menu type registry from the service container.
+     *
+     * @return MenuTypeRegistryInterface
+     * @throws Exception
+     */
+    private function getMenuTypeRegistry(): MenuTypeRegistryInterface
+    {
+        self::bootKernel();
+        $container = static::getContainer();
+
+        /** @var MenuTypeRegistryInterface $registry */
+        $registry = $container->get(MenuTypeRegistryInterface::class);
+        return $registry;
     }
 }

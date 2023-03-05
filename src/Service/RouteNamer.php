@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
@@ -12,14 +11,16 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class RouteNamer implements RouteNamerInterface
 {
     private string|null $currentRouteName = null;
+    private string $siteName;
+    private array $routeNames;
 
     private RequestStack $requestStack;
-    private ParameterBagInterface $parameterBag;
 
-    public function __construct(RequestStack $requestStack, ParameterBagInterface $parameterBag)
+    public function __construct(RequestStack $requestStack, string $siteName, array $routeNames)
     {
         $this->requestStack = $requestStack;
-        $this->parameterBag = $parameterBag;
+        $this->siteName = $siteName;
+        $this->routeNames = $routeNames;
     }
 
     /**
@@ -43,7 +44,7 @@ class RouteNamer implements RouteNamerInterface
      */
     public function getCurrentTitle(): string
     {
-        $fullPageName = $this->parameterBag->get('app_site_name');
+        $fullPageName = $this->siteName;
         if ($this->currentRouteName !== null)
         {
             $fullPageName = $this->currentRouteName . ' - ' . $fullPageName;
@@ -71,23 +72,22 @@ class RouteNamer implements RouteNamerInterface
      */
     public function setCurrentRouteNameByRoute(string $route, string $variation = null): void
     {
-        $routeNames = $this->parameterBag->get('app_route_names');
-        if ($routeNames !== null && array_key_exists($route, $routeNames))
+        if (array_key_exists($route, $this->routeNames))
         {
             // has multiple variations
-            if (is_array($routeNames[$route]))
+            if (is_array($this->routeNames[$route]))
             {
                 // no variation specified, use the first one
-                if ($variation === null || !array_key_exists($variation, $routeNames[$route]))
+                if ($variation === null || !array_key_exists($variation, $this->routeNames[$route]))
                 {
-                    $variation = array_key_first($routeNames[$route]);
+                    $variation = array_key_first($this->routeNames[$route]);
                 }
 
-                $this->currentRouteName = $routeNames[$route][$variation];
+                $this->currentRouteName = $this->routeNames[$route][$variation];
             }
             else
             {
-                $this->currentRouteName = $routeNames[$route];
+                $this->currentRouteName = $this->routeNames[$route];
             }
         }
     }

@@ -6,6 +6,7 @@ use App\Menu\Renderer\MenuTypeRenderer;
 use App\Menu\Type\MenuType;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Twig\Environment;
 
 /**
  * Tests that the menu type renderer can convert a menu type to HTML.
@@ -64,7 +65,7 @@ class MenuTypeRendererTest extends KernelTestCase
     }
 
     /**
-     * Returns the menu type renderer from the service container.
+     * Creates an instance of the menu type renderer.
      *
      * @return MenuTypeRenderer
      * @throws Exception
@@ -74,9 +75,10 @@ class MenuTypeRendererTest extends KernelTestCase
         self::bootKernel();
         $container = static::getContainer();
 
-        /** @var MenuTypeRenderer $renderer */
-        $renderer = $container->get(MenuTypeRenderer::class);
-        return $renderer;
+        /** @var Environment $twigEnvironment */
+        $twigEnvironment = $container->get(Environment::class);
+
+        return new MenuTypeRenderer($twigEnvironment, '_fragment/_menu_theme/_test.html.twig');
     }
 
     /**

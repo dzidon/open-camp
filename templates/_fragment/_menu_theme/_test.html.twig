@@ -3,7 +3,7 @@
     <ul>
         {% for menu_child in menu_type.children %}
             {% with {'menu_type': menu_child} %}
-                {{ block(menu_child.templateBlock, app_menu_theme) }}
+                {{ block(menu_child.templateBlock, menu_theme) }}
             {% endwith %}
         {% endfor %}
     </ul>
@@ -19,7 +19,7 @@
             <ul>
                 {% for menu_child in menu_type.children %}
                     {% with {'menu_type': menu_child} %}
-                        {{ block(menu_child.templateBlock, app_menu_theme) }}
+                        {{ block(menu_child.templateBlock, menu_theme) }}
                     {% endwith %}
                 {% endfor %}
             </ul>

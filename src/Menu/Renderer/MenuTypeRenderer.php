@@ -3,7 +3,6 @@
 namespace App\Menu\Renderer;
 
 use App\Menu\Type\MenuTypeInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Environment;
 
 /**
@@ -12,12 +11,12 @@ use Twig\Environment;
 class MenuTypeRenderer implements MenuTypeRendererInterface
 {
     private Environment $twig;
-    private ParameterBagInterface $parameterBag;
+    private string $menuTheme;
 
-    public function __construct(Environment $twig, ParameterBagInterface $parameterBag)
+    public function __construct(Environment $twig, string $menuTheme)
     {
         $this->twig = $twig;
-        $this->parameterBag = $parameterBag;
+        $this->menuTheme = $menuTheme;
     }
 
     /**
@@ -25,8 +24,10 @@ class MenuTypeRenderer implements MenuTypeRendererInterface
      */
     public function renderMenuType(MenuTypeInterface $menuType): string
     {
-        $menuTheme = $this->parameterBag->get('app_menu_theme');
-        $template = $this->twig->load($menuTheme);
-        return $template->renderBlock($menuType->getTemplateBlock(), ['menu_type' => $menuType]);
+        $template = $this->twig->load($this->menuTheme);
+        return $template->renderBlock($menuType->getTemplateBlock(), [
+            'menu_type' => $menuType,
+            'menu_theme' => $this->menuTheme,
+        ]);
     }
 }

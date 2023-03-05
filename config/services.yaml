@@ -31,6 +31,13 @@ services:
             - '../src/Menu/Registry/MenuRegistryRecord.php'
             - '../src/Kernel.php'
 
-when@test:
-    parameters:
-        app_menu_theme: '_fragment/_menu_theme/_test.html.twig'
+    App\Service\RouteNamerInterface:
+        class: 'App\Service\RouteNamer'
+        arguments:
+            $siteName: '%app_site_name%'
+            $routeNames: '%app_route_names%'
+
+    App\Menu\Renderer\MenuTypeRendererInterface:
+        class: 'App\Menu\Renderer\MenuTypeRenderer'
+        arguments:
+            $menuTheme: '%app_menu_theme%'
