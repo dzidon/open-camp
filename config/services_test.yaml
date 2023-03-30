@@ -7,6 +7,10 @@ services:
         alias: App\Search\Menu\MenuSearch
         public: true
 
+    App\Search\Paginator\PaginatorMenuFactoryInterface:
+        alias: App\Search\Paginator\PaginatorMenuFactory
+        public: true
+
     App\Menu\Registry\MenuTypeRegistryInterface:
         alias: App\Menu\Registry\MenuTypeRegistry
         public: true

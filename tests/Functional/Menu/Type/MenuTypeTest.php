@@ -3,7 +3,7 @@
 namespace App\Tests\Functional\Menu\Type;
 
 use App\Menu\Type\MenuType;
-use App\Menu\Type\MenuTypeInterface;
+use App\Tests\Functional\Menu\MenuTypeChildrenIdentifiersTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,6 +11,8 @@ use PHPUnit\Framework\TestCase;
  */
 class MenuTypeTest extends TestCase
 {
+    use MenuTypeChildrenIdentifiersTrait;
+
     /**
      * Tests setting and getting the identifier.
      *
@@ -227,22 +229,5 @@ class MenuTypeTest extends TestCase
         }
 
         return $menuType;
-    }
-
-    /**
-     * Returns an array containing identifiers of children of a given menu type.
-     *
-     * @param MenuTypeInterface $menuType
-     * @return array
-     */
-    private function getMenuTypeChildrenIdentifiers(MenuTypeInterface $menuType): array
-    {
-        $identifiers = [];
-        foreach ($menuType->getChildren() as $child)
-        {
-            $identifiers[] = $child->getIdentifier();
-        }
-
-        return $identifiers;
     }
 }

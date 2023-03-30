@@ -3,8 +3,8 @@
 namespace App\Tests\Functional\Search\Menu;
 
 use App\Menu\Type\MenuType;
-use App\Menu\Type\MenuTypeInterface;
 use App\Search\Menu\MenuSearch;
+use App\Tests\Functional\Menu\MenuTypeChildrenIdentifiersTrait;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -13,6 +13,8 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
  */
 class MenuSearchTest extends KernelTestCase
 {
+    use MenuTypeChildrenIdentifiersTrait;
+
     /**
      * Tests that all child nodes in a menu type tree can be sorted using their priority attribute.
      *
@@ -78,22 +80,5 @@ class MenuSearchTest extends KernelTestCase
         ;
 
         return $menuType;
-    }
-
-    /**
-     * Returns an array containing identifiers of children of a given menu type.
-     *
-     * @param MenuTypeInterface $menuType
-     * @return array
-     */
-    private function getMenuTypeChildrenIdentifiers(MenuTypeInterface $menuType): array
-    {
-        $identifiers = [];
-        foreach ($menuType->getChildren() as $child)
-        {
-            $identifiers[] = $child->getIdentifier();
-        }
-
-        return $identifiers;
     }
 }

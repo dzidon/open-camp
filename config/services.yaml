@@ -29,6 +29,7 @@ services:
             - '../src/DataStructure/'
             - '../src/Menu/Type/'
             - '../src/Menu/Registry/MenuRegistryRecord.php'
+            - '../src/Search/Paginator/Paginator.php'
             - '../src/Kernel.php'
 
     App\Service\RouteNamerInterface:
