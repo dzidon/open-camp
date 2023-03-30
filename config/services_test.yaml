@@ -1,16 +1,16 @@
 services:
+    App\Menu\Registry\MenuTypeRegistryInterface:
+        alias: App\Menu\Registry\MenuTypeRegistry
+        public: true
+
+    App\Menu\Breadcrumbs\Admin\ProfileBreadcrumbsInterface:
+        alias: App\Menu\Breadcrumbs\Admin\ProfileBreadcrumbs
+        public: true
+
     App\Search\DataStructure\GraphSearchInterface:
         alias: App\Search\DataStructure\GraphSearch
         public: true
 
-    App\Search\Menu\MenuSearchInterface:
-        alias: App\Search\Menu\MenuSearch
-        public: true
-
     App\Search\Paginator\PaginatorMenuFactoryInterface:
         alias: App\Search\Paginator\PaginatorMenuFactory
-        public: true
-
-    App\Menu\Registry\MenuTypeRegistryInterface:
-        alias: App\Menu\Registry\MenuTypeRegistry
         public: true

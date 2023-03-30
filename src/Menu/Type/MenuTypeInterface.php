@@ -71,53 +71,6 @@ interface MenuTypeInterface extends GraphNodeInterface
     public function setPriority(int $priority): self;
 
     /**
-     * Sets the parent menu type.
-     *
-     * @param MenuTypeInterface|null $parent
-     * @return $this
-     */
-    public function setParent(?MenuTypeInterface $parent): self;
-
-    /**
-     * Adds a child menu type.
-     *
-     * @param MenuTypeInterface $child
-     * @return $this
-     */
-    public function addChild(MenuTypeInterface $child): self;
-
-    /**
-     * Removes a child menu type.
-     *
-     * @param string|MenuTypeInterface $child
-     * @return $this
-     */
-    public function removeChild(string|MenuTypeInterface $child): self;
-
-    /**
-     * Returns a child menu type using its identifier.
-     *
-     * @param string $identifier
-     * @return MenuTypeInterface|null
-     */
-    public function getChild(string $identifier): ?MenuTypeInterface;
-
-    /**
-     * Returns true if the menu type has a child with the specified identifier.
-     *
-     * @param string $identifier
-     * @return bool
-     */
-    public function hasChild(string $identifier): bool;
-
-    /**
-     * Sorts its children using the priority attribute in descending order.
-     *
-     * @return $this
-     */
-    public function sortChildren(): self;
-
-    /**
      * Returns the template block name.
      *
      * @return string

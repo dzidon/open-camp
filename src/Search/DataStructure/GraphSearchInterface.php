@@ -36,4 +36,12 @@ interface GraphSearchInterface
      * @return GraphNodeInterface|null
      */
     public function getDescendentByPath(GraphNodeInterface $from, string $path): ?GraphNodeInterface;
+
+    /**
+     * Sorts all child nodes recursively using some attribute.
+     *
+     * @param GraphNodeInterface $start
+     * @return void
+     */
+    public function sortChildrenRecursively(GraphNodeInterface $start): void;
 }

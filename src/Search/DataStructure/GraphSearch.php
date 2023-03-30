@@ -142,4 +142,19 @@ class GraphSearch implements GraphSearchInterface
             unset($names[$currentKey]);
         }
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function sortChildrenRecursively(GraphNodeInterface $start): void
+    {
+        $dispatcher = new EventDispatcher();
+        $dispatcher->addListener(StackPopEvent::NAME, function (StackPopEvent $event)
+        {
+            $currentNode = $event->getCurrentNode();
+            $currentNode->sortChildren();
+        });
+
+        $this->depthFirstSearch($start, $dispatcher);
+    }
 }

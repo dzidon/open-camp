@@ -2,6 +2,9 @@
 
 namespace App\Menu\Type;
 
+use App\DataStructure\GraphNodeInterface;
+use LogicException;
+
 /**
  * Main menu type implementation which should fit most use cases.
  */
@@ -115,10 +118,15 @@ class MenuType implements MenuTypeInterface
     }
 
     /**
-     * @inheritDoc
+     * Sets the parent menu type.
+     *
+     * @param MenuTypeInterface|null $parent
+     * @return $this
      */
-    public function setParent(?MenuTypeInterface $parent): self
+    public function setParent(?GraphNodeInterface $parent): self
     {
+        $this->assertMenuTypeInterface($parent);
+
         if ($this->parent === $parent)
         {
             return $this;
@@ -140,7 +148,9 @@ class MenuType implements MenuTypeInterface
     }
 
     /**
-     * @inheritDoc
+     * Returns null or the parent menu type.
+     *
+     * @return MenuTypeInterface|null
      */
     public function getParent(): ?MenuTypeInterface
     {
@@ -148,10 +158,15 @@ class MenuType implements MenuTypeInterface
     }
 
     /**
-     * @inheritDoc
+     * Adds a child menu type.
+     *
+     * @param MenuTypeInterface $child
+     * @return $this
      */
-    public function addChild(MenuTypeInterface $child): self
+    public function addChild(GraphNodeInterface $child): self
     {
+        $this->assertMenuTypeInterface($child);
+
         $identifier = $child->getIdentifier();
 
         /** @var MenuTypeInterface $existingChild */
@@ -176,10 +191,15 @@ class MenuType implements MenuTypeInterface
     }
 
     /**
-     * @inheritDoc
+     * Removes a child menu type.
+     *
+     * @param string|MenuTypeInterface $child Identifier or instance.
+     * @return $this
      */
-    public function removeChild(string|MenuTypeInterface $child): self
+    public function removeChild(string|GraphNodeInterface $child): self
     {
+        $this->assertMenuTypeInterface($child);
+
         if (is_string($child))
         {
             $identifier = $child;
@@ -204,7 +224,9 @@ class MenuType implements MenuTypeInterface
     }
 
     /**
-     * @inheritDoc
+     * Returns all child menu types.
+     *
+     * @return MenuTypeInterface[]
      */
     public function getChildren(): array
     {
@@ -212,7 +234,10 @@ class MenuType implements MenuTypeInterface
     }
 
     /**
-     * @inheritDoc
+     * Returns a child menu type using its identifier.
+     *
+     * @param string $identifier
+     * @return MenuTypeInterface|null
      */
     public function getChild(string $identifier): ?MenuTypeInterface
     {
@@ -229,7 +254,10 @@ class MenuType implements MenuTypeInterface
     }
 
     /**
-     * @inheritDoc
+     * Returns true if the menu type has a child with the specified identifier.
+     *
+     * @param string $identifier
+     * @return bool
      */
     public function hasChild(string $identifier): bool
     {
@@ -243,7 +271,9 @@ class MenuType implements MenuTypeInterface
     }
 
     /**
-     * @inheritDoc
+     * Sorts its children using the priority attribute in descending order.
+     *
+     * @return $this
      */
     public function sortChildren(): self
     {
@@ -273,5 +303,21 @@ class MenuType implements MenuTypeInterface
     {
         $this->block = $block;
         return $this;
+    }
+
+    /**
+     * Throws a LogicException if the specified node is an object and does not implement the MenuTypeInterface.
+     *
+     * @param mixed $graphNode
+     * @return void
+     */
+    private function assertMenuTypeInterface(mixed $graphNode): void
+    {
+        if (is_object($graphNode) && !in_array(MenuTypeInterface::class, class_implements($graphNode)))
+        {
+            throw new LogicException(
+                sprintf('%s cannot be used as a parent/child with %s.', $graphNode::class, $this::class)
+            );
+        }
     }
 }
