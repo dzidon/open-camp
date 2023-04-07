@@ -4,6 +4,8 @@ namespace App\Tests\Functional\Menu\Type;
 
 use App\Menu\Type\MenuType;
 use App\Tests\Functional\DataStructure\GraphNodeChildrenIdentifiersTrait;
+use App\Tests\Functional\DataStructure\GraphNodeMock;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -101,6 +103,22 @@ class MenuTypeTest extends TestCase
 
         $menuType->setPriority(1);
         $this->assertSame(1, $menuType->getPriority());
+    }
+
+    /**
+     * Tests that unsupported graph node types cannot be used as a parent/child.
+     *
+     * @return void
+     */
+    public function testUnsupportedRelationType(): void
+    {
+        $menuType = $this->createMenuType(false, false);
+        $unsupportedType = new GraphNodeMock('id');
+
+        $this->expectException(LogicException::class);
+        $menuType->setParent($unsupportedType);
+        $menuType->addChild($unsupportedType);
+        $menuType->removeChild($unsupportedType);
     }
 
     /**
