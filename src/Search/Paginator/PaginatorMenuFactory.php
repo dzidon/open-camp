@@ -190,7 +190,7 @@ class PaginatorMenuFactory implements PaginatorMenuFactoryInterface
 
             $pageButton = new MenuType($pageId, $templateBlockItem, (string) $page, $url);
             $pageButton
-                ->setActive($active, false)
+                ->setActive($active)
                 ->setPriority(-$page)
             ;
 

@@ -235,7 +235,7 @@ class MenuType implements MenuTypeInterface
     /**
      * @inheritDoc
      */
-    public function setActive(bool $active = true, bool $ancestorsToo = true): self
+    public function setActive(bool $active = true, bool $ancestorsToo = false): self
     {
         $this->active = $active;
 

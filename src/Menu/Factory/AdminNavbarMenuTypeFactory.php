@@ -37,7 +37,7 @@ class AdminNavbarMenuTypeFactory implements MenuTypeFactoryInterface
 
         $item5 = new MenuIconType('link5', 'navbar_admin_item', 'item 5', '#',  'far fa-circle');
         $item5->setParent($item1);
-        $item5->setActive();
+        $item5->setActive(true, true);
 
         $menu
             ->addChild($item1)

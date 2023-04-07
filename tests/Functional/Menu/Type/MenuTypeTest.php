@@ -73,12 +73,12 @@ class MenuTypeTest extends TestCase
 
         $menuType = $this->createMenuType(true, true);
         $child = $menuType->getChild('child_button1');
-        $child->setActive();
+        $child->setActive(true, true);
         $this->assertSame(true, $child->isActive());
         $this->assertSame(true, $menuType->isActive());
         $this->assertSame(true, $menuType->getParent()->isActive());
 
-        $child->setActive(false);
+        $child->setActive(false, true);
         $this->assertSame(false, $child->isActive());
         $this->assertSame(false, $menuType->isActive());
         $this->assertSame(false, $menuType->getParent()->isActive());

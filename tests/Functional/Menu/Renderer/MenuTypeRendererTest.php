@@ -101,7 +101,7 @@ class MenuTypeRendererTest extends KernelTestCase
 
         $itemNested2 = new MenuType('item_nested_2', 'test_item', 'Nested item 2', 'url4');
         $itemNested2->setParent($item1);
-        $itemNested2->setActive(true, false);
+        $itemNested2->setActive();
 
         return $root;
     }
