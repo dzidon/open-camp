@@ -3,6 +3,7 @@
 namespace App\Search\DataStructure;
 
 use App\DataStructure\GraphNodeInterface;
+use App\DataStructure\SortableGraphNodeInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -40,8 +41,8 @@ interface GraphSearchInterface
     /**
      * Sorts all child nodes recursively using some attribute.
      *
-     * @param GraphNodeInterface $start
+     * @param SortableGraphNodeInterface $start
      * @return void
      */
-    public function sortChildrenRecursively(GraphNodeInterface $start): void;
+    public function sortChildrenRecursively(SortableGraphNodeInterface $start): void;
 }

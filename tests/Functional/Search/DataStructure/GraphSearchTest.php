@@ -10,9 +10,10 @@ use App\EventDispatcher\Event\DepthFirstSearch\InitialPushEvent;
 use App\EventDispatcher\Event\DepthFirstSearch\NodeMarkAsExpandedEvent;
 use App\EventDispatcher\Event\DepthFirstSearch\StackIterationEndEvent;
 use App\EventDispatcher\Event\DepthFirstSearch\StackPopEvent;
-use App\Menu\Type\MenuType;
 use App\Search\DataStructure\GraphSearch;
-use App\Tests\Functional\Menu\MenuTypeChildrenIdentifiersTrait;
+use App\Tests\Functional\DataStructure\GraphNodeChildrenIdentifiersTrait;
+use App\Tests\Functional\DataStructure\GraphNodeMock;
+use App\Tests\Functional\DataStructure\SortableGraphNodeMock;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -22,7 +23,7 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 class GraphSearchTest extends KernelTestCase
 {
-    use MenuTypeChildrenIdentifiersTrait;
+    use GraphNodeChildrenIdentifiersTrait;
 
     /**
      * Tests that the depth first search algorithm iterates over graph nodes in the right order.
@@ -32,7 +33,7 @@ class GraphSearchTest extends KernelTestCase
      */
     public function testDepthFirstSearchOrder(): void
     {
-        $tree = $this->createMenuType();
+        $tree = $this->createGraphNodeMock();
         $treeSearch = $this->getGraphSearch();
         $dispatcher = new EventDispatcher();
         $visitedLog = '';
@@ -51,7 +52,7 @@ class GraphSearchTest extends KernelTestCase
         });
 
         $treeSearch->depthFirstSearch($tree, $dispatcher);
-        $this->assertSame('menu a b c x y', $visitedLog);
+        $this->assertSame('root a b c x y', $visitedLog);
     }
 
     /**
@@ -73,7 +74,7 @@ class GraphSearchTest extends KernelTestCase
             CycleFoundEvent::NAME => false,
         ];
 
-        $graph = $this->createMenuType(true);
+        $graph = $this->createGraphNodeMock(true);
         $graphSearch = $this->getGraphSearch();
         $dispatcher = new EventDispatcher();
 
@@ -106,8 +107,8 @@ class GraphSearchTest extends KernelTestCase
      */
     public function testContainsCycle(): void
     {
-        $menuWithoutCycle = $this->createMenuType();
-        $menuWithCycle = $this->createMenuType(true);
+        $menuWithoutCycle = $this->createGraphNodeMock();
+        $menuWithCycle = $this->createGraphNodeMock(true);
         $graphSearch = $this->getGraphSearch();
 
         $this->assertSame(false, $graphSearch->containsCycle($menuWithoutCycle));
@@ -122,7 +123,7 @@ class GraphSearchTest extends KernelTestCase
      */
     public function testGetDescendentByPath(): void
     {
-        $menu = $this->createMenuType();
+        $menu = $this->createGraphNodeMock();
         $graphSearch = $this->getGraphSearch();
 
         $itemC = $graphSearch->getDescendentByPath($menu, 'a/b/c');
@@ -149,16 +150,16 @@ class GraphSearchTest extends KernelTestCase
      */
     public function testSortRecursively(): void
     {
-        $menuType = $this->createPrioritizedMenuType();
+        $menuType = $this->createSortableGraphNodeMock();
         $search = $this->getGraphSearch();
         $button1 = $menuType->getChild('button1');
 
-        $this->assertSame(['button1', 'button2'], $this->getMenuTypeChildrenIdentifiers($menuType));
-        $this->assertSame(['button3', 'button4'], $this->getMenuTypeChildrenIdentifiers($button1));
+        $this->assertSame(['button1', 'button2'], $this->getGraphNodeChildrenIdentifiers($menuType));
+        $this->assertSame(['button3', 'button4'], $this->getGraphNodeChildrenIdentifiers($button1));
 
         $search->sortChildrenRecursively($menuType);
-        $this->assertSame(['button2', 'button1'], $this->getMenuTypeChildrenIdentifiers($menuType));
-        $this->assertSame(['button4', 'button3'], $this->getMenuTypeChildrenIdentifiers($button1));
+        $this->assertSame(['button2', 'button1'], $this->getGraphNodeChildrenIdentifiers($menuType));
+        $this->assertSame(['button4', 'button3'], $this->getGraphNodeChildrenIdentifiers($button1));
     }
 
     /**
@@ -178,21 +179,21 @@ class GraphSearchTest extends KernelTestCase
     }
 
     /**
-     * Creates a menu type tree structure.
+     * Creates a graph node tree structure.
      *
      * @param bool $withCycle
-     * @return MenuType
+     * @return GraphNodeMock
      */
-    private function createMenuType(bool $withCycle = false): MenuType
+    private function createGraphNodeMock(bool $withCycle = false): GraphNodeMock
     {
-        $menu = new MenuType('menu', 'menu_block');
-        $itemA = new MenuType('a', 'item_block');
-        $itemB = new MenuType('b', 'item_block');
-        $itemC = new MenuType('c', 'item_block');
-        $itemX = new MenuType('x', 'item_block');
-        $itemY = new MenuType('y', 'item_block');
+        $root = new GraphNodeMock('root');
+        $itemA = new GraphNodeMock('a');
+        $itemB = new GraphNodeMock('b');
+        $itemC = new GraphNodeMock('c');
+        $itemX = new GraphNodeMock('x');
+        $itemY = new GraphNodeMock('y');
 
-        $menu
+        $root
             ->addChild($itemA)
             ->addChild($itemX)
         ;
@@ -206,28 +207,28 @@ class GraphSearchTest extends KernelTestCase
             $itemY->addChild($itemX);
         }
 
-        return $menu;
+        return $root;
     }
 
     /**
-     * Creates a menu type tree structure with priorities.
+     * Creates a graph node tree structure with priorities.
      *
-     * @return MenuType
+     * @return SortableGraphNodeMock
      */
-    private function createPrioritizedMenuType(): MenuType
+    private function createSortableGraphNodeMock(): SortableGraphNodeMock
     {
-        $menuType = new MenuType('root', 'block_name');
-        $button1 = new MenuType('button1', 'block_name');
+        $root = new SortableGraphNodeMock('root');
+        $button1 = new SortableGraphNodeMock('button1');
         $button1->setPriority(1);
-        $button2 = new MenuType('button2', 'block_name');
+        $button2 = new SortableGraphNodeMock('button2');
         $button2->setPriority(2);
 
-        $button3 = new MenuType('button3', 'block_name');
+        $button3 = new SortableGraphNodeMock('button3');
         $button3->setPriority(1);
-        $button4 = new MenuType('button4', 'block_name');
+        $button4 = new SortableGraphNodeMock('button4');
         $button4->setPriority(2);
 
-        $menuType
+        $root
             ->addChild($button1)
             ->addChild($button2)
         ;
@@ -237,6 +238,6 @@ class GraphSearchTest extends KernelTestCase
             ->addChild($button4)
         ;
 
-        return $menuType;
+        return $root;
     }
 }

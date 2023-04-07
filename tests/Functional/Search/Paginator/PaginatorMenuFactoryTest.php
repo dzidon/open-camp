@@ -4,7 +4,7 @@ namespace App\Tests\Functional\Search\Paginator;
 
 use App\Search\Paginator\PaginatorInterface;
 use App\Search\Paginator\PaginatorMenuFactory;
-use App\Tests\Functional\Menu\MenuTypeChildrenIdentifiersTrait;
+use App\Tests\Functional\DataStructure\GraphNodeChildrenIdentifiersTrait;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PaginatorMenuFactoryTest extends KernelTestCase
 {
-    use MenuTypeChildrenIdentifiersTrait;
+    use GraphNodeChildrenIdentifiersTrait;
 
     private const ROUTE = 'admin_profile';
     private const PAGE_PARAM_NAME = 'page';
@@ -97,7 +97,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         $menuFactory = $this->getPaginatorMenuFactory();
         $request = $this->createRequest(['_route' => self::ROUTE]);
         $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
-        $identifiers = $this->getMenuTypeChildrenIdentifiers($menu);
+        $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
 
         $this->assertSame(['page_1', 'page_2', 'page_3', 'page_4', 'page_5'], $identifiers);
     }
@@ -164,14 +164,14 @@ class PaginatorMenuFactoryTest extends KernelTestCase
             // first page is active
             $paginator = $this->createPaginator($pagesCount, 1);
             $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
-            $identifiers = $this->getMenuTypeChildrenIdentifiers($menu);
+            $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
 
             $this->assertSame($expectedSequence, $identifiers);
 
             // last page is active
             $paginator = $this->createPaginator($pagesCount, array_key_last($expectedSequence) + 1);
             $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
-            $identifiers = $this->getMenuTypeChildrenIdentifiers($menu);
+            $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
 
             $this->assertSame($expectedSequence, $identifiers);
         }
@@ -195,7 +195,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         {
             $paginator = $this->createPaginator(11, $currentPage);
             $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
-            $identifiers = $this->getMenuTypeChildrenIdentifiers($menu);
+            $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
 
             $this->assertSame($expectedSequence, $identifiers);
         }
@@ -204,7 +204,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         // Tests that pages 2 and 8 are added to the menu if current page is 5 (center) and total number of pages is 9.
         $paginator = $this->createPaginator(9, 5);
         $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
-        $identifiers = $this->getMenuTypeChildrenIdentifiers($menu);
+        $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
 
         $this->assertSame(['page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'page_7', 'page_8', 'page_9'], $identifiers);
     }

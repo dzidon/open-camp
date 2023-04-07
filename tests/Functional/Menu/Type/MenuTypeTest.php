@@ -3,7 +3,7 @@
 namespace App\Tests\Functional\Menu\Type;
 
 use App\Menu\Type\MenuType;
-use App\Tests\Functional\Menu\MenuTypeChildrenIdentifiersTrait;
+use App\Tests\Functional\DataStructure\GraphNodeChildrenIdentifiersTrait;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MenuTypeTest extends TestCase
 {
-    use MenuTypeChildrenIdentifiersTrait;
+    use GraphNodeChildrenIdentifiersTrait;
 
     /**
      * Tests setting and getting the identifier.
@@ -182,14 +182,14 @@ class MenuTypeTest extends TestCase
     public function testSortChildren(): void
     {
         $menuType = $this->createMenuType(false, true);
-        $this->assertSame(['child_button1', 'child_button2'], $this->getMenuTypeChildrenIdentifiers($menuType));
+        $this->assertSame(['child_button1', 'child_button2'], $this->getGraphNodeChildrenIdentifiers($menuType));
 
         $button1 = $menuType->getChild('child_button1');
         $button1->setPriority(1);
         $button2 = $menuType->getChild('child_button2');
         $button2->setPriority(2);
         $menuType->sortChildren();
-        $this->assertSame(['child_button2', 'child_button1'], $this->getMenuTypeChildrenIdentifiers($menuType));
+        $this->assertSame(['child_button2', 'child_button1'], $this->getGraphNodeChildrenIdentifiers($menuType));
     }
 
     /**

@@ -10,14 +10,14 @@ use LogicException;
  */
 class MenuType implements MenuTypeInterface
 {
-    private string $identifier;
-    private ?string $text;
-    private string $url;
-    private int $priority = 0;
-    private ?MenuTypeInterface $parent = null;
-    private array $children = [];
-    private bool $active = false;
-    private string $block;
+    protected string $identifier;
+    protected ?MenuTypeInterface $parent = null;
+    protected array $children = [];
+    protected ?string $text;
+    protected string $url;
+    protected int $priority = 0;
+    protected bool $active = false;
+    protected string $block;
 
     public function __construct(string $identifier, string $block, ?string $text = null, string $url = '#')
     {
@@ -28,11 +28,166 @@ class MenuType implements MenuTypeInterface
     }
 
     /**
-     * @inheritDoc
+     * Returns a unique identifier of the menu type.
+     *
+     * @return mixed
      */
     public function getIdentifier(): string
     {
         return $this->identifier;
+    }
+
+    /**
+     * Sets the parent menu type.
+     *
+     * @param MenuTypeInterface|null $parent
+     * @return $this
+     */
+    public function setParent(?GraphNodeInterface $parent): self
+    {
+        $this->assertRelatedType($parent);
+
+        if ($this->parent === $parent)
+        {
+            return $this;
+        }
+
+        $oldParent = $this->parent;
+        $this->parent = $parent;
+
+        if ($parent === null)
+        {
+            $oldParent->removeChild($this);
+        }
+        else
+        {
+            $this->parent->addChild($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns null or the parent menu type.
+     *
+     * @return MenuTypeInterface|null
+     */
+    public function getParent(): ?MenuTypeInterface
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Adds a child menu type.
+     *
+     * @param MenuTypeInterface $child
+     * @return $this
+     */
+    public function addChild(GraphNodeInterface $child): self
+    {
+        $this->assertRelatedType($child);
+
+        $identifier = $child->getIdentifier();
+
+        /** @var MenuTypeInterface $existingChild */
+        foreach ($this->children as $key => $existingChild)
+        {
+            if ($child === $existingChild)
+            {
+                return $this;
+            }
+
+            if ($existingChild->getIdentifier() === $identifier)
+            {
+                $existingChild->setParent(null);
+                unset($this->children[$key]);
+                break;
+            }
+        }
+
+        $this->children[] = $child;
+        $child->setParent($this);
+        return $this;
+    }
+
+    /**
+     * Removes a child menu type.
+     *
+     * @param string|MenuTypeInterface $child Identifier or instance.
+     * @return $this
+     */
+    public function removeChild(string|GraphNodeInterface $child): self
+    {
+        $this->assertRelatedType($child);
+
+        if (is_string($child))
+        {
+            $identifier = $child;
+        }
+        else
+        {
+            $identifier = $child->getIdentifier();
+        }
+
+        /** @var MenuTypeInterface $existingChild */
+        foreach ($this->children as $key => $existingChild)
+        {
+            if ($existingChild->getIdentifier() === $identifier)
+            {
+                $existingChild->setParent(null);
+                unset($this->children[$key]);
+                break;
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Returns all children menu types.
+     *
+     * @return MenuTypeInterface[]
+     */
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    /**
+     * Returns a child menu type using its identifier.
+     *
+     * @param string $identifier
+     * @return MenuTypeInterface|null
+     */
+    public function getChild(string $identifier): ?MenuTypeInterface
+    {
+        /** @var MenuTypeInterface $existingChild */
+        foreach ($this->children as $existingChild)
+        {
+            if ($existingChild->getIdentifier() === $identifier)
+            {
+                return $existingChild;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns true if the menu type has a child with the specified identifier.
+     *
+     * @param string $identifier
+     * @return bool
+     */
+    public function hasChild(string $identifier): bool
+    {
+        $child = $this->getChild($identifier);
+        if ($child === null)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -118,156 +273,20 @@ class MenuType implements MenuTypeInterface
     }
 
     /**
-     * Sets the parent menu type.
-     *
-     * @param MenuTypeInterface|null $parent
-     * @return $this
+     * @inheritDoc
      */
-    public function setParent(?GraphNodeInterface $parent): self
+    public function getTemplateBlock(): string
     {
-        $this->assertMenuTypeInterface($parent);
+        return $this->block;
+    }
 
-        if ($this->parent === $parent)
-        {
-            return $this;
-        }
-
-        $oldParent = $this->parent;
-        $this->parent = $parent;
-
-        if ($parent === null)
-        {
-            $oldParent->removeChild($this);
-        }
-        else
-        {
-            $this->parent->addChild($this);
-        }
-
+    /**
+     * @inheritDoc
+     */
+    public function setTemplateBlock(string $block): self
+    {
+        $this->block = $block;
         return $this;
-    }
-
-    /**
-     * Returns null or the parent menu type.
-     *
-     * @return MenuTypeInterface|null
-     */
-    public function getParent(): ?MenuTypeInterface
-    {
-        return $this->parent;
-    }
-
-    /**
-     * Adds a child menu type.
-     *
-     * @param MenuTypeInterface $child
-     * @return $this
-     */
-    public function addChild(GraphNodeInterface $child): self
-    {
-        $this->assertMenuTypeInterface($child);
-
-        $identifier = $child->getIdentifier();
-
-        /** @var MenuTypeInterface $existingChild */
-        foreach ($this->children as $key => $existingChild)
-        {
-            if ($child === $existingChild)
-            {
-                return $this;
-            }
-
-            if ($existingChild->getIdentifier() === $identifier)
-            {
-                $existingChild->setParent(null);
-                unset($this->children[$key]);
-                break;
-            }
-        }
-
-        $this->children[] = $child;
-        $child->setParent($this);
-        return $this;
-    }
-
-    /**
-     * Removes a child menu type.
-     *
-     * @param string|MenuTypeInterface $child Identifier or instance.
-     * @return $this
-     */
-    public function removeChild(string|GraphNodeInterface $child): self
-    {
-        $this->assertMenuTypeInterface($child);
-
-        if (is_string($child))
-        {
-            $identifier = $child;
-        }
-        else
-        {
-            $identifier = $child->getIdentifier();
-        }
-
-        /** @var MenuTypeInterface $existingChild */
-        foreach ($this->children as $key => $existingChild)
-        {
-            if ($existingChild->getIdentifier() === $identifier)
-            {
-                $existingChild->setParent(null);
-                unset($this->children[$key]);
-                break;
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * Returns all child menu types.
-     *
-     * @return MenuTypeInterface[]
-     */
-    public function getChildren(): array
-    {
-        return $this->children;
-    }
-
-    /**
-     * Returns a child menu type using its identifier.
-     *
-     * @param string $identifier
-     * @return MenuTypeInterface|null
-     */
-    public function getChild(string $identifier): ?MenuTypeInterface
-    {
-        /** @var MenuTypeInterface $existingChild */
-        foreach ($this->children as $existingChild)
-        {
-            if ($existingChild->getIdentifier() === $identifier)
-            {
-                return $existingChild;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Returns true if the menu type has a child with the specified identifier.
-     *
-     * @param string $identifier
-     * @return bool
-     */
-    public function hasChild(string $identifier): bool
-    {
-        $child = $this->getChild($identifier);
-        if ($child === null)
-        {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -289,31 +308,14 @@ class MenuType implements MenuTypeInterface
     }
 
     /**
-     * @inheritDoc
-     */
-    public function getTemplateBlock(): string
-    {
-        return $this->block;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setTemplateBlock(string $block): self
-    {
-        $this->block = $block;
-        return $this;
-    }
-
-    /**
-     * Throws a LogicException if the specified node is an object and does not implement the MenuTypeInterface.
+     * Throws a LogicException if the specified node type is not supported in a child/parent relationship.
      *
      * @param mixed $graphNode
      * @return void
      */
-    private function assertMenuTypeInterface(mixed $graphNode): void
+    protected function assertRelatedType(mixed $graphNode): void
     {
-        if (is_object($graphNode) && !in_array(MenuTypeInterface::class, class_implements($graphNode)))
+        if (is_object($graphNode) && !$graphNode instanceof MenuTypeInterface)
         {
             throw new LogicException(
                 sprintf('%s cannot be used as a parent/child with %s.', $graphNode::class, $this::class)

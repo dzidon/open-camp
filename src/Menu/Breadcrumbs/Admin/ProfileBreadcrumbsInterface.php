@@ -3,12 +3,12 @@
 namespace App\Menu\Breadcrumbs\Admin;
 
 /**
- * Initializes breadcrumbs for the admin profile controller.
+ * Adds admin profile breadcrumbs to the central menu registry.
  */
 interface ProfileBreadcrumbsInterface
 {
     /**
-     * Adds the admin profile breadcrumbs to the central menu registry.
+     * Initializes breadcrumbs for path "admin_profile".
      *
      * @return void
      */

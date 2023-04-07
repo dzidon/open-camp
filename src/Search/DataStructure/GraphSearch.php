@@ -2,6 +2,7 @@
 
 namespace App\Search\DataStructure;
 
+use App\DataStructure\SortableGraphNodeInterface;
 use App\DataStructure\Stack;
 use App\DataStructure\GraphNodeInterface;
 use App\EventDispatcher\Event\DepthFirstSearch\ChildIterationEndEvent;
@@ -146,13 +147,16 @@ class GraphSearch implements GraphSearchInterface
     /**
      * @inheritDoc
      */
-    public function sortChildrenRecursively(GraphNodeInterface $start): void
+    public function sortChildrenRecursively(SortableGraphNodeInterface $start): void
     {
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener(StackPopEvent::NAME, function (StackPopEvent $event)
         {
             $currentNode = $event->getCurrentNode();
-            $currentNode->sortChildren();
+            if ($currentNode instanceof SortableGraphNodeInterface)
+            {
+                $currentNode->sortChildren();
+            }
         });
 
         $this->depthFirstSearch($start, $dispatcher);

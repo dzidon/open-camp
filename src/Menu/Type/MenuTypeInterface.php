@@ -2,13 +2,28 @@
 
 namespace App\Menu\Type;
 
-use App\DataStructure\GraphNodeInterface;
+use App\DataStructure\SortableGraphNodeInterface;
 
 /**
- * Interface for all menus and menu links. Menu types can form a tree structure.
+ * Interface for all menus and menu links. Menu types can form a tree structure and their children can be sorted.
  */
-interface MenuTypeInterface extends GraphNodeInterface
+interface MenuTypeInterface extends SortableGraphNodeInterface
 {
+    /**
+     * Returns null or the parent menu type.
+     *
+     * @return MenuTypeInterface|null
+     */
+    public function getParent(): ?MenuTypeInterface;
+
+    /**
+     * Returns a child menu type using its identifier.
+     *
+     * @param string $identifier
+     * @return MenuTypeInterface|null
+     */
+    public function getChild(string $identifier): ?MenuTypeInterface;
+
     /**
      * Returns the displayed text.
      *

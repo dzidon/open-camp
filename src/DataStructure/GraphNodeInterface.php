@@ -67,11 +67,4 @@ interface GraphNodeInterface
      * @return bool
      */
     public function hasChild(string $identifier): bool;
-
-    /**
-     * Sorts its children based on some attribute.
-     *
-     * @return $this
-     */
-    public function sortChildren(): self;
 }

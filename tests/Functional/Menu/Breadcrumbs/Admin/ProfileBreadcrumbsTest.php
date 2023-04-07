@@ -3,15 +3,20 @@
 namespace App\Tests\Functional\Menu\Breadcrumbs\Admin;
 
 use App\Menu\Breadcrumbs\Admin\ProfileBreadcrumbs;
-use App\Tests\Functional\Menu\Breadcrumbs\BreadcrumbsTestCase;
+use App\Menu\Registry\MenuTypeRegistryInterface;
+use App\Tests\Functional\DataStructure\GraphNodeChildrenIdentifiersTrait;
 use Exception;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Tests breadcrumbs of the admin profile controller.
  */
-class ProfileBreadcrumbsTest extends BreadcrumbsTestCase
+class ProfileBreadcrumbsTest extends KernelTestCase
 {
-    private ProfileBreadcrumbs $breadcrumbs;
+    use GraphNodeChildrenIdentifiersTrait;
+
+    protected MenuTypeRegistryInterface $menuTypeRegistry;
+    protected ProfileBreadcrumbs $breadcrumbs;
 
     /**
      * Tests the admin profile breadcrumbs.
@@ -26,7 +31,7 @@ class ProfileBreadcrumbsTest extends BreadcrumbsTestCase
         $this->breadcrumbs->initializeIndex();
         $breadcrumbsMenu = $this->menuTypeRegistry->getMenuType('breadcrumbs');
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
-        $this->assertSame(['admin_home', 'admin_profile'], $this->getChildrenIdentifiers($breadcrumbsMenu));
+        $this->assertSame(['admin_home', 'admin_profile'], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
 
         $homeButton = $breadcrumbsMenu->getChild('admin_home');
         $this->assertSame(false, $homeButton->isActive());
@@ -39,12 +44,14 @@ class ProfileBreadcrumbsTest extends BreadcrumbsTestCase
         $this->assertSame('/admin/profile', $profileButton->getUrl());
     }
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
-        parent::setUp();
+        self::bootKernel();
+        $this->container = static::getContainer();
+
+        /** @var MenuTypeRegistryInterface $menuTypeRegistry */
+        $menuTypeRegistry = $this->container->get(MenuTypeRegistryInterface::class);
+        $this->menuTypeRegistry = $menuTypeRegistry;
 
         /** @var ProfileBreadcrumbs $breadcrumbs */
         $breadcrumbs = $this->container->get(ProfileBreadcrumbs::class);
