@@ -1,0 +1,21 @@
+{% extends "_fragment/_modal/_base.html.twig" %}
+
+{% block modal_id %}fc-removal-modal{% endblock %}
+
+{% block modal_attributes %}
+    data-controller="fc--rem-mod"
+{% endblock %}
+
+{% block modal_body %}
+    Are you sure you want to remove this item? <strong>Changes will take effect after submitting the form.</strong>
+{% endblock %}
+
+{% block modal_footer %}
+    {{ parent() }}
+
+    <button type="button"
+            class="btn btn-danger"
+            data-action="fc--rem-mod#removePreparedItem">
+        Remove
+    </button>
+{% endblock %}

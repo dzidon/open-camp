@@ -1,1 +1,11 @@
 @import "~@fortawesome/fontawesome-free/css/all.css";
+
+legend.required:before,
+label.required:before {
+  content: "* ";
+  color: red;
+}
+
+legend {
+  font-weight: 700;
+}
