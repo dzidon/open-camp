@@ -15,6 +15,11 @@ class CollectionAddItemButtonType extends AbstractType
 {
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        if ($form->getParent() === null)
+        {
+            return;
+        }
+
         $view->vars['attr'] = array_merge([
             'data-controller'                    => 'fc--add',
             'data-action'                        => 'fc--add#addItem',
