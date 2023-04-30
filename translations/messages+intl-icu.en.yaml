@@ -1,0 +1,6 @@
+app:
+    site_name: 'Camp'
+
+route:
+    admin_home: 'Dashboard'
+    admin_profile: 'Profile'

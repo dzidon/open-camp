@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/admin')]
+#[Route('/admin/profile')]
 class ProfileController extends AbstractController
 {
     private ProfileBreadcrumbsInterface $breadcrumbs;
@@ -17,7 +17,7 @@ class ProfileController extends AbstractController
         $this->breadcrumbs = $breadcrumbs;
     }
 
-    #[Route('/profile', name: 'admin_profile')]
+    #[Route('/', name: 'admin_profile')]
     public function index(): Response
     {
         $this->breadcrumbs->initializeIndex();

@@ -4,14 +4,21 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
-    app_site_name: 'Camp'
+    app.menu_theme: '_fragment/_menu_theme/_main.html.twig'
 
-    app_menu_theme: '_fragment/_menu_theme/_main.html.twig'
+    # Internationalization
+    app.locales: 'cs' # Supported locales (languages) divided by "|"
+    app.locale_names:
+        en: 'English'
+        cs: 'Česky'
 
-    # Route names
-    app_route_names:
-        admin_home: 'Dashboard'
-        admin_profile: 'Profile'
+    # Cookies
+    app.cookie_lifespan_locale: '1 year'
+
+    # Route translation keys
+    app.route_trans_keys:
+        admin_home: 'route.admin_home'
+        admin_profile: 'route.admin_profile'
 
 services:
     # default configuration for services in *this* file
@@ -32,13 +39,29 @@ services:
             - '../src/Search/Paginator/Paginator.php'
             - '../src/Kernel.php'
 
-    App\Service\RouteNamerInterface:
-        class: 'App\Service\RouteNamer'
+    App\Service\RouteNamer:
         arguments:
-            $siteName: '%app_site_name%'
-            $routeNames: '%app_route_names%'
+            $routeTransKeys: '%app.route_trans_keys%'
 
-    App\Menu\Renderer\MenuTypeRendererInterface:
-        class: 'App\Menu\Renderer\MenuTypeRenderer'
+    App\Menu\Renderer\MenuTypeRenderer:
         arguments:
-            $menuTheme: '%app_menu_theme%'
+            $menuTheme: '%app.menu_theme%'
+
+    App\Menu\Factory\LocaleSwitchMenuTypeFactory:
+        arguments:
+            $locales: '%app.locales%'
+            $localeNames: '%app.locale_names%'
+
+    App\Translation\LocaleGuesser:
+        arguments:
+            $locales: '%app.locales%'
+            $defaultLocale: '%kernel.default_locale%'
+
+    App\Translation\LocaleRedirectResponseFactory:
+        arguments:
+            $locales: '%app.locales%'
+
+    App\EventDispatcher\EventSubscriber\LocaleCookieSubscriber:
+        arguments:
+            $locales: '%app.locales%'
+            $cookieLifespan: '%app.cookie_lifespan_locale%'

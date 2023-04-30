@@ -3,7 +3,7 @@
 namespace App\EventDispatcher\EventSubscriber;
 
 use App\Service\RouteNamerInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * @package App\EventSubscriber
  */
-class RouteNameSubscriber implements EventSubscriberInterface
+class RouteNameSubscriber
 {
     private RouteNamerInterface $routeNamer;
 
@@ -25,18 +25,9 @@ class RouteNameSubscriber implements EventSubscriberInterface
      *
      * @return void
      */
+    #[AsEventListener(event: KernelEvents::CONTROLLER)]
     public function onKernelController(): void
     {
         $this->routeNamer->setCurrentRouteNameByRequest();
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            KernelEvents::CONTROLLER => 'onKernelController',
-        ];
     }
 }

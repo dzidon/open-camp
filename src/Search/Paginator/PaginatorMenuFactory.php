@@ -26,7 +26,6 @@ class PaginatorMenuFactory implements PaginatorMenuFactoryInterface
      */
     public function buildMenu(PaginatorInterface $paginator,
                               Request $request,
-                              array $useAttributes = [],
                               string $pageParameterName = 'page',
                               string $templateBlockRoot = 'pagination_root',
                               string $templateBlockItem = 'pagination_item'): MenuType
@@ -39,21 +38,10 @@ class PaginatorMenuFactory implements PaginatorMenuFactoryInterface
         $requestParameters = $request->query;
         $requestAttributes = $request->attributes;
         $requestParametersAll = $requestParameters->all();
-        $requestAttributesAll = $requestAttributes->all();
-        $route = $request->attributes->get('_route');
+        $route = $requestAttributes->get('_route');
+        $routeParams = $requestAttributes->get('_route_params', []);
 
-        $filteredAttributes = [];
-        foreach ($useAttributes as $attribute)
-        {
-            if (!array_key_exists($attribute, $requestAttributesAll))
-            {
-                continue;
-            }
-
-            $filteredAttributes[$attribute] = $requestAttributesAll[$attribute];
-        }
-
-        $queryParameters = array_merge($requestParametersAll, $filteredAttributes);
+        $queryParameters = array_merge($requestParametersAll, $routeParams);
 
         // distance calculations used for building the menu
         $maxSlotsSurroundingCenter = self::VIEW_INNER_PAGES - self::VIEW_INNER_CENTER; // 2

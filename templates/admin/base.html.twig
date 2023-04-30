@@ -37,7 +37,7 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Logo -->
             <a href="{{ path('admin_home') }}" class="brand-link">
-                <span class="brand-text font-weight-light">{{ app_site_name }}</span>
+                <span class="brand-text font-weight-light">{{ 'app.site_name'|trans }}</span>
             </a>
 
             <!-- Sidebar -->
@@ -102,13 +102,16 @@
                     {% endif %}
 
                     {% block main %}{% endblock %}
+
+                    {# TODO: Move to footer later #}
+                    {{ menu_from_registry('locale_switch') }}
                 </div>
             </section>
         </div>
 
         <!-- Footer -->
         <footer class="main-footer">
-            <strong>&copy; {{ 'now' | date('Y') }}, {{ app_site_name }}</strong>
+            <strong>&copy; {{ 'now' | date('Y') }}, {{ 'app.site_name'|trans }}</strong>
         </footer>
     </div>
 {% endblock %}

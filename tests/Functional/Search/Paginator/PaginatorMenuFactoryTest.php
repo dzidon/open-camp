@@ -17,7 +17,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
 {
     use GraphNodeChildrenIdentifiersTrait;
 
-    private const ROUTE = 'admin_profile';
+    private const ROUTE = 'route_mock';
     private const PAGE_PARAM_NAME = 'page';
     private const TEMPLATE_BLOCK_ROOT = 'pagination_root';
     private const TEMPLATE_BLOCK_ITEM = 'pagination_item';
@@ -33,7 +33,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         $paginator = $this->createPaginator(0, 1);
         $menuFactory = $this->getPaginatorMenuFactory();
         $request = $this->createRequest(['_route' => self::ROUTE]);
-        $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
+        $menu = $menuFactory->buildMenu($paginator, $request, self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
 
         $this->assertSame('pagination', $menu->getIdentifier());
         $this->assertSame(self::TEMPLATE_BLOCK_ROOT, $menu->getTemplateBlock());
@@ -50,7 +50,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         $paginator = $this->createPaginator(1, 1);
         $menuFactory = $this->getPaginatorMenuFactory();
         $request = $this->createRequest(['_route' => self::ROUTE]);
-        $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
+        $menu = $menuFactory->buildMenu($paginator, $request, self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
 
         $itemPage1 = $menu->getChild('page_1');
         $this->assertNotNull($itemPage1);
@@ -70,7 +70,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         $paginator = $this->createPaginator(3, 2);
         $menuFactory = $this->getPaginatorMenuFactory();
         $request = $this->createRequest(['_route' => self::ROUTE]);
-        $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
+        $menu = $menuFactory->buildMenu($paginator, $request, self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
 
         $itemPage1 = $menu->getChild('page_1');
         $this->assertNotNull($itemPage1);
@@ -96,7 +96,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         $paginator = $this->createPaginator(5, 5);
         $menuFactory = $this->getPaginatorMenuFactory();
         $request = $this->createRequest(['_route' => self::ROUTE]);
-        $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
+        $menu = $menuFactory->buildMenu($paginator, $request, self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
         $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
 
         $this->assertSame(['page_1', 'page_2', 'page_3', 'page_4', 'page_5'], $identifiers);
@@ -114,27 +114,27 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         $paginator = $this->createPaginator(2, 1);
         $menuFactory = $this->getPaginatorMenuFactory();
         $request = $this->createRequest(['_route' => self::ROUTE]);
-        $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
+        $menu = $menuFactory->buildMenu($paginator, $request, self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
 
         $itemPage1 = $menu->getChild('page_1');
         $itemPage2 = $menu->getChild('page_2');
         $this->assertNotNull($itemPage1);
         $this->assertNotNull($itemPage2);
 
-        $this->assertSame('/admin/profile?page=1', $itemPage1->getUrl());
-        $this->assertSame('/admin/profile?page=2', $itemPage2->getUrl());
+        $this->assertSame('/route/mock?page=1', $itemPage1->getUrl());
+        $this->assertSame('/route/mock?page=2', $itemPage2->getUrl());
 
         // with query parameters
-        $request = $this->createRequest(['_route' => self::ROUTE, 'abc' => '123', 'xyz' => '456'], ['aaa' => 'bbb', 'ccc' => 'ddd']);
-        $menu = $menuFactory->buildMenu($paginator, $request, ['abc', 'xyz'], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
+        $request = $this->createRequest(['_route' => self::ROUTE], ['abc' => '123', 'xyz' => '456'], ['aaa' => 'bbb', 'ccc' => 'ddd']);
+        $menu = $menuFactory->buildMenu($paginator, $request, self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
 
         $itemPage1 = $menu->getChild('page_1');
         $itemPage2 = $menu->getChild('page_2');
         $this->assertNotNull($itemPage1);
         $this->assertNotNull($itemPage2);
 
-        $this->assertSame('/admin/profile?aaa=bbb&ccc=ddd&abc=123&xyz=456&page=1', $itemPage1->getUrl());
-        $this->assertSame('/admin/profile?aaa=bbb&ccc=ddd&abc=123&xyz=456&page=2', $itemPage2->getUrl());
+        $this->assertSame('/route/mock?aaa=bbb&ccc=ddd&abc=123&xyz=456&page=1', $itemPage1->getUrl());
+        $this->assertSame('/route/mock?aaa=bbb&ccc=ddd&abc=123&xyz=456&page=2', $itemPage2->getUrl());
     }
 
     /**
@@ -163,14 +163,14 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         {
             // first page is active
             $paginator = $this->createPaginator($pagesCount, 1);
-            $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
+            $menu = $menuFactory->buildMenu($paginator, $request, self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
             $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
 
             $this->assertSame($expectedSequence, $identifiers);
 
             // last page is active
             $paginator = $this->createPaginator($pagesCount, array_key_last($expectedSequence) + 1);
-            $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
+            $menu = $menuFactory->buildMenu($paginator, $request, self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
             $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
 
             $this->assertSame($expectedSequence, $identifiers);
@@ -194,7 +194,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         foreach ($expectedSequences as $currentPage => $expectedSequence)
         {
             $paginator = $this->createPaginator(11, $currentPage);
-            $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
+            $menu = $menuFactory->buildMenu($paginator, $request, self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
             $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
 
             $this->assertSame($expectedSequence, $identifiers);
@@ -203,7 +203,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         // Extra use case:
         // Tests that pages 2 and 8 are added to the menu if current page is 5 (center) and total number of pages is 9.
         $paginator = $this->createPaginator(9, 5);
-        $menu = $menuFactory->buildMenu($paginator, $request, [], self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
+        $menu = $menuFactory->buildMenu($paginator, $request, self::PAGE_PARAM_NAME, self::TEMPLATE_BLOCK_ROOT, self::TEMPLATE_BLOCK_ITEM);
         $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
 
         $this->assertSame(['page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'page_7', 'page_8', 'page_9'], $identifiers);
@@ -228,12 +228,16 @@ class PaginatorMenuFactoryTest extends KernelTestCase
     /**
      * Creates an instance of a request.
      *
-     * @param array $queryParameters
      * @param array $attributes
+     * @param array $routeParams
+     * @param array $queryParameters
      * @return Request
      */
-    private function createRequest(array $attributes = [], array $queryParameters = []): Request
+    private function createRequest(array $attributes = [], array $routeParams = [], array $queryParameters = []): Request
     {
+        $attributes = array_merge($attributes, $routeParams);
+        $attributes['_route_params'] = $routeParams;
+
         return new Request($queryParameters, [], $attributes);
     }
 

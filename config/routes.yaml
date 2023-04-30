@@ -3,3 +3,25 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+    # Uncomment the following line if your app supports more than one language.
+    # prefix: '/{_locale<%app.locales%>}'
+
+user_home_no_locale:
+    path: '/'
+    prefix: ''
+    controller: App\Controller\User\HomeController::noLocale
+
+when@test:
+    # By default, locale is not required when generating URLs in test environment.
+    controllers:
+        resource:
+            path: ../src/Controller/
+            namespace: App\Controller
+        type: attribute
+        prefix: ''
+
+    route_mock:
+        path: '/route/mock'
+
+    locale_route_mock:
+        path: '/{_locale}/route/mock'

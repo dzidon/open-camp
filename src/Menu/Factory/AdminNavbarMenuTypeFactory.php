@@ -4,7 +4,6 @@ namespace App\Menu\Factory;
 
 use App\Menu\Type\MenuIconType;
 use App\Menu\Type\MenuType;
-use App\Menu\Type\MenuTypeInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
@@ -24,7 +23,7 @@ class AdminNavbarMenuTypeFactory implements MenuTypeFactoryInterface
     /**
      * @inheritDoc
      */
-    public function buildMenuType(): MenuTypeInterface
+    public function buildMenuType(): MenuType
     {
         $menu = new MenuType(self::getMenuIdentifier(), 'navbar_admin_root');
 

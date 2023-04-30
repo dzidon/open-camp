@@ -4,9 +4,11 @@ namespace App\Tests\Functional\Service;
 
 use App\Service\RouteNamer;
 use Exception;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Tests the route namer.
@@ -187,16 +189,37 @@ class RouteNamerTest extends KernelTestCase
             '_route' => $requestRoute
         ]));
 
+        /** @var TranslatorInterface|MockObject $translatorMock */
+        $translatorMock = $this->getMockBuilder(TranslatorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        $translatorMock
+            ->expects($this->any())
+            ->method('trans')
+            ->willReturnCallback(function (string $id)
+            {
+                $catalog = [
+                    'app.site_name'          => 'Site Name',
+                    'route.product_overview' => 'Products',
+                    'route.user.new'         => 'New user',
+                    'route.user.existing'    => 'Existing user',
+                ];
+
+                return $catalog[$id];
+            })
+        ;
+
         // config
-        $siteName = 'Site Name';
-        $routeNames = [
-            'product_overview' => 'Products',
+        $routeTransKeys = [
+            'product_overview' => 'route.product_overview',
             'user' => [
-                'new' => 'New user',
-                'existing' => 'Existing user',
+                'new'      => 'route.user.new',
+                'existing' => 'route.user.existing',
             ],
         ];
 
-        return new RouteNamer($requestStack, $siteName, $routeNames);
+        return new RouteNamer($requestStack, $translatorMock, $routeTransKeys);
     }
 }

@@ -15,7 +15,6 @@ interface PaginatorMenuFactoryInterface
      *
      * @param PaginatorInterface $paginator
      * @param Request $request
-     * @param array $useAttributes Specifies request attributes which should be added to page URLs.
      * @param string $pageParameterName GET parameter which holds a page number.
      * @param string $templateBlockRoot
      * @param string $templateBlockItem
@@ -23,7 +22,6 @@ interface PaginatorMenuFactoryInterface
      */
     public function buildMenu(PaginatorInterface $paginator,
                               Request $request,
-                              array $useAttributes,
                               string $pageParameterName,
                               string $templateBlockRoot,
                               string $templateBlockItem): MenuTypeInterface;

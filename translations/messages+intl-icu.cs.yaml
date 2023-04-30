@@ -1,0 +1,6 @@
+app:
+    site_name: 'Kemp'
+
+route:
+    admin_home: 'Přehled'
+    admin_profile: 'Profil'
