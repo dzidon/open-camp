@@ -82,7 +82,11 @@
                                         <div class="card {% if type == 'success' %} card-success {% elseif type == 'failure' %} card-danger {% elseif type == 'warning' %} card-warning {% elseif type == 'info' %} card-primary {% endif %}">
                                             <div class="card-header">
                                                 <h3 class="card-title">
-                                                    {% if type == 'success' %} Úspěch {% elseif type == 'failure' %} Chyba {% elseif type == 'warning' %} Varování {% elseif type == 'info' %} Info {% endif %}
+                                                    {% if type == 'success' %} {{ 'flash_message.success'|trans }}
+                                                    {% elseif type == 'failure' %} {{ 'flash_message.failure'|trans }}
+                                                    {% elseif type == 'warning' %} {{ 'flash_message.warning'|trans }}
+                                                    {% elseif type == 'info' %} {{ 'flash_message.info'|trans }}
+                                                    {% endif %}
                                                 </h3>
 
                                                 <div class="card-tools">
@@ -102,9 +106,6 @@
                     {% endif %}
 
                     {% block main %}{% endblock %}
-
-                    {# TODO: Move to footer later #}
-                    {{ menu_from_registry('locale_switch') }}
                 </div>
             </section>
         </div>

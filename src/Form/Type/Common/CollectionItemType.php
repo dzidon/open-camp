@@ -32,7 +32,7 @@ class CollectionItemType extends AbstractType
                     'data-fc--rem-prep-target' => 'button',
                     'data-action'              => 'fc--rem-prep#prepareItemForRemoval',
                 ],
-                'label'    => 'Remove',
+                'label'    => 'form.common.collection.remove',
                 'priority' => $options['remove_button_priority'],
             ])
         ;

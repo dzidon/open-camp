@@ -7,7 +7,7 @@ parameters:
     app.menu_theme: '_fragment/_menu_theme/_main.html.twig'
 
     # Internationalization
-    app.locales: 'cs' # Supported locales (languages) divided by "|"
+    app.locales: 'cs' # Enabled locales (languages) divided by "|"
     app.locale_names:
         en: 'English'
         cs: 'Česky'
@@ -17,8 +17,11 @@ parameters:
 
     # Route translation keys
     app.route_trans_keys:
-        admin_home: 'route.admin_home'
-        admin_profile: 'route.admin_profile'
+        admin_home: 'route.admin.home'
+        admin_profile: 'route.admin.profile'
+
+        user_home: 'route.user.home'
+        user_login: 'route.user.login'
 
 services:
     # default configuration for services in *this* file

@@ -4,6 +4,10 @@ services:
         alias: App\Menu\Breadcrumbs\Admin\ProfileBreadcrumbs
         public: true
 
+    App\Menu\Breadcrumbs\User\LoginBreadcrumbsInterface:
+        alias: App\Menu\Breadcrumbs\User\LoginBreadcrumbs
+        public: true
+
     # Menu
     App\Menu\Registry\MenuTypeRegistryInterface:
         alias: App\Menu\Registry\MenuTypeRegistry
@@ -11,6 +15,11 @@ services:
 
     App\Menu\Renderer\MenuTypeRendererInterface:
         alias: App\Menu\Renderer\MenuTypeRenderer
+        public: true
+
+    # Repository
+    App\Repository\UserRepositoryInterface:
+        alias: App\Repository\UserRepository
         public: true
 
     # Search

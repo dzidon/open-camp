@@ -1,46 +1,43 @@
 <?php
 
-namespace App\Tests\Functional\Menu\Breadcrumbs\Admin;
+namespace App\Tests\Functional\Menu\Breadcrumbs\User;
 
-use App\Menu\Breadcrumbs\Admin\ProfileBreadcrumbs;
+use App\Menu\Breadcrumbs\User\LoginBreadcrumbs;
 use App\Menu\Registry\MenuTypeRegistryInterface;
 use App\Tests\Functional\DataStructure\GraphNodeChildrenIdentifiersTrait;
 use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Tests breadcrumbs of the admin profile controller.
- */
-class ProfileBreadcrumbsTest extends KernelTestCase
+class LoginBreadcrumbsTest extends KernelTestCase
 {
     use GraphNodeChildrenIdentifiersTrait;
 
     protected MenuTypeRegistryInterface $menuTypeRegistry;
-    protected ProfileBreadcrumbs $breadcrumbs;
+    protected LoginBreadcrumbs $breadcrumbs;
 
     /**
-     * Tests the admin profile breadcrumbs.
+     * Tests the login breadcrumbs.
      *
      * @return void
      * @throws Exception
      */
-    public function testProfile(): void
+    public function testLogin(): void
     {
         $this->assertSame(null, $this->menuTypeRegistry->getMenuType('breadcrumbs'));
 
-        $returnedMenu = $this->breadcrumbs->initializeProfile();
+        $returnedMenu = $this->breadcrumbs->initializeLogin();
         $breadcrumbsMenu = $this->menuTypeRegistry->getMenuType('breadcrumbs');
         $this->assertSame($returnedMenu, $breadcrumbsMenu);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
-        $this->assertSame(['admin_home', 'admin_profile'], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
+        $this->assertSame(['user_home', 'user_login'], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
 
-        $homeButton = $breadcrumbsMenu->getChild('admin_home');
+        $homeButton = $breadcrumbsMenu->getChild('user_home');
         $this->assertSame(false, $homeButton->isActive());
-        $this->assertSame('/admin/', $homeButton->getUrl());
+        $this->assertSame('/', $homeButton->getUrl());
 
-        $profileButton = $breadcrumbsMenu->getChild('admin_profile');
+        $profileButton = $breadcrumbsMenu->getChild('user_login');
         $this->assertSame(true, $profileButton->isActive());
-        $this->assertSame('/admin/profile/', $profileButton->getUrl());
+        $this->assertSame('/login', $profileButton->getUrl());
     }
 
     protected function setUp(): void
@@ -52,8 +49,8 @@ class ProfileBreadcrumbsTest extends KernelTestCase
         $menuTypeRegistry = $this->container->get(MenuTypeRegistryInterface::class);
         $this->menuTypeRegistry = $menuTypeRegistry;
 
-        /** @var ProfileBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->container->get(ProfileBreadcrumbs::class);
+        /** @var LoginBreadcrumbs $breadcrumbs */
+        $breadcrumbs = $this->container->get(LoginBreadcrumbs::class);
         $this->breadcrumbs = $breadcrumbs;
     }
 }

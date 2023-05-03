@@ -1,6 +1,35 @@
 app:
     site_name: 'Camp'
 
+auth:
+    already_logged_in: 'You are already logged in, log out first.'
+    logged_out: 'Successfully logged out!'
+
+flash_message:
+    success: 'Success'
+    failure: 'Error'
+    warning: 'Warning'
+    info: 'Info'
+
+form:
+    common:
+        collection:
+            remove: 'Remove'
+
+    admin:
+
+    user:
+        login:
+            email: 'E-mail'
+            password: 'Password'
+            remember_me: 'Remember me'
+            button: 'Log in'
+
 route:
-    admin_home: 'Dashboard'
-    admin_profile: 'Profile'
+    admin:
+        home: 'Dashboard'
+        profile: 'Profile'
+
+    user:
+        home: 'Home'
+        login: 'Login'

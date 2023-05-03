@@ -8,8 +8,6 @@ use Twig\TwigFunction;
 
 /**
  * Adds route name related functions to Twig.
- *
- * @package App\Twig
  */
 class RouteNameExtension extends AbstractExtension
 {

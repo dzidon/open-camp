@@ -11,6 +11,10 @@ user_home_no_locale:
     prefix: ''
     controller: App\Controller\User\HomeController::noLocale
 
+user_logout:
+    path: '/logout'
+    prefix: ''
+
 when@test:
     # By default, locale is not required when generating URLs in test environment.
     controllers:

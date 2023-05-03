@@ -1,6 +1,35 @@
 app:
     site_name: 'Kemp'
 
+auth:
+    already_logged_in: 'Už jste přihlášen, nejdříve se odhlašte.'
+    logged_out: 'Odhlášení proběhlo úspěšně!'
+
+flash_message:
+    success: 'Úspěch'
+    failure: 'Chyba'
+    warning: 'Varování'
+    info: 'Info'
+
+form:
+    common:
+        collection:
+            remove: 'Odebrat'
+
+    admin:
+
+    user:
+        login:
+            email: 'E-mail'
+            password: 'Heslo'
+            remember_me: 'Zůstat přihlášen'
+            button: 'Přihlásit se'
+
 route:
-    admin_home: 'Přehled'
-    admin_profile: 'Profil'
+    admin:
+        home: 'Přehled'
+        profile: 'Profil'
+
+    user:
+        home: 'Domů'
+        login: 'Přihlášení'

@@ -18,9 +18,9 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/', name: 'admin_profile')]
-    public function index(): Response
+    public function profile(): Response
     {
-        $this->breadcrumbs->initializeIndex();
-        return $this->render('admin/profile/index.html.twig');
+        $this->breadcrumbs->initializeProfile();
+        return $this->render('admin/profile/profile.html.twig');
     }
 }

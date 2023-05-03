@@ -22,6 +22,11 @@ class RouteNamer implements RouteNamerInterface
         $this->requestStack = $requestStack;
         $this->translator = $translator;
         $this->routeTransKeys = $routeTransKeys;
+
+        if (array_key_exists('user_home', $this->routeTransKeys))
+        {
+            unset($this->routeTransKeys['user_home']);
+        }
     }
 
     /**
