@@ -37,7 +37,7 @@ class LoginController extends AbstractController
             return $this->redirectToRoute('user_home');
         }
 
-        $this->breadcrumbs->initializeLogin();
+        $this->breadcrumbs->addLoginToMenuRegistry();
 
         $error = $authenticationUtils->getLastAuthenticationError();
         if ($error)

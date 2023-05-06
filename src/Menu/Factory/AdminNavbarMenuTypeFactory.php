@@ -4,12 +4,10 @@ namespace App\Menu\Factory;
 
 use App\Menu\Type\MenuIconType;
 use App\Menu\Type\MenuType;
-use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 /**
  * Creates the admin navbar menu.
  */
-#[AutoconfigureTag('app.menu_factory')]
 class AdminNavbarMenuTypeFactory implements MenuTypeFactoryInterface
 {
     /**

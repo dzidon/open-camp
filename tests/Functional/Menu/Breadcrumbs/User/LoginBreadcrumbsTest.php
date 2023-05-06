@@ -25,9 +25,8 @@ class LoginBreadcrumbsTest extends KernelTestCase
     {
         $this->assertSame(null, $this->menuTypeRegistry->getMenuType('breadcrumbs'));
 
-        $returnedMenu = $this->breadcrumbs->initializeLogin();
+        $this->breadcrumbs->addLoginToMenuRegistry();
         $breadcrumbsMenu = $this->menuTypeRegistry->getMenuType('breadcrumbs');
-        $this->assertSame($returnedMenu, $breadcrumbsMenu);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_login'], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
 

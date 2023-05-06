@@ -20,10 +20,12 @@ class MenuTypeRegistry implements MenuTypeRegistryInterface
      */
     public function registerFactory(MenuTypeFactoryInterface $factory): self
     {
-        $identifier = $factory::getMenuIdentifier();
-        $record = $this->findExistingRecordOrCreateNew($identifier);
+        $record = new MenuTypeRegistryRecord();
         $record->setFactory($factory);
+
+        $identifier = $factory::getMenuIdentifier();
         $this->records[$identifier] = $record;
+
         return $this;
     }
 
@@ -32,22 +34,11 @@ class MenuTypeRegistry implements MenuTypeRegistryInterface
      */
     public function registerMenuType(MenuTypeInterface $menuType): MenuTypeRegistryInterface
     {
-        $identifier = $menuType->getIdentifier();
-        $record = $this->findExistingRecordOrCreateNew($identifier);
+        $record = new MenuTypeRegistryRecord();
         $record->setMenuType($menuType);
+
+        $identifier = $menuType->getIdentifier();
         $this->records[$identifier] = $record;
-        return $this;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function removeRecord(string $identifier): self
-    {
-        if (array_key_exists($identifier, $this->records))
-        {
-            unset($this->records[$identifier]);
-        }
 
         return $this;
     }
@@ -55,7 +46,7 @@ class MenuTypeRegistry implements MenuTypeRegistryInterface
     /**
      * @inheritDoc
      */
-    public function getMenuType(string $identifier, bool $forceRebuild = false): ?MenuTypeInterface
+    public function getMenuType(string $identifier): ?MenuTypeInterface
     {
         if (!array_key_exists($identifier, $this->records))
         {
@@ -71,31 +62,12 @@ class MenuTypeRegistry implements MenuTypeRegistryInterface
             return $menuType;
         }
 
-        if ($menuType === null || $forceRebuild)
+        if ($menuType === null)
         {
             $newMenuType = $factory->buildMenuType();
             $record->setMenuType($newMenuType);
         }
 
         return $record->getMenuType();
-    }
-
-    /**
-     * Helper method for finding a record in the registry. If no record with the specified identifier is found,
-     * a new record is returned.
-     *
-     * @param string $identifier
-     * @return MenuTypeRegistryRecord
-     */
-    private function findExistingRecordOrCreateNew(string $identifier): MenuTypeRegistryRecord
-    {
-        if (array_key_exists($identifier, $this->records))
-        {
-            return $this->records[$identifier];
-        }
-        else
-        {
-            return new MenuTypeRegistryRecord();
-        }
     }
 }

@@ -26,9 +26,9 @@ class PaginatorMenuFactory implements PaginatorMenuFactoryInterface
      */
     public function buildMenu(PaginatorInterface $paginator,
                               Request $request,
-                              string $pageParameterName = 'page',
-                              string $templateBlockRoot = 'pagination_root',
-                              string $templateBlockItem = 'pagination_item'): MenuType
+                              string $pageParameterName,
+                              string $templateBlockRoot,
+                              string $templateBlockItem): MenuType
     {
         // extract data from the paginator
         $currentPage = $paginator->getCurrentPage();

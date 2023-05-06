@@ -35,12 +35,17 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Database/Entity/'
+            - '../src/Entity/'
             - '../src/DataStructure/'
+            - '../src/Form/DTO/'
             - '../src/Menu/Type/'
-            - '../src/Menu/Registry/MenuRegistryRecord.php'
+            - '../src/Menu/Registry/MenuTypeRegistryRecord.php'
             - '../src/Search/Paginator/Paginator.php'
             - '../src/Kernel.php'
+
+    _instanceof:
+        App\Menu\Factory\MenuTypeFactoryInterface:
+            tags: ['app.menu_factory']
 
     App\Service\RouteNamer:
         arguments:

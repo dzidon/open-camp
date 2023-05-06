@@ -43,8 +43,7 @@ interface PaginatorInterface
     public function getPagesCount(): int;
 
     /**
-     * Returns true if the specified page is greater than the total number of pages and is not equal to 1
-     * OR if the specified page is lower than 1.
+     * Returns true if the specified page is out of bounds.
      *
      * @param int $page
      * @return bool
@@ -52,8 +51,7 @@ interface PaginatorInterface
     public function isPageOutOfBounds(int $page): bool;
 
     /**
-     * Returns true if the current page is greater than the total number of pages and is not equal to 1
-     * OR if the current page is lower than 1.
+     * Returns true if the current page is out of bounds.
      *
      * @return bool
      */

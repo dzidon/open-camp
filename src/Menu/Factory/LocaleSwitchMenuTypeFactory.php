@@ -3,14 +3,12 @@
 namespace App\Menu\Factory;
 
 use App\Menu\Type\MenuType;
-use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Creates a menu that lets users change their locale (language).
  */
-#[AutoconfigureTag('app.menu_factory')]
 class LocaleSwitchMenuTypeFactory implements MenuTypeFactoryInterface
 {
     private array $locales;

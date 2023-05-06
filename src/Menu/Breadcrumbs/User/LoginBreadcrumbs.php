@@ -3,7 +3,6 @@
 namespace App\Menu\Breadcrumbs\User;
 
 use App\Menu\Breadcrumbs\AbstractBreadcrumbs;
-use App\Menu\Type\MenuType;
 
 /**
  * @inheritDoc
@@ -13,7 +12,7 @@ class LoginBreadcrumbs extends AbstractBreadcrumbs implements LoginBreadcrumbsIn
     /**
      * @inheritDoc
      */
-    public function initializeLogin(): MenuType
+    public function addLoginToMenuRegistry(): void
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
@@ -22,6 +21,5 @@ class LoginBreadcrumbs extends AbstractBreadcrumbs implements LoginBreadcrumbsIn
         ;
 
         $this->registerBreadcrumbs($root);
-        return $root;
     }
 }

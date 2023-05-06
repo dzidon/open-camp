@@ -3,7 +3,6 @@
 namespace App\Menu\Breadcrumbs\Admin;
 
 use App\Menu\Breadcrumbs\AbstractBreadcrumbs;
-use App\Menu\Type\MenuType;
 
 /**
  * @inheritDoc
@@ -13,7 +12,7 @@ class ProfileBreadcrumbs extends AbstractBreadcrumbs implements ProfileBreadcrum
     /**
      * @inheritDoc
      */
-    public function initializeProfile(): MenuType
+    public function addProfileToMenuRegistry(): void
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
@@ -22,6 +21,5 @@ class ProfileBreadcrumbs extends AbstractBreadcrumbs implements ProfileBreadcrum
         ;
 
         $this->registerBreadcrumbs($root);
-        return $root;
     }
 }

@@ -28,9 +28,8 @@ class ProfileBreadcrumbsTest extends KernelTestCase
     {
         $this->assertSame(null, $this->menuTypeRegistry->getMenuType('breadcrumbs'));
 
-        $returnedMenu = $this->breadcrumbs->initializeProfile();
+        $this->breadcrumbs->addProfileToMenuRegistry();
         $breadcrumbsMenu = $this->menuTypeRegistry->getMenuType('breadcrumbs');
-        $this->assertSame($returnedMenu, $breadcrumbsMenu);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_profile'], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
 
