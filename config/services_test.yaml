@@ -1,1 +1,23 @@
+parameters:
+    app.menu_theme: '_fragment/_menu_theme/_test.html.twig'
+
+    # Internationalization
+    app.locales: 'en|cs|de'
+    app.locale_names:
+        en: 'English'
+        cs: 'Čeština'
+        de: 'Deutsch'
+
+    # Cookies
+    app.cookie_lifespan_locale: '1 year'
+
+    # Route translation keys
+    app.route_trans_keys:
+          product_overview: 'route.product_overview'
+          user:
+              new: 'route.user.new'
+              existing: 'route.user.existing'
+
 services:
+    Symfony\Contracts\Translation\TranslatorInterface:
+        class: App\Tests\Translation\TranslatorMock
