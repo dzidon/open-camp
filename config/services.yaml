@@ -9,8 +9,17 @@ parameters:
     # Internationalization
     app.locales: 'cs' # Enabled locales (languages) divided by "|"
     app.locale_names:
-        en: 'English'
         cs: 'Česky'
+
+    # Security
+    app.social_login_services: 'facebook|google'
+    app.social_login_scopes:
+        facebook:
+            - 'public_profile'
+            - 'email'
+        google:
+            - 'https://www.googleapis.com/auth/userinfo.profile'
+            - 'https://www.googleapis.com/auth/userinfo.email'
 
     # Cookies
     app.cookie_lifespan_locale: '1 year'
@@ -46,6 +55,14 @@ services:
     _instanceof:
         App\Menu\Factory\MenuTypeFactoryInterface:
             tags: ['app.menu_factory']
+
+    App\Security\SocialLoginRedirectResponseFactory:
+        arguments:
+            $scopes: '%app.social_login_scopes%'
+
+    App\Security\SocialAuthenticator:
+        arguments:
+            $services: '%app.social_login_services%'
 
     App\Service\RouteNamer:
         arguments:

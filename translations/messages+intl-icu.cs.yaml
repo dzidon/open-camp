@@ -3,6 +3,10 @@ app:
 
 auth:
     already_logged_in: 'Už jste přihlášen, nejdříve se odhlašte.'
+    social_login_failed: 'Přihlášení pomocí služby třetí strany selhalo.'
+    login_required: 'Před provedením této akce se musíte přihlásit.'
+    login_repeat_required: 'Před provedením této akce musíte z bezpečnostních důvodů opakovat přihlášení.'
+    logged_in: 'Přihlášení proběhlo úspěšně!'
     logged_out: 'Odhlášení proběhlo úspěšně!'
 
 flash_message:

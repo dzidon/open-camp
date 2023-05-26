@@ -10,7 +10,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 /**
  * Fake data used for testing.
  */
-class AppFixtures extends Fixture
+class TestFixtures extends Fixture
 {
     private UserPasswordHasherInterface $passwordHasher;
 

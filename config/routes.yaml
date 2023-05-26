@@ -3,13 +3,17 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
-    # Uncomment the following line if your app supports more than one language.
     # prefix: '/{_locale<%app.locales%>}'
 
 user_home_no_locale:
     path: '/'
     prefix: ''
     controller: App\Controller\User\HomeController::noLocale
+
+user_login_oauth_check:
+    path: '/login/{service<%app.social_login_services%>}/check'
+    prefix: ''
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
 
 user_logout:
     path: '/logout'

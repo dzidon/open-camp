@@ -47,6 +47,6 @@ class LocaleRedirectResponseFactory implements LocaleRedirectResponseFactoryInte
         $routeParams['_locale'] = $locale;
 
         $url = $this->urlGenerator->generate($route, $routeParams);
-        return new RedirectResponse($url, 302);
+        return new RedirectResponse($url);
     }
 }

@@ -3,19 +3,31 @@
 namespace App\EventDispatcher\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use Symfony\Component\Security\Http\Event\LogoutEvent;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Informs the user about logging out.
+ * Informs the user about logging in and out.
  */
-class LogoutSubscriber
+class AuthenticationSubscriber
 {
     public TranslatorInterface $translator;
 
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
+    }
+
+    #[AsEventListener(event: LoginSuccessEvent::class)]
+    public function onLogin(LoginSuccessEvent $event): void
+    {
+        $request = $event->getRequest();
+        $session = $request->getSession();
+        $flashBag = $session->getFlashBag();
+
+        $message = $this->translator->trans('auth.logged_in');
+        $flashBag->add('success', $message);
     }
 
     #[AsEventListener(event: LogoutEvent::class)]

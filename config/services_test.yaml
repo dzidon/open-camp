@@ -8,6 +8,13 @@ parameters:
         cs: 'Čeština'
         de: 'Deutsch'
 
+    # Security
+    app.social_login_services: 'facebook'
+    app.social_login_scopes:
+        facebook:
+            - 'public_profile'
+            - 'email'
+
     # Cookies
     app.cookie_lifespan_locale: '1 year'
 
