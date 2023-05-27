@@ -34,7 +34,9 @@
         <!-- Page content-->
         <div class="container pt-4 pt-4">
             <!-- Breadcrumbs -->
-            {{ menu_from_registry('breadcrumbs') }}
+            {% if _breadcrumbs is defined %}
+                {{ menu(_breadcrumbs) }}
+            {% endif %}
 
             <!-- Flash messages -->
             {% if app.session.flashbag.peekAll|length > 0 %}

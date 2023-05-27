@@ -71,7 +71,6 @@ class MenuTypeRendererTest extends KernelTestCase
      */
     private function getMenuTypeRenderer(): MenuTypeRenderer
     {
-        self::bootKernel();
         $container = static::getContainer();
 
         /** @var MenuTypeRenderer $renderer */

@@ -2,7 +2,7 @@
 
 namespace App\Tests\Search\Paginator;
 
-use App\Search\Paginator\Paginator;
+use App\Search\Paginator\DqlPaginator;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  * Tests paginator calculations. Method 'getCurrentPageItems' is excluded, this test does not fetch
  * items from the database. Correct retrieval of items is tested in individual repository tests.
  */
-class PaginatorTest extends TestCase
+class DqlPaginatorTest extends TestCase
 {
     public function testGetTotalItems(): void
     {
@@ -119,9 +119,9 @@ class PaginatorTest extends TestCase
      * @param int $totalItems
      * @param int $currentPage
      * @param int $pageSize
-     * @return Paginator
+     * @return DqlPaginator
      */
-    private function createPaginator(int $totalItems, int $currentPage, int $pageSize): Paginator
+    private function createPaginator(int $totalItems, int $currentPage, int $pageSize): DqlPaginator
     {
         // query mock
         /** @var AbstractQuery|MockObject $queryMock */
@@ -168,6 +168,6 @@ class PaginatorTest extends TestCase
             ->willReturn($queryMock)
         ;
 
-        return new Paginator($doctrinePaginatorMock, $currentPage, $pageSize);
+        return new DqlPaginator($doctrinePaginatorMock, $currentPage, $pageSize);
     }
 }

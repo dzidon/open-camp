@@ -170,7 +170,6 @@ class GraphSearchTest extends KernelTestCase
      */
     private function getGraphSearch(): GraphSearch
     {
-        self::bootKernel();
         $container = static::getContainer();
 
         /** @var GraphSearch $graphSearch */

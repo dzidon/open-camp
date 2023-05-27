@@ -48,8 +48,7 @@ services:
             - '../src/DataStructure/'
             - '../src/Form/DTO/'
             - '../src/Menu/Type/'
-            - '../src/Menu/Registry/MenuTypeRegistryRecord.php'
-            - '../src/Search/Paginator/Paginator.php'
+            - '../src/Search/Paginator/'
             - '../src/Kernel.php'
 
     _instanceof:

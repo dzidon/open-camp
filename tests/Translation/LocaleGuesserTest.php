@@ -80,7 +80,6 @@ class LocaleGuesserTest extends KernelTestCase
      */
     private function createLocaleGuesser(): LocaleGuesser
     {
-        self::bootKernel();
         $container = static::getContainer();
 
         /** @var LocaleGuesser $localeGuesser */

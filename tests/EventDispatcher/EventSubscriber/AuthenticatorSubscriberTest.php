@@ -173,7 +173,6 @@ class AuthenticatorSubscriberTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        self::bootKernel();
         $container = static::getContainer();
 
         /** @var AuthenticationSubscriber $authSubscriber */

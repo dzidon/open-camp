@@ -8,7 +8,7 @@ use App\Menu\Type\MenuType;
 /**
  * Creates the admin navbar menu.
  */
-class AdminNavbarMenuTypeFactory implements MenuTypeFactoryInterface
+class AdminNavbarMenuTypeFactory extends AbstractMenuTypeFactory
 {
     /**
      * @inheritDoc
@@ -21,7 +21,7 @@ class AdminNavbarMenuTypeFactory implements MenuTypeFactoryInterface
     /**
      * @inheritDoc
      */
-    public function buildMenuType(): MenuType
+    public function buildMenuType(array $options = []): MenuType
     {
         $menu = new MenuType(self::getMenuIdentifier(), 'navbar_admin_root');
 

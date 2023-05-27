@@ -107,7 +107,6 @@ class AuthenticationEntryPointTest extends KernelTestCase
      */
     private function getAuthenticationEntryPoint(array $userRoles = []): AuthenticationEntryPoint
     {
-        self::bootKernel();
         $container = static::getContainer();
 
         /** @var Security|MockObject $securityMock */

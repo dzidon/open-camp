@@ -44,14 +44,8 @@ class LocaleSwitchMenuTypeFactoryTest extends KernelTestCase
         $this->assertSame('/de/route/mock?get_parameter=value', $buttonDe->getUrl());
     }
 
-    /**
-     * Instantiates the menu factory.
-     *
-     * @return LocaleSwitchMenuTypeFactory
-     */
     private function createLocaleSwitchMenuTypeFactory(): LocaleSwitchMenuTypeFactory
     {
-        self::bootKernel();
         $container = static::getContainer();
 
         $request = new Request([

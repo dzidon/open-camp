@@ -20,7 +20,8 @@ class ProfileController extends AbstractController
     #[Route('/', name: 'admin_profile')]
     public function profile(): Response
     {
-        $this->breadcrumbs->addProfileToMenuRegistry();
-        return $this->render('admin/profile/profile.html.twig');
+        return $this->render('admin/profile/profile.html.twig', [
+            '_breadcrumbs' => $this->breadcrumbs->buildProfile()
+        ]);
     }
 }

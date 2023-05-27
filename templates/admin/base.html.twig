@@ -44,7 +44,8 @@
             <div class="sidebar">
                 <!-- Sidebar menu -->
                 <nav class="mt-2">
-                    {{ menu_from_registry('navbar_admin') }}
+                    {% set navbar_admin = build_menu('navbar_admin') %}
+                    {{ menu(navbar_admin) }}
                 </nav>
             </div>
         </aside>
@@ -63,8 +64,9 @@
 
                         <div class="col-sm-6">
                             <div class="float-sm-right">
-                                <!-- Breadcrumbs -->
-                                {{ menu_from_registry('breadcrumbs') }}
+                                {% if _breadcrumbs is defined %}
+                                    {{ menu(_breadcrumbs) }}
+                                {% endif %}
                             </div>
                         </div>
                     </div>

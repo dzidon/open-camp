@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * Creates a menu that lets users change their locale (language).
  */
-class LocaleSwitchMenuTypeFactory implements MenuTypeFactoryInterface
+class LocaleSwitchMenuTypeFactory extends AbstractMenuTypeFactory
 {
     private array $locales;
     private array $localeNames;
@@ -44,7 +44,7 @@ class LocaleSwitchMenuTypeFactory implements MenuTypeFactoryInterface
     /**
      * @inheritDoc
      */
-    public function buildMenuType(): MenuType
+    public function buildMenuType(array $options = []): MenuType
     {
         $menu = new MenuType(self::getMenuIdentifier(), 'locale_switch_root');
         $request = $this->requestStack->getCurrentRequest();

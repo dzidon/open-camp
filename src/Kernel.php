@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\DependencyInjection\Compiler\MenuTypeRegistryPass;
+use App\DependencyInjection\Compiler\MenuTypeFactoryRegistryPass;
 use App\DependencyInjection\Compiler\PublicServicesInTestCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -15,7 +15,7 @@ class Kernel extends BaseKernel
     protected function build(ContainerBuilder $container): void
     {
         $container
-            ->addCompilerPass(new MenuTypeRegistryPass())
+            ->addCompilerPass(new MenuTypeFactoryRegistryPass())
             ->addCompilerPass(new PublicServicesInTestCompilerPass())
         ;
     }

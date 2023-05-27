@@ -178,7 +178,6 @@ class RouteNamerTest extends KernelTestCase
      */
     private function getRouteNamer(null|string $requestRoute): RouteNamer
     {
-        self::bootKernel();
         $container = static::getContainer();
 
         /** @var RequestStack $requestStack */

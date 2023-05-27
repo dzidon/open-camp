@@ -1,35 +1,56 @@
 <?php
 
-namespace App\Search\Paginator;
+namespace App\Menu\Factory;
 
 use App\Menu\Type\MenuType;
-use Symfony\Component\HttpFoundation\Request;
+use App\Search\Paginator\PaginatorInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Creates a basic pagination menu.
  */
-class PaginatorMenuFactory implements PaginatorMenuFactoryInterface
+class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
 {
     private const VIEW_INNER_PAGES = 5;
     private const VIEW_INNER_CENTER = 3;
 
     private UrlGeneratorInterface $urlGenerator;
+    private RequestStack $requestStack;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator)
+    public function __construct(UrlGeneratorInterface $urlGenerator, RequestStack $requestStack)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->requestStack = $requestStack;
     }
 
     /**
      * @inheritDoc
      */
-    public function buildMenu(PaginatorInterface $paginator,
-                              Request $request,
-                              string $pageParameterName,
-                              string $templateBlockRoot,
-                              string $templateBlockItem): MenuType
+    public static function getMenuIdentifier(): string
     {
+        return 'pagination';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function buildMenuType(array $options = []): MenuType
+    {
+        /** @var PaginatorInterface $paginator */
+        $paginator = $options['paginator'];
+        $pageParameterName = $options['page_parameter_name'];
+        $templateBlockRoot = $options['template_block_root'];
+        $templateBlockItem = $options['template_block_item'];
+
+        $menu = new MenuType('pagination', $templateBlockRoot);
+        $request = $this->requestStack->getCurrentRequest();
+        if ($request === null)
+        {
+            return $menu;
+        }
+
         // extract data from the paginator
         $currentPage = $paginator->getCurrentPage();
         $pagesCount = $paginator->getPagesCount();
@@ -73,7 +94,6 @@ class PaginatorMenuFactory implements PaginatorMenuFactoryInterface
             ],
         ];
 
-        $menu = new MenuType('pagination', $templateBlockRoot);
         $direction = $directions['left'];
         $visitedPage = $currentPage;
         $lowestPage = null;
@@ -147,7 +167,30 @@ class PaginatorMenuFactory implements PaginatorMenuFactoryInterface
         }
 
         $menu->sortChildren();
+
         return $menu;
+    }
+
+    /**
+     * Configures the following options: paginator, page_parameter_name, template_block_root, and template_block_item.
+     *
+     * @param OptionsResolver $resolver
+     * @return void
+     */
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setRequired(['paginator', 'page_parameter_name', 'template_block_root', 'template_block_item']);
+
+        $resolver->setDefaults([
+            'page_parameter_name' => 'page',
+            'template_block_root' => 'pagination_root',
+            'template_block_item' => 'pagination_item',
+        ]);
+
+        $resolver->setAllowedTypes('paginator', PaginatorInterface::class);
+        $resolver->setAllowedTypes('page_parameter_name', 'string');
+        $resolver->setAllowedTypes('template_block_root', 'string');
+        $resolver->setAllowedTypes('template_block_item', 'string');
     }
 
     /**

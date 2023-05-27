@@ -2,9 +2,8 @@
 
 namespace App\Menu\Breadcrumbs;
 
-use App\Menu\Registry\MenuTypeRegistryInterface;
+use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use App\Menu\Type\MenuType;
-use LogicException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -15,14 +14,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 abstract class AbstractBreadcrumbs
 {
     protected UrlGeneratorInterface $urlGenerator;
-    protected MenuTypeRegistryInterface $menuTypeRegistry;
+    protected MenuTypeFactoryRegistryInterface $menuTypeRegistry;
     protected ParameterBagInterface $parameterBag;
     protected TranslatorInterface $translator;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator,
-                                MenuTypeRegistryInterface $menuTypeRegistry,
-                                ParameterBagInterface $parameterBag,
-                                TranslatorInterface $translator)
+    public function __construct(UrlGeneratorInterface            $urlGenerator,
+                                MenuTypeFactoryRegistryInterface $menuTypeRegistry,
+                                ParameterBagInterface            $parameterBag,
+                                TranslatorInterface              $translator)
     {
         $this->urlGenerator = $urlGenerator;
         $this->menuTypeRegistry = $menuTypeRegistry;
@@ -46,19 +45,17 @@ abstract class AbstractBreadcrumbs
      *
      * @param MenuType $root
      * @param string $routeName
-     * @param string|null $variation
      * @param array $urlParameters
+     * @param string|null $variation
      * @param string $block
      * @return MenuType
      */
     protected function addChildRoute(MenuType $root,
                                      string $routeName,
-                                     ?string $variation = null,
                                      array $urlParameters = [],
+                                     ?string $variation = null,
                                      string $block = 'breadcrumb'): MenuType
     {
-        $this->assertRootIdentifier($root);
-
         $text = $routeName;
         $routeNames = $this->parameterBag->get('app.route_trans_keys');
         if ($routeNames !== null && array_key_exists($routeName, $routeNames))
@@ -83,34 +80,5 @@ abstract class AbstractBreadcrumbs
         $root->addChild($child);
 
         return $child;
-    }
-
-    /**
-     * Adds the breadcrumbs to the central menu registry.
-     *
-     * @param MenuType $root
-     * @return void
-     */
-    protected function registerBreadcrumbs(MenuType $root): void
-    {
-        $this->assertRootIdentifier($root);
-        $this->menuTypeRegistry->registerMenuType($root);
-    }
-
-    /**
-     * Validates that a menu has the "breadcrumbs" identifier.
-     *
-     * @param MenuType $root
-     * @return void
-     */
-    private function assertRootIdentifier(MenuType $root): void
-    {
-        $identifier = $root->getIdentifier();
-        if ($identifier !== 'breadcrumbs')
-        {
-            throw new LogicException(
-                sprintf('Breadcrumbs root menu type must have the "breadcrumbs" identifier. "%s" used.', $identifier)
-            );
-        }
     }
 }

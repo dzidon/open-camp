@@ -7,7 +7,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 /**
  * Class for paginating Doctrine queries. Calculates offset & limit, applies it to the query and fetches results.
  */
-class Paginator implements PaginatorInterface
+class DqlPaginator implements PaginatorInterface
 {
     private int $pageSize;
     private int $currentPage;

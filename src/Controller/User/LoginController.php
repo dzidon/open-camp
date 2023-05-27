@@ -39,8 +39,6 @@ class LoginController extends AbstractController
             return $redirectHome;
         }
 
-        $this->breadcrumbs->addLoginToMenuRegistry();
-
         $error = $authenticationUtils->getLastAuthenticationError();
         if ($error)
         {
@@ -59,6 +57,7 @@ class LoginController extends AbstractController
 
         return $this->render('user/auth/login.html.twig', [
             'form_login' => $form->createView(),
+            '_breadcrumbs' => $this->breadcrumbs->buildLogin(),
         ]);
     }
 

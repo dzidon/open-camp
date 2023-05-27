@@ -94,7 +94,6 @@ class LocaleRedirectResponseFactoryTest extends KernelTestCase
      */
     private function getLocaleRedirectResponseFactory(): LocaleRedirectResponseFactory
     {
-        self::bootKernel();
         $container = static::getContainer();
 
         /** @var LocaleRedirectResponseFactory $factory */

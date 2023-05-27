@@ -14,9 +14,9 @@ abstract class RepositoryTestCase extends KernelTestCase
 
     protected function setUp(): void
     {
-        $kernel = self::bootKernel();
+        $container = static::getContainer();
 
-        $this->entityManager = $kernel->getContainer()
+        $this->entityManager = $container
             ->get('doctrine')
             ->getManager()
         ;
