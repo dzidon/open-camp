@@ -87,6 +87,13 @@ class UserRegistration
         return $this;
     }
 
+    public function isActive(): bool
+    {
+        $now = new DateTimeImmutable('now');
+
+        return $now < $this->expireAt && $this->state === UserRegistrationStateEnum::UNUSED->value;
+    }
+
     public function getSelector(): string
     {
         return $this->selector;

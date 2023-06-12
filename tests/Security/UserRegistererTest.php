@@ -192,6 +192,27 @@ class UserRegistererTest extends KernelTestCase
         $this->assertSame(UserRegistrationStateEnum::DISABLED->value, $registration2->getState());
     }
 
+    public function testCompleteUserRegistrationIfItsInactive(): void
+    {
+        $registerer = $this->getUserRegisterer();
+        $registrationRepository = $this->getUserRegistrationRepository();
+        $registration1 = $registrationRepository->findOneBySelector('lu2');
+        $registration2 = $registrationRepository->findOneBySelector('ti2');
+        $registration3 = $registrationRepository->findOneBySelector('al2');
+
+        $registerer->completeUserRegistration($registration1, '123456');
+        $registerer->completeUserRegistration($registration2, '123456');
+        $registerer->completeUserRegistration($registration3, '123456');
+
+        $registration1 = $registrationRepository->findOneBySelector('lu2');
+        $registration2 = $registrationRepository->findOneBySelector('ti2');
+        $registration3 = $registrationRepository->findOneBySelector('al2');
+
+        $this->assertSame(UserRegistrationStateEnum::UNUSED->value, $registration1->getState());
+        $this->assertSame(UserRegistrationStateEnum::DISABLED->value, $registration2->getState());
+        $this->assertSame(UserRegistrationStateEnum::USED->value, $registration3->getState());
+    }
+
     private function getUserRegistrationRepository(): UserRegistrationRepositoryInterface
     {
         $container = static::getContainer();

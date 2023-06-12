@@ -71,6 +71,11 @@ class UserRegisterer implements UserRegistererInterface
      */
     public function completeUserRegistration(UserRegistration $userRegistration, string $plainPassword): void
     {
+        if (!$userRegistration->isActive())
+        {
+            return;
+        }
+
         $email = $userRegistration->getEmail();
         $otherEmailRegistrations = $this->userRegistrationRepository->findByEmail($email, true);
 
