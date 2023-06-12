@@ -15,7 +15,7 @@ class HomeController extends AbstractController
         return $responseFactory->createRedirectResponse($request, 'user_home');
     }
 
-    #[Route('/', name: 'user_home')]
+    #[Route('', name: 'user_home')]
     public function index(): Response
     {
         return $this->render('user/home/index.html.twig');

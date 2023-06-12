@@ -3,7 +3,6 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -68,22 +67,28 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
      */
     public function findOneByEmail(string $email): ?User
     {
-        try
-        {
-            /** @var null|User $user */
-            $user = $this->createQueryBuilder('u')
-                ->andWhere('u.email = :email')
-                ->setParameter('email', $email)
-                ->getQuery()
-                ->getOneOrNullResult()
-            ;
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 
-            return $user;
-        }
-        catch (NonUniqueResultException)
-        {
-            return null;
-        }
+    /**
+     * @inheritDoc
+     */
+    public function isEmailRegistered(string $email): bool
+    {
+        $count = $this->createQueryBuilder('u')
+            ->select('count(u.id)')
+            ->andWhere('u.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
     }
 
     /**

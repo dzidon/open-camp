@@ -18,7 +18,7 @@ class UserRepositoryTest extends RepositoryTestCase
 
     public function testSaveAndRemove(): void
     {
-        $user = $this->createNewUser();
+        $user = new User('bob@bing.com');
         $this->repository->saveUser($user, true);
         $id = $user->getId();
 
@@ -55,6 +55,15 @@ class UserRepositoryTest extends RepositoryTestCase
         $this->assertSame('david@gmail.com', $loadedUser->getEmail());
     }
 
+    public function testIsEmailRegistered(): void
+    {
+        $registered = $this->repository->isEmailRegistered('david@gmail.com');
+        $this->assertTrue($registered);
+
+        $registered = $this->repository->isEmailRegistered('non-existent-user@gmail.com');
+        $this->assertFalse($registered);
+    }
+
     public function testSupportsClass(): void
     {
         $this->assertTrue($this->repository->supportsClass(User::class));
@@ -81,7 +90,7 @@ class UserRepositoryTest extends RepositoryTestCase
         $refreshedUser = $this->repository->refreshUser($loadedUser);
         $this->assertSame($loadedUser->getId(), $refreshedUser->getId());
 
-        $newUser = $this->createNewUser();
+        $newUser = new User('bob@bing.com');
 
         $this->expectException(UserNotFoundException::class);
         $this->repository->refreshUser($newUser);
@@ -94,11 +103,6 @@ class UserRepositoryTest extends RepositoryTestCase
 
         $this->expectException(UnsupportedUserException::class);
         $this->repository->refreshUser($unsupportedUser);
-    }
-
-    private function createNewUser(): User
-    {
-        return new User('bob@bing.com');
     }
 
     protected function setUp(): void

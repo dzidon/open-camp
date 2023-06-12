@@ -1,7 +1,11 @@
 parameters:
     app.menu_theme: '_fragment/_menu_theme/_test.html.twig'
 
+    # Mailer
+    app.email_no_reply: 'noreply@camp.com'
+
     # Internationalization
+    app.date_time_format: 'd. m. Y H:i:s'
     app.locales: 'en|cs|de'
     app.locale_names:
         en: 'English'
@@ -9,6 +13,8 @@ parameters:
         de: 'Deutsch'
 
     # Security
+    app.max_active_registrations_per_email: 2
+    app.registration_lifespan: '1 hour'
     app.social_login_services: 'facebook'
     app.social_login_scopes:
         facebook:
@@ -26,5 +32,16 @@ parameters:
               existing: 'route.user.existing'
 
 services:
+    # Interfaces
     Symfony\Contracts\Translation\TranslatorInterface:
         class: App\Tests\Translation\TranslatorMock
+
+    Symfony\Component\Mailer\MailerInterface:
+        class: App\Tests\Mailer\MailerMock
+
+    App\Security\TokenSplitterInterface:
+        class: App\Tests\Security\TokenSplitterMock
+
+    # Classes
+    App\Security\TokenSplitter:
+        public: true

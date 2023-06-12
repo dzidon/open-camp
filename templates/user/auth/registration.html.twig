@@ -1,0 +1,24 @@
+{% extends "user/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-8 col-lg-6 col-xl-4">
+            {{ form(form_registration) }}
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        <div class="col-md-8 col-lg-6 col-xl-4">
+            <div>
+                {{ 'auth.already_have_account'|trans }}
+                <a href="{{ path('user_login') }}">{{ 'auth.already_have_account_link'|trans }}</a>
+            </div>
+
+            <br>
+
+            {{ include('_fragment/_auth/_social_login_links.html.twig') }}
+        </div>
+    </div>
+{% endblock %}

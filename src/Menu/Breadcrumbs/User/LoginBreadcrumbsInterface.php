@@ -2,15 +2,16 @@
 
 namespace App\Menu\Breadcrumbs\User;
 
+use App\Controller\User\LoginController;
 use App\Menu\Type\MenuTypeInterface;
 
 /**
- * Adds login page breadcrumbs to the central menu registry.
+ * Creates breadcrumbs for {@link LoginController}.
  */
 interface LoginBreadcrumbsInterface
 {
     /**
-     * Initializes breadcrumbs for the path "user_login".
+     * Creates breadcrumbs for the path "user_login".
      */
     public function buildLogin(): MenuTypeInterface;
 }

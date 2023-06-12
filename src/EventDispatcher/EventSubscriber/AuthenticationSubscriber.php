@@ -3,6 +3,7 @@
 namespace App\EventDispatcher\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use Symfony\Component\Security\Http\Event\LogoutEvent;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -22,6 +23,12 @@ class AuthenticationSubscriber
     #[AsEventListener(event: LoginSuccessEvent::class)]
     public function onLogin(LoginSuccessEvent $event): void
     {
+        $token = $event->getAuthenticatedToken();
+        if ($token instanceof RememberMeToken)
+        {
+            return;
+        }
+
         $request = $event->getRequest();
         $session = $request->getSession();
         $flashBag = $session->getFlashBag();

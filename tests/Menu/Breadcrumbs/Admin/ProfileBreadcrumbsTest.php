@@ -32,11 +32,11 @@ class ProfileBreadcrumbsTest extends KernelTestCase
 
         $homeButton = $breadcrumbsMenu->getChild('admin_home');
         $this->assertSame(false, $homeButton->isActive());
-        $this->assertSame('/admin/', $homeButton->getUrl());
+        $this->assertSame('/admin', $homeButton->getUrl());
 
         $profileButton = $breadcrumbsMenu->getChild('admin_profile');
         $this->assertSame(true, $profileButton->isActive());
-        $this->assertSame('/admin/profile/', $profileButton->getUrl());
+        $this->assertSame('/admin/profile', $profileButton->getUrl());
     }
 
     protected function setUp(): void

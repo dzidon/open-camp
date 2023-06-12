@@ -2,15 +2,16 @@
 
 namespace App\Menu\Breadcrumbs\Admin;
 
+use App\Controller\Admin\ProfileController;
 use App\Menu\Type\MenuTypeInterface;
 
 /**
- * Adds admin profile breadcrumbs to the central menu registry.
+ * Creates breadcrumbs for {@link ProfileController}.
  */
 interface ProfileBreadcrumbsInterface
 {
     /**
-     * Initializes breadcrumbs for the path "admin_profile".
+     * Creates breadcrumbs for the path "admin_profile".
      */
     public function buildProfile(): MenuTypeInterface;
 }

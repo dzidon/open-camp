@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\RememberMeToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
@@ -29,7 +30,7 @@ class AuthenticatorSubscriberTest extends KernelTestCase
      */
     public function testOnLogin(): void
     {
-        $event = $this->createLoginSuccessEvent();
+        $event = $this->createLoginSuccessEvent(false);
         $this->authSubscriber->onLogin($event);
 
         $flashBag = $this->eventGetFlashBag($event);
@@ -37,6 +38,20 @@ class AuthenticatorSubscriberTest extends KernelTestCase
 
         $messages = $flashBag->peek('success');
         $this->assertTrue(in_array('auth.logged_in', $messages));
+    }
+
+    /**
+     * Tests that no message is added when a user is authenticated using remember me cookie.
+     *
+     * @return void
+     */
+    public function testOnLoginRememberMe(): void
+    {
+        $event = $this->createLoginSuccessEvent(true);
+        $this->authSubscriber->onLogin($event);
+
+        $flashBag = $this->eventGetFlashBag($event);
+        $this->assertFalse($flashBag->has('success'));
     }
 
     /**
@@ -114,9 +129,10 @@ class AuthenticatorSubscriberTest extends KernelTestCase
     /**
      * Creates a successful login event.
      *
+     * @param bool $rememberMeToken
      * @return LoginSuccessEvent
      */
-    private function createLoginSuccessEvent(): LoginSuccessEvent
+    private function createLoginSuccessEvent(bool $rememberMeToken): LoginSuccessEvent
     {
         $request = new Request();
         $sessionMock = $this->createSessionMock();
@@ -135,8 +151,14 @@ class AuthenticatorSubscriberTest extends KernelTestCase
             ->getMock()
         ;
 
+        $tokenClass = TokenInterface::class;
+        if ($rememberMeToken)
+        {
+            $tokenClass = RememberMeToken::class;
+        }
+
         /** @var TokenInterface|MockObject $tokenMock */
-        $tokenMock = $this->getMockBuilder(TokenInterface::class)
+        $tokenMock = $this->getMockBuilder($tokenClass)
             ->disableOriginalConstructor()
             ->getMock()
         ;

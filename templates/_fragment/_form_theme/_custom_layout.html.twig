@@ -1,0 +1,19 @@
+{% block checkbox_with_url_label %}
+    {% set label %}
+        {% if translation_domain is same as(false) %}
+            {{ label }}
+        {% else %}
+            {{ label|trans(label_translation_parameters, translation_domain) }}
+        {% endif %}
+
+        <a href="{{ checkbox_link_url }}" {% with { attr: checkbox_link_attr } %} {{ block('attributes') }} {% endwith %}>
+            {% if translation_domain is same as(false) %}
+                {{ checkbox_link_label }}
+            {% else %}
+                {{ checkbox_link_label|trans(checkbox_link_translation_parameters, translation_domain) }}
+            {% endif %}
+        </a>
+    {% endset %}
+
+    {{ form_label(form, label, {translation_domain: false}) }}
+{% endblock %}

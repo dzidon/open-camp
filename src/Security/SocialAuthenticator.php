@@ -110,14 +110,19 @@ class SocialAuthenticator extends OAuth2Authenticator
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?RedirectResponse
     {
         $targetPath = $this->getTargetPath($request->getSession(), $firewallName);
-        if ($targetPath !== null)
+        if ($targetPath === null)
         {
-            return new RedirectResponse($targetPath);
+            $url = $this->urlGenerator->generate('user_home');
+            $response = new RedirectResponse($url);
+        }
+        else
+        {
+            $response = new RedirectResponse($targetPath);
         }
 
-        $url = $this->urlGenerator->generate('user_home');
+        $response->headers->clearCookie('REMEMBERME');
 
-        return new RedirectResponse($url);
+        return $response;
     }
 
     /**

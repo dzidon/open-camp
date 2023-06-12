@@ -6,12 +6,18 @@
 parameters:
     app.menu_theme: '_fragment/_menu_theme/_main.html.twig'
 
+    # Mailer
+    app.email_no_reply: 'noreply@camp.com'
+
     # Internationalization
+    app.date_time_format: 'd.m.Y H:i:s'
     app.locales: 'cs' # Enabled locales (languages) divided by "|"
     app.locale_names:
         cs: 'Česky'
 
     # Security
+    app.max_active_registrations_per_email: 5
+    app.registration_lifespan: '1 hour'
     app.social_login_services: 'facebook|google'
     app.social_login_scopes:
         facebook:
@@ -31,6 +37,8 @@ parameters:
 
         user_home: 'route.user.home'
         user_login: 'route.user.login'
+        user_registration: 'route.user.registration'
+        user_registration_complete: 'route.user.registration_complete'
 
 services:
     # default configuration for services in *this* file
@@ -45,9 +53,13 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
+            - '../src/Enum/'
             - '../src/DataStructure/'
             - '../src/Form/DTO/'
             - '../src/Menu/Type/'
+            - '../src/Security/Exception/'
+            - '../src/Security/TokenSplit.php'
+            - '../src/Security/UserRegistrationCreationResult.php'
             - '../src/Search/Paginator/'
             - '../src/Kernel.php'
 
@@ -89,3 +101,13 @@ services:
         arguments:
             $locales: '%app.locales%'
             $cookieLifespan: '%app.cookie_lifespan_locale%'
+
+    App\Repository\UserRegistrationRepository:
+        arguments:
+            $maxActiveRegistrationsPerEmail: '%app.max_active_registrations_per_email%'
+            $registrationLifespan: '%app.registration_lifespan%'
+
+    App\Mailer\UserRegistrationMailer:
+        arguments:
+            $emailFrom: '%app.email_no_reply%'
+            $dateTimeFormat: '%app.date_time_format%'

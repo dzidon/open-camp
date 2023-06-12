@@ -2,12 +2,21 @@ app:
     site_name: 'Kemp'
 
 auth:
+    no_account_yet: 'Ještě u nás nemáte účet?'
+    no_account_yet_link: 'Zaregistrovat se'
+    already_have_account: 'Už u nás máte účet?'
+    already_have_account_link: 'Přihlásit se'
+
     already_logged_in: 'Už jste přihlášen, nejdříve se odhlašte.'
     social_login_failed: 'Přihlášení pomocí služby třetí strany selhalo.'
     login_required: 'Před provedením této akce se musíte přihlásit.'
     login_repeat_required: 'Před provedením této akce musíte z bezpečnostních důvodů opakovat přihlášení.'
     logged_in: 'Přihlášení proběhlo úspěšně!'
     logged_out: 'Odhlášení proběhlo úspěšně!'
+
+    registration_created: 'Registrace proběhla úspěšně! Pokud zadaný e-mail existuje a pokud u nás ještě není zaregistrovaný, poslali jsme na něj potvrzovací odkaz pro dokončení registrace.'
+    registration_enter_password: 'Nyní prosím zadejte své nové heslo pro dokončení registrace.'
+    registration_complete: 'Registrace dokončena! Nyní se můžete přihlásit ke svému účtu.'
 
 flash_message:
     success: 'Úspěch'
@@ -23,11 +32,36 @@ form:
     admin:
 
     user:
+        registration:
+            email: 'E-mail'
+            captcha: 'Captcha'
+            privacy: 'Souhlasím se zásadami ochrany soukromí'
+            privacy_link: 'Číst'
+            terms: 'Souhlasím s podmínkami používání'
+            terms_link: 'Číst'
+            button: 'Zaregistrovat se'
+
+        registration_complete:
+            button: 'Zaregistrovat se'
+
+        plain_password:
+            one: 'Heslo'
+            two: 'Heslo znovu'
+
         login:
             email: 'E-mail'
             password: 'Heslo'
             remember_me: 'Zůstat přihlášen'
             button: 'Přihlásit se'
+
+mail:
+    greeting: 'Zdravíme!'
+
+    user_registration:
+        subject: 'Registrace'
+        body1: 'Pro dokončení registrace klikněte'
+        link_text: 'ZDE'
+        body2: 'Odkaz vyprší {date}.'
 
 route:
     admin:
@@ -37,3 +71,5 @@ route:
     user:
         home: 'Domů'
         login: 'Přihlášení'
+        registration: 'Registrace'
+        registration_complete: 'Dokončení registrace'

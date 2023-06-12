@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Form\DTO;
+namespace App\Form\DTO\User;
 
 use App\Form\Type\User\LoginType;
 
 /**
  * See {@link LoginType}
  */
-class UserLoginDTO
+class LoginDTO
 {
-    public string $email = '';
+    public ?string $email = null;
 
-    public string $password = '';
+    public ?string $password = null;
 
     public bool $rememberMe = false;
 }

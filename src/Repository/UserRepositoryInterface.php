@@ -43,4 +43,12 @@ interface UserRepositoryInterface
      * @return User|null
      */
     public function findOneByEmail(string $email): ?User;
+
+    /**
+     * Returns true if there is a user with the specified email.
+     *
+     * @param string $email
+     * @return bool
+     */
+    public function isEmailRegistered(string $email): bool;
 }

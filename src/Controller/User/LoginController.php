@@ -2,22 +2,25 @@
 
 namespace App\Controller\User;
 
-use App\Form\DTO\UserLoginDTO;
+use App\Form\DTO\User\LoginDTO;
 use App\Form\Type\User\LoginType;
 use App\Menu\Breadcrumbs\User\LoginBreadcrumbsInterface;
 use App\Security\SocialLoginRedirectResponseFactoryInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 
 #[Route('/login')]
+#[IsGranted(new Expression('not is_granted("IS_AUTHENTICATED_FULLY")'), statusCode: 403)]
 class LoginController extends AbstractController
 {
     private LoginBreadcrumbsInterface $breadcrumbs;
@@ -34,11 +37,6 @@ class LoginController extends AbstractController
                           FormFactoryInterface $formFactory,
                           AuthenticationUtils  $authenticationUtils): Response
     {
-        if (($redirectHome = $this->redirectHomeIfAuthenticatedFully()) !== null)
-        {
-            return $redirectHome;
-        }
-
         $error = $authenticationUtils->getLastAuthenticationError();
         if ($error)
         {
@@ -48,10 +46,9 @@ class LoginController extends AbstractController
             $this->addFlash('failure', $errorMessage);
         }
 
-        $dto = new UserLoginDTO();
+        $dto = new LoginDTO();
         $dto->email = $authenticationUtils->getLastUsername();
         $form = $formFactory->createNamed('', LoginType::class, $dto);
-
         $form->add('submit', SubmitType::class, ['label' => 'form.user.login.button']);
         $request->getSession()->remove(Security::LAST_USERNAME);
 
@@ -64,28 +61,6 @@ class LoginController extends AbstractController
     #[Route('/{service<%app.social_login_services%>}', name: 'user_login_oauth')]
     public function loginSocial(SocialLoginRedirectResponseFactoryInterface $responseFactory, $service): RedirectResponse
     {
-        if (($redirectHome = $this->redirectHomeIfAuthenticatedFully()) !== null)
-        {
-            return $redirectHome;
-        }
-
         return $responseFactory->createRedirectResponse($service);
-    }
-
-    /**
-     * Adds an error flash message and creates a home redirect response if the user is authenticated fully.
-     *
-     * @return RedirectResponse|null
-     */
-    private function redirectHomeIfAuthenticatedFully(): ?RedirectResponse
-    {
-        if ($this->isGranted('IS_AUTHENTICATED_FULLY'))
-        {
-            $errorMessage = $this->translator->trans('auth.already_logged_in');
-            $this->addFlash('failure', $errorMessage);
-            return $this->redirectToRoute('user_home');
-        }
-
-        return null;
     }
 }

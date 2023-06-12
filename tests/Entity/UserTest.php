@@ -39,7 +39,7 @@ class UserTest extends TestCase
     }
 
     /**
-     * Tests the internal roles getter.
+     * Tests the internal getter of roles.
      *
      * @return void
      */
