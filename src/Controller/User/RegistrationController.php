@@ -2,9 +2,9 @@
 
 namespace App\Controller\User;
 
-use App\Form\DTO\User\PlainPasswordDTO;
+use App\Form\DTO\User\RegistrationPasswordDTO;
 use App\Form\DTO\User\RegistrationDTO;
-use App\Form\Type\User\PlainPasswordType;
+use App\Form\Type\User\RegistrationPasswordType;
 use App\Form\Type\User\RegistrationType;
 use App\Menu\Breadcrumbs\User\RegistrationBreadcrumbsInterface;
 use App\Repository\UserRegistrationRepositoryInterface;
@@ -75,9 +75,9 @@ class RegistrationController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $passwordDTO = new PlainPasswordDTO();
-        $form = $this->createForm(PlainPasswordType::class, $passwordDTO);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.registration_complete.button']);
+        $passwordDTO = new RegistrationPasswordDTO();
+        $form = $this->createForm(RegistrationPasswordType::class, $passwordDTO);
+        $form->add('submit', SubmitType::class, ['label' => 'form.user.registration_password.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())

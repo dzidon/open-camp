@@ -2,13 +2,13 @@
 
 namespace App\Form\DTO\User;
 
-use App\Form\Type\User\PlainPasswordType;
+use App\Form\Type\User\RegistrationPasswordType;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * See {@link PlainPasswordType}
+ * See {@link RegistrationPasswordType}
  */
-class PlainPasswordDTO
+class RegistrationPasswordDTO
 {
     #[Assert\Length(min: 6, max: 4096)]
     #[Assert\NotBlank]

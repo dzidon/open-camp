@@ -41,12 +41,10 @@ form:
             terms_link: 'Číst'
             button: 'Zaregistrovat se'
 
-        registration_complete:
+        registration_password:
+            first: 'Heslo'
+            second: 'Heslo znovu'
             button: 'Zaregistrovat se'
-
-        plain_password:
-            one: 'Heslo'
-            two: 'Heslo znovu'
 
         login:
             email: 'E-mail'
