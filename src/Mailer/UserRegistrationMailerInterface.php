@@ -18,8 +18,5 @@ interface UserRegistrationMailerInterface
      * @param bool $fake If true, the email is only created and not sent.
      * @return void
      */
-    public function sendEmail(string $emailTo,
-                              string $token,
-                              DateTimeImmutable $expireAt,
-                              bool $fake): void;
+    public function sendEmail(string $emailTo, string $token, DateTimeImmutable $expireAt, bool $fake): void;
 }

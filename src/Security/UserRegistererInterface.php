@@ -5,19 +5,18 @@ namespace App\Security;
 use App\Entity\UserRegistration;
 
 /**
- * A facade that handles registering new users.
+ * Handles registering new users.
  */
 interface UserRegistererInterface
 {
     /**
-     * This method:
-     * 1) Creates a new UserRegistration in the database.
-     * 2) Sends a registration completion url to the user.
+     * This method creates a new UserRegistration in the database, and it ensures that its selector is unique.
      *
      * @param string $email
-     * @return void
+     * @param bool $flush
+     * @return UserRegistrationResultInterface
      */
-    public function createUserRegistration(string $email): void;
+    public function createUserRegistration(string $email, bool $flush): UserRegistrationResultInterface;
 
     /**
      * Hashes the plain text verifier and if it matches the user registration's hash, true is returned.
@@ -42,7 +41,8 @@ interface UserRegistererInterface
      *
      * @param UserRegistration $userRegistration
      * @param string $plainPassword
+     * @param bool $flush
      * @return void
      */
-    public function completeUserRegistration(UserRegistration $userRegistration, string $plainPassword): void;
+    public function completeUserRegistration(UserRegistration $userRegistration, string $plainPassword, bool $flush): void;
 }

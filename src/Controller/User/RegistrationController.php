@@ -2,20 +2,20 @@
 
 namespace App\Controller\User;
 
-use App\Form\DTO\User\RegistrationPasswordDTO;
+use App\Controller\AbstractController;
+use App\Form\DTO\User\PlainPasswordDTO;
 use App\Form\DTO\User\RegistrationDTO;
-use App\Form\Type\User\RegistrationPasswordType;
+use App\Form\Type\User\RepeatedPasswordType;
 use App\Form\Type\User\RegistrationType;
+use App\Mailer\UserRegistrationMailerInterface;
 use App\Menu\Breadcrumbs\User\RegistrationBreadcrumbsInterface;
 use App\Repository\UserRegistrationRepositoryInterface;
 use App\Security\TokenSplitterInterface;
 use App\Security\UserRegistererInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -23,21 +23,17 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted(new Expression('not is_authenticated()'), statusCode: 403)]
 class RegistrationController extends AbstractController
 {
-    private TranslatorInterface $translator;
     private UserRegistererInterface $userRegisterer;
     private RegistrationBreadcrumbsInterface $registrationBreadcrumbs;
 
-    public function __construct(TranslatorInterface $translator,
-                                UserRegistererInterface $userRegisterer,
-                                RegistrationBreadcrumbsInterface $registrationBreadcrumbs)
+    public function __construct(UserRegistererInterface $userRegisterer, RegistrationBreadcrumbsInterface $registrationBreadcrumbs)
     {
-        $this->translator = $translator;
         $this->userRegisterer = $userRegisterer;
         $this->registrationBreadcrumbs = $registrationBreadcrumbs;
     }
 
     #[Route('', name: 'user_registration')]
-    public function registration(Request $request): Response
+    public function registration(UserRegistrationMailerInterface $mailer, Request $request): Response
     {
         $registrationDTO = new RegistrationDTO();
         $form = $this->createForm(RegistrationType::class, $registrationDTO);
@@ -46,9 +42,10 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->userRegisterer->createUserRegistration((string) $registrationDTO->email);
-            $successMessage = $this->translator->trans('auth.registration_created');
-            $this->addFlash('success', $successMessage);
+            $result = $this->userRegisterer->createUserRegistration((string) $registrationDTO->email, true);
+            $userRegistration = $result->getUserRegistration();
+            $mailer->sendEmail($userRegistration->getEmail(), $result->getToken(), $userRegistration->getExpireAt(), $result->isFake());
+            $this->addTransFlash('success', 'auth.registration_created');
 
             return $this->redirectToRoute('user_home');
         }
@@ -66,25 +63,22 @@ class RegistrationController extends AbstractController
                                          string $token): Response
     {
         $tokenSplit = $tokenSplitter->splitToken($token);
-        $selector = $tokenSplit->getSelector();
-        $plainVerifier = $tokenSplit->getPlainVerifier();
-        $userRegistration = $registrationRepository->findOneBySelector($selector, true);
+        $userRegistration = $registrationRepository->findOneBySelector($tokenSplit->getSelector(), true);
 
-        if ($userRegistration === null || !$this->userRegisterer->verify($userRegistration, $plainVerifier))
+        if ($userRegistration === null || !$this->userRegisterer->verify($userRegistration, $tokenSplit->getPlainVerifier()))
         {
             throw $this->createNotFoundException();
         }
 
-        $passwordDTO = new RegistrationPasswordDTO();
-        $form = $this->createForm(RegistrationPasswordType::class, $passwordDTO);
+        $passwordDTO = new PlainPasswordDTO();
+        $form = $this->createForm(RepeatedPasswordType::class, $passwordDTO);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.registration_password.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->userRegisterer->completeUserRegistration($userRegistration, (string) $passwordDTO->plainPassword);
-            $successMessage = $this->translator->trans('auth.registration_complete');
-            $this->addFlash('success', $successMessage);
+            $this->userRegisterer->completeUserRegistration($userRegistration, (string) $passwordDTO->plainPassword, true);
+            $this->addTransFlash('success', 'auth.registration_complete');
 
             return $this->redirectToRoute('user_login');
         }

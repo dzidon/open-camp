@@ -4,8 +4,6 @@ namespace App\Repository;
 
 use App\Entity\UserRegistration;
 use App\Enum\Entity\UserRegistrationStateEnum;
-use App\Security\TokenSplitterInterface;
-use App\Security\UserRegistrationCreationResult;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -22,28 +20,13 @@ use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
  */
 class UserRegistrationRepository extends AbstractRepository implements UserRegistrationRepositoryInterface
 {
-    private int $maxActiveRegistrationsPerEmail;
-    private string $registrationLifespan;
-
-    private UserRepositoryInterface $userRepository;
-    private TokenSplitterInterface $tokenSplitter;
     private PasswordHasherFactoryInterface $passwordHasher;
 
-    public function __construct(ManagerRegistry $registry,
-                                UserRepositoryInterface $userRepository,
-                                TokenSplitterInterface $tokenSplitter,
-                                PasswordHasherFactoryInterface $passwordHasher,
-                                int $maxActiveRegistrationsPerEmail,
-                                string $registrationLifespan)
+    public function __construct(ManagerRegistry $registry, PasswordHasherFactoryInterface $passwordHasher)
     {
         parent::__construct($registry, UserRegistration::class);
 
-        $this->userRepository = $userRepository;
-        $this->tokenSplitter = $tokenSplitter;
         $this->passwordHasher = $passwordHasher;
-
-        $this->maxActiveRegistrationsPerEmail = $maxActiveRegistrationsPerEmail;
-        $this->registrationLifespan = $registrationLifespan;
     }
 
     /**
@@ -65,41 +48,15 @@ class UserRegistrationRepository extends AbstractRepository implements UserRegis
     /**
      * @inheritDoc
      */
-    public function createUserRegistration(string $email): UserRegistrationCreationResult
+    public function createUserRegistration(string $email,
+                                           DateTimeImmutable $expireAt,
+                                           string $selector,
+                                           string $plainVerifier): UserRegistration
     {
-        $fake = false;
-
-        // this email might be registered already
-        if ($this->userRepository->isEmailRegistered($email))
-        {
-            $fake = true;
-        }
-
-        // maximum amount of active registrations might have been reached
-        $activeRegistrations = $this->findByEmail($email, true);
-        if (count($activeRegistrations) >= $this->maxActiveRegistrationsPerEmail)
-        {
-            $fake = true;
-        }
-
-        // make sure the selector is unique
-        $selector = null;
-        $plainVerifier = '';
-
-        while ($selector === null || $this->findOneBySelector($selector) !== null)
-        {
-            $tokenSplit = $this->tokenSplitter->generateTokenSplit();
-            $selector = $tokenSplit->getSelector();
-            $plainVerifier = $tokenSplit->getPlainVerifier();
-        }
-
         $hasher = $this->passwordHasher->getPasswordHasher(UserRegistration::class);
         $verifier = $hasher->hash($plainVerifier);
 
-        $expireAt = new DateTimeImmutable(sprintf('+%s', $this->registrationLifespan));
-        $userRegistration = new UserRegistration($email, $expireAt, $selector, $verifier);
-
-        return new UserRegistrationCreationResult($userRegistration, $fake, $plainVerifier);
+        return new UserRegistration($email, $expireAt, $selector, $verifier);
     }
 
     /**

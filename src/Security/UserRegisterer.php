@@ -4,9 +4,9 @@ namespace App\Security;
 
 use App\Entity\UserRegistration;
 use App\Enum\Entity\UserRegistrationStateEnum;
-use App\Mailer\UserRegistrationMailerInterface;
 use App\Repository\UserRegistrationRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
+use DateTimeImmutable;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 /**
@@ -14,45 +14,70 @@ use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
  */
 class UserRegisterer implements UserRegistererInterface
 {
+    private int $maxActiveRegistrationsPerEmail;
+    private string $registrationLifespan;
+
+    private TokenSplitterInterface $tokenSplitter;
     private UserRegistrationRepositoryInterface $userRegistrationRepository;
     private UserRepositoryInterface $userRepository;
     private PasswordHasherFactoryInterface $passwordHasher;
-    private UserRegistrationMailerInterface $mailer;
 
-    public function __construct(UserRegistrationRepositoryInterface $userRegistrationRepository,
+    public function __construct(TokenSplitterInterface $tokenSplitter,
+                                UserRegistrationRepositoryInterface $userRegistrationRepository,
                                 UserRepositoryInterface $userRepository,
                                 PasswordHasherFactoryInterface $passwordHasher,
-                                UserRegistrationMailerInterface $mailer)
+                                int $maxActiveRegistrationsPerEmail,
+                                string $registrationLifespan)
     {
+        $this->tokenSplitter = $tokenSplitter;
         $this->userRegistrationRepository = $userRegistrationRepository;
         $this->userRepository = $userRepository;
         $this->passwordHasher = $passwordHasher;
-        $this->mailer = $mailer;
+
+        $this->maxActiveRegistrationsPerEmail = $maxActiveRegistrationsPerEmail;
+        $this->registrationLifespan = $registrationLifespan;
     }
 
     /**
      * @inheritDoc
      */
-    public function createUserRegistration(string $email): void
+    public function createUserRegistration(string $email, bool $flush): UserRegistrationResult
     {
-        // create user registration
-        $result = $this->userRegistrationRepository->createUserRegistration($email);
+        $fake = false;
 
-        // extract data
-        $userRegistration = $result->getUserRegistration();
-        $fake = $result->isFake();
-        $plainVerifier = $result->getPlainVerifier();
-        $selector = $userRegistration->getSelector();
-        $expireAt = $userRegistration->getExpireAt();
-
-        // email
-        $token = sprintf('%s%s', $selector, $plainVerifier);
-        $this->mailer->sendEmail($email, $token, $expireAt, $fake);
-
-        if (!$fake)
+        // this email might be registered already
+        if ($this->userRepository->isEmailRegistered($email))
         {
-            $this->userRegistrationRepository->saveUserRegistration($userRegistration, true);
+            $fake = true;
         }
+
+        // maximum amount of active registrations might have been reached
+        $activeRegistrations = $this->userRegistrationRepository->findByEmail($email, true);
+        if (count($activeRegistrations) >= $this->maxActiveRegistrationsPerEmail)
+        {
+            $fake = true;
+        }
+
+        // make sure the selector is unique
+        $selector = null;
+        $plainVerifier = '';
+
+        while ($selector === null || $this->userRegistrationRepository->findOneBySelector($selector) !== null)
+        {
+            $tokenSplit = $this->tokenSplitter->generateTokenSplit();
+            $selector = $tokenSplit->getSelector();
+            $plainVerifier = $tokenSplit->getPlainVerifier();
+        }
+
+        // create a registration and return the result
+        $expireAt = new DateTimeImmutable(sprintf('+%s', $this->registrationLifespan));
+        $userRegistration = $this->userRegistrationRepository->createUserRegistration(
+            $email, $expireAt, $selector, $plainVerifier
+        );
+
+        $this->userRegistrationRepository->saveUserRegistration($userRegistration, $flush && !$fake);
+
+        return new UserRegistrationResult($userRegistration, $plainVerifier, $fake);
     }
 
     /**
@@ -69,7 +94,7 @@ class UserRegisterer implements UserRegistererInterface
     /**
      * @inheritDoc
      */
-    public function completeUserRegistration(UserRegistration $userRegistration, string $plainPassword): void
+    public function completeUserRegistration(UserRegistration $userRegistration, string $plainPassword, bool $flush): void
     {
         if (!$userRegistration->isActive())
         {
@@ -93,7 +118,7 @@ class UserRegisterer implements UserRegistererInterface
         if ($this->userRepository->isEmailRegistered($email))
         {
             $userRegistration->setState(UserRegistrationStateEnum::DISABLED);
-            $this->userRegistrationRepository->saveUserRegistration($userRegistration, true);
+            $this->userRegistrationRepository->saveUserRegistration($userRegistration, $flush);
         }
         else
         {
@@ -101,7 +126,7 @@ class UserRegisterer implements UserRegistererInterface
             $this->userRegistrationRepository->saveUserRegistration($userRegistration, false);
 
             $user = $this->userRepository->createUser($email, $plainPassword);
-            $this->userRepository->saveUser($user, true);
+            $this->userRepository->saveUser($user, $flush);
         }
     }
 }

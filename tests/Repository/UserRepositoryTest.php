@@ -5,6 +5,7 @@ namespace App\Tests\Repository;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -31,6 +32,18 @@ class UserRepositoryTest extends RepositoryTestCase
         $this->assertNull($loadedUser);
     }
 
+    public function testSaveAndRemoveNoFlush(): void
+    {
+        $user = new User('bob@bing.com');
+        $this->repository->saveUser($user, false);
+        $this->assertNull($this->repository->findOneBy(['email' => 'bob@bing.com']));
+
+        $removalCriteria = ['email' => 'kate@gmail.com'];
+        $loadedUser = $this->repository->findOneBy($removalCriteria);
+        $this->repository->removeUser($loadedUser, false);
+        $this->assertNotNull($this->repository->findOneBy($removalCriteria));
+    }
+
     public function testCreate(): void
     {
         $user = $this->repository->createUser('bob@bing.com');
@@ -38,11 +51,12 @@ class UserRepositoryTest extends RepositoryTestCase
         $this->assertSame('bob@bing.com', $user->getEmail());
         $this->assertNull($user->getPassword());
 
+        $hasher = $this->getUserPasswordHasher();
         $user = $this->repository->createUser('alice@bing.com', '123456');
         $this->assertNotNull($user);
         $this->assertSame('alice@bing.com', $user->getEmail());
         $this->assertNotNull($user->getPassword());
-        $this->assertNotSame('123456', $user->getPassword());
+        $this->assertTrue($hasher->isPasswordValid($user, '123456'));
     }
 
     public function testFindOneByEmail(): void
@@ -103,6 +117,16 @@ class UserRepositoryTest extends RepositoryTestCase
 
         $this->expectException(UnsupportedUserException::class);
         $this->repository->refreshUser($unsupportedUser);
+    }
+
+    private function getUserPasswordHasher(): UserPasswordHasherInterface
+    {
+        $container = static::getContainer();
+
+        /** @var UserPasswordHasherInterface $hasher */
+        $hasher = $container->get(UserPasswordHasherInterface::class);
+
+        return $hasher;
     }
 
     protected function setUp(): void

@@ -4,9 +4,9 @@ namespace App\Tests\Repository;
 
 use App\Entity\UserRegistration;
 use App\Repository\UserRegistrationRepository;
-use App\Security\TokenSplitterInterface;
-use App\Tests\Security\TokenSplitterMock;
 use DateTimeImmutable;
+use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
+use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 
 /**
  * Tests the user registration repository.
@@ -18,7 +18,7 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
     public function testSaveAndRemove(): void
     {
         $now = new DateTimeImmutable('now');
-        $registration = new UserRegistration('bob@bing.com', $now, 'a', 'b');
+        $registration = new UserRegistration('bob@bing.com', $now, 'bob', '123');
         $this->repository->saveUserRegistration($registration, true);
         $id = $registration->getId();
 
@@ -31,64 +31,34 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
         $this->assertNull($loadedRegistration);
     }
 
+    public function testSaveAndRemoveNoFlush(): void
+    {
+        $now = new DateTimeImmutable('now');
+        $registration = new UserRegistration('bob@bing.com', $now, 'bob', '123');
+        $this->repository->saveUserRegistration($registration, false);
+        $this->assertNull($this->repository->findOneBy(['selector' => 'bob']));
+
+        $removalCriteria = ['selector' => 'max'];
+        $loadedRegistration = $this->repository->findOneBy($removalCriteria);
+        $this->repository->removeUserRegistration($loadedRegistration, false);
+        $this->assertNotNull($this->repository->findOneBy($removalCriteria));
+    }
+
     public function testCreate(): void
     {
-        $result = $this->repository->createUserRegistration('bob@gmail.com');
-        $this->assertFalse($result->isFake());
-    }
+        $email = 'bob@gmail.com';
+        $expireAt = new DateTimeImmutable('now');
+        $selector = 'abc';
+        $verifier = 'xyz';
 
-    public function testCreateIfOneExists(): void
-    {
-        $result = $this->repository->createUserRegistration('max@gmail.com');
-        $this->assertFalse($result->isFake());
-    }
+        $userRegistration = $this->repository->createUserRegistration($email, $expireAt, $selector, $verifier);
+        $this->assertSame($email, $userRegistration->getEmail());
+        $this->assertSame($expireAt, $userRegistration->getExpireAt());
+        $this->assertSame($selector, $userRegistration->getSelector());
 
-    public function testCreateIfEmailIsRegistered(): void
-    {
-        $result = $this->repository->createUserRegistration('david@gmail.com');
-        $this->assertTrue($result->isFake());
-    }
-
-    public function testCreateIfActiveAmountExceeded(): void
-    {
-        $result = $this->repository->createUserRegistration('roman@gmail.com');
-        $this->assertTrue($result->isFake());
-    }
-
-    public function testCreateIfOneIsActiveAndOneIsTimeExpired(): void
-    {
-        $result = $this->repository->createUserRegistration('lucas@gmail.com');
-        $this->assertFalse($result->isFake());
-    }
-
-    public function testCreateIfOneIsActiveAndOneIsDisabled(): void
-    {
-        $result = $this->repository->createUserRegistration('tim@gmail.com');
-        $this->assertFalse($result->isFake());
-    }
-
-    public function testCreateIfOneIsActiveAndOneIsUsed(): void
-    {
-        $result = $this->repository->createUserRegistration('alena@gmail.com');
-        $this->assertFalse($result->isFake());
-    }
-
-    public function testCreateIfSelectorExists(): void
-    {
-        $container = static::getContainer();
-
-        /** @var TokenSplitterMock $splitterMock Configured in services_test.yaml */
-        $splitterMock = $container->get(TokenSplitterInterface::class);
-        $splitterMock
-            ->addTestToken('max123') // max is the selector (this one exists in the test db)
-            ->addTestToken('xyz123') // xyz is the selector (this one does not exist in the test db)
-        ;
-
-        $result = $this->repository->createUserRegistration('bob@gmail.com');
-        $this->assertFalse($result->isFake());
-
-        $userRegistration = $result->getUserRegistration();
-        $this->assertSame('xyz', $userRegistration->getSelector());
+        $hasher = $this->getUserRegistrationPasswordHasher();
+        $valid = $hasher->verify($userRegistration->getVerifier(), $verifier);
+        $this->assertTrue($valid);
     }
 
     public function testFindOneBySelector(): void
@@ -230,6 +200,16 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
         }
 
         return $selectors;
+    }
+
+    private function getUserRegistrationPasswordHasher(): PasswordHasherInterface
+    {
+        $container = static::getContainer();
+
+        /** @var PasswordHasherFactoryInterface $hasherFactory */
+        $hasherFactory = $container->get(PasswordHasherFactoryInterface::class);
+
+        return $hasherFactory->getPasswordHasher(UserRegistration::class);
     }
 
     protected function setUp(): void

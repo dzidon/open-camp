@@ -38,10 +38,7 @@ class UserRegistrationMailer implements UserRegistrationMailerInterface
     /**
      * @inheritDoc
      */
-    public function sendEmail(string $emailTo,
-                              string $token,
-                              DateTimeImmutable $expireAt,
-                              bool $fake): void
+    public function sendEmail(string $emailTo, string $token, DateTimeImmutable $expireAt, bool $fake): void
     {
         $completionUrl = $this->urlGenerator->generate('user_registration_complete', [
             'token' => $token,

@@ -59,7 +59,7 @@ services:
             - '../src/Menu/Type/'
             - '../src/Security/Exception/'
             - '../src/Security/TokenSplit.php'
-            - '../src/Security/UserRegistrationCreationResult.php'
+            - '../src/Security/UserRegistrationResult.php'
             - '../src/Search/Paginator/'
             - '../src/Kernel.php'
 
@@ -102,7 +102,7 @@ services:
             $locales: '%app.locales%'
             $cookieLifespan: '%app.cookie_lifespan_locale%'
 
-    App\Repository\UserRegistrationRepository:
+    App\Security\UserRegisterer:
         arguments:
             $maxActiveRegistrationsPerEmail: '%app.max_active_registrations_per_email%'
             $registrationLifespan: '%app.registration_lifespan%'

@@ -2,11 +2,11 @@
 
 namespace App\Controller\User;
 
+use App\Controller\AbstractController;
 use App\Form\DTO\User\LoginDTO;
 use App\Form\Type\User\LoginType;
 use App\Menu\Breadcrumbs\User\LoginBreadcrumbsInterface;
 use App\Security\SocialLoginRedirectResponseFactoryInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -17,19 +17,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/login')]
 #[IsGranted(new Expression('not is_granted("IS_AUTHENTICATED_FULLY")'), statusCode: 403)]
 class LoginController extends AbstractController
 {
     private LoginBreadcrumbsInterface $breadcrumbs;
-    private TranslatorInterface $translator;
 
-    public function __construct(LoginBreadcrumbsInterface $breadcrumbs, TranslatorInterface $translator)
+    public function __construct(LoginBreadcrumbsInterface $breadcrumbs)
     {
         $this->breadcrumbs = $breadcrumbs;
-        $this->translator = $translator;
     }
 
     #[Route('', name: 'user_login')]
@@ -40,10 +37,7 @@ class LoginController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         if ($error)
         {
-            $messageKey = $error->getMessageKey();
-            $messageData = $error->getMessageData();
-            $errorMessage = $this->translator->trans($messageKey, $messageData, 'security');
-            $this->addFlash('failure', $errorMessage);
+            $this->addTransFlash('failure', $error->getMessageKey(), $error->getMessageData(), 'security');
         }
 
         $dto = new LoginDTO();

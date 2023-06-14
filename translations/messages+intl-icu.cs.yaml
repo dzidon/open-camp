@@ -42,9 +42,11 @@ form:
             button: 'Zaregistrovat se'
 
         registration_password:
+            button: 'Zaregistrovat se'
+
+        repeated_password:
             first: 'Heslo'
             second: 'Heslo znovu'
-            button: 'Zaregistrovat se'
 
         login:
             email: 'E-mail'

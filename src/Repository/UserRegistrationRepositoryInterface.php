@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\UserRegistration;
-use App\Security\UserRegistrationCreationResultInterface;
+use DateTimeImmutable;
 
 /**
  * User registration CRUD.
@@ -32,9 +32,15 @@ interface UserRegistrationRepositoryInterface
      * Creates a user registration.
      *
      * @param string $email
-     * @return UserRegistrationCreationResultInterface
+     * @param DateTimeImmutable $expireAt
+     * @param string $selector
+     * @param string $plainVerifier
+     * @return UserRegistration
      */
-    public function createUserRegistration(string $email): UserRegistrationCreationResultInterface;
+    public function createUserRegistration(string $email,
+                                           DateTimeImmutable $expireAt,
+                                           string $selector,
+                                           string $plainVerifier): UserRegistration;
 
     /**
      * Finds one user registration by selector.

@@ -2,7 +2,7 @@
 
 namespace App\Form\Type\User;
 
-use App\Form\DTO\User\RegistrationPasswordDTO;
+use App\Form\DTO\User\PlainPasswordDTO;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -10,9 +10,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * User plain password registration.
+ * User plain password repeated type.
  */
-class RegistrationPasswordType extends AbstractType
+class RepeatedPasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -26,13 +26,13 @@ class RegistrationPasswordType extends AbstractType
 
                 ],
                 'first_options'  => [
-                    'label' => 'form.user.registration_password.first',
+                    'label' => 'form.user.repeated_password.first',
                     'attr' => [
                         'autofocus' => 'autofocus',
                     ],
                 ],
                 'second_options' => [
-                    'label' => 'form.user.registration_password.second',
+                    'label' => 'form.user.repeated_password.second',
                 ],
             ])
         ;
@@ -41,7 +41,7 @@ class RegistrationPasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => RegistrationPasswordDTO::class,
+            'data_class' => PlainPasswordDTO::class,
         ]);
     }
 }
