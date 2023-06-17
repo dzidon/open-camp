@@ -13,10 +13,13 @@
         <div class="col-md-8 col-lg-6 col-xl-4">
             {% if not is_granted('IS_AUTHENTICATED') %}
                 <div>
-                    <span>
-                        {{ 'auth.no_account_yet'|trans }}
-                        <a href="{{ path('user_registration') }}">{{ 'auth.no_account_yet_link'|trans }}</a>
-                    </span>
+                    <span>{{ 'auth.no_account_yet'|trans }}</span>
+                    <a href="{{ path('user_registration') }}">{{ 'auth.no_account_yet_link'|trans }}</a>
+                </div>
+
+                <div>
+                    <span>{{ 'auth.forgot_password'|trans }}</span>
+                    <a href="{{ path('user_password_change') }}">{{ 'auth.forgot_password_link'|trans }}</a>
                 </div>
 
                 <br>

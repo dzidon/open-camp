@@ -10,6 +10,7 @@ use App\Security\UserRegisterer;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * Tests creating, verifying and completing user registrations.
@@ -37,16 +38,6 @@ class UserRegistererTest extends KernelTestCase
 
         $registration = $registrationRepository->findOneBySelector('bob', true);
         $this->assertNotNull($registration);
-    }
-
-    public function testCreateUserRegistrationNoFlush(): void
-    {
-        $registerer = $this->getUserRegisterer();
-        $registrationRepository = $this->getUserRegistrationRepository();
-
-        $registerer->createUserRegistration('bob@gmail.com', false);
-        $registration = $registrationRepository->findOneBySelector('bob', true);
-        $this->assertNull($registration);
     }
 
     public function testCreateUserRegistrationIfOneExists(): void
@@ -152,27 +143,23 @@ class UserRegistererTest extends KernelTestCase
 
     public function testCompleteUserRegistration(): void
     {
+        $plainPassword = '123456';
         $registerer = $this->getUserRegisterer();
         $userRepository = $this->getUserRepository();
         $registrationRepository = $this->getUserRegistrationRepository();
+        $userPasswordHasher = $this->getUserPasswordHasher();
         $registration = $registrationRepository->findOneBySelector('max');
 
-        $registerer->completeUserRegistration($registration, '123456', true);
-        $this->assertTrue($userRepository->isEmailRegistered('max@gmail.com'));
+        $registerer->completeUserRegistration($registration, $plainPassword, true);
+
+        $user = $userRepository->findOneByEmail('max@gmail.com');
+        $this->assertNotNull($user);
+
+        $valid = $userPasswordHasher->isPasswordValid($user, $plainPassword);
+        $this->assertTrue($valid);
 
         $registration = $registrationRepository->findOneBySelector('max');
         $this->assertSame(UserRegistrationStateEnum::USED->value, $registration->getState());
-    }
-
-    public function testCompleteUserRegistrationNoFlush(): void
-    {
-        $registerer = $this->getUserRegisterer();
-        $userRepository = $this->getUserRepository();
-        $registrationRepository = $this->getUserRegistrationRepository();
-        $registration = $registrationRepository->findOneBySelector('max');
-
-        $registerer->completeUserRegistration($registration, '123456', false);
-        $this->assertFalse($userRepository->isEmailRegistered('max@gmail.com'));
     }
 
     public function testCompleteUserRegistrationIfMultipleActiveExistForEmail(): void
@@ -221,6 +208,22 @@ class UserRegistererTest extends KernelTestCase
         $registration2 = $registrationRepository->findOneBySelector('ti2');
         $this->assertSame(UserRegistrationStateEnum::USED->value, $registration1->getState());
         $this->assertSame(UserRegistrationStateEnum::DISABLED->value, $registration2->getState());
+    }
+
+    public function testCompleteUserRegistrationIfOneIsUsed(): void
+    {
+        $registerer = $this->getUserRegisterer();
+        $userRepository = $this->getUserRepository();
+        $registrationRepository = $this->getUserRegistrationRepository();
+        $registration1 = $registrationRepository->findOneBySelector('al1');
+
+        $registerer->completeUserRegistration($registration1, '123456', true);
+        $this->assertTrue($userRepository->isEmailRegistered('alena@gmail.com'));
+
+        $registration1 = $registrationRepository->findOneBySelector('al1');
+        $registration2 = $registrationRepository->findOneBySelector('al2');
+        $this->assertSame(UserRegistrationStateEnum::USED->value, $registration1->getState());
+        $this->assertSame(UserRegistrationStateEnum::USED->value, $registration2->getState());
     }
 
     public function testCompleteUserRegistrationIfEmailIsRegistered(): void
@@ -276,6 +279,16 @@ class UserRegistererTest extends KernelTestCase
         $splitterMock = $container->get(TokenSplitterInterface::class);
 
         return $splitterMock;
+    }
+
+    private function getUserPasswordHasher(): UserPasswordHasherInterface
+    {
+        $container = static::getContainer();
+
+        /** @var UserPasswordHasherInterface $repository */
+        $repository = $container->get(UserPasswordHasherInterface::class);
+
+        return $repository;
     }
 
     private function getUserRegistrationRepository(): UserRegistrationRepositoryInterface

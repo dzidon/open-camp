@@ -3,6 +3,7 @@ security:
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: auto
         App\Entity\UserRegistration: auto
+        App\Entity\UserPasswordChange: auto
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
@@ -58,6 +59,12 @@ when@test:
                 memory_cost: 10 # Lowest possible value for argon
 
             App\Entity\UserRegistration:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon
+
+            App\Entity\UserPasswordChange:
                 algorithm: auto
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon

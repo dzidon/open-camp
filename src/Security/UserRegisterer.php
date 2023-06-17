@@ -75,7 +75,11 @@ class UserRegisterer implements UserRegistererInterface
             $email, $expireAt, $selector, $plainVerifier
         );
 
-        $this->userRegistrationRepository->saveUserRegistration($userRegistration, $flush && !$fake);
+        // save
+        if (!$fake)
+        {
+            $this->userRegistrationRepository->saveUserRegistration($userRegistration, $flush);
+        }
 
         return new UserRegistrationResult($userRegistration, $plainVerifier, $fake);
     }

@@ -5,25 +5,15 @@ namespace App\Tests\Menu\Breadcrumbs\Admin;
 use App\Menu\Breadcrumbs\Admin\ProfileBreadcrumbs;
 use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use App\Tests\DataStructure\GraphNodeChildrenIdentifiersTrait;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-/**
- * Tests breadcrumbs of the admin profile controller.
- */
 class ProfileBreadcrumbsTest extends KernelTestCase
 {
     use GraphNodeChildrenIdentifiersTrait;
 
-    protected MenuTypeFactoryRegistryInterface $factoryRegistry;
-    protected ProfileBreadcrumbs $breadcrumbs;
+    private MenuTypeFactoryRegistryInterface $factoryRegistry;
+    private ProfileBreadcrumbs $breadcrumbs;
 
-    /**
-     * Tests the admin profile breadcrumbs.
-     *
-     * @return void
-     * @throws Exception
-     */
     public function testProfile(): void
     {
         $breadcrumbsMenu = $this->breadcrumbs->buildProfile();

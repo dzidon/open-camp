@@ -5,12 +5,8 @@ namespace App\Tests\Entity;
 use App\Entity\UserRegistration;
 use App\Enum\Entity\UserRegistrationStateEnum;
 use DateTimeImmutable;
-use Exception;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Tests the UserRegistration entity.
- */
 class UserRegistrationTest extends TestCase
 {
     private const EMAIL = 'abc@gmail.com';
@@ -20,11 +16,6 @@ class UserRegistrationTest extends TestCase
 
     private UserRegistration $userRegistration;
 
-    /**
-     * Tests the email getter and setter.
-     *
-     * @return void
-     */
     public function testEmail(): void
     {
         $this->assertSame(self::EMAIL, $this->userRegistration->getEmail());
@@ -34,12 +25,6 @@ class UserRegistrationTest extends TestCase
         $this->assertSame($newEmail, $this->userRegistration->getEmail());
     }
 
-    /**
-     * Tests the expiration date getter and setter.
-     *
-     * @return void
-     * @throws Exception
-     */
     public function testExpireAt(): void
     {
         $expireAt = $this->userRegistration->getExpireAt();
@@ -52,11 +37,6 @@ class UserRegistrationTest extends TestCase
         $this->assertSame($newExpireAtString, $expireAt->format('Y-m-d H:i:s'));
     }
 
-    /**
-     * Tests the state getter and setter.
-     *
-     * @return void
-     */
     public function testState(): void
     {
         $this->assertSame(UserRegistrationStateEnum::UNUSED->value, $this->userRegistration->getState());
@@ -68,11 +48,6 @@ class UserRegistrationTest extends TestCase
         $this->assertSame(UserRegistrationStateEnum::DISABLED->value, $this->userRegistration->getState());
     }
 
-    /**
-     * Tests the selector getter and setter.
-     *
-     * @return void
-     */
     public function testSelector(): void
     {
         $this->assertSame(self::SELECTOR, $this->userRegistration->getSelector());
@@ -82,11 +57,6 @@ class UserRegistrationTest extends TestCase
         $this->assertSame($newSelector, $this->userRegistration->getSelector());
     }
 
-    /**
-     * Tests the verifier getter and setter.
-     *
-     * @return void
-     */
     public function testVerifier(): void
     {
         $this->assertSame(self::VERIFIER, $this->userRegistration->getVerifier());
@@ -94,6 +64,32 @@ class UserRegistrationTest extends TestCase
         $newVerifier = 'foo';
         $this->userRegistration->setVerifier($newVerifier);
         $this->assertSame($newVerifier, $this->userRegistration->getVerifier());
+    }
+
+    public function testIsActive(): void
+    {
+        $future = new DateTimeImmutable('3000-01-01 12:00:00');
+        $past = new DateTimeImmutable('2000-01-01 12:00:00');
+
+        // active
+        $this->userRegistration->setExpireAt($future);
+        $this->userRegistration->setState(UserRegistrationStateEnum::UNUSED);
+        $this->assertTrue($this->userRegistration->isActive());
+
+        // inactive - expiration date in the past
+        $this->userRegistration->setExpireAt($past);
+        $this->userRegistration->setState(UserRegistrationStateEnum::UNUSED);
+        $this->assertFalse($this->userRegistration->isActive());
+
+        // inactive - state is disabled
+        $this->userRegistration->setExpireAt($future);
+        $this->userRegistration->setState(UserRegistrationStateEnum::DISABLED);
+        $this->assertFalse($this->userRegistration->isActive());
+
+        // inactive - state is used
+        $this->userRegistration->setExpireAt($future);
+        $this->userRegistration->setState(UserRegistrationStateEnum::USED);
+        $this->assertFalse($this->userRegistration->isActive());
     }
 
     protected function setUp(): void

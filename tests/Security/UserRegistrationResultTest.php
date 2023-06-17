@@ -7,9 +7,6 @@ use App\Security\UserRegistrationResult;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Tests UserRegistrationResult.
- */
 class UserRegistrationResultTest extends TestCase
 {
     public function testResult(): void

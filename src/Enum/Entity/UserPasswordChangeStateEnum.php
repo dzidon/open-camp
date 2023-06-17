@@ -3,9 +3,9 @@
 namespace App\Enum\Entity;
 
 /**
- * States of the UserRegistration entity.
+ * States of the UserPasswordChange entity.
  */
-enum UserRegistrationStateEnum: string
+enum UserPasswordChangeStateEnum: string
 {
     case USED = 'used';
     case UNUSED = 'unused';

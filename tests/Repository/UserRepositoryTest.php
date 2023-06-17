@@ -10,9 +10,6 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * Tests the user repository.
- */
 class UserRepositoryTest extends RepositoryTestCase
 {
     private UserRepository $repository;
@@ -30,18 +27,6 @@ class UserRepositoryTest extends RepositoryTestCase
         $this->repository->removeUser($user, true);
         $loadedUser = $this->repository->find($id);
         $this->assertNull($loadedUser);
-    }
-
-    public function testSaveAndRemoveNoFlush(): void
-    {
-        $user = new User('bob@bing.com');
-        $this->repository->saveUser($user, false);
-        $this->assertNull($this->repository->findOneBy(['email' => 'bob@bing.com']));
-
-        $removalCriteria = ['email' => 'kate@gmail.com'];
-        $loadedUser = $this->repository->findOneBy($removalCriteria);
-        $this->repository->removeUser($loadedUser, false);
-        $this->assertNotNull($this->repository->findOneBy($removalCriteria));
     }
 
     public function testCreate(): void

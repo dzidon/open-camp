@@ -15,6 +15,8 @@ parameters:
     # Security
     app.max_active_registrations_per_email: 2
     app.registration_lifespan: '1 hour'
+    app.max_active_password_changes_per_user: 2
+    app.password_change_lifespan: '1 hour'
     app.social_login_services: 'facebook'
     app.social_login_scopes:
         facebook:

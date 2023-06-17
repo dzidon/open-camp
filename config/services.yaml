@@ -18,6 +18,8 @@ parameters:
     # Security
     app.max_active_registrations_per_email: 5
     app.registration_lifespan: '1 hour'
+    app.max_active_password_changes_per_user: 5
+    app.password_change_lifespan: '1 hour'
     app.social_login_services: 'facebook|google'
     app.social_login_scopes:
         facebook:
@@ -39,6 +41,8 @@ parameters:
         user_login: 'route.user.login'
         user_registration: 'route.user.registration'
         user_registration_complete: 'route.user.registration_complete'
+        user_password_change: 'route.user.password_change'
+        user_password_change_complete: 'route.user.password_change_complete'
 
 services:
     # default configuration for services in *this* file
@@ -60,6 +64,7 @@ services:
             - '../src/Security/Exception/'
             - '../src/Security/TokenSplit.php'
             - '../src/Security/UserRegistrationResult.php'
+            - '../src/Security/UserPasswordChangeResult.php'
             - '../src/Search/Paginator/'
             - '../src/Kernel.php'
 
@@ -107,7 +112,17 @@ services:
             $maxActiveRegistrationsPerEmail: '%app.max_active_registrations_per_email%'
             $registrationLifespan: '%app.registration_lifespan%'
 
+    App\Security\UserPasswordChanger:
+        arguments:
+            $maxActivePasswordChangesPerUser: '%app.max_active_password_changes_per_user%'
+            $passwordChangeLifespan: '%app.password_change_lifespan%'
+
     App\Mailer\UserRegistrationMailer:
+        arguments:
+            $emailFrom: '%app.email_no_reply%'
+            $dateTimeFormat: '%app.date_time_format%'
+
+    App\Mailer\UserPasswordChangeMailer:
         arguments:
             $emailFrom: '%app.email_no_reply%'
             $dateTimeFormat: '%app.date_time_format%'

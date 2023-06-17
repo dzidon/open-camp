@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/registration', condition: '')]
+#[Route('/registration')]
 #[IsGranted(new Expression('not is_authenticated()'), statusCode: 403)]
 class RegistrationController extends AbstractController
 {

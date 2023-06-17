@@ -2,16 +2,16 @@
 
 namespace App\Tests\Mailer;
 
-use App\Mailer\UserRegistrationMailer;
+use App\Mailer\UserPasswordChangeMailer;
 use DateTimeImmutable;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Mailer\MailerInterface;
 
 /**
- * Tests the class that sends user registration emails.
+ * Tests the class that sends user password change emails.
  */
-class UserRegistrationMailerTest extends KernelTestCase
+class UserPasswordChangeMailerTest extends KernelTestCase
 {
     /**
      * Tests that the email is sent correctly.
@@ -20,11 +20,11 @@ class UserRegistrationMailerTest extends KernelTestCase
      */
     public function testSendEmail(): void
     {
-        $registrationMailer = $this->getUserRegistrationMailer();
+        $passwordChangeMailer = $this->getUserPasswordChangeMailer();
         $mailerMock = $this->getMailerMock();
         $expireAt = new DateTimeImmutable('3000-01-01 12:00:00');
 
-        $registrationMailer->sendEmail('to@email.com', 'abc', $expireAt, false);
+        $passwordChangeMailer->sendEmail('to@email.com', 'abc', $expireAt, false);
         $emailsSent = $mailerMock->getEmailsSent();
 
         $this->assertCount(1, $emailsSent);
@@ -39,13 +39,13 @@ class UserRegistrationMailerTest extends KernelTestCase
 
         $this->assertSame('noreply@camp.com', $from[0]->getAddress());
         $this->assertSame('to@email.com', $to[0]->getAddress());
-        $this->assertSame('mail.user_registration.subject', $email->getSubject());
-        $this->assertSame('_fragment/_email/_user_registration.html.twig', $email->getHtmlTemplate());
+        $this->assertSame('mail.user_password_change.subject', $email->getSubject());
+        $this->assertSame('_fragment/_email/_user_password_change.html.twig', $email->getHtmlTemplate());
 
         $context = $email->getContext();
-        $this->assertSame('mail.user_registration.body1', $context['body1']);
-        $this->assertSame('mail.user_registration.link_text', $context['link_text']);
-        $this->assertSame('mail.user_registration.body2', $context['body2']);
+        $this->assertSame('mail.user_password_change.body1', $context['body1']);
+        $this->assertSame('mail.user_password_change.link_text', $context['link_text']);
+        $this->assertSame('mail.user_password_change.body2', $context['body2']);
         $this->assertStringContainsString('abc', $context['completion_url']);
     }
 
@@ -56,22 +56,22 @@ class UserRegistrationMailerTest extends KernelTestCase
      */
     public function testSendEmailFake(): void
     {
-        $registrationMailer = $this->getUserRegistrationMailer();
+        $passwordChangeMailer = $this->getUserPasswordChangeMailer();
         $mailerMock = $this->getMailerMock();
         $expireAt = new DateTimeImmutable('3000-01-01 12:00:00');
 
-        $registrationMailer->sendEmail('to@email.com', 'abc', $expireAt, true);
+        $passwordChangeMailer->sendEmail('to@email.com', 'abc', $expireAt, true);
         $emailsSent = $mailerMock->getEmailsSent();
 
         $this->assertEmpty($emailsSent);
     }
 
-    private function getUserRegistrationMailer(): UserRegistrationMailer
+    private function getUserPasswordChangeMailer(): UserPasswordChangeMailer
     {
         $container = static::getContainer();
 
-        /** @var UserRegistrationMailer $mailer */
-        $mailer = $container->get(UserRegistrationMailer::class);
+        /** @var UserPasswordChangeMailer $mailer */
+        $mailer = $container->get(UserPasswordChangeMailer::class);
 
         return $mailer;
     }

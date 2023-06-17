@@ -4,7 +4,6 @@ namespace App\Menu\Breadcrumbs\User;
 
 use App\Menu\Breadcrumbs\AbstractBreadcrumbs;
 use App\Menu\Type\MenuType;
-use App\Menu\Type\MenuTypeInterface;
 
 /**
  * @inheritDoc
@@ -28,10 +27,11 @@ class RegistrationBreadcrumbs extends AbstractBreadcrumbs implements Registratio
     /**
      * @inheritDoc
      */
-    public function buildRegistrationComplete(string $token): MenuTypeInterface
+    public function buildRegistrationComplete(string $token): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
+        $this->addChildRoute($root, 'user_registration');
         $this->addChildRoute($root, 'user_registration_complete', ['token' => $token])
             ->setActive()
         ;

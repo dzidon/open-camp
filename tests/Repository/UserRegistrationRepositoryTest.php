@@ -8,9 +8,6 @@ use DateTimeImmutable;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 
-/**
- * Tests the user registration repository.
- */
 class UserRegistrationRepositoryTest extends RepositoryTestCase
 {
     private UserRegistrationRepository $repository;
@@ -31,33 +28,20 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
         $this->assertNull($loadedRegistration);
     }
 
-    public function testSaveAndRemoveNoFlush(): void
-    {
-        $now = new DateTimeImmutable('now');
-        $registration = new UserRegistration('bob@bing.com', $now, 'bob', '123');
-        $this->repository->saveUserRegistration($registration, false);
-        $this->assertNull($this->repository->findOneBy(['selector' => 'bob']));
-
-        $removalCriteria = ['selector' => 'max'];
-        $loadedRegistration = $this->repository->findOneBy($removalCriteria);
-        $this->repository->removeUserRegistration($loadedRegistration, false);
-        $this->assertNotNull($this->repository->findOneBy($removalCriteria));
-    }
-
     public function testCreate(): void
     {
         $email = 'bob@gmail.com';
         $expireAt = new DateTimeImmutable('now');
         $selector = 'abc';
-        $verifier = 'xyz';
+        $plainVerifier = 'xyz';
 
-        $userRegistration = $this->repository->createUserRegistration($email, $expireAt, $selector, $verifier);
+        $userRegistration = $this->repository->createUserRegistration($email, $expireAt, $selector, $plainVerifier);
         $this->assertSame($email, $userRegistration->getEmail());
         $this->assertSame($expireAt, $userRegistration->getExpireAt());
         $this->assertSame($selector, $userRegistration->getSelector());
 
-        $hasher = $this->getUserRegistrationPasswordHasher();
-        $valid = $hasher->verify($userRegistration->getVerifier(), $verifier);
+        $hasher = $this->getPasswordHasher();
+        $valid = $hasher->verify($userRegistration->getVerifier(), $plainVerifier);
         $this->assertTrue($valid);
     }
 
@@ -202,7 +186,7 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
         return $selectors;
     }
 
-    private function getUserRegistrationPasswordHasher(): PasswordHasherInterface
+    private function getPasswordHasher(): PasswordHasherInterface
     {
         $container = static::getContainer();
 

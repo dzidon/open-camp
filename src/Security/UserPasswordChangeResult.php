@@ -2,33 +2,33 @@
 
 namespace App\Security;
 
-use App\Entity\UserRegistration;
+use App\Entity\UserPasswordChange;
 
 /**
  * @inheritDoc
  */
-class UserRegistrationResult implements UserRegistrationResultInterface
+class UserPasswordChangeResult implements UserPasswordChangeResultInterface
 {
-    private UserRegistration $userRegistration;
+    private UserPasswordChange $userPasswordChange;
     private string $plainVerifier;
     private string $token;
     private bool $fake;
 
-    public function __construct(UserRegistration $userRegistration, string $plainVerifier, bool $fake)
+    public function __construct(UserPasswordChange $userPasswordChange, string $plainVerifier, bool $fake)
     {
-        $this->userRegistration = $userRegistration;
+        $this->userPasswordChange = $userPasswordChange;
         $this->plainVerifier = $plainVerifier;
         $this->fake = $fake;
 
-        $this->token = sprintf('%s%s', $this->userRegistration->getSelector(), $this->plainVerifier);
+        $this->token = sprintf('%s%s', $this->userPasswordChange->getSelector(), $this->plainVerifier);
     }
 
     /**
      * @inheritDoc
      */
-    public function getUserRegistration(): UserRegistration
+    public function getUserPasswordChange(): UserPasswordChange
     {
-        return $this->userRegistration;
+        return $this->userPasswordChange;
     }
 
     /**

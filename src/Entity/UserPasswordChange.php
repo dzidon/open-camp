@@ -2,25 +2,26 @@
 
 namespace App\Entity;
 
-use App\Enum\Entity\UserRegistrationStateEnum;
-use App\Repository\UserRegistrationRepository;
+use App\Enum\Entity\UserPasswordChangeStateEnum;
+use App\Repository\UserPasswordChangeRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Used for registering new users.
+ * Allows users to reset their forgotten password.
  */
-#[ORM\Entity(repositoryClass: UserRegistrationRepository::class)]
-class UserRegistration
+#[ORM\Entity(repositoryClass: UserPasswordChangeRepository::class)]
+class UserPasswordChange
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 180)]
-    private string $email;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(onDelete: 'SET NULL')]
+    private ?User $user = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $expireAt;
@@ -37,13 +38,12 @@ class UserRegistration
     #[ORM\Column(length: 255)]
     private string $verifier;
 
-    public function __construct(string $email, DateTimeImmutable $expireAt, string $selector, string $verifier)
+    public function __construct(DateTimeImmutable $expireAt, string $selector, string $verifier)
     {
-        $this->email = $email;
         $this->expireAt = $expireAt;
         $this->selector = $selector;
         $this->verifier = $verifier;
-        $this->state = UserRegistrationStateEnum::UNUSED->value;
+        $this->state = UserPasswordChangeStateEnum::UNUSED->value;
     }
 
     public function getId(): ?int
@@ -51,14 +51,14 @@ class UserRegistration
         return $this->id;
     }
 
-    public function getEmail(): string
+    public function getUser(): ?User
     {
-        return $this->email;
+        return $this->user;
     }
 
-    public function setEmail(string $email): self
+    public function setUser(?User $user): self
     {
-        $this->email = $email;
+        $this->user = $user;
 
         return $this;
     }
@@ -80,7 +80,7 @@ class UserRegistration
         return $this->state;
     }
 
-    public function setState(UserRegistrationStateEnum $state): self
+    public function setState(UserPasswordChangeStateEnum $state): self
     {
         $this->state = $state->value;
 
@@ -88,7 +88,7 @@ class UserRegistration
     }
 
     /**
-     * Returns true if current date time is smaller than expiration date and state is set to unused.
+     * Returns true if the user exists, current date time is smaller than expiration date and state is set to unused.
      *
      * @return bool
      */
@@ -96,7 +96,7 @@ class UserRegistration
     {
         $now = new DateTimeImmutable('now');
 
-        return $now < $this->expireAt && $this->state === UserRegistrationStateEnum::UNUSED->value;
+        return $this->user !== null && $now < $this->expireAt && $this->state === UserPasswordChangeStateEnum::UNUSED->value;
     }
 
     public function getSelector(): string

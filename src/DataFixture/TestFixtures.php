@@ -3,7 +3,9 @@
 namespace App\DataFixture;
 
 use App\Entity\User;
+use App\Entity\UserPasswordChange;
 use App\Entity\UserRegistration;
+use App\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Enum\Entity\UserRegistrationStateEnum;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -44,6 +46,15 @@ class TestFixtures extends Fixture
         $user2->setPassword($hashedPassword);
         $manager->persist($user2);
 
+        $user3 = new User('jeff@gmail.com');
+        $manager->persist($user3);
+
+        $user4 = new User('xena@gmail.com');
+        $manager->persist($user4);
+
+        $user5 = new User('mark@gmail.com');
+        $manager->persist($user5);
+
         /*
          * UserRegistration
          */
@@ -54,7 +65,7 @@ class TestFixtures extends Fixture
         $userRegistration1 = new UserRegistration('max@gmail.com', $expirationDateFuture, 'max', $verifier);
         $manager->persist($userRegistration1);
 
-        // two active registrations (max amount of inactive registrations in test env)
+        // two active registrations (max amount of active registrations in test env)
         $userRegistration2 = new UserRegistration('roman@gmail.com', $expirationDateFuture, 'ro1', $verifier);
         $userRegistration3 = new UserRegistration('roman@gmail.com', $expirationDateFuture, 'ro2', $verifier);
         $manager->persist($userRegistration2);
@@ -85,6 +96,55 @@ class TestFixtures extends Fixture
         $userRegistration11 = new UserRegistration('kate@gmail.com', $expirationDateFuture, 'ka2', $verifier);
         $manager->persist($userRegistration10);
         $manager->persist($userRegistration11);
+
+        /*
+         * UserPasswordChange
+         */
+        $userPasswordChangeHasher = $this->passwordHasher->getPasswordHasher(UserPasswordChange::class);
+        $verifier = $userPasswordChangeHasher->hash('123');
+
+        // only one active password change
+        $userPasswordChange1 = new UserPasswordChange($expirationDateFuture, 'dav', $verifier);
+        $userPasswordChange1->setUser($user1); // david@gmail.com
+        $manager->persist($userPasswordChange1);
+
+        // two active password changes (max amount of active password changes in test env)
+        $userPasswordChange2 = new UserPasswordChange($expirationDateFuture, 'ka1', $verifier);
+        $userPasswordChange2->setUser($user2); // kate@gmail.com
+        $userPasswordChange3 = new UserPasswordChange($expirationDateFuture, 'ka2', $verifier);
+        $userPasswordChange3->setUser($user2); // kate@gmail.com
+        $manager->persist($userPasswordChange2);
+        $manager->persist($userPasswordChange3);
+
+        // inactive - no user
+        $userPasswordChange4 = new UserPasswordChange($expirationDateFuture, 'xxx', $verifier);
+        $manager->persist($userPasswordChange4);
+
+        // one active and one inactive registration (expiration date exceeded)
+        $userPasswordChange5 = new UserPasswordChange($expirationDateFuture, 'je1', $verifier);
+        $userPasswordChange5->setUser($user3); // jeff@gmail.com
+        $userPasswordChange6 = new UserPasswordChange($expirationDatePast, 'je2', $verifier);
+        $userPasswordChange6->setUser($user3); // jeff@gmail.com
+        $manager->persist($userPasswordChange5);
+        $manager->persist($userPasswordChange6);
+
+        // one active and one inactive registration (disabled)
+        $userPasswordChange7 = new UserPasswordChange($expirationDateFuture, 'xe1', $verifier);
+        $userPasswordChange7->setUser($user4); // xena@gmail.com
+        $userPasswordChange8 = new UserPasswordChange($expirationDateFuture, 'xe2', $verifier);
+        $userPasswordChange8->setState(UserPasswordChangeStateEnum::DISABLED);
+        $userPasswordChange8->setUser($user4); // xena@gmail.com
+        $manager->persist($userPasswordChange7);
+        $manager->persist($userPasswordChange8);
+
+        // one active and one inactive registration (used)
+        $userPasswordChange9 = new UserPasswordChange($expirationDateFuture, 'ma1', $verifier);
+        $userPasswordChange9->setUser($user5); // mark@gmail.com
+        $userPasswordChange10 = new UserPasswordChange($expirationDateFuture, 'ma2', $verifier);
+        $userPasswordChange10->setState(UserPasswordChangeStateEnum::USED);
+        $userPasswordChange10->setUser($user5); // mark@gmail.com
+        $manager->persist($userPasswordChange9);
+        $manager->persist($userPasswordChange10);
 
         $manager->flush();
     }

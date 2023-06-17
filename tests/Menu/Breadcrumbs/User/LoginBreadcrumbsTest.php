@@ -12,15 +12,9 @@ class LoginBreadcrumbsTest extends KernelTestCase
 {
     use GraphNodeChildrenIdentifiersTrait;
 
-    protected MenuTypeFactoryRegistryInterface $menuTypeRegistry;
-    protected LoginBreadcrumbs $breadcrumbs;
+    private MenuTypeFactoryRegistryInterface $menuTypeRegistry;
+    private LoginBreadcrumbs $breadcrumbs;
 
-    /**
-     * Tests the login breadcrumbs.
-     *
-     * @return void
-     * @throws Exception
-     */
     public function testLogin(): void
     {
         $breadcrumbsMenu = $this->breadcrumbs->buildLogin();
