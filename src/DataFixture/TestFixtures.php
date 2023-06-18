@@ -7,10 +7,11 @@ use App\Entity\UserPasswordChange;
 use App\Entity\UserRegistration;
 use App\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Enum\Entity\UserRegistrationStateEnum;
+use App\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
+use App\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
@@ -18,13 +19,17 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
  */
 class TestFixtures extends Fixture
 {
-    private UserPasswordHasherInterface $userPasswordHasher;
-    private PasswordHasherFactoryInterface $passwordHasher;
+    private UserPasswordHasherInterface $userHasher;
+    private UserPasswordChangeVerifierHasherInterface $passwordChangeHasher;
+    private UserRegistrationVerifierHasherInterface $registrationHasher;
 
-    public function __construct(UserPasswordHasherInterface $userPasswordHasher, PasswordHasherFactoryInterface $passwordHasher)
+    public function __construct(UserPasswordHasherInterface               $userHasher,
+                                UserPasswordChangeVerifierHasherInterface $passwordChangeHasher,
+                                UserRegistrationVerifierHasherInterface   $registrationHasher)
     {
-        $this->userPasswordHasher = $userPasswordHasher;
-        $this->passwordHasher = $passwordHasher;
+        $this->userHasher = $userHasher;
+        $this->passwordChangeHasher = $passwordChangeHasher;
+        $this->registrationHasher = $registrationHasher;
     }
 
     /**
@@ -42,7 +47,7 @@ class TestFixtures extends Fixture
         $manager->persist($user1);
 
         $user2 = new User('kate@gmail.com');
-        $hashedPassword = $this->userPasswordHasher->hashPassword($user2, '123456');
+        $hashedPassword = $this->userHasher->hashPassword($user2, '123456');
         $user2->setPassword($hashedPassword);
         $manager->persist($user2);
 
@@ -58,8 +63,7 @@ class TestFixtures extends Fixture
         /*
          * UserRegistration
          */
-        $userRegistrationHasher = $this->passwordHasher->getPasswordHasher(UserRegistration::class);
-        $verifier = $userRegistrationHasher->hash('123');
+        $verifier = $this->registrationHasher->hashVerifier('123');
 
         // only one active registration
         $userRegistration1 = new UserRegistration('max@gmail.com', $expirationDateFuture, 'max', $verifier);
@@ -100,8 +104,7 @@ class TestFixtures extends Fixture
         /*
          * UserPasswordChange
          */
-        $userPasswordChangeHasher = $this->passwordHasher->getPasswordHasher(UserPasswordChange::class);
-        $verifier = $userPasswordChangeHasher->hash('123');
+        $verifier = $this->passwordChangeHasher->hashVerifier('123');
 
         // only one active password change
         $userPasswordChange1 = new UserPasswordChange($expirationDateFuture, 'dav', $verifier);

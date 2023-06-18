@@ -5,11 +5,11 @@ namespace App\Repository;
 use App\Entity\User;
 use App\Entity\UserPasswordChange;
 use App\Enum\Entity\UserPasswordChangeStateEnum;
+use App\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 /**
  * @extends ServiceEntityRepository<UserPasswordChange>
@@ -21,13 +21,13 @@ use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
  */
 class UserPasswordChangeRepository extends AbstractRepository implements UserPasswordChangeRepositoryInterface
 {
-    private PasswordHasherFactoryInterface $passwordHasher;
+    private UserPasswordChangeVerifierHasherInterface $verifierHasher;
 
-    public function __construct(ManagerRegistry $registry, PasswordHasherFactoryInterface $passwordHasher)
+    public function __construct(ManagerRegistry $registry, UserPasswordChangeVerifierHasherInterface $verifierHasher)
     {
         parent::__construct($registry, UserPasswordChange::class);
 
-        $this->passwordHasher = $passwordHasher;
+        $this->verifierHasher = $verifierHasher;
     }
 
     /**
@@ -51,8 +51,7 @@ class UserPasswordChangeRepository extends AbstractRepository implements UserPas
      */
     public function createUserPasswordChange(DateTimeImmutable $expireAt, string $selector, string $plainVerifier): UserPasswordChange
     {
-        $hasher = $this->passwordHasher->getPasswordHasher(UserPasswordChange::class);
-        $verifier = $hasher->hash($plainVerifier);
+        $verifier = $this->verifierHasher->hashVerifier($plainVerifier);
 
         return new UserPasswordChange($expireAt, $selector, $verifier);
     }

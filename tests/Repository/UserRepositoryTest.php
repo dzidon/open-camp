@@ -10,6 +10,9 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
+/**
+ * Tests the User repository.
+ */
 class UserRepositoryTest extends RepositoryTestCase
 {
     private UserRepository $repository;

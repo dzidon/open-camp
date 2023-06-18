@@ -4,10 +4,12 @@ namespace App\Tests\Repository;
 
 use App\Entity\UserRegistration;
 use App\Repository\UserRegistrationRepository;
+use App\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use DateTimeImmutable;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 
+/**
+ * Tests the UserRegistration repository.
+ */
 class UserRegistrationRepositoryTest extends RepositoryTestCase
 {
     private UserRegistrationRepository $repository;
@@ -41,7 +43,7 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
         $this->assertSame($selector, $userRegistration->getSelector());
 
         $hasher = $this->getPasswordHasher();
-        $valid = $hasher->verify($userRegistration->getVerifier(), $plainVerifier);
+        $valid = $hasher->isVerifierValid($userRegistration, $plainVerifier);
         $this->assertTrue($valid);
     }
 
@@ -186,14 +188,14 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
         return $selectors;
     }
 
-    private function getPasswordHasher(): PasswordHasherInterface
+    private function getPasswordHasher(): UserRegistrationVerifierHasherInterface
     {
         $container = static::getContainer();
 
-        /** @var PasswordHasherFactoryInterface $hasherFactory */
-        $hasherFactory = $container->get(PasswordHasherFactoryInterface::class);
+        /** @var UserRegistrationVerifierHasherInterface $hasher */
+        $hasher = $container->get(UserRegistrationVerifierHasherInterface::class);
 
-        return $hasherFactory->getPasswordHasher(UserRegistration::class);
+        return $hasher;
     }
 
     protected function setUp(): void

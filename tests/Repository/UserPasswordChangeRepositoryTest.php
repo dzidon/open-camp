@@ -5,10 +5,12 @@ namespace App\Tests\Repository;
 use App\Entity\UserPasswordChange;
 use App\Repository\UserPasswordChangeRepository;
 use App\Repository\UserRepositoryInterface;
+use App\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
 use DateTimeImmutable;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
-use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 
+/**
+ * Tests the UserPasswordChange repository.
+ */
 class UserPasswordChangeRepositoryTest extends RepositoryTestCase
 {
     private UserPasswordChangeRepository $repository;
@@ -40,7 +42,7 @@ class UserPasswordChangeRepositoryTest extends RepositoryTestCase
         $this->assertSame($selector, $passwordChange->getSelector());
 
         $hasher = $this->getPasswordHasher();
-        $valid = $hasher->verify($passwordChange->getVerifier(), $plainVerifier);
+        $valid = $hasher->isVerifierValid($passwordChange, $plainVerifier);
         $this->assertTrue($valid);
     }
 
@@ -193,14 +195,14 @@ class UserPasswordChangeRepositoryTest extends RepositoryTestCase
         return $selectors;
     }
 
-    private function getPasswordHasher(): PasswordHasherInterface
+    private function getPasswordHasher(): UserPasswordChangeVerifierHasherInterface
     {
         $container = static::getContainer();
 
-        /** @var PasswordHasherFactoryInterface $hasherFactory */
-        $hasherFactory = $container->get(PasswordHasherFactoryInterface::class);
+        /** @var UserPasswordChangeVerifierHasherInterface $hasher */
+        $hasher = $container->get(UserPasswordChangeVerifierHasherInterface::class);
 
-        return $hasherFactory->getPasswordHasher(UserPasswordChange::class);
+        return $hasher;
     }
 
     private function getUserRepository(): UserRepositoryInterface

@@ -41,9 +41,9 @@ services:
     Symfony\Component\Mailer\MailerInterface:
         class: App\Tests\Mailer\MailerMock
 
-    App\Security\TokenSplitterInterface:
-        class: App\Tests\Security\TokenSplitterMock
+    App\Security\Token\TokenSplitterInterface:
+        class: App\Tests\Security\Token\TokenSplitterMock
 
     # Classes
-    App\Security\TokenSplitter:
+    App\Security\Token\TokenSplitter:
         public: true

@@ -6,7 +6,7 @@ use App\Controller\AbstractController;
 use App\Form\DTO\User\LoginDTO;
 use App\Form\Type\User\LoginType;
 use App\Menu\Breadcrumbs\User\LoginBreadcrumbsInterface;
-use App\Security\SocialLoginRedirectResponseFactoryInterface;
+use App\Security\Authentication\SocialLoginRedirectResponseFactoryInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -28,7 +28,7 @@ class LoginController extends AbstractController
     {
         $this->breadcrumbs = $breadcrumbs;
     }
-
+    
     #[Route('', name: 'user_login')]
     public function login(Request              $request,
                           FormFactoryInterface $formFactory,

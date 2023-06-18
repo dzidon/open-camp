@@ -20,9 +20,9 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            entry_point: App\Security\AuthenticationEntryPoint
+            entry_point: App\Security\Authentication\AuthenticationEntryPoint
             custom_authenticators:
-                - App\Security\SocialAuthenticator
+                - App\Security\Authentication\SocialAuthenticator
             login_throttling:
                 max_attempts: 5
                 interval: 5 minutes

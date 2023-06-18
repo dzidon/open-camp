@@ -4,11 +4,11 @@ namespace App\Repository;
 
 use App\Entity\UserRegistration;
 use App\Enum\Entity\UserRegistrationStateEnum;
+use App\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 
 /**
  * @extends ServiceEntityRepository<UserRegistration>
@@ -20,13 +20,13 @@ use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
  */
 class UserRegistrationRepository extends AbstractRepository implements UserRegistrationRepositoryInterface
 {
-    private PasswordHasherFactoryInterface $passwordHasher;
+    private UserRegistrationVerifierHasherInterface $verifierHasher;
 
-    public function __construct(ManagerRegistry $registry, PasswordHasherFactoryInterface $passwordHasher)
+    public function __construct(ManagerRegistry $registry, UserRegistrationVerifierHasherInterface $verifierHasher)
     {
         parent::__construct($registry, UserRegistration::class);
 
-        $this->passwordHasher = $passwordHasher;
+        $this->verifierHasher = $verifierHasher;
     }
 
     /**
@@ -53,8 +53,7 @@ class UserRegistrationRepository extends AbstractRepository implements UserRegis
                                            string $selector,
                                            string $plainVerifier): UserRegistration
     {
-        $hasher = $this->passwordHasher->getPasswordHasher(UserRegistration::class);
-        $verifier = $hasher->hash($plainVerifier);
+        $verifier = $this->verifierHasher->hashVerifier($plainVerifier);
 
         return new UserRegistration($email, $expireAt, $selector, $verifier);
     }
