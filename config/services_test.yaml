@@ -26,13 +26,6 @@ parameters:
     # Cookies
     app.cookie_lifespan_locale: '1 year'
 
-    # Route translation keys
-    app.route_trans_keys:
-          product_overview: 'route.product_overview'
-          user:
-              new: 'route.user.new'
-              existing: 'route.user.existing'
-
 services:
     # Interfaces
     Symfony\Contracts\Translation\TranslatorInterface:

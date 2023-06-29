@@ -56,8 +56,8 @@ class RouteNamerTest extends KernelTestCase
         $routeNamer = $this->getRouteNamer(null);
         $this->assertSame('app.site_name', $routeNamer->getCurrentTitle());
 
-        $routeNamer->setCurrentRouteName('name');
-        $this->assertSame('name - app.site_name', $routeNamer->getCurrentTitle());
+        $routeNamer->setCurrentRouteName('Name');
+        $this->assertSame('Name - app.site_name', $routeNamer->getCurrentTitle());
     }
 
     /**
@@ -68,23 +68,13 @@ class RouteNamerTest extends KernelTestCase
      */
     public function testSetCurrentRouteNameByRequest(): void
     {
-        $routeNamer = $this->getRouteNamer('product_overview');
+        $routeNamer = $this->getRouteNamer('user_home');
         $routeNamer->setCurrentRouteNameByRequest();
-        $this->assertSame('route.product_overview', $routeNamer->getCurrentRouteName());
-
-        $routeNamer = $this->getRouteNamer('user');
-        $routeNamer->setCurrentRouteNameByRequest();
-        $this->assertSame('route.user.new', $routeNamer->getCurrentRouteName());
-
-        $routeNamer->setCurrentRouteNameByRequest('existing');
-        $this->assertSame('route.user.existing', $routeNamer->getCurrentRouteName());
-
-        $routeNamer->setCurrentRouteNameByRequest('nonexistent');
-        $this->assertSame('route.user.new', $routeNamer->getCurrentRouteName());
+        $this->assertSame('route.user_home', $routeNamer->getCurrentRouteName());
     }
 
     /**
-     * Tests that the current route name is set correctly using the route identifier and its variation (if it has any).
+     * Tests that the current route name is set correctly using the route identifier.
      *
      * @return void
      * @throws Exception
@@ -92,21 +82,8 @@ class RouteNamerTest extends KernelTestCase
     public function testSetCurrentRouteNameByRoute(): void
     {
         $routeNamer = $this->getRouteNamer(null);
-        $routeNamer->setCurrentRouteNameByRoute('nonexistent');
-        $this->assertSame(null, $routeNamer->getCurrentRouteName());
-        $this->assertSame('app.site_name', $routeNamer->getCurrentTitle());
-
-        $routeNamer->setCurrentRouteNameByRoute('product_overview');
-        $this->assertSame('route.product_overview', $routeNamer->getCurrentRouteName());
-
-        $routeNamer->setCurrentRouteNameByRoute('user');
-        $this->assertSame('route.user.new', $routeNamer->getCurrentRouteName());
-
-        $routeNamer->setCurrentRouteNameByRoute('user', 'existing');
-        $this->assertSame('route.user.existing', $routeNamer->getCurrentRouteName());
-
-        $routeNamer->setCurrentRouteNameByRoute('user', 'nonexistent');
-        $this->assertSame('route.user.new', $routeNamer->getCurrentRouteName());
+        $routeNamer->setCurrentRouteNameByRoute('user_home');
+        $this->assertSame('route.user_home', $routeNamer->getCurrentRouteName());
     }
 
     /**

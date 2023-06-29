@@ -32,23 +32,6 @@ parameters:
     # Cookies
     app.cookie_lifespan_locale: '1 year'
 
-    # Route translation keys
-    app.route_trans_keys:
-        admin_home: 'route.admin.home'
-        admin_profile: 'route.admin.profile'
-        admin_role_list: 'route.admin.role_list'
-        admin_role_create: 'route.admin.role_create'
-        admin_role_read: 'route.admin.role_read'
-        admin_role_update: 'route.admin.role_update'
-        admin_role_delete: 'route.admin.role_delete'
-
-        user_home: 'route.user.home'
-        user_login: 'route.user.login'
-        user_registration: 'route.user.registration'
-        user_registration_complete: 'route.user.registration_complete'
-        user_password_change: 'route.user.password_change'
-        user_password_change_complete: 'route.user.password_change_complete'
-
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -97,10 +80,6 @@ services:
         arguments:
             $maxActivePasswordChangesPerUser: '%app.max_active_password_changes_per_user%'
             $passwordChangeLifespan: '%app.password_change_lifespan%'
-
-    App\Service\RouteNamer:
-        arguments:
-            $routeTransKeys: '%app.route_trans_keys%'
 
     App\Menu\Renderer\MenuTypeRenderer:
         arguments:

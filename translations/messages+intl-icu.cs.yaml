@@ -207,19 +207,17 @@ mail:
         body2: 'Odkaz vyprší {date}.'
 
 route:
-    admin:
-        home: 'Přehled'
-        profile: 'Profil'
-        role_list: 'Role'
-        role_create: 'Nová role'
-        role_read: 'Zobrazení role'
-        role_update: 'Editace role'
-        role_delete: 'Odstranění role'
+    admin_home: 'Přehled'
+    admin_profile: 'Profil'
+    admin_role_list: 'Role'
+    admin_role_create: 'Nová role'
+    admin_role_read: 'Zobrazení role'
+    admin_role_update: 'Editace role'
+    admin_role_delete: 'Odstranění role'
 
-    user:
-        home: 'Domů'
-        login: 'Přihlášení'
-        registration: 'Registrace'
-        registration_complete: 'Dokončení registrace'
-        password_change: 'Změna hesla'
-        password_change_complete: 'Nové heslo'
+    user_home: 'Domů'
+    user_login: 'Přihlášení'
+    user_registration: 'Registrace'
+    user_registration_complete: 'Dokončení registrace'
+    user_password_change: 'Změna hesla'
+    user_password_change_complete: 'Nové heslo'

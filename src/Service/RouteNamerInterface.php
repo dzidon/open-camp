@@ -3,8 +3,7 @@
 namespace App\Service;
 
 /**
- * Sets and gets the current route name. The current route name is displayed in the title, breadcrumbs,
- * and in the h1 heading.
+ * Sets and gets the current route name. The current route name is displayed in the title, and in the h1 heading.
  */
 interface RouteNamerInterface
 {
@@ -32,19 +31,17 @@ interface RouteNamerInterface
     /**
      * Automatically sets the current route name based on the "_route" attribute from the current request.
      *
-     * @param string|null $variation
      * @return void
      */
-    public function setCurrentRouteNameByRequest(string $variation = null): void;
+    public function setCurrentRouteNameByRequest(): void;
 
     /**
-     * Sets the current route name using route identifier and variation (if the route has any).
+     * Sets the current route name using route identifier.
      *
      * @param string $route
-     * @param string|null $variation
      * @return void
      */
-    public function setCurrentRouteNameByRoute(string $route, string $variation = null): void;
+    public function setCurrentRouteNameByRoute(string $route): void;
 
     /**
      * Sets the current route name to a specific string.
