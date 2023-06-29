@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block modal_body %}
-    Are you sure you want to remove this item? <strong>Changes will take effect after submitting the form.</strong>
+    {{ 'modal.form_collection_remove.question'|trans }} <strong>{{ 'modal.form_collection_remove.warning'|trans }}</strong>
 {% endblock %}
 
 {% block modal_footer %}
@@ -16,6 +16,6 @@
     <button type="button"
             class="btn btn-danger"
             data-action="fc--rem-mod#removePreparedItem">
-        Remove
+        {{ 'modal.form_collection_remove.button_remove'|trans }}
     </button>
 {% endblock %}

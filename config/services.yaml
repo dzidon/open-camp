@@ -36,6 +36,11 @@ parameters:
     app.route_trans_keys:
         admin_home: 'route.admin.home'
         admin_profile: 'route.admin.profile'
+        admin_role_list: 'route.admin.role_list'
+        admin_role_create: 'route.admin.role_create'
+        admin_role_read: 'route.admin.role_read'
+        admin_role_update: 'route.admin.role_update'
+        admin_role_delete: 'route.admin.role_delete'
 
         user_home: 'route.user.home'
         user_login: 'route.user.login'
@@ -59,7 +64,7 @@ services:
             - '../src/Entity/'
             - '../src/Enum/'
             - '../src/DataStructure/'
-            - '../src/Form/DTO/'
+            - '../src/Form/DataTransfer/Data/'
             - '../src/Menu/Type/'
             - '../src/Security/Authentication/Exception/'
             - '../src/Security/Token/TokenSplit.php'
@@ -71,6 +76,9 @@ services:
     _instanceof:
         App\Menu\Factory\MenuTypeFactoryInterface:
             tags: ['app.menu_factory']
+
+        App\Form\DataTransfer\Transfer\DataTransferInterface:
+            tags: [ 'app.data_transfer' ]
 
     App\Security\Authentication\SocialLoginRedirectResponseFactory:
         arguments:

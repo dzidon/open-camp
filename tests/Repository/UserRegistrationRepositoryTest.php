@@ -6,38 +6,41 @@ use App\Entity\UserRegistration;
 use App\Repository\UserRegistrationRepository;
 use App\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use DateTimeImmutable;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Tests the UserRegistration repository.
  */
-class UserRegistrationRepositoryTest extends RepositoryTestCase
+class UserRegistrationRepositoryTest extends KernelTestCase
 {
-    private UserRegistrationRepository $repository;
-
     public function testSaveAndRemove(): void
     {
+        $repository = $this->getUserRegistrationRepository();
+
         $now = new DateTimeImmutable('now');
         $registration = new UserRegistration('bob@bing.com', $now, 'bob', '123');
-        $this->repository->saveUserRegistration($registration, true);
+        $repository->saveUserRegistration($registration, true);
         $id = $registration->getId();
 
-        $loadedRegistration = $this->repository->find($id);
+        $loadedRegistration = $repository->find($id);
         $this->assertNotNull($loadedRegistration);
         $this->assertSame($registration->getId(), $loadedRegistration->getId());
 
-        $this->repository->removeUserRegistration($registration, true);
-        $loadedRegistration = $this->repository->find($id);
+        $repository->removeUserRegistration($registration, true);
+        $loadedRegistration = $repository->find($id);
         $this->assertNull($loadedRegistration);
     }
 
     public function testCreate(): void
     {
+        $repository = $this->getUserRegistrationRepository();
+
         $email = 'bob@gmail.com';
         $expireAt = new DateTimeImmutable('now');
         $selector = 'abc';
         $plainVerifier = 'xyz';
 
-        $userRegistration = $this->repository->createUserRegistration($email, $expireAt, $selector, $plainVerifier);
+        $userRegistration = $repository->createUserRegistration($email, $expireAt, $selector, $plainVerifier);
         $this->assertSame($email, $userRegistration->getEmail());
         $this->assertSame($expireAt, $userRegistration->getExpireAt());
         $this->assertSame($selector, $userRegistration->getSelector());
@@ -49,61 +52,69 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
 
     public function testFindOneBySelector(): void
     {
-        $registration = $this->repository->findOneBySelector('bob');
+        $repository = $this->getUserRegistrationRepository();
+
+        $registration = $repository->findOneBySelector('bob');
         $this->assertNull($registration);
 
-        $registration = $this->repository->findOneBySelector('max');
+        $registration = $repository->findOneBySelector('max');
         $this->assertNotNull($registration);
         $this->assertSame('max', $registration->getSelector());
 
-        $registration = $this->repository->findOneBySelector('lu2');
+        $registration = $repository->findOneBySelector('lu2');
         $this->assertNotNull($registration);
 
-        $registration = $this->repository->findOneBySelector('ti2');
+        $registration = $repository->findOneBySelector('ti2');
         $this->assertNotNull($registration);
 
-        $registration = $this->repository->findOneBySelector('al2');
+        $registration = $repository->findOneBySelector('al2');
         $this->assertNotNull($registration);
     }
 
     public function testFindOneBySelectorActive(): void
     {
-        $registration = $this->repository->findOneBySelector('max', true);
+        $repository = $this->getUserRegistrationRepository();
+
+        $registration = $repository->findOneBySelector('max', true);
         $this->assertNotNull($registration);
 
-        $registration = $this->repository->findOneBySelector('lu2', true);
+        $registration = $repository->findOneBySelector('lu2', true);
         $this->assertNull($registration);
 
-        $registration = $this->repository->findOneBySelector('ti2', true);
+        $registration = $repository->findOneBySelector('ti2', true);
         $this->assertNull($registration);
 
-        $registration = $this->repository->findOneBySelector('al2', true);
+        $registration = $repository->findOneBySelector('al2', true);
         $this->assertNull($registration);
     }
 
     public function testFindOneBySelectorInactive(): void
     {
-        $registration = $this->repository->findOneBySelector('max', false);
+        $repository = $this->getUserRegistrationRepository();
+
+        $registration = $repository->findOneBySelector('max', false);
         $this->assertNull($registration);
 
-        $registration = $this->repository->findOneBySelector('lu2', false);
+        $registration = $repository->findOneBySelector('lu2', false);
         $this->assertNotNull($registration);
 
-        $registration = $this->repository->findOneBySelector('ti2', false);
+        $registration = $repository->findOneBySelector('ti2', false);
         $this->assertNotNull($registration);
 
-        $registration = $this->repository->findOneBySelector('al2', false);
+        $registration = $repository->findOneBySelector('al2', false);
         $this->assertNotNull($registration);
     }
 
     public function testFindByEmail(): void
     {
+        $repository = $this->getUserRegistrationRepository();
+
         // bob
-        $registrations = $this->repository->findByEmail('bob@gmail.com');
+        $registrations = $repository->findByEmail('bob@gmail.com');
         $this->assertCount(0, $registrations);
 
         // lucas
-        $registrations = $this->repository->findByEmail('lucas@gmail.com');
+        $registrations = $repository->findByEmail('lucas@gmail.com');
         $this->assertCount(2, $registrations);
 
         $selectors = $this->getSelectorsFromCollection($registrations);
@@ -111,7 +122,7 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
         $this->assertContains('lu2', $selectors);
 
         // tim
-        $registrations = $this->repository->findByEmail('tim@gmail.com');
+        $registrations = $repository->findByEmail('tim@gmail.com');
         $this->assertCount(2, $registrations);
 
         $selectors = $this->getSelectorsFromCollection($registrations);
@@ -119,7 +130,7 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
         $this->assertContains('ti2', $selectors);
 
         // alena
-        $registrations = $this->repository->findByEmail('alena@gmail.com');
+        $registrations = $repository->findByEmail('alena@gmail.com');
         $this->assertCount(2, $registrations);
 
         $selectors = $this->getSelectorsFromCollection($registrations);
@@ -129,22 +140,24 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
 
     public function testFindByEmailActive(): void
     {
+        $repository = $this->getUserRegistrationRepository();
+
         // lucas
-        $registrations = $this->repository->findByEmail('lucas@gmail.com', true);
+        $registrations = $repository->findByEmail('lucas@gmail.com', true);
         $this->assertCount(1, $registrations);
 
         $selectors = $this->getSelectorsFromCollection($registrations);
         $this->assertContains('lu1', $selectors);
 
         // tim
-        $registrations = $this->repository->findByEmail('tim@gmail.com', true);
+        $registrations = $repository->findByEmail('tim@gmail.com', true);
         $this->assertCount(1, $registrations);
 
         $selectors = $this->getSelectorsFromCollection($registrations);
         $this->assertContains('ti1', $selectors);
 
         // alena
-        $registrations = $this->repository->findByEmail('alena@gmail.com', true);
+        $registrations = $repository->findByEmail('alena@gmail.com', true);
         $this->assertCount(1, $registrations);
 
         $selectors = $this->getSelectorsFromCollection($registrations);
@@ -153,22 +166,24 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
 
     public function testFindByEmailInactive(): void
     {
+        $repository = $this->getUserRegistrationRepository();
+
         // lucas
-        $registrations = $this->repository->findByEmail('lucas@gmail.com', false);
+        $registrations = $repository->findByEmail('lucas@gmail.com', false);
         $this->assertCount(1, $registrations);
 
         $selectors = $this->getSelectorsFromCollection($registrations);
         $this->assertContains('lu2', $selectors);
 
         // tim
-        $registrations = $this->repository->findByEmail('tim@gmail.com', false);
+        $registrations = $repository->findByEmail('tim@gmail.com', false);
         $this->assertCount(1, $registrations);
 
         $selectors = $this->getSelectorsFromCollection($registrations);
         $this->assertContains('ti2', $selectors);
 
         // alena
-        $registrations = $this->repository->findByEmail('alena@gmail.com', false);
+        $registrations = $repository->findByEmail('alena@gmail.com', false);
         $this->assertCount(1, $registrations);
 
         $selectors = $this->getSelectorsFromCollection($registrations);
@@ -198,12 +213,13 @@ class UserRegistrationRepositoryTest extends RepositoryTestCase
         return $hasher;
     }
 
-    protected function setUp(): void
+    private function getUserRegistrationRepository(): UserRegistrationRepository
     {
-        parent::setUp();
+        $container = static::getContainer();
 
         /** @var UserRegistrationRepository $repository */
-        $repository = $this->entityManager->getRepository(UserRegistration::class);
-        $this->repository = $repository;
+        $repository = $container->get(UserRegistrationRepository::class);
+
+        return $repository;
     }
 }

@@ -2,7 +2,7 @@
 
 {% block main %}
     <div class="row">
-        <div class="col-md-8 col-lg-6 col-xl-4">
+        <div class="col-md-8 col-lg-6 col-xl-5">
             {{ form(form_login) }}
         </div>
     </div>
@@ -10,7 +10,7 @@
     <br>
 
     <div class="row">
-        <div class="col-md-8 col-lg-6 col-xl-4">
+        <div class="col-md-8 col-lg-6 col-xl-5">
             {% if not is_granted('IS_AUTHENTICATED') %}
                 <div>
                     <span>{{ 'auth.no_account_yet'|trans }}</span>

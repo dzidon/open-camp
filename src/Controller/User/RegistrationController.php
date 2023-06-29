@@ -3,8 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Form\DTO\User\PlainPasswordDTO;
-use App\Form\DTO\User\RegistrationDTO;
+use App\Form\DataTransfer\Data\User\PlainPasswordData;
 use App\Form\Type\User\RegistrationType;
 use App\Form\Type\User\RepeatedPasswordType;
 use App\Mailer\UserRegistrationMailerInterface;
@@ -37,14 +36,14 @@ class RegistrationController extends AbstractController
                                  UserRegistrationFactoryInterface $registrationFactory,
                                  Request                          $request): Response
     {
-        $registrationDTO = new RegistrationDTO();
-        $form = $this->createForm(RegistrationType::class, $registrationDTO);
+        $registrationData = new \App\Form\DataTransfer\Data\User\RegistrationData();
+        $form = $this->createForm(RegistrationType::class, $registrationData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.registration.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $result = $registrationFactory->createUserRegistration((string) $registrationDTO->email, true);
+            $result = $registrationFactory->createUserRegistration($registrationData->getEmail(), true);
             $userRegistration = $result->getUserRegistration();
             $mailer->sendEmail($userRegistration->getEmail(), $result->getToken(), $userRegistration->getExpireAt(), $result->isFake());
             $this->addTransFlash('success', 'auth.registration_created');
@@ -74,14 +73,14 @@ class RegistrationController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $passwordDTO = new PlainPasswordDTO();
-        $form = $this->createForm(RepeatedPasswordType::class, $passwordDTO);
+        $passwordData = new PlainPasswordData();
+        $form = $this->createForm(RepeatedPasswordType::class, $passwordData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.registration_password.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $userRegisterer->completeUserRegistration($userRegistration, (string) $passwordDTO->plainPassword, true);
+            $userRegisterer->completeUserRegistration($userRegistration, $passwordData->getPlainPassword(), true);
             $this->addTransFlash('success', 'auth.registration_complete');
 
             return $this->redirectToRoute('user_login');

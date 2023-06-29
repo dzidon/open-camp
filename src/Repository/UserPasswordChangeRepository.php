@@ -68,6 +68,7 @@ class UserPasswordChangeRepository extends AbstractRepository implements UserPas
         }
 
         return $queryBuilder
+            ->select('upc, u')
             ->leftJoin('upc.user', 'u')
             ->andWhere('upc.selector = :selector')
             ->setParameter('selector', $selector)
@@ -88,6 +89,7 @@ class UserPasswordChangeRepository extends AbstractRepository implements UserPas
         }
 
         return $queryBuilder
+            ->select('upc, u')
             ->leftJoin('upc.user', 'u')
             ->andWhere('upc.user = :user')
             ->setParameter('user', $user)

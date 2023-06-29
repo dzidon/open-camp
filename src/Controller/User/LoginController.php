@@ -3,7 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Form\DTO\User\LoginDTO;
+use App\Form\DataTransfer\Data\User\LoginData;
 use App\Form\Type\User\LoginType;
 use App\Menu\Breadcrumbs\User\LoginBreadcrumbsInterface;
 use App\Security\Authentication\SocialLoginRedirectResponseFactoryInterface;
@@ -40,9 +40,9 @@ class LoginController extends AbstractController
             $this->addTransFlash('failure', $error->getMessageKey(), $error->getMessageData(), 'security');
         }
 
-        $dto = new LoginDTO();
-        $dto->email = $authenticationUtils->getLastUsername();
-        $form = $formFactory->createNamed('', LoginType::class, $dto);
+        $loginData = new LoginData();
+        $loginData->setEmail($authenticationUtils->getLastUsername());
+        $form = $formFactory->createNamed('', LoginType::class, $loginData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.login.button']);
         $request->getSession()->remove(Security::LAST_USERNAME);
 

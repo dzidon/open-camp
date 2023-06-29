@@ -7,6 +7,7 @@ use App\Menu\Registry\MenuTypeFactoryRegistry;
 use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use App\Tests\Menu\Factory\MenuTypeFactoryMock;
 use Exception;
+use ReflectionObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -16,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class MenuTypeRegistryPassTest extends KernelTestCase
 {
     /**
-     * Tests that the compiler pass properly registers menu factories tagged with 'app.menu_factory'.
+     * Tests that the compiler pass properly registers menu factories tagged as 'app.menu_factory'.
      *
      * @return void
      * @throws Exception
@@ -46,25 +47,22 @@ class MenuTypeRegistryPassTest extends KernelTestCase
 
         /** @var MenuTypeFactoryRegistry $registry */
         $registry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->assertNotNull($registry);
 
-        $menuType = $registry->buildMenuType('menu_mock');
-        $this->assertNotNull($menuType);
-        $this->assertSame('menu_mock', $menuType->getIdentifier());
+        $reflection = new ReflectionObject($registry);
+        $property = $reflection->getProperty('factories');
+        $factories = $property->getValue($registry);
+
+        $this->assertCount(1, $factories);
+        $this->assertArrayHasKey('menu_mock', $factories);
+        $this->assertSame(MenuTypeFactoryMock::class, $factories['menu_mock']::class);
     }
-
-    /**
-     * Returns an instance of the menu type factory registry from the service container.
-     *
-     * @return MenuTypeFactoryRegistryInterface
-     * @throws Exception
-     */
-    private function getMenuTypeFactoryRegistry(): MenuTypeFactoryRegistryInterface
+    
+    private function getMenuTypeFactoryRegistry(): MenuTypeFactoryRegistry
     {
         $container = static::getContainer();
 
-        /** @var MenuTypeFactoryRegistryInterface $registry */
-        $registry = $container->get(MenuTypeFactoryRegistryInterface::class);
+        /** @var MenuTypeFactoryRegistry $registry */
+        $registry = $container->get(MenuTypeFactoryRegistry::class);
 
         return $registry;
     }

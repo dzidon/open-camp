@@ -13,6 +13,8 @@ interface MenuTypeFactoryRegistryInterface
     /**
      * Registers a menu factory for later menu instantiation.
      *
+     * @internal
+     *
      * @param MenuTypeFactoryInterface $factory
      * @return void
      */

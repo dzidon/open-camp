@@ -58,6 +58,7 @@ abstract class AbstractBreadcrumbs
     {
         $text = $routeName;
         $routeNames = $this->parameterBag->get('app.route_trans_keys');
+
         if ($routeNames !== null && array_key_exists($routeName, $routeNames))
         {
             if (is_array($routeNames[$routeName]))

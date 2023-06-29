@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Role;
 use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
@@ -68,6 +69,10 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     public function findOneByEmail(string $email): ?User
     {
         return $this->createQueryBuilder('u')
+            ->select('u, ur, urp, urpg')
+            ->leftJoin('u.role', 'ur')
+            ->leftJoin('ur.permissions', 'urp')
+            ->leftJoin('urp.group', 'urpg')
             ->andWhere('u.email = :email')
             ->setParameter('email', $email)
             ->getQuery()
@@ -89,6 +94,19 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         ;
 
         return $count > 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findByRole(?Role $role): array
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.role = :role')
+            ->setParameter('role', $role)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**

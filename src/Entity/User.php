@@ -24,6 +24,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(nullable: true)]
     private ?string $password = null;
 
+    #[ORM\ManyToOne(targetEntity: Role::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?Role $role = null;
+
     public function __construct(string $email)
     {
         $this->email = $email;
@@ -57,18 +61,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @see UserInterface
-     */
-    public function getRoles(): array
-    {
-        $roles = ['ROLE_USER'];
-
-        // TODO: add admin role
-
-        return array_unique($roles);
-    }
-
-    /**
      * @see PasswordAuthenticatedUserInterface
      */
     public function getPassword(): ?string
@@ -89,5 +81,61 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
+    }
+
+    /**
+     * Internal Symfony method that makes authorization work.
+     *
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $permissionNames[] = 'ROLE_USER';
+
+        if ($this->role !== null)
+        {
+            foreach ($this->role->getPermissions() as $permission)
+            {
+                $permissionNames[] = $permission->getName();
+            }
+        }
+
+        return $permissionNames;
+    }
+
+    /**
+     * Checks if user's role has a permission with the given name.
+     *
+     * @param string $permissionName
+     * @return bool
+     */
+    public function hasPermission(string $permissionName): bool
+    {
+        if ($this->role === null)
+        {
+            return false;
+        }
+
+        foreach ($this->role->getPermissions() as $permission)
+        {
+            if ($permissionName === $permission->getName())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Role $role): self
+    {
+        $this->role = $role;
+
+        return $this;
     }
 }

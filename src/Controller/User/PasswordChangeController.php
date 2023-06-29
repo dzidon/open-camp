@@ -3,8 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Form\DTO\User\PasswordChangeDTO;
-use App\Form\DTO\User\PlainPasswordDTO;
+use App\Form\DataTransfer\Data\User\PasswordChangeData;
 use App\Form\Type\User\PasswordChangeType;
 use App\Form\Type\User\RepeatedPasswordType;
 use App\Mailer\UserPasswordChangeMailerInterface;
@@ -37,14 +36,14 @@ class PasswordChangeController extends AbstractController
                                  UserPasswordChangeFactoryInterface $passwordChangeFactory,
                                  Request                            $request): Response
     {
-        $passwordChangeDTO = new PasswordChangeDTO();
-        $form = $this->createForm(PasswordChangeType::class, $passwordChangeDTO);
+        $passwordChangeData = new PasswordChangeData();
+        $form = $this->createForm(PasswordChangeType::class, $passwordChangeData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.password_change.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $result = $passwordChangeFactory->createUserPasswordChange((string)$passwordChangeDTO->email, true);
+            $result = $passwordChangeFactory->createUserPasswordChange($passwordChangeData->getEmail(), true);
             $userPasswordChange = $result->getUserPasswordChange();
             $user = $userPasswordChange->getUser();
             $email = ($user === null ? 'fake@email.com' : $user->getEmail());
@@ -76,14 +75,14 @@ class PasswordChangeController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $passwordDTO = new PlainPasswordDTO();
-        $form = $this->createForm(RepeatedPasswordType::class, $passwordDTO);
+        $passwordData = new \App\Form\DataTransfer\Data\User\PlainPasswordData();
+        $form = $this->createForm(RepeatedPasswordType::class, $passwordData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.password_change_complete.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $userPasswordChanger->completeUserPasswordChange($userPasswordChange, (string)$passwordDTO->plainPassword, true);
+            $userPasswordChanger->completeUserPasswordChange($userPasswordChange, $passwordData->getPlainPassword(), true);
             $this->addTransFlash('success', 'auth.password_changed');
 
             return $this->redirectToRoute('user_login');

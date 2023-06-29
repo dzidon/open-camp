@@ -2,7 +2,7 @@
 
 namespace App\Form\Type\User;
 
-use App\Form\DTO\User\LoginDTO;
+use App\Form\DataTransfer\Data\User\LoginDataInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -40,7 +40,7 @@ class LoginType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'      => LoginDTO::class,
+            'data_class'      => LoginDataInterface::class,
             'csrf_field_name' => '_csrf_token',
             'csrf_token_id'   => 'authenticate',
         ]);

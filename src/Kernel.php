@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\DependencyInjection\Compiler\DataTransferRegistryPass;
 use App\DependencyInjection\Compiler\MenuTypeFactoryRegistryPass;
 use App\DependencyInjection\Compiler\PublicServicesInTestCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
@@ -16,6 +17,7 @@ class Kernel extends BaseKernel
     {
         $container
             ->addCompilerPass(new MenuTypeFactoryRegistryPass())
+            ->addCompilerPass(new DataTransferRegistryPass())
             ->addCompilerPass(new PublicServicesInTestCompilerPass())
         ;
     }

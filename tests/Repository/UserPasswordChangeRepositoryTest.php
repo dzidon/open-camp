@@ -7,37 +7,40 @@ use App\Repository\UserPasswordChangeRepository;
 use App\Repository\UserRepositoryInterface;
 use App\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
 use DateTimeImmutable;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 /**
  * Tests the UserPasswordChange repository.
  */
-class UserPasswordChangeRepositoryTest extends RepositoryTestCase
+class UserPasswordChangeRepositoryTest extends KernelTestCase
 {
-    private UserPasswordChangeRepository $repository;
-
     public function testSaveAndRemove(): void
     {
+        $passwordChangeRepository = $this->getUserPasswordChangeRepository();
+
         $now = new DateTimeImmutable('now');
         $passwordChange = new UserPasswordChange($now, 'bob', '123');
-        $this->repository->saveUserPasswordChange($passwordChange, true);
+        $passwordChangeRepository->saveUserPasswordChange($passwordChange, true);
         $id = $passwordChange->getId();
 
-        $loadedPasswordChange = $this->repository->find($id);
+        $loadedPasswordChange = $passwordChangeRepository->find($id);
         $this->assertNotNull($loadedPasswordChange);
         $this->assertSame($passwordChange->getId(), $loadedPasswordChange->getId());
 
-        $this->repository->removeUserPasswordChange($passwordChange, true);
-        $loadedPasswordChange = $this->repository->find($id);
+        $passwordChangeRepository->removeUserPasswordChange($passwordChange, true);
+        $loadedPasswordChange = $passwordChangeRepository->find($id);
         $this->assertNull($loadedPasswordChange);
     }
 
     public function testCreate(): void
     {
+        $passwordChangeRepository = $this->getUserPasswordChangeRepository();
+
         $expireAt = new DateTimeImmutable('now');
         $selector = 'abc';
         $plainVerifier = 'xyz';
 
-        $passwordChange = $this->repository->createUserPasswordChange($expireAt, $selector, $plainVerifier);
+        $passwordChange = $passwordChangeRepository->createUserPasswordChange($expireAt, $selector, $plainVerifier);
         $this->assertSame($expireAt, $passwordChange->getExpireAt());
         $this->assertSame($selector, $passwordChange->getSelector());
 
@@ -48,108 +51,116 @@ class UserPasswordChangeRepositoryTest extends RepositoryTestCase
 
     public function testFindOneBySelector(): void
     {
-        $passwordChange = $this->repository->findOneBySelector('bob');
+        $passwordChangeRepository = $this->getUserPasswordChangeRepository();
+
+        $passwordChange = $passwordChangeRepository->findOneBySelector('bob');
         $this->assertNull($passwordChange);
 
-        $passwordChange = $this->repository->findOneBySelector('dav');
+        $passwordChange = $passwordChangeRepository->findOneBySelector('dav');
         $this->assertNotNull($passwordChange);
         $this->assertSame('dav', $passwordChange->getSelector());
 
-        $registration = $this->repository->findOneBySelector('xxx');
+        $registration = $passwordChangeRepository->findOneBySelector('xxx');
         $this->assertNotNull($registration);
 
-        $registration = $this->repository->findOneBySelector('je2');
+        $registration = $passwordChangeRepository->findOneBySelector('je2');
         $this->assertNotNull($registration);
 
-        $registration = $this->repository->findOneBySelector('xe2');
+        $registration = $passwordChangeRepository->findOneBySelector('xe2');
         $this->assertNotNull($registration);
 
-        $registration = $this->repository->findOneBySelector('ma2');
+        $registration = $passwordChangeRepository->findOneBySelector('ma2');
         $this->assertNotNull($registration);
     }
 
     public function testFindOneBySelectorActive(): void
     {
-        $passwordChange = $this->repository->findOneBySelector('dav', true);
+        $passwordChangeRepository = $this->getUserPasswordChangeRepository();
+
+        $passwordChange = $passwordChangeRepository->findOneBySelector('dav', true);
         $this->assertNotNull($passwordChange);
 
-        $registration = $this->repository->findOneBySelector('xxx', true);
+        $registration = $passwordChangeRepository->findOneBySelector('xxx', true);
         $this->assertNull($registration);
 
-        $registration = $this->repository->findOneBySelector('je2', true);
+        $registration = $passwordChangeRepository->findOneBySelector('je2', true);
         $this->assertNull($registration);
 
-        $registration = $this->repository->findOneBySelector('xe2', true);
+        $registration = $passwordChangeRepository->findOneBySelector('xe2', true);
         $this->assertNull($registration);
 
-        $registration = $this->repository->findOneBySelector('ma2', true);
+        $registration = $passwordChangeRepository->findOneBySelector('ma2', true);
         $this->assertNull($registration);
     }
 
     public function testFindOneBySelectorInactive(): void
     {
-        $passwordChange = $this->repository->findOneBySelector('dav', false);
+        $passwordChangeRepository = $this->getUserPasswordChangeRepository();
+
+        $passwordChange = $passwordChangeRepository->findOneBySelector('dav', false);
         $this->assertNull($passwordChange);
 
-        $registration = $this->repository->findOneBySelector('xxx', false);
+        $registration = $passwordChangeRepository->findOneBySelector('xxx', false);
         $this->assertNotNull($registration);
 
-        $registration = $this->repository->findOneBySelector('je2', false);
+        $registration = $passwordChangeRepository->findOneBySelector('je2', false);
         $this->assertNotNull($registration);
 
-        $registration = $this->repository->findOneBySelector('xe2', false);
+        $registration = $passwordChangeRepository->findOneBySelector('xe2', false);
         $this->assertNotNull($registration);
 
-        $registration = $this->repository->findOneBySelector('ma2', false);
+        $registration = $passwordChangeRepository->findOneBySelector('ma2', false);
         $this->assertNotNull($registration);
     }
 
     public function testFindByUser(): void
     {
+        $passwordChangeRepository = $this->getUserPasswordChangeRepository();
         $userRepository = $this->getUserRepository();
 
         $user = $userRepository->findOneByEmail('kate@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user);
+        $passwordChanges = $passwordChangeRepository->findByUser($user);
         $this->assertCount(2, $passwordChanges);
 
         $user = $userRepository->findOneByEmail('jeff@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user);
+        $passwordChanges = $passwordChangeRepository->findByUser($user);
         $this->assertCount(2, $passwordChanges);
 
         $user = $userRepository->findOneByEmail('xena@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user);
+        $passwordChanges = $passwordChangeRepository->findByUser($user);
         $this->assertCount(2, $passwordChanges);
 
         $user = $userRepository->findOneByEmail('mark@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user);
+        $passwordChanges = $passwordChangeRepository->findByUser($user);
         $this->assertCount(2, $passwordChanges);
     }
 
     public function testFindByUserActive(): void
     {
+        $passwordChangeRepository = $this->getUserPasswordChangeRepository();
         $userRepository = $this->getUserRepository();
 
         $user = $userRepository->findOneByEmail('kate@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user, true);
+        $passwordChanges = $passwordChangeRepository->findByUser($user, true);
         $this->assertCount(2, $passwordChanges);
         $selectors = $this->getSelectorsFromCollection($passwordChanges);
         $this->assertContains('ka1', $selectors);
         $this->assertContains('ka2', $selectors);
 
         $user = $userRepository->findOneByEmail('jeff@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user, true);
+        $passwordChanges = $passwordChangeRepository->findByUser($user, true);
         $this->assertCount(1, $passwordChanges);
         $selectors = $this->getSelectorsFromCollection($passwordChanges);
         $this->assertContains('je1', $selectors);
 
         $user = $userRepository->findOneByEmail('xena@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user, true);
+        $passwordChanges = $passwordChangeRepository->findByUser($user, true);
         $this->assertCount(1, $passwordChanges);
         $selectors = $this->getSelectorsFromCollection($passwordChanges);
         $this->assertContains('xe1', $selectors);
 
         $user = $userRepository->findOneByEmail('mark@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user, true);
+        $passwordChanges = $passwordChangeRepository->findByUser($user, true);
         $this->assertCount(1, $passwordChanges);
         $selectors = $this->getSelectorsFromCollection($passwordChanges);
         $this->assertContains('ma1', $selectors);
@@ -157,26 +168,27 @@ class UserPasswordChangeRepositoryTest extends RepositoryTestCase
 
     public function testFindByUserInactive(): void
     {
+        $passwordChangeRepository = $this->getUserPasswordChangeRepository();
         $userRepository = $this->getUserRepository();
 
         $user = $userRepository->findOneByEmail('kate@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user, false);
+        $passwordChanges = $passwordChangeRepository->findByUser($user, false);
         $this->assertCount(0, $passwordChanges);
 
         $user = $userRepository->findOneByEmail('jeff@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user, false);
+        $passwordChanges = $passwordChangeRepository->findByUser($user, false);
         $this->assertCount(1, $passwordChanges);
         $selectors = $this->getSelectorsFromCollection($passwordChanges);
         $this->assertContains('je2', $selectors);
 
         $user = $userRepository->findOneByEmail('xena@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user, false);
+        $passwordChanges = $passwordChangeRepository->findByUser($user, false);
         $this->assertCount(1, $passwordChanges);
         $selectors = $this->getSelectorsFromCollection($passwordChanges);
         $this->assertContains('xe2', $selectors);
 
         $user = $userRepository->findOneByEmail('mark@gmail.com');
-        $passwordChanges = $this->repository->findByUser($user, false);
+        $passwordChanges = $passwordChangeRepository->findByUser($user, false);
         $this->assertCount(1, $passwordChanges);
         $selectors = $this->getSelectorsFromCollection($passwordChanges);
         $this->assertContains('ma2', $selectors);
@@ -209,18 +221,19 @@ class UserPasswordChangeRepositoryTest extends RepositoryTestCase
     {
         $container = static::getContainer();
 
-        /** @var UserRepositoryInterface $userRepository */
-        $userRepository = $container->get(UserRepositoryInterface::class);
+        /** @var UserRepositoryInterface $repository */
+        $repository = $container->get(UserRepositoryInterface::class);
 
-        return $userRepository;
+        return $repository;
     }
 
-    protected function setUp(): void
+    private function getUserPasswordChangeRepository(): UserPasswordChangeRepository
     {
-        parent::setUp();
+        $container = static::getContainer();
 
         /** @var UserPasswordChangeRepository $repository */
-        $repository = $this->entityManager->getRepository(UserPasswordChange::class);
-        $this->repository = $repository;
+        $repository = $container->get(UserPasswordChangeRepository::class);
+
+        return $repository;
     }
 }

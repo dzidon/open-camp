@@ -1,3 +1,4 @@
+{# Checkbox with a link #}
 {% block checkbox_with_url_label %}
     {% set label %}
         {% if translation_domain is same as(false) %}
@@ -17,3 +18,26 @@
 
     {{ form_label(form, label, {translation_domain: false}) }}
 {% endblock %}
+
+{# Expanded choice with group_by support #}
+{% block choice_widget_expanded %}
+    <div {{ block('widget_container_attributes') }}>
+        {% if form.vars.choices|length != form.children|length %}
+            {% for name, choices in form.vars.choices %}
+                <fieldset class="checkbox-group">
+                    <legend class="checkbox-group-legend">{{ name }}</legend>
+
+                    {% for key,choice in choices %}
+                        {{ form_widget(form[key]) }}
+                        {{ form_label(form[key], null, {translation_domain: choice_translation_domain}) }}
+                    {% endfor %}
+                </fieldset>
+            {% endfor %}
+        {% else %}
+            {% for child in form %}
+                {{ form_widget(child) }}
+                {{ form_label(child, null, {translation_domain: choice_translation_domain}) }}
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock choice_widget_expanded %}

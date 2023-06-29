@@ -2,7 +2,7 @@
 
 namespace App\Form\Type\User;
 
-use App\Form\DTO\User\PasswordChangeDTO;
+use App\Form\DataTransfer\Data\User\PasswordChangeDataInterface;
 use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -32,7 +32,7 @@ class PasswordChangeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => PasswordChangeDTO::class,
+            'data_class' => PasswordChangeDataInterface::class,
         ]);
     }
 }

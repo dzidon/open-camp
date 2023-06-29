@@ -44,7 +44,7 @@ class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
         $templateBlockRoot = $options['template_block_root'];
         $templateBlockItem = $options['template_block_item'];
 
-        $menu = new MenuType('pagination', $templateBlockRoot);
+        $menu = new MenuType(self::getMenuIdentifier(), $templateBlockRoot);
         $request = $this->requestStack->getCurrentRequest();
         if ($request === null)
         {

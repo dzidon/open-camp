@@ -22,7 +22,14 @@ class UserPasswordChangeTest extends TestCase
 
         $user = new User('bob@gmail.com');
         $this->userPasswordChange->setUser($user);
-        $this->assertSame($user, $this->userPasswordChange->getUser());
+        $this->assertSame($this->userPasswordChange->getUser(), $user);
+
+        $userNew = new User('bob-new@bing.com');
+        $this->userPasswordChange->setUser($userNew);
+        $this->assertSame($this->userPasswordChange->getUser(), $userNew);
+
+        $this->userPasswordChange->setUser(null);
+        $this->assertNull($this->userPasswordChange->getUser());
     }
 
     public function testExpireAt(): void

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Role;
 use App\Entity\User;
 
 /**
@@ -51,4 +52,12 @@ interface UserRepositoryInterface
      * @return bool
      */
     public function isEmailRegistered(string $email): bool;
+
+    /**
+     * Finds all users that have the given role.
+     *
+     * @param null|Role $role
+     * @return User[]
+     */
+    public function findByRole(?Role $role): array;
 }

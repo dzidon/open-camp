@@ -9,22 +9,33 @@
 {% endblock %}
 
 {% block body %}
-    <main>
+    <main role="main">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="{{ path('user_home') }}">{{ 'app.site_name'|trans }}</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Link</a></li>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarsExample07">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Link</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link disabled">Disabled</a>
+                        </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" id="navbarDropdownPortfolio" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Portfolio</a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownPortfolio">
-                                <li><a class="dropdown-item" href="portfolio-overview.html">Portfolio Overview</a></li>
-                                <li><a class="dropdown-item" href="portfolio-item.html">Portfolio Type</a></li>
-                            </ul>
+                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-expanded="false">Dropdown</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -32,7 +43,7 @@
         </nav>
 
         <!-- Page content-->
-        <div class="container pt-4 pt-4">
+        <div class="container pt-4">
             <!-- Breadcrumbs -->
             {% if _breadcrumbs is defined %}
                 {{ menu(_breadcrumbs) }}
@@ -44,7 +55,7 @@
                     <div class="col">
                         {% for type, messages in app.session.flashbag.all() %}
                             {% for message in messages %}
-                                <div class="alert mt-3 {% if type == 'success' %} alert-success {% elseif type == 'failure' %} alert-danger {% elseif type == 'warning' %} alert-warning {% elseif type == 'info' %} alert-primary {% endif %}" role="alert">
+                                <div class="alert pt-3 {% if type == 'success' %} alert-success {% elseif type == 'failure' %} alert-danger {% elseif type == 'warning' %} alert-warning {% elseif type == 'info' %} alert-primary {% endif %}" role="alert">
                                     {{ message }}
                                 </div>
                             {% endfor %}
@@ -55,9 +66,7 @@
 
             <!-- Heading -->
             {% if is_route_name_set() %}
-                <div class="row">
-                    <h1>{{ route_name() }}</h1>
-                </div>
+                <h1>{{ route_name() }}</h1>
             {% endif %}
 
             {% block main %}{% endblock %}

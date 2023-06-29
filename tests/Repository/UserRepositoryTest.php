@@ -5,6 +5,7 @@ namespace App\Tests\Repository;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -13,34 +14,36 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Tests the User repository.
  */
-class UserRepositoryTest extends RepositoryTestCase
+class UserRepositoryTest extends KernelTestCase
 {
-    private UserRepository $repository;
-
     public function testSaveAndRemove(): void
     {
+        $repository = $this->getUserRepository();
+
         $user = new User('bob@bing.com');
-        $this->repository->saveUser($user, true);
+        $repository->saveUser($user, true);
         $id = $user->getId();
 
-        $loadedUser = $this->repository->find($id);
+        $loadedUser = $repository->find($id);
         $this->assertNotNull($loadedUser);
         $this->assertSame($user->getId(), $loadedUser->getId());
 
-        $this->repository->removeUser($user, true);
-        $loadedUser = $this->repository->find($id);
+        $repository->removeUser($user, true);
+        $loadedUser = $repository->find($id);
         $this->assertNull($loadedUser);
     }
 
     public function testCreate(): void
     {
-        $user = $this->repository->createUser('bob@bing.com');
+        $repository = $this->getUserRepository();
+
+        $user = $repository->createUser('bob@bing.com');
         $this->assertNotNull($user);
         $this->assertSame('bob@bing.com', $user->getEmail());
         $this->assertNull($user->getPassword());
 
         $hasher = $this->getUserPasswordHasher();
-        $user = $this->repository->createUser('alice@bing.com', '123456');
+        $user = $repository->createUser('alice@bing.com', '123456');
         $this->assertNotNull($user);
         $this->assertSame('alice@bing.com', $user->getEmail());
         $this->assertNotNull($user->getPassword());
@@ -49,53 +52,73 @@ class UserRepositoryTest extends RepositoryTestCase
 
     public function testFindOneByEmail(): void
     {
-        $loadedUser = $this->repository->findOneByEmail('bob@bing.com');
+        $repository = $this->getUserRepository();
+
+        $loadedUser = $repository->findOneByEmail('bob@bing.com');
         $this->assertNull($loadedUser);
 
-        $loadedUser = $this->repository->findOneByEmail('david@gmail.com');
+        $loadedUser = $repository->findOneByEmail('david@gmail.com');
         $this->assertNotNull($loadedUser);
         $this->assertSame('david@gmail.com', $loadedUser->getEmail());
     }
 
     public function testIsEmailRegistered(): void
     {
-        $registered = $this->repository->isEmailRegistered('david@gmail.com');
+        $repository = $this->getUserRepository();
+
+        $registered = $repository->isEmailRegistered('david@gmail.com');
         $this->assertTrue($registered);
 
-        $registered = $this->repository->isEmailRegistered('non-existent-user@gmail.com');
+        $registered = $repository->isEmailRegistered('non-existent-user@gmail.com');
         $this->assertFalse($registered);
+    }
+
+    public function testFindByRole(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $user = $repository->findOneByEmail('david@gmail.com');
+        $role = $user->getRole();
+
+        $usersLoadedByRole = $repository->findByRole($role);
+        $this->assertContains($user, $usersLoadedByRole);
     }
 
     public function testSupportsClass(): void
     {
-        $this->assertTrue($this->repository->supportsClass(User::class));
+        $repository = $this->getUserRepository();
+        $this->assertTrue($repository->supportsClass(User::class));
     }
 
     public function testLoadUserByIdentifier(): void
     {
+        $repository = $this->getUserRepository();
+
         /** @var User $loadedUser */
-        $loadedUser = $this->repository->loadUserByIdentifier('david@gmail.com');
+        $loadedUser = $repository->loadUserByIdentifier('david@gmail.com');
         $this->assertNotNull($loadedUser);
         $this->assertSame('david@gmail.com', $loadedUser->getEmail());
 
         $this->expectException(UserNotFoundException::class);
-        $this->repository->loadUserByIdentifier('bob@bing.com');
+        $repository->loadUserByIdentifier('bob@bing.com');
     }
 
     public function testRefreshUser(): void
     {
+        $repository = $this->getUserRepository();
+
         /** @var User $loadedUser */
-        $loadedUser = $this->repository->findOneBy(['email' => 'david@gmail.com']);
+        $loadedUser = $repository->findOneBy(['email' => 'david@gmail.com']);
         $this->assertNotNull($loadedUser);
 
         /** @var User $refreshedUser */
-        $refreshedUser = $this->repository->refreshUser($loadedUser);
+        $refreshedUser = $repository->refreshUser($loadedUser);
         $this->assertSame($loadedUser->getId(), $refreshedUser->getId());
 
         $newUser = new User('bob@bing.com');
 
         $this->expectException(UserNotFoundException::class);
-        $this->repository->refreshUser($newUser);
+        $repository->refreshUser($newUser);
 
         /** @var UserInterface|MockObject $unsupportedUser */
         $unsupportedUser = $this->getMockBuilder(UserInterface::class)
@@ -104,7 +127,7 @@ class UserRepositoryTest extends RepositoryTestCase
         ;
 
         $this->expectException(UnsupportedUserException::class);
-        $this->repository->refreshUser($unsupportedUser);
+        $repository->refreshUser($unsupportedUser);
     }
 
     private function getUserPasswordHasher(): UserPasswordHasherInterface
@@ -117,12 +140,13 @@ class UserRepositoryTest extends RepositoryTestCase
         return $hasher;
     }
 
-    protected function setUp(): void
+    private function getUserRepository(): UserRepository
     {
-        parent::setUp();
+        $container = static::getContainer();
 
         /** @var UserRepository $repository */
-        $repository = $this->entityManager->getRepository(User::class);
-        $this->repository = $repository;
+        $repository = $container->get(UserRepository::class);
+
+        return $repository;
     }
 }

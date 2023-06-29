@@ -1,0 +1,88 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity_attribute.Role.label'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            <span>{{ role.label }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity_attribute.Role.permissions'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            {% set permissions_grouped = role.getPermissionsGrouped(true) %}
+
+                            {% if permissions_grouped is empty %}
+                                <div>
+                                    <em>{{ 'search.error.no_results'|trans }}</em>
+                                </div>
+                            {% else %}
+                                {% for group_label, permissions in permissions_grouped %}
+                                    <div {% if not loop.first %} class="mt-2" {% endif %}>
+                                        <span>{{ group_label|trans }}:</span>
+                                    </div>
+
+                                    {% for permission in permissions %}
+                                        <div>
+                                            <span>- {{ permission.label|trans }}</span>
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity.User.plural'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            {% if users is empty %}
+                                <div>
+                                    <em>{{ 'search.error.no_results'|trans }}</em>
+                                </div>
+                            {% else %}
+                                {% for user in users %}
+                                    <div>
+                                        <span>{{ user.email }}</span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% set granted_update = is_granted('role_update') %}
+                {% set granted_delete = is_granted('role_delete') %}
+
+                {% if granted_update or granted_delete %}
+                    <div class="card-footer">
+                        {% if granted_update %}
+                            <a href="{{ path('admin_role_update', {id: role.id}) }}" class="btn btn-primary mr-2">
+                                {{ 'crud.action.update'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if granted_delete %}
+                            <a href="{{ path('admin_role_delete', {id: role.id}) }}" class="btn btn-danger">
+                                {{ 'crud.action.delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

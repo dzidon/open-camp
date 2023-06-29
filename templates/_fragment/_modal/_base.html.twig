@@ -6,7 +6,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="{{ block('modal_id') }}Label">
                     {% block modal_title %}
-                        Warning
+                        {{ 'modal.title'|trans }}
                     {% endblock %}
                 </h5>
 
@@ -19,7 +19,9 @@
 
             <div class="modal-footer">
                 {% block modal_footer %}
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        {{ 'modal.button_close'|trans }}
+                    </button>
                 {% endblock %}
             </div>
         </div>

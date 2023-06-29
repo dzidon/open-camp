@@ -2,7 +2,7 @@
 
 namespace App\Form\Type\User;
 
-use App\Form\DTO\User\PlainPasswordDTO;
+use App\Form\DataTransfer\Data\User\PlainPasswordDataInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -23,7 +23,6 @@ class RepeatedPasswordType extends AbstractType
                     'attr' => [
                         'autocomplete' => 'new-password'
                     ],
-
                 ],
                 'first_options'  => [
                     'label' => 'form.user.repeated_password.first',
@@ -41,7 +40,7 @@ class RepeatedPasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => PlainPasswordDTO::class,
+            'data_class' => PlainPasswordDataInterface::class,
         ]);
     }
 }

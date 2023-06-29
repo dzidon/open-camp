@@ -2,6 +2,9 @@
 
 namespace App\Tests\Entity;
 
+use App\Entity\Permission;
+use App\Entity\PermissionGroup;
+use App\Entity\Role;
 use App\Entity\User;
 use PHPUnit\Framework\TestCase;
 
@@ -28,6 +31,18 @@ class UserTest extends TestCase
     public function testRoles(): void
     {
         $this->assertSame(['ROLE_USER'], $this->user->getRoles());
+
+        $group = new PermissionGroup('group', 'Group', 0);
+        $perm1 = new Permission('perm1', 'Permission 1', 0, $group);
+        $perm2 = new Permission('perm2', 'Permission 2', 0, $group);
+        $role = new Role('Role');
+        $role
+            ->addPermission($perm1)
+            ->addPermission($perm2)
+        ;
+
+        $this->user->setRole($role);
+        $this->assertSame(['ROLE_USER', 'perm1', 'perm2'], $this->user->getRoles());
     }
 
     public function testPassword(): void
@@ -39,6 +54,35 @@ class UserTest extends TestCase
 
         $this->user->setPassword(null);
         $this->assertNull($this->user->getPassword());
+    }
+
+    public function testHasPermission(): void
+    {
+        $this->assertFalse($this->user->hasPermission('perm1'));
+
+        $group = new PermissionGroup('group', 'Group', 0);
+        $perm1 = new Permission('perm1', 'Permission 1', 0, $group);
+        $role = new Role('Role');
+        $role->addPermission($perm1);
+
+        $this->user->setRole($role);
+        $this->assertTrue($this->user->hasPermission('perm1'));
+    }
+
+    public function testRole(): void
+    {
+        $this->assertNull($this->user->getRole());
+
+        $role = new Role('Role');
+        $this->user->setRole($role);
+        $this->assertSame($this->user->getRole(), $role);
+
+        $roleNew = new Role('Role new');
+        $this->user->setRole($roleNew);
+        $this->assertSame($this->user->getRole(), $roleNew);
+
+        $this->user->setRole(null);
+        $this->assertNull($this->user->getRole());
     }
 
     protected function setUp(): void

@@ -24,11 +24,118 @@ auth:
     password_change_instruction: 'Zadejte své nové heslo.'
     password_changed: 'Heslo úspěšně nastaveno! Nyní se můžete přihlásit.'
 
+permission_group:
+    user: 'Uživatelé'
+    role: 'Role'
+
+permission:
+    user_read: 'Zobrazení uživatele'
+    user_create: 'Tvorba uživatele'
+    user_update: 'Editace uživatele'
+    user_update_role: 'Nastavení role uživatele'
+    user_delete: 'Odstranění uživatele'
+
+    role_read: 'Zobrazení role'
+    role_create: 'Tvorba role'
+    role_update: 'Editace role'
+    role_delete: 'Odstranění role'
+
+crud:
+    action:
+        read: 'Zobrazit'
+        create: 'Vytvořit'
+        update: 'Upravit'
+        delete: 'Odstranit'
+
+    action_performed:
+        Role:
+            create: 'Role vytvořena!'
+            update: 'Role upravena!'
+            delete: 'Role odstraněna!'
+
+entity:
+    Permission:
+        singular: 'Oprávnění'
+        plural: 'Oprávnění'
+
+    PermissionGroup:
+        singular: 'Skupina oprávnění'
+        plural: 'Skupiny oprávnění'
+
+    Role:
+        singular: 'Role'
+        plural: 'Role'
+
+    User:
+        singular: 'Uživatel'
+        plural: 'Uživatelé'
+
+    UserPasswordChange:
+        singular: 'Změna hesla uživatele'
+        plural: 'Změny hesel uživatelů'
+
+    UserRegistration:
+        singular: 'Registrace uživatele'
+        plural: 'Registrace uživatelů'
+
+entity_attribute:
+    Permission:
+        id: 'ID'
+        name: 'Interní označení'
+        label: 'Název'
+        group: 'Skupina oprávnění'
+
+    PermissionGroup:
+        id: 'ID'
+        name: 'Interní označení'
+        label: 'Název'
+
+    Role:
+        id: 'ID'
+        label: 'Název'
+        permissions: 'Oprávnění'
+        users: 'Uživatelé'
+
+    User:
+        id: 'ID'
+        email: 'E-mail'
+        password: 'Hash hesla'
+        role: 'Role'
+
+    UserPasswordChange:
+        id: 'ID'
+        user: 'Uživatel'
+        expireAt: 'Datum expirace'
+        state: 'Stav'
+        selector: 'Selektor'
+        verifier: 'Hash verifikátoru'
+
+search:
+    label: 'Vyhledávání'
+    results: 'Výsledky'
+    total: 'celkem'
+    item_action: 'Akce'
+    error:
+        no_results: 'Žádné výsledky'
+        invalid_filter: 'Váš filtr obsahuje nesprávné hodnoty, bylo provedeno základní hledání.'
+
+confirmation:
+    role_delete: 'Opravdu si přejete odstranit roli "{label}"?'
+
 flash_message:
     success: 'Úspěch'
     failure: 'Chyba'
     warning: 'Varování'
     info: 'Info'
+
+modal:
+    title: 'Varování'
+    button_close: 'Zavřít'
+
+    form_collection_remove:
+        question: 'Opravdu chcete odstranit tuto položku?'
+        warning: 'Změny se projeví až po odeslání formuláře.'
+        button_remove: 'Odstranit'
 
 form:
     common:
@@ -36,6 +143,22 @@ form:
             remove: 'Odebrat'
 
     admin:
+        role_search:
+            label: 'Hledat podle názvu'
+            sort_by:
+                label: 'Seřadit podle'
+                options:
+                    id_desc: 'ID (od nejvyššího)'
+                    id_asc: 'ID (od nejnižšího)'
+            button: 'Hledat'
+
+        role:
+            label: 'Název'
+            permissions: 'Oprávnění'
+            button: 'Uložit'
+
+        role_delete:
+            button: 'Odstranit'
 
     user:
         registration:
@@ -87,6 +210,11 @@ route:
     admin:
         home: 'Přehled'
         profile: 'Profil'
+        role_list: 'Role'
+        role_create: 'Nová role'
+        role_read: 'Zobrazení role'
+        role_update: 'Editace role'
+        role_delete: 'Odstranění role'
 
     user:
         home: 'Domů'

@@ -2,6 +2,9 @@
 
 namespace App\DataFixture;
 
+use App\Entity\Permission;
+use App\Entity\PermissionGroup;
+use App\Entity\Role;
 use App\Entity\User;
 use App\Entity\UserPasswordChange;
 use App\Entity\UserRegistration;
@@ -41,14 +44,53 @@ class TestFixtures extends Fixture
         $expirationDatePast = new DateTimeImmutable('2000-01-01 12:00:00');
 
         /*
+         * PermissionGroup
+         */
+        $permissionGroup1 = new PermissionGroup('group1', 'Group 1', 100);
+        $permissionGroup2 = new PermissionGroup('group2', 'Group 2', 200);
+        $manager->persist($permissionGroup1);
+        $manager->persist($permissionGroup2);
+
+        /*
+         * Permission
+         */
+        $permission1 = new Permission('permission1', 'Permission 1', 100, $permissionGroup1);
+        $permission2 = new Permission('permission2', 'Permission 2', 200, $permissionGroup1);
+        $permission3 = new Permission('permission3', 'Permission 3', 300, $permissionGroup2);
+        $permission4 = new Permission('permission4', 'Permission 4', 400, $permissionGroup2);
+        $manager->persist($permission1);
+        $manager->persist($permission2);
+        $manager->persist($permission3);
+        $manager->persist($permission4);
+
+        /*
+         * Role
+         */
+        $role1 = new Role('Super admin');
+        $role1
+            ->addPermission($permission1)
+            ->addPermission($permission2)
+            ->addPermission($permission3)
+            ->addPermission($permission4)
+        ;
+
+        $role2 = new Role('Admin');
+        $role2->addPermission($permission3);
+
+        $manager->persist($role1);
+        $manager->persist($role2);
+
+        /*
          * User
          */
         $user1 = new User('david@gmail.com');
+        $user1->setRole($role1);
         $manager->persist($user1);
 
         $user2 = new User('kate@gmail.com');
         $hashedPassword = $this->userHasher->hashPassword($user2, '123456');
         $user2->setPassword($hashedPassword);
+        $user2->setRole($role2);
         $manager->persist($user2);
 
         $user3 = new User('jeff@gmail.com');
@@ -149,6 +191,7 @@ class TestFixtures extends Fixture
         $manager->persist($userPasswordChange9);
         $manager->persist($userPasswordChange10);
 
+        // save
         $manager->flush();
     }
 }
