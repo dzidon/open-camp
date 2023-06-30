@@ -3,6 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
+use App\Service\RouteNamerInterface;
 use App\Translation\LocaleRedirectResponseFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,8 +17,10 @@ class HomeController extends AbstractController
     }
 
     #[Route('', name: 'user_home')]
-    public function index(): Response
+    public function index(RouteNamerInterface $routeNamer): Response
     {
+        $routeNamer->setCurrentRouteName(null);
+
         return $this->render('user/home/index.html.twig');
     }
 }

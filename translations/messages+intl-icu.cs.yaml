@@ -208,7 +208,7 @@ mail:
 
 route:
     admin_home: 'Přehled'
-    admin_profile: 'Profil'
+    admin_profile: 'Administrátorský profil'
     admin_role_list: 'Role'
     admin_role_create: 'Nová role'
     admin_role_read: 'Zobrazení role'
@@ -217,6 +217,7 @@ route:
 
     user_home: 'Domů'
     user_login: 'Přihlášení'
+    user_logout: 'Odhlášení'
     user_registration: 'Registrace'
     user_registration_complete: 'Dokončení registrace'
     user_password_change: 'Změna hesla'

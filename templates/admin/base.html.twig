@@ -27,9 +27,15 @@
 
             <!-- Right aligned items -->
             <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a href="#" class="nav-link">Link</a>
-                </li>
+                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                    <li class="nav-item">
+                        <a href="{{ path('admin_profile') }}" class="nav-link">{{ app.user.email }}</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ path('user_logout') }}" class="nav-link">{{ 'route.user_logout'|trans }}</a>
+                    </li>
+                {% endif %}
             </ul>
         </nav>
 

@@ -5,7 +5,51 @@
         <div class="col-12">
             <div class="card card-outline card-primary">
                 <div class="card-body">
-                    Profile...
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity_attribute.User.email'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            <span>{{ admin.email }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>
+                                {{ 'entity_attribute.Role.permissions'|trans }}:
+                            </strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            {% if admin.role is null %}
+                                <div>
+                                    <em>{{ 'search.error.no_results'|trans }}</em>
+                                </div>
+                            {% else %}
+                                {% set permissions_grouped = admin.role.getPermissionsGrouped(true) %}
+
+                                {% if permissions_grouped is empty %}
+                                    <div>
+                                        <em>{{ 'search.error.no_results'|trans }}</em>
+                                    </div>
+                                {% else %}
+                                    {% for group_label, permissions in permissions_grouped %}
+                                        <div {% if not loop.first %} class="mt-2" {% endif %}>
+                                            <span>{{ group_label|trans }}:</span>
+                                        </div>
+
+                                        {% for permission in permissions %}
+                                            <div>
+                                                <span>- {{ permission.label|trans }}</span>
+                                            </div>
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

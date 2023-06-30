@@ -38,7 +38,16 @@ class PermissionVoter implements VoterInterface
 
         foreach ($attributes as $attribute)
         {
-            if (in_array($attribute, $this->permissionNames))
+            if ($attribute === '_any_permission')
+            {
+                $vote = self::ACCESS_DENIED;
+
+                if (!empty($user->getRole()?->getPermissions()))
+                {
+                    return self::ACCESS_GRANTED;
+                }
+            }
+            else if (in_array($attribute, $this->permissionNames))
             {
                 $vote = self::ACCESS_DENIED;
 

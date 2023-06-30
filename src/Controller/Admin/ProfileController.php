@@ -3,10 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
+use App\Entity\User;
 use App\Menu\Breadcrumbs\Admin\ProfileBreadcrumbsInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 #[Route('/admin/profile')]
 class ProfileController extends AbstractController
 {
@@ -17,11 +20,16 @@ class ProfileController extends AbstractController
         $this->breadcrumbs = $breadcrumbs;
     }
 
+    #[IsGranted('_any_permission')]
     #[Route('', name: 'admin_profile')]
     public function profile(): Response
     {
+        /** @var User $admin */
+        $admin = $this->getUser();
+
         return $this->render('admin/profile/profile.html.twig', [
-            '_breadcrumbs' => $this->breadcrumbs->buildProfile()
+            'admin'        => $admin,
+            '_breadcrumbs' => $this->breadcrumbs->buildProfile(),
         ]);
     }
 }

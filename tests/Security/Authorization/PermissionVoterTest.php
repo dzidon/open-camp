@@ -18,6 +18,50 @@ class PermissionVoterTest extends KernelTestCase
         $userRepository = $this->getUserRepository();
         $user = $userRepository->findOneByEmail('kate@gmail.com');
 
+        $tokenMock = $this->createTokenMock($user);
+
+        $this->assertSame(VoterInterface::ACCESS_ABSTAIN, $voter->vote($tokenMock, null, ['permission_non_existent']));
+
+        $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, null, ['permission1']));
+
+        $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, null, ['permission3']));
+    }
+
+    public function testAnyPermission(): void
+    {
+        $voter = $this->getPermissionVoter();
+        $userRepository = $this->getUserRepository();
+        $user1 = $userRepository->findOneByEmail('kate@gmail.com');
+        $user2 = $userRepository->findOneByEmail('david@gmail.com');
+        $user3 = $userRepository->findOneByEmail('jeff@gmail.com');
+
+        $tokenMock = $this->createTokenMock($user1);
+        $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, null, ['_any_permission']));
+
+        $tokenMock = $this->createTokenMock($user2);
+        $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, null, ['_any_permission']));
+
+        $tokenMock = $this->createTokenMock($user3);
+        $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, null, ['_any_permission']));
+    }
+
+    public function testVoteNoUser(): void
+    {
+        $voter = $this->getPermissionVoter();
+
+        /** @var UserInterface|MockObject $userMock */
+        $userMock = $this->getMockBuilder(UserInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
+
+        $tokenMock = $this->createTokenMock($userMock);
+
+        $this->assertSame(VoterInterface::ACCESS_ABSTAIN, $voter->vote($tokenMock, null, []));
+    }
+
+    private function createTokenMock(?UserInterface $user): TokenInterface
+    {
         /** @var TokenInterface|MockObject $tokenMock */
         $tokenMock = $this->getMockBuilder(TokenInterface::class)
             ->disableOriginalConstructor()
@@ -30,36 +74,7 @@ class PermissionVoterTest extends KernelTestCase
             ->willReturn($user)
         ;
 
-        $this->assertSame(VoterInterface::ACCESS_ABSTAIN, $voter->vote($tokenMock, null, ['permission_non_existent']));
-
-        $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, null, ['permission1']));
-
-        $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, null, ['permission3']));
-    }
-
-    public function testVoteNoUser(): void
-    {
-        $voter = $this->getPermissionVoter();
-
-        /** @var TokenInterface|MockObject $tokenMock */
-        $tokenMock = $this->getMockBuilder(TokenInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-
-        /** @var UserInterface|MockObject $userMock */
-        $userMock = $this->getMockBuilder(UserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
-
-        $tokenMock
-            ->expects($this->any())
-            ->method('getUser')
-            ->willReturn($userMock)
-        ;
-
-        $this->assertSame(VoterInterface::ACCESS_ABSTAIN, $voter->vote($tokenMock, null, []));
+        return $tokenMock;
     }
 
     private function getUserRepository(): UserRepositoryInterface
