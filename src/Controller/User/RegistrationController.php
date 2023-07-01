@@ -4,6 +4,7 @@ namespace App\Controller\User;
 
 use App\Controller\AbstractController;
 use App\Form\DataTransfer\Data\User\PlainPasswordData;
+use App\Form\DataTransfer\Data\User\RegistrationData;
 use App\Form\Type\User\RegistrationType;
 use App\Form\Type\User\RepeatedPasswordType;
 use App\Mailer\UserRegistrationMailerInterface;
@@ -20,8 +21,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/registration')]
 #[IsGranted(new Expression('not is_authenticated()'), statusCode: 403)]
+#[Route('/registration')]
 class RegistrationController extends AbstractController
 {
     private RegistrationBreadcrumbsInterface $registrationBreadcrumbs;
@@ -36,7 +37,7 @@ class RegistrationController extends AbstractController
                                  UserRegistrationFactoryInterface $registrationFactory,
                                  Request                          $request): Response
     {
-        $registrationData = new \App\Form\DataTransfer\Data\User\RegistrationData();
+        $registrationData = new RegistrationData();
         $form = $this->createForm(RegistrationType::class, $registrationData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.registration.button']);
         $form->handleRequest($request);

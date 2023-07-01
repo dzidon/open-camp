@@ -88,15 +88,13 @@
 
 {# Locale switch #}
 {% block locale_switch_root %}
-    {% if menu_type.children|length > 1 %}
-        <ul>
-            {% for menu_child in menu_type.children %}
-                {% with {'menu_type': menu_child} %}
-                    {{ block(menu_child.templateBlock, menu_theme) }}
-                {% endwith %}
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <ul>
+        {% for menu_child in menu_type.children %}
+            {% with {'menu_type': menu_child} %}
+                {{ block(menu_child.templateBlock, menu_theme) }}
+            {% endwith %}
+        {% endfor %}
+    </ul>
 {% endblock %}
 
 {% block locale_switch_item %}
@@ -114,5 +112,24 @@
                 {% endfor %}
             </ul>
         {% endif %}
+    </li>
+{% endblock %}
+
+{# Profile navigation #}
+{% block navbar_user_profile %}
+    <ul class="nav nav-tabs">
+        {% for menu_child in menu_type.children %}
+            {% with {'menu_type': menu_child} %}
+                {{ block(menu_child.templateBlock, menu_theme) }}
+            {% endwith %}
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block navbar_user_profile_item %}
+    <li class="nav-item">
+        <a class="nav-link {% if menu_type.active %} active {% endif %}" href="{{ menu_type.url }}">
+            {{ menu_type.text }}
+        </a>
     </li>
 {% endblock %}

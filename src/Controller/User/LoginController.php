@@ -18,8 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-#[Route('/login')]
 #[IsGranted(new Expression('not is_granted("IS_AUTHENTICATED_FULLY")'), statusCode: 403)]
+#[Route('/login')]
 class LoginController extends AbstractController
 {
     private LoginBreadcrumbsInterface $breadcrumbs;

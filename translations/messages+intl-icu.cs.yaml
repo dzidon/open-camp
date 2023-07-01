@@ -22,7 +22,13 @@ auth:
 
     password_change_created: 'Pokud je u nás zadaný e-mail zaregistrovaný, poslali jsme na něj odkaz pro nastavení nového hesla.'
     password_change_instruction: 'Zadejte své nové heslo.'
-    password_changed: 'Heslo úspěšně nastaveno! Nyní se můžete přihlásit.'
+    password_changed_unauthenticated: 'Heslo úspěšně nastaveno! Nyní se můžete přihlásit.'
+    password_changed_authenticated: 'Heslo úspěšně nastaveno!'
+
+    profile_password_change_wrong: 'Zadané aktuální heslo není správné.'
+    profile_password_changed: 'Heslo úspěšně nastaveno!'
+    profile_password_change_created: 'Na e-mail {email} jsme poslali e-mail pro nastavení hesla!'
+    profile_password_change_create_instruction: 'Na tento účet se momentálně nejde přihlásit pomocí hesla, protože žádné nemáte nastavené. Kliknutím na následující tlačítko Vám pošleme e-mail pro nastavení hesla.'
 
 permission_group:
     user: 'Uživatelé'
@@ -182,14 +188,21 @@ form:
             button: 'Změnit heslo'
 
         repeated_password:
-            first: 'Heslo'
-            second: 'Heslo znovu'
+            first: 'Nové heslo'
+            second: 'Nové heslo znovu'
 
         login:
             email: 'E-mail'
             password: 'Heslo'
             remember_me: 'Zůstat přihlášen'
             button: 'Přihlásit se'
+
+        profile_password_change:
+            current_password: 'Aktuální heslo'
+            button: 'Nastavit heslo'
+
+        profile_password_change_create:
+            button: 'Poslat email'
 
 mail:
     greeting: 'Zdravíme!'
@@ -222,3 +235,5 @@ route:
     user_registration_complete: 'Dokončení registrace'
     user_password_change: 'Změna hesla'
     user_password_change_complete: 'Nové heslo'
+    user_profile_password_change: 'Změna hesla'
+    user_profile_password_change_create: 'Nastavení hesla'

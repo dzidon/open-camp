@@ -3,7 +3,9 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
+use App\Entity\User;
 use App\Form\DataTransfer\Data\User\PasswordChangeData;
+use App\Form\DataTransfer\Data\User\PlainPasswordData;
 use App\Form\Type\User\PasswordChangeType;
 use App\Form\Type\User\RepeatedPasswordType;
 use App\Mailer\UserPasswordChangeMailerInterface;
@@ -21,7 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/password-change')]
-#[IsGranted(new Expression('not is_authenticated()'), statusCode: 403)]
 class PasswordChangeController extends AbstractController
 {
     private PasswordChangeBreadcrumbsInterface $passwordChangeBreadcrumbs;
@@ -31,6 +32,7 @@ class PasswordChangeController extends AbstractController
         $this->passwordChangeBreadcrumbs = $passwordChangeBreadcrumbs;
     }
 
+    #[IsGranted(new Expression('not is_authenticated()'), statusCode: 403)]
     #[Route('', name: 'user_password_change')]
     public function registration(UserPasswordChangeMailerInterface  $mailer,
                                  UserPasswordChangeFactoryInterface $passwordChangeFactory,
@@ -75,7 +77,7 @@ class PasswordChangeController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $passwordData = new \App\Form\DataTransfer\Data\User\PlainPasswordData();
+        $passwordData = new PlainPasswordData();
         $form = $this->createForm(RepeatedPasswordType::class, $passwordData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.password_change_complete.button']);
         $form->handleRequest($request);
@@ -83,9 +85,19 @@ class PasswordChangeController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $userPasswordChanger->completeUserPasswordChange($userPasswordChange, $passwordData->getPlainPassword(), true);
-            $this->addTransFlash('success', 'auth.password_changed');
 
-            return $this->redirectToRoute('user_login');
+            /** @var User $user */
+            $user = $this->getUser();
+            if ($user === null)
+            {
+                $this->addTransFlash('success', 'auth.password_changed_unauthenticated');
+                return $this->redirectToRoute('user_login');
+            }
+            else
+            {
+                $this->addTransFlash('success', 'auth.password_changed_authenticated');
+                return $this->redirectToRoute('user_home');
+            }
         }
 
         return $this->render('user/auth/password_change_complete.html.twig', [
