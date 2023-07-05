@@ -4,8 +4,8 @@ namespace App\Menu\Factory;
 
 use App\Entity\User;
 use App\Menu\Type\MenuType;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -17,14 +17,17 @@ class UserProfileMenuTypeFactory extends AbstractMenuTypeFactory
     private TranslatorInterface $translator;
     private UrlGeneratorInterface $urlGenerator;
     private RequestStack $requestStack;
+    private Security $security;
 
     public function __construct(TranslatorInterface   $translator,
                                 UrlGeneratorInterface $urlGenerator,
-                                RequestStack          $requestStack)
+                                RequestStack          $requestStack,
+                                Security              $security)
     {
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->requestStack = $requestStack;
+        $this->security = $security;
     }
 
     /**
@@ -41,7 +44,7 @@ class UserProfileMenuTypeFactory extends AbstractMenuTypeFactory
     public function buildMenuType(array $options = []): MenuType
     {
         /** @var User $user */
-        $user = $options['user'];
+        $user = $this->security->getUser();
         $request = $this->requestStack->getCurrentRequest();
         $route = $request->get('_route', '');
 
@@ -82,18 +85,5 @@ class UserProfileMenuTypeFactory extends AbstractMenuTypeFactory
         ;
 
         return $menu;
-    }
-
-    /**
-     * Configures the following options: user.
-     *
-     * @param OptionsResolver $resolver
-     * @return void
-     */
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setRequired('user');
-
-        $resolver->setAllowedTypes('user', User::class);
     }
 }

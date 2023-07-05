@@ -12,6 +12,8 @@ interface RegistrationBreadcrumbsInterface
 {
     /**
      * Initializes breadcrumbs for the path "user_registration".
+     *
+     * @return MenuTypeInterface
      */
     public function buildRegistration(): MenuTypeInterface;
 

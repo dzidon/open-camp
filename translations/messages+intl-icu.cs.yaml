@@ -47,17 +47,37 @@ permission:
     role_delete: 'Odstranění role'
 
 crud:
+    instruction:
+        User:
+            update_password_set: 'Tento uživatel má nastavené heslo. Kliknutím na následující tlačítko přejdete do nastavení hesla.'
+            update_password_not_set: 'Tento uživatel nemá nastavené heslo. Kliknutím na následující tlačítko přejdete do nastavení hesla.'
+
+    confirmation:
+        role_delete: 'Opravdu si přejete odstranit roli "{label}"?'
+        user_delete: 'Opravdu si přejete odstranit uživatele "{email}"?'
+
     action:
-        read: 'Zobrazit'
-        create: 'Vytvořit'
-        update: 'Upravit'
-        delete: 'Odstranit'
+        common:
+            read: 'Zobrazit'
+            create: 'Vytvořit'
+            update: 'Upravit'
+            delete: 'Odstranit'
+
+        User:
+            update_password: 'Nastavit heslo'
 
     action_performed:
         Role:
             create: 'Role vytvořena!'
             update: 'Role upravena!'
             delete: 'Role odstraněna!'
+
+        User:
+            create: 'Uživatel vytvořen!'
+            update: 'Uživatel upraven!'
+            update_password: 'Heslo uživatele nastaveno!'
+            reset_password: 'Heslo uživatele odstraněno!'
+            delete: 'Uživatel odstraněn!'
 
 entity:
     Permission:
@@ -85,6 +105,10 @@ entity:
         plural: 'Registrace uživatelů'
 
 entity_attribute:
+    common:
+        set: 'Nastaveno'
+        unset: 'Nenastaveno'
+
     Permission:
         id: 'ID'
         name: 'Interní označení'
@@ -105,7 +129,7 @@ entity_attribute:
     User:
         id: 'ID'
         email: 'E-mail'
-        password: 'Hash hesla'
+        password: 'Heslo'
         role: 'Role'
 
     UserPasswordChange:
@@ -121,12 +145,14 @@ search:
     results: 'Výsledky'
     total: 'celkem'
     item_action: 'Akce'
+    item_no_reference:
+        male: 'Žádný'
+        female: 'Žádná'
+        neutral: 'Žádný'
+
     error:
         no_results: 'Žádné výsledky'
         invalid_filter: 'Váš filtr obsahuje nesprávné hodnoty, bylo provedeno základní hledání.'
-
-confirmation:
-    role_delete: 'Opravdu si přejete odstranit roli "{label}"?'
 
 flash_message:
     success: 'Úspěch'
@@ -137,14 +163,27 @@ flash_message:
 modal:
     title: 'Varování'
     button_close: 'Zavřít'
-
     form_collection_remove:
         question: 'Opravdu chcete odstranit tuto položku?'
         warning: 'Změny se projeví až po odeslání formuláře.'
         button_remove: 'Odstranit'
 
+menu:
+    navbar_admin_horizontal:
+        user_web: 'Web'
+
+    navbar_admin_vertical:
+        browse: 'Procházet'
+
 form:
     common:
+        choice:
+            irrelevant: '-- nezáleží --'
+            none:
+                male: 'Žádný'
+                female: 'Žádná'
+                neutral: 'Žádné'
+
         collection:
             remove: 'Odebrat'
 
@@ -156,6 +195,7 @@ form:
                 options:
                     id_desc: 'ID (od nejvyššího)'
                     id_asc: 'ID (od nejnižšího)'
+
             button: 'Hledat'
 
         role:
@@ -165,6 +205,36 @@ form:
 
         role_delete:
             button: 'Odstranit'
+
+        user:
+            email: 'E-mail'
+            role: 'Role'
+            button: 'Uložit'
+            error:
+                not_unique: 'Už existuje uživatel s tímto e-mailem.'
+
+        user_search:
+            email: 'Hledat podle e-mailu'
+            sort_by:
+                label: 'Seřadit podle'
+                options:
+                    id_desc: 'ID (od nejvyššího)'
+                    id_asc: 'ID (od nejnižšího)'
+                    email_desc: 'E-mail (Z-A)'
+                    email_asc: 'E-mail (A-Z)'
+
+            role: 'Role'
+            button: 'Hledat'
+
+        user_delete:
+            button: 'Odstranit'
+
+        user_password:
+            button: 'Změnit heslo'
+
+        repeated_password:
+            first: 'Nové heslo'
+            second: 'Nové heslo znovu'
 
     user:
         registration:
@@ -227,6 +297,12 @@ route:
     admin_role_read: 'Zobrazení role'
     admin_role_update: 'Editace role'
     admin_role_delete: 'Odstranění role'
+    admin_user_list: 'Uživatelé'
+    admin_user_create: 'Nový uživatel'
+    admin_user_read: 'Zobrazení uživatele'
+    admin_user_update: 'Editace uživatele'
+    admin_user_update_password: 'Nastavení hesla uživatele'
+    admin_user_delete: 'Odstranění uživatele'
 
     user_home: 'Domů'
     user_login: 'Přihlášení'

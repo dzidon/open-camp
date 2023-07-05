@@ -12,6 +12,8 @@ interface PasswordChangeBreadcrumbsInterface
 {
     /**
      * Initializes breadcrumbs for the path "user_password_change".
+     *
+     * @return MenuTypeInterface
      */
     public function buildPasswordChange(): MenuTypeInterface;
 

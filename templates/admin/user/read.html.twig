@@ -1,0 +1,68 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity_attribute.User.email'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            <span>{{ user.email }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity_attribute.User.password'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            {% if user.password is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <em>{{ 'entity_attribute.common.set'|trans }}</em>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity_attribute.User.role'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            {% if user.role is null %}
+                                <em>{{ 'search.item_no_reference.female'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.role.label }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% set granted_update = is_granted('user_update') or is_granted('user_update_role') %}
+                {% set granted_delete = is_granted('user_delete') %}
+
+                {% if granted_update or granted_delete %}
+                    <div class="card-footer">
+                        {% if granted_update %}
+                            <a href="{{ path('admin_user_update', {id: user.id}) }}" class="btn btn-primary mr-2">
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if granted_delete %}
+                            <a href="{{ path('admin_user_delete', {id: user.id}) }}" class="btn btn-danger">
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

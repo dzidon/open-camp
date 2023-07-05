@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Role;
 use App\Entity\User;
+use App\Form\DataTransfer\Data\Admin\UserSearchDataInterface;
+use App\Search\Paginator\PaginatorInterface;
 
 /**
  * User CRUD.
@@ -38,6 +40,14 @@ interface UserRepositoryInterface
     public function createUser(string $email, ?string $plainPassword = null): User;
 
     /**
+     * Finds one user by id.
+     *
+     * @param int $id
+     * @return User|null
+     */
+    public function findOneById(int $id): ?User;
+
+    /**
      * Finds one user by email.
      *
      * @param string $email
@@ -60,4 +70,14 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function findByRole(?Role $role): array;
+
+    /**
+     * Returns admin user search paginator.
+     *
+     * @param UserSearchDataInterface $data
+     * @param int $currentPage
+     * @param int $pageSize
+     * @return PaginatorInterface
+     */
+    public function getAdminPaginator(UserSearchDataInterface $data, int $currentPage, int $pageSize): PaginatorInterface;
 }

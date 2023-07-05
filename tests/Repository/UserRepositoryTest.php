@@ -3,6 +3,8 @@
 namespace App\Tests\Repository;
 
 use App\Entity\User;
+use App\Enum\Search\Data\Admin\UserSortEnum;
+use App\Form\DataTransfer\Data\Admin\UserSearchData;
 use App\Repository\UserRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -50,6 +52,20 @@ class UserRepositoryTest extends KernelTestCase
         $this->assertTrue($hasher->isPasswordValid($user, '123456'));
     }
 
+    public function testFindOneById(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $loadedUser = $repository->findOneById(-10000);
+        $this->assertNull($loadedUser);
+
+        $user = new User('New role');
+        $repository->saveUser($user, true);
+
+        $loadedUser = $repository->findOneById($user->getId());
+        $this->assertSame($user->getId(), $loadedUser->getId());
+    }
+
     public function testFindOneByEmail(): void
     {
         $repository = $this->getUserRepository();
@@ -82,6 +98,127 @@ class UserRepositoryTest extends KernelTestCase
 
         $usersLoadedByRole = $repository->findByRole($role);
         $this->assertContains($user, $usersLoadedByRole);
+    }
+
+    public function testGetAdminPaginator(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $data = new UserSearchData();
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame($paginator->getTotalItems(), 5);
+        $this->assertSame($paginator->getPagesCount(), 3);
+        $this->assertSame($paginator->getCurrentPage(), 1);
+        $this->assertSame($paginator->getPageSize(), 2);
+
+        $emails = $this->getUserEmails($paginator->getCurrentPageItems());
+        $this->assertSame(['mark@gmail.com', 'xena@gmail.com'], $emails);
+    }
+
+    public function testGetAdminPaginatorWithEmail(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $data = new UserSearchData();
+        $data->setEmail('xena');
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame($paginator->getTotalItems(), 1);
+        $this->assertSame($paginator->getPagesCount(), 1);
+        $this->assertSame($paginator->getCurrentPage(), 1);
+        $this->assertSame($paginator->getPageSize(), 2);
+
+        $emails = $this->getUserEmails($paginator->getCurrentPageItems());
+        $this->assertSame(['xena@gmail.com'], $emails);
+    }
+
+    public function testGetAdminPaginatorSortByIdDesc(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $data = new UserSearchData();
+        $data->setSortBy(UserSortEnum::ID_DESC);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame($paginator->getTotalItems(), 5);
+        $this->assertSame($paginator->getPagesCount(), 3);
+        $this->assertSame($paginator->getCurrentPage(), 1);
+        $this->assertSame($paginator->getPageSize(), 2);
+
+        $emails = $this->getUserEmails($paginator->getCurrentPageItems());
+        $this->assertSame(['mark@gmail.com', 'xena@gmail.com'], $emails);
+    }
+
+    public function testGetAdminPaginatorSortByIdAsc(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $data = new UserSearchData();
+        $data->setSortBy(UserSortEnum::ID_ASC);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame($paginator->getTotalItems(), 5);
+        $this->assertSame($paginator->getPagesCount(), 3);
+        $this->assertSame($paginator->getCurrentPage(), 1);
+        $this->assertSame($paginator->getPageSize(), 2);
+
+        $emails = $this->getUserEmails($paginator->getCurrentPageItems());
+        $this->assertSame(['david@gmail.com', 'kate@gmail.com'], $emails);
+    }
+
+    public function testGetAdminPaginatorSortByEmailAsc(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $data = new UserSearchData();
+        $data->setSortBy(UserSortEnum::EMAIL_ASC);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame($paginator->getTotalItems(), 5);
+        $this->assertSame($paginator->getPagesCount(), 3);
+        $this->assertSame($paginator->getCurrentPage(), 1);
+        $this->assertSame($paginator->getPageSize(), 2);
+
+        $emails = $this->getUserEmails($paginator->getCurrentPageItems());
+        $this->assertSame(['david@gmail.com', 'jeff@gmail.com'], $emails);
+    }
+
+    public function testGetAdminPaginatorSortByEmailDesc(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $data = new UserSearchData();
+        $data->setSortBy(UserSortEnum::EMAIL_DESC);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame($paginator->getTotalItems(), 5);
+        $this->assertSame($paginator->getPagesCount(), 3);
+        $this->assertSame($paginator->getCurrentPage(), 1);
+        $this->assertSame($paginator->getPageSize(), 2);
+
+        $emails = $this->getUserEmails($paginator->getCurrentPageItems());
+        $this->assertSame(['xena@gmail.com', 'mark@gmail.com'], $emails);
+    }
+
+    public function testGetAdminPaginatorWithRole(): void
+    {
+        $userRepository = $this->getUserRepository();
+        $role = $userRepository
+            ->findOneByEmail('david@gmail.com')
+            ->getRole()
+        ;
+
+        $data = new UserSearchData();
+        $data->setRole($role);
+
+        $paginator = $userRepository->getAdminPaginator($data, 1, 2);
+        $this->assertSame($paginator->getTotalItems(), 1);
+        $this->assertSame($paginator->getPagesCount(), 1);
+        $this->assertSame($paginator->getCurrentPage(), 1);
+        $this->assertSame($paginator->getPageSize(), 2);
+
+        $emails = $this->getUserEmails($paginator->getCurrentPageItems());
+        $this->assertSame(['david@gmail.com'], $emails);
     }
 
     public function testSupportsClass(): void
@@ -128,6 +265,19 @@ class UserRepositoryTest extends KernelTestCase
 
         $this->expectException(UnsupportedUserException::class);
         $repository->refreshUser($unsupportedUser);
+    }
+
+    private function getUserEmails(array $users): array
+    {
+        $emails = [];
+
+        /** @var User $user */
+        foreach ($users as $user)
+        {
+            $emails[] = $user->getEmail();
+        }
+
+        return $emails;
     }
 
     private function getUserPasswordHasher(): UserPasswordHasherInterface

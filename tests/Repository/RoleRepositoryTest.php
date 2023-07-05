@@ -121,6 +121,7 @@ class RoleRepositoryTest extends KernelTestCase
     private function getRoleLabels(array $roles): array
     {
         $labels = [];
+
         /** @var Role $role */
         foreach ($roles as $role)
         {

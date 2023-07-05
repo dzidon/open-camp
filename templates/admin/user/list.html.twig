@@ -17,15 +17,19 @@
                     {{ form_start(form_search) }}
                         <div class="form-row">
                             <div class="form-group col-md-8">
-                                {{ form_row(form_search.label) }}
+                                {{ form_row(form_search.email) }}
                             </div>
 
                             <div class="form-group col-md-4">
                                 {{ form_row(form_search.sortBy) }}
                             </div>
+
+                            <div class="form-group col-md-4">
+                                {{ form_row(form_search.role) }}
+                            </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.role_search.button'|trans }}</button>
+                        <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.user_search.button'|trans }}</button>
                     {{ form_end(form_search) }}
                 </div>
             </div>
@@ -58,9 +62,9 @@
                         {% endif %}
                     </h3>
 
-                    {% set granted_create = is_granted('role_create') %}
+                    {% set granted_create = is_granted('user_create') %}
                     {% if granted_create %}
-                        <a href="{{ path('admin_role_create') }}" class="btn btn-success ml-3">{{ 'crud.action.common.create'|trans }}</a>
+                        <a href="{{ path('admin_user_create') }}" class="btn btn-success ml-3">{{ 'crud.action.common.create'|trans }}</a>
                     {% endif %}
                 </div>
 
@@ -69,37 +73,46 @@
                         <table class="table text-nowrap">
                             <thead>
                                 <tr>
-                                    <th class="cell-5">{{ 'entity_attribute.Role.id'|trans }}</th>
-                                    <th>{{ 'entity_attribute.Role.label'|trans }}</th>
+                                    <th class="cell-5">{{ 'entity_attribute.User.id'|trans }}</th>
+                                    <th class="cell-25">{{ 'entity_attribute.User.email'|trans }}</th>
+                                    <th>{{ 'entity_attribute.User.role'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {% set granted_read = is_granted('role_read') %}
-                                {% set granted_update = is_granted('role_update') %}
-                                {% set granted_delete = is_granted('role_delete') %}
+                                {% set granted_read = is_granted('user_read') %}
+                                {% set granted_update = is_granted('user_update') or is_granted('user_update_role') %}
+                                {% set granted_delete = is_granted('user_delete') %}
 
-                                {% for role in paginator.currentPageItems %}
+                                {% for user in paginator.currentPageItems %}
                                     <tr class="align-items-center">
-                                        <td class="align-middle cell-5">{{ role.id }}</td>
+                                        <td class="align-middle cell-5">{{ user.id }}</td>
+
+                                        <td class="align-middle cell-25">
+                                            <span>{{ user.email }}</span>
+                                        </td>
 
                                         <td class="align-middle">
-                                            <span>{{ role.label }}</span>
+                                            {% if user.role is null %}
+                                                <em>{{ 'search.item_no_reference.female'|trans }}</em>
+                                            {% else %}
+                                                <span>{{ user.role.label }}</span>
+                                            {% endif %}
                                         </td>
 
                                         <td class="align-middle cell-25">
                                             {% if granted_read or granted_update or granted_delete %}
                                                 {% if granted_read %}
-                                                    <a href="{{ path('admin_role_read', {id: role.id}) }}" class="btn btn-secondary">{{ 'crud.action.common.read'|trans }}</a>
+                                                    <a href="{{ path('admin_user_read', {id: user.id}) }}" class="btn btn-secondary">{{ 'crud.action.common.read'|trans }}</a>
                                                 {% endif %}
 
                                                 {% if granted_update %}
-                                                    <a href="{{ path('admin_role_update', {id: role.id}) }}" class="btn btn-primary">{{ 'crud.action.common.update'|trans }}</a>
+                                                    <a href="{{ path('admin_user_update', {id: user.id}) }}" class="btn btn-primary">{{ 'crud.action.common.update'|trans }}</a>
                                                 {% endif %}
 
                                                 {% if granted_delete %}
-                                                    <a href="{{ path('admin_role_delete', {id: role.id}) }}" class="btn btn-danger">{{ 'crud.action.common.delete'|trans }}</a>
+                                                    <a href="{{ path('admin_user_delete', {id: user.id}) }}" class="btn btn-danger">{{ 'crud.action.common.delete'|trans }}</a>
                                                 {% endif %}
                                             {% else %}
                                                 <span>-</span>

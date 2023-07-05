@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Role;
 use App\Entity\User;
+use App\Form\DataTransfer\Data\Admin\UserSearchDataInterface;
+use App\Search\Paginator\DqlPaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -11,6 +13,7 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -66,6 +69,23 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     /**
      * @inheritDoc
      */
+    public function findOneById(int $id): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->select('u, ur, urp, urpg')
+            ->leftJoin('u.role', 'ur')
+            ->leftJoin('ur.permissions', 'urp')
+            ->leftJoin('urp.group', 'urpg')
+            ->andWhere('u.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findOneByEmail(string $email): ?User
     {
         return $this->createQueryBuilder('u')
@@ -107,6 +127,36 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAdminPaginator(UserSearchDataInterface $data, int $currentPage, int $pageSize): DqlPaginator
+    {
+        $phrase = $data->getEmail();
+        $sortBy = $data->getSortBy();
+        $role = $data->getRole();
+
+        $queryBuilder = $this->createQueryBuilder('u')
+            ->select('u, ur')
+            ->leftJoin('u.role', 'ur')
+            ->andWhere('u.email LIKE :email')
+            ->setParameter('email', '%' . $phrase . '%')
+            ->orderBy('u.' . $sortBy->property(), $sortBy->order())
+        ;
+
+        if ($role !== null)
+        {
+            $queryBuilder
+                ->andWhere('u.role = :role')
+                ->setParameter('role', $role)
+            ;
+        }
+
+        $query = $queryBuilder->getQuery();
+
+        return new DqlPaginator(new DoctrinePaginator($query), $currentPage, $pageSize);
     }
 
     /**

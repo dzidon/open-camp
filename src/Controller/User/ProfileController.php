@@ -8,6 +8,7 @@ use App\Form\DataTransfer\Data\User\ProfilePasswordChangeData;
 use App\Form\Type\Common\HiddenTrueType;
 use App\Form\Type\User\ProfilePasswordChangeType;
 use App\Mailer\UserPasswordChangeMailerInterface;
+use App\Menu\Breadcrumbs\User\ProfileBreadcrumbsInterface;
 use App\Repository\UserRepositoryInterface;
 use App\Security\PasswordChange\UserPasswordChangeFactoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -21,6 +22,13 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/profile')]
 class ProfileController extends AbstractController
 {
+    private ProfileBreadcrumbsInterface $breadcrumbs;
+
+    public function __construct(ProfileBreadcrumbsInterface $breadcrumbs)
+    {
+        $this->breadcrumbs = $breadcrumbs;
+    }
+
     #[Route('/password-change', name: 'user_profile_password_change')]
     public function passwordChange(UserPasswordHasherInterface $hasher,
                                    UserRepositoryInterface     $userRepository,
@@ -58,13 +66,14 @@ class ProfileController extends AbstractController
 
         return $this->render('user/profile/password_change.html.twig', [
             'form_password_change' => $form,
+            '_breadcrumbs' => $this->breadcrumbs->buildPasswordChange(),
         ]);
     }
 
     #[Route('/password-change-create', name: 'user_profile_password_change_create')]
-    public function passwordSet(UserPasswordChangeFactoryInterface $passwordChangeFactory,
-                                UserPasswordChangeMailerInterface  $mailer,
-                                Request                            $request): Response
+    public function passwordChangeCreate(UserPasswordChangeFactoryInterface $passwordChangeFactory,
+                                         UserPasswordChangeMailerInterface  $mailer,
+                                         Request                            $request): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -89,6 +98,7 @@ class ProfileController extends AbstractController
 
         return $this->render('user/profile/password_change_create.html.twig', [
             'form_password_change_create' => $form,
+            '_breadcrumbs' => $this->breadcrumbs->buildPasswordChangeCreate(),
         ]);
     }
 }

@@ -1,5 +1,5 @@
-{# Admin navigation #}
-{% block navbar_admin_root %}
+{# Admin vertical navigation #}
+{% block navbar_admin_vertical_root %}
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         {% for menu_child in menu_type.children %}
             {% with {'menu_type': menu_child} %}
@@ -9,7 +9,7 @@
     </ul>
 {% endblock %}
 
-{% block navbar_admin_item %}
+{% block navbar_admin_vertical_item %}
     <li class="nav-item">
         <a href="{{ menu_type.url }}" class="nav-link{% if menu_type.active %} active{% endif %}">
             {% if menu_type.icon is not null %}
@@ -36,17 +36,34 @@
     </li>
 {% endblock %}
 
+{# Admin horizontal navigation #}
+{% block navbar_admin_horizontal_root %}
+    <ul class="navbar-nav ml-auto">
+        {% for menu_child in menu_type.children %}
+            {% with {'menu_type': menu_child} %}
+                {{ block(menu_child.templateBlock, menu_theme) }}
+            {% endwith %}
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block navbar_admin_horizontal_item %}
+    <li class="nav-item">
+        <a class="nav-link" href="{{ menu_type.url }}">
+            {{ menu_type.text }}
+        </a>
+    </li>
+{% endblock %}
+
 {# Pagination #}
 {% block pagination_root %}
-    {% if menu_type.children|length > 0 %}
-        <ul class="pagination pagination-sm m-0">
-            {% for menu_child in menu_type.children %}
-                {% with {'menu_type': menu_child} %}
-                    {{ block(menu_child.templateBlock, menu_theme) }}
-                {% endwith %}
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <ul class="pagination pagination-sm m-0">
+        {% for menu_child in menu_type.children %}
+            {% with {'menu_type': menu_child} %}
+                {{ block(menu_child.templateBlock, menu_theme) }}
+            {% endwith %}
+        {% endfor %}
+    </ul>
 {% endblock %}
 
 {% block pagination_item %}
@@ -65,15 +82,13 @@
 
 {# Breadcrumbs #}
 {% block breadcrumbs %}
-    {% if menu_type.children|length > 1 %}
-        <ol class="breadcrumb">
-            {% for menu_child in menu_type.children %}
-                {% with {'menu_type': menu_child} %}
-                    {{ block(menu_child.templateBlock, menu_theme) }}
-                {% endwith %}
-            {% endfor %}
-        </ol>
-    {% endif %}
+    <ol class="breadcrumb">
+        {% for menu_child in menu_type.children %}
+            {% with {'menu_type': menu_child} %}
+                {{ block(menu_child.templateBlock, menu_theme) }}
+            {% endwith %}
+        {% endfor %}
+    </ol>
 {% endblock %}
 
 {% block breadcrumb %}

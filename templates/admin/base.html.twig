@@ -26,17 +26,8 @@
             </ul>
 
             <!-- Right aligned items -->
-            <ul class="navbar-nav ml-auto">
-                {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-                    <li class="nav-item">
-                        <a href="{{ path('admin_profile') }}" class="nav-link">{{ app.user.email }}</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a href="{{ path('user_logout') }}" class="nav-link">{{ 'route.user_logout'|trans }}</a>
-                    </li>
-                {% endif %}
-            </ul>
+            {% set navbar_admin_horizontal = build_menu('navbar_admin_horizontal') %}
+            {{ menu(navbar_admin_horizontal) }}
         </nav>
 
         <!-- Left navbar -->
@@ -50,8 +41,8 @@
             <div class="sidebar">
                 <!-- Sidebar menu -->
                 <nav class="mt-2">
-                    {% set navbar_admin = build_menu('navbar_admin') %}
-                    {{ menu(navbar_admin) }}
+                    {% set navbar_admin_vertical = build_menu('navbar_admin_vertical') %}
+                    {{ menu(navbar_admin_vertical) }}
                 </nav>
             </div>
         </aside>

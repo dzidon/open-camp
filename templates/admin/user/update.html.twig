@@ -1,0 +1,41 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            {% if user is defined and is_granted('user_update') %}
+                <div class="card card-outline card-primary">
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col">
+                                {% if user.password is null %}
+                                    {{ 'crud.instruction.User.update_password_not_set'|trans }}
+                                {% else %}
+                                    {{ 'crud.instruction.User.update_password_set'|trans }}
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <a href="{{ path('admin_user_update_password', {id: user.id}) }}" class="btn btn-primary">
+                                    {{ 'crud.action.User.update_password'|trans }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-8 col-xl-5">
+                            {{ form(form_user) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
