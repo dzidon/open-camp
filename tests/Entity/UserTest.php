@@ -85,6 +85,61 @@ class UserTest extends TestCase
         $this->assertNull($this->user->getRole());
     }
 
+    public function testName(): void
+    {
+        $this->assertNull($this->user->getName());
+
+        $this->user->setName('text');
+        $this->assertSame('text', $this->user->getName());
+
+        $this->user->setName(null);
+        $this->assertNull($this->user->getName());
+    }
+
+    public function testStreet(): void
+    {
+        $this->assertNull($this->user->getStreet());
+
+        $this->user->setStreet('text');
+        $this->assertSame('text', $this->user->getStreet());
+
+        $this->user->setStreet(null);
+        $this->assertNull($this->user->getStreet());
+    }
+
+    public function testTown(): void
+    {
+        $this->assertNull($this->user->getTown());
+
+        $this->user->setTown('text');
+        $this->assertSame('text', $this->user->getTown());
+
+        $this->user->setTown(null);
+        $this->assertNull($this->user->getTown());
+    }
+
+    public function testZip(): void
+    {
+        $this->assertNull($this->user->getZip());
+
+        $this->user->setZip('text');
+        $this->assertSame('text', $this->user->getZip());
+
+        $this->user->setZip(null);
+        $this->assertNull($this->user->getZip());
+    }
+
+    public function testCountry(): void
+    {
+        $this->assertNull($this->user->getCountry());
+
+        $this->user->setCountry('text');
+        $this->assertSame('text', $this->user->getCountry());
+
+        $this->user->setCountry(null);
+        $this->assertNull($this->user->getCountry());
+    }
+
     protected function setUp(): void
     {
         $this->user = new User(self::EMAIL);

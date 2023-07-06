@@ -45,7 +45,7 @@ class AdminNavbarHorizontalMenuTypeFactory extends AbstractMenuTypeFactory
         $user = $this->security->getUser();
 
         // user web
-        $text = $this->translator->trans('menu.navbar_admin_horizontal.user_web');
+        $text = $this->translator->trans('module.user');
         $url = $this->urlGenerator->generate('user_home');
         $itemHome = new MenuType('user_home', 'navbar_admin_horizontal_item', $text, $url);
         $menu->addChild($itemHome);

@@ -4,8 +4,11 @@ namespace App\Controller\User;
 
 use App\Controller\AbstractController;
 use App\Entity\User;
+use App\Form\DataTransfer\Data\User\BillingData;
 use App\Form\DataTransfer\Data\User\ProfilePasswordChangeData;
+use App\Form\DataTransfer\Registry\DataTransferRegistryInterface;
 use App\Form\Type\Common\HiddenTrueType;
+use App\Form\Type\User\BillingType;
 use App\Form\Type\User\ProfilePasswordChangeType;
 use App\Mailer\UserPasswordChangeMailerInterface;
 use App\Menu\Breadcrumbs\User\ProfileBreadcrumbsInterface;
@@ -27,6 +30,36 @@ class ProfileController extends AbstractController
     public function __construct(ProfileBreadcrumbsInterface $breadcrumbs)
     {
         $this->breadcrumbs = $breadcrumbs;
+    }
+
+    #[Route('/billing', name: 'user_profile_billing')]
+    public function billing(DataTransferRegistryInterface $dataTransfer,
+                            UserRepositoryInterface       $userRepository,
+                            Request                       $request): Response
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $billingData = new BillingData();
+        $dataTransfer->fillData($billingData, $user);
+
+        $form = $this->createForm(BillingType::class, $billingData);
+        $form->add('submit', SubmitType::class, ['label' => 'form.user.profile_billing.button']);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $dataTransfer->fillEntity($billingData, $user);
+            $userRepository->saveUser($user, true);
+            $this->addTransFlash('success', 'crud.action_performed.User.update_billing');
+
+            return $this->redirectToRoute('user_profile_billing');
+        }
+
+        return $this->render('user/profile/billing.html.twig', [
+            'form_billing' => $form,
+            '_breadcrumbs' => $this->breadcrumbs->buildBilling(),
+        ]);
     }
 
     #[Route('/password-change', name: 'user_profile_password_change')]

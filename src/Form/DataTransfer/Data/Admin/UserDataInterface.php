@@ -3,6 +3,7 @@
 namespace App\Form\DataTransfer\Data\Admin;
 
 use App\Entity\Role;
+use App\Form\DataTransfer\Data\User\BillingDataInterface;
 
 /**
  * Admin user edit data.
@@ -20,4 +21,6 @@ interface UserDataInterface
     public function getRole(): ?Role;
 
     public function setRole(?Role $role): self;
+
+    public function getBillingData(): BillingDataInterface;
 }

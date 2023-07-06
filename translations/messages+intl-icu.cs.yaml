@@ -1,6 +1,10 @@
 app:
     site_name: 'Kemp'
 
+country:
+    cs: 'Česká republika'
+    sk: 'Slovensko'
+
 auth:
     no_account_yet: 'Ještě u nás nemáte účet?'
     no_account_yet_link: 'Zaregistrovat se'
@@ -69,14 +73,15 @@ crud:
     action_performed:
         Role:
             create: 'Role vytvořena!'
-            update: 'Role upravena!'
+            update: 'Role uložena!'
             delete: 'Role odstraněna!'
 
         User:
             create: 'Uživatel vytvořen!'
-            update: 'Uživatel upraven!'
-            update_password: 'Heslo uživatele nastaveno!'
-            reset_password: 'Heslo uživatele odstraněno!'
+            update: 'Uživatel uložen!'
+            update_billing: 'Fakturační údaje uloženy!'
+            update_password: 'Heslo nastaveno!'
+            reset_password: 'Heslo odstraněno!'
             delete: 'Uživatel odstraněn!'
 
 entity:
@@ -131,6 +136,11 @@ entity_attribute:
         email: 'E-mail'
         password: 'Heslo'
         role: 'Role'
+        name: 'Celé jméno'
+        street: 'Ulice a číslo popisné'
+        town: 'Obec'
+        zip: 'PSČ'
+        country: 'Země'
 
     UserPasswordChange:
         id: 'ID'
@@ -138,7 +148,15 @@ entity_attribute:
         expireAt: 'Datum expirace'
         state: 'Stav'
         selector: 'Selektor'
-        verifier: 'Hash verifikátoru'
+        verifier: 'Verifikátor'
+
+    UserRegistration:
+        id: 'ID'
+        email: 'E-mail'
+        expireAt: 'Datum expirace'
+        state: 'Stav'
+        selector: 'Selektor'
+        verifier: 'Verifikátor'
 
 search:
     label: 'Vyhledávání'
@@ -169,9 +187,6 @@ modal:
         button_remove: 'Odstranit'
 
 menu:
-    navbar_admin_horizontal:
-        user_web: 'Web'
-
     navbar_admin_vertical:
         browse: 'Procházet'
 
@@ -267,6 +282,14 @@ form:
             remember_me: 'Zůstat přihlášen'
             button: 'Přihlásit se'
 
+        profile_billing:
+            name: 'Celé jméno'
+            street: 'Ulice a číslo popisné'
+            town: 'Obec'
+            zip: 'PSČ'
+            country: 'Země'
+            button: 'Uložit'
+
         profile_password_change:
             current_password: 'Aktuální heslo'
             button: 'Nastavit heslo'
@@ -289,14 +312,21 @@ mail:
         link_text: 'ZDE'
         body2: 'Odkaz vyprší {date}.'
 
+module:
+    user: 'Uživatelský web'
+    user_profile: 'Profil'
+    admin: 'Administrace'
+
 route:
     admin_home: 'Přehled'
     admin_profile: 'Administrátorský profil'
+
     admin_role_list: 'Role'
     admin_role_create: 'Nová role'
     admin_role_read: 'Zobrazení role'
     admin_role_update: 'Editace role'
     admin_role_delete: 'Odstranění role'
+
     admin_user_list: 'Uživatelé'
     admin_user_create: 'Nový uživatel'
     admin_user_read: 'Zobrazení uživatele'
@@ -311,5 +341,7 @@ route:
     user_registration_complete: 'Dokončení registrace'
     user_password_change: 'Změna hesla'
     user_password_change_complete: 'Nové heslo'
+
+    user_profile_billing: 'Fakturační údaje'
     user_profile_password_change: 'Změna hesla'
     user_profile_password_change_create: 'Nastavení hesla'

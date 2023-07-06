@@ -4,6 +4,7 @@ namespace App\Tests\Form\DataTransfer\Data\Admin;
 
 use App\Entity\Role;
 use App\Form\DataTransfer\Data\Admin\UserData;
+use App\Form\DataTransfer\Data\User\BillingData;
 use App\Repository\UserRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -102,6 +103,13 @@ class UserDataTest extends KernelTestCase
 
         $data->setRole(null);
         $this->assertSame(null, $data->getRole());
+    }
+
+    public function testBillingData(): void
+    {
+        $data = new UserData();
+        $billingData = $data->getBillingData();
+        $this->assertInstanceOf(BillingData::class, $billingData);
     }
 
     private function getUserRepository(): UserRepositoryInterface

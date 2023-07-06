@@ -51,14 +51,20 @@ class UserProfileMenuTypeFactory extends AbstractMenuTypeFactory
         // root
         $menu = new MenuType(self::getMenuIdentifier(), 'navbar_user_profile');
 
-        // applications
-        $itemApplications = new MenuType('link1', 'navbar_user_profile_item', 'applications', '#');
+        // billing
+        $text = $this->translator->trans('route.user_profile_billing');
+        $url = $this->urlGenerator->generate('user_profile_billing');
+        $itemBilling = new MenuType('user_profile_billing', 'navbar_user_profile_item', $text, $url);
+        $itemBilling->setActive($route === 'user_profile_billing');
 
         // parents
-        $itemParents = new MenuType('link2', 'navbar_user_profile_item', 'parents', '#');
+        $itemParents = new MenuType('link1', 'navbar_user_profile_item', 'parents', '#');
 
         // campers
-        $itemCampers = new MenuType('link3', 'navbar_user_profile_item', 'campers', '#');
+        $itemCampers = new MenuType('link2', 'navbar_user_profile_item', 'campers', '#');
+
+        // applications
+        $itemApplications = new MenuType('link3', 'navbar_user_profile_item', 'applications', '#');
 
         // password set
         if ($user->getPassword() === null)
@@ -78,9 +84,10 @@ class UserProfileMenuTypeFactory extends AbstractMenuTypeFactory
         }
 
         $menu
-            ->addChild($itemApplications)
+            ->addChild($itemBilling)
             ->addChild($itemParents)
             ->addChild($itemCampers)
+            ->addChild($itemApplications)
             ->addChild($itemPassword)
         ;
 

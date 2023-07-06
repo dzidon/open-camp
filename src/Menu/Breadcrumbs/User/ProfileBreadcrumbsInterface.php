@@ -11,7 +11,12 @@ use App\Menu\Type\MenuTypeInterface;
 interface ProfileBreadcrumbsInterface
 {
     /**
-     * Initializes breadcrumbs for the path "user_password_change".
+     * Initializes breadcrumbs for the path "user_profile_billing".
+     */
+    public function buildBilling(): MenuTypeInterface;
+
+    /**
+     * Initializes breadcrumbs for the path "user_profile_password_change".
      */
     public function buildPasswordChange(): MenuTypeInterface;
 

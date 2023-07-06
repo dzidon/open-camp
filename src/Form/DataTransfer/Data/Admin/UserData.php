@@ -3,6 +3,7 @@
 namespace App\Form\DataTransfer\Data\Admin;
 
 use App\Entity\Role;
+use App\Form\DataTransfer\Data\User\BillingData;
 use App\Form\Type\Admin\UserType;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator as CustomAssert;
@@ -22,6 +23,14 @@ class UserData implements UserDataInterface
     private string $email = '';
 
     private ?Role $role = null;
+
+    #[Assert\Valid]
+    private BillingData $billingData;
+
+    public function __construct()
+    {
+        $this->billingData = new BillingData();
+    }
 
     public function getId(): ?int
     {
@@ -57,5 +66,10 @@ class UserData implements UserDataInterface
         $this->role = $role;
 
         return $this;
+    }
+
+    public function getBillingData(): BillingData
+    {
+        return $this->billingData;
     }
 }

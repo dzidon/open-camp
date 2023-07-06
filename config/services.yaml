@@ -14,6 +14,9 @@ parameters:
     app.locales: 'cs' # Enabled locales (languages) divided by "|"
     app.locale_names:
         cs: 'Česky'
+    app.billing_countries:
+        - cs
+        - sk
 
     # Security
     app.max_active_registrations_per_email: 5
@@ -113,3 +116,7 @@ services:
         arguments:
             $emailFrom: '%app.email_no_reply%'
             $dateTimeFormat: '%app.date_time_format%'
+
+    App\Form\Type\User\BillingType:
+        arguments:
+            $billingCountries: '%app.billing_countries%'

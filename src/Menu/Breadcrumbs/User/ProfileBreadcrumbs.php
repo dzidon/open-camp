@@ -13,6 +13,20 @@ class ProfileBreadcrumbs extends AbstractBreadcrumbs implements ProfileBreadcrum
     /**
      * @inheritDoc
      */
+    public function buildBilling(): MenuType
+    {
+        $root = $this->createRoot();
+        $this->addChildRoute($root, 'user_home');
+        $this->addChildRoute($root, 'user_profile_billing')
+            ->setActive()
+        ;
+
+        return $root;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function buildPasswordChange(): MenuType
     {
         $root = $this->createRoot();

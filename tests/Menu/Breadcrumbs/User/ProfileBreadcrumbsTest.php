@@ -14,6 +14,24 @@ class ProfileBreadcrumbsTest extends KernelTestCase
     private MenuTypeFactoryRegistryInterface $menuTypeRegistry;
     private ProfileBreadcrumbs $breadcrumbs;
 
+    public function testBuildBilling(): void
+    {
+        $breadcrumbsMenu = $this->breadcrumbs->buildBilling();
+        $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
+        $this->assertSame([
+            'user_home',
+            'user_profile_billing',
+        ], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
+
+        $homeButton = $breadcrumbsMenu->getChild('user_home');
+        $this->assertSame(false, $homeButton->isActive());
+        $this->assertSame('/', $homeButton->getUrl());
+
+        $profileButton = $breadcrumbsMenu->getChild('user_profile_billing');
+        $this->assertSame(true, $profileButton->isActive());
+        $this->assertSame('/profile/billing', $profileButton->getUrl());
+    }
+
     public function testBuildPasswordChange(): void
     {
         $breadcrumbsMenu = $this->breadcrumbs->buildPasswordChange();

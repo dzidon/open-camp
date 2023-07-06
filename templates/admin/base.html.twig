@@ -54,9 +54,11 @@
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <!-- Heading -->
-                            {% if is_route_name_set() %}
-                                <h1 class="m-0">{{ route_name() }}</h1>
-                            {% endif %}
+                            {% block h1 %}
+                                {% if is_route_name_set() %}
+                                    <h1 class="m-0">{{ route_name() }}</h1>
+                                {% endif %}
+                            {% endblock %}
                         </div>
 
                         <div class="col-sm-6">

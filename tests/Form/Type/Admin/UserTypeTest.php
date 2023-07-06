@@ -23,6 +23,7 @@ class UserTypeTest extends KernelTestCase
         $form = $factory->create(UserType::class, $data);
 
         $this->assertTrue($form->has('email'));
+        $this->assertTrue($form->has('billingData'));
         $this->assertFalse($form->has('role'));
     }
 
@@ -35,6 +36,7 @@ class UserTypeTest extends KernelTestCase
         $form = $factory->create(UserType::class, $data);
 
         $this->assertFalse($form->has('email'));
+        $this->assertFalse($form->has('billingData'));
         $this->assertTrue($form->has('role'));
     }
 
@@ -47,6 +49,7 @@ class UserTypeTest extends KernelTestCase
         $form = $factory->create(UserType::class, $data);
 
         $this->assertTrue($form->has('email'));
+        $this->assertTrue($form->has('billingData'));
         $this->assertTrue($form->has('role'));
     }
 

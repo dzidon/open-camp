@@ -65,9 +65,11 @@
             {% endif %}
 
             <!-- Heading -->
-            {% if is_route_name_set() %}
-                <h1 class="mb-3">{{ route_name() }}</h1>
-            {% endif %}
+            {% block h1 %}
+                {% if is_route_name_set() %}
+                    <h1 class="mb-3">{{ route_name() }}</h1>
+                {% endif %}
+            {% endblock %}
 
             {% block main %}{% endblock %}
         </div>

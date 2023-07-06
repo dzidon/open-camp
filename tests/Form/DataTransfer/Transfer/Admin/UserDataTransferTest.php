@@ -20,8 +20,19 @@ class UserDataTransferTest extends KernelTestCase
         $expectedId = 123;
         $expectedEmail = 'abc@gmail.com';
         $expectedRole = new Role('label');
+        $expectedName = 'Name';
+        $expectedStreet = 'Street';
+        $expectedTown = 'Town';
+        $expectedZip = 'Zip';
+        $expectedCountry = 'Country';
+
         $user = new User($expectedEmail);
         $user->setRole($expectedRole);
+        $user->setName($expectedName);
+        $user->setStreet($expectedStreet);
+        $user->setTown($expectedTown);
+        $user->setZip($expectedZip);
+        $user->setCountry($expectedCountry);
 
         $reflectionClass = new ReflectionClass(User::class);
         $reflectionProperty = $reflectionClass->getProperty('id');
@@ -33,6 +44,13 @@ class UserDataTransferTest extends KernelTestCase
         $this->assertSame($expectedId, $data->getId());
         $this->assertSame($expectedEmail, $data->getEmail());
         $this->assertSame($expectedRole, $data->getRole());
+
+        $billingData = $data->getBillingData();
+        $this->assertSame($expectedName, $billingData->getName());
+        $this->assertSame($expectedStreet, $billingData->getStreet());
+        $this->assertSame($expectedTown, $billingData->getTown());
+        $this->assertSame($expectedZip, $billingData->getZip());
+        $this->assertSame($expectedCountry, $billingData->getCountry());
     }
 
     public function testFillEntityUserUpdateGranted(): void
@@ -42,17 +60,35 @@ class UserDataTransferTest extends KernelTestCase
         $expectedId = 123;
         $expectedEmail = 'abc@gmail.com';
         $expectedRole = new Role('label');
+        $expectedName = 'Name';
+        $expectedStreet = 'Street';
+        $expectedTown = 'Town';
+        $expectedZip = 'Zip';
+        $expectedCountry = 'Country';
+
         $data = new UserData();
         $data->setId($expectedId);
         $data->setEmail($expectedEmail);
         $data->setRole($expectedRole);
 
+        $billingData = $data->getBillingData();
+        $billingData->setName($expectedName);
+        $billingData->setStreet($expectedStreet);
+        $billingData->setTown($expectedTown);
+        $billingData->setZip($expectedZip);
+        $billingData->setCountry($expectedCountry);
+
         $user = new User('bob@gmail.com');
         $dataTransfer->fillEntity($data, $user);
 
-        $this->assertSame(null, $user->getId());
+        $this->assertNull($user->getId());
         $this->assertSame($expectedEmail, $user->getEmail());
-        $this->assertSame(null, $user->getRole());
+        $this->assertNull($user->getRole());
+        $this->assertSame($expectedName, $user->getName());
+        $this->assertSame($expectedStreet, $user->getStreet());
+        $this->assertSame($expectedTown, $user->getTown());
+        $this->assertSame($expectedZip, $user->getZip());
+        $this->assertSame($expectedCountry, $user->getCountry());
     }
 
     public function testFillEntityUserUpdateRoleGranted(): void
@@ -62,17 +98,35 @@ class UserDataTransferTest extends KernelTestCase
         $expectedId = 123;
         $expectedEmail = 'abc@gmail.com';
         $expectedRole = new Role('label');
+        $expectedName = 'Name';
+        $expectedStreet = 'Street';
+        $expectedTown = 'Town';
+        $expectedZip = 'Zip';
+        $expectedCountry = 'Country';
+
         $data = new UserData();
         $data->setId($expectedId);
         $data->setEmail($expectedEmail);
         $data->setRole($expectedRole);
 
+        $billingData = $data->getBillingData();
+        $billingData->setName($expectedName);
+        $billingData->setStreet($expectedStreet);
+        $billingData->setTown($expectedTown);
+        $billingData->setZip($expectedZip);
+        $billingData->setCountry($expectedCountry);
+
         $user = new User('bob@gmail.com');
         $dataTransfer->fillEntity($data, $user);
 
-        $this->assertSame(null, $user->getId());
+        $this->assertNull($user->getId());
         $this->assertSame('bob@gmail.com', $user->getEmail());
         $this->assertSame($expectedRole, $user->getRole());
+        $this->assertNull($user->getName());
+        $this->assertNull($user->getStreet());
+        $this->assertNull($user->getTown());
+        $this->assertNull($user->getZip());
+        $this->assertNull($user->getCountry());
     }
 
     private function getUserDataTransfer(array $userRoles = []): UserDataTransfer

@@ -11,6 +11,10 @@ parameters:
         en: 'English'
         cs: 'Čeština'
         de: 'Deutsch'
+    app.billing_countries:
+        - en
+        - cs
+        - de
 
     # Security
     app.max_active_registrations_per_email: 2

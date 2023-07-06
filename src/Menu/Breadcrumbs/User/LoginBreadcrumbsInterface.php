@@ -12,8 +12,6 @@ interface LoginBreadcrumbsInterface
 {
     /**
      * Creates breadcrumbs for the path "user_login".
-     *
-     * @return MenuTypeInterface
      */
     public function buildLogin(): MenuTypeInterface;
 }
