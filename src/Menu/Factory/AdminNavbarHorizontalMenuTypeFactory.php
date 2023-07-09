@@ -44,23 +44,22 @@ class AdminNavbarHorizontalMenuTypeFactory extends AbstractMenuTypeFactory
         /** @var User $user */
         $user = $this->security->getUser();
 
-        // user web
-        $text = $this->translator->trans('module.user');
-        $url = $this->urlGenerator->generate('user_home');
-        $itemHome = new MenuType('user_home', 'navbar_admin_horizontal_item', $text, $url);
-        $menu->addChild($itemHome);
+        // parent - profile
+        $text = $user->getEmail();
+        $itemParentProfile = new MenuType('parent_profile', 'navbar_admin_horizontal_item', $text);
+        $menu->addChild($itemParentProfile);
 
         // profile
-        $text = $user->getEmail();
+        $text = $this->translator->trans('route.admin_profile');
         $url = $this->urlGenerator->generate('admin_profile');
         $itemProfile = new MenuType('admin_profile', 'navbar_admin_horizontal_item', $text, $url);
-        $menu->addChild($itemProfile);
+        $itemParentProfile->addChild($itemProfile);
 
         // logout
         $text = $this->translator->trans('route.user_logout');
         $url = $this->urlGenerator->generate('user_logout');
         $itemLogout = new MenuType('user_logout', 'navbar_admin_horizontal_item', $text, $url);
-        $menu->addChild($itemLogout);
+        $itemParentProfile->addChild($itemLogout);
 
         return $menu;
     }

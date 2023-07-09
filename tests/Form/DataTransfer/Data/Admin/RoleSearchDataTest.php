@@ -8,16 +8,16 @@ use PHPUnit\Framework\TestCase;
 
 class RoleSearchDataTest extends TestCase
 {
-    public function testLabel(): void
+    public function testPhrase(): void
     {
         $data = new RoleSearchData();
-        $this->assertSame('', $data->getLabel());
+        $this->assertSame('', $data->getPhrase());
 
-        $data->setLabel(null);
-        $this->assertSame('', $data->getLabel());
+        $data->setPhrase(null);
+        $this->assertSame('', $data->getPhrase());
 
-        $data->setLabel('text');
-        $this->assertSame('text', $data->getLabel());
+        $data->setPhrase('text');
+        $this->assertSame('text', $data->getPhrase());
     }
 
     public function testSortBy(): void

@@ -1,0 +1,45 @@
+{% extends "user/profile/base.html.twig" %}
+
+{% block profile_content %}
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3 col-md-2">
+            <strong>{{ 'entity_attribute.Contact.name'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9 col-md-10">
+            <span>{{ contact.name }}</span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3 col-md-2">
+            <strong>{{ 'entity_attribute.Contact.email'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9 col-md-10">
+            <span>{{ contact.email }}</span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3 col-md-2">
+            <strong>{{ 'entity_attribute.Contact.phoneNumber'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9 col-md-10">
+            <span>{{ contact.phoneNumber|phone_number_format(phone_number_format) }}</span>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col">
+            <a href="{{ path('user_profile_contact_update', {id: contact.id}) }}" class="card-link">
+                {{ 'crud.action.common.update'|trans }}
+            </a>
+
+            <a href="{{ path('user_profile_contact_delete', {id: contact.id}) }}" class="card-link">
+                {{ 'crud.action.common.delete'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}

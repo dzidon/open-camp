@@ -134,15 +134,17 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
      */
     public function getAdminPaginator(UserSearchDataInterface $data, int $currentPage, int $pageSize): DqlPaginator
     {
-        $phrase = $data->getEmail();
+        $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();
         $role = $data->getRole();
 
         $queryBuilder = $this->createQueryBuilder('u')
             ->select('u, ur')
             ->leftJoin('u.role', 'ur')
-            ->andWhere('u.email LIKE :email')
+            ->orWhere('u.email LIKE :email')
             ->setParameter('email', '%' . $phrase . '%')
+            ->orWhere('u.name LIKE :name')
+            ->setParameter('name', '%' . $phrase . '%')
             ->orderBy('u.' . $sortBy->property(), $sortBy->order())
         ;
 

@@ -21,9 +21,7 @@ class PermissionVoterTest extends KernelTestCase
         $tokenMock = $this->createTokenMock($user);
 
         $this->assertSame(VoterInterface::ACCESS_ABSTAIN, $voter->vote($tokenMock, null, ['permission_non_existent']));
-
         $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, null, ['permission1']));
-
         $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, null, ['permission3']));
     }
 

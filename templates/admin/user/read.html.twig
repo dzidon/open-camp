@@ -7,6 +7,20 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity_attribute.User.name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            {% if user.name is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.name }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3 col-md-2">
                             <strong>{{ 'entity_attribute.User.email'|trans }}:</strong>
                         </div>
 
@@ -29,7 +43,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col-12 col-sm-3 col-md-2">
                             <strong>{{ 'entity_attribute.User.role'|trans }}:</strong>
                         </div>
@@ -39,6 +53,62 @@
                                 <em>{{ 'search.item_no_reference.female'|trans }}</em>
                             {% else %}
                                 <span>{{ user.role.label }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity_attribute.User.street'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            {% if user.street is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.street }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity_attribute.User.town'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            {% if user.town is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.town }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity_attribute.User.zip'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            {% if user.zip is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.zip }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3 col-md-2">
+                            <strong>{{ 'entity_attribute.User.country'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9 col-md-10">
+                            {% if user.country is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.country }}</span>
                             {% endif %}
                         </div>
                     </div>

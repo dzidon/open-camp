@@ -75,11 +75,11 @@ class UserTest extends TestCase
 
         $role = new Role('Role');
         $this->user->setRole($role);
-        $this->assertSame($this->user->getRole(), $role);
+        $this->assertSame($role, $this->user->getRole());
 
         $roleNew = new Role('Role new');
         $this->user->setRole($roleNew);
-        $this->assertSame($this->user->getRole(), $roleNew);
+        $this->assertSame($roleNew, $this->user->getRole());
 
         $this->user->setRole(null);
         $this->assertNull($this->user->getRole());

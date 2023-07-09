@@ -48,6 +48,12 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
 
         $menu = new MenuType(self::getMenuIdentifier(), 'navbar_admin_vertical_root');
 
+        // back to user web
+        $text = $this->translator->trans('module.user');
+        $url = $this->urlGenerator->generate('user_home');
+        $itemDashboard = new MenuIconType('user_home', 'navbar_admin_vertical_item', $text, $url, 'fas fa-backward');
+        $menu->addChild($itemDashboard);
+
         // dashboard
         if ($this->security->isGranted('_any_permission'))
         {

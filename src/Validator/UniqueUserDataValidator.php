@@ -2,7 +2,6 @@
 
 namespace App\Validator;
 
-use App\Form\DataTransfer\Data\Admin\UserDataInterface;
 use App\Repository\UserRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
@@ -11,7 +10,7 @@ use Symfony\Component\Validator\Exception\UnexpectedValueException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Validates that the entered e-mail is not yet registered. See {@link UserDataInterface}.
+ * Validates that the entered e-mail is not yet registered.
  */
 class UniqueUserDataValidator extends ConstraintValidator
 {

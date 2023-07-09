@@ -15,4 +15,6 @@ enum UserSortEnum: string
     case ID_ASC = 'id ASC';
     case EMAIL_ASC = 'email ASC';
     case EMAIL_DESC = 'email DESC';
+    case NAME_ASC = 'name ASC';
+    case NAME_DESC = 'name DESC';
 }

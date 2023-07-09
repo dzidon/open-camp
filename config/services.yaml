@@ -15,8 +15,10 @@ parameters:
     app.locale_names:
         cs: 'Česky'
     app.billing_countries:
-        - cs
-        - sk
+        - 'cs'
+        - 'sk'
+    app.phone_number_default_locale: 'CZ'
+    app.phone_number_format: 1 # e.g. +420 123 456 789
 
     # Security
     app.max_active_registrations_per_email: 5
@@ -117,6 +119,15 @@ services:
             $emailFrom: '%app.email_no_reply%'
             $dateTimeFormat: '%app.date_time_format%'
 
+    App\Repository\ContactRepository:
+        arguments:
+            $phoneNumberDefaultLocale: '%app.phone_number_default_locale%'
+
     App\Form\Type\User\BillingType:
         arguments:
             $billingCountries: '%app.billing_countries%'
+
+    App\Form\Type\User\ContactType:
+        arguments:
+            $phoneNumberDefaultLocale: '%app.phone_number_default_locale%'
+            $phoneNumberFormat: '%app.phone_number_format%'

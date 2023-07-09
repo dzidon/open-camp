@@ -68,7 +68,7 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
      */
     public function getAdminPaginator(RoleSearchDataInterface $data, int $currentPage, int $pageSize): DqlPaginator
     {
-        $phrase = $data->getLabel();
+        $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();
 
         $query = $this->createQueryBuilder('r')

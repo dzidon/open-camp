@@ -120,7 +120,7 @@ class UserRepositoryTest extends KernelTestCase
         $repository = $this->getUserRepository();
 
         $data = new UserSearchData();
-        $data->setEmail('xena');
+        $data->setPhrase('xena');
 
         $paginator = $repository->getAdminPaginator($data, 1, 2);
         $this->assertSame($paginator->getTotalItems(), 1);
@@ -130,6 +130,23 @@ class UserRepositoryTest extends KernelTestCase
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
         $this->assertSame(['xena@gmail.com'], $emails);
+    }
+
+    public function testGetAdminPaginatorWithName(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $data = new UserSearchData();
+        $data->setPhrase('David Smi');
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame($paginator->getTotalItems(), 1);
+        $this->assertSame($paginator->getPagesCount(), 1);
+        $this->assertSame($paginator->getCurrentPage(), 1);
+        $this->assertSame($paginator->getPageSize(), 2);
+
+        $emails = $this->getUserNames($paginator->getCurrentPageItems());
+        $this->assertSame(['David Smith'], $emails);
     }
 
     public function testGetAdminPaginatorSortByIdDesc(): void
@@ -278,6 +295,19 @@ class UserRepositoryTest extends KernelTestCase
         }
 
         return $emails;
+    }
+
+    private function getUserNames(array $users): array
+    {
+        $names = [];
+
+        /** @var User $user */
+        foreach ($users as $user)
+        {
+            $names[] = (string) $user->getName();
+        }
+
+        return $names;
     }
 
     private function getUserPasswordHasher(): UserPasswordHasherInterface

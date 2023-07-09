@@ -10,9 +10,9 @@ use App\Enum\Search\Data\Admin\UserSortEnum;
  */
 interface UserSearchDataInterface
 {
-    public function getEmail(): string;
+    public function getPhrase(): string;
 
-    public function setEmail(?string $email): self;
+    public function setPhrase(?string $phrase): self;
 
     public function getSortBy(): UserSortEnum;
 

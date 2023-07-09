@@ -10,18 +10,18 @@ use App\Form\Type\Admin\RoleSearchType;
  */
 class RoleSearchData implements RoleSearchDataInterface
 {
-    private string $label = '';
+    private string $phrase = '';
 
     private RoleSortEnum $sortBy = RoleSortEnum::ID_DESC;
 
-    public function getLabel(): string
+    public function getPhrase(): string
     {
-        return $this->label;
+        return $this->phrase;
     }
 
-    public function setLabel(?string $label): self
+    public function setPhrase(?string $phrase): self
     {
-        $this->label = (string) $label;
+        $this->phrase = (string) $phrase;
 
         return $this;
     }

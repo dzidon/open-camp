@@ -55,16 +55,28 @@ class UserProfileMenuTypeFactory extends AbstractMenuTypeFactory
         $text = $this->translator->trans('route.user_profile_billing');
         $url = $this->urlGenerator->generate('user_profile_billing');
         $itemBilling = new MenuType('user_profile_billing', 'navbar_user_profile_item', $text, $url);
+        $menu->addChild($itemBilling);
         $itemBilling->setActive($route === 'user_profile_billing');
 
-        // parents
-        $itemParents = new MenuType('link1', 'navbar_user_profile_item', 'parents', '#');
+        // contacts
+        $active =
+            $route === 'user_profile_contact_list'   || $route === 'user_profile_contact_create' || $route === 'user_profile_contact_read' ||
+            $route === 'user_profile_contact_update' || $route === 'user_profile_contact_delete'
+        ;
+
+        $text = $this->translator->trans('route.user_profile_contact_list');
+        $url = $this->urlGenerator->generate('user_profile_contact_list');
+        $itemContacts = new MenuType('user_profile_contact_list', 'navbar_user_profile_item', $text, $url);
+        $menu->addChild($itemContacts);
+        $itemContacts->setActive($active);
 
         // campers
         $itemCampers = new MenuType('link2', 'navbar_user_profile_item', 'campers', '#');
+        $menu->addChild($itemCampers);
 
         // applications
         $itemApplications = new MenuType('link3', 'navbar_user_profile_item', 'applications', '#');
+        $menu->addChild($itemApplications);
 
         // password set
         if ($user->getPassword() === null)
@@ -72,6 +84,7 @@ class UserProfileMenuTypeFactory extends AbstractMenuTypeFactory
             $text = $this->translator->trans('route.user_profile_password_change_create');
             $url = $this->urlGenerator->generate('user_profile_password_change_create');
             $itemPassword = new MenuType('user_profile_password_change_create', 'navbar_user_profile_item', $text, $url);
+            $menu->addChild($itemPassword);
             $itemPassword->setActive($route === 'user_profile_password_change_create');
         }
         // password change
@@ -80,16 +93,9 @@ class UserProfileMenuTypeFactory extends AbstractMenuTypeFactory
             $text = $this->translator->trans('route.user_profile_password_change');
             $url = $this->urlGenerator->generate('user_profile_password_change');
             $itemPassword = new MenuType('user_profile_password_change', 'navbar_user_profile_item', $text, $url);
+            $menu->addChild($itemPassword);
             $itemPassword->setActive($route === 'user_profile_password_change');
         }
-
-        $menu
-            ->addChild($itemBilling)
-            ->addChild($itemParents)
-            ->addChild($itemCampers)
-            ->addChild($itemApplications)
-            ->addChild($itemPassword)
-        ;
 
         return $menu;
     }

@@ -11,20 +11,20 @@ use App\Form\Type\Admin\UserSearchType;
  */
 class UserSearchData implements UserSearchDataInterface
 {
-    private string $email = '';
+    private string $phrase = '';
 
     private UserSortEnum $sortBy = UserSortEnum::ID_DESC;
 
     private ?Role $role = null;
 
-    public function getEmail(): string
+    public function getPhrase(): string
     {
-        return $this->email;
+        return $this->phrase;
     }
 
-    public function setEmail(?string $email): self
+    public function setPhrase(?string $phrase): self
     {
-        $this->email = (string) $email;
+        $this->phrase = (string) $phrase;
 
         return $this;
     }

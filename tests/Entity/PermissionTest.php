@@ -17,12 +17,12 @@ class PermissionTest extends TestCase
 
     public function testPermissionGroup(): void
     {
-        $this->assertSame($this->permission->getPermissionGroup(), $this->permissionGroup);
+        $this->assertSame($this->permissionGroup, $this->permission->getPermissionGroup());
 
         $permissionGroupNew = new PermissionGroup('xyz', 'Xyz...', 500);
         $this->permission->setPermissionGroup($permissionGroupNew);
 
-        $this->assertSame($this->permission->getPermissionGroup(), $permissionGroupNew);
+        $this->assertSame($permissionGroupNew, $this->permission->getPermissionGroup());
     }
 
     public function testName(): void

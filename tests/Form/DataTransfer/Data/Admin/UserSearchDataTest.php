@@ -9,16 +9,16 @@ use PHPUnit\Framework\TestCase;
 
 class UserSearchDataTest extends TestCase
 {
-    public function testEmail(): void
+    public function testPhrase(): void
     {
         $data = new UserSearchData();
-        $this->assertSame('', $data->getEmail());
+        $this->assertSame('', $data->getPhrase());
 
-        $data->setEmail(null);
-        $this->assertSame('', $data->getEmail());
+        $data->setPhrase(null);
+        $this->assertSame('', $data->getPhrase());
 
-        $data->setEmail('text');
-        $this->assertSame('text', $data->getEmail());
+        $data->setPhrase('text');
+        $this->assertSame('text', $data->getPhrase());
     }
 
     public function testSortBy(): void

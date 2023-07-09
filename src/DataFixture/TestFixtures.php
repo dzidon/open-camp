@@ -2,6 +2,7 @@
 
 namespace App\DataFixture;
 
+use App\Entity\Contact;
 use App\Entity\Permission;
 use App\Entity\PermissionGroup;
 use App\Entity\Role;
@@ -15,6 +16,7 @@ use App\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use libphonenumber\PhoneNumberUtil;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
@@ -25,14 +27,17 @@ class TestFixtures extends Fixture
     private UserPasswordHasherInterface $userHasher;
     private UserPasswordChangeVerifierHasherInterface $passwordChangeHasher;
     private UserRegistrationVerifierHasherInterface $registrationHasher;
+    private PhoneNumberUtil $phoneNumberUtil;
 
     public function __construct(UserPasswordHasherInterface               $userHasher,
                                 UserPasswordChangeVerifierHasherInterface $passwordChangeHasher,
-                                UserRegistrationVerifierHasherInterface   $registrationHasher)
+                                UserRegistrationVerifierHasherInterface   $registrationHasher,
+                                PhoneNumberUtil                           $phoneNumberUtil)
     {
         $this->userHasher = $userHasher;
         $this->passwordChangeHasher = $passwordChangeHasher;
         $this->registrationHasher = $registrationHasher;
+        $this->phoneNumberUtil = $phoneNumberUtil;
     }
 
     /**
@@ -84,6 +89,7 @@ class TestFixtures extends Fixture
          * User
          */
         $user1 = new User('david@gmail.com');
+        $user1->setName('David Smith');
         $user1->setRole($role1);
         $manager->persist($user1);
 
@@ -190,6 +196,17 @@ class TestFixtures extends Fixture
         $userPasswordChange10->setUser($user5); // mark@gmail.com
         $manager->persist($userPasswordChange9);
         $manager->persist($userPasswordChange10);
+
+        /*
+         * Contact
+         */
+        $phoneNumber = $this->phoneNumberUtil->parse('+420607999888');
+        $contact1 = new Contact('David Smith', 'david.smith@gmail.com', $phoneNumber, $user1);
+        $manager->persist($contact1);
+
+        $phoneNumber = $this->phoneNumberUtil->parse('+420724999888');
+        $contact2 = new Contact('Jessica Smith', 'jess.smith@gmail.com', $phoneNumber, $user1);
+        $manager->persist($contact2);
 
         // save
         $manager->flush();

@@ -72,7 +72,7 @@ class RoleRepositoryTest extends KernelTestCase
         $roleRepository = $this->getRoleRepository();
 
         $data = new RoleSearchData();
-        $data->setLabel('Super');
+        $data->setPhrase('Super');
 
         $paginator = $roleRepository->getAdminPaginator($data, 1, 2);
         $this->assertSame($paginator->getTotalItems(), 1);

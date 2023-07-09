@@ -9,9 +9,9 @@ use App\Enum\Search\Data\Admin\RoleSortEnum;
  */
 interface RoleSearchDataInterface
 {
-    public function getLabel(): string;
+    public function getPhrase(): string;
 
-    public function setLabel(?string $label): self;
+    public function setPhrase(?string $phrase): self;
 
     public function getSortBy(): RoleSortEnum;
 

@@ -20,12 +20,12 @@ class UserSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('email', TextType::class, [
+            ->add('phrase', TextType::class, [
                 'attr' => [
                     'autofocus' => 'autofocus'
                 ],
                 'required' => false,
-                'label' => 'form.admin.user_search.email',
+                'label' => 'form.admin.user_search.phrase',
             ])
             ->add('sortBy', EnumType::class, [
                 'class'        => UserSortEnum::class,
@@ -35,6 +35,8 @@ class UserSearchType extends AbstractType
                     UserSortEnum::ID_ASC     => 'form.admin.user_search.sort_by.options.id_asc',
                     UserSortEnum::EMAIL_ASC  => 'form.admin.user_search.sort_by.options.email_asc',
                     UserSortEnum::EMAIL_DESC => 'form.admin.user_search.sort_by.options.email_desc',
+                    UserSortEnum::NAME_ASC   => 'form.admin.user_search.sort_by.options.name_asc',
+                    UserSortEnum::NAME_DESC  => 'form.admin.user_search.sort_by.options.name_desc',
                 },
             ])
             ->add('role', EntityType::class, [

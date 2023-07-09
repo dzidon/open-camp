@@ -57,6 +57,7 @@ crud:
             update_password_not_set: 'Tento uživatel nemá nastavené heslo. Kliknutím na následující tlačítko přejdete do nastavení hesla.'
 
     confirmation:
+        contact_delete: 'Opravdu si přejete odstranit kontakt "{name}"?'
         role_delete: 'Opravdu si přejete odstranit roli "{label}"?'
         user_delete: 'Opravdu si přejete odstranit uživatele "{email}"?'
 
@@ -71,6 +72,11 @@ crud:
             update_password: 'Nastavit heslo'
 
     action_performed:
+        Contact:
+            create: 'Kontakt vytvořen!'
+            update: 'Kontakt uložen!'
+            delete: 'Kontakt odstraněn!'
+
         Role:
             create: 'Role vytvořena!'
             update: 'Role uložena!'
@@ -85,6 +91,10 @@ crud:
             delete: 'Uživatel odstraněn!'
 
 entity:
+    Contact:
+        singular: 'Kontakt'
+        plural: 'Kontakty'
+
     Permission:
         singular: 'Oprávnění'
         plural: 'Oprávnění'
@@ -113,6 +123,13 @@ entity_attribute:
     common:
         set: 'Nastaveno'
         unset: 'Nenastaveno'
+
+    Contact:
+        id: 'ID'
+        name: 'Celé jméno'
+        email: 'E-mail'
+        phoneNumber: 'Telefonní číslo'
+        user: 'Uživatel'
 
     Permission:
         id: 'ID'
@@ -204,9 +221,9 @@ form:
 
     admin:
         role_search:
-            label: 'Hledat podle názvu'
+            phrase: 'Hledat podle názvu'
             sort_by:
-                label: 'Seřadit podle'
+                label: 'Řazení'
                 options:
                     id_desc: 'ID (od nejvyššího)'
                     id_asc: 'ID (od nejnižšího)'
@@ -229,14 +246,16 @@ form:
                 not_unique: 'Už existuje uživatel s tímto e-mailem.'
 
         user_search:
-            email: 'Hledat podle e-mailu'
+            phrase: 'Hledat podle e-mailu nebo jména'
             sort_by:
-                label: 'Seřadit podle'
+                label: 'Řazení'
                 options:
                     id_desc: 'ID (od nejvyššího)'
                     id_asc: 'ID (od nejnižšího)'
                     email_desc: 'E-mail (Z-A)'
                     email_asc: 'E-mail (A-Z)'
+                    name_asc: 'Jméno (A-Z)'
+                    name_desc: 'Jméno (Z-A)'
 
             role: 'Role'
             button: 'Hledat'
@@ -297,6 +316,25 @@ form:
         profile_password_change_create:
             button: 'Poslat email'
 
+        contact:
+            name: 'Celé jméno'
+            email: 'E-mail'
+            phone_number: 'Telefonní číslo'
+            button: 'Uložit'
+
+        contact_delete:
+            button: 'Odstranit'
+
+        contact_search:
+            phrase: 'Hledat podle jména'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    name_asc: 'Jméno (A-Z)'
+                    name_desc: 'Jméno (Z-A)'
+
+            button: 'Hledat'
+
 mail:
     greeting: 'Zdravíme!'
 
@@ -315,7 +353,7 @@ mail:
 module:
     user: 'Uživatelský web'
     user_profile: 'Profil'
-    admin: 'Administrace'
+    admin: 'Admin'
 
 route:
     admin_home: 'Přehled'
@@ -343,5 +381,10 @@ route:
     user_password_change_complete: 'Nové heslo'
 
     user_profile_billing: 'Fakturační údaje'
+    user_profile_contact_list: 'Kontakty'
+    user_profile_contact_create: 'Nový kontakt'
+    user_profile_contact_read: 'Zobrazení kontaktu'
+    user_profile_contact_update: 'Editace kontaktu'
+    user_profile_contact_delete: 'Odstranění kontaktu'
     user_profile_password_change: 'Změna hesla'
     user_profile_password_change_create: 'Nastavení hesla'

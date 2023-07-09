@@ -3,6 +3,8 @@ twig:
     form_themes:
         - 'bootstrap_4_layout.html.twig'
         - '_fragment/_form_theme/_custom_layout.html.twig'
+    globals:
+        phone_number_format: '%app.phone_number_format%'
 
 when@test:
     twig:

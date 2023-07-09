@@ -18,12 +18,12 @@ class RoleSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('label', TextType::class, [
+            ->add('phrase', TextType::class, [
                 'attr' => [
                     'autofocus' => 'autofocus'
                 ],
                 'required' => false,
-                'label' => 'form.admin.role_search.label',
+                'label' => 'form.admin.role_search.phrase',
             ])
             ->add('sortBy', EnumType::class, [
                 'class'        => RoleSortEnum::class,

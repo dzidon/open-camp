@@ -12,9 +12,11 @@ parameters:
         cs: 'Čeština'
         de: 'Deutsch'
     app.billing_countries:
-        - en
-        - cs
-        - de
+        - 'en'
+        - 'cs'
+        - 'de'
+    app.phone_number_default_locale: 'CZ'
+    app.phone_number_format: 1
 
     # Security
     app.max_active_registrations_per_email: 2
