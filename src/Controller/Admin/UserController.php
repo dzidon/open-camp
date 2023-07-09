@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
-use App\Entity\User;
 use App\Form\DataTransfer\Data\Admin\PlainPasswordData;
 use App\Form\DataTransfer\Data\Admin\UserData;
 use App\Form\DataTransfer\Data\Admin\UserSearchData;
@@ -14,7 +13,8 @@ use App\Form\Type\Admin\UserType;
 use App\Form\Type\Common\HiddenTrueType;
 use App\Menu\Breadcrumbs\Admin\UserBreadcrumbsInterface;
 use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
-use App\Repository\UserRepositoryInterface;
+use App\Model\Entity\User;
+use App\Model\Repository\UserRepositoryInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;

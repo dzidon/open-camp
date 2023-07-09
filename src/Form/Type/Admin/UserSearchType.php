@@ -2,9 +2,9 @@
 
 namespace App\Form\Type\Admin;
 
-use App\Entity\Role;
 use App\Enum\Search\Data\Admin\UserSortEnum;
 use App\Form\DataTransfer\Data\Admin\UserSearchDataInterface;
+use App\Model\Entity\Role;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;

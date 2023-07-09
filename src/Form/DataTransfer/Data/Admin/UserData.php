@@ -2,11 +2,11 @@
 
 namespace App\Form\DataTransfer\Data\Admin;
 
-use App\Entity\Role;
 use App\Form\DataTransfer\Data\User\BillingData;
 use App\Form\Type\Admin\UserType;
-use Symfony\Component\Validator\Constraints as Assert;
+use App\Model\Entity\Role;
 use App\Validator as CustomAssert;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * See {@link UserType}

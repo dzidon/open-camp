@@ -2,9 +2,9 @@
 
 namespace App\Form\DataTransfer\Data\Admin;
 
-use App\Entity\Role;
 use App\Enum\Search\Data\Admin\UserSortEnum;
 use App\Form\Type\Admin\UserSearchType;
+use App\Model\Entity\Role;
 
 /**
  * See {@link UserSearchType}

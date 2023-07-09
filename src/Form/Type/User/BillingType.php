@@ -8,7 +8,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * User profile billing information edit.
@@ -17,12 +16,8 @@ class BillingType extends AbstractType
 {
     private array $billingCountries;
 
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator, array $billingCountries)
+    public function __construct(array $billingCountries)
     {
-        $this->translator = $translator;
-
         $this->billingCountries = $billingCountries;
     }
 
@@ -33,8 +28,7 @@ class BillingType extends AbstractType
         foreach ($this->billingCountries as $countryCode)
         {
             $translationKey = "country.$countryCode";
-            $countryName = $this->translator->trans($translationKey);
-            $countryChoices[$translationKey] = $countryName;
+            $countryChoices[$translationKey] = $countryCode;
         }
 
         $builder

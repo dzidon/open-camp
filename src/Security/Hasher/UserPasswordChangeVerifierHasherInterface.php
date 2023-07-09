@@ -2,7 +2,7 @@
 
 namespace App\Security\Hasher;
 
-use App\Entity\UserPasswordChange;
+use App\Model\Entity\UserPasswordChange;
 
 /**
  * Hashes and verifies user password change verifiers.

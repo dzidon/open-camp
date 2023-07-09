@@ -2,10 +2,10 @@
 
 namespace App\Tests\Form\Type\Admin;
 
-use App\Entity\Role;
 use App\Form\DataTransfer\Data\Admin\UserData;
 use App\Form\Type\Admin\UserType;
-use App\Repository\RoleRepository;
+use App\Model\Entity\Role;
+use App\Model\Repository\RoleRepository;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\SecurityBundle\Security;

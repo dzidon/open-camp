@@ -2,9 +2,9 @@
 
 namespace App\Tests\Form\DataTransfer\Transfer\User;
 
-use App\Entity\User;
 use App\Form\DataTransfer\Data\User\BillingData;
 use App\Form\DataTransfer\Transfer\User\BillingDataTransfer;
+use App\Model\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class BillingDataTransferTest extends KernelTestCase

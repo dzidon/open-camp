@@ -2,7 +2,7 @@
 
 namespace App\Security\Hasher;
 
-use App\Entity\UserRegistration;
+use App\Model\Entity\UserRegistration;
 
 /**
  * Hashes and verifies user registration verifiers.

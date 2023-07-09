@@ -2,10 +2,10 @@
 
 namespace App\Tests\Form\DataTransfer\Transfer\User;
 
-use App\Entity\Contact;
-use App\Entity\User;
 use App\Form\DataTransfer\Data\User\ContactData;
 use App\Form\DataTransfer\Transfer\User\ContactDataTransfer;
+use App\Model\Entity\Contact;
+use App\Model\Entity\User;
 use libphonenumber\PhoneNumber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

@@ -2,10 +2,10 @@
 
 namespace App\Form\DataTransfer\Transfer\Admin;
 
-use App\Entity\User;
 use App\Form\DataTransfer\Data\Admin\UserData;
 use App\Form\DataTransfer\Registry\DataTransferRegistryInterface;
 use App\Form\DataTransfer\Transfer\DataTransferInterface;
+use App\Model\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 
 /**

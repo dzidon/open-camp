@@ -2,7 +2,7 @@
 
 namespace App\Security\Authentication;
 
-use App\Repository\UserRepositoryInterface;
+use App\Model\Repository\UserRepositoryInterface;
 use App\Security\Authentication\Exception\AlreadyAuthenticatedException;
 use App\Security\Authentication\Exception\SocialUserNotFoundException;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;

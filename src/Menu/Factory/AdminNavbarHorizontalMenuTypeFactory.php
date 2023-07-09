@@ -2,8 +2,8 @@
 
 namespace App\Menu\Factory;
 
-use App\Entity\User;
 use App\Menu\Type\MenuType;
+use App\Model\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;

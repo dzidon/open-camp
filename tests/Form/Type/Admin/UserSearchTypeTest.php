@@ -2,10 +2,10 @@
 
 namespace App\Tests\Form\Type\Admin;
 
-use App\Entity\Role;
 use App\Form\DataTransfer\Data\Admin\UserSearchData;
 use App\Form\Type\Admin\UserSearchType;
-use App\Repository\RoleRepository;
+use App\Model\Entity\Role;
+use App\Model\Repository\RoleRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\ChoiceList\Factory\Cache\ChoiceLoader;
 use Symfony\Component\Form\FormFactoryInterface;

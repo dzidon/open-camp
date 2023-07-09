@@ -2,10 +2,10 @@
 
 namespace App\Tests\Form\DataTransfer\Transfer\Admin;
 
-use App\Entity\Role;
-use App\Entity\User;
 use App\Form\DataTransfer\Data\Admin\UserData;
 use App\Form\DataTransfer\Transfer\Admin\UserDataTransfer;
+use App\Model\Entity\Role;
+use App\Model\Entity\User;
 use PHPUnit\Framework\MockObject\MockObject;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

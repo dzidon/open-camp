@@ -2,9 +2,9 @@
 
 namespace App\Form\DataTransfer\Transfer\User;
 
-use App\Entity\Contact;
 use App\Form\DataTransfer\Data\User\ContactData;
 use App\Form\DataTransfer\Transfer\DataTransferInterface;
+use App\Model\Entity\Contact;
 
 /**
  * Transfers data from {@link ContactData} to {@link Contact} and vice versa.

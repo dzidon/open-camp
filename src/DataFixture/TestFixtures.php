@@ -2,15 +2,15 @@
 
 namespace App\DataFixture;
 
-use App\Entity\Contact;
-use App\Entity\Permission;
-use App\Entity\PermissionGroup;
-use App\Entity\Role;
-use App\Entity\User;
-use App\Entity\UserPasswordChange;
-use App\Entity\UserRegistration;
 use App\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Enum\Entity\UserRegistrationStateEnum;
+use App\Model\Entity\Contact;
+use App\Model\Entity\Permission;
+use App\Model\Entity\PermissionGroup;
+use App\Model\Entity\Role;
+use App\Model\Entity\User;
+use App\Model\Entity\UserPasswordChange;
+use App\Model\Entity\UserRegistration;
 use App\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
 use App\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use DateTimeImmutable;

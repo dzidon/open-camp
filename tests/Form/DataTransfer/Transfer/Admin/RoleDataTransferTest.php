@@ -2,11 +2,11 @@
 
 namespace App\Tests\Form\DataTransfer\Transfer\Admin;
 
-use App\Entity\Permission;
-use App\Entity\PermissionGroup;
-use App\Entity\Role;
 use App\Form\DataTransfer\Data\Admin\RoleData;
 use App\Form\DataTransfer\Transfer\Admin\RoleDataTransfer;
+use App\Model\Entity\Permission;
+use App\Model\Entity\PermissionGroup;
+use App\Model\Entity\Role;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class RoleDataTransferTest extends KernelTestCase

@@ -3,8 +3,6 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Entity\Contact;
-use App\Entity\User;
 use App\Form\DataTransfer\Data\User\ContactData;
 use App\Form\DataTransfer\Data\User\ContactSearchData;
 use App\Form\DataTransfer\Registry\DataTransferRegistryInterface;
@@ -13,7 +11,9 @@ use App\Form\Type\User\ContactSearchType;
 use App\Form\Type\User\ContactType;
 use App\Menu\Breadcrumbs\User\ProfileContactBreadcrumbsInterface;
 use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
-use App\Repository\ContactRepositoryInterface;
+use App\Model\Entity\Contact;
+use App\Model\Entity\User;
+use App\Model\Repository\ContactRepositoryInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;

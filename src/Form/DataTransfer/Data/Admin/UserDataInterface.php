@@ -2,8 +2,8 @@
 
 namespace App\Form\DataTransfer\Data\Admin;
 
-use App\Entity\Role;
 use App\Form\DataTransfer\Data\User\BillingDataInterface;
+use App\Model\Entity\Role;
 
 /**
  * Admin user edit data.

@@ -2,8 +2,8 @@
 
 namespace App\Security\Authorization;
 
-use App\Entity\User;
-use App\Repository\PermissionRepositoryInterface;
+use App\Model\Entity\User;
+use App\Model\Repository\PermissionRepositoryInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\VoterInterface;
 

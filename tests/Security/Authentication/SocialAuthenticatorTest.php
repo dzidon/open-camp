@@ -2,8 +2,8 @@
 
 namespace App\Tests\Security\Authentication;
 
-use App\Entity\User;
-use App\Repository\UserRepositoryInterface;
+use App\Model\Entity\User;
+use App\Model\Repository\UserRepositoryInterface;
 use App\Security\Authentication\Exception\AlreadyAuthenticatedException;
 use App\Security\Authentication\Exception\SocialUserNotFoundException;
 use App\Security\Authentication\SocialAuthenticator;

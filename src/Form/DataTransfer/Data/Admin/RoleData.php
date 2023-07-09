@@ -2,8 +2,8 @@
 
 namespace App\Form\DataTransfer\Data\Admin;
 
-use App\Entity\Permission;
 use App\Form\Type\Admin\RoleType;
+use App\Model\Entity\Permission;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

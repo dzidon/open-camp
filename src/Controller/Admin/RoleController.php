@@ -3,7 +3,6 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
-use App\Entity\Role;
 use App\Form\DataTransfer\Data\Admin\RoleData;
 use App\Form\DataTransfer\Data\Admin\RoleSearchData;
 use App\Form\DataTransfer\Registry\DataTransferRegistryInterface;
@@ -12,8 +11,9 @@ use App\Form\Type\Admin\RoleType;
 use App\Form\Type\Common\HiddenTrueType;
 use App\Menu\Breadcrumbs\Admin\RoleBreadcrumbsInterface;
 use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
-use App\Repository\RoleRepositoryInterface;
-use App\Repository\UserRepositoryInterface;
+use App\Model\Entity\Role;
+use App\Model\Repository\RoleRepositoryInterface;
+use App\Model\Repository\UserRepositoryInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;

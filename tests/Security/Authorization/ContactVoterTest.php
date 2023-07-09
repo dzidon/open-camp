@@ -2,8 +2,8 @@
 
 namespace App\Tests\Security\Authorization;
 
-use App\Entity\Contact;
-use App\Entity\User;
+use App\Model\Entity\Contact;
+use App\Model\Entity\User;
 use App\Security\Authorization\ContactVoter;
 use libphonenumber\PhoneNumber;
 use PHPUnit\Framework\MockObject\MockObject;

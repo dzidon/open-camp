@@ -2,9 +2,9 @@
 
 namespace App\Tests\Form\DataTransfer\Data\Admin;
 
-use App\Entity\Permission;
-use App\Entity\PermissionGroup;
 use App\Form\DataTransfer\Data\Admin\RoleData;
+use App\Model\Entity\Permission;
+use App\Model\Entity\PermissionGroup;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

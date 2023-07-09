@@ -2,7 +2,7 @@
 
 namespace App\Tests\Security\Hasher;
 
-use App\Entity\UserPasswordChange;
+use App\Model\Entity\UserPasswordChange;
 use App\Security\Hasher\UserPasswordChangeVerifierHasher;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

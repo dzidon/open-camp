@@ -2,9 +2,9 @@
 
 namespace App\Form\DataTransfer\Transfer\Admin;
 
-use App\Entity\Role;
 use App\Form\DataTransfer\Data\Admin\RoleData;
 use App\Form\DataTransfer\Transfer\DataTransferInterface;
+use App\Model\Entity\Role;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**

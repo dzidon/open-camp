@@ -2,10 +2,10 @@
 
 namespace App\Command;
 
-use App\Entity\Permission;
-use App\Entity\PermissionGroup;
-use App\Repository\PermissionGroupRepositoryInterface;
-use App\Repository\PermissionRepositoryInterface;
+use App\Model\Entity\Permission;
+use App\Model\Entity\PermissionGroup;
+use App\Model\Repository\PermissionGroupRepositoryInterface;
+use App\Model\Repository\PermissionRepositoryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

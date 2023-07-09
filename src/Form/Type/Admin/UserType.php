@@ -2,9 +2,9 @@
 
 namespace App\Form\Type\Admin;
 
-use App\Entity\Role;
 use App\Form\DataTransfer\Data\Admin\UserDataInterface;
 use App\Form\Type\User\BillingType;
+use App\Model\Entity\Role;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;

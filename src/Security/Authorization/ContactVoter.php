@@ -2,8 +2,8 @@
 
 namespace App\Security\Authorization;
 
-use App\Entity\Contact;
-use App\Entity\User;
+use App\Model\Entity\Contact;
+use App\Model\Entity\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 

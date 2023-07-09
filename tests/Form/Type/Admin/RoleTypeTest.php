@@ -2,10 +2,10 @@
 
 namespace App\Tests\Form\Type\Admin;
 
-use App\Entity\Permission;
 use App\Form\DataTransfer\Data\Admin\RoleData;
 use App\Form\Type\Admin\RoleType;
-use App\Repository\PermissionRepository;
+use App\Model\Entity\Permission;
+use App\Model\Repository\PermissionRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Form\ChoiceList\Factory\Cache\ChoiceLoader;
 use Symfony\Component\Form\FormFactoryInterface;

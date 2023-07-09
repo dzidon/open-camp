@@ -2,8 +2,8 @@
 
 namespace App\Menu\Factory;
 
-use App\Entity\User;
 use App\Menu\Type\MenuType;
+use App\Model\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -113,8 +113,6 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
                 $text = $this->translator->trans('route.user_profile_password_change_create');
                 $url = $this->urlGenerator->generate('user_profile_password_change_create');
                 $itemProfilePassword = new MenuType('user_profile_password_change_create', 'navbar_user_dropdown_item', $text, $url);
-                $itemProfileParent->addChild($itemProfilePassword);
-                $itemProfilePassword->setActive($active, $active);
             }
             // profile - password change
             else
@@ -124,9 +122,10 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
                 $text = $this->translator->trans('route.user_profile_password_change');
                 $url = $this->urlGenerator->generate('user_profile_password_change');
                 $itemProfilePassword = new MenuType('user_profile_password_change', 'navbar_user_dropdown_item', $text, $url);
-                $itemProfileParent->addChild($itemProfilePassword);
-                $itemProfilePassword->setActive($active, $active);
             }
+
+            $itemProfileParent->addChild($itemProfilePassword);
+            $itemProfilePassword->setActive($active, $active);
 
             // logout
             $text = $this->translator->trans('route.user_logout');

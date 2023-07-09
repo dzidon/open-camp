@@ -2,7 +2,7 @@
 
 namespace App\Security\Hasher;
 
-use App\Entity\UserPasswordChange;
+use App\Model\Entity\UserPasswordChange;
 use Symfony\Component\PasswordHasher\Hasher\PasswordHasherFactoryInterface;
 use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 

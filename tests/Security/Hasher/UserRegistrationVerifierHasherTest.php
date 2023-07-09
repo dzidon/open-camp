@@ -2,7 +2,7 @@
 
 namespace App\Tests\Security\Hasher;
 
-use App\Entity\UserRegistration;
+use App\Model\Entity\UserRegistration;
 use App\Security\Hasher\UserRegistrationVerifierHasher;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

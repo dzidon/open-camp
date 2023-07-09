@@ -2,9 +2,9 @@
 
 namespace App\Tests\Form\DataTransfer\Data\Admin;
 
-use App\Entity\Role;
 use App\Enum\Search\Data\Admin\UserSortEnum;
 use App\Form\DataTransfer\Data\Admin\UserSearchData;
+use App\Model\Entity\Role;
 use PHPUnit\Framework\TestCase;
 
 class UserSearchDataTest extends TestCase

@@ -3,11 +3,11 @@
 namespace App\Tests\Form\DataTransfer\Registry;
 
 use App\Form\DataTransfer\Registry\DataTransferRegistry;
-use App\Tests\Entity\EntityMock;
 use App\Tests\Form\DataTransfer\Data\LabelDataMock;
 use App\Tests\Form\DataTransfer\Data\NameDataMock;
 use App\Tests\Form\DataTransfer\Transfer\LabelDataTransferMock;
 use App\Tests\Form\DataTransfer\Transfer\NameDataTransferMock;
+use App\Tests\Model\Entity\EntityMock;
 use PHPUnit\Framework\TestCase;
 
 class DataTransferRegistryTest extends TestCase

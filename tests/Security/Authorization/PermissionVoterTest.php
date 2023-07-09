@@ -2,7 +2,7 @@
 
 namespace App\Tests\Security\Authorization;
 
-use App\Repository\UserRepositoryInterface;
+use App\Model\Repository\UserRepositoryInterface;
 use App\Security\Authorization\PermissionVoter;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

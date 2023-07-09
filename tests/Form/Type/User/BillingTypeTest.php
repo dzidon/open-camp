@@ -23,9 +23,9 @@ class BillingTypeTest extends KernelTestCase
         ;
 
         $expectedChoices = [
-            'country.en' => 'country.en',
-            'country.cs' => 'country.cs',
-            'country.de' => 'country.de',
+            'country.en' => 'en',
+            'country.cs' => 'cs',
+            'country.de' => 'de',
         ];
 
         $this->assertSame($expectedChoices, $choices);

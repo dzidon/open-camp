@@ -2,15 +2,15 @@ security:
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: auto
-        App\Entity\UserRegistration: auto
-        App\Entity\UserPasswordChange: auto
+        App\Model\Entity\UserRegistration: auto
+        App\Model\Entity\UserPasswordChange: auto
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\User
+                class: App\Model\Entity\User
                 property: email
 
     firewalls:
@@ -58,13 +58,13 @@ when@test:
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
 
-            App\Entity\UserRegistration:
+            App\Model\Entity\UserRegistration:
                 algorithm: auto
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
 
-            App\Entity\UserPasswordChange:
+            App\Model\Entity\UserPasswordChange:
                 algorithm: auto
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon

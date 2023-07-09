@@ -2,12 +2,12 @@
 
 namespace App\Form\DataTransfer\Transfer\User;
 
-use App\Entity\User;
 use App\Form\DataTransfer\Data\User\BillingData;
 use App\Form\DataTransfer\Transfer\DataTransferInterface;
+use App\Model\Entity\User;
 
 /**
- * Transfers data from {@link BillingData} to {@link User} and vice versa.
+ * Transfers data from {@link BillingData} to {@link \App\Model\Entity\User} and vice versa.
  */
 class BillingDataTransfer implements DataTransferInterface
 {

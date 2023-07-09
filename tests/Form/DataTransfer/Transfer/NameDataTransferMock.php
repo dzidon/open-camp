@@ -3,8 +3,8 @@
 namespace App\Tests\Form\DataTransfer\Transfer;
 
 use App\Form\DataTransfer\Transfer\DataTransferInterface;
-use App\Tests\Entity\EntityMock;
 use App\Tests\Form\DataTransfer\Data\NameDataMock;
+use App\Tests\Model\Entity\EntityMock;
 
 class NameDataTransferMock implements DataTransferInterface
 {

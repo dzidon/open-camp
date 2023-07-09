@@ -2,10 +2,10 @@
 
 namespace App\Tests\Form\DataTransfer\Data\Admin;
 
-use App\Entity\Role;
 use App\Form\DataTransfer\Data\Admin\UserData;
 use App\Form\DataTransfer\Data\User\BillingData;
-use App\Repository\UserRepositoryInterface;
+use App\Model\Entity\Role;
+use App\Model\Repository\UserRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

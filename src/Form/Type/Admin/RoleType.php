@@ -2,8 +2,8 @@
 
 namespace App\Form\Type\Admin;
 
-use App\Entity\Permission;
 use App\Form\DataTransfer\Data\Admin\RoleDataInterface;
+use App\Model\Entity\Permission;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

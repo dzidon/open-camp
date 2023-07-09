@@ -49,15 +49,15 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Entity/'
+            - '../src/Model/Entity/'
             - '../src/Enum/'
             - '../src/DataStructure/'
             - '../src/Form/DataTransfer/Data/'
             - '../src/Menu/Type/'
             - '../src/Security/Authentication/Exception/'
             - '../src/Security/Token/TokenSplit.php'
-            - '../src/Security/Registration/UserRegistrationResult.php'
-            - '../src/Security/PasswordChange/UserPasswordChangeResult.php'
+            - '../src/Model/Module/Security/UserRegistration/UserRegistrationResult.php'
+            - '../src/Model/Module/Security/UserPasswordChange/UserPasswordChangeResult.php'
             - '../src/Search/Paginator/'
             - '../src/Kernel.php'
 
@@ -76,12 +76,12 @@ services:
         arguments:
             $services: '%app.social_login_services%'
 
-    App\Security\Registration\UserRegistrationFactory:
+    App\Model\Module\Security\UserRegistration\UserRegistrationFactory:
         arguments:
             $maxActiveRegistrationsPerEmail: '%app.max_active_registrations_per_email%'
             $registrationLifespan: '%app.registration_lifespan%'
 
-    App\Security\PasswordChange\UserPasswordChangeFactory:
+    App\Model\Module\Security\UserPasswordChange\UserPasswordChangeFactory:
         arguments:
             $maxActivePasswordChangesPerUser: '%app.max_active_password_changes_per_user%'
             $passwordChangeLifespan: '%app.password_change_lifespan%'
@@ -119,7 +119,7 @@ services:
             $emailFrom: '%app.email_no_reply%'
             $dateTimeFormat: '%app.date_time_format%'
 
-    App\Repository\ContactRepository:
+    App\Model\Repository\ContactRepository:
         arguments:
             $phoneNumberDefaultLocale: '%app.phone_number_default_locale%'
 
