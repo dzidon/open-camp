@@ -108,7 +108,7 @@
                             {% if user.country is null %}
                                 <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                             {% else %}
-                                <span>{{ ('country.' ~ user.country)|trans }}</span>
+                                <span>{{ country_name_for_code(user.country) }}</span>
                             {% endif %}
                         </div>
                     </div>

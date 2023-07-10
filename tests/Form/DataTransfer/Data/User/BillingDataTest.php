@@ -57,13 +57,49 @@ class BillingDataTest extends KernelTestCase
         $result = $validator->validateProperty($data, 'street');
         $this->assertEmpty($result); // valid
 
-        $data->setStreet(str_repeat('x', 255));
-        $result = $validator->validateProperty($data, 'street');
-        $this->assertEmpty($result); // valid
-
         $data->setStreet(str_repeat('x', 256));
         $result = $validator->validateProperty($data, 'street');
         $this->assertNotEmpty($result); // invalid
+
+        $data->setStreet('foo');
+        $result = $validator->validateProperty($data, 'street');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setStreet('foo bar');
+        $result = $validator->validateProperty($data, 'street');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setStreet('1 1');
+        $result = $validator->validateProperty($data, 'street');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setStreet('foo123');
+        $result = $validator->validateProperty($data, 'street');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setStreet('123foo');
+        $result = $validator->validateProperty($data, 'street');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setStreet('foo 123');
+        $result = $validator->validateProperty($data, 'street');
+        $this->assertEmpty($result); // valid
+
+        $data->setStreet('foo 123/a');
+        $result = $validator->validateProperty($data, 'street');
+        $this->assertEmpty($result); // valid
+
+        $data->setStreet('123 foo');
+        $result = $validator->validateProperty($data, 'street');
+        $this->assertEmpty($result); // valid
+
+        $data->setStreet('123/a foo');
+        $result = $validator->validateProperty($data, 'street');
+        $this->assertEmpty($result); // valid
+
+        $data->setStreet('123 West 2nd Ave');
+        $result = $validator->validateProperty($data, 'street');
+        $this->assertEmpty($result); // valid
     }
 
     public function testTown(): void
@@ -98,13 +134,13 @@ class BillingDataTest extends KernelTestCase
     public function testCountry(): void
     {
         $data = new BillingData();
-        $this->assertSame(null, $data->getCountry());
+        $this->assertNull($data->getCountry());
 
         $data->setCountry('text');
         $this->assertSame('text', $data->getCountry());
 
         $data->setCountry(null);
-        $this->assertSame(null, $data->getCountry());
+        $this->assertNull($data->getCountry());
     }
 
     public function testCountryValidation(): void
@@ -115,13 +151,13 @@ class BillingDataTest extends KernelTestCase
         $result = $validator->validateProperty($data, 'country');
         $this->assertEmpty($result); // valid
 
-        $data->setCountry(str_repeat('x', 255));
-        $result = $validator->validateProperty($data, 'country');
-        $this->assertEmpty($result); // valid
-
-        $data->setCountry(str_repeat('x', 256));
+        $data->setCountry('XX');
         $result = $validator->validateProperty($data, 'country');
         $this->assertNotEmpty($result); // invalid
+
+        $data->setCountry('CZ');
+        $result = $validator->validateProperty($data, 'country');
+        $this->assertEmpty($result); // valid
     }
 
     public function testZip(): void
@@ -164,7 +200,15 @@ class BillingDataTest extends KernelTestCase
         $result = $validator->validateProperty($data, 'zip');
         $this->assertEmpty($result); // valid
 
+        $data->setZip('12345-6789');
+        $result = $validator->validateProperty($data, 'zip');
+        $this->assertEmpty($result); // valid
+
         $data->setZip('123 45 6789');
+        $result = $validator->validateProperty($data, 'zip');
+        $this->assertEmpty($result); // valid
+
+        $data->setZip('123 45-6789');
         $result = $validator->validateProperty($data, 'zip');
         $this->assertEmpty($result); // valid
 
@@ -185,6 +229,10 @@ class BillingDataTest extends KernelTestCase
         $result = $validator->validateProperty($data, 'zip');
         $this->assertNotEmpty($result); // invalid
 
+        $data->setZip('123 45-67890');
+        $result = $validator->validateProperty($data, 'zip');
+        $this->assertNotEmpty($result); // invalid
+
 
         $data->setZip('1234');
         $result = $validator->validateProperty($data, 'zip');
@@ -202,6 +250,10 @@ class BillingDataTest extends KernelTestCase
         $result = $validator->validateProperty($data, 'zip');
         $this->assertNotEmpty($result); // invalid
 
+        $data->setZip('123 45-678');
+        $result = $validator->validateProperty($data, 'zip');
+        $this->assertNotEmpty($result); // invalid
+
 
         $data->setZip('xxxxx');
         $result = $validator->validateProperty($data, 'zip');
@@ -216,6 +268,10 @@ class BillingDataTest extends KernelTestCase
         $this->assertNotEmpty($result); // invalid
 
         $data->setZip('xxx xx xxxx');
+        $result = $validator->validateProperty($data, 'zip');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setZip('xxx xx-xxxx');
         $result = $validator->validateProperty($data, 'zip');
         $this->assertNotEmpty($result); // invalid
     }

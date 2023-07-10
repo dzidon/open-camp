@@ -3,8 +3,8 @@
 namespace App\Form\DataTransfer\Data\User;
 
 use App\Form\Type\User\BillingType;
+use App\Validator\Compound as CompoundAssert;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Validator as CustomAssert;
 
 /**
  * See {@link BillingType}
@@ -15,15 +15,16 @@ class BillingData implements BillingDataInterface
     private ?string $name = null;
 
     #[Assert\Length(max: 255)]
+    #[CompoundAssert\StreetRequirements]
     private ?string $street = null;
 
     #[Assert\Length(max: 255)]
     private ?string $town = null;
 
-    #[CustomAssert\ZipCodeRequirements]
+    #[CompoundAssert\ZipCodeRequirements]
     private ?string $zip = null;
 
-    #[Assert\Length(max: 255)]
+    #[Assert\Country]
     private ?string $country = null;
 
     public function getName(): ?string

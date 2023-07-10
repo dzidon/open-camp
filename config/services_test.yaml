@@ -11,10 +11,6 @@ parameters:
         en: 'English'
         cs: 'Čeština'
         de: 'Deutsch'
-    app.billing_countries:
-        - 'en'
-        - 'cs'
-        - 'de'
     app.phone_number_default_locale: 'CZ'
     app.phone_number_format: 1
 
@@ -31,6 +27,17 @@ parameters:
 
     # Cookies
     app.cookie_lifespan_locale: '1 year'
+
+    # Applications
+    app.preferred_country_choices:
+        - 'CZ'
+        - 'SK'
+        - 'DE'
+
+    app.autocomplete_insurance_companies:
+        - 'VZP, Všeobecná zdravotní pojišťovna ČR'
+        - 'VoZP, Vojenská zdravotní pojišťovna ČR'
+        - 'ČPZP, Česká průmyslová zdravotní pojišťovna'
 
 services:
     # Interfaces

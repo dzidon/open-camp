@@ -14,9 +14,6 @@ parameters:
     app.locales: 'cs' # Enabled locales (languages) divided by "|"
     app.locale_names:
         cs: 'Česky'
-    app.billing_countries:
-        - 'cs'
-        - 'sk'
     app.phone_number_default_locale: 'CZ'
     app.phone_number_format: 1 # e.g. +420 123 456 789
 
@@ -37,6 +34,23 @@ parameters:
     # Cookies
     app.cookie_lifespan_locale: '1 year'
 
+    # Applications
+    app.preferred_country_choices:
+        - 'CZ'
+        - 'SK'
+
+    app.autocomplete_insurance_companies:
+        - 'VZP, Všeobecná zdravotní pojišťovna ČR'
+        - 'VoZP, Vojenská zdravotní pojišťovna ČR'
+        - 'ČPZP, Česká průmyslová zdravotní pojišťovna'
+        - 'OZP, Oborová zdravotní pojišťovna zaměstnanců bank, pojišťoven a stavebnictví'
+        - 'ZPŠ, Zaměstnanecká pojišťovna Škoda'
+        - 'ZPMV, Zdravotní pojišťovna ministerstva vnitra České republiky'
+        - 'RBP, Revírní bratrská pokladna, zdravotní pojišťovna'
+        - 'Dôvera'
+        - 'VZP, Všeobecná zdravotná poisťovňa SR'
+        - 'Union'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -49,16 +63,17 @@ services:
         resource: '../src/'
         exclude:
             - '../src/DependencyInjection/'
-            - '../src/Model/Entity/'
             - '../src/Enum/'
             - '../src/DataStructure/'
             - '../src/Form/DataTransfer/Data/'
             - '../src/Menu/Type/'
             - '../src/Security/Authentication/Exception/'
             - '../src/Security/Token/TokenSplit.php'
+            - '../src/Model/Entity/'
             - '../src/Model/Module/Security/UserRegistration/UserRegistrationResult.php'
             - '../src/Model/Module/Security/UserPasswordChange/UserPasswordChangeResult.php'
             - '../src/Search/Paginator/'
+            - '../src/Validator/Compound/'
             - '../src/Kernel.php'
 
     _instanceof:
@@ -125,7 +140,7 @@ services:
 
     App\Form\Type\User\BillingType:
         arguments:
-            $billingCountries: '%app.billing_countries%'
+            $preferredCountries: '%app.preferred_country_choices%'
 
     App\Form\Type\User\ContactType:
         arguments:

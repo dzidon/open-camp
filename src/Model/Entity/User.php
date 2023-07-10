@@ -37,10 +37,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $town = null;
 
-    #[ORM\Column(length: 16, nullable: true)]
+    #[ORM\Column(length: 11, nullable: true)]
     private ?string $zip = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 2, nullable: true)]
     private ?string $country = null;
 
     public function __construct(string $email)

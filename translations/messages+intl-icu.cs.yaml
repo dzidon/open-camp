@@ -1,10 +1,6 @@
 app:
     site_name: 'Kemp'
 
-country:
-    cs: 'Česká republika'
-    sk: 'Slovensko'
-
 auth:
     no_account_yet: 'Ještě u nás nemáte účet?'
     no_account_yet_link: 'Zaregistrovat se'
