@@ -58,10 +58,10 @@ class RoleRepositoryTest extends KernelTestCase
 
         $data = new RoleSearchData();
         $paginator = $roleRepository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 2);
-        $this->assertSame($paginator->getPagesCount(), 1);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $labels = $this->getRoleLabels($paginator->getCurrentPageItems());
         $this->assertSame(['Admin', 'Super admin'], $labels);
@@ -75,10 +75,10 @@ class RoleRepositoryTest extends KernelTestCase
         $data->setPhrase('Super');
 
         $paginator = $roleRepository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 1);
-        $this->assertSame($paginator->getPagesCount(), 1);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $labels = $this->getRoleLabels($paginator->getCurrentPageItems());
         $this->assertSame(['Super admin'], $labels);
@@ -92,10 +92,10 @@ class RoleRepositoryTest extends KernelTestCase
         $data->setSortBy(RoleSortEnum::ID_DESC);
 
         $paginator = $roleRepository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 2);
-        $this->assertSame($paginator->getPagesCount(), 1);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $labels = $this->getRoleLabels($paginator->getCurrentPageItems());
         $this->assertSame(['Admin', 'Super admin'], $labels);
@@ -109,10 +109,10 @@ class RoleRepositoryTest extends KernelTestCase
         $data->setSortBy(RoleSortEnum::ID_ASC);
 
         $paginator = $roleRepository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 2);
-        $this->assertSame($paginator->getPagesCount(), 1);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $labels = $this->getRoleLabels($paginator->getCurrentPageItems());
         $this->assertSame(['Super admin', 'Admin'], $labels);

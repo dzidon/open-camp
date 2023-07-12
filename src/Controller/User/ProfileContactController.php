@@ -87,7 +87,7 @@ class ProfileContactController extends AbstractController
             $contact = $this->contactRepository->createContact($contactData->getName(), $contactData->getEmail(), $contactData->getPhoneNumber(), $user);
             $dataTransfer->fillEntity($contactData, $contact);
             $this->contactRepository->saveContact($contact, true);
-            $this->addTransFlash('success', 'crud.action_performed.Contact.create');
+            $this->addTransFlash('success', 'crud.action_performed.contact.create');
 
             return $this->redirectToRoute('user_profile_contact_list');
         }
@@ -126,7 +126,7 @@ class ProfileContactController extends AbstractController
         {
             $dataTransfer->fillEntity($contactData, $contact);
             $this->contactRepository->saveContact($contact, true);
-            $this->addTransFlash('success', 'crud.action_performed.Contact.update');
+            $this->addTransFlash('success', 'crud.action_performed.contact.update');
 
             return $this->redirectToRoute('user_profile_contact_list');
         }
@@ -153,7 +153,7 @@ class ProfileContactController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $this->contactRepository->removeContact($contact, true);
-            $this->addTransFlash('success', 'crud.action_performed.Contact.delete');
+            $this->addTransFlash('success', 'crud.action_performed.contact.delete');
 
             return $this->redirectToRoute('user_profile_contact_list');
         }

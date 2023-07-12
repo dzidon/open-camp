@@ -7,7 +7,7 @@ namespace App\Form\DataTransfer\Data\User;
  */
 interface ProfilePasswordChangeDataInterface
 {
-    public function getCurrentPassword(): string;
+    public function getCurrentPassword(): ?string;
 
     public function setCurrentPassword(?string $currentPassword): self;
 

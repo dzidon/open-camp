@@ -66,26 +66,13 @@ class ContactRepository extends AbstractRepository implements ContactRepositoryI
      */
     public function findOneById(int $id): ?Contact
     {
-        return $this->createQueryBuilder('c')
-            ->select('c, cu')
-            ->leftJoin('c.user', 'cu')
-            ->andWhere('c.id = :id')
+        return $this->createQueryBuilder('contact')
+            ->select('contact, contactUser')
+            ->leftJoin('contact.user', 'contactUser')
+            ->andWhere('contact.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult()
-        ;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function findByUser(User $user): array
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.user = :user')
-            ->setParameter('user', $user)
-            ->getQuery()
-            ->getResult()
         ;
     }
 
@@ -97,12 +84,12 @@ class ContactRepository extends AbstractRepository implements ContactRepositoryI
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();
 
-        $query = $this->createQueryBuilder('c')
-            ->andWhere('c.name LIKE :name')
+        $query = $this->createQueryBuilder('contact')
+            ->andWhere('contact.name LIKE :name')
             ->setParameter('name', '%' . $phrase . '%')
-            ->andWhere('c.user = :user')
+            ->andWhere('contact.user = :user')
             ->setParameter('user', $user)
-            ->orderBy('c.' . $sortBy->property(), $sortBy->order())
+            ->orderBy('contact.' . $sortBy->property(), $sortBy->order())
             ->getQuery()
         ;
 

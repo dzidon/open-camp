@@ -14,7 +14,7 @@ interface UserDataInterface
 
     public function setId(?int $id): self;
 
-    public function getEmail(): string;
+    public function getEmail(): ?string;
 
     public function setEmail(?string $email): self;
 

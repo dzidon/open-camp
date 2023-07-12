@@ -11,13 +11,13 @@ class RegistrationDataTest extends KernelTestCase
     public function testEmail(): void
     {
         $data = new RegistrationData();
-        $this->assertSame('', $data->getEmail());
-
-        $data->setEmail(null);
-        $this->assertSame('', $data->getEmail());
+        $this->assertNull($data->getEmail());
 
         $data->setEmail('text');
         $this->assertSame('text', $data->getEmail());
+
+        $data->setEmail(null);
+        $this->assertNull($data->getEmail());
     }
 
     public function testEmailValidation(): void
@@ -25,6 +25,10 @@ class RegistrationDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new RegistrationData();
+        $result = $validator->validateProperty($data, 'email');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setEmail('');
         $result = $validator->validateProperty($data, 'email');
         $this->assertNotEmpty($result); // invalid
 

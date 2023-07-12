@@ -10,13 +10,13 @@ class PasswordChangeDataTest extends TestCase
     public function testEmail(): void
     {
         $data = new PasswordChangeData();
-        $this->assertSame('', $data->getEmail());
-
-        $data->setEmail(null);
-        $this->assertSame('', $data->getEmail());
+        $this->assertNull($data->getEmail());
 
         $data->setEmail('text');
         $this->assertSame('text', $data->getEmail());
+
+        $data->setEmail(null);
+        $this->assertNull($data->getEmail());
     }
 
     public function testCaptcha(): void

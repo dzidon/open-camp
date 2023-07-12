@@ -11,13 +11,13 @@ class PlainPasswordDataTest extends KernelTestCase
     public function testPlainPassword(): void
     {
         $data = new PlainPasswordData();
-        $this->assertSame('', $data->getPlainPassword());
-
-        $data->setPlainPassword(null);
-        $this->assertSame('', $data->getPlainPassword());
+        $this->assertNull($data->getPlainPassword());
 
         $data->setPlainPassword('text');
         $this->assertSame('text', $data->getPlainPassword());
+
+        $data->setPlainPassword(null);
+        $this->assertNull($data->getPlainPassword());
     }
 
     public function testPlainPasswordValidation(): void

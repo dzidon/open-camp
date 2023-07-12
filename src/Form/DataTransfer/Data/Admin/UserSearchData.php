@@ -3,11 +3,10 @@
 namespace App\Form\DataTransfer\Data\Admin;
 
 use App\Enum\Search\Data\Admin\UserSortEnum;
-use App\Form\Type\Admin\UserSearchType;
 use App\Model\Entity\Role;
 
 /**
- * See {@link UserSearchType}
+ * @inheritDoc
  */
 class UserSearchData implements UserSearchDataInterface
 {

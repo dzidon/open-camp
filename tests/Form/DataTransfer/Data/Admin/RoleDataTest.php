@@ -13,13 +13,13 @@ class RoleDataTest extends KernelTestCase
     public function testLabel(): void
     {
         $data = new RoleData();
-        $this->assertSame('', $data->getLabel());
-
-        $data->setLabel(null);
-        $this->assertSame('', $data->getLabel());
+        $this->assertNull($data->getLabel());
 
         $data->setLabel('text');
         $this->assertSame('text', $data->getLabel());
+
+        $data->setLabel(null);
+        $this->assertNull($data->getLabel());
     }
 
     public function testLabelValidation(): void
@@ -27,6 +27,10 @@ class RoleDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new RoleData();
+        $result = $validator->validateProperty($data, 'label');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setLabel('');
         $result = $validator->validateProperty($data, 'label');
         $this->assertNotEmpty($result); // invalid
 

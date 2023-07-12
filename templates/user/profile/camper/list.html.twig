@@ -1,0 +1,87 @@
+{% extends "user/profile/base.html.twig" %}
+
+{% block profile_content %}
+    <div class="row mb-5">
+        <div class="col">
+            {{ form_start(form_search) }}
+                <div class="form-row">
+                    <div class="col-md-8">
+                        {{ form_row(form_search.phrase) }}
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ form_row(form_search.sortBy) }}
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">{{ 'form.user.camper_search.button'|trans }}</button>
+            {{ form_end(form_search) }}
+        </div>
+    </div>
+
+    {% if is_search_invalid %}
+        <div class="row mb-4">
+            <div class="col">
+                <div class="alert alert-danger" role="alert">
+                    {{ 'search.error.invalid_filter'|trans }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row mb-3">
+        <div class="col">
+            <h4>
+                {% if paginator.totalItems > 0 %}
+                    {{ 'search.results'|trans }} ({{ 'search.total'|trans }} {{ paginator.totalItems }})
+                {% else %}
+                    {{ 'search.error.no_results'|trans }}
+                {% endif %}
+            </h4>
+
+            <h6>
+                <a href="{{ path('user_profile_camper_create') }}">{{ 'crud.action.common.create'|trans }}</a>
+            </h6>
+        </div>
+    </div>
+
+    {% if paginator.totalItems > 0 %}
+        <div class="row">
+            {% for camper in paginator.currentPageItems %}
+                <div class="col-sm-12 col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ camper.name }}
+                            </h5>
+
+                            <p>
+                                {{ 'entity_attribute.camper.gender'|trans }}: {{ ('gender.' ~ camper.gender.value)|trans }}
+                                <br>
+                                {{ 'entity_attribute.camper.born_at'|trans }}: {{ camper.bornAt|date(date_format) }}
+                            </p>
+
+                            <a href="{{ path('user_profile_camper_read', {id: camper.id}) }}" class="card-link">
+                                {{ 'crud.action.common.read'|trans }}
+                            </a>
+
+                            <a href="{{ path('user_profile_camper_update', {id: camper.id}) }}" class="card-link">
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
+
+                            <a href="{{ path('user_profile_camper_delete', {id: camper.id}) }}" class="card-link">
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row mb-4">
+            <div class="col">
+                {{ menu(pagination_menu) }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

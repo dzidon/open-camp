@@ -85,7 +85,7 @@ class RoleController extends AbstractController
             $role = $this->roleRepository->createRole($roleData->getLabel());
             $dataTransfer->fillEntity($roleData, $role);
             $this->roleRepository->saveRole($role, true);
-            $this->addTransFlash('success', 'crud.action_performed.Role.create');
+            $this->addTransFlash('success', 'crud.action_performed.role.create');
 
             return $this->redirectToRoute('admin_role_list');
         }
@@ -127,7 +127,7 @@ class RoleController extends AbstractController
         {
             $dataTransfer->fillEntity($roleData, $role);
             $this->roleRepository->saveRole($role, true);
-            $this->addTransFlash('success', 'crud.action_performed.Role.update');
+            $this->addTransFlash('success', 'crud.action_performed.role.update');
 
             return $this->redirectToRoute('admin_role_list');
         }
@@ -155,7 +155,7 @@ class RoleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $this->roleRepository->removeRole($role, true);
-            $this->addTransFlash('success', 'crud.action_performed.Role.delete');
+            $this->addTransFlash('success', 'crud.action_performed.role.delete');
 
             return $this->redirectToRoute('admin_role_list');
         }

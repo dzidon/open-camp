@@ -2,26 +2,25 @@
 
 namespace App\Form\DataTransfer\Data\User;
 
-use App\Form\Type\User\RepeatedPasswordType;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * See {@link RepeatedPasswordType}
+ * @inheritDoc
  */
 class PlainPasswordData implements PlainPasswordDataInterface
 {
     #[Assert\Length(min: 6, max: 4096)]
     #[Assert\NotBlank]
-    private string $plainPassword = '';
+    private ?string $plainPassword = null;
 
-    public function getPlainPassword(): string
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
 
     public function setPlainPassword(?string $plainPassword): self
     {
-        $this->plainPassword = (string) $plainPassword;
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }

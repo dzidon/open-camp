@@ -3,13 +3,15 @@
 namespace App\Form\DataTransfer\Data\User;
 
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 
 /**
- * See {@link ProfilePasswordChangeType}
+ * @inheritDoc
  */
 class ProfilePasswordChangeData implements ProfilePasswordChangeDataInterface
 {
-    private string $currentPassword = '';
+    #[SecurityAssert\UserPassword]
+    private ?string $currentPassword = null;
 
     #[Assert\Valid]
     private PlainPasswordData $newPasswordData;
@@ -19,14 +21,14 @@ class ProfilePasswordChangeData implements ProfilePasswordChangeDataInterface
         $this->newPasswordData = new PlainPasswordData();
     }
 
-    public function getCurrentPassword(): string
+    public function getCurrentPassword(): ?string
     {
         return $this->currentPassword;
     }
 
     public function setCurrentPassword(?string $currentPassword): self
     {
-        $this->currentPassword = (string) $currentPassword;
+        $this->currentPassword = $currentPassword;
 
         return $this;
     }

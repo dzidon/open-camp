@@ -3,16 +3,15 @@
 namespace App\Form\DataTransfer\Data\User;
 
 use App\Enum\Search\Data\User\ContactSortEnum;
-use App\Form\Type\User\ContactSearchType;
 
 /**
- * See {@link ContactSearchType}
+ * @inheritDoc
  */
 class ContactSearchData implements ContactSearchDataInterface
 {
     private string $phrase = '';
 
-    private ContactSortEnum $sortBy = ContactSortEnum::NAME_ASC;
+    private ContactSortEnum $sortBy = ContactSortEnum::ID_DESC;
 
     public function getPhrase(): string
     {
@@ -35,7 +34,7 @@ class ContactSearchData implements ContactSearchDataInterface
     {
         if ($sortBy === null)
         {
-            $sortBy = ContactSortEnum::NAME_ASC;
+            $sortBy = ContactSortEnum::ID_DESC;
         }
 
         $this->sortBy = $sortBy;

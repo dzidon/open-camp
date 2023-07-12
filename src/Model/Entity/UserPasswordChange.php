@@ -75,9 +75,9 @@ class UserPasswordChange
         return $this;
     }
 
-    public function getState(): string
+    public function getState(): UserPasswordChangeStateEnum
     {
-        return $this->state;
+        return UserPasswordChangeStateEnum::tryFrom($this->state);
     }
 
     public function setState(UserPasswordChangeStateEnum $state): self

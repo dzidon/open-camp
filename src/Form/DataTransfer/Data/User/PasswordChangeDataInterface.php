@@ -7,7 +7,7 @@ namespace App\Form\DataTransfer\Data\User;
  */
 interface PasswordChangeDataInterface
 {
-    public function getEmail(): string;
+    public function getEmail(): ?string;
 
     public function setEmail(?string $email): self;
 

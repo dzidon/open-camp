@@ -7,11 +7,11 @@ namespace App\Form\DataTransfer\Data\User;
  */
 interface LoginDataInterface
 {
-    public function getEmail(): string;
+    public function getEmail(): ?string;
 
     public function setEmail(?string $email): self;
 
-    public function getPassword(): string;
+    public function getPassword(): ?string;
 
     public function setPassword(?string $password): self;
 

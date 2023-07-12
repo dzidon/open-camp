@@ -46,7 +46,7 @@ class PermissionGroupRepository extends AbstractRepository implements Permission
      */
     public function findAll(): array
     {
-        return $this->createQueryBuilder('pg')
+        return $this->createQueryBuilder('permissionGroup')
             ->getQuery()
             ->getResult()
         ;

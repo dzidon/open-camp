@@ -88,7 +88,7 @@ class UserController extends AbstractController
             $user = $this->userRepository->createUser($userData->getEmail());
             $dataTransfer->fillEntity($userData, $user);
             $this->userRepository->saveUser($user, true);
-            $this->addTransFlash('success', 'crud.action_performed.User.create');
+            $this->addTransFlash('success', 'crud.action_performed.user.create');
 
             return $this->redirectToRoute('admin_user_list');
         }
@@ -128,7 +128,7 @@ class UserController extends AbstractController
         {
             $dataTransfer->fillEntity($userData, $user);
             $this->userRepository->saveUser($user, true);
-            $this->addTransFlash('success', 'crud.action_performed.User.update');
+            $this->addTransFlash('success', 'crud.action_performed.user.update');
 
             return $this->redirectToRoute('admin_user_list');
         }
@@ -157,13 +157,13 @@ class UserController extends AbstractController
             if ($plainPassword === null)
             {
                 $user->setPassword(null);
-                $this->addTransFlash('success', 'crud.action_performed.User.reset_password');
+                $this->addTransFlash('success', 'crud.action_performed.user.reset_password');
             }
             else
             {
                 $password = $hasher->hashPassword($user, $plainPassword);
                 $user->setPassword($password);
-                $this->addTransFlash('success', 'crud.action_performed.User.update_password');
+                $this->addTransFlash('success', 'crud.action_performed.user.update_password');
             }
 
             $this->userRepository->saveUser($user, true);
@@ -194,7 +194,7 @@ class UserController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $this->userRepository->removeUser($user, true);
-            $this->addTransFlash('success', 'crud.action_performed.User.delete');
+            $this->addTransFlash('success', 'crud.action_performed.user.delete');
 
             return $this->redirectToRoute('admin_user_list');
         }

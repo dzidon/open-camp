@@ -11,6 +11,6 @@ enum ContactSortEnum: string
 {
     use SortEnumTrait;
 
-    case NAME_ASC = 'name ASC';
-    case NAME_DESC = 'name DESC';
+    case ID_DESC = 'id DESC';
+    case ID_ASC = 'id ASC';
 }

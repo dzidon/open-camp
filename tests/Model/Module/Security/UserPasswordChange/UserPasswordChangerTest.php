@@ -31,7 +31,7 @@ class UserPasswordChangerTest extends KernelTestCase
         $this->assertTrue($valid);
 
         $passwordChange = $passwordChangeRepository->findOneBySelector('dav');
-        $this->assertSame(UserPasswordChangeStateEnum::USED->value, $passwordChange->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::USED, $passwordChange->getState());
     }
 
     public function testCompletePasswordChangeIfMultipleActiveExistForUser(): void
@@ -44,8 +44,8 @@ class UserPasswordChangerTest extends KernelTestCase
 
         $passwordChange1 = $passwordChangeRepository->findOneBySelector('ka1');
         $passwordChange2 = $passwordChangeRepository->findOneBySelector('ka2');
-        $this->assertSame(UserPasswordChangeStateEnum::USED->value, $passwordChange1->getState());
-        $this->assertSame(UserPasswordChangeStateEnum::DISABLED->value, $passwordChange2->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::USED, $passwordChange1->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::DISABLED, $passwordChange2->getState());
     }
 
     public function testCompletePasswordChangeIfOneIsTimeExpired(): void
@@ -58,8 +58,8 @@ class UserPasswordChangerTest extends KernelTestCase
 
         $passwordChange1 = $passwordChangeRepository->findOneBySelector('je1');
         $passwordChange2 = $passwordChangeRepository->findOneBySelector('je2');
-        $this->assertSame(UserPasswordChangeStateEnum::USED->value, $passwordChange1->getState());
-        $this->assertSame(UserPasswordChangeStateEnum::UNUSED->value, $passwordChange2->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::USED, $passwordChange1->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::UNUSED, $passwordChange2->getState());
     }
 
     public function testCompletePasswordChangeIfOneIsDisabled(): void
@@ -72,8 +72,8 @@ class UserPasswordChangerTest extends KernelTestCase
 
         $passwordChange1 = $passwordChangeRepository->findOneBySelector('xe1');
         $passwordChange2 = $passwordChangeRepository->findOneBySelector('xe2');
-        $this->assertSame(UserPasswordChangeStateEnum::USED->value, $passwordChange1->getState());
-        $this->assertSame(UserPasswordChangeStateEnum::DISABLED->value, $passwordChange2->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::USED, $passwordChange1->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::DISABLED, $passwordChange2->getState());
     }
 
     public function testCompletePasswordChangeIfOneIsUsed(): void
@@ -86,8 +86,8 @@ class UserPasswordChangerTest extends KernelTestCase
 
         $passwordChange1 = $passwordChangeRepository->findOneBySelector('ma1');
         $passwordChange2 = $passwordChangeRepository->findOneBySelector('ma2');
-        $this->assertSame(UserPasswordChangeStateEnum::USED->value, $passwordChange1->getState());
-        $this->assertSame(UserPasswordChangeStateEnum::USED->value, $passwordChange2->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::USED, $passwordChange1->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::USED, $passwordChange2->getState());
     }
 
     public function testCompletePasswordChangeIfItsInactive(): void
@@ -109,10 +109,10 @@ class UserPasswordChangerTest extends KernelTestCase
         $passwordChange3 = $passwordChangeRepository->findOneBySelector('xe2');
         $passwordChange4 = $passwordChangeRepository->findOneBySelector('ma2');
 
-        $this->assertSame(UserPasswordChangeStateEnum::UNUSED->value, $passwordChange1->getState());
-        $this->assertSame(UserPasswordChangeStateEnum::UNUSED->value, $passwordChange2->getState());
-        $this->assertSame(UserPasswordChangeStateEnum::DISABLED->value, $passwordChange3->getState());
-        $this->assertSame(UserPasswordChangeStateEnum::USED->value, $passwordChange4->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::UNUSED, $passwordChange1->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::UNUSED, $passwordChange2->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::DISABLED, $passwordChange3->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::USED, $passwordChange4->getState());
     }
 
     private function getUserPasswordHasher(): UserPasswordHasherInterface

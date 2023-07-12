@@ -71,8 +71,16 @@ class UserProfileMenuTypeFactory extends AbstractMenuTypeFactory
         $itemContacts->setActive($active);
 
         // campers
-        $itemCampers = new MenuType('link2', 'navbar_user_profile_item', 'campers', '#');
+        $active =
+            $route === 'user_profile_camper_list'   || $route === 'user_profile_camper_create' || $route === 'user_profile_camper_read' ||
+            $route === 'user_profile_camper_update' || $route === 'user_profile_camper_delete'
+        ;
+
+        $text = $this->translator->trans('route.user_profile_camper_list');
+        $url = $this->urlGenerator->generate('user_profile_camper_list');
+        $itemCampers = new MenuType('user_profile_camper_list', 'navbar_user_profile_item', $text, $url);
         $menu->addChild($itemCampers);
+        $itemCampers->setActive($active);
 
         // applications
         $itemApplications = new MenuType('link3', 'navbar_user_profile_item', 'applications', '#');

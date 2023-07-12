@@ -7,7 +7,7 @@ namespace App\Form\DataTransfer\Data\Admin;
  */
 interface RoleDataInterface
 {
-    public function getLabel(): string;
+    public function getLabel(): ?string;
 
     public function setLabel(?string $label): self;
 

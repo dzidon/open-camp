@@ -51,7 +51,7 @@ class ProfileController extends AbstractController
         {
             $dataTransfer->fillEntity($billingData, $user);
             $userRepository->saveUser($user, true);
-            $this->addTransFlash('success', 'crud.action_performed.User.update_billing');
+            $this->addTransFlash('success', 'crud.action_performed.user.update_billing');
 
             return $this->redirectToRoute('user_profile_billing');
         }
@@ -81,13 +81,6 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            if (!$hasher->isPasswordValid($user, $passwordChangeData->getCurrentPassword()))
-            {
-                $this->addTransFlash('failure', 'auth.profile_password_change_wrong');
-
-                return $this->redirectToRoute('user_profile_password_change');
-            }
-
             $newPasswordChangeData = $passwordChangeData->getNewPasswordData();
             $newPassword = $hasher->hashPassword($user, $newPasswordChangeData->getPlainPassword());
             $user->setPassword($newPassword);

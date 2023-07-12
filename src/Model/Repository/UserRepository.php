@@ -71,12 +71,12 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
      */
     public function findOneById(int $id): ?User
     {
-        return $this->createQueryBuilder('u')
-            ->select('u, ur, urp, urpg')
-            ->leftJoin('u.role', 'ur')
-            ->leftJoin('ur.permissions', 'urp')
-            ->leftJoin('urp.group', 'urpg')
-            ->andWhere('u.id = :id')
+        return $this->createQueryBuilder('user')
+            ->select('user, userRole, userRolePermission, userRolePermissionGroup')
+            ->leftJoin('user.role', 'userRole')
+            ->leftJoin('userRole.permissions', 'userRolePermission')
+            ->leftJoin('userRolePermission.group', 'userRolePermissionGroup')
+            ->andWhere('user.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult()
@@ -88,12 +88,12 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
      */
     public function findOneByEmail(string $email): ?User
     {
-        return $this->createQueryBuilder('u')
-            ->select('u, ur, urp, urpg')
-            ->leftJoin('u.role', 'ur')
-            ->leftJoin('ur.permissions', 'urp')
-            ->leftJoin('urp.group', 'urpg')
-            ->andWhere('u.email = :email')
+        return $this->createQueryBuilder('user')
+            ->select('user, userRole, userRolePermission, userRolePermissionGroup')
+            ->leftJoin('user.role', 'userRole')
+            ->leftJoin('userRole.permissions', 'userRolePermission')
+            ->leftJoin('userRolePermission.group', 'userRolePermissionGroup')
+            ->andWhere('user.email = :email')
             ->setParameter('email', $email)
             ->getQuery()
             ->getOneOrNullResult()
@@ -105,9 +105,9 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
      */
     public function isEmailRegistered(string $email): bool
     {
-        $count = $this->createQueryBuilder('u')
-            ->select('count(u.id)')
-            ->andWhere('u.email = :email')
+        $count = $this->createQueryBuilder('user')
+            ->select('count(user.id)')
+            ->andWhere('user.email = :email')
             ->setParameter('email', $email)
             ->getQuery()
             ->getSingleScalarResult()
@@ -121,8 +121,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
      */
     public function findByRole(?Role $role): array
     {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.role = :role')
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.role = :role')
             ->setParameter('role', $role)
             ->getQuery()
             ->getResult()
@@ -138,20 +138,20 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         $sortBy = $data->getSortBy();
         $role = $data->getRole();
 
-        $queryBuilder = $this->createQueryBuilder('u')
-            ->select('u, ur')
-            ->leftJoin('u.role', 'ur')
-            ->orWhere('u.email LIKE :email')
+        $queryBuilder = $this->createQueryBuilder('user')
+            ->select('user, userRole')
+            ->leftJoin('user.role', 'userRole')
+            ->orWhere('user.email LIKE :email')
             ->setParameter('email', '%' . $phrase . '%')
-            ->orWhere('u.name LIKE :name')
+            ->orWhere('user.name LIKE :name')
             ->setParameter('name', '%' . $phrase . '%')
-            ->orderBy('u.' . $sortBy->property(), $sortBy->order())
+            ->orderBy('user.' . $sortBy->property(), $sortBy->order())
         ;
 
         if ($role !== null)
         {
             $queryBuilder
-                ->andWhere('u.role = :role')
+                ->andWhere('user.role = :role')
                 ->setParameter('role', $role)
             ;
         }

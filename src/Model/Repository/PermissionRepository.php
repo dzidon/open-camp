@@ -47,11 +47,11 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
      */
     public function findAll(): array
     {
-        return $this->createQueryBuilder('p')
-            ->select('p, pg')
-            ->leftJoin('p.group', 'pg')
-            ->addOrderBy('pg.priority', 'ASC')
-            ->addOrderBy('p.priority', 'ASC')
+        return $this->createQueryBuilder('permission')
+            ->select('permission, permissionGroup')
+            ->leftJoin('permission.group', 'permissionGroup')
+            ->addOrderBy('permissionGroup.priority', 'ASC')
+            ->addOrderBy('permission.priority', 'ASC')
             ->getQuery()
             ->getResult()
         ;

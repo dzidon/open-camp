@@ -75,9 +75,9 @@ class UserRegistration
         return $this;
     }
 
-    public function getState(): string
+    public function getState(): UserRegistrationStateEnum
     {
-        return $this->state;
+        return UserRegistrationStateEnum::tryFrom($this->state);
     }
 
     public function setState(UserRegistrationStateEnum $state): self

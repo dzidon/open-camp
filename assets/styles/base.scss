@@ -6,6 +6,15 @@ label.required:before {
   color: red;
 }
 
+input[type="radio"] + label:before {
+  content: none;
+  color: initial;
+}
+
+label:not(.form-check-label):not(.custom-file-label) {
+  font-weight: 700;
+}
+
 legend {
   font-weight: 700;
 }

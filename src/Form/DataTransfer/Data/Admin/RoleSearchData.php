@@ -3,10 +3,9 @@
 namespace App\Form\DataTransfer\Data\Admin;
 
 use App\Enum\Search\Data\Admin\RoleSortEnum;
-use App\Form\Type\Admin\RoleSearchType;
 
 /**
- * See {@link RoleSearchType}
+ * @inheritDoc
  */
 class RoleSearchData implements RoleSearchDataInterface
 {

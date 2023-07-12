@@ -46,13 +46,13 @@ class UserPasswordChangeTest extends TestCase
 
     public function testState(): void
     {
-        $this->assertSame(UserPasswordChangeStateEnum::UNUSED->value, $this->userPasswordChange->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::UNUSED, $this->userPasswordChange->getState());
 
         $this->userPasswordChange->setState(UserPasswordChangeStateEnum::USED);
-        $this->assertSame(UserPasswordChangeStateEnum::USED->value, $this->userPasswordChange->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::USED, $this->userPasswordChange->getState());
 
         $this->userPasswordChange->setState(UserPasswordChangeStateEnum::DISABLED);
-        $this->assertSame(UserPasswordChangeStateEnum::DISABLED->value, $this->userPasswordChange->getState());
+        $this->assertSame(UserPasswordChangeStateEnum::DISABLED, $this->userPasswordChange->getState());
     }
 
     public function testSelector(): void

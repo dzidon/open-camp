@@ -4,6 +4,8 @@ namespace App\DataFixture;
 
 use App\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Enum\Entity\UserRegistrationStateEnum;
+use App\Enum\GenderEnum;
+use App\Model\Entity\Camper;
 use App\Model\Entity\Contact;
 use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
@@ -207,6 +209,16 @@ class TestFixtures extends Fixture
         $phoneNumber = $this->phoneNumberUtil->parse('+420724999888');
         $contact2 = new Contact('Jessica Smith', 'jess.smith@gmail.com', $phoneNumber, $user1);
         $manager->persist($contact2);
+
+        /*
+         * Camper
+         */
+        $bornAtDate = new DateTimeImmutable('2000-01-01');
+        $camper1 = new Camper('Camper 1', GenderEnum::MALE, $bornAtDate, $user1);
+        $manager->persist($camper1);
+
+        $camper2 = new Camper('Camper 2', GenderEnum::FEMALE, $bornAtDate, $user1);
+        $manager->persist($camper2);
 
         // save
         $manager->flush();

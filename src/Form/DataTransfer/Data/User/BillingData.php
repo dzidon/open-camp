@@ -2,12 +2,12 @@
 
 namespace App\Form\DataTransfer\Data\User;
 
-use App\Form\Type\User\BillingType;
-use App\Validator\Compound as CompoundAssert;
+use App\Validator\Constraint\Compound\StreetRequirements;
+use App\Validator\Constraint\Compound\ZipCodeRequirements;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * See {@link BillingType}
+ * @inheritDoc
  */
 class BillingData implements BillingDataInterface
 {
@@ -15,13 +15,13 @@ class BillingData implements BillingDataInterface
     private ?string $name = null;
 
     #[Assert\Length(max: 255)]
-    #[CompoundAssert\StreetRequirements]
+    #[StreetRequirements]
     private ?string $street = null;
 
     #[Assert\Length(max: 255)]
     private ?string $town = null;
 
-    #[CompoundAssert\ZipCodeRequirements]
+    #[ZipCodeRequirements]
     private ?string $zip = null;
 
     #[Assert\Country]

@@ -51,14 +51,6 @@ interface ContactRepositoryInterface
     public function findOneById(int $id): ?Contact;
 
     /**
-     * Finds all contacts assigned to a user.
-     *
-     * @param User $user
-     * @return Contact[]
-     */
-    public function findByUser(User $user): array;
-
-    /**
      * Returns user contact search paginator.
      *
      * @param ContactSearchDataInterface $data

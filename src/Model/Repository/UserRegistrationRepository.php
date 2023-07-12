@@ -63,14 +63,14 @@ class UserRegistrationRepository extends AbstractRepository implements UserRegis
      */
     public function findOneBySelector(string $selector, ?bool $active = null): ?UserRegistration
     {
-        $queryBuilder = $this->createQueryBuilder('ur');
+        $queryBuilder = $this->createQueryBuilder('userRegistration');
         if ($active !== null)
         {
             $this->addActiveCondition($queryBuilder, $active);
         }
 
         return $queryBuilder
-            ->andWhere('ur.selector = :selector')
+            ->andWhere('userRegistration.selector = :selector')
             ->setParameter('selector', $selector)
             ->getQuery()
             ->getOneOrNullResult()
@@ -82,14 +82,14 @@ class UserRegistrationRepository extends AbstractRepository implements UserRegis
      */
     public function findByEmail(string $email, ?bool $active = null): array
     {
-        $queryBuilder = $this->createQueryBuilder('ur');
+        $queryBuilder = $this->createQueryBuilder('userRegistration');
         if ($active !== null)
         {
             $this->addActiveCondition($queryBuilder, $active);
         }
 
         return $queryBuilder
-            ->andWhere('ur.email = :email')
+            ->andWhere('userRegistration.email = :email')
             ->setParameter('email', $email)
             ->getQuery()
             ->getResult()
@@ -109,16 +109,16 @@ class UserRegistrationRepository extends AbstractRepository implements UserRegis
         if ($positive)
         {
             $queryBuilder
-                ->andWhere(':now < ur.expireAt')
-                ->andWhere('ur.state = :unusedState')
+                ->andWhere(':now < userRegistration.expireAt')
+                ->andWhere('userRegistration.state = :unusedState')
             ;
         }
         // is not active
         else
         {
             $queryBuilder
-                ->orWhere('NOT (:now < ur.expireAt)')
-                ->orWhere('NOT (ur.state = :unusedState)')
+                ->orWhere('NOT (:now < userRegistration.expireAt)')
+                ->orWhere('NOT (userRegistration.state = :unusedState)')
             ;
         }
 

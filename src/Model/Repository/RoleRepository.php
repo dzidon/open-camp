@@ -50,14 +50,14 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
      */
     public function findOneById(int $id): ?Role
     {
-        return $this->createQueryBuilder('r')
-            ->select('r, rp, rpg')
-            ->leftJoin('r.permissions', 'rp')
-            ->leftJoin('rp.group', 'rpg')
-            ->andWhere('r.id = :id')
+        return $this->createQueryBuilder('role')
+            ->select('role, rolePermission, rolePermissionGroup')
+            ->leftJoin('role.permissions', 'rolePermission')
+            ->leftJoin('rolePermission.group', 'rolePermissionGroup')
+            ->andWhere('role.id = :id')
             ->setParameter('id', $id)
-            ->addOrderBy('rpg.priority', 'ASC')
-            ->addOrderBy('rp.priority', 'ASC')
+            ->addOrderBy('rolePermissionGroup.priority', 'ASC')
+            ->addOrderBy('rolePermission.priority', 'ASC')
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -71,10 +71,10 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();
 
-        $query = $this->createQueryBuilder('r')
-            ->andWhere('r.label LIKE :label')
+        $query = $this->createQueryBuilder('role')
+            ->andWhere('role.label LIKE :label')
             ->setParameter('label', '%' . $phrase . '%')
-            ->orderBy('r.' . $sortBy->property(), $sortBy->order())
+            ->orderBy('role.' . $sortBy->property(), $sortBy->order())
             ->getQuery()
         ;
 

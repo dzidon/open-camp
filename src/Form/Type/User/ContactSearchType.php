@@ -29,8 +29,8 @@ class ContactSearchType extends AbstractType
                 'class'        => ContactSortEnum::class,
                 'label'        => 'form.user.contact_search.sort_by.label',
                 'choice_label' => fn ($choice) => match ($choice) {
-                    ContactSortEnum::NAME_ASC  => 'form.user.contact_search.sort_by.options.name_asc',
-                    ContactSortEnum::NAME_DESC => 'form.user.contact_search.sort_by.options.name_desc',
+                    ContactSortEnum::ID_DESC    => 'form.user.contact_search.sort_by.options.id_desc',
+                    ContactSortEnum::ID_ASC     => 'form.user.contact_search.sort_by.options.id_asc',
                 },
             ])
         ;

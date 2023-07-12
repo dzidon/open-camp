@@ -39,13 +39,13 @@ class UserRegistrationTest extends TestCase
 
     public function testState(): void
     {
-        $this->assertSame(UserRegistrationStateEnum::UNUSED->value, $this->userRegistration->getState());
+        $this->assertSame(UserRegistrationStateEnum::UNUSED, $this->userRegistration->getState());
 
         $this->userRegistration->setState(UserRegistrationStateEnum::USED);
-        $this->assertSame(UserRegistrationStateEnum::USED->value, $this->userRegistration->getState());
+        $this->assertSame(UserRegistrationStateEnum::USED, $this->userRegistration->getState());
 
         $this->userRegistration->setState(UserRegistrationStateEnum::DISABLED);
-        $this->assertSame(UserRegistrationStateEnum::DISABLED->value, $this->userRegistration->getState());
+        $this->assertSame(UserRegistrationStateEnum::DISABLED, $this->userRegistration->getState());
     }
 
     public function testSelector(): void

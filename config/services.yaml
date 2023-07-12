@@ -10,10 +10,12 @@ parameters:
     app.email_no_reply: 'noreply@camp.com'
 
     # Internationalization
+    app.date_format: 'd.m.Y'
     app.date_time_format: 'd.m.Y H:i:s'
     app.locales: 'cs' # Enabled locales (languages) divided by "|"
     app.locale_names:
         cs: 'Česky'
+
     app.phone_number_default_locale: 'CZ'
     app.phone_number_format: 1 # e.g. +420 123 456 789
 
@@ -39,18 +41,6 @@ parameters:
         - 'CZ'
         - 'SK'
 
-    app.autocomplete_insurance_companies:
-        - 'VZP, Všeobecná zdravotní pojišťovna ČR'
-        - 'VoZP, Vojenská zdravotní pojišťovna ČR'
-        - 'ČPZP, Česká průmyslová zdravotní pojišťovna'
-        - 'OZP, Oborová zdravotní pojišťovna zaměstnanců bank, pojišťoven a stavebnictví'
-        - 'ZPŠ, Zaměstnanecká pojišťovna Škoda'
-        - 'ZPMV, Zdravotní pojišťovna ministerstva vnitra České republiky'
-        - 'RBP, Revírní bratrská pokladna, zdravotní pojišťovna'
-        - 'Dôvera'
-        - 'VZP, Všeobecná zdravotná poisťovňa SR'
-        - 'Union'
-
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -73,12 +63,12 @@ services:
             - '../src/Model/Module/Security/UserRegistration/UserRegistrationResult.php'
             - '../src/Model/Module/Security/UserPasswordChange/UserPasswordChangeResult.php'
             - '../src/Search/Paginator/'
-            - '../src/Validator/Compound/'
+            - '../src/Validator/Constraint/'
             - '../src/Kernel.php'
 
     _instanceof:
         App\Menu\Factory\MenuTypeFactoryInterface:
-            tags: ['app.menu_factory']
+            tags: [ 'app.menu_factory' ]
 
         App\Form\DataTransfer\Transfer\DataTransferInterface:
             tags: [ 'app.data_transfer' ]

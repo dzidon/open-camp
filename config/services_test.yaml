@@ -5,6 +5,7 @@ parameters:
     app.email_no_reply: 'noreply@camp.com'
 
     # Internationalization
+    app.date_format: 'd. m. Y'
     app.date_time_format: 'd. m. Y H:i:s'
     app.locales: 'en|cs|de'
     app.locale_names:
@@ -33,11 +34,6 @@ parameters:
         - 'CZ'
         - 'SK'
         - 'DE'
-
-    app.autocomplete_insurance_companies:
-        - 'VZP, Všeobecná zdravotní pojišťovna ČR'
-        - 'VoZP, Vojenská zdravotní pojišťovna ČR'
-        - 'ČPZP, Česká průmyslová zdravotní pojišťovna'
 
 services:
     # Interfaces

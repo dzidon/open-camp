@@ -14,25 +14,25 @@ class UserDataTest extends KernelTestCase
     public function testId(): void
     {
         $data = new UserData();
-        $this->assertSame(null, $data->getId());
+        $this->assertNull($data->getId());
 
         $data->setId(123);
         $this->assertSame(123, $data->getId());
 
         $data->setId(null);
-        $this->assertSame(null, $data->getId());
+        $this->assertNull($data->getId());
     }
 
     public function testEmail(): void
     {
         $data = new UserData();
-        $this->assertSame('', $data->getEmail());
-
-        $data->setEmail(null);
-        $this->assertSame('', $data->getEmail());
+        $this->assertNull($data->getEmail());
 
         $data->setEmail('text');
         $this->assertSame('text', $data->getEmail());
+
+        $data->setEmail(null);
+        $this->assertNull($data->getEmail());
     }
 
     public function testEmailValidation(): void
@@ -40,6 +40,10 @@ class UserDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new UserData();
+        $result = $validator->validateProperty($data, 'email');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setEmail('');
         $result = $validator->validateProperty($data, 'email');
         $this->assertNotEmpty($result); // invalid
 

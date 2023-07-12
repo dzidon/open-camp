@@ -7,7 +7,7 @@ namespace App\Form\DataTransfer\Data\User;
  */
 interface PlainPasswordDataInterface
 {
-    public function getPlainPassword(): string;
+    public function getPlainPassword(): ?string;
 
     public function setPlainPassword(?string $plainPassword): self;
 }

@@ -82,18 +82,7 @@ class ContactRepositoryTest extends KernelTestCase
         $this->assertSame($contact->getId(), $loadedContact->getId());
     }
 
-    public function testFindByUser(): void
-    {
-        $contactRepository = $this->getContactRepository();
-        $userRepository = $this->getUserRepository();
-
-        $user = $userRepository->findOneByEmail('david@gmail.com');
-        $contacts = $contactRepository->findByUser($user);
-        $names = $this->getContactNames($contacts);
-        $this->assertSame(['David Smith', 'Jessica Smith'], $names);
-    }
-
-    public function testGetAdminPaginator(): void
+    public function testGetUserPaginator(): void
     {
         $contactRepository = $this->getContactRepository();
         $userRepository = $this->getUserRepository();
@@ -101,13 +90,13 @@ class ContactRepositoryTest extends KernelTestCase
 
         $data = new ContactSearchData();
         $paginator = $contactRepository->getUserPaginator($data, $user, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 2);
-        $this->assertSame($paginator->getPagesCount(), 1);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
-        $emails = $this->getContactNames($paginator->getCurrentPageItems());
-        $this->assertSame(['David Smith', 'Jessica Smith'], $emails);
+        $names = $this->getContactNames($paginator->getCurrentPageItems());
+        $this->assertSame(['Jessica Smith', 'David Smith'], $names);
     }
 
     public function testGetAdminPaginatorWithPhrase(): void
@@ -119,49 +108,51 @@ class ContactRepositoryTest extends KernelTestCase
         $data = new ContactSearchData();
         $data->setPhrase('david');
         $paginator = $contactRepository->getUserPaginator($data, $user, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 1);
-        $this->assertSame($paginator->getPagesCount(), 1);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
-        $emails = $this->getContactNames($paginator->getCurrentPageItems());
-        $this->assertSame(['David Smith'], $emails);
+        $names = $this->getContactNames($paginator->getCurrentPageItems());
+        $this->assertSame(['David Smith'], $names);
     }
 
-    public function testGetAdminPaginatorSortByNameAsc(): void
+    public function testGetUserPaginatorSortByIdDesc(): void
     {
         $contactRepository = $this->getContactRepository();
         $userRepository = $this->getUserRepository();
         $user = $userRepository->findOneByEmail('david@gmail.com');
 
         $data = new ContactSearchData();
-        $data->setSortBy(ContactSortEnum::NAME_ASC);
-        $paginator = $contactRepository->getUserPaginator($data, $user, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 2);
-        $this->assertSame($paginator->getPagesCount(), 1);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $data->setSortBy(ContactSortEnum::ID_DESC);
 
-        $emails = $this->getContactNames($paginator->getCurrentPageItems());
-        $this->assertSame(['David Smith', 'Jessica Smith'], $emails);
+        $paginator = $contactRepository->getUserPaginator($data, $user, 1, 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $names = $this->getContactNames($paginator->getCurrentPageItems());
+        $this->assertSame(['Jessica Smith', 'David Smith'], $names);
     }
 
-    public function testGetAdminPaginatorSortByNameDesc(): void
+    public function testGetUserPaginatorSortByIdAsc(): void
     {
         $contactRepository = $this->getContactRepository();
         $userRepository = $this->getUserRepository();
         $user = $userRepository->findOneByEmail('david@gmail.com');
 
         $data = new ContactSearchData();
-        $data->setSortBy(ContactSortEnum::NAME_DESC);
-        $paginator = $contactRepository->getUserPaginator($data, $user, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 2);
-        $this->assertSame($paginator->getPagesCount(), 1);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $data->setSortBy(ContactSortEnum::ID_ASC);
 
-        $emails = $this->getContactNames($paginator->getCurrentPageItems());
-        $this->assertSame(['Jessica Smith', 'David Smith'], $emails);
+        $paginator = $contactRepository->getUserPaginator($data, $user, 1, 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $names = $this->getContactNames($paginator->getCurrentPageItems());
+        $this->assertSame(['David Smith', 'Jessica Smith'], $names);
     }
 
     private function getContactNames(array $contacts): array

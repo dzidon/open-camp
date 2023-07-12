@@ -2,11 +2,10 @@
 
 namespace App\Form\DataTransfer\Data\Admin;
 
-use App\Form\Type\Admin\RepeatedPasswordType;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * See {@link RepeatedPasswordType}
+ * @inheritDoc
  */
 class PlainPasswordData implements PlainPasswordDataInterface
 {

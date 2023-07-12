@@ -3,15 +3,14 @@
 namespace App\Form\DataTransfer\Data\Admin;
 
 use App\Form\DataTransfer\Data\User\BillingData;
-use App\Form\Type\Admin\UserType;
 use App\Model\Entity\Role;
-use App\Validator as CustomAssert;
+use App\Validator\Constraint as CustomAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * See {@link UserType}
+ * @inheritDoc
  */
-#[CustomAssert\UniqueUserData]
+#[CustomAssert\UniqueUser]
 class UserData implements UserDataInterface
 {
     /** @var int|null Used for the unique constraint. */
@@ -20,7 +19,7 @@ class UserData implements UserDataInterface
     #[Assert\Length(max: 180)]
     #[Assert\Email]
     #[Assert\NotBlank]
-    private string $email = '';
+    private ?string $email = null;
 
     private ?Role $role = null;
 
@@ -44,14 +43,14 @@ class UserData implements UserDataInterface
         return $this;
     }
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
     public function setEmail(?string $email): self
     {
-        $this->email = (string) $email;
+        $this->email = $email;
 
         return $this;
     }

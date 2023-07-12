@@ -61,16 +61,16 @@ class UserPasswordChangeRepository extends AbstractRepository implements UserPas
      */
     public function findOneBySelector(string $selector, ?bool $active = null): ?UserPasswordChange
     {
-        $queryBuilder = $this->createQueryBuilder('upc');
+        $queryBuilder = $this->createQueryBuilder('userPasswordChange');
         if ($active !== null)
         {
             $this->addActiveCondition($queryBuilder, $active);
         }
 
         return $queryBuilder
-            ->select('upc, u')
-            ->leftJoin('upc.user', 'u')
-            ->andWhere('upc.selector = :selector')
+            ->select('userPasswordChange, userPasswordChangeUser')
+            ->leftJoin('userPasswordChange.user', 'userPasswordChangeUser')
+            ->andWhere('userPasswordChange.selector = :selector')
             ->setParameter('selector', $selector)
             ->getQuery()
             ->getOneOrNullResult()
@@ -82,16 +82,16 @@ class UserPasswordChangeRepository extends AbstractRepository implements UserPas
      */
     public function findByUser(User $user, ?bool $active = null): array
     {
-        $queryBuilder = $this->createQueryBuilder('upc');
+        $queryBuilder = $this->createQueryBuilder('userPasswordChange');
         if ($active !== null)
         {
             $this->addActiveCondition($queryBuilder, $active);
         }
 
         return $queryBuilder
-            ->select('upc, u')
-            ->leftJoin('upc.user', 'u')
-            ->andWhere('upc.user = :user')
+            ->select('userPasswordChange, userPasswordChangeUser')
+            ->leftJoin('userPasswordChange.user', 'userPasswordChangeUser')
+            ->andWhere('userPasswordChange.user = :user')
             ->setParameter('user', $user)
             ->getQuery()
             ->getResult()
@@ -111,18 +111,18 @@ class UserPasswordChangeRepository extends AbstractRepository implements UserPas
         if ($positive)
         {
             $queryBuilder
-                ->andWhere('upc.user IS NOT NULL')
-                ->andWhere(':now < upc.expireAt')
-                ->andWhere('upc.state = :unusedState')
+                ->andWhere('userPasswordChange.user IS NOT NULL')
+                ->andWhere(':now < userPasswordChange.expireAt')
+                ->andWhere('userPasswordChange.state = :unusedState')
             ;
         }
         // is not active
         else
         {
             $queryBuilder
-                ->orWhere('upc.user IS NULL')
-                ->orWhere('NOT (:now < upc.expireAt)')
-                ->orWhere('NOT (upc.state = :unusedState)')
+                ->orWhere('userPasswordChange.user IS NULL')
+                ->orWhere('NOT (:now < userPasswordChange.expireAt)')
+                ->orWhere('NOT (userPasswordChange.state = :unusedState)')
             ;
         }
 

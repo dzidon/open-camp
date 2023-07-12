@@ -10,25 +10,25 @@ class LoginDataTest extends TestCase
     public function testEmail(): void
     {
         $data = new LoginData();
-        $this->assertSame('', $data->getEmail());
-
-        $data->setEmail(null);
-        $this->assertSame('', $data->getEmail());
+        $this->assertNull($data->getEmail());
 
         $data->setEmail('text');
         $this->assertSame('text', $data->getEmail());
+
+        $data->setEmail(null);
+        $this->assertNull($data->getEmail());
     }
 
     public function testPassword(): void
     {
         $data = new LoginData();
-        $this->assertSame('', $data->getPassword());
-
-        $data->setPassword(null);
-        $this->assertSame('', $data->getPassword());
+        $this->assertNull($data->getPassword());
 
         $data->setPassword('text');
         $this->assertSame('text', $data->getPassword());
+
+        $data->setPassword(null);
+        $this->assertNull($data->getPassword());
     }
 
     public function testRememberMe(): void

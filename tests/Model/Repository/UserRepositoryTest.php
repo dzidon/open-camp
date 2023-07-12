@@ -106,10 +106,10 @@ class UserRepositoryTest extends KernelTestCase
 
         $data = new UserSearchData();
         $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 5);
-        $this->assertSame($paginator->getPagesCount(), 3);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(5, $paginator->getTotalItems());
+        $this->assertSame(3, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
         $this->assertSame(['mark@gmail.com', 'xena@gmail.com'], $emails);
@@ -123,10 +123,10 @@ class UserRepositoryTest extends KernelTestCase
         $data->setPhrase('xena');
 
         $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 1);
-        $this->assertSame($paginator->getPagesCount(), 1);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
         $this->assertSame(['xena@gmail.com'], $emails);
@@ -140,10 +140,10 @@ class UserRepositoryTest extends KernelTestCase
         $data->setPhrase('David Smi');
 
         $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 1);
-        $this->assertSame($paginator->getPagesCount(), 1);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $emails = $this->getUserNames($paginator->getCurrentPageItems());
         $this->assertSame(['David Smith'], $emails);
@@ -157,10 +157,10 @@ class UserRepositoryTest extends KernelTestCase
         $data->setSortBy(UserSortEnum::ID_DESC);
 
         $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 5);
-        $this->assertSame($paginator->getPagesCount(), 3);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(5, $paginator->getTotalItems());
+        $this->assertSame(3, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
         $this->assertSame(['mark@gmail.com', 'xena@gmail.com'], $emails);
@@ -174,10 +174,10 @@ class UserRepositoryTest extends KernelTestCase
         $data->setSortBy(UserSortEnum::ID_ASC);
 
         $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 5);
-        $this->assertSame($paginator->getPagesCount(), 3);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(5, $paginator->getTotalItems());
+        $this->assertSame(3, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
         $this->assertSame(['david@gmail.com', 'kate@gmail.com'], $emails);
@@ -191,10 +191,10 @@ class UserRepositoryTest extends KernelTestCase
         $data->setSortBy(UserSortEnum::EMAIL_ASC);
 
         $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 5);
-        $this->assertSame($paginator->getPagesCount(), 3);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(5, $paginator->getTotalItems());
+        $this->assertSame(3, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
         $this->assertSame(['david@gmail.com', 'jeff@gmail.com'], $emails);
@@ -208,10 +208,10 @@ class UserRepositoryTest extends KernelTestCase
         $data->setSortBy(UserSortEnum::EMAIL_DESC);
 
         $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 5);
-        $this->assertSame($paginator->getPagesCount(), 3);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(5, $paginator->getTotalItems());
+        $this->assertSame(3, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
         $this->assertSame(['xena@gmail.com', 'mark@gmail.com'], $emails);
@@ -229,10 +229,10 @@ class UserRepositoryTest extends KernelTestCase
         $data->setRole($role);
 
         $paginator = $userRepository->getAdminPaginator($data, 1, 2);
-        $this->assertSame($paginator->getTotalItems(), 1);
-        $this->assertSame($paginator->getPagesCount(), 1);
-        $this->assertSame($paginator->getCurrentPage(), 1);
-        $this->assertSame($paginator->getPageSize(), 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
         $this->assertSame(['david@gmail.com'], $emails);

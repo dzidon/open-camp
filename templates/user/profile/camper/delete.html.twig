@@ -1,0 +1,11 @@
+{% extends "user/profile/base.html.twig" %}
+
+{% block profile_content %}
+    <div class="row">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            <p>{{ 'crud.confirmation.camper_delete'|trans({'name': camper.name}) }}</p>
+
+            {{ form(form_delete) }}
+        </div>
+    </div>
+{% endblock %}

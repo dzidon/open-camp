@@ -2,32 +2,31 @@
 
 namespace App\Form\DataTransfer\Data\Admin;
 
-use App\Form\Type\Admin\RoleType;
 use App\Model\Entity\Permission;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * See {@link RoleType}
+ * @inheritDoc
  */
 class RoleData implements RoleDataInterface
 {
     #[Assert\Length(max: 64)]
     #[Assert\NotBlank]
-    private string $label = '';
+    private ?string $label = null;
 
     /**
      * @var Permission[]
      */
     private iterable $permissions = [];
 
-    public function getLabel(): string
+    public function getLabel(): ?string
     {
         return $this->label;
     }
 
     public function setLabel(?string $label): self
     {
-        $this->label = (string) $label;
+        $this->label = $label;
 
         return $this;
     }

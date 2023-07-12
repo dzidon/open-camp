@@ -32,7 +32,7 @@ class UserRegistererTest extends KernelTestCase
         $this->assertTrue($valid);
 
         $registration = $registrationRepository->findOneBySelector('max');
-        $this->assertSame(UserRegistrationStateEnum::USED->value, $registration->getState());
+        $this->assertSame(UserRegistrationStateEnum::USED, $registration->getState());
     }
 
     public function testCompleteUserRegistrationIfMultipleActiveExistForEmail(): void
@@ -47,8 +47,8 @@ class UserRegistererTest extends KernelTestCase
 
         $registration1 = $registrationRepository->findOneBySelector('ro1');
         $registration2 = $registrationRepository->findOneBySelector('ro2');
-        $this->assertSame(UserRegistrationStateEnum::USED->value, $registration1->getState());
-        $this->assertSame(UserRegistrationStateEnum::DISABLED->value, $registration2->getState());
+        $this->assertSame(UserRegistrationStateEnum::USED, $registration1->getState());
+        $this->assertSame(UserRegistrationStateEnum::DISABLED, $registration2->getState());
     }
 
     public function testCompleteUserRegistrationIfOneIsTimeExpired(): void
@@ -63,8 +63,8 @@ class UserRegistererTest extends KernelTestCase
 
         $registration1 = $registrationRepository->findOneBySelector('lu1');
         $registration2 = $registrationRepository->findOneBySelector('lu2');
-        $this->assertSame(UserRegistrationStateEnum::USED->value, $registration1->getState());
-        $this->assertSame(UserRegistrationStateEnum::UNUSED->value, $registration2->getState());
+        $this->assertSame(UserRegistrationStateEnum::USED, $registration1->getState());
+        $this->assertSame(UserRegistrationStateEnum::UNUSED, $registration2->getState());
     }
 
     public function testCompleteUserRegistrationIfOneIsDisabled(): void
@@ -79,8 +79,8 @@ class UserRegistererTest extends KernelTestCase
 
         $registration1 = $registrationRepository->findOneBySelector('ti1');
         $registration2 = $registrationRepository->findOneBySelector('ti2');
-        $this->assertSame(UserRegistrationStateEnum::USED->value, $registration1->getState());
-        $this->assertSame(UserRegistrationStateEnum::DISABLED->value, $registration2->getState());
+        $this->assertSame(UserRegistrationStateEnum::USED, $registration1->getState());
+        $this->assertSame(UserRegistrationStateEnum::DISABLED, $registration2->getState());
     }
 
     public function testCompleteUserRegistrationIfOneIsUsed(): void
@@ -95,8 +95,8 @@ class UserRegistererTest extends KernelTestCase
 
         $registration1 = $registrationRepository->findOneBySelector('al1');
         $registration2 = $registrationRepository->findOneBySelector('al2');
-        $this->assertSame(UserRegistrationStateEnum::USED->value, $registration1->getState());
-        $this->assertSame(UserRegistrationStateEnum::USED->value, $registration2->getState());
+        $this->assertSame(UserRegistrationStateEnum::USED, $registration1->getState());
+        $this->assertSame(UserRegistrationStateEnum::USED, $registration2->getState());
     }
 
     public function testCompleteUserRegistrationIfEmailIsRegistered(): void
@@ -109,8 +109,8 @@ class UserRegistererTest extends KernelTestCase
 
         $registration1 = $registrationRepository->findOneBySelector('ka1');
         $registration2 = $registrationRepository->findOneBySelector('ka2');
-        $this->assertSame(UserRegistrationStateEnum::DISABLED->value, $registration1->getState());
-        $this->assertSame(UserRegistrationStateEnum::DISABLED->value, $registration2->getState());
+        $this->assertSame(UserRegistrationStateEnum::DISABLED, $registration1->getState());
+        $this->assertSame(UserRegistrationStateEnum::DISABLED, $registration2->getState());
     }
 
     public function testCompleteUserRegistrationIfItsInactive(): void
@@ -129,9 +129,9 @@ class UserRegistererTest extends KernelTestCase
         $registration2 = $registrationRepository->findOneBySelector('ti2');
         $registration3 = $registrationRepository->findOneBySelector('al2');
 
-        $this->assertSame(UserRegistrationStateEnum::UNUSED->value, $registration1->getState());
-        $this->assertSame(UserRegistrationStateEnum::DISABLED->value, $registration2->getState());
-        $this->assertSame(UserRegistrationStateEnum::USED->value, $registration3->getState());
+        $this->assertSame(UserRegistrationStateEnum::UNUSED, $registration1->getState());
+        $this->assertSame(UserRegistrationStateEnum::DISABLED, $registration2->getState());
+        $this->assertSame(UserRegistrationStateEnum::USED, $registration3->getState());
     }
 
     private function getUserRegistrationRepository(): UserRegistrationRepositoryInterface

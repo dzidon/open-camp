@@ -12,13 +12,13 @@ class ContactDataTest extends KernelTestCase
     public function testName(): void
     {
         $data = new ContactData();
-        $this->assertSame('', $data->getName());
-
-        $data->setName(null);
-        $this->assertSame('', $data->getName());
+        $this->assertNull($data->getName());
 
         $data->setName('text');
         $this->assertSame('text', $data->getName());
+
+        $data->setName(null);
+        $this->assertNull($data->getName());
     }
 
     public function testNameValidation(): void
@@ -26,6 +26,10 @@ class ContactDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new ContactData();
+        $result = $validator->validateProperty($data, 'name');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setName('');
         $result = $validator->validateProperty($data, 'name');
         $this->assertNotEmpty($result); // invalid
 
@@ -45,13 +49,13 @@ class ContactDataTest extends KernelTestCase
     public function testEmail(): void
     {
         $data = new ContactData();
-        $this->assertSame('', $data->getEmail());
-
-        $data->setEmail(null);
-        $this->assertSame('', $data->getEmail());
+        $this->assertNull($data->getEmail());
 
         $data->setEmail('text');
         $this->assertSame('text', $data->getEmail());
+
+        $data->setEmail(null);
+        $this->assertNull($data->getEmail());
     }
 
     public function testEmailValidation(): void
@@ -59,6 +63,10 @@ class ContactDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new ContactData();
+        $result = $validator->validateProperty($data, 'email');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setEmail('');
         $result = $validator->validateProperty($data, 'email');
         $this->assertNotEmpty($result); // invalid
 
@@ -86,18 +94,14 @@ class ContactDataTest extends KernelTestCase
     public function testPhoneNumber(): void
     {
         $data = new ContactData();
-        $phoneNumber = $data->getPhoneNumber();
-        $this->assertNull($phoneNumber->getCountryCode());
-        $this->assertNull($phoneNumber->getNationalNumber());
-
-        $data->setPhoneNumber(null);
-        $phoneNumber = $data->getPhoneNumber();
-        $this->assertNull($phoneNumber->getCountryCode());
-        $this->assertNull($phoneNumber->getNationalNumber());
+        $this->assertNull($data->getPhoneNumber());
 
         $phoneNumber = new PhoneNumber();
         $data->setPhoneNumber($phoneNumber);
         $this->assertSame($phoneNumber, $data->getPhoneNumber());
+
+        $data->setPhoneNumber(null);
+        $this->assertNull($data->getPhoneNumber());
     }
 
     public function testPhoneNumberValidation(): void

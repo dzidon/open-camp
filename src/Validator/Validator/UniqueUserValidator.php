@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Validator;
+namespace App\Validator\Validator;
 
 use App\Model\Repository\UserRepositoryInterface;
+use App\Validator\Constraint\UniqueUser;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -12,7 +13,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Validates that the entered e-mail is not yet registered.
  */
-class UniqueUserDataValidator extends ConstraintValidator
+class UniqueUserValidator extends ConstraintValidator
 {
     private PropertyAccessorInterface $propertyAccessor;
     private UserRepositoryInterface $userRepository;
@@ -39,12 +40,18 @@ class UniqueUserDataValidator extends ConstraintValidator
 
         $userData = $value;
 
-        if (!$constraint instanceof UniqueUserData)
+        if (!$constraint instanceof UniqueUser)
         {
-            throw new UnexpectedValueException($constraint, UniqueUserData::class);
+            throw new UnexpectedValueException($constraint, UniqueUser::class);
         }
 
         $email = $this->propertyAccessor->getValue($userData, $constraint->emailProperty);
+
+        if ($email === null || $email === '')
+        {
+            return;
+        }
+
         $id = $this->propertyAccessor->getValue($userData, $constraint->idProperty);
         $existingUser = $this->userRepository->findOneByEmail($email);
 
@@ -62,7 +69,7 @@ class UniqueUserDataValidator extends ConstraintValidator
 
             $this->context
                 ->buildViolation($message)
-                ->atPath('email')
+                ->atPath($constraint->emailProperty)
                 ->addViolation()
             ;
         }

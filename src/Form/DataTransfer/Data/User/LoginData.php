@@ -2,39 +2,37 @@
 
 namespace App\Form\DataTransfer\Data\User;
 
-use App\Form\Type\User\LoginType;
-
 /**
- * See {@link LoginType}
+ * @inheritDoc
  */
 class LoginData implements LoginDataInterface
 {
-    private string $email = '';
+    private ?string $email = null;
 
-    private string $password = '';
+    private ?string $password = null;
 
     private bool $rememberMe = false;
 
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
     public function setEmail(?string $email): self
     {
-        $this->email = (string) $email;
+        $this->email = $email;
 
         return $this;
     }
 
-    public function getPassword(): string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
     public function setPassword(?string $password): self
     {
-        $this->password = (string) $password;
+        $this->password = $password;
 
         return $this;
     }

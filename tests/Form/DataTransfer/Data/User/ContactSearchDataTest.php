@@ -23,12 +23,12 @@ class ContactSearchDataTest extends TestCase
     public function testSortBy(): void
     {
         $data = new ContactSearchData();
-        $this->assertSame(ContactSortEnum::NAME_ASC, $data->getSortBy());
+        $this->assertSame(ContactSortEnum::ID_DESC, $data->getSortBy());
 
         $data->setSortBy(null);
-        $this->assertSame(ContactSortEnum::NAME_ASC, $data->getSortBy());
+        $this->assertSame(ContactSortEnum::ID_DESC, $data->getSortBy());
 
-        $data->setSortBy(ContactSortEnum::NAME_DESC);
-        $this->assertSame(ContactSortEnum::NAME_DESC, $data->getSortBy());
+        $data->setSortBy(ContactSortEnum::ID_ASC);
+        $this->assertSame(ContactSortEnum::ID_ASC, $data->getSortBy());
     }
 }
