@@ -18,6 +18,8 @@ class ContactDataTransferTest extends KernelTestCase
         $expectedName = 'Name';
         $expectedEmail = 'test@test.com';
         $expectedPhoneNumber = new PhoneNumber();
+        $expectedPhoneNumber->setCountryCode(420);
+        $expectedPhoneNumber->setNationalNumber('724888999');
 
         $user = new User('bob@gmail.com');
         $contact = new Contact($expectedName, $expectedEmail, $expectedPhoneNumber, $user);
@@ -27,7 +29,10 @@ class ContactDataTransferTest extends KernelTestCase
 
         $this->assertSame($expectedName, $data->getName());
         $this->assertSame($expectedEmail, $data->getEmail());
-        $this->assertSame($expectedPhoneNumber, $data->getPhoneNumber());
+
+        $phoneNumber = $data->getPhoneNumber();
+        $this->assertSame(420, $phoneNumber->getCountryCode());
+        $this->assertSame('724888999', $phoneNumber->getNationalNumber());
     }
 
     public function testFillEntity(): void
@@ -37,6 +42,8 @@ class ContactDataTransferTest extends KernelTestCase
         $expectedName = 'Name';
         $expectedEmail = 'test@test.com';
         $expectedPhoneNumber = new PhoneNumber();
+        $expectedPhoneNumber->setCountryCode(420);
+        $expectedPhoneNumber->setNationalNumber('724888999');
 
         $user = new User('bob@gmail.com');
         $contact = new Contact('', '', new PhoneNumber(), $user);
@@ -50,7 +57,10 @@ class ContactDataTransferTest extends KernelTestCase
 
         $this->assertSame($expectedName, $contact->getName());
         $this->assertSame($expectedEmail, $contact->getEmail());
-        $this->assertSame($expectedPhoneNumber, $contact->getPhoneNumber());
+
+        $phoneNumber = $contact->getPhoneNumber();
+        $this->assertSame(420, $phoneNumber->getCountryCode());
+        $this->assertSame('724888999', $phoneNumber->getNationalNumber());
     }
 
     private function getContactDataTransfer(): ContactDataTransfer

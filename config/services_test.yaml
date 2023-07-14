@@ -12,6 +12,7 @@ parameters:
         en: 'English'
         cs: 'Čeština'
         de: 'Deutsch'
+
     app.phone_number_default_locale: 'CZ'
     app.phone_number_format: 1
 

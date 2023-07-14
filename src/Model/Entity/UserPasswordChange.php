@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Enum\Entity\UserPasswordChangeStateEnum;
+use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\UserPasswordChangeRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -38,12 +39,20 @@ class UserPasswordChange
     #[ORM\Column(length: 255)]
     private string $verifier;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private DateTimeImmutable $createdAt;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
+    private ?DateTimeImmutable $updatedAt = null;
+
     public function __construct(DateTimeImmutable $expireAt, string $selector, string $verifier)
     {
         $this->expireAt = $expireAt;
         $this->selector = $selector;
         $this->verifier = $verifier;
         $this->state = UserPasswordChangeStateEnum::UNUSED->value;
+        $this->createdAt = new DateTimeImmutable('now');
     }
 
     public function getId(): ?int
@@ -121,5 +130,15 @@ class UserPasswordChange
         $this->verifier = $verifier;
 
         return $this;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 }

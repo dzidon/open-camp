@@ -11,7 +11,7 @@ class CamperSearchData implements CamperSearchDataInterface
 {
     private string $phrase = '';
 
-    private CamperSortEnum $sortBy = CamperSortEnum::ID_DESC;
+    private CamperSortEnum $sortBy = CamperSortEnum::CREATED_AT_DESC;
 
     public function getPhrase(): string
     {
@@ -34,7 +34,7 @@ class CamperSearchData implements CamperSearchDataInterface
     {
         if ($sortBy === null)
         {
-            $sortBy = CamperSortEnum::ID_DESC;
+            $sortBy = CamperSortEnum::CREATED_AT_DESC;
         }
 
         $this->sortBy = $sortBy;

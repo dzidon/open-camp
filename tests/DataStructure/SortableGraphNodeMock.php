@@ -4,7 +4,6 @@ namespace App\Tests\DataStructure;
 
 use App\DataStructure\GraphNodeInterface;
 use App\DataStructure\SortableGraphNodeInterface;
-use App\Tests\DataStructure\GraphNodeMock;
 use LogicException;
 
 /**

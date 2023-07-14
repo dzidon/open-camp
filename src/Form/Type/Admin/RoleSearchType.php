@@ -29,8 +29,8 @@ class RoleSearchType extends AbstractType
                 'class'        => RoleSortEnum::class,
                 'label'        => 'form.admin.role_search.sort_by.label',
                 'choice_label' => fn ($choice) => match ($choice) {
-                    RoleSortEnum::ID_DESC => 'form.admin.role_search.sort_by.options.id_desc',
-                    RoleSortEnum::ID_ASC  => 'form.admin.role_search.sort_by.options.id_asc',
+                    RoleSortEnum::CREATED_AT_DESC => 'form.admin.role_search.sort_by.options.created_at_desc',
+                    RoleSortEnum::CREATED_AT_ASC  => 'form.admin.role_search.sort_by.options.created_at_asc',
                 },
             ])
         ;

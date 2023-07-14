@@ -4,20 +4,19 @@ namespace App\Tests\Model\Entity;
 
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
-use libphonenumber\PhoneNumberFormat;
-use libphonenumber\PhoneNumberUtil;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use libphonenumber\PhoneNumber;
+use PHPUnit\Framework\TestCase;
 
-class ContactTest extends KernelTestCase
+class ContactTest extends TestCase
 {
     private const NAME = 'Test Contact';
     private const EMAIL = 'test@gmail.com';
-    private const PHONE_NUMBER = '+420 724 888 999';
+    private const PHONE_NUMBER_COUNTRY_CODE = 420;
+    private const PHONE_NUMBER_NATIONAL_NUMBER = '724888999';
 
+    private PhoneNumber $phoneNumber;
     private Contact $contact;
     private User $user;
-
-    private PhoneNumberUtil $phoneNumberUtil;
 
     public function testUser(): void
     {
@@ -49,29 +48,28 @@ class ContactTest extends KernelTestCase
 
     public function testPhoneNumber(): void
     {
-        $phoneNumber = $this->contact->getPhoneNumber();
-        $phoneNumberString = $this->phoneNumberUtil->format($phoneNumber, PhoneNumberFormat::INTERNATIONAL);
-        $this->assertSame(self::PHONE_NUMBER, $phoneNumberString);
+        $this->assertNotSame($this->phoneNumber, $this->contact->getPhoneNumber());
+        $this->assertSame(self::PHONE_NUMBER_COUNTRY_CODE, $this->contact->getPhoneNumber()->getCountryCode());
+        $this->assertSame(self::PHONE_NUMBER_NATIONAL_NUMBER, $this->contact->getPhoneNumber()->getNationalNumber());
 
-        $newExpectedPhoneNumber = '+420 607 555 666';
-        $newPhoneNumber = $this->phoneNumberUtil->parse($newExpectedPhoneNumber);
-        $this->contact->setPhoneNumber($newPhoneNumber);
-        $phoneNumber = $this->contact->getPhoneNumber();
-        $phoneNumberString = $this->phoneNumberUtil->format($phoneNumber, PhoneNumberFormat::INTERNATIONAL);
-        $this->assertSame($newExpectedPhoneNumber, $phoneNumberString);
+        $phoneNumber = new PhoneNumber();
+        $phoneNumber->setCountryCode(421);
+        $phoneNumber->setNationalNumber('605222333');
+
+        $this->contact->setPhoneNumber($phoneNumber);
+
+        $this->assertNotSame($phoneNumber, $this->contact->getPhoneNumber());
+        $this->assertSame(421, $this->contact->getPhoneNumber()->getCountryCode());
+        $this->assertSame('605222333', $this->contact->getPhoneNumber()->getNationalNumber());
     }
 
     protected function setUp(): void
     {
-        $container = static::getContainer();
-
-        /** @var PhoneNumberUtil $phoneNumberUtil */
-        $phoneNumberUtil = $container->get(PhoneNumberUtil::class);
-        $this->phoneNumberUtil = $phoneNumberUtil;
-
-        $phoneNumber = $this->phoneNumberUtil->parse(self::PHONE_NUMBER);
+        $this->phoneNumber = new PhoneNumber();
+        $this->phoneNumber->setCountryCode(self::PHONE_NUMBER_COUNTRY_CODE);
+        $this->phoneNumber->setNationalNumber(self::PHONE_NUMBER_NATIONAL_NUMBER);
 
         $this->user = new User('user@test.com');
-        $this->contact = new Contact(self::NAME, self::EMAIL, $phoneNumber, $this->user);
+        $this->contact = new Contact(self::NAME, self::EMAIL, $this->phoneNumber, $this->user);
     }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Model\Entity;
 
+use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\UserRepository;
+use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -43,9 +46,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 2, nullable: true)]
     private ?string $country = null;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private DateTimeImmutable $createdAt;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
+    private ?DateTimeImmutable $updatedAt = null;
+
     public function __construct(string $email)
     {
         $this->email = $email;
+        $this->createdAt = new DateTimeImmutable('now');
     }
 
     public function getId(): ?int
@@ -212,5 +223,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->country = $country;
 
         return $this;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 }

@@ -11,8 +11,8 @@ enum UserSortEnum: string
 {
     use SortEnumTrait;
 
-    case ID_DESC = 'id DESC';
-    case ID_ASC = 'id ASC';
+    case CREATED_AT_DESC = 'createdAt DESC';
+    case CREATED_AT_ASC = 'createdAt ASC';
     case EMAIL_ASC = 'email ASC';
     case EMAIL_DESC = 'email DESC';
     case NAME_ASC = 'name ASC';

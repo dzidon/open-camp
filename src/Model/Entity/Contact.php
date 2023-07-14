@@ -2,7 +2,10 @@
 
 namespace App\Model\Entity;
 
+use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\ContactRepository;
+use DateTimeImmutable;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use libphonenumber\PhoneNumber;
 
@@ -30,12 +33,20 @@ class Contact
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $user;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private DateTimeImmutable $createdAt;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
+    private ?DateTimeImmutable $updatedAt = null;
+
     public function __construct(string $name, string $email, PhoneNumber $phoneNumber, User $user)
     {
         $this->name = $name;
         $this->email = $email;
-        $this->phoneNumber = $phoneNumber;
+        $this->phoneNumber = clone $phoneNumber;
         $this->user = $user;
+        $this->createdAt = new DateTimeImmutable('now');
     }
 
     public function getId(): ?int
@@ -69,12 +80,17 @@ class Contact
 
     public function getPhoneNumber(): PhoneNumber
     {
-        return $this->phoneNumber;
+        return clone $this->phoneNumber;
     }
 
     public function setPhoneNumber(PhoneNumber $phoneNumber): self
     {
-        $this->phoneNumber = $phoneNumber;
+        if ($this->phoneNumber->equals($phoneNumber))
+        {
+            return $this;
+        }
+
+        $this->phoneNumber = clone $phoneNumber;
 
         return $this;
     }
@@ -89,5 +105,15 @@ class Contact
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 }

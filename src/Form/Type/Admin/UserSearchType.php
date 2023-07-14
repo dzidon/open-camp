@@ -31,12 +31,12 @@ class UserSearchType extends AbstractType
                 'class'        => UserSortEnum::class,
                 'label'        => 'form.admin.user_search.sort_by.label',
                 'choice_label' => fn ($choice) => match ($choice) {
-                    UserSortEnum::ID_DESC    => 'form.admin.user_search.sort_by.options.id_desc',
-                    UserSortEnum::ID_ASC     => 'form.admin.user_search.sort_by.options.id_asc',
-                    UserSortEnum::EMAIL_ASC  => 'form.admin.user_search.sort_by.options.email_asc',
-                    UserSortEnum::EMAIL_DESC => 'form.admin.user_search.sort_by.options.email_desc',
-                    UserSortEnum::NAME_ASC   => 'form.admin.user_search.sort_by.options.name_asc',
-                    UserSortEnum::NAME_DESC  => 'form.admin.user_search.sort_by.options.name_desc',
+                    UserSortEnum::CREATED_AT_DESC => 'form.admin.user_search.sort_by.options.created_at_desc',
+                    UserSortEnum::CREATED_AT_ASC  => 'form.admin.user_search.sort_by.options.created_at_asc',
+                    UserSortEnum::EMAIL_ASC       => 'form.admin.user_search.sort_by.options.email_asc',
+                    UserSortEnum::EMAIL_DESC      => 'form.admin.user_search.sort_by.options.email_desc',
+                    UserSortEnum::NAME_ASC        => 'form.admin.user_search.sort_by.options.name_asc',
+                    UserSortEnum::NAME_DESC       => 'form.admin.user_search.sort_by.options.name_desc',
                 },
             ])
             ->add('role', EntityType::class, [

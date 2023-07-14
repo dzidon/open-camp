@@ -84,12 +84,12 @@ class RoleRepositoryTest extends KernelTestCase
         $this->assertSame(['Super admin'], $labels);
     }
 
-    public function testGetAdminPaginatorSortByIdDesc(): void
+    public function testGetAdminPaginatorSortByCreatedAtDesc(): void
     {
         $roleRepository = $this->getRoleRepository();
 
         $data = new RoleSearchData();
-        $data->setSortBy(RoleSortEnum::ID_DESC);
+        $data->setSortBy(RoleSortEnum::CREATED_AT_DESC);
 
         $paginator = $roleRepository->getAdminPaginator($data, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());
@@ -101,12 +101,12 @@ class RoleRepositoryTest extends KernelTestCase
         $this->assertSame(['Admin', 'Super admin'], $labels);
     }
 
-    public function testGetAdminPaginatorSortByIdAsc(): void
+    public function testGetAdminPaginatorSortByCreatedAtAsc(): void
     {
         $roleRepository = $this->getRoleRepository();
 
         $data = new RoleSearchData();
-        $data->setSortBy(RoleSortEnum::ID_ASC);
+        $data->setSortBy(RoleSortEnum::CREATED_AT_ASC);
 
         $paginator = $roleRepository->getAdminPaginator($data, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());

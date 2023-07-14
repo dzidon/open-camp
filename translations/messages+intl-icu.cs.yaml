@@ -247,8 +247,8 @@ form:
             sort_by:
                 label: 'Řazení'
                 options:
-                    id_desc: 'ID (od nejvyššího)'
-                    id_asc: 'ID (od nejnižšího)'
+                    created_at_desc: 'Od nejnovější'
+                    created_at_asc: 'Od nejstarší'
 
             button: 'Hledat'
 
@@ -270,8 +270,8 @@ form:
             sort_by:
                 label: 'Řazení'
                 options:
-                    id_desc: 'ID (od nejvyššího)'
-                    id_asc: 'ID (od nejnižšího)'
+                    created_at_desc: 'Od nejnovějšího'
+                    created_at_asc: 'Od nejstaršího'
                     email_desc: 'E-mail (Z-A)'
                     email_asc: 'E-mail (A-Z)'
                     name_asc: 'Jméno (A-Z)'
@@ -350,8 +350,8 @@ form:
             sort_by:
                 label: 'Řazení'
                 options:
-                    id_asc: 'Od nejstaršího'
-                    id_desc: 'Od nejnovějšího'
+                    created_at_asc: 'Od nejstaršího'
+                    created_at_desc: 'Od nejnovějšího'
 
             button: 'Hledat'
 
@@ -372,8 +372,8 @@ form:
             sort_by:
                 label: 'Řazení'
                 options:
-                    id_asc: 'Od nejstaršího'
-                    id_desc: 'Od nejnovějšího'
+                    created_at_asc: 'Od nejstaršího'
+                    created_at_desc: 'Od nejnovějšího'
 
             button: 'Hledat'
 

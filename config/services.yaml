@@ -52,17 +52,19 @@ services:
     App\:
         resource: '../src/'
         exclude:
+            - '../src/DataStructure/'
             - '../src/DependencyInjection/'
             - '../src/Enum/'
-            - '../src/DataStructure/'
+            - '../src/EventDispatcher/Event/'
             - '../src/Form/DataTransfer/Data/'
             - '../src/Menu/Type/'
-            - '../src/Security/Authentication/Exception/'
-            - '../src/Security/Token/TokenSplit.php'
+            - '../src/Model/Attribute/'
             - '../src/Model/Entity/'
             - '../src/Model/Module/Security/UserRegistration/UserRegistrationResult.php'
             - '../src/Model/Module/Security/UserPasswordChange/UserPasswordChangeResult.php'
             - '../src/Search/Paginator/'
+            - '../src/Security/Authentication/Exception/'
+            - '../src/Security/Token/TokenSplit.php'
             - '../src/Validator/Constraint/'
             - '../src/Kernel.php'
 

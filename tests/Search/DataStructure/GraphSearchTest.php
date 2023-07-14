@@ -181,7 +181,7 @@ class GraphSearchTest extends KernelTestCase
      * Creates a graph node tree structure.
      *
      * @param bool $withCycle
-     * @return \App\Tests\DataStructure\GraphNodeMock
+     * @return GraphNodeMock
      */
     private function createGraphNodeMock(bool $withCycle = false): GraphNodeMock
     {

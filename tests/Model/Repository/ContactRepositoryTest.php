@@ -37,17 +37,28 @@ class ContactRepositoryTest extends KernelTestCase
         $this->assertNull($loadedContact);
     }
 
-    public function testCreate(): void
+    public function testCreateWithPhoneNumberObject(): void
     {
         $repository = $this->getContactRepository();
 
         $phoneNumber = new PhoneNumber();
+        $phoneNumber->setCountryCode(420);
+        $phoneNumber->setNationalNumber('724555666');
+
         $user = new User('bob@bing.com');
         $contact = $repository->createContact('Bob Bobby', 'bob@bing.com', $phoneNumber, $user);
         $this->assertSame('Bob Bobby', $contact->getName());
         $this->assertSame('bob@bing.com', $contact->getEmail());
-        $this->assertSame($phoneNumber, $contact->getPhoneNumber());
         $this->assertSame($user, $contact->getUser());
+
+        $this->assertNotSame($phoneNumber, $contact->getPhoneNumber());
+        $this->assertSame(420, $contact->getPhoneNumber()->getCountryCode());
+        $this->assertSame('724555666', $contact->getPhoneNumber()->getNationalNumber());
+    }
+
+    public function testCreateWithPhoneNumberString(): void
+    {
+        $repository = $this->getContactRepository();
 
         $user = new User('bob@bing.com');
         $contact = $repository->createContact('Bob Bobby', 'bob@bing.com', '+420607555666', $user);
@@ -55,9 +66,8 @@ class ContactRepositoryTest extends KernelTestCase
         $this->assertSame('bob@bing.com', $contact->getEmail());
         $this->assertSame($user, $contact->getUser());
 
-        $phoneNumber = $contact->getPhoneNumber();
-        $this->assertSame(420, $phoneNumber->getCountryCode());
-        $this->assertSame('607555666', $phoneNumber->getNationalNumber());
+        $this->assertSame(420, $contact->getPhoneNumber()->getCountryCode());
+        $this->assertSame('607555666', $contact->getPhoneNumber()->getNationalNumber());
     }
 
     public function testFindOneById(): void
@@ -117,14 +127,14 @@ class ContactRepositoryTest extends KernelTestCase
         $this->assertSame(['David Smith'], $names);
     }
 
-    public function testGetUserPaginatorSortByIdDesc(): void
+    public function testGetUserPaginatorSortByCreatedAtDesc(): void
     {
         $contactRepository = $this->getContactRepository();
         $userRepository = $this->getUserRepository();
         $user = $userRepository->findOneByEmail('david@gmail.com');
 
         $data = new ContactSearchData();
-        $data->setSortBy(ContactSortEnum::ID_DESC);
+        $data->setSortBy(ContactSortEnum::CREATED_AT_DESC);
 
         $paginator = $contactRepository->getUserPaginator($data, $user, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());
@@ -136,14 +146,14 @@ class ContactRepositoryTest extends KernelTestCase
         $this->assertSame(['Jessica Smith', 'David Smith'], $names);
     }
 
-    public function testGetUserPaginatorSortByIdAsc(): void
+    public function testGetUserPaginatorSortByCreatedAtAsc(): void
     {
         $contactRepository = $this->getContactRepository();
         $userRepository = $this->getUserRepository();
         $user = $userRepository->findOneByEmail('david@gmail.com');
 
         $data = new ContactSearchData();
-        $data->setSortBy(ContactSortEnum::ID_ASC);
+        $data->setSortBy(ContactSortEnum::CREATED_AT_ASC);
 
         $paginator = $contactRepository->getUserPaginator($data, $user, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());

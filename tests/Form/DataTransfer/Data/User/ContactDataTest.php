@@ -97,8 +97,13 @@ class ContactDataTest extends KernelTestCase
         $this->assertNull($data->getPhoneNumber());
 
         $phoneNumber = new PhoneNumber();
+        $phoneNumber->setCountryCode(420);
+        $phoneNumber->setNationalNumber('724888999');
+
         $data->setPhoneNumber($phoneNumber);
-        $this->assertSame($phoneNumber, $data->getPhoneNumber());
+        $this->assertNotSame($phoneNumber, $data->getPhoneNumber());
+        $this->assertSame(420, $data->getPhoneNumber()->getCountryCode());
+        $this->assertSame('724888999', $data->getPhoneNumber()->getNationalNumber());
 
         $data->setPhoneNumber(null);
         $this->assertNull($data->getPhoneNumber());

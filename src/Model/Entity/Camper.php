@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Enum\GenderEnum;
+use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\CamperRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -38,12 +39,20 @@ class Camper
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $user;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private DateTimeImmutable $createdAt;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
+    private ?DateTimeImmutable $updatedAt = null;
+
     public function __construct(string $name, GenderEnum $gender, DateTimeImmutable $bornAt, User $user)
     {
         $this->name = $name;
         $this->gender = $gender->value;
         $this->bornAt = $bornAt;
         $this->user = $user;
+        $this->createdAt = new DateTimeImmutable('now');
     }
 
     public function getId(): ?int
@@ -121,5 +130,15 @@ class Camper
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 }

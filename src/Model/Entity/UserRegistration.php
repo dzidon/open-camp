@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Enum\Entity\UserRegistrationStateEnum;
+use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\UserRegistrationRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -37,6 +38,13 @@ class UserRegistration
     #[ORM\Column(length: 255)]
     private string $verifier;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private DateTimeImmutable $createdAt;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
+    private ?DateTimeImmutable $updatedAt = null;
+
     public function __construct(string $email, DateTimeImmutable $expireAt, string $selector, string $verifier)
     {
         $this->email = $email;
@@ -44,6 +52,7 @@ class UserRegistration
         $this->selector = $selector;
         $this->verifier = $verifier;
         $this->state = UserRegistrationStateEnum::UNUSED->value;
+        $this->createdAt = new DateTimeImmutable('now');
     }
 
     public function getId(): ?int
@@ -121,5 +130,15 @@ class UserRegistration
         $this->verifier = $verifier;
 
         return $this;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 }

@@ -50,11 +50,21 @@ class ContactData implements ContactDataInterface
 
     public function getPhoneNumber(): ?PhoneNumber
     {
+        if ($this->phoneNumber !== null)
+        {
+            return clone $this->phoneNumber;
+        }
+
         return $this->phoneNumber;
     }
 
     public function setPhoneNumber(?PhoneNumber $phoneNumber): self
     {
+        if ($phoneNumber !== null)
+        {
+            $phoneNumber = clone $phoneNumber;
+        }
+
         $this->phoneNumber = $phoneNumber;
 
         return $this;

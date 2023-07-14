@@ -23,14 +23,14 @@ class ContactSearchType extends AbstractType
                     'autofocus' => 'autofocus'
                 ],
                 'required' => false,
-                'label' => 'form.user.contact_search.phrase',
+                'label'    => 'form.user.contact_search.phrase',
             ])
             ->add('sortBy', EnumType::class, [
                 'class'        => ContactSortEnum::class,
                 'label'        => 'form.user.contact_search.sort_by.label',
                 'choice_label' => fn ($choice) => match ($choice) {
-                    ContactSortEnum::ID_DESC    => 'form.user.contact_search.sort_by.options.id_desc',
-                    ContactSortEnum::ID_ASC     => 'form.user.contact_search.sort_by.options.id_asc',
+                    ContactSortEnum::CREATED_AT_DESC => 'form.user.contact_search.sort_by.options.created_at_desc',
+                    ContactSortEnum::CREATED_AT_ASC  => 'form.user.contact_search.sort_by.options.created_at_asc',
                 },
             ])
         ;

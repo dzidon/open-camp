@@ -5,7 +5,6 @@ namespace App\Tests\Menu\Breadcrumbs\User;
 use App\Menu\Breadcrumbs\User\LoginBreadcrumbs;
 use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use App\Tests\DataStructure\GraphNodeChildrenIdentifiersTrait;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class LoginBreadcrumbsTest extends KernelTestCase

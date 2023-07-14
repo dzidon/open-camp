@@ -11,7 +11,7 @@ class ContactSearchData implements ContactSearchDataInterface
 {
     private string $phrase = '';
 
-    private ContactSortEnum $sortBy = ContactSortEnum::ID_DESC;
+    private ContactSortEnum $sortBy = ContactSortEnum::CREATED_AT_DESC;
 
     public function getPhrase(): string
     {
@@ -34,7 +34,7 @@ class ContactSearchData implements ContactSearchDataInterface
     {
         if ($sortBy === null)
         {
-            $sortBy = ContactSortEnum::ID_DESC;
+            $sortBy = ContactSortEnum::CREATED_AT_DESC;
         }
 
         $this->sortBy = $sortBy;

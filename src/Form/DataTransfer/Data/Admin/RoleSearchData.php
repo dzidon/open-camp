@@ -11,7 +11,7 @@ class RoleSearchData implements RoleSearchDataInterface
 {
     private string $phrase = '';
 
-    private RoleSortEnum $sortBy = RoleSortEnum::ID_DESC;
+    private RoleSortEnum $sortBy = RoleSortEnum::CREATED_AT_DESC;
 
     public function getPhrase(): string
     {
@@ -34,7 +34,7 @@ class RoleSearchData implements RoleSearchDataInterface
     {
         if ($sortBy === null)
         {
-            $sortBy = RoleSortEnum::ID_DESC;
+            $sortBy = RoleSortEnum::CREATED_AT_DESC;
         }
 
         $this->sortBy = $sortBy;

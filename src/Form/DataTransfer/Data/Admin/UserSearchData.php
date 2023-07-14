@@ -12,7 +12,7 @@ class UserSearchData implements UserSearchDataInterface
 {
     private string $phrase = '';
 
-    private UserSortEnum $sortBy = UserSortEnum::ID_DESC;
+    private UserSortEnum $sortBy = UserSortEnum::CREATED_AT_DESC;
 
     private ?Role $role = null;
 
@@ -37,7 +37,7 @@ class UserSearchData implements UserSearchDataInterface
     {
         if ($sortBy === null)
         {
-            $sortBy = UserSortEnum::ID_DESC;
+            $sortBy = UserSortEnum::CREATED_AT_DESC;
         }
 
         $this->sortBy = $sortBy;

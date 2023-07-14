@@ -149,12 +149,12 @@ class UserRepositoryTest extends KernelTestCase
         $this->assertSame(['David Smith'], $emails);
     }
 
-    public function testGetAdminPaginatorSortByIdDesc(): void
+    public function testGetAdminPaginatorSortByCreatedAtDesc(): void
     {
         $repository = $this->getUserRepository();
 
         $data = new UserSearchData();
-        $data->setSortBy(UserSortEnum::ID_DESC);
+        $data->setSortBy(UserSortEnum::CREATED_AT_DESC);
 
         $paginator = $repository->getAdminPaginator($data, 1, 2);
         $this->assertSame(5, $paginator->getTotalItems());
@@ -166,12 +166,12 @@ class UserRepositoryTest extends KernelTestCase
         $this->assertSame(['mark@gmail.com', 'xena@gmail.com'], $emails);
     }
 
-    public function testGetAdminPaginatorSortByIdAsc(): void
+    public function testGetAdminPaginatorSortByCreatedAtAsc(): void
     {
         $repository = $this->getUserRepository();
 
         $data = new UserSearchData();
-        $data->setSortBy(UserSortEnum::ID_ASC);
+        $data->setSortBy(UserSortEnum::CREATED_AT_ASC);
 
         $paginator = $repository->getAdminPaginator($data, 1, 2);
         $this->assertSame(5, $paginator->getTotalItems());

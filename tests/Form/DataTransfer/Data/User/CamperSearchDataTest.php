@@ -23,12 +23,12 @@ class CamperSearchDataTest extends TestCase
     public function testSortBy(): void
     {
         $data = new CamperSearchData();
-        $this->assertSame(CamperSortEnum::ID_DESC, $data->getSortBy());
+        $this->assertSame(CamperSortEnum::CREATED_AT_DESC, $data->getSortBy());
 
         $data->setSortBy(null);
-        $this->assertSame(CamperSortEnum::ID_DESC, $data->getSortBy());
+        $this->assertSame(CamperSortEnum::CREATED_AT_DESC, $data->getSortBy());
 
-        $data->setSortBy(CamperSortEnum::ID_ASC);
-        $this->assertSame(CamperSortEnum::ID_ASC, $data->getSortBy());
+        $data->setSortBy(CamperSortEnum::CREATED_AT_ASC);
+        $this->assertSame(CamperSortEnum::CREATED_AT_ASC, $data->getSortBy());
     }
 }

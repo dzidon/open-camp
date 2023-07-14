@@ -23,12 +23,12 @@ class RoleSearchDataTest extends TestCase
     public function testSortBy(): void
     {
         $data = new RoleSearchData();
-        $this->assertSame(RoleSortEnum::ID_DESC, $data->getSortBy());
+        $this->assertSame(RoleSortEnum::CREATED_AT_DESC, $data->getSortBy());
 
         $data->setSortBy(null);
-        $this->assertSame(RoleSortEnum::ID_DESC, $data->getSortBy());
+        $this->assertSame(RoleSortEnum::CREATED_AT_DESC, $data->getSortBy());
 
-        $data->setSortBy(RoleSortEnum::ID_ASC);
-        $this->assertSame(RoleSortEnum::ID_ASC, $data->getSortBy());
+        $data->setSortBy(RoleSortEnum::CREATED_AT_ASC);
+        $this->assertSame(RoleSortEnum::CREATED_AT_ASC, $data->getSortBy());
     }
 }

@@ -24,13 +24,13 @@ class UserSearchDataTest extends TestCase
     public function testSortBy(): void
     {
         $data = new UserSearchData();
-        $this->assertSame(UserSortEnum::ID_DESC, $data->getSortBy());
+        $this->assertSame(UserSortEnum::CREATED_AT_DESC, $data->getSortBy());
 
         $data->setSortBy(null);
-        $this->assertSame(UserSortEnum::ID_DESC, $data->getSortBy());
+        $this->assertSame(UserSortEnum::CREATED_AT_DESC, $data->getSortBy());
 
-        $data->setSortBy(UserSortEnum::ID_ASC);
-        $this->assertSame(UserSortEnum::ID_ASC, $data->getSortBy());
+        $data->setSortBy(UserSortEnum::CREATED_AT_ASC);
+        $this->assertSame(UserSortEnum::CREATED_AT_ASC, $data->getSortBy());
     }
 
     public function testRole(): void

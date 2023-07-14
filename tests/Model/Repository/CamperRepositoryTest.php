@@ -105,14 +105,14 @@ class CamperRepositoryTest extends KernelTestCase
         $this->assertSame(['Camper 1'], $names);
     }
 
-    public function testGetUserPaginatorSortByIdDesc(): void
+    public function testGetUserPaginatorSortByCreatedAtDesc(): void
     {
         $camperRepository = $this->getCamperRepository();
         $userRepository = $this->getUserRepository();
         $user = $userRepository->findOneByEmail('david@gmail.com');
 
         $data = new CamperSearchData();
-        $data->setSortBy(CamperSortEnum::ID_DESC);
+        $data->setSortBy(CamperSortEnum::CREATED_AT_DESC);
 
         $paginator = $camperRepository->getUserPaginator($data, $user, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());
@@ -124,14 +124,14 @@ class CamperRepositoryTest extends KernelTestCase
         $this->assertSame(['Camper 2', 'Camper 1'], $names);
     }
 
-    public function testGetUserPaginatorSortByIdAsc(): void
+    public function testGetUserPaginatorSortByCreatedAtAsc(): void
     {
         $camperRepository = $this->getCamperRepository();
         $userRepository = $this->getUserRepository();
         $user = $userRepository->findOneByEmail('david@gmail.com');
 
         $data = new CamperSearchData();
-        $data->setSortBy(CamperSortEnum::ID_ASC);
+        $data->setSortBy(CamperSortEnum::CREATED_AT_ASC);
 
         $paginator = $camperRepository->getUserPaginator($data, $user, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());

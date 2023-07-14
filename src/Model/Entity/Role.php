@@ -2,9 +2,12 @@
 
 namespace App\Model\Entity;
 
+use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\RoleRepository;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -24,10 +27,18 @@ class Role
     #[ORM\ManyToMany(targetEntity: Permission::class)]
     private Collection $permissions;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private DateTimeImmutable $createdAt;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
+    private ?DateTimeImmutable $updatedAt = null;
+
     public function __construct(string $label)
     {
         $this->label = $label;
         $this->permissions = new ArrayCollection();
+        $this->createdAt = new DateTimeImmutable('now');
     }
 
     public function getId(): ?int
@@ -98,5 +109,15 @@ class Role
         $this->permissions->removeElement($permission);
 
         return $this;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 }

@@ -2,7 +2,9 @@
 
 namespace App\Model\Entity;
 
+use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\PermissionRepository;
+use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -30,12 +32,20 @@ class Permission
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private PermissionGroup $group;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private DateTimeImmutable $createdAt;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
+    private ?DateTimeImmutable $updatedAt = null;
+
     public function __construct(string $name, string $label, int $priority, PermissionGroup $group)
     {
         $this->name = $name;
         $this->label = $label;
         $this->priority = $priority;
         $this->group = $group;
+        $this->createdAt = new DateTimeImmutable('now');
     }
 
     public function getId(): ?int
@@ -89,5 +99,15 @@ class Permission
         $this->group = $group;
 
         return $this;
+    }
+
+    public function getCreatedAt(): DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    public function getUpdatedAt(): ?DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 }
