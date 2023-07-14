@@ -5,6 +5,7 @@ namespace App\Tests\Form\DataTransfer\Data\Admin;
 use App\Form\DataTransfer\Data\Admin\RoleData;
 use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
+use App\Model\Repository\RoleRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -47,6 +48,34 @@ class RoleDataTest extends KernelTestCase
         $this->assertNotEmpty($result); // invalid
     }
 
+    public function testUniqueValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new RoleData();
+        $data->setId(null);
+        $data->setLabel('Super admin');
+        $result = $validator->validate($data);
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setId(null);
+        $data->setLabel('text');
+        $result = $validator->validate($data);
+        $this->assertEmpty($result); // valid
+
+        $roleRepository = $this->getRoleRepository();
+        $role = $roleRepository->findOneByLabel('Admin');
+        $data->setId($role->getId());
+        $data->setLabel('Admin');
+        $result = $validator->validate($data);
+        $this->assertEmpty($result); // valid
+
+        $data->setId($role->getId());
+        $data->setLabel('Super admin');
+        $result = $validator->validate($data);
+        $this->assertNotEmpty($result); // invalid
+    }
+
     public function testPermissions(): void
     {
         $data = new RoleData();
@@ -59,6 +88,16 @@ class RoleDataTest extends KernelTestCase
 
         $data->setPermissions($permissions);
         $this->assertSame($permissions, $data->getPermissions());
+    }
+
+    private function getRoleRepository(): RoleRepositoryInterface
+    {
+        $container = static::getContainer();
+
+        /** @var RoleRepositoryInterface $repository */
+        $repository = $container->get(RoleRepositoryInterface::class);
+
+        return $repository;
     }
 
     private function getValidator(): ValidatorInterface

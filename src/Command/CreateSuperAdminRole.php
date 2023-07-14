@@ -33,7 +33,14 @@ class CreateSuperAdminRole extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $permissions = $this->permissionRepository->findAll();
-        $role = new Role('Super admin');
+        $role = $this->roleRepository->findOneByLabel('Super admin');
+        $isRoleNew = false;
+
+        if ($role === null)
+        {
+            $role = new Role('Super admin');
+            $isRoleNew = true;
+        }
 
         foreach ($permissions as $permission)
         {
@@ -41,7 +48,15 @@ class CreateSuperAdminRole extends Command
         }
 
         $this->roleRepository->saveRole($role, true);
-        $output->writeln('Super admin role created.');
+
+        if ($isRoleNew)
+        {
+            $output->writeln('Super admin role created.');
+        }
+        else
+        {
+            $output->writeln('Super admin role already exists, permissions were re-assigned.');
+        }
 
         return Command::SUCCESS;
     }

@@ -57,9 +57,10 @@ class TestFixtures extends Fixture
          */
         $permissionGroup1 = new PermissionGroup('group1', 'Group 1', 100);
         $this->setCreatedAt($permissionGroup1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($permissionGroup1);
+
         $permissionGroup2 = new PermissionGroup('group2', 'Group 2', 200);
         $this->setCreatedAt($permissionGroup2, new DateTimeImmutable('2000-01-02'));
-        $manager->persist($permissionGroup1);
         $manager->persist($permissionGroup2);
 
         /*
@@ -67,15 +68,18 @@ class TestFixtures extends Fixture
          */
         $permission1 = new Permission('permission1', 'Permission 1', 100, $permissionGroup1);
         $this->setCreatedAt($permission1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($permission1);
+
         $permission2 = new Permission('permission2', 'Permission 2', 200, $permissionGroup1);
         $this->setCreatedAt($permission2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($permission2);
+
         $permission3 = new Permission('permission3', 'Permission 3', 300, $permissionGroup2);
         $this->setCreatedAt($permission3, new DateTimeImmutable('2000-01-03'));
+        $manager->persist($permission3);
+
         $permission4 = new Permission('permission4', 'Permission 4', 400, $permissionGroup2);
         $this->setCreatedAt($permission4, new DateTimeImmutable('2000-01-04'));
-        $manager->persist($permission1);
-        $manager->persist($permission2);
-        $manager->persist($permission3);
         $manager->persist($permission4);
 
         /*
@@ -89,12 +93,11 @@ class TestFixtures extends Fixture
             ->addPermission($permission3)
             ->addPermission($permission4)
         ;
+        $manager->persist($role1);
 
         $role2 = new Role('Admin');
         $this->setCreatedAt($role2, new DateTimeImmutable('2000-01-02'));
         $role2->addPermission($permission3);
-
-        $manager->persist($role1);
         $manager->persist($role2);
 
         /*

@@ -66,6 +66,24 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
     /**
      * @inheritDoc
      */
+    public function findOneByLabel(string $label): ?Role
+    {
+        return $this->createQueryBuilder('role')
+            ->select('role, rolePermission, rolePermissionGroup')
+            ->leftJoin('role.permissions', 'rolePermission')
+            ->leftJoin('rolePermission.group', 'rolePermissionGroup')
+            ->andWhere('role.label = :label')
+            ->setParameter('label', $label)
+            ->addOrderBy('rolePermissionGroup.priority', 'ASC')
+            ->addOrderBy('rolePermission.priority', 'ASC')
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getAdminPaginator(RoleSearchDataInterface $data, int $currentPage, int $pageSize): DqlPaginator
     {
         $phrase = $data->getPhrase();

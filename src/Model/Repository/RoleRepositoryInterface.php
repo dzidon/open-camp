@@ -46,6 +46,14 @@ interface RoleRepositoryInterface
     public function findOneById(int $id): ?Role;
 
     /**
+     * Finds one role by label.
+     *
+     * @param string $label
+     * @return Role|null
+     */
+    public function findOneByLabel(string $label): ?Role;
+
+    /**
      * Returns admin role search paginator.
      *
      * @param RoleSearchDataInterface $data

@@ -228,6 +228,7 @@ menu:
 
 constraint:
     unique_user: 'Už existuje uživatel s tímto e-mailem.'
+    unique_role: 'Už existuje role s tímto názvem.'
 
 form:
     common:
