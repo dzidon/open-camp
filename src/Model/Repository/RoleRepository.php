@@ -96,6 +96,6 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
             ->getQuery()
         ;
 
-        return new DqlPaginator(new DoctrinePaginator($query), $currentPage, $pageSize);
+        return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
     }
 }

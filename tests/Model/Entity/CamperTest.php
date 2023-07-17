@@ -81,6 +81,49 @@ class CamperTest extends TestCase
         $this->assertNull($this->camper->getHealthRestrictions());
     }
 
+    public function testSiblings(): void
+    {
+        $this->assertEmpty($this->camper->getSiblings());
+
+        $sibling1Name = 'Sibling 1';
+        $sibling2Name = 'Sibling 2';
+        $sibling1 = new Camper($sibling1Name, GenderEnum::FEMALE, new DateTimeImmutable(), $this->user);
+        $sibling2 = new Camper($sibling2Name, GenderEnum::MALE, new DateTimeImmutable(), $this->user);
+
+        // add
+        $this->camper->addSibling($sibling1);
+        $this->assertSame([$sibling1Name], $this->getSiblingNames($this->camper));
+        $this->assertSame([self::NAME], $this->getSiblingNames($sibling1));
+
+        $this->camper->addSibling($sibling2);
+        $this->assertSame([$sibling1Name, $sibling2Name], $this->getSiblingNames($this->camper));
+        $this->assertSame([self::NAME, $sibling2Name], $this->getSiblingNames($sibling1));
+        $this->assertSame([self::NAME, $sibling1Name], $this->getSiblingNames($sibling2));
+
+        // remove
+        $this->camper->removeSibling($sibling2);
+        $this->assertEmpty($this->getSiblingNames($sibling2));
+        $this->assertSame([$sibling1Name], $this->getSiblingNames($this->camper));
+        $this->assertSame([self::NAME], $this->getSiblingNames($sibling1));
+
+        $this->camper->removeSibling($sibling1);
+        $this->assertEmpty($this->getSiblingNames($sibling2));
+        $this->assertEmpty($this->getSiblingNames($this->camper));
+        $this->assertEmpty($this->getSiblingNames($sibling1));
+    }
+
+    public function getSiblingNames(Camper $camper): array
+    {
+        $names = [];
+
+        foreach ($camper->getSiblings() as $sibling)
+        {
+            $names[] = $sibling->getName();
+        }
+
+        return $names;
+    }
+
     protected function setUp(): void
     {
         $this->user = new User('bob@gmail.com');

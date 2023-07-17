@@ -42,22 +42,22 @@ class RoleType extends AbstractType
                 'choices'       => $options['choices_permissions'],
                 'query_builder' => function (EntityRepository $er) {
                     return $er
-                        ->createQueryBuilder('p')
-                        ->select('p, pg')
-                        ->leftJoin('p.group', 'pg')
-                        ->addOrderBy('pg.priority', 'ASC')
-                        ->addOrderBy('p.priority', 'ASC')
+                        ->createQueryBuilder('permission')
+                        ->select('permission, permissionGroup')
+                        ->leftJoin('permission.group', 'permissionGroup')
+                        ->addOrderBy('permissionGroup.priority', 'ASC')
+                        ->addOrderBy('permission.priority', 'ASC')
                     ;
                 },
-                'group_by'      => function (Permission $permission) {
+                'group_by' => function (Permission $permission) {
                     $group = $permission->getPermissionGroup();
                     $label = $group->getLabel();
                     return $this->translator->trans($label);
                 },
-                'multiple'      => true,
-                'expanded'      => true,
-                'required'      => false,
-                'label'         => 'form.admin.role.permissions',
+                'multiple' => true,
+                'expanded' => true,
+                'required' => false,
+                'label'    => 'form.admin.role.permissions',
             ])
         ;
     }

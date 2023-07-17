@@ -158,7 +158,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
 
         $query = $queryBuilder->getQuery();
 
-        return new DqlPaginator(new DoctrinePaginator($query), $currentPage, $pageSize);
+        return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
     }
 
     /**

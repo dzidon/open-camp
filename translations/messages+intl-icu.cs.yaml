@@ -148,6 +148,7 @@ entity_attribute:
         born_at: 'Datum narození'
         dietary_restrictions: 'Dietní omezení'
         health_restrictions: 'Zdravotní omezení'
+        siblings: 'Sourozenci'
         user: 'Uživatel'
 
     permission:
@@ -235,9 +236,9 @@ form:
         choice:
             irrelevant: '-- nezáleží --'
             none:
-                male: 'Žádný'
-                female: 'Žádná'
-                neutral: 'Žádné'
+                male: '-- žádný --'
+                female: '-- žádná --'
+                neutral: '-- žádné --'
 
         collection:
             remove: 'Odebrat'
@@ -363,6 +364,7 @@ form:
             health_insurance_company: 'Zdravotní pojišťovna'
             dietary_restrictions: 'Dietní omezení'
             health_restrictions: 'Další zdravotní omezení'
+            siblings: 'Sourozenci'
             button: 'Uložit'
 
         camper_delete:
@@ -395,7 +397,7 @@ mail:
 
 module:
     user: 'Uživatelský web'
-    user_profile: 'Profil'
+    profile: 'Profil'
     admin: 'Admin'
 
 route:

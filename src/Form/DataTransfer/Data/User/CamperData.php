@@ -3,6 +3,7 @@
 namespace App\Form\DataTransfer\Data\User;
 
 use App\Enum\GenderEnum;
+use App\Model\Entity\Camper;
 use DateTimeImmutable;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -27,6 +28,11 @@ class CamperData implements CamperDataInterface
 
     #[Assert\Length(max: 1000)]
     private ?string $healthRestrictions = null;
+
+    /**
+     * @var Camper[]
+     */
+    private iterable $siblings = [];
 
     public function getName(): ?string
     {
@@ -84,6 +90,18 @@ class CamperData implements CamperDataInterface
     public function setHealthRestrictions(?string $healthRestrictions): self
     {
         $this->healthRestrictions = $healthRestrictions;
+
+        return $this;
+    }
+
+    public function getSiblings(): iterable
+    {
+        return $this->siblings;
+    }
+
+    public function setSiblings(iterable $siblings): self
+    {
+        $this->siblings = $siblings;
 
         return $this;
     }

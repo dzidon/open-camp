@@ -5,12 +5,24 @@ namespace App\Form\DataTransfer\Transfer\User;
 use App\Form\DataTransfer\Data\User\CamperData;
 use App\Form\DataTransfer\Transfer\DataTransferInterface;
 use App\Model\Entity\Camper;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * Transfers data from {@link CamperData} to {@link Camper} and vice versa.
  */
 class CamperDataTransfer implements DataTransferInterface
 {
+    private bool $isSaleCamperSiblingsEnabled;
+
+    private PropertyAccessorInterface $propertyAccessor;
+
+    public function __construct(PropertyAccessorInterface $propertyAccessor, bool $isSaleCamperSiblingsEnabled)
+    {
+        $this->propertyAccessor = $propertyAccessor;
+
+        $this->isSaleCamperSiblingsEnabled = $isSaleCamperSiblingsEnabled;
+    }
+
     /**
      * @inheritDoc
      */
@@ -34,6 +46,7 @@ class CamperDataTransfer implements DataTransferInterface
         $camperData->setGender($camper->getGender());
         $camperData->setDietaryRestrictions($camper->getDietaryRestrictions());
         $camperData->setHealthRestrictions($camper->getHealthRestrictions());
+        $camperData->setSiblings($camper->getSiblings());
     }
 
     /**
@@ -51,5 +64,10 @@ class CamperDataTransfer implements DataTransferInterface
         $camper->setGender($camperData->getGender());
         $camper->setDietaryRestrictions($camperData->getDietaryRestrictions());
         $camper->setHealthRestrictions($camperData->getHealthRestrictions());
+
+        if ($this->isSaleCamperSiblingsEnabled)
+        {
+            $this->propertyAccessor->setValue($camper, 'siblings', $camperData->getSiblings());
+        }
     }
 }

@@ -2,44 +2,44 @@
 
 {% block profile_content %}
     <div class="row mb-3">
-        <div class="col-12 col-sm-3 col-md-3">
+        <div class="col-12 col-sm-3">
             <strong>{{ 'entity_attribute.camper.name'|trans }}:</strong>
         </div>
 
-        <div class="col-12 col-sm-9 col-md-9">
+        <div class="col-12 col-sm-9">
             <span>{{ camper.name }}</span>
         </div>
     </div>
 
     <div class="row mb-3">
-        <div class="col-12 col-sm-3 col-md-3">
+        <div class="col-12 col-sm-3">
             <strong>{{ 'entity_attribute.camper.gender'|trans }}:</strong>
         </div>
 
-        <div class="col-12 col-sm-9 col-md-9">
+        <div class="col-12 col-sm-9">
             <span>{{ ('gender.' ~ camper.gender.value)|trans }}</span>
         </div>
     </div>
 
     <div class="row mb-3">
-        <div class="col-12 col-sm-3 col-md-3">
+        <div class="col-12 col-sm-3">
             <strong>{{ 'entity_attribute.camper.born_at'|trans }}:</strong>
         </div>
 
-        <div class="col-12 col-sm-9 col-md-9">
+        <div class="col-12 col-sm-9">
             <span>{{ camper.bornAt|date(date_format) }}</span>
         </div>
     </div>
 
     <div class="row mb-3">
-        <div class="col-12 col-sm-3 col-md-3">
+        <div class="col-12 col-sm-3">
             <strong>{{ 'entity_attribute.camper.dietary_restrictions'|trans }}:</strong>
         </div>
 
-        <div class="col-12 col-sm-9 col-md-9">
+        <div class="col-12 col-sm-9">
             <span>
                 {% if camper.dietaryRestrictions is null %}
-                    -
+                    <span>-</span>
                 {% else %}
                     {{ camper.dietaryRestrictions|nl2br }}
                 {% endif %}
@@ -48,14 +48,14 @@
     </div>
 
     <div class="row mb-3">
-        <div class="col-12 col-sm-3 col-md-3">
+        <div class="col-12 col-sm-3">
             <strong>{{ 'entity_attribute.camper.health_restrictions'|trans }}:</strong>
         </div>
 
-        <div class="col-12 col-sm-9 col-md-9">
+        <div class="col-12 col-sm-9">
             <span>
                 {% if camper.healthRestrictions is null %}
-                    -
+                    <span>-</span>
                 {% else %}
                     {{ camper.healthRestrictions|nl2br }}
                 {% endif %}
@@ -63,7 +63,27 @@
         </div>
     </div>
 
-    <div class="row mt-4">
+    {% if sale_camper_siblings_enabled %}
+        <div class="row mb-3">
+            <div class="col-12 col-sm-3">
+                <strong>{{ 'entity_attribute.camper.siblings'|trans }}:</strong>
+            </div>
+
+            <div class="col-12 col-sm-9">
+                {% if camper.siblings is empty %}
+                    <span>-</span>
+                {% else %}
+                    {% for sibling in camper.siblings %}
+                        <div>
+                            <span>{{ sibling.name }}</span>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
         <div class="col">
             <a href="{{ path('user_profile_camper_update', {id: camper.id}) }}" class="card-link">
                 {{ 'crud.action.common.update'|trans }}

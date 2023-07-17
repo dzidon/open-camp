@@ -3,7 +3,6 @@
 namespace App\Twig;
 
 use Symfony\Component\Intl\Countries;
-use Symfony\Component\Intl\Exception\MissingResourceException;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -26,17 +25,11 @@ class CountryNameExtension extends AbstractExtension
      * Returns the name that corresponds with the given country code.
      *
      * @param string $countryCode
+     * @param string|null $displayLocale
      * @return string
      */
-    public function getCountryNameForCode(string $countryCode): string
+    public function getCountryNameForCode(string $countryCode, string $displayLocale = null): string
     {
-        try
-        {
-            return Countries::getName($countryCode);
-        }
-        catch (MissingResourceException)
-        {
-            return $countryCode;
-        }
+        return Countries::getName($countryCode, $displayLocale);
     }
 }

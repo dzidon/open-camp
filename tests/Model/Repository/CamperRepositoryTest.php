@@ -70,6 +70,29 @@ class CamperRepositoryTest extends KernelTestCase
         $this->assertSame($camper->getId(), $loadedCamper->getId());
     }
 
+    public function testFindByUser(): void
+    {
+        $camperRepository = $this->getCamperRepository();
+        $userRepository = $this->getUserRepository();
+
+        $user = $userRepository->findOneByEmail('david@gmail.com');
+        $campers = $camperRepository->findByUser($user);
+        $this->assertSame(['Camper 1', 'Camper 2'], $this->getCamperNames($campers));
+    }
+
+    public function testFindOwnedBySameUser(): void
+    {
+        $camperRepository = $this->getCamperRepository();
+        $userRepository = $this->getUserRepository();
+
+        $user = $userRepository->findOneByEmail('david@gmail.com');
+        $camper = new Camper('Camper 3', GenderEnum::MALE, new DateTimeImmutable(), $user);
+        $camperRepository->saveCamper($camper, true);
+
+        $campers = $camperRepository->findOwnedBySameUser($camper);
+        $this->assertSame(['Camper 1', 'Camper 2'], $this->getCamperNames($campers));
+    }
+
     public function testGetUserPaginator(): void
     {
         $camperRepository = $this->getCamperRepository();

@@ -29,6 +29,7 @@ parameters:
         facebook:
             - 'public_profile'
             - 'email'
+
         google:
             - 'https://www.googleapis.com/auth/userinfo.profile'
             - 'https://www.googleapis.com/auth/userinfo.email'
@@ -40,6 +41,9 @@ parameters:
     app.preferred_country_choices:
         - 'CZ'
         - 'SK'
+
+    app.sale_camper_recurring: true
+    app.sale_camper_siblings: true
 
 services:
     # default configuration for services in *this* file
@@ -57,6 +61,7 @@ services:
             - '../src/Enum/'
             - '../src/EventDispatcher/Event/'
             - '../src/Form/DataTransfer/Data/'
+            - '../src/Form/DataTransfer/Target/'
             - '../src/Menu/Type/'
             - '../src/Model/Attribute/'
             - '../src/Model/Entity/'
@@ -130,6 +135,10 @@ services:
         arguments:
             $phoneNumberDefaultLocale: '%app.phone_number_default_locale%'
 
+    App\Form\DataTransfer\Transfer\User\CamperDataTransfer:
+        arguments:
+            $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'
+
     App\Form\Type\User\BillingType:
         arguments:
             $preferredCountries: '%app.preferred_country_choices%'
@@ -138,3 +147,7 @@ services:
         arguments:
             $phoneNumberDefaultLocale: '%app.phone_number_default_locale%'
             $phoneNumberFormat: '%app.phone_number_format%'
+
+    App\Form\Type\User\CamperType:
+        arguments:
+            $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'

@@ -36,6 +36,9 @@ parameters:
         - 'SK'
         - 'DE'
 
+    app.sale_camper_recurring: true
+    app.sale_camper_siblings: true
+
 services:
     # Interfaces
     Symfony\Contracts\Translation\TranslatorInterface:

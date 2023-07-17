@@ -54,12 +54,47 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
     public function findOneById(int $id): ?Camper
     {
         return $this->createQueryBuilder('camper')
-            ->select('camper, camperUser')
+            ->select('camper, camperUser, camperSiblings')
             ->leftJoin('camper.user', 'camperUser')
+            ->leftJoin('camper.siblings', 'camperSiblings')
             ->andWhere('camper.id = :id')
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findByUser(User $user): array
+    {
+        return $this->createQueryBuilder('camper')
+            ->select('camper, camperSiblings')
+            ->leftJoin('camper.siblings', 'camperSiblings')
+            ->andWhere('camper.user = :user')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findOwnedBySameUser(Camper $camper): array
+    {
+        $user = $camper->getUser();
+
+        return $this->createQueryBuilder('camper')
+            ->select('camper, camperSiblings')
+            ->leftJoin('camper.siblings', 'camperSiblings')
+            ->andWhere('camper.user = :user')
+            ->setParameter('user', $user)
+            ->andWhere('camper.id != :id')
+            ->setParameter('id', $camper->getId())
+            ->getQuery()
+            ->getResult()
         ;
     }
 
@@ -80,6 +115,6 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
             ->getQuery()
         ;
 
-        return new DqlPaginator(new DoctrinePaginator($query), $currentPage, $pageSize);
+        return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
     }
 }

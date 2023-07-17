@@ -93,6 +93,6 @@ class ContactRepository extends AbstractRepository implements ContactRepositoryI
             ->getQuery()
         ;
 
-        return new DqlPaginator(new DoctrinePaginator($query), $currentPage, $pageSize);
+        return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
     }
 }

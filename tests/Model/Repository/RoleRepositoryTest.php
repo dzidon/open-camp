@@ -52,6 +52,14 @@ class RoleRepositoryTest extends KernelTestCase
         $this->assertSame($role->getId(), $loadedRole->getId());
     }
 
+    public function testFindOneByLabel(): void
+    {
+        $repository = $this->getRoleRepository();
+
+        $role = $repository->findOneByLabel('Super admin');
+        $this->assertSame('Super admin', $role->getLabel());
+    }
+
     public function testGetAdminPaginator(): void
     {
         $roleRepository = $this->getRoleRepository();

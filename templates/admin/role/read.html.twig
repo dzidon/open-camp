@@ -6,21 +6,21 @@
             <div class="card card-outline card-primary">
                 <div class="card-body">
                     <div class="row mb-3">
-                        <div class="col-12 col-sm-3 col-md-3">
+                        <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.role.label'|trans }}:</strong>
                         </div>
 
-                        <div class="col-12 col-sm-9 col-md-9">
+                        <div class="col-12 col-sm-9">
                             <span>{{ role.label }}</span>
                         </div>
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-12 col-sm-3 col-md-3">
+                        <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.role.permissions'|trans }}:</strong>
                         </div>
 
-                        <div class="col-12 col-sm-9 col-md-9">
+                        <div class="col-12 col-sm-9">
                             {% set permissions_grouped = role.getPermissionsGrouped(true) %}
 
                             {% if permissions_grouped is empty %}
@@ -44,11 +44,11 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-12 col-sm-3 col-md-3">
+                        <div class="col-12 col-sm-3">
                             <strong>{{ 'entity.user.plural'|trans }}:</strong>
                         </div>
 
-                        <div class="col-12 col-sm-9 col-md-9">
+                        <div class="col-12 col-sm-9">
                             {% if users is empty %}
                                 <div>
                                     <em>{{ 'search.error.no_results'|trans }}</em>

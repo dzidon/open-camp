@@ -29,4 +29,8 @@ interface CamperDataInterface
     public function getHealthRestrictions(): ?string;
 
     public function setHealthRestrictions(?string $healthRestrictions): self;
+
+    public function getSiblings(): iterable;
+
+    public function setSiblings(iterable $siblings): self;
 }

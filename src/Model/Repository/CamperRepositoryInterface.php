@@ -55,6 +55,22 @@ interface CamperRepositoryInterface
     public function findOneById(int $id): ?Camper;
 
     /**
+     * Finds campers assigned to the given user.
+     *
+     * @param User $user
+     * @return Camper[]
+     */
+    public function findByUser(User $user): array;
+
+    /**
+     * Finds other campers that have the same user as the given camper.
+     *
+     * @param Camper $camper
+     * @return Camper[]
+     */
+    public function findOwnedBySameUser(Camper $camper): array;
+
+    /**
      * Returns user camper search paginator.
      *
      * @param CamperSearchDataInterface $data

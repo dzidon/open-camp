@@ -77,8 +77,16 @@ class ProfileCamperController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        $formOptions = [];
+        if ($this->getParameter('app.sale_camper_siblings'))
+        {
+            $formOptions = [
+                'choices_siblings' => $this->camperRepository->findByUser($user),
+            ];
+        }
+
         $camperData = new CamperData();
-        $form = $this->createForm(CamperType::class, $camperData);
+        $form = $this->createForm(CamperType::class, $camperData, $formOptions);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.camper.button']);
         $form->handleRequest($request);
 
@@ -116,9 +124,17 @@ class ProfileCamperController extends AbstractController
         $camper = $this->findCamperOrThrow404($id);
         $this->denyAccessUnlessGranted('camper_update', $camper);
 
+        $formOptions = [];
+        if ($this->getParameter('app.sale_camper_siblings') === true)
+        {
+            $formOptions = [
+                'choices_siblings' => $this->camperRepository->findOwnedBySameUser($camper),
+            ];
+        }
+
         $camperData = new CamperData();
         $dataTransfer->fillData($camperData, $camper);
-        $form = $this->createForm(CamperType::class, $camperData);
+        $form = $this->createForm(CamperType::class, $camperData, $formOptions);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.camper.button']);
         $form->handleRequest($request);
 
