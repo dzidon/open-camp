@@ -12,6 +12,7 @@ use App\Form\Type\Common\HiddenTrueType;
 use App\Menu\Breadcrumbs\Admin\RoleBreadcrumbsInterface;
 use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use App\Model\Entity\Role;
+use App\Model\Repository\PermissionRepositoryInterface;
 use App\Model\Repository\RoleRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -72,11 +73,14 @@ class RoleController extends AbstractController
 
     #[IsGranted('role_create')]
     #[Route('/admin/role/create', name: 'admin_role_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer, Request $request): Response
+    public function create(DataTransferRegistryInterface $dataTransfer,
+                           PermissionRepositoryInterface $permissionRepository,
+                           Request                       $request): Response
     {
         $roleData = new RoleData();
+        $permissionChoices = $permissionRepository->findAll();
 
-        $form = $this->createForm(RoleType::class, $roleData);
+        $form = $this->createForm(RoleType::class, $roleData, ['choices_permissions' => $permissionChoices]);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.role.button']);
         $form->handleRequest($request);
 
@@ -112,14 +116,18 @@ class RoleController extends AbstractController
 
     #[IsGranted('role_update')]
     #[Route('/admin/role/{id}/update', name: 'admin_role_update', requirements: ['id' => '\d+'])]
-    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, int $id): Response
+    public function update(DataTransferRegistryInterface $dataTransfer,
+                           PermissionRepositoryInterface $permissionRepository,
+                           Request                       $request,
+                           int                           $id): Response
     {
         $role = $this->findRoleOrThrow404($id);
+        $permissionChoices = $permissionRepository->findAll();
 
         $roleData = new RoleData();
         $dataTransfer->fillData($roleData, $role);
 
-        $form = $this->createForm(RoleType::class, $roleData);
+        $form = $this->createForm(RoleType::class, $roleData, ['choices_permissions' => $permissionChoices]);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.role.button']);
         $form->handleRequest($request);
 

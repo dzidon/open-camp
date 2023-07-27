@@ -56,13 +56,13 @@ class UserType extends AbstractType
         }
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class'    => UserDataInterface::class,
-            'choices_roles' => null,
+            'choices_roles' => [],
         ]);
 
-        $resolver->setAllowedTypes('choices_roles', ['null', 'array']);
+        $resolver->setAllowedTypes('choices_roles', ['array']);
     }
 }

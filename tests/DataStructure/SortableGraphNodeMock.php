@@ -42,7 +42,7 @@ class SortableGraphNodeMock extends GraphNodeMock implements SortableGraphNodeIn
      */
     public function setParent(?GraphNodeInterface $parent): self
     {
-        $this->assertRelatedType($parent);
+        $this->assertSelfReferencedType($parent);
 
         return parent::setParent($parent);
     }
@@ -55,7 +55,7 @@ class SortableGraphNodeMock extends GraphNodeMock implements SortableGraphNodeIn
      */
     public function addChild(GraphNodeInterface $child): self
     {
-        $this->assertRelatedType($child);
+        $this->assertSelfReferencedType($child);
 
         return parent::addChild($child);
     }
@@ -68,7 +68,7 @@ class SortableGraphNodeMock extends GraphNodeMock implements SortableGraphNodeIn
      */
     public function removeChild(GraphNodeInterface|string $child): self
     {
-        $this->assertRelatedType($child);
+        $this->assertSelfReferencedType($child);
 
         return parent::removeChild($child);
     }
@@ -120,7 +120,7 @@ class SortableGraphNodeMock extends GraphNodeMock implements SortableGraphNodeIn
      * @param mixed $graphNode
      * @return void
      */
-    protected function assertRelatedType(mixed $graphNode): void
+    protected function assertSelfReferencedType(mixed $graphNode): void
     {
         if (is_object($graphNode) && !$graphNode instanceof SortableGraphNodeMock)
         {

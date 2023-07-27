@@ -1,20 +1,20 @@
 <?php
 
-namespace App\EventDispatcher\Event\DepthFirstSearch;
+namespace App\EventDispatcher\Event\Search\DepthFirstSearch;
 
-use App\DataStructure\StackInterface;
 use App\DataStructure\GraphNodeInterface;
+use App\DataStructure\StackInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
- * Dispatched after a node is popped out of the stack.
+ * Dispatched at the end of a stack iteration.
  */
-class StackPopEvent extends Event
+class StackIterationEndEvent extends Event
 {
-    public const NAME = 'dfs.stack_pop';
+    public const NAME = 'dfs.stack_iteration_end';
 
-    private array $expandedNodes;
     private StackInterface $stack;
+    private array $expandedNodes;
     private GraphNodeInterface $currentNode;
 
     public function __construct(StackInterface $stack, array $expandedNodes, GraphNodeInterface $currentNode)

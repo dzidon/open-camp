@@ -1,6 +1,6 @@
 <?php
 
-namespace App\EventDispatcher\Event\DepthFirstSearch;
+namespace App\EventDispatcher\Event\Search\DepthFirstSearch;
 
 use App\DataStructure\StackInterface;
 use Symfony\Contracts\EventDispatcher\Event;

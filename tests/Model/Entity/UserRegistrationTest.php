@@ -92,6 +92,16 @@ class UserRegistrationTest extends TestCase
         $this->assertFalse($this->userRegistration->isActive());
     }
 
+    public function testCreatedAt(): void
+    {
+        $this->assertSame((new DateTimeImmutable('now'))->getTimestamp(), $this->userRegistration->getCreatedAt()->getTimestamp());
+    }
+
+    public function testUpdatedAt(): void
+    {
+        $this->assertNull($this->userRegistration->getUpdatedAt());
+    }
+
     protected function setUp(): void
     {
         $expireAt = new DateTimeImmutable(self::EXPIRE_AT);

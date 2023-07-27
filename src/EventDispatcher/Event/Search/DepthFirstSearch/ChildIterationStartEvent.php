@@ -1,9 +1,9 @@
 <?php
 
-namespace App\EventDispatcher\Event\DepthFirstSearch;
+namespace App\EventDispatcher\Event\Search\DepthFirstSearch;
 
-use App\DataStructure\StackInterface;
 use App\DataStructure\GraphNodeInterface;
+use App\DataStructure\StackInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

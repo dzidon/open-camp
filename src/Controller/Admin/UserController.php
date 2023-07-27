@@ -14,6 +14,7 @@ use App\Form\Type\Common\HiddenTrueType;
 use App\Menu\Breadcrumbs\Admin\UserBreadcrumbsInterface;
 use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use App\Model\Entity\User;
+use App\Model\Repository\RoleRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -43,11 +44,13 @@ class UserController extends AbstractController
     #[Route('/admin/users', name: 'admin_user_list')]
     public function list(MenuTypeFactoryRegistryInterface $menuFactory,
                          FormFactoryInterface             $formFactory,
+                         RoleRepositoryInterface          $roleRepository,
                          Request                          $request): Response
     {
         $page = (int) $request->query->get('page', 1);
         $searchData = new UserSearchData();
-        $form = $formFactory->createNamed('', UserSearchType::class, $searchData);
+        $roleChoices = $roleRepository->findAll();
+        $form = $formFactory->createNamed('', UserSearchType::class, $searchData, ['choices_roles' => $roleChoices]);
         $form->handleRequest($request);
 
         $isSearchInvalid = $form->isSubmitted() && !$form->isValid();
@@ -75,11 +78,14 @@ class UserController extends AbstractController
 
     #[IsGranted('user_create')]
     #[Route('/admin/user/create', name: 'admin_user_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer, Request $request): Response
+    public function create(DataTransferRegistryInterface $dataTransfer,
+                           RoleRepositoryInterface       $roleRepository,
+                           Request                       $request): Response
     {
         $userData = new UserData();
 
-        $form = $this->createForm(UserType::class, $userData);
+        $roleChoices = $roleRepository->findAll();
+        $form = $this->createForm(UserType::class, $userData, ['choices_roles' => $roleChoices]);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.user.button']);
         $form->handleRequest($request);
 
@@ -113,14 +119,18 @@ class UserController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("user_update") or is_granted("user_update_role")'))]
     #[Route('/admin/user/{id}/update', name: 'admin_user_update', requirements: ['id' => '\d+'])]
-    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, int $id): Response
+    public function update(DataTransferRegistryInterface $dataTransfer,
+                           RoleRepositoryInterface       $roleRepository,
+                           Request                       $request,
+                           int                           $id): Response
     {
         $user = $this->findUserOrThrow404($id);
 
         $userData = new UserData();
         $dataTransfer->fillData($userData, $user);
 
-        $form = $this->createForm(UserType::class, $userData);
+        $roleChoices = $roleRepository->findAll();
+        $form = $this->createForm(UserType::class, $userData, ['choices_roles' => $roleChoices]);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.user.button']);
         $form->handleRequest($request);
 

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\EventDispatcher\Event\DepthFirstSearch;
+namespace App\EventDispatcher\Event\Search\DepthFirstSearch;
 
-use App\DataStructure\StackInterface;
 use App\DataStructure\GraphNodeInterface;
+use App\DataStructure\StackInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
- * Dispatched after a node is marked as expanded (already visited).
+ * Dispatched after a node is popped out of the stack.
  */
-class NodeMarkAsExpandedEvent extends Event
+class StackPopEvent extends Event
 {
-    public const NAME = 'dfs.node_mark_as_expanded';
+    public const NAME = 'dfs.stack_pop';
 
     private array $expandedNodes;
     private StackInterface $stack;

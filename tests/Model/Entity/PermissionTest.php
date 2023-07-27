@@ -4,6 +4,7 @@ namespace App\Tests\Model\Entity;
 
 use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 class PermissionTest extends TestCase
@@ -50,6 +51,16 @@ class PermissionTest extends TestCase
         $newPriority = 321;
         $this->permission->setPriority($newPriority);
         $this->assertSame($newPriority, $this->permission->getPriority());
+    }
+
+    public function testCreatedAt(): void
+    {
+        $this->assertSame((new DateTimeImmutable('now'))->getTimestamp(), $this->permission->getCreatedAt()->getTimestamp());
+    }
+
+    public function testUpdatedAt(): void
+    {
+        $this->assertNull($this->permission->getUpdatedAt());
     }
 
     protected function setUp(): void

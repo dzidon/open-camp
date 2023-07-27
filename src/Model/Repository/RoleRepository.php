@@ -11,7 +11,6 @@ use Doctrine\Persistence\ManagerRegistry;
 /**
  * @method Role|null find($id, $lockMode = null, $lockVersion = null)
  * @method Role|null findOneBy(array $criteria, array $orderBy = null)
- * @method Role[]    findAll()
  * @method Role[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class RoleRepository extends AbstractRepository implements RoleRepositoryInterface
@@ -43,6 +42,22 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
     public function createRole(string $label): Role
     {
         return new Role($label);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('role')
+            ->select('role, rolePermission, rolePermissionGroup')
+            ->leftJoin('role.permissions', 'rolePermission')
+            ->leftJoin('rolePermission.group', 'rolePermissionGroup')
+            ->addOrderBy('rolePermissionGroup.priority', 'ASC')
+            ->addOrderBy('rolePermission.priority', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**

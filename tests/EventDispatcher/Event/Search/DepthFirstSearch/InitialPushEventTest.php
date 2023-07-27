@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tests\EventDispatcher\Event\DepthFirstSearch;
+namespace App\Tests\EventDispatcher\Event\Search\DepthFirstSearch;
 
 use App\DataStructure\Stack;
-use App\EventDispatcher\Event\DepthFirstSearch\InitialPushEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\InitialPushEvent;
 use PHPUnit\Framework\TestCase;
 
 class InitialPushEventTest extends TestCase

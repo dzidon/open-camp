@@ -115,6 +115,7 @@ class CreatePermissionsCommand extends Command
     {
         $groups['user'] = $this->permissionGroupRepository->createPermissionGroup('user', 'permission_group.user', 100);
         $groups['role'] = $this->permissionGroupRepository->createPermissionGroup('role', 'permission_group.role', 200);
+        $groups['camp_category'] = $this->permissionGroupRepository->createPermissionGroup('camp_category', 'permission_group.camp_category', 300);
 
         return $groups;
     }
@@ -137,6 +138,11 @@ class CreatePermissionsCommand extends Command
         $permissions['role_read'] = $this->permissionRepository->createPermission('role_read', 'permission.role_read', 200, $groups['role']);
         $permissions['role_update'] = $this->permissionRepository->createPermission('role_update', 'permission.role_update', 300, $groups['role']);
         $permissions['role_delete'] = $this->permissionRepository->createPermission('role_delete', 'permission.role_delete', 400, $groups['role']);
+
+        $permissions['camp_category_create'] = $this->permissionRepository->createPermission('camp_category_create', 'permission.camp_category_create', 100, $groups['camp_category']);
+        $permissions['camp_category_read'] = $this->permissionRepository->createPermission('camp_category_read', 'permission.camp_category_read', 200, $groups['camp_category']);
+        $permissions['camp_category_update'] = $this->permissionRepository->createPermission('camp_category_update', 'permission.camp_category_update', 300, $groups['camp_category']);
+        $permissions['camp_category_delete'] = $this->permissionRepository->createPermission('camp_category_delete', 'permission.camp_category_delete', 400, $groups['camp_category']);
 
         return $permissions;
     }

@@ -50,16 +50,16 @@ class UserSearchType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class'         => UserSearchDataInterface::class,
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,
-            'choices_roles'      => null,
+            'choices_roles'      => [],
         ]);
 
-        $resolver->setAllowedTypes('choices_roles', ['null', 'array']);
+        $resolver->setAllowedTypes('choices_roles', ['array']);
     }
 }

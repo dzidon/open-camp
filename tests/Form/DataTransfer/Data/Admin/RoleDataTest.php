@@ -11,6 +11,18 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RoleDataTest extends KernelTestCase
 {
+    public function testId(): void
+    {
+        $data = new RoleData();
+        $this->assertNull($data->getId());
+
+        $data->setId(123);
+        $this->assertSame(123, $data->getId());
+
+        $data->setId(null);
+        $this->assertNull($data->getId());
+    }
+
     public function testLabel(): void
     {
         $data = new RoleData();

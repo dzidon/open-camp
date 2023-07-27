@@ -4,7 +4,6 @@ namespace App\Form\Type\Admin;
 
 use App\Form\DataTransfer\Data\Admin\RoleDataInterface;
 use App\Model\Entity\Permission;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -39,16 +38,7 @@ class RoleType extends AbstractType
                     $label = $permission->getLabel();
                     return $this->translator->trans($label);
                 },
-                'choices'       => $options['choices_permissions'],
-                'query_builder' => function (EntityRepository $er) {
-                    return $er
-                        ->createQueryBuilder('permission')
-                        ->select('permission, permissionGroup')
-                        ->leftJoin('permission.group', 'permissionGroup')
-                        ->addOrderBy('permissionGroup.priority', 'ASC')
-                        ->addOrderBy('permission.priority', 'ASC')
-                    ;
-                },
+                'choices'  => $options['choices_permissions'],
                 'group_by' => function (Permission $permission) {
                     $group = $permission->getPermissionGroup();
                     $label = $group->getLabel();
@@ -62,13 +52,13 @@ class RoleType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class'          => RoleDataInterface::class,
-            'choices_permissions' => null,
+            'choices_permissions' => [],
         ]);
 
-        $resolver->setAllowedTypes('choices_permissions', ['null', 'array']);
+        $resolver->setAllowedTypes('choices_permissions', ['array']);
     }
 }

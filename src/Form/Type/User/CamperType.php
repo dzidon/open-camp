@@ -78,7 +78,7 @@ class CamperType extends AbstractType
 
         if ($this->isSaleCamperSiblingsEnabled)
         {
-            $resolver->setRequired('choices_siblings');
+            $resolver->setDefault('choices_siblings', []);
             $resolver->setAllowedTypes('choices_siblings', ['array']);
         }
     }

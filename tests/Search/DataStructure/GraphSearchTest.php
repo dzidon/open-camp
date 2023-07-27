@@ -2,35 +2,25 @@
 
 namespace App\Tests\Search\DataStructure;
 
-use App\EventDispatcher\Event\DepthFirstSearch\ChildIterationEndEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\ChildIterationStartEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\CycleFoundEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\FinishEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\InitialPushEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\NodeMarkAsExpandedEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\StackIterationEndEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\StackPopEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\ChildIterationEndEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\ChildIterationStartEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\CycleFoundEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\FinishEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\InitialPushEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\NodeMarkAsExpandedEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\StackIterationEndEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\StackPopEvent;
 use App\Search\DataStructure\GraphSearch;
 use App\Tests\DataStructure\GraphNodeChildrenIdentifiersTrait;
 use App\Tests\DataStructure\GraphNodeMock;
 use App\Tests\DataStructure\SortableGraphNodeMock;
-use Exception;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-/**
- * Tests the graph search class.
- */
 class GraphSearchTest extends KernelTestCase
 {
     use GraphNodeChildrenIdentifiersTrait;
 
-    /**
-     * Tests that the depth first search algorithm iterates over graph nodes in the right order.
-     *
-     * @return void
-     * @throws Exception
-     */
     public function testDepthFirstSearchOrder(): void
     {
         $tree = $this->createGraphNodeMock();
@@ -55,12 +45,6 @@ class GraphSearchTest extends KernelTestCase
         $this->assertSame('root a b c x y', $visitedLog);
     }
 
-    /**
-     * Tests that the depth first search algorithm dispatches all events.
-     *
-     * @return void
-     * @throws Exception
-     */
     public function testDepthFirstSearchEvents(): void
     {
         $eventsDispatched = [
@@ -99,12 +83,6 @@ class GraphSearchTest extends KernelTestCase
         ], $eventsDispatched);
     }
 
-    /**
-     * Tests the method for detecting a cycle in a graph.
-     *
-     * @return void
-     * @throws Exception
-     */
     public function testContainsCycle(): void
     {
         $menuWithoutCycle = $this->createGraphNodeMock();
@@ -115,12 +93,6 @@ class GraphSearchTest extends KernelTestCase
         $this->assertSame(true, $graphSearch->containsCycle($menuWithCycle));
     }
 
-    /**
-     * Tests that descendents can be looked up using string paths.
-     *
-     * @return void
-     * @throws Exception
-     */
     public function testGetDescendentByPath(): void
     {
         $menu = $this->createGraphNodeMock();
@@ -142,12 +114,23 @@ class GraphSearchTest extends KernelTestCase
         $this->assertSame(null, $item);
     }
 
-    /**
-     * Tests that all child nodes in a menu type tree can be sorted recursively using their priority attribute.
-     *
-     * @return void
-     * @throws Exception
-     */
+    public function testGetDescendentsOfNode(): void
+    {
+        $menu = $this->createGraphNodeMock();
+        $graphSearch = $this->getGraphSearch();
+
+        $descendentIdentifiers = [];
+        $descendents = $graphSearch->getDescendentsOfNode($menu);
+
+        /** @var GraphNodeMock $descendent */
+        foreach ($descendents as $descendent)
+        {
+            $descendentIdentifiers[] = $descendent->getIdentifier();
+        }
+
+        $this->assertSame(['a', 'b', 'c', 'x', 'y'], $descendentIdentifiers);
+    }
+
     public function testSortRecursively(): void
     {
         $menuType = $this->createSortableGraphNodeMock();
@@ -162,27 +145,16 @@ class GraphSearchTest extends KernelTestCase
         $this->assertSame(['button4', 'button3'], $this->getGraphNodeChildrenIdentifiers($button1));
     }
 
-    /**
-     * Returns an instance of the graph search service from the service container.
-     *
-     * @return GraphSearch
-     * @throws Exception
-     */
     private function getGraphSearch(): GraphSearch
     {
         $container = static::getContainer();
 
         /** @var GraphSearch $graphSearch */
         $graphSearch = $container->get(GraphSearch::class);
+
         return $graphSearch;
     }
 
-    /**
-     * Creates a graph node tree structure.
-     *
-     * @param bool $withCycle
-     * @return GraphNodeMock
-     */
     private function createGraphNodeMock(bool $withCycle = false): GraphNodeMock
     {
         $root = new GraphNodeMock('root');
@@ -209,11 +181,6 @@ class GraphSearchTest extends KernelTestCase
         return $root;
     }
 
-    /**
-     * Creates a graph node tree structure with priorities.
-     *
-     * @return SortableGraphNodeMock
-     */
     private function createSortableGraphNodeMock(): SortableGraphNodeMock
     {
         $root = new SortableGraphNodeMock('root');

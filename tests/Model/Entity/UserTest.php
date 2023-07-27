@@ -6,6 +6,7 @@ use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
@@ -138,6 +139,16 @@ class UserTest extends TestCase
 
         $this->user->setCountry(null);
         $this->assertNull($this->user->getCountry());
+    }
+
+    public function testCreatedAt(): void
+    {
+        $this->assertSame((new DateTimeImmutable('now'))->getTimestamp(), $this->user->getCreatedAt()->getTimestamp());
+    }
+
+    public function testUpdatedAt(): void
+    {
+        $this->assertNull($this->user->getUpdatedAt());
     }
 
     protected function setUp(): void

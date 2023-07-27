@@ -45,7 +45,7 @@ class MenuType implements MenuTypeInterface
      */
     public function setParent(?GraphNodeInterface $parent): self
     {
-        $this->assertRelatedType($parent);
+        $this->assertSelfReferencedType($parent);
 
         if ($this->parent === $parent)
         {
@@ -85,7 +85,7 @@ class MenuType implements MenuTypeInterface
      */
     public function addChild(GraphNodeInterface $child): self
     {
-        $this->assertRelatedType($child);
+        $this->assertSelfReferencedType($child);
 
         $identifier = $child->getIdentifier();
 
@@ -101,12 +101,14 @@ class MenuType implements MenuTypeInterface
             {
                 $existingChild->setParent(null);
                 unset($this->children[$key]);
+
                 break;
             }
         }
 
         $this->children[] = $child;
         $child->setParent($this);
+
         return $this;
     }
 
@@ -118,7 +120,7 @@ class MenuType implements MenuTypeInterface
      */
     public function removeChild(string|GraphNodeInterface $child): self
     {
-        $this->assertRelatedType($child);
+        $this->assertSelfReferencedType($child);
 
         if (is_string($child))
         {
@@ -136,6 +138,7 @@ class MenuType implements MenuTypeInterface
             {
                 $existingChild->setParent(null);
                 unset($this->children[$key]);
+
                 break;
             }
         }
@@ -313,7 +316,7 @@ class MenuType implements MenuTypeInterface
      * @param mixed $graphNode
      * @return void
      */
-    protected function assertRelatedType(mixed $graphNode): void
+    protected function assertSelfReferencedType(mixed $graphNode): void
     {
         if (is_object($graphNode) && !$graphNode instanceof MenuTypeInterface)
         {

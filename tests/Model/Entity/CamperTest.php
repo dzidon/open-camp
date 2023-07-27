@@ -112,6 +112,16 @@ class CamperTest extends TestCase
         $this->assertEmpty($this->getSiblingNames($sibling1));
     }
 
+    public function testCreatedAt(): void
+    {
+        $this->assertSame((new DateTimeImmutable('now'))->getTimestamp(), $this->camper->getCreatedAt()->getTimestamp());
+    }
+
+    public function testUpdatedAt(): void
+    {
+        $this->assertNull($this->camper->getUpdatedAt());
+    }
+
     public function getSiblingNames(Camper $camper): array
     {
         $names = [];

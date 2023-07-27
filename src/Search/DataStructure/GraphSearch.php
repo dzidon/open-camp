@@ -2,25 +2,33 @@
 
 namespace App\Search\DataStructure;
 
+use App\DataStructure\GraphNodeInterface;
 use App\DataStructure\SortableGraphNodeInterface;
 use App\DataStructure\Stack;
-use App\DataStructure\GraphNodeInterface;
-use App\EventDispatcher\Event\DepthFirstSearch\ChildIterationEndEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\ChildIterationStartEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\CycleFoundEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\FinishEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\InitialPushEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\NodeMarkAsExpandedEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\StackIterationEndEvent;
-use App\EventDispatcher\Event\DepthFirstSearch\StackPopEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\ChildIterationEndEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\ChildIterationStartEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\CycleFoundEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\FinishEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\InitialPushEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\NodeMarkAsExpandedEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\StackIterationEndEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\StackPopEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * @inheritDoc
  */
 class GraphSearch implements GraphSearchInterface
 {
+    private PropertyAccessorInterface $propertyAccessor;
+
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
+    {
+        $this->propertyAccessor = $propertyAccessor;
+    }
+
     /**
      * @inheritDoc
      */
@@ -98,13 +106,14 @@ class GraphSearch implements GraphSearchInterface
         });
 
         $this->depthFirstSearch($start, $dispatcher);
+
         return $found;
     }
 
     /**
      * @inheritDoc
      */
-    public function getDescendentByPath(GraphNodeInterface $from, string $path): ?GraphNodeInterface
+    public function getDescendentByPath(GraphNodeInterface $from, string $path, string $property = 'identifier'): ?GraphNodeInterface
     {
         $names = explode('/', trim($path, '/'));
         if (empty($names))
@@ -127,10 +136,13 @@ class GraphSearch implements GraphSearchInterface
 
             foreach ($currentNode->getChildren() as $child)
             {
-                if ($child->getIdentifier() === $currentName)
+                $value = (string) $this->propertyAccessor->getValue($child, $property);
+
+                if ($value === $currentName)
                 {
                     $currentNode = $child;
                     $foundChild = true;
+
                     break;
                 }
             }
@@ -142,6 +154,28 @@ class GraphSearch implements GraphSearchInterface
 
             unset($names[$currentKey]);
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDescendentsOfNode(GraphNodeInterface $node): array
+    {
+        $descendents = [];
+        $dispatcher = new EventDispatcher();
+        $dispatcher->addListener(StackPopEvent::NAME, function (StackPopEvent $event) use (&$descendents, $node)
+        {
+            $descendent = $event->getCurrentNode();
+
+            if ($descendent->getIdentifier() !== $node->getIdentifier())
+            {
+                $descendents[] = $descendent;
+            }
+        });
+
+        $this->depthFirstSearch($node, $dispatcher);
+
+        return $descendents;
     }
 
     /**

@@ -37,6 +37,7 @@ auth:
 permission_group:
     user: 'Uživatelé'
     role: 'Role'
+    camp_category: 'Kategorie tábora'
 
 permission:
     user_read: 'Zobrazení uživatele'
@@ -50,6 +51,11 @@ permission:
     role_update: 'Editace role'
     role_delete: 'Odstranění role'
 
+    camp_category_read: 'Zobrazení kategorie tábora'
+    camp_category_create: 'Tvorba kategorie tábora'
+    camp_category_update: 'Editace kategorie tábora'
+    camp_category_delete: 'Odstranění kategorie tábora'
+
 crud:
     instruction:
         user:
@@ -61,6 +67,7 @@ crud:
         camper_delete: 'Opravdu si přejete odstranit táborníka "{name}"?'
         role_delete: 'Opravdu si přejete odstranit roli "{label}"?'
         user_delete: 'Opravdu si přejete odstranit uživatele "{email}"?'
+        camp_category_delete: 'Opravdu si přejete odstranit kategorii tábora "{name}"?'
 
     action:
         common:
@@ -96,6 +103,11 @@ crud:
             reset_password: 'Heslo odstraněno!'
             delete: 'Uživatel odstraněn!'
 
+        camp_category:
+            create: 'Kateogrie tábora vytvořena!'
+            update: 'Kateogrie tábora uložena!'
+            delete: 'Kateogrie tábora odstraněna!'
+
 entity:
     contact:
         singular: 'Kontakt'
@@ -128,6 +140,10 @@ entity:
     user_registration:
         singular: 'Registrace uživatele'
         plural: 'Registrace uživatelů'
+
+    camp_category:
+        singular: 'Kategorie tábora'
+        plural: 'Kategorie táborů'
 
 entity_attribute:
     common:
@@ -195,6 +211,13 @@ entity_attribute:
         selector: 'Selektor'
         verifier: 'Verifikátor'
 
+    camp_category:
+        id: 'ID'
+        name: 'Název'
+        url_name: 'Název v odkazu'
+        parent: 'Nadřazená kategorie'
+        children: 'Podřazené kategorie'
+
 search:
     label: 'Vyhledávání'
     results: 'Výsledky'
@@ -230,6 +253,7 @@ menu:
 constraint:
     unique_user: 'Už existuje uživatel s tímto e-mailem.'
     unique_role: 'Už existuje role s tímto názvem.'
+    unique_camp_category: 'Zvolená nadřazená kategorie už má kategorii s tímto názvem v odkazu.'
 
 form:
     common:
@@ -291,6 +315,15 @@ form:
         repeated_password:
             first: 'Nové heslo'
             second: 'Nové heslo znovu'
+
+        camp_category:
+            name: 'Název'
+            url_name: 'Název v odkazu'
+            parent: 'Nadřazená kategorie'
+            button: 'Uložit'
+
+        camp_category_delete:
+            button: 'Odstranit'
 
     user:
         registration:
@@ -416,6 +449,18 @@ route:
     admin_user_update: 'Editace uživatele'
     admin_user_update_password: 'Nastavení hesla uživatele'
     admin_user_delete: 'Odstranění uživatele'
+
+    admin_camp_list: 'Tábory'
+    admin_camp_create: 'Nový tábor'
+    admin_camp_read: 'Zobrazení tábora'
+    admin_camp_update: 'Editace tábora'
+    admin_camp_delete: 'Odstranění tábora'
+
+    admin_camp_category_list: 'Kategorie tábora'
+    admin_camp_category_create: 'Nová kategorie tábora'
+    admin_camp_category_read: 'Zobrazení kategorie tábora'
+    admin_camp_category_update: 'Editace kategorie tábora'
+    admin_camp_category_delete: 'Odstranění kategorie tábora'
 
     user_home: 'Domů'
     user_login: 'Přihlášení'

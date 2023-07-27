@@ -110,6 +110,16 @@ class UserPasswordChangeTest extends TestCase
         $this->assertFalse($this->userPasswordChange->isActive());
     }
 
+    public function testCreatedAt(): void
+    {
+        $this->assertSame((new DateTimeImmutable('now'))->getTimestamp(), $this->userPasswordChange->getCreatedAt()->getTimestamp());
+    }
+
+    public function testUpdatedAt(): void
+    {
+        $this->assertNull($this->userPasswordChange->getUpdatedAt());
+    }
+
     protected function setUp(): void
     {
         $expireAt = new DateTimeImmutable(self::EXPIRE_AT);

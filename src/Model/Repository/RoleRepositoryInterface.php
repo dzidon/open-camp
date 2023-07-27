@@ -38,6 +38,13 @@ interface RoleRepositoryInterface
     public function createRole(string $label): Role;
 
     /**
+     * Finds all roles.
+     *
+     * @return Role[]
+     */
+    public function findAll(): array;
+
+    /**
      * Finds one role by id.
      *
      * @param int $id

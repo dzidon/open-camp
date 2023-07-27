@@ -1,0 +1,64 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_category.name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ camp_category.name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_category.url_name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ camp_category.urlName }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_category.parent'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_category.parent is null %}
+                                <em>{{ 'search.item_no_reference.female'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp_category.parent.path }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% set granted_update = is_granted('camp_category_update') %}
+                {% set granted_delete = is_granted('camp_category_delete') %}
+
+                {% if granted_update or granted_delete %}
+                    <div class="card-footer">
+                        {% if granted_update %}
+                            <a href="{{ path('admin_camp_category_update', {id: camp_category.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if granted_delete %}
+                            <a href="{{ path('admin_camp_category_delete', {id: camp_category.id.toRfc4122}) }}" class="btn btn-danger">
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -5,6 +5,7 @@ namespace App\DataFixture;
 use App\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Enum\Entity\UserRegistrationStateEnum;
 use App\Enum\GenderEnum;
+use App\Model\Entity\CampCategory;
 use App\Model\Entity\Camper;
 use App\Model\Entity\Contact;
 use App\Model\Entity\Permission;
@@ -22,6 +23,7 @@ use Doctrine\Persistence\ObjectManager;
 use libphonenumber\PhoneNumberUtil;
 use ReflectionClass;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Fake data used for testing.
@@ -272,6 +274,23 @@ class TestFixtures extends Fixture
         $this->setCreatedAt($camper2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($camper2);
 
+        /*
+         * CampCategory
+         */
+        $campCategory1 = new CampCategory('Category 1', 'category-1');
+        $this->setUid($campCategory1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($campCategory1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($campCategory1);
+
+        $campCategory2 = new CampCategory('Category 2', 'category-2');
+        $this->setCreatedAt($campCategory2, new DateTimeImmutable('2000-01-02'));
+        $campCategory2->setParent($campCategory1);
+        $manager->persist($campCategory2);
+
+        $campCategory3 = new CampCategory('Category 3', 'category-3');
+        $this->setCreatedAt($campCategory3, new DateTimeImmutable('2000-01-03'));
+        $manager->persist($campCategory3);
+
         // save
         $manager->flush();
     }
@@ -281,5 +300,12 @@ class TestFixtures extends Fixture
         $reflectionClass = new ReflectionClass($entity);
         $property = $reflectionClass->getProperty('createdAt');
         $property->setValue($entity, $dateTime);
+    }
+
+    private function setUid(object $entity, string $uidString): void
+    {
+        $reflectionClass = new ReflectionClass($entity);
+        $property = $reflectionClass->getProperty('id');
+        $property->setValue($entity, UuidV4::fromString($uidString));
     }
 }

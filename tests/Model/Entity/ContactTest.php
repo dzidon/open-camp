@@ -4,6 +4,7 @@ namespace App\Tests\Model\Entity;
 
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
+use DateTimeImmutable;
 use libphonenumber\PhoneNumber;
 use PHPUnit\Framework\TestCase;
 
@@ -61,6 +62,16 @@ class ContactTest extends TestCase
         $this->assertNotSame($phoneNumber, $this->contact->getPhoneNumber());
         $this->assertSame(421, $this->contact->getPhoneNumber()->getCountryCode());
         $this->assertSame('605222333', $this->contact->getPhoneNumber()->getNationalNumber());
+    }
+
+    public function testCreatedAt(): void
+    {
+        $this->assertSame((new DateTimeImmutable('now'))->getTimestamp(), $this->contact->getCreatedAt()->getTimestamp());
+    }
+
+    public function testUpdatedAt(): void
+    {
+        $this->assertNull($this->contact->getUpdatedAt());
     }
 
     protected function setUp(): void

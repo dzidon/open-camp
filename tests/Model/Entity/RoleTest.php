@@ -5,6 +5,7 @@ namespace App\Tests\Model\Entity;
 use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
 use App\Model\Entity\Role;
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 
 class RoleTest extends TestCase
@@ -89,6 +90,16 @@ class RoleTest extends TestCase
 
         $this->role->removePermission($perm);
         $this->assertNotContains($perm, $this->role->getPermissions());
+    }
+
+    public function testCreatedAt(): void
+    {
+        $this->assertSame((new DateTimeImmutable('now'))->getTimestamp(), $this->role->getCreatedAt()->getTimestamp());
+    }
+
+    public function testUpdatedAt(): void
+    {
+        $this->assertNull($this->role->getUpdatedAt());
     }
 
     protected function setUp(): void

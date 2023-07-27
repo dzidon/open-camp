@@ -1,0 +1,80 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header d-flex w-100 align-items-center">
+                    {% set granted_create = is_granted('camp_category_create') %}
+                    {% if granted_create %}
+                        <a href="{{ path('admin_camp_category_create') }}" class="btn btn-success">
+                            {{ 'crud.action.common.create'|trans }}
+                        </a>
+                    {% endif %}
+                </div>
+
+                <div class="card-body {% if root_categories is not empty %} table-responsive p-0 {% endif %}">
+                    {% if root_categories is empty %}
+                        <em>{{ 'search.error.no_results'|trans }}</em>
+                    {% else %}
+                        {% set granted_read = is_granted('camp_category_read') %}
+                        {% set granted_update = is_granted('camp_category_update') %}
+                        {% set granted_delete = is_granted('camp_category_delete') %}
+
+                        {% for camp_category in root_categories %}
+                            {% with {'camp_category': camp_category} %}
+                                {{ block('camp_category_table') }}
+                            {% endwith %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block camp_category_table %}
+    <table class="table text-nowrap table-hover">
+        <tbody>
+            <tr {% if camp_category.children is not empty %} data-widget="expandable-table" aria-expanded="false" {% endif %}>
+                <td class="d-flex w-100 justify-content-between align-items-center">
+                    <span>
+                        {% if camp_category.children is not empty %}
+                            <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                        {% endif %}
+
+                        {{ camp_category.name }}
+                    </span>
+
+                    <span class="pl-3">
+                        {% if granted_read %}
+                            <a href="{{ path('admin_camp_category_read', {id: camp_category.id.toRfc4122}) }}" class="btn btn-secondary">{{ 'crud.action.common.read'|trans }}</a>
+                        {% endif %}
+
+                        {% if granted_update %}
+                            <a href="{{ path('admin_camp_category_update', {id: camp_category.id.toRfc4122}) }}" class="btn btn-primary">{{ 'crud.action.common.update'|trans }}</a>
+                        {% endif %}
+
+                        {% if granted_delete %}
+                            <a href="{{ path('admin_camp_category_delete', {id: camp_category.id.toRfc4122}) }}" class="btn btn-danger">{{ 'crud.action.common.delete'|trans }}</a>
+                        {% endif %}
+                    </span>
+                </td>
+            </tr>
+
+            {% if camp_category.children is not empty %}
+                <tr class="expandable-body">
+                    <td>
+                        <div class="p-0">
+                            {% for camp_category_child in camp_category.children %}
+                                {% with {'camp_category': camp_category_child} %}
+                                    {{ block('camp_category_table') }}
+                                {% endwith %}
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

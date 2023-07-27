@@ -13,7 +13,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[CustomAssert\UniqueUser]
 class UserData implements UserDataInterface
 {
-    /** @var int|null Used for the unique constraint. */
     private ?int $id = null;
 
     #[Assert\Length(max: 180)]

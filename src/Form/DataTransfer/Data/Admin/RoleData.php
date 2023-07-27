@@ -12,7 +12,6 @@ use App\Validator\Constraint as CustomAssert;
 #[CustomAssert\UniqueRole]
 class RoleData implements RoleDataInterface
 {
-    /** @var int|null Used for the unique constraint. */
     private ?int $id = null;
 
     #[Assert\Length(max: 64)]

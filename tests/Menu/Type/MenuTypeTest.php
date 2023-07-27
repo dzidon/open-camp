@@ -117,7 +117,11 @@ class MenuTypeTest extends TestCase
 
         $this->expectException(LogicException::class);
         $menuType->setParent($unsupportedType);
+
+        $this->expectException(LogicException::class);
         $menuType->addChild($unsupportedType);
+
+        $this->expectException(LogicException::class);
         $menuType->removeChild($unsupportedType);
     }
 
@@ -172,6 +176,24 @@ class MenuTypeTest extends TestCase
         $this->assertSame(null, $menuType->getChild('child_button1'));
         $this->assertSame(false, $menuType->hasChild('child_button1'));
         $this->assertSame(null, $child->getParent());
+    }
+
+    /**
+     * Tests that parent nodes can be rewritten safely.
+     *
+     * @return void
+     */
+    public function testParentRewriting(): void
+    {
+        $menuType = $this->createMenuType(false, true);
+        $oldChildButton1 = $menuType->getChild('child_button1');
+        $newChildButton1 = new MenuType('child_button1', 'child_button_block_name');
+        $newChildButton1->setParent($menuType);
+
+        $this->assertSame($newChildButton1, $menuType->getChild('child_button1'));
+        $this->assertSame($menuType, $newChildButton1->getParent());
+        $this->assertSame(null, $oldChildButton1->getParent());
+        $this->assertSame(false, in_array($oldChildButton1, $menuType->getChildren(), true));
     }
 
     /**

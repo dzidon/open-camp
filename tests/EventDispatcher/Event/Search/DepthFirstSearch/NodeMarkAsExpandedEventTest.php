@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Tests\EventDispatcher\Event\DepthFirstSearch;
+namespace App\Tests\EventDispatcher\Event\Search\DepthFirstSearch;
 
 use App\DataStructure\Stack;
-use App\EventDispatcher\Event\DepthFirstSearch\NodeMarkAsExpandedEvent;
+use App\EventDispatcher\Event\Search\DepthFirstSearch\NodeMarkAsExpandedEvent;
 use App\Menu\Type\MenuType;
 use PHPUnit\Framework\TestCase;
 

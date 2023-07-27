@@ -33,26 +33,36 @@ class UniqueRoleValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint): void
     {
+        if (!$constraint instanceof UniqueRole)
+        {
+            throw new UnexpectedValueException($constraint, UniqueRole::class);
+        }
+
         if (!is_object($value))
         {
             throw new UnexpectedValueException($value, 'object');
         }
 
         $roleData = $value;
+        $label = $this->propertyAccessor->getValue($roleData, $constraint->labelProperty);
 
-        if (!$constraint instanceof UniqueRole)
+        if ($label !== null && !is_string($label))
         {
-            throw new UnexpectedValueException($constraint, UniqueRole::class);
+            throw new UnexpectedValueException($label, 'string');
         }
 
-        $label = $this->propertyAccessor->getValue($roleData, $constraint->labelProperty);
+        $id = $this->propertyAccessor->getValue($roleData, $constraint->idProperty);
+
+        if ($id !== null && !is_int($id))
+        {
+            throw new UnexpectedValueException($id, 'int');
+        }
 
         if ($label === null || $label === '')
         {
             return;
         }
 
-        $id = $this->propertyAccessor->getValue($roleData, $constraint->idProperty);
         $existingRole = $this->roleRepository->findOneByLabel($label);
 
         if ($existingRole === null)
@@ -60,10 +70,9 @@ class UniqueRoleValidator extends ConstraintValidator
             return;
         }
 
-        $existingLabel = $existingRole->getLabel();
         $existingId = $existingRole->getId();
 
-        if ($label === $existingLabel && $id !== $existingId)
+        if ($id !== $existingId)
         {
             $message = $this->translator->trans($constraint->message);
 

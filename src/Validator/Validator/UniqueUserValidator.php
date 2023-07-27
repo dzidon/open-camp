@@ -33,26 +33,36 @@ class UniqueUserValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint): void
     {
+        if (!$constraint instanceof UniqueUser)
+        {
+            throw new UnexpectedValueException($constraint, UniqueUser::class);
+        }
+
         if (!is_object($value))
         {
             throw new UnexpectedValueException($value, 'object');
         }
 
         $userData = $value;
+        $email = $this->propertyAccessor->getValue($userData, $constraint->emailProperty);
 
-        if (!$constraint instanceof UniqueUser)
+        if ($email !== null && !is_string($email))
         {
-            throw new UnexpectedValueException($constraint, UniqueUser::class);
+            throw new UnexpectedValueException($email, 'string');
         }
 
-        $email = $this->propertyAccessor->getValue($userData, $constraint->emailProperty);
+        $id = $this->propertyAccessor->getValue($userData, $constraint->idProperty);
+
+        if ($id !== null && !is_int($id))
+        {
+            throw new UnexpectedValueException($id, 'int');
+        }
 
         if ($email === null || $email === '')
         {
             return;
         }
 
-        $id = $this->propertyAccessor->getValue($userData, $constraint->idProperty);
         $existingUser = $this->userRepository->findOneByEmail($email);
 
         if ($existingUser === null)
@@ -60,10 +70,9 @@ class UniqueUserValidator extends ConstraintValidator
             return;
         }
 
-        $existingEmail = $existingUser->getEmail();
         $existingId = $existingUser->getId();
 
-        if ($email === $existingEmail && $id !== $existingId)
+        if ($id !== $existingId)
         {
             $message = $this->translator->trans($constraint->message);
 
