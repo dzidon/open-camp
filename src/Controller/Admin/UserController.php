@@ -24,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Uid\UuidV4;
 
 #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 class UserController extends AbstractController
@@ -106,8 +107,8 @@ class UserController extends AbstractController
     }
 
     #[IsGranted('user_read')]
-    #[Route('/admin/user/{id}/read', name: 'admin_user_read', requirements: ['id' => '\d+'])]
-    public function read(int $id): Response
+    #[Route('/admin/user/{id}/read', name: 'admin_user_read')]
+    public function read(UuidV4 $id): Response
     {
         $user = $this->findUserOrThrow404($id);
 
@@ -118,11 +119,11 @@ class UserController extends AbstractController
     }
 
     #[IsGranted(new Expression('is_granted("user_update") or is_granted("user_update_role")'))]
-    #[Route('/admin/user/{id}/update', name: 'admin_user_update', requirements: ['id' => '\d+'])]
+    #[Route('/admin/user/{id}/update', name: 'admin_user_update')]
     public function update(DataTransferRegistryInterface $dataTransfer,
                            RoleRepositoryInterface       $roleRepository,
                            Request                       $request,
-                           int                           $id): Response
+                           UuidV4                        $id): Response
     {
         $user = $this->findUserOrThrow404($id);
 
@@ -151,8 +152,8 @@ class UserController extends AbstractController
     }
 
     #[IsGranted('user_update')]
-    #[Route('/admin/user/{id}/update/password', name: 'admin_user_update_password', requirements: ['id' => '\d+'])]
-    public function updatePassword(UserPasswordHasherInterface $hasher, Request $request, int $id): Response
+    #[Route('/admin/user/{id}/update/password', name: 'admin_user_update_password')]
+    public function updatePassword(UserPasswordHasherInterface $hasher, Request $request, UuidV4 $id): Response
     {
         $user = $this->findUserOrThrow404($id);
 
@@ -189,8 +190,8 @@ class UserController extends AbstractController
     }
 
     #[IsGranted('user_delete')]
-    #[Route('/admin/user/{id}/delete', name: 'admin_user_delete', requirements: ['id' => '\d+'])]
-    public function delete(Request $request, int $id): Response
+    #[Route('/admin/user/{id}/delete', name: 'admin_user_delete')]
+    public function delete(Request $request, UuidV4 $id): Response
     {
         $user = $this->findUserOrThrow404($id);
 
@@ -216,7 +217,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    private function findUserOrThrow404(int $id): User
+    private function findUserOrThrow404(UuidV4 $id): User
     {
         $user = $this->userRepository->findOneById($id);
         if ($user === null)

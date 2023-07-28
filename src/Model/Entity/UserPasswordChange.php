@@ -8,6 +8,9 @@ use App\Model\Repository\UserPasswordChangeRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Allows users to reset their forgotten password.
@@ -16,9 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
 class UserPasswordChange
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    private UuidV4 $id;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
@@ -48,6 +50,7 @@ class UserPasswordChange
 
     public function __construct(DateTimeImmutable $expireAt, string $selector, string $verifier)
     {
+        $this->id = Uuid::v4();
         $this->expireAt = $expireAt;
         $this->selector = $selector;
         $this->verifier = $verifier;
@@ -55,7 +58,7 @@ class UserPasswordChange
         $this->createdAt = new DateTimeImmutable('now');
     }
 
-    public function getId(): ?int
+    public function getId(): UuidV4
     {
         return $this->id;
     }

@@ -9,6 +9,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Admin role used for authorization.
@@ -17,9 +20,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Role
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    private UuidV4 $id;
 
     #[ORM\Column(length: 64, unique: true)]
     private string $label;
@@ -36,12 +38,13 @@ class Role
 
     public function __construct(string $label)
     {
+        $this->id = Uuid::v4();
         $this->label = $label;
         $this->permissions = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable('now');
     }
 
-    public function getId(): ?int
+    public function getId(): UuidV4
     {
         return $this->id;
     }

@@ -58,6 +58,7 @@ class TestFixtures extends Fixture
          * PermissionGroup
          */
         $permissionGroup1 = new PermissionGroup('group1', 'Group 1', 100);
+        $this->setUid($permissionGroup1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($permissionGroup1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($permissionGroup1);
 
@@ -69,6 +70,7 @@ class TestFixtures extends Fixture
          * Permission
          */
         $permission1 = new Permission('permission1', 'Permission 1', 100, $permissionGroup1);
+        $this->setUid($permission1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($permission1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($permission1);
 
@@ -88,6 +90,7 @@ class TestFixtures extends Fixture
          * Role
          */
         $role1 = new Role('Super admin');
+        $this->setUid($role1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($role1, new DateTimeImmutable('2000-01-01'));
         $role1
             ->addPermission($permission1)
@@ -106,6 +109,7 @@ class TestFixtures extends Fixture
          * User
          */
         $user1 = new User('david@gmail.com');
+        $this->setUid($user1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($user1, new DateTimeImmutable('2000-01-01'));
         $user1->setName('David Smith');
         $user1->setRole($role1);
@@ -137,6 +141,7 @@ class TestFixtures extends Fixture
 
         // only one active registration
         $userRegistration1 = new UserRegistration('max@gmail.com', $expirationDateFuture, 'max', $verifier);
+        $this->setUid($userRegistration1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($userRegistration1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($userRegistration1);
 
@@ -194,6 +199,7 @@ class TestFixtures extends Fixture
 
         // only one active password change
         $userPasswordChange1 = new UserPasswordChange($expirationDateFuture, 'dav', $verifier);
+        $this->setUid($userPasswordChange1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($userPasswordChange1, new DateTimeImmutable('2000-01-01'));
         $userPasswordChange1->setUser($user1); // david@gmail.com
         $manager->persist($userPasswordChange1);
@@ -254,6 +260,7 @@ class TestFixtures extends Fixture
          */
         $phoneNumber = $this->phoneNumberUtil->parse('+420607999888');
         $contact1 = new Contact('David Smith', 'david.smith@gmail.com', $phoneNumber, $user1);
+        $this->setUid($contact1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($contact1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($contact1);
 
@@ -267,6 +274,7 @@ class TestFixtures extends Fixture
          */
         $bornAtDate = new DateTimeImmutable('2000-01-01');
         $camper1 = new Camper('Camper 1', GenderEnum::MALE, $bornAtDate, $user1);
+        $this->setUid($camper1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($camper1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($camper1);
 

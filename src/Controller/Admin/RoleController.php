@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Uid\UuidV4;
 
 #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 class RoleController extends AbstractController
@@ -101,8 +102,8 @@ class RoleController extends AbstractController
     }
 
     #[IsGranted('role_read')]
-    #[Route('/admin/role/{id}/read', name: 'admin_role_read', requirements: ['id' => '\d+'])]
-    public function read(UserRepositoryInterface $userRepository, int $id): Response
+    #[Route('/admin/role/{id}/read', name: 'admin_role_read')]
+    public function read(UserRepositoryInterface $userRepository, UuidV4 $id): Response
     {
         $role = $this->findRoleOrThrow404($id);
         $users = $userRepository->findByRole($role);
@@ -115,11 +116,11 @@ class RoleController extends AbstractController
     }
 
     #[IsGranted('role_update')]
-    #[Route('/admin/role/{id}/update', name: 'admin_role_update', requirements: ['id' => '\d+'])]
+    #[Route('/admin/role/{id}/update', name: 'admin_role_update')]
     public function update(DataTransferRegistryInterface $dataTransfer,
                            PermissionRepositoryInterface $permissionRepository,
                            Request                       $request,
-                           int                           $id): Response
+                           UuidV4                        $id): Response
     {
         $role = $this->findRoleOrThrow404($id);
         $permissionChoices = $permissionRepository->findAll();
@@ -148,8 +149,8 @@ class RoleController extends AbstractController
     }
 
     #[IsGranted('role_delete')]
-    #[Route('/admin/role/{id}/delete', name: 'admin_role_delete', requirements: ['id' => '\d+'])]
-    public function delete(Request $request, int $id): Response
+    #[Route('/admin/role/{id}/delete', name: 'admin_role_delete')]
+    public function delete(Request $request, UuidV4 $id): Response
     {
         $role = $this->findRoleOrThrow404($id);
 
@@ -175,7 +176,7 @@ class RoleController extends AbstractController
         ]);
     }
 
-    private function findRoleOrThrow404(int $id): Role
+    private function findRoleOrThrow404(UuidV4 $id): Role
     {
         $role = $this->roleRepository->findOneById($id);
         if ($role === null)

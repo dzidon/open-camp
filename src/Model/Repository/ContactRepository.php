@@ -10,6 +10,8 @@ use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use libphonenumber\PhoneNumber;
 use libphonenumber\PhoneNumberUtil;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @method Contact|null find($id, $lockMode = null, $lockVersion = null)
@@ -64,13 +66,13 @@ class ContactRepository extends AbstractRepository implements ContactRepositoryI
     /**
      * @inheritDoc
      */
-    public function findOneById(int $id): ?Contact
+    public function findOneById(UuidV4 $id): ?Contact
     {
         return $this->createQueryBuilder('contact')
             ->select('contact, contactUser')
             ->leftJoin('contact.user', 'contactUser')
             ->andWhere('contact.id = :id')
-            ->setParameter('id', $id)
+            ->setParameter('id', $id, UuidType::NAME)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -87,8 +89,8 @@ class ContactRepository extends AbstractRepository implements ContactRepositoryI
         $query = $this->createQueryBuilder('contact')
             ->andWhere('contact.name LIKE :name')
             ->setParameter('name', '%' . $phrase . '%')
-            ->andWhere('contact.user = :user')
-            ->setParameter('user', $user)
+            ->andWhere('contact.user = :userId')
+            ->setParameter('userId', $user->getId(), UuidType::NAME)
             ->orderBy('contact.' . $sortBy->property(), $sortBy->order())
             ->getQuery()
         ;

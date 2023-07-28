@@ -275,6 +275,8 @@ form:
                 options:
                     created_at_desc: 'Od nejnovější'
                     created_at_asc: 'Od nejstarší'
+                    label_asc: 'Název (A-Z)'
+                    label_desc: 'Název (Z-A)'
 
             button: 'Hledat'
 

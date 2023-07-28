@@ -8,6 +8,9 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use libphonenumber\PhoneNumber;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * User contact information.
@@ -16,9 +19,8 @@ use libphonenumber\PhoneNumber;
 class Contact
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    private UuidV4 $id;
 
     #[ORM\Column(length: 255)]
     private string $name;
@@ -42,6 +44,7 @@ class Contact
 
     public function __construct(string $name, string $email, PhoneNumber $phoneNumber, User $user)
     {
+        $this->id = Uuid::v4();
         $this->name = $name;
         $this->email = $email;
         $this->phoneNumber = clone $phoneNumber;
@@ -49,7 +52,7 @@ class Contact
         $this->createdAt = new DateTimeImmutable('now');
     }
 
-    public function getId(): ?int
+    public function getId(): UuidV4
     {
         return $this->id;
     }

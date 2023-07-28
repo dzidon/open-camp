@@ -42,7 +42,7 @@ class UserPasswordChanger implements UserPasswordChangerInterface
         // mark other user's active password changes as disabled
         foreach ($otherPasswordChanges as $otherPasswordChange)
         {
-            if ($userPasswordChange->getId() === $otherPasswordChange->getId())
+            if ($userPasswordChange->getId()->toRfc4122() === $otherPasswordChange->getId()->toRfc4122())
             {
                 continue;
             }

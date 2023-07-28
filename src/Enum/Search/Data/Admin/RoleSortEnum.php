@@ -13,4 +13,6 @@ enum RoleSortEnum: string
 
     case CREATED_AT_DESC = 'createdAt DESC';
     case CREATED_AT_ASC = 'createdAt ASC';
+    case LABEL_ASC = 'label ASC';
+    case LABEL_DESC = 'label DESC';
 }

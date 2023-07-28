@@ -6,6 +6,7 @@ use App\Form\DataTransfer\Data\Admin\UserSearchDataInterface;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Search\Paginator\PaginatorInterface;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * User CRUD.
@@ -24,7 +25,7 @@ interface UserRepositoryInterface
     /**
      * Removes a user.
      *
-     * @param \App\Model\Entity\User $user
+     * @param User $user
      * @param bool $flush
      * @return void
      */
@@ -35,17 +36,17 @@ interface UserRepositoryInterface
      *
      * @param string $email
      * @param string|null $plainPassword Gets hashed if not null.
-     * @return \App\Model\Entity\User
+     * @return User
      */
     public function createUser(string $email, ?string $plainPassword = null): User;
 
     /**
      * Finds one user by id.
      *
-     * @param int $id
+     * @param UuidV4 $id
      * @return User|null
      */
-    public function findOneById(int $id): ?User;
+    public function findOneById(UuidV4 $id): ?User;
 
     /**
      * Finds one user by email.

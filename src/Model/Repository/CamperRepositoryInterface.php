@@ -8,6 +8,7 @@ use App\Model\Entity\Camper;
 use App\Model\Entity\User;
 use App\Search\Paginator\PaginatorInterface;
 use DateTimeImmutable;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Camper CRUD.
@@ -49,10 +50,10 @@ interface CamperRepositoryInterface
     /**
      * Finds one camper by id.
      *
-     * @param int $id
+     * @param UuidV4 $id
      * @return Camper|null
      */
-    public function findOneById(int $id): ?Camper;
+    public function findOneById(UuidV4 $id): ?Camper;
 
     /**
      * Finds campers assigned to the given user.

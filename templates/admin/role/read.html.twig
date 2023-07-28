@@ -70,13 +70,13 @@
                 {% if granted_update or granted_delete %}
                     <div class="card-footer">
                         {% if granted_update %}
-                            <a href="{{ path('admin_role_update', {id: role.id}) }}" class="btn btn-primary mr-2">
+                            <a href="{{ path('admin_role_update', {id: role.id.toRfc4122}) }}" class="btn btn-primary mr-2">
                                 {{ 'crud.action.common.update'|trans }}
                             </a>
                         {% endif %}
 
                         {% if granted_delete %}
-                            <a href="{{ path('admin_role_delete', {id: role.id}) }}" class="btn btn-danger">
+                            <a href="{{ path('admin_role_delete', {id: role.id.toRfc4122}) }}" class="btn btn-danger">
                                 {{ 'crud.action.common.delete'|trans }}
                             </a>
                         {% endif %}

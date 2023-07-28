@@ -8,6 +8,9 @@ use App\Model\Repository\UserRegistrationRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Used for registering new users.
@@ -16,9 +19,8 @@ use Doctrine\ORM\Mapping as ORM;
 class UserRegistration
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    private UuidV4 $id;
 
     #[ORM\Column(length: 180)]
     private string $email;
@@ -47,6 +49,7 @@ class UserRegistration
 
     public function __construct(string $email, DateTimeImmutable $expireAt, string $selector, string $verifier)
     {
+        $this->id = Uuid::v4();
         $this->email = $email;
         $this->expireAt = $expireAt;
         $this->selector = $selector;
@@ -55,7 +58,7 @@ class UserRegistration
         $this->createdAt = new DateTimeImmutable('now');
     }
 
-    public function getId(): ?int
+    public function getId(): UuidV4
     {
         return $this->id;
     }

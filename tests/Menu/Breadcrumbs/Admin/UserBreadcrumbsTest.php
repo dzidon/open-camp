@@ -6,6 +6,7 @@ use App\Menu\Breadcrumbs\Admin\UserBreadcrumbs;
 use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use App\Tests\DataStructure\GraphNodeChildrenIdentifiersTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class UserBreadcrumbsTest extends KernelTestCase
 {
@@ -50,7 +51,8 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead(1);
+        $uid = UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $breadcrumbsMenu = $this->breadcrumbs->buildRead($uid);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_read'], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -64,12 +66,13 @@ class UserBreadcrumbsTest extends KernelTestCase
 
         $button = $breadcrumbsMenu->getChild('admin_user_read');
         $this->assertSame(true, $button->isActive());
-        $this->assertSame('/admin/user/1/read', $button->getUrl());
+        $this->assertSame('/admin/user/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b/read', $button->getUrl());
     }
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate(1);
+        $uid = UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($uid);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_update'], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -83,12 +86,13 @@ class UserBreadcrumbsTest extends KernelTestCase
 
         $button = $breadcrumbsMenu->getChild('admin_user_update');
         $this->assertSame(true, $button->isActive());
-        $this->assertSame('/admin/user/1/update', $button->getUrl());
+        $this->assertSame('/admin/user/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b/update', $button->getUrl());
     }
 
     public function testUpdatePassword(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdatePassword(1);
+        $uid = UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $breadcrumbsMenu = $this->breadcrumbs->buildUpdatePassword($uid);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_update', 'admin_user_update_password'], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -102,16 +106,17 @@ class UserBreadcrumbsTest extends KernelTestCase
 
         $button = $breadcrumbsMenu->getChild('admin_user_update');
         $this->assertSame(false, $button->isActive());
-        $this->assertSame('/admin/user/1/update', $button->getUrl());
+        $this->assertSame('/admin/user/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b/update', $button->getUrl());
 
         $button = $breadcrumbsMenu->getChild('admin_user_update_password');
         $this->assertSame(true, $button->isActive());
-        $this->assertSame('/admin/user/1/update/password', $button->getUrl());
+        $this->assertSame('/admin/user/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b/update/password', $button->getUrl());
     }
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete(1);
+        $uid = UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($uid);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_delete'], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -125,7 +130,7 @@ class UserBreadcrumbsTest extends KernelTestCase
 
         $button = $breadcrumbsMenu->getChild('admin_user_delete');
         $this->assertSame(true, $button->isActive());
-        $this->assertSame('/admin/user/1/delete', $button->getUrl());
+        $this->assertSame('/admin/user/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b/delete', $button->getUrl());
     }
 
     protected function setUp(): void

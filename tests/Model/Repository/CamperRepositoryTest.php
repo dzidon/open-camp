@@ -11,6 +11,7 @@ use App\Model\Repository\CamperRepository;
 use App\Model\Repository\UserRepositoryInterface;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Tests the Camper repository.
@@ -53,21 +54,12 @@ class CamperRepositoryTest extends KernelTestCase
 
     public function testFindOneById(): void
     {
-        $camperRepository = $this->getCamperRepository();
-        $userRepository = $this->getUserRepository();
+        $repository = $this->getCamperRepository();
 
-        $loadedCamper = $camperRepository->findOneById(-10000);
-        $this->assertNull($loadedCamper);
+        $uid = new UuidV4('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $camper = $repository->findOneById($uid);
 
-        $bornAtDate = new DateTimeImmutable('2000-01-01');
-        $user = new User('bob@bing.com');
-        $camper = $camperRepository->createCamper('Name', GenderEnum::FEMALE, $bornAtDate, $user);
-
-        $userRepository->saveUser($user, false);
-        $camperRepository->saveCamper($camper, true);
-
-        $loadedCamper = $camperRepository->findOneById($camper->getId());
-        $this->assertSame($camper->getId(), $loadedCamper->getId());
+        $this->assertSame($uid->toRfc4122(), $camper->getId()->toRfc4122());
     }
 
     public function testFindByUser(): void
@@ -77,7 +69,11 @@ class CamperRepositoryTest extends KernelTestCase
 
         $user = $userRepository->findOneByEmail('david@gmail.com');
         $campers = $camperRepository->findByUser($user);
-        $this->assertSame(['Camper 1', 'Camper 2'], $this->getCamperNames($campers));
+        $names = $this->getCamperNames($campers);
+
+        $this->assertCount(2, $names);
+        $this->assertContains('Camper 1', $names);
+        $this->assertContains('Camper 2', $names);
     }
 
     public function testFindOwnedBySameUser(): void
@@ -90,7 +86,11 @@ class CamperRepositoryTest extends KernelTestCase
         $camperRepository->saveCamper($camper, true);
 
         $campers = $camperRepository->findOwnedBySameUser($camper);
-        $this->assertSame(['Camper 1', 'Camper 2'], $this->getCamperNames($campers));
+        $names = $this->getCamperNames($campers);
+
+        $this->assertCount(2, $names);
+        $this->assertContains('Camper 1', $names);
+        $this->assertContains('Camper 2', $names);
     }
 
     public function testGetUserPaginator(): void

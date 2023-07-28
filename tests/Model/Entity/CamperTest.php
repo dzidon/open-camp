@@ -7,6 +7,7 @@ use App\Model\Entity\Camper;
 use App\Model\Entity\User;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class CamperTest extends TestCase
 {
@@ -16,6 +17,12 @@ class CamperTest extends TestCase
 
     private Camper $camper;
     private User $user;
+
+    public function testId(): void
+    {
+        $id = $this->camper->getId();
+        $this->assertInstanceOf(UuidV4::class, $id);
+    }
 
     public function testUser(): void
     {

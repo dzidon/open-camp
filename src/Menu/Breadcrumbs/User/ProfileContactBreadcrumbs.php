@@ -4,6 +4,7 @@ namespace App\Menu\Breadcrumbs\User;
 
 use App\Menu\Breadcrumbs\AbstractBreadcrumbs;
 use App\Menu\Type\MenuType;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @inheritDoc
@@ -42,12 +43,12 @@ class ProfileContactBreadcrumbs extends AbstractBreadcrumbs implements ProfileCo
     /**
      * @inheritDoc
      */
-    public function buildRead(int $contactId): MenuType
+    public function buildRead(UuidV4 $contactId): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
         $this->addChildRoute($root, 'user_profile_contact_list');
-        $this->addChildRoute($root, 'user_profile_contact_read', ['id' => $contactId])
+        $this->addChildRoute($root, 'user_profile_contact_read', ['id' => $contactId->toRfc4122()])
             ->setActive()
         ;
 
@@ -57,12 +58,12 @@ class ProfileContactBreadcrumbs extends AbstractBreadcrumbs implements ProfileCo
     /**
      * @inheritDoc
      */
-    public function buildUpdate(int $contactId): MenuType
+    public function buildUpdate(UuidV4 $contactId): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
         $this->addChildRoute($root, 'user_profile_contact_list');
-        $this->addChildRoute($root, 'user_profile_contact_update', ['id' => $contactId])
+        $this->addChildRoute($root, 'user_profile_contact_update', ['id' => $contactId->toRfc4122()])
             ->setActive()
         ;
 
@@ -72,12 +73,12 @@ class ProfileContactBreadcrumbs extends AbstractBreadcrumbs implements ProfileCo
     /**
      * @inheritDoc
      */
-    public function buildDelete(int $contactId): MenuType
+    public function buildDelete(UuidV4 $contactId): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
         $this->addChildRoute($root, 'user_profile_contact_list');
-        $this->addChildRoute($root, 'user_profile_contact_delete', ['id' => $contactId])
+        $this->addChildRoute($root, 'user_profile_contact_delete', ['id' => $contactId->toRfc4122()])
             ->setActive()
         ;
 

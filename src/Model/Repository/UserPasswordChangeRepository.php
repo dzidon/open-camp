@@ -10,6 +10,7 @@ use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
  * @extends ServiceEntityRepository<UserPasswordChange>
@@ -91,8 +92,8 @@ class UserPasswordChangeRepository extends AbstractRepository implements UserPas
         return $queryBuilder
             ->select('userPasswordChange, userPasswordChangeUser')
             ->leftJoin('userPasswordChange.user', 'userPasswordChangeUser')
-            ->andWhere('userPasswordChange.user = :user')
-            ->setParameter('user', $user)
+            ->andWhere('userPasswordChange.user = :userId')
+            ->setParameter('userId', $user->getId(), UuidType::NAME)
             ->getQuery()
             ->getResult()
         ;

@@ -7,6 +7,7 @@ use App\Form\DataTransfer\Data\Admin\RoleSearchData;
 use App\Model\Entity\Role;
 use App\Model\Repository\RoleRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Tests the Role repository.
@@ -50,14 +51,10 @@ class RoleRepositoryTest extends KernelTestCase
     {
         $repository = $this->getRoleRepository();
 
-        $loadedRole = $repository->findOneById(-10000);
-        $this->assertNull($loadedRole);
+        $uid = new UuidV4('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $camper = $repository->findOneById($uid);
 
-        $role = new Role('New role');
-        $repository->saveRole($role, true);
-
-        $loadedRole = $repository->findOneById($role->getId());
-        $this->assertSame($role->getId(), $loadedRole->getId());
+        $this->assertSame($uid->toRfc4122(), $camper->getId()->toRfc4122());
     }
 
     public function testFindOneByLabel(): void
@@ -123,6 +120,40 @@ class RoleRepositoryTest extends KernelTestCase
 
         $data = new RoleSearchData();
         $data->setSortBy(RoleSortEnum::CREATED_AT_ASC);
+
+        $paginator = $roleRepository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $labels = $this->getRoleLabels($paginator->getCurrentPageItems());
+        $this->assertSame(['Super admin', 'Admin'], $labels);
+    }
+
+    public function testGetAdminPaginatorSortByLabelAsc(): void
+    {
+        $roleRepository = $this->getRoleRepository();
+
+        $data = new RoleSearchData();
+        $data->setSortBy(RoleSortEnum::LABEL_ASC);
+
+        $paginator = $roleRepository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $labels = $this->getRoleLabels($paginator->getCurrentPageItems());
+        $this->assertSame(['Admin', 'Super admin'], $labels);
+    }
+
+    public function testGetAdminPaginatorSortByLabelDesc(): void
+    {
+        $roleRepository = $this->getRoleRepository();
+
+        $data = new RoleSearchData();
+        $data->setSortBy(RoleSortEnum::LABEL_DESC);
 
         $paginator = $roleRepository->getAdminPaginator($data, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());

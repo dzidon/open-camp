@@ -7,6 +7,9 @@ use App\Model\Repository\PermissionRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Admin permission used for authorization.
@@ -15,9 +18,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Permission
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    private UuidV4 $id;
 
     #[ORM\Column(length: 64, unique: true)]
     private string $name;
@@ -41,6 +43,7 @@ class Permission
 
     public function __construct(string $name, string $label, int $priority, PermissionGroup $group)
     {
+        $this->id = Uuid::v4();
         $this->name = $name;
         $this->label = $label;
         $this->priority = $priority;
@@ -48,7 +51,7 @@ class Permission
         $this->createdAt = new DateTimeImmutable('now');
     }
 
-    public function getId(): ?int
+    public function getId(): UuidV4
     {
         return $this->id;
     }

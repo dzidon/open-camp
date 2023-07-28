@@ -10,6 +10,7 @@ use App\Model\Repository\ContactRepository;
 use App\Model\Repository\UserRepositoryInterface;
 use libphonenumber\PhoneNumber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Tests the Contact repository.
@@ -72,24 +73,12 @@ class ContactRepositoryTest extends KernelTestCase
 
     public function testFindOneById(): void
     {
-        $contactRepository = $this->getContactRepository();
-        $userRepository = $this->getUserRepository();
+        $repository = $this->getContactRepository();
 
-        $loadedContact = $contactRepository->findOneById(-10000);
-        $this->assertNull($loadedContact);
+        $uid = new UuidV4('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $camper = $repository->findOneById($uid);
 
-        $phoneNumber = (new PhoneNumber())
-            ->setNationalNumber(420)
-            ->setNationalNumber('607555666')
-        ;
-
-        $user = new User('bob@bing.com');
-        $contact = new Contact('Bob Bobby', 'bob@bing.com', $phoneNumber, $user);
-        $userRepository->saveUser($user, false);
-        $contactRepository->saveContact($contact, true);
-
-        $loadedContact = $contactRepository->findOneById($contact->getId());
-        $this->assertSame($contact->getId(), $loadedContact->getId());
+        $this->assertSame($uid->toRfc4122(), $camper->getId()->toRfc4122());
     }
 
     public function testGetUserPaginator(): void

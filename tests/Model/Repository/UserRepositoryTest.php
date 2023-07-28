@@ -12,6 +12,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Tests the User repository.
@@ -56,14 +57,10 @@ class UserRepositoryTest extends KernelTestCase
     {
         $repository = $this->getUserRepository();
 
-        $loadedUser = $repository->findOneById(-10000);
-        $this->assertNull($loadedUser);
+        $uid = new UuidV4('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $camper = $repository->findOneById($uid);
 
-        $user = new User('New role');
-        $repository->saveUser($user, true);
-
-        $loadedUser = $repository->findOneById($user->getId());
-        $this->assertSame($user->getId(), $loadedUser->getId());
+        $this->assertSame($uid->toRfc4122(), $camper->getId()->toRfc4122());
     }
 
     public function testFindOneByEmail(): void

@@ -4,6 +4,7 @@ namespace App\Menu\Breadcrumbs\Admin;
 
 use App\Controller\Admin\UserController;
 use App\Menu\Type\MenuTypeInterface;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Creates breadcrumbs for {@link UserController}.
@@ -23,20 +24,20 @@ interface UserBreadcrumbsInterface
     /**
      * Creates breadcrumbs for the path "admin_user_read".
      */
-    public function buildRead(int $userId): MenuTypeInterface;
+    public function buildRead(UuidV4 $userId): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "admin_user_update".
      */
-    public function buildUpdate(int $userId): MenuTypeInterface;
+    public function buildUpdate(UuidV4 $userId): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "admin_password_update".
      */
-    public function buildUpdatePassword(int $userId): MenuTypeInterface;
+    public function buildUpdatePassword(UuidV4 $userId): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "admin_user_delete".
      */
-    public function buildDelete(int $userId): MenuTypeInterface;
+    public function buildDelete(UuidV4 $userId): MenuTypeInterface;
 }

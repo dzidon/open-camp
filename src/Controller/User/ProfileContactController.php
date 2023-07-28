@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Uid\UuidV4;
 
 #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 #[Route('/profile')]
@@ -98,8 +99,8 @@ class ProfileContactController extends AbstractController
         ]);
     }
 
-    #[Route('/contact/{id}/read', name: 'user_profile_contact_read', requirements: ['id' => '\d+'])]
-    public function read(int $id): Response
+    #[Route('/contact/{id}/read', name: 'user_profile_contact_read')]
+    public function read(UuidV4 $id): Response
     {
         $contact = $this->findContactOrThrow404($id);
         $this->denyAccessUnlessGranted('contact_read', $contact);
@@ -110,8 +111,8 @@ class ProfileContactController extends AbstractController
         ]);
     }
 
-    #[Route('/contact/{id}/update', name: 'user_profile_contact_update', requirements: ['id' => '\d+'])]
-    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, int $id): Response
+    #[Route('/contact/{id}/update', name: 'user_profile_contact_update')]
+    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
     {
         $contact = $this->findContactOrThrow404($id);
         $this->denyAccessUnlessGranted('contact_update', $contact);
@@ -137,8 +138,8 @@ class ProfileContactController extends AbstractController
         ]);
     }
 
-    #[Route('/contact/{id}/delete', name: 'user_profile_contact_delete', requirements: ['id' => '\d+'])]
-    public function delete(Request $request, int $id): Response
+    #[Route('/contact/{id}/delete', name: 'user_profile_contact_delete')]
+    public function delete(Request $request, UuidV4 $id): Response
     {
         $contact = $this->findContactOrThrow404($id);
         $this->denyAccessUnlessGranted('contact_delete', $contact);
@@ -165,7 +166,7 @@ class ProfileContactController extends AbstractController
         ]);
     }
 
-    private function findContactOrThrow404(int $id): Contact
+    private function findContactOrThrow404(UuidV4 $id): Contact
     {
         $contact = $this->contactRepository->findOneById($id);
         if ($contact === null)

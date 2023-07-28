@@ -8,12 +8,19 @@ use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class UserTest extends TestCase
 {
     private const EMAIL = 'abc@gmail.com';
 
     private User $user;
+
+    public function testId(): void
+    {
+        $id = $this->user->getId();
+        $this->assertInstanceOf(UuidV4::class, $id);
+    }
 
     public function testEmail(): void
     {

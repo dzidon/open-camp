@@ -7,6 +7,7 @@ use App\Form\DataTransfer\Data\User\BillingData;
 use App\Model\Entity\Role;
 use App\Model\Repository\UserRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserDataTest extends KernelTestCase
@@ -16,8 +17,9 @@ class UserDataTest extends KernelTestCase
         $data = new UserData();
         $this->assertNull($data->getId());
 
-        $data->setId(123);
-        $this->assertSame(123, $data->getId());
+        $uid = Uuid::v4();
+        $data->setId($uid);
+        $this->assertSame($uid, $data->getId());
 
         $data->setId(null);
         $this->assertNull($data->getId());

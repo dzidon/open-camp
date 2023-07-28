@@ -6,6 +6,7 @@ use App\Enum\Entity\UserRegistrationStateEnum;
 use App\Model\Entity\UserRegistration;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class UserRegistrationTest extends TestCase
 {
@@ -15,6 +16,12 @@ class UserRegistrationTest extends TestCase
     private const VERIFIER = 'xyz';
 
     private UserRegistration $userRegistration;
+
+    public function testId(): void
+    {
+        $id = $this->userRegistration->getId();
+        $this->assertInstanceOf(UuidV4::class, $id);
+    }
 
     public function testEmail(): void
     {

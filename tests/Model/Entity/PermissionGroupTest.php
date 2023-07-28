@@ -5,6 +5,7 @@ namespace App\Tests\Model\Entity;
 use App\Model\Entity\PermissionGroup;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class PermissionGroupTest extends TestCase
 {
@@ -13,6 +14,12 @@ class PermissionGroupTest extends TestCase
     private const PRIORITY = 1;
 
     private PermissionGroup $group;
+
+    public function testId(): void
+    {
+        $id = $this->group->getId();
+        $this->assertInstanceOf(UuidV4::class, $id);
+    }
 
     public function testName(): void
     {

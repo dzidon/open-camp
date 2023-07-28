@@ -7,6 +7,8 @@ use App\Model\Entity\Role;
 use App\Search\Paginator\DqlPaginator;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @method Role|null find($id, $lockMode = null, $lockVersion = null)
@@ -63,14 +65,14 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function findOneById(int $id): ?Role
+    public function findOneById(UuidV4 $id): ?Role
     {
         return $this->createQueryBuilder('role')
             ->select('role, rolePermission, rolePermissionGroup')
             ->leftJoin('role.permissions', 'rolePermission')
             ->leftJoin('rolePermission.group', 'rolePermissionGroup')
             ->andWhere('role.id = :id')
-            ->setParameter('id', $id)
+            ->setParameter('id', $id, UuidType::NAME)
             ->addOrderBy('rolePermissionGroup.priority', 'ASC')
             ->addOrderBy('rolePermission.priority', 'ASC')
             ->getQuery()

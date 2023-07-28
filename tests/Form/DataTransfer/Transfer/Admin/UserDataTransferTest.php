@@ -17,7 +17,6 @@ class UserDataTransferTest extends KernelTestCase
     {
         $dataTransfer = $this->getUserDataTransfer();
 
-        $expectedId = 123;
         $expectedEmail = 'abc@gmail.com';
         $expectedRole = new Role('label');
         $expectedName = 'Name';
@@ -34,14 +33,10 @@ class UserDataTransferTest extends KernelTestCase
         $user->setZip($expectedZip);
         $user->setCountry($expectedCountry);
 
-        $reflectionClass = new ReflectionClass(User::class);
-        $reflectionProperty = $reflectionClass->getProperty('id');
-        $reflectionProperty->setValue($user, $expectedId);
-
         $data = new UserData();
         $dataTransfer->fillData($data, $user);
 
-        $this->assertSame($expectedId, $data->getId());
+        $this->assertSame($user->getId(), $data->getId());
         $this->assertSame($expectedEmail, $data->getEmail());
         $this->assertSame($expectedRole, $data->getRole());
 
@@ -57,7 +52,6 @@ class UserDataTransferTest extends KernelTestCase
     {
         $dataTransfer = $this->getUserDataTransfer(['user_update']);
 
-        $expectedId = 123;
         $expectedEmail = 'abc@gmail.com';
         $expectedRole = new Role('label');
         $expectedName = 'Name';
@@ -67,7 +61,6 @@ class UserDataTransferTest extends KernelTestCase
         $expectedCountry = 'Country';
 
         $data = new UserData();
-        $data->setId($expectedId);
         $data->setEmail($expectedEmail);
         $data->setRole($expectedRole);
 
@@ -81,7 +74,7 @@ class UserDataTransferTest extends KernelTestCase
         $user = new User('bob@gmail.com');
         $dataTransfer->fillEntity($data, $user);
 
-        $this->assertNull($user->getId());
+        $this->assertNotSame($user->getId(), $data->getId());
         $this->assertSame($expectedEmail, $user->getEmail());
         $this->assertNull($user->getRole());
         $this->assertSame($expectedName, $user->getName());
@@ -95,7 +88,6 @@ class UserDataTransferTest extends KernelTestCase
     {
         $dataTransfer = $this->getUserDataTransfer(['user_update_role']);
 
-        $expectedId = 123;
         $expectedEmail = 'abc@gmail.com';
         $expectedRole = new Role('label');
         $expectedName = 'Name';
@@ -105,7 +97,6 @@ class UserDataTransferTest extends KernelTestCase
         $expectedCountry = 'Country';
 
         $data = new UserData();
-        $data->setId($expectedId);
         $data->setEmail($expectedEmail);
         $data->setRole($expectedRole);
 
@@ -119,7 +110,7 @@ class UserDataTransferTest extends KernelTestCase
         $user = new User('bob@gmail.com');
         $dataTransfer->fillEntity($data, $user);
 
-        $this->assertNull($user->getId());
+        $this->assertNotSame($user->getId(), $data->getId());
         $this->assertSame('bob@gmail.com', $user->getEmail());
         $this->assertSame($expectedRole, $user->getRole());
         $this->assertNull($user->getName());

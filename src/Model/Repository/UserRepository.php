@@ -9,11 +9,13 @@ use App\Search\Paginator\DqlPaginator;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -69,7 +71,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function findOneById(int $id): ?User
+    public function findOneById(UuidV4 $id): ?User
     {
         return $this->createQueryBuilder('user')
             ->select('user, userRole, userRolePermission, userRolePermissionGroup')
@@ -77,7 +79,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
             ->leftJoin('userRole.permissions', 'userRolePermission')
             ->leftJoin('userRolePermission.group', 'userRolePermissionGroup')
             ->andWhere('user.id = :id')
-            ->setParameter('id', $id)
+            ->setParameter('id', $id, UuidType::NAME)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -122,8 +124,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     public function findByRole(?Role $role): array
     {
         return $this->createQueryBuilder('user')
-            ->andWhere('user.role = :role')
-            ->setParameter('role', $role)
+            ->andWhere('user.role = :roleId')
+            ->setParameter('roleId', $role->getId(), UuidType::NAME)
             ->getQuery()
             ->getResult()
         ;
@@ -151,8 +153,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         if ($role !== null)
         {
             $queryBuilder
-                ->andWhere('user.role = :role')
-                ->setParameter('role', $role)
+                ->andWhere('user.role = :roleId')
+                ->setParameter('roleId', $role->getId(), UuidType::NAME)
             ;
         }
 

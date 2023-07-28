@@ -73,7 +73,6 @@
                         <table class="table text-nowrap">
                             <thead>
                                 <tr>
-                                    <th class="cell-5">{{ 'entity_attribute.user.id'|trans }}</th>
                                     <th class="cell-25">{{ 'entity_attribute.user.email'|trans }}</th>
                                     <th class="cell-25">{{ 'entity_attribute.user.name'|trans }}</th>
                                     <th>{{ 'entity_attribute.user.role'|trans }}</th>
@@ -88,8 +87,6 @@
 
                                 {% for user in paginator.currentPageItems %}
                                     <tr class="align-items-center">
-                                        <td class="align-middle cell-5">{{ user.id }}</td>
-
                                         <td class="align-middle cell-25">
                                             <span>{{ user.email }}</span>
                                         </td>
@@ -113,15 +110,15 @@
                                         <td class="align-middle cell-25">
                                             {% if granted_read or granted_update or granted_delete %}
                                                 {% if granted_read %}
-                                                    <a href="{{ path('admin_user_read', {id: user.id}) }}" class="btn btn-secondary">{{ 'crud.action.common.read'|trans }}</a>
+                                                    <a href="{{ path('admin_user_read', {id: user.id.toRfc4122}) }}" class="btn btn-secondary">{{ 'crud.action.common.read'|trans }}</a>
                                                 {% endif %}
 
                                                 {% if granted_update %}
-                                                    <a href="{{ path('admin_user_update', {id: user.id}) }}" class="btn btn-primary">{{ 'crud.action.common.update'|trans }}</a>
+                                                    <a href="{{ path('admin_user_update', {id: user.id.toRfc4122}) }}" class="btn btn-primary">{{ 'crud.action.common.update'|trans }}</a>
                                                 {% endif %}
 
                                                 {% if granted_delete %}
-                                                    <a href="{{ path('admin_user_delete', {id: user.id}) }}" class="btn btn-danger">{{ 'crud.action.common.delete'|trans }}</a>
+                                                    <a href="{{ path('admin_user_delete', {id: user.id.toRfc4122}) }}" class="btn btn-danger">{{ 'crud.action.common.delete'|trans }}</a>
                                                 {% endif %}
                                             {% else %}
                                                 <span>-</span>

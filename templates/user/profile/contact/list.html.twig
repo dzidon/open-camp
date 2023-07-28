@@ -61,15 +61,15 @@
                                 {{ contact.phoneNumber|phone_number_format(phone_number_format) }}
                             </p>
 
-                            <a href="{{ path('user_profile_contact_read', {id: contact.id}) }}" class="card-link">
+                            <a href="{{ path('user_profile_contact_read', {id: contact.id.toRfc4122}) }}" class="card-link">
                                 {{ 'crud.action.common.read'|trans }}
                             </a>
 
-                            <a href="{{ path('user_profile_contact_update', {id: contact.id}) }}" class="card-link">
+                            <a href="{{ path('user_profile_contact_update', {id: contact.id.toRfc4122}) }}" class="card-link">
                                 {{ 'crud.action.common.update'|trans }}
                             </a>
 
-                            <a href="{{ path('user_profile_contact_delete', {id: contact.id}) }}" class="card-link">
+                            <a href="{{ path('user_profile_contact_delete', {id: contact.id.toRfc4122}) }}" class="card-link">
                                 {{ 'crud.action.common.delete'|trans }}
                             </a>
                         </div>

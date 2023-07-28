@@ -4,6 +4,7 @@ namespace App\Menu\Breadcrumbs\Admin;
 
 use App\Menu\Breadcrumbs\AbstractBreadcrumbs;
 use App\Menu\Type\MenuType;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @inheritDoc
@@ -42,12 +43,12 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     /**
      * @inheritDoc
      */
-    public function buildRead(int $userId): MenuType
+    public function buildRead(UuidV4 $userId): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_user_list');
-        $this->addChildRoute($root, 'admin_user_read', ['id' => $userId])
+        $this->addChildRoute($root, 'admin_user_read', ['id' => $userId->toRfc4122()])
             ->setActive()
         ;
 
@@ -57,12 +58,12 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     /**
      * @inheritDoc
      */
-    public function buildUpdate(int $userId): MenuType
+    public function buildUpdate(UuidV4 $userId): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_user_list');
-        $this->addChildRoute($root, 'admin_user_update', ['id' => $userId])
+        $this->addChildRoute($root, 'admin_user_update', ['id' => $userId->toRfc4122()])
             ->setActive()
         ;
 
@@ -72,13 +73,13 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     /**
      * @inheritDoc
      */
-    public function buildUpdatePassword(int $userId): MenuType
+    public function buildUpdatePassword(UuidV4 $userId): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_user_list');
-        $this->addChildRoute($root, 'admin_user_update', ['id' => $userId]);
-        $this->addChildRoute($root, 'admin_user_update_password', ['id' => $userId])
+        $this->addChildRoute($root, 'admin_user_update', ['id' => $userId->toRfc4122()]);
+        $this->addChildRoute($root, 'admin_user_update_password', ['id' => $userId->toRfc4122()])
             ->setActive()
         ;
 
@@ -88,12 +89,12 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     /**
      * @inheritDoc
      */
-    public function buildDelete(int $userId): MenuType
+    public function buildDelete(UuidV4 $userId): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_user_list');
-        $this->addChildRoute($root, 'admin_user_delete', ['id' => $userId])
+        $this->addChildRoute($root, 'admin_user_delete', ['id' => $userId->toRfc4122()])
             ->setActive()
         ;
 

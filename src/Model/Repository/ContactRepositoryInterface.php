@@ -7,6 +7,7 @@ use App\Model\Entity\Contact;
 use App\Model\Entity\User;
 use App\Search\Paginator\PaginatorInterface;
 use libphonenumber\PhoneNumber;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Contact CRUD.
@@ -45,10 +46,10 @@ interface ContactRepositoryInterface
     /**
      * Finds one contact by id.
      *
-     * @param int $id
+     * @param UuidV4 $id
      * @return Contact|null
      */
-    public function findOneById(int $id): ?Contact;
+    public function findOneById(UuidV4 $id): ?Contact;
 
     /**
      * Returns user contact search paginator.

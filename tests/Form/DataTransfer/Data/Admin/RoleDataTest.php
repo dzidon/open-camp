@@ -7,6 +7,7 @@ use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
 use App\Model\Repository\RoleRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RoleDataTest extends KernelTestCase
@@ -16,8 +17,9 @@ class RoleDataTest extends KernelTestCase
         $data = new RoleData();
         $this->assertNull($data->getId());
 
-        $data->setId(123);
-        $this->assertSame(123, $data->getId());
+        $uid = Uuid::v4();
+        $data->setId($uid);
+        $this->assertSame($uid, $data->getId());
 
         $data->setId(null);
         $this->assertNull($data->getId());

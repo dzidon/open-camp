@@ -61,15 +61,15 @@
                                 {{ 'entity_attribute.camper.born_at'|trans }}: {{ camper.bornAt|date(date_format) }}
                             </p>
 
-                            <a href="{{ path('user_profile_camper_read', {id: camper.id}) }}" class="card-link">
+                            <a href="{{ path('user_profile_camper_read', {id: camper.id.toRfc4122}) }}" class="card-link">
                                 {{ 'crud.action.common.read'|trans }}
                             </a>
 
-                            <a href="{{ path('user_profile_camper_update', {id: camper.id}) }}" class="card-link">
+                            <a href="{{ path('user_profile_camper_update', {id: camper.id.toRfc4122}) }}" class="card-link">
                                 {{ 'crud.action.common.update'|trans }}
                             </a>
 
-                            <a href="{{ path('user_profile_camper_delete', {id: camper.id}) }}" class="card-link">
+                            <a href="{{ path('user_profile_camper_delete', {id: camper.id.toRfc4122}) }}" class="card-link">
                                 {{ 'crud.action.common.delete'|trans }}
                             </a>
                         </div>

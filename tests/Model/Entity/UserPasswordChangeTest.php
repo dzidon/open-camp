@@ -7,6 +7,7 @@ use App\Model\Entity\User;
 use App\Model\Entity\UserPasswordChange;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class UserPasswordChangeTest extends TestCase
 {
@@ -15,6 +16,12 @@ class UserPasswordChangeTest extends TestCase
     private const VERIFIER = 'xyz';
 
     private UserPasswordChange $userPasswordChange;
+
+    public function testId(): void
+    {
+        $id = $this->userPasswordChange->getId();
+        $this->assertInstanceOf(UuidV4::class, $id);
+    }
 
     public function testUser(): void
     {

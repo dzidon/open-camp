@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Uid\UuidV4;
 
 #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
 #[Route('/profile')]
@@ -106,8 +107,8 @@ class ProfileCamperController extends AbstractController
         ]);
     }
 
-    #[Route('/camper/{id}/read', name: 'user_profile_camper_read', requirements: ['id' => '\d+'])]
-    public function read(int $id): Response
+    #[Route('/camper/{id}/read', name: 'user_profile_camper_read')]
+    public function read(UuidV4 $id): Response
     {
         $camper = $this->findCamperOrThrow404($id);
         $this->denyAccessUnlessGranted('camper_read', $camper);
@@ -118,8 +119,8 @@ class ProfileCamperController extends AbstractController
         ]);
     }
 
-    #[Route('/camper/{id}/update', name: 'user_profile_camper_update', requirements: ['id' => '\d+'])]
-    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, int $id): Response
+    #[Route('/camper/{id}/update', name: 'user_profile_camper_update')]
+    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
     {
         $camper = $this->findCamperOrThrow404($id);
         $this->denyAccessUnlessGranted('camper_update', $camper);
@@ -153,8 +154,8 @@ class ProfileCamperController extends AbstractController
         ]);
     }
 
-    #[Route('/camper/{id}/delete', name: 'user_profile_camper_delete', requirements: ['id' => '\d+'])]
-    public function delete(Request $request, int $id): Response
+    #[Route('/camper/{id}/delete', name: 'user_profile_camper_delete')]
+    public function delete(Request $request, UuidV4 $id): Response
     {
         $camper = $this->findCamperOrThrow404($id);
         $this->denyAccessUnlessGranted('camper_delete', $camper);
@@ -181,7 +182,7 @@ class ProfileCamperController extends AbstractController
         ]);
     }
 
-    private function findCamperOrThrow404(int $id): Camper
+    private function findCamperOrThrow404(UuidV4 $id): Camper
     {
         $camper = $this->camperRepository->findOneById($id);
         if ($camper === null)

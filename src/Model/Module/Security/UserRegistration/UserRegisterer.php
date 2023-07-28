@@ -37,7 +37,7 @@ class UserRegisterer implements UserRegistererInterface
 
         foreach ($otherEmailRegistrations as $otherRegistration)
         {
-            if ($userRegistration->getId() === $otherRegistration->getId())
+            if ($userRegistration->getId()->toRfc4122() === $otherRegistration->getId()->toRfc4122())
             {
                 continue;
             }

@@ -85,11 +85,11 @@
 
     <div class="row">
         <div class="col">
-            <a href="{{ path('user_profile_camper_update', {id: camper.id}) }}" class="card-link">
+            <a href="{{ path('user_profile_camper_update', {id: camper.id.toRfc4122}) }}" class="card-link">
                 {{ 'crud.action.common.update'|trans }}
             </a>
 
-            <a href="{{ path('user_profile_camper_delete', {id: camper.id}) }}" class="card-link">
+            <a href="{{ path('user_profile_camper_delete', {id: camper.id.toRfc4122}) }}" class="card-link">
                 {{ 'crud.action.common.delete'|trans }}
             </a>
         </div>

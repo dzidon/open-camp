@@ -5,6 +5,7 @@ namespace App\Model\Repository;
 use App\Form\DataTransfer\Data\Admin\RoleSearchDataInterface;
 use App\Model\Entity\Role;
 use App\Search\Paginator\PaginatorInterface;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Admin role CRUD.
@@ -47,10 +48,10 @@ interface RoleRepositoryInterface
     /**
      * Finds one role by id.
      *
-     * @param int $id
+     * @param UuidV4 $id
      * @return Role|null
      */
-    public function findOneById(int $id): ?Role;
+    public function findOneById(UuidV4 $id): ?Role;
 
     /**
      * Finds one role by label.

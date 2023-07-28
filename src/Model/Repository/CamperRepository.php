@@ -10,6 +10,8 @@ use App\Search\Paginator\DqlPaginator;
 use DateTimeImmutable;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @method Camper|null find($id, $lockMode = null, $lockVersion = null)
@@ -51,14 +53,14 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
     /**
      * @inheritDoc
      */
-    public function findOneById(int $id): ?Camper
+    public function findOneById(UuidV4 $id): ?Camper
     {
         return $this->createQueryBuilder('camper')
             ->select('camper, camperUser, camperSiblings')
             ->leftJoin('camper.user', 'camperUser')
             ->leftJoin('camper.siblings', 'camperSiblings')
             ->andWhere('camper.id = :id')
-            ->setParameter('id', $id)
+            ->setParameter('id', $id, UuidType::NAME)
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -72,8 +74,8 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
         return $this->createQueryBuilder('camper')
             ->select('camper, camperSiblings')
             ->leftJoin('camper.siblings', 'camperSiblings')
-            ->andWhere('camper.user = :user')
-            ->setParameter('user', $user)
+            ->andWhere('camper.user = :userId')
+            ->setParameter('userId', $user->getId(), UuidType::NAME)
             ->getQuery()
             ->getResult()
         ;
@@ -89,10 +91,10 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
         return $this->createQueryBuilder('camper')
             ->select('camper, camperSiblings')
             ->leftJoin('camper.siblings', 'camperSiblings')
-            ->andWhere('camper.user = :user')
-            ->setParameter('user', $user)
+            ->andWhere('camper.user = :userId')
+            ->setParameter('userId', $user->getId(), UuidType::NAME)
             ->andWhere('camper.id != :id')
-            ->setParameter('id', $camper->getId())
+            ->setParameter('id', $camper->getId(), UuidType::NAME)
             ->getQuery()
             ->getResult()
         ;
@@ -109,8 +111,8 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
         $query = $this->createQueryBuilder('camper')
             ->andWhere('camper.name LIKE :name')
             ->setParameter('name', '%' . $phrase . '%')
-            ->andWhere('camper.user = :user')
-            ->setParameter('user', $user)
+            ->andWhere('camper.user = :userId')
+            ->setParameter('userId', $user->getId(), UuidType::NAME)
             ->orderBy('camper.' . $sortBy->property(), $sortBy->order())
             ->getQuery()
         ;

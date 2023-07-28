@@ -5,6 +5,7 @@ namespace App\Form\DataTransfer\Data\Admin;
 use App\Form\DataTransfer\Data\User\BillingData;
 use App\Model\Entity\Role;
 use App\Validator\Constraint as CustomAssert;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[CustomAssert\UniqueUser]
 class UserData implements UserDataInterface
 {
-    private ?int $id = null;
+    private ?UuidV4 $id = null;
 
     #[Assert\Length(max: 180)]
     #[Assert\Email]
@@ -30,12 +31,12 @@ class UserData implements UserDataInterface
         $this->billingData = new BillingData();
     }
 
-    public function getId(): ?int
+    public function getId(): ?UuidV4
     {
         return $this->id;
     }
 
-    public function setId(?int $id): self
+    public function setId(?UuidV4 $id): self
     {
         $this->id = $id;
 

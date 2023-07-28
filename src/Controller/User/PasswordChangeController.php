@@ -86,7 +86,7 @@ class PasswordChangeController extends AbstractController
         {
             $userPasswordChanger->completeUserPasswordChange($userPasswordChange, $passwordData->getPlainPassword(), true);
 
-            /** @var \App\Model\Entity\User $user */
+            /** @var User $user */
             $user = $this->getUser();
             if ($user === null)
             {

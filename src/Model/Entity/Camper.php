@@ -10,6 +10,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * User camper information.
@@ -18,9 +21,8 @@ use Doctrine\ORM\Mapping as ORM;
 class Camper
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: UuidType::NAME, unique: true)]
+    private UuidV4 $id;
 
     #[ORM\Column(length: 255)]
     private string $name;
@@ -53,6 +55,7 @@ class Camper
 
     public function __construct(string $name, GenderEnum $gender, DateTimeImmutable $bornAt, User $user)
     {
+        $this->id = Uuid::v4();
         $this->name = $name;
         $this->gender = $gender->value;
         $this->bornAt = $bornAt;
@@ -61,7 +64,7 @@ class Camper
         $this->createdAt = new DateTimeImmutable('now');
     }
 
-    public function getId(): ?int
+    public function getId(): UuidV4
     {
         return $this->id;
     }

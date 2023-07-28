@@ -4,6 +4,7 @@ namespace App\Menu\Breadcrumbs\Admin;
 
 use App\Controller\Admin\RoleController;
 use App\Menu\Type\MenuTypeInterface;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * Creates breadcrumbs for {@link RoleController}.
@@ -23,15 +24,15 @@ interface RoleBreadcrumbsInterface
     /**
      * Creates breadcrumbs for the path "admin_role_read".
      */
-    public function buildRead(int $roleId): MenuTypeInterface;
+    public function buildRead(UuidV4 $roleId): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "admin_role_update".
      */
-    public function buildUpdate(int $roleId): MenuTypeInterface;
+    public function buildUpdate(UuidV4 $roleId): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "admin_role_delete".
      */
-    public function buildDelete(int $roleId): MenuTypeInterface;
+    public function buildDelete(UuidV4 $roleId): MenuTypeInterface;
 }

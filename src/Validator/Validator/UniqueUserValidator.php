@@ -5,6 +5,7 @@ namespace App\Validator\Validator;
 use App\Model\Repository\UserRepositoryInterface;
 use App\Validator\Constraint\UniqueUser;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
@@ -53,9 +54,9 @@ class UniqueUserValidator extends ConstraintValidator
 
         $id = $this->propertyAccessor->getValue($userData, $constraint->idProperty);
 
-        if ($id !== null && !is_int($id))
+        if ($id !== null && !$id instanceof UuidV4)
         {
-            throw new UnexpectedValueException($id, 'int');
+            throw new UnexpectedValueException($id, UuidV4::class);
         }
 
         if ($email === null || $email === '')
@@ -72,7 +73,7 @@ class UniqueUserValidator extends ConstraintValidator
 
         $existingId = $existingUser->getId();
 
-        if ($id !== $existingId)
+        if ($id === null || $id->toRfc4122() !== $existingId->toRfc4122())
         {
             $message = $this->translator->trans($constraint->message);
 

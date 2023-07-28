@@ -7,12 +7,19 @@ use App\Model\Entity\PermissionGroup;
 use App\Model\Entity\Role;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class RoleTest extends TestCase
 {
     private const LABEL = 'Label...';
 
     private Role $role;
+
+    public function testId(): void
+    {
+        $id = $this->role->getId();
+        $this->assertInstanceOf(UuidV4::class, $id);
+    }
 
     public function testLabel(): void
     {

@@ -3,6 +3,7 @@
 namespace App\Form\DataTransfer\Data\Admin;
 
 use App\Model\Entity\Permission;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator\Constraint as CustomAssert;
 
@@ -12,7 +13,7 @@ use App\Validator\Constraint as CustomAssert;
 #[CustomAssert\UniqueRole]
 class RoleData implements RoleDataInterface
 {
-    private ?int $id = null;
+    private ?UuidV4 $id = null;
 
     #[Assert\Length(max: 64)]
     #[Assert\NotBlank]
@@ -23,12 +24,12 @@ class RoleData implements RoleDataInterface
      */
     private iterable $permissions = [];
 
-    public function getId(): ?int
+    public function getId(): ?UuidV4
     {
         return $this->id;
     }
 
-    public function setId(?int $id): self
+    public function setId(?UuidV4 $id): self
     {
         $this->id = $id;
 

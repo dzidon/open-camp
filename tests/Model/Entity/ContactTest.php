@@ -7,6 +7,7 @@ use App\Model\Entity\User;
 use DateTimeImmutable;
 use libphonenumber\PhoneNumber;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Uid\UuidV4;
 
 class ContactTest extends TestCase
 {
@@ -18,6 +19,12 @@ class ContactTest extends TestCase
     private PhoneNumber $phoneNumber;
     private Contact $contact;
     private User $user;
+
+    public function testId(): void
+    {
+        $id = $this->contact->getId();
+        $this->assertInstanceOf(UuidV4::class, $id);
+    }
 
     public function testUser(): void
     {

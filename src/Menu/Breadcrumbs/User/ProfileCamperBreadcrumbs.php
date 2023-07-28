@@ -4,6 +4,7 @@ namespace App\Menu\Breadcrumbs\User;
 
 use App\Menu\Breadcrumbs\AbstractBreadcrumbs;
 use App\Menu\Type\MenuType;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @inheritDoc
@@ -42,12 +43,12 @@ class ProfileCamperBreadcrumbs extends AbstractBreadcrumbs implements ProfileCam
     /**
      * @inheritDoc
      */
-    public function buildRead(int $camperId): MenuType
+    public function buildRead(UuidV4 $camperId): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
         $this->addChildRoute($root, 'user_profile_camper_list');
-        $this->addChildRoute($root, 'user_profile_camper_read', ['id' => $camperId])
+        $this->addChildRoute($root, 'user_profile_camper_read', ['id' => $camperId->toRfc4122()])
             ->setActive()
         ;
 
@@ -57,12 +58,12 @@ class ProfileCamperBreadcrumbs extends AbstractBreadcrumbs implements ProfileCam
     /**
      * @inheritDoc
      */
-    public function buildUpdate(int $camperId): MenuType
+    public function buildUpdate(UuidV4 $camperId): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
         $this->addChildRoute($root, 'user_profile_camper_list');
-        $this->addChildRoute($root, 'user_profile_camper_update', ['id' => $camperId])
+        $this->addChildRoute($root, 'user_profile_camper_update', ['id' => $camperId->toRfc4122()])
             ->setActive()
         ;
 
@@ -72,12 +73,12 @@ class ProfileCamperBreadcrumbs extends AbstractBreadcrumbs implements ProfileCam
     /**
      * @inheritDoc
      */
-    public function buildDelete(int $camperId): MenuType
+    public function buildDelete(UuidV4 $camperId): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
         $this->addChildRoute($root, 'user_profile_camper_list');
-        $this->addChildRoute($root, 'user_profile_camper_delete', ['id' => $camperId])
+        $this->addChildRoute($root, 'user_profile_camper_delete', ['id' => $camperId->toRfc4122()])
             ->setActive()
         ;
 
