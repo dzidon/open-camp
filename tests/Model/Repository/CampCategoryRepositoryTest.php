@@ -53,10 +53,7 @@ class CampCategoryRepositoryTest extends KernelTestCase
         $campCategories = $repository->findAll();
         $categoryUrlNames = $this->getCampCategoryUrlNames($campCategories);
 
-        $this->assertCount(3, $categoryUrlNames);
-        $this->assertContains('category-1', $categoryUrlNames);
-        $this->assertContains('category-2', $categoryUrlNames);
-        $this->assertContains('category-3', $categoryUrlNames);
+        $this->assertSame(['category-1', 'category-2', 'category-3'], $categoryUrlNames);
     }
 
     public function testFindRoots(): void
@@ -66,9 +63,7 @@ class CampCategoryRepositoryTest extends KernelTestCase
         $campCategories = $repository->findRoots();
         $categoryUrlNames = $this->getCampCategoryUrlNames($campCategories);
 
-        $this->assertCount(2, $categoryUrlNames);
-        $this->assertContains('category-1', $categoryUrlNames);
-        $this->assertContains('category-3', $categoryUrlNames);
+        $this->assertSame(['category-1', 'category-3'], $categoryUrlNames);
     }
 
     public function testFindPossibleParents(): void
@@ -80,8 +75,7 @@ class CampCategoryRepositoryTest extends KernelTestCase
         $possibleParents = $repository->findPossibleParents($campCategory);
         $categoryUrlNames = $this->getCampCategoryUrlNames($possibleParents);
 
-        $this->assertCount(1, $categoryUrlNames);
-        $this->assertContains('category-3', $categoryUrlNames);
+        $this->assertSame(['category-3'], $categoryUrlNames);
     }
 
     public function testFindByUrlName(): void
@@ -91,8 +85,7 @@ class CampCategoryRepositoryTest extends KernelTestCase
         $campCategories = $repository->findByUrlName('category-1');
         $categoryUrlNames = $this->getCampCategoryUrlNames($campCategories);
 
-        $this->assertCount(1, $categoryUrlNames);
-        $this->assertContains('category-1', $categoryUrlNames);
+        $this->assertSame(['category-1'], $categoryUrlNames);
     }
 
     private function getCampCategoryUrlNames(array $campCategories): array

@@ -147,7 +147,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
             ->setParameter('email', '%' . $phrase . '%')
             ->orWhere('user.name LIKE :name')
             ->setParameter('name', '%' . $phrase . '%')
-            ->orderBy('user.' . $sortBy->property(), $sortBy->order())
+            ->orderBy($sortBy->property(), $sortBy->order())
         ;
 
         if ($role !== null)

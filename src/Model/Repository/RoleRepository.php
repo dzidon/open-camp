@@ -109,7 +109,7 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
         $query = $this->createQueryBuilder('role')
             ->andWhere('role.label LIKE :label')
             ->setParameter('label', '%' . $phrase . '%')
-            ->orderBy('role.' . $sortBy->property(), $sortBy->order())
+            ->orderBy($sortBy->property(), $sortBy->order())
             ->getQuery()
         ;
 

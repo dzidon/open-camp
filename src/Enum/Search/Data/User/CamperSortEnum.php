@@ -11,6 +11,6 @@ enum CamperSortEnum: string
 {
     use SortEnumTrait;
 
-    case CREATED_AT_DESC = 'createdAt DESC';
-    case CREATED_AT_ASC = 'createdAt ASC';
+    case CREATED_AT_DESC = 'camper.createdAt DESC';
+    case CREATED_AT_ASC = 'camper.createdAt ASC';
 }

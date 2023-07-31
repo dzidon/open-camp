@@ -91,7 +91,7 @@ class ContactRepository extends AbstractRepository implements ContactRepositoryI
             ->setParameter('name', '%' . $phrase . '%')
             ->andWhere('contact.user = :userId')
             ->setParameter('userId', $user->getId(), UuidType::NAME)
-            ->orderBy('contact.' . $sortBy->property(), $sortBy->order())
+            ->orderBy($sortBy->property(), $sortBy->order())
             ->getQuery()
         ;
 

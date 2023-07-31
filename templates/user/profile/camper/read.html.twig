@@ -39,7 +39,7 @@
         <div class="col-12 col-sm-9">
             <span>
                 {% if camper.dietaryRestrictions is null %}
-                    <span>-</span>
+                    -
                 {% else %}
                     {{ camper.dietaryRestrictions|nl2br }}
                 {% endif %}
@@ -55,7 +55,7 @@
         <div class="col-12 col-sm-9">
             <span>
                 {% if camper.healthRestrictions is null %}
-                    <span>-</span>
+                    -
                 {% else %}
                     {{ camper.healthRestrictions|nl2br }}
                 {% endif %}

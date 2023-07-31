@@ -5,6 +5,7 @@ namespace App\DataFixture;
 use App\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Enum\Entity\UserRegistrationStateEnum;
 use App\Enum\GenderEnum;
+use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
 use App\Model\Entity\Camper;
 use App\Model\Entity\Contact;
@@ -298,6 +299,20 @@ class TestFixtures extends Fixture
         $campCategory3 = new CampCategory('Category 3', 'category-3');
         $this->setCreatedAt($campCategory3, new DateTimeImmutable('2000-01-03'));
         $manager->persist($campCategory3);
+
+        /*
+         * Camp
+         */
+        $camp1 = new Camp('Camp 1', 'camp-1', 6, 12);
+        $this->setUid($camp1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $camp1->setCampCategory($campCategory1);
+        $this->setCreatedAt($camp1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($camp1);
+
+        $camp2 = new Camp('Camp 2', 'camp-2', 13, 18);
+        $camp2->setCampCategory($campCategory2);
+        $this->setCreatedAt($camp2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($camp2);
 
         // save
         $manager->flush();

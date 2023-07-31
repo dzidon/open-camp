@@ -2,11 +2,12 @@
 
 namespace App\Menu\Breadcrumbs\Admin;
 
+use App\Controller\Admin\CampCategoryController;
 use App\Menu\Type\MenuTypeInterface;
 use Symfony\Component\Uid\UuidV4;
 
 /**
- * Creates breadcrumbs for {@link }.
+ * Creates breadcrumbs for {@link CampCategoryController}.
  */
 interface CampCategoryBreadcrumbsInterface
 {

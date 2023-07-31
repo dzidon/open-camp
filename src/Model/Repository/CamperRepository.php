@@ -113,7 +113,7 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
             ->setParameter('name', '%' . $phrase . '%')
             ->andWhere('camper.user = :userId')
             ->setParameter('userId', $user->getId(), UuidType::NAME)
-            ->orderBy('camper.' . $sortBy->property(), $sortBy->order())
+            ->orderBy($sortBy->property(), $sortBy->order())
             ->getQuery()
         ;
 

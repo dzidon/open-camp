@@ -38,6 +38,7 @@ permission_group:
     user: 'Uživatelé'
     role: 'Role'
     camp_category: 'Kategorie tábora'
+    camp: 'Tábory'
 
 permission:
     user_read: 'Zobrazení uživatele'
@@ -56,6 +57,11 @@ permission:
     camp_category_update: 'Editace kategorie tábora'
     camp_category_delete: 'Odstranění kategorie tábora'
 
+    camp_read: 'Zobrazení tábora'
+    camp_create: 'Tvorba tábora'
+    camp_update: 'Editace tábora'
+    camp_delete: 'Odstranění tábora'
+
 crud:
     instruction:
         user:
@@ -68,6 +74,7 @@ crud:
         role_delete: 'Opravdu si přejete odstranit roli "{label}"?'
         user_delete: 'Opravdu si přejete odstranit uživatele "{email}"?'
         camp_category_delete: 'Opravdu si přejete odstranit kategorii tábora "{name}"?'
+        camp_delete: 'Opravdu si přejete odstranit tábor "{name}"?'
 
     action:
         common:
@@ -108,6 +115,11 @@ crud:
             update: 'Kateogrie tábora uložena!'
             delete: 'Kateogrie tábora odstraněna!'
 
+        camp:
+            create: 'Tábor vytvořen!'
+            update: 'Tábor uložen!'
+            delete: 'Tábor odstraněn!'
+
 entity:
     contact:
         singular: 'Kontakt'
@@ -145,6 +157,10 @@ entity:
         singular: 'Kategorie tábora'
         plural: 'Kategorie táborů'
 
+    camp:
+        singular: 'Tábor'
+        plural: 'Tábory'
+
 entity_attribute:
     common:
         set: 'Nastaveno'
@@ -156,6 +172,8 @@ entity_attribute:
         email: 'E-mail'
         phone_number: 'Telefonní číslo'
         user: 'Uživatel'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
     camper:
         id: 'ID'
@@ -166,23 +184,31 @@ entity_attribute:
         health_restrictions: 'Zdravotní omezení'
         siblings: 'Sourozenci'
         user: 'Uživatel'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
     permission:
         id: 'ID'
         name: 'Interní označení'
         label: 'Název'
         group: 'Skupina oprávnění'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
     permission_group:
         id: 'ID'
         name: 'Interní označení'
         label: 'Název'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
     role:
         id: 'ID'
         label: 'Název'
         permissions: 'Oprávnění'
         users: 'Uživatelé'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
     user:
         id: 'ID'
@@ -194,6 +220,8 @@ entity_attribute:
         town: 'Obec'
         zip: 'PSČ'
         country: 'Země'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
     user_password_change:
         id: 'ID'
@@ -202,6 +230,8 @@ entity_attribute:
         state: 'Stav'
         selector: 'Selektor'
         verifier: 'Verifikátor'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
     user_registration:
         id: 'ID'
@@ -210,6 +240,8 @@ entity_attribute:
         state: 'Stav'
         selector: 'Selektor'
         verifier: 'Verifikátor'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
     camp_category:
         id: 'ID'
@@ -217,6 +249,21 @@ entity_attribute:
         url_name: 'Název v odkazu'
         parent: 'Nadřazená kategorie'
         children: 'Podřazené kategorie'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    camp:
+        id: 'ID'
+        name: 'Název'
+        url_name: 'Název v odkazu'
+        age_min: 'Min. věk'
+        age_max: 'Max. věk'
+        gender: 'Pohlaví táborníka'
+        description_short: 'Krátký popis'
+        description_long: 'Dlouhý popis'
+        camp_category: 'Kategorie tábora'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
 search:
     label: 'Vyhledávání'
@@ -254,6 +301,7 @@ constraint:
     unique_user: 'Už existuje uživatel s tímto e-mailem.'
     unique_role: 'Už existuje role s tímto názvem.'
     unique_camp_category: 'Zvolená nadřazená kategorie už má kategorii s tímto názvem v odkazu.'
+    unique_camp: 'Už existuje tábor s tímto názvem v odkazu.'
 
 form:
     common:
@@ -263,6 +311,9 @@ form:
                 male: '-- žádný --'
                 female: '-- žádná --'
                 neutral: '-- žádné --'
+
+            yes: 'Ano'
+            no: 'Ne'
 
         collection:
             remove: 'Odebrat'
@@ -325,6 +376,38 @@ form:
             button: 'Uložit'
 
         camp_category_delete:
+            button: 'Odstranit'
+
+        camp:
+            name: 'Název'
+            url_name: 'Název v odkazu'
+            age_min: 'Min. věk'
+            age_max: 'Max. věk'
+            description_short: 'Krátký popis'
+            description_long: 'Dlouhý popis'
+            camp_category: 'Kategorie tábora'
+            button: 'Uložit'
+
+        camp_search:
+            phrase: 'Hledat podle názvu nebo názvu v odkazu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovějšího'
+                    created_at_asc: 'Od nejstaršího'
+                    name_asc: 'Název (A-Z)'
+                    name_desc: 'Název (Z-A)'
+                    url_name_asc: 'Název v odkazu (A-Z)'
+                    url_name_desc: 'Název v odkazu (Z-A)'
+
+            age: 'Věk'
+            date_start: 'Datum odjezdu'
+            date_end: 'Datum návratu'
+            camp_category: 'Kategorie tábora'
+            active: 'Přijímá přihlášky'
+            button: 'Hledat'
+
+        camp_delete:
             button: 'Odstranit'
 
     user:

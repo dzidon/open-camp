@@ -11,6 +11,6 @@ enum ContactSortEnum: string
 {
     use SortEnumTrait;
 
-    case CREATED_AT_DESC = 'createdAt DESC';
-    case CREATED_AT_ASC = 'createdAt ASC';
+    case CREATED_AT_DESC = 'contact.createdAt DESC';
+    case CREATED_AT_ASC = 'contact.createdAt ASC';
 }

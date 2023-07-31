@@ -65,18 +65,35 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
         }
 
         // camps
+        $isGrantedCamp =
+            $this->security->isGranted('camp_create') || $this->security->isGranted('camp_read') ||
+            $this->security->isGranted('camp_update') || $this->security->isGranted('camp_delete')
+        ;
+
         $isGrantedCampCategory =
             $this->security->isGranted('camp_category_create') || $this->security->isGranted('camp_category_read') ||
             $this->security->isGranted('camp_category_update') || $this->security->isGranted('camp_category_delete')
         ;
 
-        if ($isGrantedCampCategory /* || ...*/)
+        if ($isGrantedCamp || $isGrantedCampCategory)
         {
             $text = $this->translator->trans('route.admin_camp_list');
             $itemCampsParent = new MenuIconType('parent_camps', 'navbar_admin_vertical_item', $text, '#', 'fas fa-campground');
             $menu->addChild($itemCampsParent);
 
-            // ...
+            if ($isGrantedCamp)
+            {
+                $active =
+                    $route === 'admin_camp_list'   || $route === 'admin_camp_create' || $route === 'admin_camp_read' ||
+                    $route === 'admin_camp_update' || $route === 'admin_camp_delete'
+                ;
+
+                $text = $this->translator->trans('menu.navbar_admin_vertical.browse');
+                $url = $this->urlGenerator->generate('admin_camp_list');
+                $itemCamps = new MenuIconType('admin_camp_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
+                $itemCampsParent->addChild($itemCamps);
+                $itemCamps->setActive($active, $active);
+            }
 
             if ($isGrantedCampCategory)
             {

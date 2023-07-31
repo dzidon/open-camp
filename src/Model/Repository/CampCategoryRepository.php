@@ -69,13 +69,32 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
      */
     public function findAll(): array
     {
-        return $this->createQueryBuilder('campCategory')
+        $campCategories = $this->createQueryBuilder('campCategory')
             ->select('campCategory, campCategoryParent, campCategoryChild')
             ->leftJoin('campCategory.parent', 'campCategoryParent')
             ->leftJoin('campCategory.children', 'campCategoryChild')
             ->getQuery()
             ->getResult()
         ;
+
+        $campCategoryPaths = [];
+
+        foreach ($campCategories as $campCategory)
+        {
+            $path = $campCategory->getPath();
+            $campCategoryId = $campCategory->getId();
+            $campCategoryPaths[$campCategoryId->toRfc4122()] = $path;
+        }
+
+        usort($campCategories, function (CampCategory $campCategoryA, CampCategory $campCategoryB) use ($campCategoryPaths)
+        {
+            $idA = $campCategoryA->getId();
+            $idB = $campCategoryB->getId();
+
+            return $campCategoryPaths[$idA->toRfc4122()] <=> $campCategoryPaths[$idB->toRfc4122()];
+        });
+
+        return $campCategories;
     }
 
     /**

@@ -11,8 +11,8 @@ enum RoleSortEnum: string
 {
     use SortEnumTrait;
 
-    case CREATED_AT_DESC = 'createdAt DESC';
-    case CREATED_AT_ASC = 'createdAt ASC';
-    case LABEL_ASC = 'label ASC';
-    case LABEL_DESC = 'label DESC';
+    case CREATED_AT_DESC = 'role.createdAt DESC';
+    case CREATED_AT_ASC = 'role.createdAt ASC';
+    case LABEL_ASC = 'role.label ASC';
+    case LABEL_DESC = 'role.label DESC';
 }

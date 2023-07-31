@@ -2,9 +2,8 @@
 
 namespace App\Form\DataTransfer\Data\User;
 
-use App\Validator\Constraint\Compound\StreetRequirements;
-use App\Validator\Constraint\Compound\ZipCodeRequirements;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\Constraint as CustomAssert;
 
 /**
  * @inheritDoc
@@ -15,13 +14,13 @@ class BillingData implements BillingDataInterface
     private ?string $name = null;
 
     #[Assert\Length(max: 255)]
-    #[StreetRequirements]
+    #[CustomAssert\Compound\StreetRequirements]
     private ?string $street = null;
 
     #[Assert\Length(max: 255)]
     private ?string $town = null;
 
-    #[ZipCodeRequirements]
+    #[CustomAssert\Compound\ZipCodeRequirements]
     private ?string $zip = null;
 
     #[Assert\Country]

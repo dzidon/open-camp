@@ -6,7 +6,6 @@ use App\Model\Entity\CampCategory;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator\Constraint as CustomAssert;
-use App\Validator\Constraint\Compound\SlugRequirements;
 
 /**
  * @inheritDoc
@@ -21,7 +20,7 @@ class CampCategoryData implements CampCategoryDataInterface
     private ?string $name = null;
 
     #[Assert\Length(max: 255)]
-    #[SlugRequirements]
+    #[CustomAssert\Compound\SlugRequirements]
     #[Assert\NotBlank]
     private ?string $urlName = null;
 
