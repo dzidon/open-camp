@@ -2,6 +2,7 @@
 
 namespace App\Form\DataTransfer\Data\User;
 
+use App\Enum\Entity\ContactRoleEnum;
 use libphonenumber\PhoneNumber;
 
 /**
@@ -9,9 +10,13 @@ use libphonenumber\PhoneNumber;
  */
 interface ContactDataInterface
 {
-    public function getName(): ?string;
+    public function getNameFirst(): ?string;
 
-    public function setName(?string $name): self;
+    public function setNameFirst(?string $nameFirst): self;
+
+    public function getNameLast(): ?string;
+
+    public function setNameLast(?string $nameLast): self;
 
     public function getEmail(): ?string;
 
@@ -20,4 +25,8 @@ interface ContactDataInterface
     public function getPhoneNumber(): ?PhoneNumber;
 
     public function setPhoneNumber(?PhoneNumber $phoneNumber): self;
+
+    public function getRole(): ?ContactRoleEnum;
+
+    public function setRole(?ContactRoleEnum $role): self;
 }

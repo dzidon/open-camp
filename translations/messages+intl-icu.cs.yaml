@@ -5,6 +5,11 @@ gender:
     m: 'Muž'
     f: 'Žena'
 
+contact_role:
+    mother: 'Matka'
+    father: 'Otec'
+    tutor: 'Vychovatel'
+
 auth:
     no_account_yet: 'Ještě u nás nemáte účet?'
     no_account_yet_link: 'Zaregistrovat se'
@@ -69,7 +74,7 @@ crud:
             update_password_not_set: 'Tento uživatel nemá nastavené heslo. Kliknutím na následující tlačítko přejdete do nastavení hesla.'
 
     confirmation:
-        contact_delete: 'Opravdu si přejete odstranit kontakt "{name}"?'
+        contact_delete: 'Opravdu si přejete odstranit kontakt "{full_name}"?'
         camper_delete: 'Opravdu si přejete odstranit táborníka "{name}"?'
         role_delete: 'Opravdu si přejete odstranit roli "{label}"?'
         user_delete: 'Opravdu si přejete odstranit uživatele "{email}"?'
@@ -168,9 +173,11 @@ entity_attribute:
 
     contact:
         id: 'ID'
-        name: 'Celé jméno'
+        name_first: 'Jméno'
+        name_last: 'Příjmení'
         email: 'E-mail'
         phone_number: 'Telefonní číslo'
+        role: 'Role'
         user: 'Uživatel'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -457,21 +464,25 @@ form:
             button: 'Poslat email'
 
         contact:
-            name: 'Celé jméno'
+            name_first: 'Jméno'
+            name_last: 'Příjmení'
             email: 'E-mail'
             phone_number: 'Telefonní číslo'
+            role: 'Role'
             button: 'Uložit'
 
         contact_delete:
             button: 'Odstranit'
 
         contact_search:
-            phrase: 'Hledat podle jména'
+            phrase: 'Hledat podle celého jména'
             sort_by:
                 label: 'Řazení'
                 options:
                     created_at_asc: 'Od nejstaršího'
                     created_at_desc: 'Od nejnovějšího'
+                    name_last_asc: 'Příjmení (A-Z)'
+                    name_last_desc: 'Příjmení (Z-A)'
 
             button: 'Hledat'
 

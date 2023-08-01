@@ -2,6 +2,7 @@
 
 namespace App\Form\DataTransfer\Data\User;
 
+use App\Enum\Entity\ContactRoleEnum;
 use libphonenumber\PhoneNumber;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -13,25 +14,54 @@ class ContactData implements ContactDataInterface
 {
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
-    private ?string $name = null;
+    private ?string $nameFirst = null;
+
+    #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
+    private ?string $nameLast = null;
 
     #[Assert\Length(max: 180)]
     #[Assert\Email]
-    #[Assert\NotBlank]
+    #[Assert\When(
+        expression: 'this.getPhoneNumber() === null',
+        constraints: [
+            new Assert\NotBlank(message: 'email_or_phone_number')
+        ],
+    )]
     private ?string $email = null;
 
     #[AssertPhoneNumber]
-    #[Assert\NotBlank]
+    #[Assert\When(
+        expression: 'this.getEmail() === null',
+        constraints: [
+            new Assert\NotBlank(message: 'email_or_phone_number')
+        ],
+    )]
     private ?PhoneNumber $phoneNumber = null;
 
-    public function getName(): ?string
+    #[Assert\NotBlank]
+    private ?ContactRoleEnum $role = null;
+
+    public function getNameFirst(): ?string
     {
-        return $this->name;
+        return $this->nameFirst;
     }
 
-    public function setName(?string $name): self
+    public function setNameFirst(?string $nameFirst): self
     {
-        $this->name = $name;
+        $this->nameFirst = $nameFirst;
+
+        return $this;
+    }
+
+    public function getNameLast(): ?string
+    {
+        return $this->nameLast;
+    }
+
+    public function setNameLast(?string $nameLast): self
+    {
+        $this->nameLast = $nameLast;
 
         return $this;
     }
@@ -66,6 +96,18 @@ class ContactData implements ContactDataInterface
         }
 
         $this->phoneNumber = $phoneNumber;
+
+        return $this;
+    }
+
+    public function getRole(): ?ContactRoleEnum
+    {
+        return $this->role;
+    }
+
+    public function setRole(?ContactRoleEnum $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }

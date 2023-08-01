@@ -2,6 +2,7 @@
 
 namespace App\Model\Entity;
 
+use App\Enum\Entity\ContactRoleEnum;
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\ContactRepository;
 use DateTimeImmutable;
@@ -23,13 +24,19 @@ class Contact
     private UuidV4 $id;
 
     #[ORM\Column(length: 255)]
-    private string $name;
+    private string $nameFirst;
 
-    #[ORM\Column(length: 180)]
-    private string $email;
+    #[ORM\Column(length: 255)]
+    private string $nameLast;
 
-    #[ORM\Column(type: 'phone_number')]
-    private PhoneNumber $phoneNumber;
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $email = null;
+
+    #[ORM\Column(type: 'phone_number', nullable: true)]
+    private ?PhoneNumber $phoneNumber = null;
+
+    #[ORM\Column(length: 32)]
+    private string $role;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -42,12 +49,12 @@ class Contact
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $name, string $email, PhoneNumber $phoneNumber, User $user)
+    public function __construct(string $nameFirst, string $nameLast, ContactRoleEnum $role, User $user)
     {
         $this->id = Uuid::v4();
-        $this->name = $name;
-        $this->email = $email;
-        $this->phoneNumber = clone $phoneNumber;
+        $this->nameFirst = $nameFirst;
+        $this->nameLast = $nameLast;
+        $this->role = $role->value;
         $this->user = $user;
         $this->createdAt = new DateTimeImmutable('now');
     }
@@ -57,43 +64,74 @@ class Contact
         return $this->id;
     }
 
-    public function getName(): string
+    public function getNameFirst(): string
     {
-        return $this->name;
+        return $this->nameFirst;
     }
 
-    public function setName(string $name): self
+    public function setNameFirst(string $nameFirst): self
     {
-        $this->name = $name;
+        $this->nameFirst = $nameFirst;
 
         return $this;
     }
 
-    public function getEmail(): string
+    public function getNameLast(): string
+    {
+        return $this->nameLast;
+    }
+
+    public function setNameLast(string $nameLast): self
+    {
+        $this->nameLast = $nameLast;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
         return $this;
     }
 
-    public function getPhoneNumber(): PhoneNumber
+    public function getPhoneNumber(): ?PhoneNumber
     {
-        return clone $this->phoneNumber;
+        return $this->phoneNumber === null ? null : clone $this->phoneNumber;
     }
 
-    public function setPhoneNumber(PhoneNumber $phoneNumber): self
+    public function setPhoneNumber(?PhoneNumber $phoneNumber): self
     {
-        if ($this->phoneNumber->equals($phoneNumber))
+        if ($phoneNumber === null)
+        {
+            $this->phoneNumber = $phoneNumber;
+
+            return $this;
+        }
+
+        if ($this->phoneNumber !== null && $this->phoneNumber->equals($phoneNumber))
         {
             return $this;
         }
 
         $this->phoneNumber = clone $phoneNumber;
+
+        return $this;
+    }
+
+    public function getRole(): ContactRoleEnum
+    {
+        return ContactRoleEnum::tryFrom($this->role);
+    }
+
+    public function setRole(ContactRoleEnum $role): self
+    {
+        $this->role = $role->value;
 
         return $this;
     }

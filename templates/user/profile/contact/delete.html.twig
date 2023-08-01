@@ -3,7 +3,7 @@
 {% block profile_content %}
     <div class="row">
         <div class="col-md-8 col-lg-6 col-xl-5">
-            <p>{{ 'crud.confirmation.contact_delete'|trans({'name': contact.name}) }}</p>
+            <p>{{ 'crud.confirmation.contact_delete'|trans({'full_name': contact.nameFirst ~ ' ' ~ contact.nameLast}) }}</p>
 
             {{ form(form_delete) }}
         </div>

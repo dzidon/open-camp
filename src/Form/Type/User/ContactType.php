@@ -3,6 +3,7 @@
 namespace App\Form\Type\User;
 
 use App\Form\DataTransfer\Data\User\ContactDataInterface;
+use App\Form\Type\Common\ContactRoleType;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -27,19 +28,33 @@ class ContactType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, [
+            ->add('nameFirst', TextType::class, [
                 'attr' => [
                     'autofocus' => 'autofocus'
                 ],
-                'label' => 'form.user.contact.name',
+                'label' => 'form.user.contact.name_first',
+            ])
+            ->add('nameLast', TextType::class, [
+                'label' => 'form.user.contact.name_last',
             ])
             ->add('email', EmailType::class, [
-                'label' => 'form.user.contact.email',
+                'required'   => false,
+                'label'      => 'form.user.contact.email',
+                'label_attr' => [
+                    'class' => 'required-conditional'
+                ],
             ])
             ->add('phoneNumber', PhoneNumberType::class, [
+                'required'       => false,
                 'label'          => 'form.user.contact.phone_number',
                 'default_region' => $this->phoneNumberDefaultLocale,
                 'format'         => $this->phoneNumberFormat,
+                'label_attr'     => [
+                    'class' => 'required-conditional'
+                ],
+            ])
+            ->add('role', ContactRoleType::class, [
+                'label' => 'form.user.contact.role',
             ])
         ;
     }

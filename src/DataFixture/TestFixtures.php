@@ -2,6 +2,7 @@
 
 namespace App\DataFixture;
 
+use App\Enum\Entity\ContactRoleEnum;
 use App\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Enum\Entity\UserRegistrationStateEnum;
 use App\Enum\GenderEnum;
@@ -21,7 +22,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use libphonenumber\PhoneNumberUtil;
 use ReflectionClass;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Uid\UuidV4;
@@ -34,17 +34,14 @@ class TestFixtures extends Fixture
     private UserPasswordHasherInterface $userHasher;
     private UserPasswordChangeVerifierHasherInterface $passwordChangeHasher;
     private UserRegistrationVerifierHasherInterface $registrationHasher;
-    private PhoneNumberUtil $phoneNumberUtil;
 
     public function __construct(UserPasswordHasherInterface               $userHasher,
                                 UserPasswordChangeVerifierHasherInterface $passwordChangeHasher,
-                                UserRegistrationVerifierHasherInterface   $registrationHasher,
-                                PhoneNumberUtil                           $phoneNumberUtil)
+                                UserRegistrationVerifierHasherInterface   $registrationHasher)
     {
         $this->userHasher = $userHasher;
         $this->passwordChangeHasher = $passwordChangeHasher;
         $this->registrationHasher = $registrationHasher;
-        $this->phoneNumberUtil = $phoneNumberUtil;
     }
 
     /**
@@ -259,14 +256,12 @@ class TestFixtures extends Fixture
         /*
          * Contact
          */
-        $phoneNumber = $this->phoneNumberUtil->parse('+420607999888');
-        $contact1 = new Contact('David Smith', 'david.smith@gmail.com', $phoneNumber, $user1);
+        $contact1 = new Contact('David', 'Smith', ContactRoleEnum::FATHER, $user1);
         $this->setUid($contact1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($contact1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($contact1);
 
-        $phoneNumber = $this->phoneNumberUtil->parse('+420724999888');
-        $contact2 = new Contact('Jessica Smith', 'jess.smith@gmail.com', $phoneNumber, $user1);
+        $contact2 = new Contact('Jessica', 'Smith', ContactRoleEnum::MOTHER, $user1);
         $this->setCreatedAt($contact2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($contact2);
 

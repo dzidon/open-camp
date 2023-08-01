@@ -2,6 +2,7 @@
 
 namespace App\Model\Repository;
 
+use App\Enum\Entity\ContactRoleEnum;
 use App\Form\DataTransfer\Data\User\ContactSearchDataInterface;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
@@ -35,13 +36,13 @@ interface ContactRepositoryInterface
     /**
      * Creates a contact.
      *
-     * @param string $name
-     * @param string $email
-     * @param string|PhoneNumber $phoneNumber
+     * @param string $nameFirst
+     * @param string $nameLast
+     * @param ContactRoleEnum $role
      * @param User $user
      * @return Contact
      */
-    public function createContact(string $name, string $email, string|PhoneNumber $phoneNumber, User $user): Contact;
+    public function createContact(string $nameFirst, string $nameLast, ContactRoleEnum $role, User $user): Contact;
 
     /**
      * Finds one contact by id.

@@ -13,4 +13,6 @@ enum ContactSortEnum: string
 
     case CREATED_AT_DESC = 'contact.createdAt DESC';
     case CREATED_AT_ASC = 'contact.createdAt ASC';
+    case NAME_LAST_ASC = 'contact.nameLast ASC';
+    case NAME_LAST_DESC = 'contact.nameLast DESC';
 }

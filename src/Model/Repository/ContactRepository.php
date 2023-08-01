@@ -2,14 +2,13 @@
 
 namespace App\Model\Repository;
 
+use App\Enum\Entity\ContactRoleEnum;
 use App\Form\DataTransfer\Data\User\ContactSearchDataInterface;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
 use App\Search\Paginator\DqlPaginator;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
-use libphonenumber\PhoneNumber;
-use libphonenumber\PhoneNumberUtil;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\UuidV4;
 
@@ -21,17 +20,9 @@ use Symfony\Component\Uid\UuidV4;
  */
 class ContactRepository extends AbstractRepository implements ContactRepositoryInterface
 {
-    private string $phoneNumberDefaultLocale;
-
-    private PhoneNumberUtil $phoneNumberUtil;
-
-    public function __construct(ManagerRegistry $registry, PhoneNumberUtil $phoneNumberUtil, string $phoneNumberDefaultLocale)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Contact::class);
-
-        $this->phoneNumberUtil = $phoneNumberUtil;
-
-        $this->phoneNumberDefaultLocale = $phoneNumberDefaultLocale;
     }
 
     /**
@@ -53,14 +44,9 @@ class ContactRepository extends AbstractRepository implements ContactRepositoryI
     /**
      * @inheritDoc
      */
-    public function createContact(string $name, string $email, PhoneNumber|string $phoneNumber, User $user): Contact
+    public function createContact(string $nameFirst, string $nameLast, ContactRoleEnum $role, User $user): Contact
     {
-        if (is_string($phoneNumber))
-        {
-            $phoneNumber = $this->phoneNumberUtil->parse($phoneNumber, $this->phoneNumberDefaultLocale);
-        }
-
-        return new Contact($name, $email, $phoneNumber, $user);
+        return new Contact($nameFirst, $nameLast, $role, $user);
     }
 
     /**
@@ -87,8 +73,8 @@ class ContactRepository extends AbstractRepository implements ContactRepositoryI
         $sortBy = $data->getSortBy();
 
         $query = $this->createQueryBuilder('contact')
-            ->andWhere('contact.name LIKE :name')
-            ->setParameter('name', '%' . $phrase . '%')
+            ->andWhere('CONCAT(contact.nameFirst, \' \', contact.nameLast) LIKE :fullName')
+            ->setParameter('fullName', '%' . $phrase . '%')
             ->andWhere('contact.user = :userId')
             ->setParameter('userId', $user->getId(), UuidType::NAME)
             ->orderBy($sortBy->property(), $sortBy->order())

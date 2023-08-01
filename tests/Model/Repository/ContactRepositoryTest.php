@@ -2,13 +2,13 @@
 
 namespace App\Tests\Model\Repository;
 
+use App\Enum\Entity\ContactRoleEnum;
 use App\Enum\Search\Data\User\ContactSortEnum;
 use App\Form\DataTransfer\Data\User\ContactSearchData;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
 use App\Model\Repository\ContactRepository;
 use App\Model\Repository\UserRepositoryInterface;
-use libphonenumber\PhoneNumber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Uid\UuidV4;
 
@@ -23,7 +23,7 @@ class ContactRepositoryTest extends KernelTestCase
         $userRepository = $this->getUserRepository();
 
         $user = new User('bob@bing.com');
-        $contact = new Contact('Bob Bobby', 'bob@bing.com', new PhoneNumber(), $user);
+        $contact = new Contact('Bob', 'Bobby', ContactRoleEnum::MOTHER, $user);
 
         $userRepository->saveUser($user, false);
         $contactRepository->saveContact($contact, true);
@@ -38,37 +38,16 @@ class ContactRepositoryTest extends KernelTestCase
         $this->assertNull($loadedContact);
     }
 
-    public function testCreateWithPhoneNumberObject(): void
-    {
-        $repository = $this->getContactRepository();
-
-        $phoneNumber = new PhoneNumber();
-        $phoneNumber->setCountryCode(420);
-        $phoneNumber->setNationalNumber('724555666');
-
-        $user = new User('bob@bing.com');
-        $contact = $repository->createContact('Bob Bobby', 'bob@bing.com', $phoneNumber, $user);
-        $this->assertSame('Bob Bobby', $contact->getName());
-        $this->assertSame('bob@bing.com', $contact->getEmail());
-        $this->assertSame($user, $contact->getUser());
-
-        $this->assertNotSame($phoneNumber, $contact->getPhoneNumber());
-        $this->assertSame(420, $contact->getPhoneNumber()->getCountryCode());
-        $this->assertSame('724555666', $contact->getPhoneNumber()->getNationalNumber());
-    }
-
-    public function testCreateWithPhoneNumberString(): void
+    public function testCreate(): void
     {
         $repository = $this->getContactRepository();
 
         $user = new User('bob@bing.com');
-        $contact = $repository->createContact('Bob Bobby', 'bob@bing.com', '+420607555666', $user);
-        $this->assertSame('Bob Bobby', $contact->getName());
-        $this->assertSame('bob@bing.com', $contact->getEmail());
+        $contact = $repository->createContact('Bob', 'Bobby', ContactRoleEnum::MOTHER, $user);
+        $this->assertSame('Bob', $contact->getNameFirst());
+        $this->assertSame('Bobby', $contact->getNameLast());
+        $this->assertSame(ContactRoleEnum::MOTHER, $contact->getRole());
         $this->assertSame($user, $contact->getUser());
-
-        $this->assertSame(420, $contact->getPhoneNumber()->getCountryCode());
-        $this->assertSame('607555666', $contact->getPhoneNumber()->getNationalNumber());
     }
 
     public function testFindOneById(): void
@@ -161,7 +140,7 @@ class ContactRepositoryTest extends KernelTestCase
         /** @var Contact $contact */
         foreach ($contacts as $contact)
         {
-            $names[] = $contact->getName();
+            $names[] = $contact->getNameFirst() . ' ' . $contact->getNameLast();
         }
 
         return $names;

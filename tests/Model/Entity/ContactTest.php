@@ -2,6 +2,7 @@
 
 namespace App\Tests\Model\Entity;
 
+use App\Enum\Entity\ContactRoleEnum;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
 use DateTimeImmutable;
@@ -11,12 +12,10 @@ use Symfony\Component\Uid\UuidV4;
 
 class ContactTest extends TestCase
 {
-    private const NAME = 'Test Contact';
-    private const EMAIL = 'test@gmail.com';
-    private const PHONE_NUMBER_COUNTRY_CODE = 420;
-    private const PHONE_NUMBER_NATIONAL_NUMBER = '724888999';
+    private const NAME_FIRST = 'John';
+    private const NAME_LAST = 'Doe';
+    private const ROLE = ContactRoleEnum::MOTHER;
 
-    private PhoneNumber $phoneNumber;
     private Contact $contact;
     private User $user;
 
@@ -36,29 +35,39 @@ class ContactTest extends TestCase
         $this->assertSame($userNew, $this->contact->getUser());
     }
 
-    public function testName(): void
+    public function testNameFirst(): void
     {
-        $this->assertSame(self::NAME, $this->contact->getName());
+        $this->assertSame(self::NAME_FIRST, $this->contact->getNameFirst());
 
-        $newName = 'New Name';
-        $this->contact->setName($newName);
-        $this->assertSame($newName, $this->contact->getName());
+        $newName = 'Johny';
+        $this->contact->setNameFirst($newName);
+        $this->assertSame($newName, $this->contact->getNameFirst());
+    }
+
+    public function testNameLast(): void
+    {
+        $this->assertSame(self::NAME_LAST, $this->contact->getNameLast());
+
+        $newName = 'Last';
+        $this->contact->setNameLast($newName);
+        $this->assertSame($newName, $this->contact->getNameLast());
     }
 
     public function testEmail(): void
     {
-        $this->assertSame(self::EMAIL, $this->contact->getEmail());
+        $this->assertNull($this->contact->getEmail());
 
         $newEmail = 'testNew@gmail.com';
         $this->contact->setEmail($newEmail);
         $this->assertSame($newEmail, $this->contact->getEmail());
+
+        $this->contact->setEmail(null);
+        $this->assertNull($this->contact->getEmail());
     }
 
     public function testPhoneNumber(): void
     {
-        $this->assertNotSame($this->phoneNumber, $this->contact->getPhoneNumber());
-        $this->assertSame(self::PHONE_NUMBER_COUNTRY_CODE, $this->contact->getPhoneNumber()->getCountryCode());
-        $this->assertSame(self::PHONE_NUMBER_NATIONAL_NUMBER, $this->contact->getPhoneNumber()->getNationalNumber());
+        $this->assertNull($this->contact->getEmail());
 
         $phoneNumber = new PhoneNumber();
         $phoneNumber->setCountryCode(421);
@@ -69,6 +78,18 @@ class ContactTest extends TestCase
         $this->assertNotSame($phoneNumber, $this->contact->getPhoneNumber());
         $this->assertSame(421, $this->contact->getPhoneNumber()->getCountryCode());
         $this->assertSame('605222333', $this->contact->getPhoneNumber()->getNationalNumber());
+
+        $this->contact->setPhoneNumber(null);
+        $this->assertNull($this->contact->getPhoneNumber());
+    }
+
+    public function testGender(): void
+    {
+        $this->assertSame(self::ROLE, $this->contact->getRole());
+
+        $newRole = ContactRoleEnum::MOTHER;
+        $this->contact->setRole($newRole);
+        $this->assertSame($newRole, $this->contact->getRole());
     }
 
     public function testCreatedAt(): void
@@ -83,11 +104,7 @@ class ContactTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->phoneNumber = new PhoneNumber();
-        $this->phoneNumber->setCountryCode(self::PHONE_NUMBER_COUNTRY_CODE);
-        $this->phoneNumber->setNationalNumber(self::PHONE_NUMBER_NATIONAL_NUMBER);
-
         $this->user = new User('user@test.com');
-        $this->contact = new Contact(self::NAME, self::EMAIL, $this->phoneNumber, $this->user);
+        $this->contact = new Contact(self::NAME_FIRST, self::NAME_LAST, self::ROLE, $this->user);
     }
 }

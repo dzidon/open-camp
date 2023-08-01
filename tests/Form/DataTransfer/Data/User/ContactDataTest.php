@@ -2,6 +2,7 @@
 
 namespace App\Tests\Form\DataTransfer\Data\User;
 
+use App\Enum\Entity\ContactRoleEnum;
 use App\Form\DataTransfer\Data\User\ContactData;
 use libphonenumber\PhoneNumber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -9,40 +10,77 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ContactDataTest extends KernelTestCase
 {
-    public function testName(): void
+    public function testNameFirst(): void
     {
         $data = new ContactData();
-        $this->assertNull($data->getName());
+        $this->assertNull($data->getNameFirst());
 
-        $data->setName('text');
-        $this->assertSame('text', $data->getName());
+        $data->setNameFirst('text');
+        $this->assertSame('text', $data->getNameFirst());
 
-        $data->setName(null);
-        $this->assertNull($data->getName());
+        $data->setNameFirst(null);
+        $this->assertNull($data->getNameFirst());
     }
 
-    public function testNameValidation(): void
+    public function testNameFirstValidation(): void
     {
         $validator = $this->getValidator();
 
         $data = new ContactData();
-        $result = $validator->validateProperty($data, 'name');
+        $result = $validator->validateProperty($data, 'nameFirst');
         $this->assertNotEmpty($result); // invalid
 
-        $data->setName('');
-        $result = $validator->validateProperty($data, 'name');
+        $data->setNameFirst('');
+        $result = $validator->validateProperty($data, 'nameFirst');
         $this->assertNotEmpty($result); // invalid
 
-        $data->setName(null);
-        $result = $validator->validateProperty($data, 'name');
+        $data->setNameFirst(null);
+        $result = $validator->validateProperty($data, 'nameFirst');
         $this->assertNotEmpty($result); // invalid
 
-        $data->setName(str_repeat('x', 255));
-        $result = $validator->validateProperty($data, 'name');
+        $data->setNameFirst(str_repeat('x', 255));
+        $result = $validator->validateProperty($data, 'nameFirst');
         $this->assertEmpty($result); // valid
 
-        $data->setName(str_repeat('x', 256));
-        $result = $validator->validateProperty($data, 'name');
+        $data->setNameFirst(str_repeat('x', 256));
+        $result = $validator->validateProperty($data, 'nameFirst');
+        $this->assertNotEmpty($result); // invalid
+    }
+
+    public function testNameLast(): void
+    {
+        $data = new ContactData();
+        $this->assertNull($data->getNameLast());
+
+        $data->setNameLast('text');
+        $this->assertSame('text', $data->getNameLast());
+
+        $data->setNameLast(null);
+        $this->assertNull($data->getNameLast());
+    }
+
+    public function testNameLastValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new ContactData();
+        $result = $validator->validateProperty($data, 'nameLast');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setNameLast('');
+        $result = $validator->validateProperty($data, 'nameLast');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setNameLast(null);
+        $result = $validator->validateProperty($data, 'nameLast');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setNameLast(str_repeat('x', 255));
+        $result = $validator->validateProperty($data, 'nameLast');
+        $this->assertEmpty($result); // valid
+
+        $data->setNameLast(str_repeat('x', 256));
+        $result = $validator->validateProperty($data, 'nameLast');
         $this->assertNotEmpty($result); // invalid
     }
 
@@ -63,7 +101,11 @@ class ContactDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new ContactData();
+
         $result = $validator->validateProperty($data, 'email');
+        $this->assertNotEmpty($result); // invalid
+
+        $result = $validator->validateProperty($data, 'phoneNumber');
         $this->assertNotEmpty($result); // invalid
 
         $data->setEmail('');
@@ -88,6 +130,9 @@ class ContactDataTest extends KernelTestCase
 
         $data->setEmail('abc@gmail.com');
         $result = $validator->validateProperty($data, 'email');
+        $this->assertEmpty($result); // valid
+
+        $result = $validator->validateProperty($data, 'phoneNumber');
         $this->assertEmpty($result); // valid
     }
 
@@ -117,6 +162,13 @@ class ContactDataTest extends KernelTestCase
         $result = $validator->validateProperty($data, 'phoneNumber');
         $this->assertNotEmpty($result); // invalid
 
+        $result = $validator->validateProperty($data, 'email');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setPhoneNumber(null);
+        $result = $validator->validateProperty($data, 'phoneNumber');
+        $this->assertNotEmpty($result); // invalid
+
         $phoneNumber = new PhoneNumber();
         $phoneNumber->setCountryCode(420);
         $phoneNumber->setNationalNumber('123');
@@ -129,6 +181,38 @@ class ContactDataTest extends KernelTestCase
         $data->setPhoneNumber($phoneNumber);
         $result = $validator->validateProperty($data, 'phoneNumber');
         $this->assertEmpty($result); // valid
+
+        $result = $validator->validateProperty($data, 'email');
+        $this->assertEmpty($result); // valid
+    }
+
+    public function testRole(): void
+    {
+        $data = new ContactData();
+        $this->assertNull($data->getRole());
+
+        $data->setRole(ContactRoleEnum::MOTHER);
+        $this->assertSame(ContactRoleEnum::MOTHER, $data->getRole());
+
+        $data->setRole(null);
+        $this->assertNull($data->getRole());
+    }
+
+    public function testRoleValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new ContactData();
+        $result = $validator->validateProperty($data, 'role');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setRole(ContactRoleEnum::MOTHER);
+        $result = $validator->validateProperty($data, 'role');
+        $this->assertEmpty($result); // valid
+
+        $data->setRole(null);
+        $result = $validator->validateProperty($data, 'role');
+        $this->assertNotEmpty($result); // invalid
     }
 
     private function getValidator(): ValidatorInterface

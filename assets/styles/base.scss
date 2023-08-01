@@ -6,6 +6,12 @@ label.required:before {
   color: red;
 }
 
+legend.required-conditional:before,
+label.required-conditional:before {
+  content: "* ";
+  color: gray;
+}
+
 input[type="radio"] + label:before {
   content: none;
   color: initial;

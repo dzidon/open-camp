@@ -48,19 +48,25 @@
     {% if paginator.totalItems > 0 %}
         <div class="row">
             {% for contact in paginator.currentPageItems %}
-                <div class="col-sm-12 col-md-6">
-                    <div class="card mb-4">
+                <div class="col-sm-12 col-md-6 d-flex">
+                    <div class="card mb-4 flex-fill">
                         <div class="card-body">
                             <h5 class="card-title">
-                                {{ contact.name }}
+                                {{ contact.nameFirst }} {{ contact.nameLast }}
                             </h5>
 
-                            <p>
-                                {{ contact.email }}
-                                <br>
-                                {{ contact.phoneNumber|phone_number_format(phone_number_format) }}
-                            </p>
+                            {% if contact.email is not null %}
+                                <div>{{ contact.email }}</div>
+                            {% endif %}
 
+                            {% if contact.phoneNumber is not null %}
+                                <div>{{ contact.phoneNumber|phone_number_format(phone_number_format) }}</div>
+                            {% endif %}
+
+                            <div>{{ ('contact_role.' ~ contact.role.value)|trans }}</div>
+                        </div>
+
+                        <div class="card-footer">
                             <a href="{{ path('user_profile_contact_read', {id: contact.id.toRfc4122}) }}" class="card-link">
                                 {{ 'crud.action.common.read'|trans }}
                             </a>

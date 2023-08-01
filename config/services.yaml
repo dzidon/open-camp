@@ -131,10 +131,6 @@ services:
             $emailFrom: '%app.email_no_reply%'
             $dateTimeFormat: '%app.date_time_format%'
 
-    App\Model\Repository\ContactRepository:
-        arguments:
-            $phoneNumberDefaultLocale: '%app.phone_number_default_locale%'
-
     App\Form\DataTransfer\Transfer\User\CamperDataTransfer:
         arguments:
             $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'

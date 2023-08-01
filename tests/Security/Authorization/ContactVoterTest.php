@@ -2,10 +2,10 @@
 
 namespace App\Tests\Security\Authorization;
 
+use App\Enum\Entity\ContactRoleEnum;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
 use App\Security\Authorization\ContactVoter;
-use libphonenumber\PhoneNumber;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -19,7 +19,7 @@ class ContactVoterTest extends KernelTestCase
         $voter = $this->getContactVoter();
 
         $user = new User('bob@gmail.com');
-        $contact = new Contact('Name', 'bob@gmail.com', new PhoneNumber(), $user);
+        $contact = new Contact('Name', 'bob@gmail.com', ContactRoleEnum::MOTHER, $user);
         $tokenMock = $this->createTokenMock($user);
 
         $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, $contact, ['contact_read']));
@@ -33,7 +33,7 @@ class ContactVoterTest extends KernelTestCase
 
         $loggedInUser = new User('bob2@gmail.com');
         $user = new User('bob@gmail.com');
-        $contact = new Contact('Name', 'bob@gmail.com', new PhoneNumber(), $user);
+        $contact = new Contact('Name', 'bob@gmail.com', ContactRoleEnum::MOTHER, $user);
         $tokenMock = $this->createTokenMock($loggedInUser);
 
         $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, $contact, ['contact_read']));
@@ -46,7 +46,7 @@ class ContactVoterTest extends KernelTestCase
         $voter = $this->getContactVoter();
 
         $user = new User('bob@gmail.com');
-        $contact = new Contact('Name', 'bob@gmail.com', new PhoneNumber(), $user);
+        $contact = new Contact('Name', 'bob@gmail.com', ContactRoleEnum::MOTHER, $user);
         $tokenMock = $this->createTokenMock($user);
 
         $this->assertSame(VoterInterface::ACCESS_ABSTAIN, $voter->vote($tokenMock, $contact, ['']));
@@ -75,7 +75,7 @@ class ContactVoterTest extends KernelTestCase
         ;
 
         $tokenMock = $this->createTokenMock($userMock);
-        $contact = new Contact('Name', 'bob@gmail.com', new PhoneNumber(), new User('bob@gmail.com'));
+        $contact = new Contact('Name', 'bob@gmail.com', ContactRoleEnum::MOTHER, new User('bob@gmail.com'));
 
         $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, $contact, ['contact_read']));
         $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, $contact, ['contact_update']));
