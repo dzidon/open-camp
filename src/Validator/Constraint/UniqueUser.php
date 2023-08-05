@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute]
 class UniqueUser extends Constraint
 {
-    public string $message = 'constraint.unique_user';
+    public string $message = 'unique_user';
     public string $emailProperty = 'email';
     public string $idProperty = 'id';
 

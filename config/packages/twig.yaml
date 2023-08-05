@@ -9,6 +9,7 @@ twig:
         date_format: '%app.date_format%'
         date_time_format: '%app.date_time_format%'
         sale_camper_siblings_enabled: '%app.sale_camper_siblings%'
+        national_identifier_enabled: '%app.national_identifier%'
 
 when@test:
     twig:

@@ -15,6 +15,12 @@ parameters:
 
     app.phone_number_default_locale: 'CZ'
     app.phone_number_format: 1
+    app.national_identifier: true
+    app.eu_business_data: true
+    app.preferred_country_choices:
+        - 'CZ'
+        - 'SK'
+        - 'DE'
 
     # Security
     app.max_active_registrations_per_email: 2
@@ -31,13 +37,13 @@ parameters:
     app.cookie_lifespan_locale: '1 year'
 
     # Applications
-    app.preferred_country_choices:
-        - 'CZ'
-        - 'SK'
-        - 'DE'
-
     app.sale_camper_recurring: true
     app.sale_camper_siblings: true
+
+    # Validation
+    app.national_identifier_regex: '#^\s*(\d\d)(\d\d)(\d\d)[ /]*(\d\d\d)(\d?)\s*$#'
+    app.eu_cin_regex: '#^\d{8}$#'
+    app.eu_vat_id_regex: '#^(((CZ)[0-9]{8,10})|((SK)[0-9]{10}))$#'
 
 services:
     # Interfaces

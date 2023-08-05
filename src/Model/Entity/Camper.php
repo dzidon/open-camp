@@ -25,7 +25,10 @@ class Camper
     private UuidV4 $id;
 
     #[ORM\Column(length: 255)]
-    private string $name;
+    private string $nameFirst;
+
+    #[ORM\Column(length: 255)]
+    private string $nameLast;
 
     #[ORM\Column(length: 1)]
     private string $gender;
@@ -33,11 +36,17 @@ class Camper
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private DateTimeImmutable $bornAt;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nationalIdentifier = null;
+
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $dietaryRestrictions = null;
 
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $healthRestrictions = null;
+
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $medication = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -53,10 +62,11 @@ class Camper
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $name, GenderEnum $gender, DateTimeImmutable $bornAt, User $user)
+    public function __construct(string $nameFirst, string $nameLast, GenderEnum $gender, DateTimeImmutable $bornAt, User $user)
     {
         $this->id = Uuid::v4();
-        $this->name = $name;
+        $this->nameFirst = $nameFirst;
+        $this->nameLast = $nameLast;
         $this->gender = $gender->value;
         $this->bornAt = $bornAt;
         $this->user = $user;
@@ -69,14 +79,26 @@ class Camper
         return $this->id;
     }
 
-    public function getName(): string
+    public function getNameFirst(): string
     {
-        return $this->name;
+        return $this->nameFirst;
     }
 
-    public function setName(string $name): self
+    public function setNameFirst(string $nameFirst): self
     {
-        $this->name = $name;
+        $this->nameFirst = $nameFirst;
+
+        return $this;
+    }
+
+    public function getNameLast(): string
+    {
+        return $this->nameLast;
+    }
+
+    public function setNameLast(string $nameLast): self
+    {
+        $this->nameLast = $nameLast;
 
         return $this;
     }
@@ -105,6 +127,18 @@ class Camper
         return $this;
     }
 
+    public function getNationalIdentifier(): ?string
+    {
+        return $this->nationalIdentifier;
+    }
+
+    public function setNationalIdentifier(?string $nationalIdentifier): self
+    {
+        $this->nationalIdentifier = $nationalIdentifier;
+
+        return $this;
+    }
+
     public function getDietaryRestrictions(): ?string
     {
         return $this->dietaryRestrictions;
@@ -125,6 +159,18 @@ class Camper
     public function setHealthRestrictions(?string $healthRestrictions): self
     {
         $this->healthRestrictions = $healthRestrictions;
+
+        return $this;
+    }
+
+    public function getMedication(): ?string
+    {
+        return $this->medication;
+    }
+
+    public function setMedication(?string $medication): self
+    {
+        $this->medication = $medication;
 
         return $this;
     }

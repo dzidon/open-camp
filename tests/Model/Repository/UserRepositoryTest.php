@@ -153,14 +153,14 @@ class UserRepositoryTest extends KernelTestCase
         $data = new UserSearchData();
         $data->setSortBy(UserSortEnum::CREATED_AT_DESC);
 
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $paginator = $repository->getAdminPaginator($data, 1, 5);
         $this->assertSame(5, $paginator->getTotalItems());
-        $this->assertSame(3, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(5, $paginator->getPageSize());
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
-        $this->assertSame(['mark@gmail.com', 'xena@gmail.com'], $emails);
+        $this->assertSame(['mark@gmail.com', 'xena@gmail.com', 'jeff@gmail.com', 'kate@gmail.com', 'david@gmail.com'], $emails);
     }
 
     public function testGetAdminPaginatorSortByCreatedAtAsc(): void
@@ -170,14 +170,14 @@ class UserRepositoryTest extends KernelTestCase
         $data = new UserSearchData();
         $data->setSortBy(UserSortEnum::CREATED_AT_ASC);
 
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $paginator = $repository->getAdminPaginator($data, 1, 5);
         $this->assertSame(5, $paginator->getTotalItems());
-        $this->assertSame(3, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(5, $paginator->getPageSize());
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
-        $this->assertSame(['david@gmail.com', 'kate@gmail.com'], $emails);
+        $this->assertSame(['david@gmail.com', 'kate@gmail.com', 'jeff@gmail.com', 'xena@gmail.com', 'mark@gmail.com'], $emails);
     }
 
     public function testGetAdminPaginatorSortByEmailAsc(): void
@@ -187,14 +187,14 @@ class UserRepositoryTest extends KernelTestCase
         $data = new UserSearchData();
         $data->setSortBy(UserSortEnum::EMAIL_ASC);
 
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $paginator = $repository->getAdminPaginator($data, 1, 5);
         $this->assertSame(5, $paginator->getTotalItems());
-        $this->assertSame(3, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(5, $paginator->getPageSize());
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
-        $this->assertSame(['david@gmail.com', 'jeff@gmail.com'], $emails);
+        $this->assertSame(['david@gmail.com', 'jeff@gmail.com', 'kate@gmail.com', 'mark@gmail.com', 'xena@gmail.com'], $emails);
     }
 
     public function testGetAdminPaginatorSortByEmailDesc(): void
@@ -204,14 +204,65 @@ class UserRepositoryTest extends KernelTestCase
         $data = new UserSearchData();
         $data->setSortBy(UserSortEnum::EMAIL_DESC);
 
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $paginator = $repository->getAdminPaginator($data, 1, 5);
         $this->assertSame(5, $paginator->getTotalItems());
-        $this->assertSame(3, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(5, $paginator->getPageSize());
 
         $emails = $this->getUserEmails($paginator->getCurrentPageItems());
-        $this->assertSame(['xena@gmail.com', 'mark@gmail.com'], $emails);
+        $this->assertSame(['xena@gmail.com', 'mark@gmail.com', 'kate@gmail.com', 'jeff@gmail.com', 'david@gmail.com'], $emails);
+    }
+
+    public function testGetAdminPaginatorSortByLastNameAsc(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $data = new UserSearchData();
+        $data->setSortBy(UserSortEnum::NAME_LAST_ASC);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 5);
+        $this->assertSame(5, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(5, $paginator->getPageSize());
+
+        $emails = $this->getUserEmails($paginator->getCurrentPageItems());
+        $this->assertSame(['jeff@gmail.com', 'kate@gmail.com', 'xena@gmail.com', 'david@gmail.com', 'mark@gmail.com'], $emails);
+    }
+
+    public function testGetAdminPaginatorSortByLastNameDesc(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $data = new UserSearchData();
+        $data->setSortBy(UserSortEnum::NAME_LAST_DESC);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 5);
+        $this->assertSame(5, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(5, $paginator->getPageSize());
+
+        $emails = $this->getUserEmails($paginator->getCurrentPageItems());
+        $this->assertSame(['mark@gmail.com', 'david@gmail.com', 'xena@gmail.com', 'kate@gmail.com', 'jeff@gmail.com'], $emails);
+    }
+
+    public function testGetAdminPaginatorSortByLastActiveAtDesc(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $data = new UserSearchData();
+        $data->setSortBy(UserSortEnum::LAST_ACTIVE_AT_DESC);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 5);
+        $this->assertSame(5, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(5, $paginator->getPageSize());
+
+        $emails = $this->getUserEmails($paginator->getCurrentPageItems());
+        $this->assertSame(['xena@gmail.com', 'jeff@gmail.com', 'kate@gmail.com', 'david@gmail.com', 'mark@gmail.com'], $emails);
     }
 
     public function testGetAdminPaginatorWithRole(): void
@@ -301,7 +352,7 @@ class UserRepositoryTest extends KernelTestCase
         /** @var User $user */
         foreach ($users as $user)
         {
-            $names[] = (string) $user->getName();
+            $names[] = $user->getNameFirst() . ' ' . $user->getNameLast();
         }
 
         return $names;

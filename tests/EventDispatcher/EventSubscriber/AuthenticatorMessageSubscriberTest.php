@@ -2,7 +2,7 @@
 
 namespace App\Tests\EventDispatcher\EventSubscriber;
 
-use App\EventDispatcher\EventSubscriber\AuthenticationSubscriber;
+use App\EventDispatcher\EventSubscriber\AuthenticationMessageSubscriber;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,9 +19,9 @@ use Symfony\Component\Security\Http\Event\LogoutEvent;
 /**
  * Tests that a flash message gets added to the flash bag after logging out.
  */
-class AuthenticatorSubscriberTest extends KernelTestCase
+class AuthenticatorMessageSubscriberTest extends KernelTestCase
 {
-    private AuthenticationSubscriber $authSubscriber;
+    private AuthenticationMessageSubscriber $authSubscriber;
 
     /**
      * Tests that a message is added to the flash bag if a user logs in.
@@ -197,8 +197,8 @@ class AuthenticatorSubscriberTest extends KernelTestCase
     {
         $container = static::getContainer();
 
-        /** @var AuthenticationSubscriber $authSubscriber */
-        $authSubscriber = $container->get(AuthenticationSubscriber::class);
+        /** @var AuthenticationMessageSubscriber $authSubscriber */
+        $authSubscriber = $container->get(AuthenticationMessageSubscriber::class);
         $this->authSubscriber = $authSubscriber;
     }
 }

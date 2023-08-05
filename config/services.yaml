@@ -18,6 +18,11 @@ parameters:
 
     app.phone_number_default_locale: 'CZ'
     app.phone_number_format: 1 # e.g. +420 123 456 789
+    app.national_identifier: true
+    app.eu_business_data: true
+    app.preferred_country_choices:
+        - 'CZ'
+        - 'SK'
 
     # Security
     app.max_active_registrations_per_email: 5
@@ -38,12 +43,13 @@ parameters:
     app.cookie_lifespan_locale: '1 year'
 
     # Applications
-    app.preferred_country_choices:
-        - 'CZ'
-        - 'SK'
-
     app.sale_camper_recurring: true
     app.sale_camper_siblings: true
+
+    # Validation
+    app.national_identifier_regex: '#^(\d\d)(\d\d)(\d\d)( |/)?(\d\d\d)(\d?)$#'
+    app.eu_cin_regex: '#^\d{8}$#'
+    app.eu_vat_id_regex: '#^(((CZ)[0-9]{8,10})|((SK)[0-9]{10}))$#'
 
 services:
     # default configuration for services in *this* file
@@ -131,13 +137,19 @@ services:
             $emailFrom: '%app.email_no_reply%'
             $dateTimeFormat: '%app.date_time_format%'
 
+    App\Form\DataTransfer\Transfer\User\BillingDataTransfer:
+        arguments:
+            $isEuBusinessDataEnabled: '%app.eu_business_data%'
+
     App\Form\DataTransfer\Transfer\User\CamperDataTransfer:
         arguments:
             $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'
+            $isNationalIdentifierEnabled: '%app.national_identifier%'
 
     App\Form\Type\User\BillingType:
         arguments:
             $preferredCountries: '%app.preferred_country_choices%'
+            $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
     App\Form\Type\User\ContactType:
         arguments:
@@ -147,3 +159,16 @@ services:
     App\Form\Type\User\CamperType:
         arguments:
             $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'
+            $isNationalIdentifierEnabled: '%app.national_identifier%'
+
+    App\Validator\Validator\NationalIdentifierValidator:
+        arguments:
+            $nationalIdentifierRegex: '%app.national_identifier_regex%'
+
+    App\Validator\Validator\EuCinValidator:
+        arguments:
+            $euCinRegex: '%app.eu_cin_regex%'
+
+    App\Validator\Validator\EuVatIdValidator:
+        arguments:
+            $euVatIdRegex: '%app.eu_vat_id_regex%'

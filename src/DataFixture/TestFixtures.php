@@ -109,27 +109,40 @@ class TestFixtures extends Fixture
         $user1 = new User('david@gmail.com');
         $this->setUid($user1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($user1, new DateTimeImmutable('2000-01-01'));
-        $user1->setName('David Smith');
+        $user1->setNameFirst('David');
+        $user1->setNameLast('Smith');
         $user1->setRole($role1);
+        $user1->setLastActiveAt(new DateTimeImmutable('1995-01-01'));
         $manager->persist($user1);
 
         $user2 = new User('kate@gmail.com');
         $this->setCreatedAt($user2, new DateTimeImmutable('2000-01-02'));
+        $user2->setNameFirst('Kate');
+        $user2->setNameLast('Doe');
         $hashedPassword = $this->userHasher->hashPassword($user2, '123456');
         $user2->setPassword($hashedPassword);
         $user2->setRole($role2);
+        $user2->setLastActiveAt(new DateTimeImmutable('1995-01-02'));
         $manager->persist($user2);
 
         $user3 = new User('jeff@gmail.com');
         $this->setCreatedAt($user3, new DateTimeImmutable('2000-01-03'));
+        $user3->setNameFirst('Jeff');
+        $user3->setNameLast('Brooks');
+        $user3->setLastActiveAt(new DateTimeImmutable('1995-01-03'));
         $manager->persist($user3);
 
         $user4 = new User('xena@gmail.com');
         $this->setCreatedAt($user4, new DateTimeImmutable('2000-01-04'));
+        $user4->setNameFirst('Xena');
+        $user4->setNameLast('Rich');
+        $user4->setLastActiveAt(new DateTimeImmutable('1995-01-04'));
         $manager->persist($user4);
 
         $user5 = new User('mark@gmail.com');
         $this->setCreatedAt($user5, new DateTimeImmutable('2000-01-05'));
+        $user5->setNameFirst('Mark');
+        $user5->setNameLast('Zuckerberg');
         $manager->persist($user5);
 
         /*
@@ -269,12 +282,12 @@ class TestFixtures extends Fixture
          * Camper
          */
         $bornAtDate = new DateTimeImmutable('2000-01-01');
-        $camper1 = new Camper('Camper 1', GenderEnum::MALE, $bornAtDate, $user1);
+        $camper1 = new Camper('Camper', '1', GenderEnum::MALE, $bornAtDate, $user1);
         $this->setUid($camper1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($camper1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($camper1);
 
-        $camper2 = new Camper('Camper 2', GenderEnum::FEMALE, $bornAtDate, $user1);
+        $camper2 = new Camper('Camper', '2', GenderEnum::FEMALE, $bornAtDate, $user1);
         $this->setCreatedAt($camper2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($camper2);
 

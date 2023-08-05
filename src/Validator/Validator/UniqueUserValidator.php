@@ -75,7 +75,7 @@ class UniqueUserValidator extends ConstraintValidator
 
         if ($id === null || $id->toRfc4122() !== $existingId->toRfc4122())
         {
-            $message = $this->translator->trans($constraint->message);
+            $message = $this->translator->trans($constraint->message, [], 'validators');
 
             $this->context
                 ->buildViolation($message)

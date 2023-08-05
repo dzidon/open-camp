@@ -40,7 +40,7 @@ class ProfileController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $billingData = new BillingData();
+        $billingData = new BillingData($this->getParameter('app.eu_business_data'));
         $dataTransfer->fillData($billingData, $user);
 
         $form = $this->createForm(BillingType::class, $billingData);

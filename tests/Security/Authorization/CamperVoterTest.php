@@ -20,7 +20,7 @@ class CamperVoterTest extends KernelTestCase
         $voter = $this->getCamperVoter();
 
         $user = new User('bob@gmail.com');
-        $camper = new Camper('Name name', GenderEnum::MALE, new DateTimeImmutable('now'), $user);
+        $camper = new Camper('John', 'Doe', GenderEnum::MALE, new DateTimeImmutable('now'), $user);
         $tokenMock = $this->createTokenMock($user);
 
         $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, $camper, ['camper_read']));
@@ -34,7 +34,7 @@ class CamperVoterTest extends KernelTestCase
 
         $loggedInUser = new User('bob2@gmail.com');
         $user = new User('bob@gmail.com');
-        $camper = new Camper('Name name', GenderEnum::MALE, new DateTimeImmutable('now'), $user);
+        $camper = new Camper('John', 'Doe', GenderEnum::MALE, new DateTimeImmutable('now'), $user);
         $tokenMock = $this->createTokenMock($loggedInUser);
 
         $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, $camper, ['camper_read']));
@@ -47,7 +47,7 @@ class CamperVoterTest extends KernelTestCase
         $voter = $this->getCamperVoter();
 
         $user = new User('bob@gmail.com');
-        $camper = new Camper('Name name', GenderEnum::MALE, new DateTimeImmutable('now'), $user);
+        $camper = new Camper('John', 'Doe', GenderEnum::MALE, new DateTimeImmutable('now'), $user);
         $tokenMock = $this->createTokenMock($user);
 
         $this->assertSame(VoterInterface::ACCESS_ABSTAIN, $voter->vote($tokenMock, $camper, ['']));
@@ -76,7 +76,7 @@ class CamperVoterTest extends KernelTestCase
         ;
 
         $tokenMock = $this->createTokenMock($userMock);
-        $camper = new Camper('Name name', GenderEnum::MALE, new DateTimeImmutable('now'), new User('bob@gmail.com'));
+        $camper = new Camper('John', 'Doe', GenderEnum::MALE, new DateTimeImmutable('now'), new User('bob@gmail.com'));
 
         $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, $camper, ['camper_read']));
         $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, $camper, ['camper_update']));

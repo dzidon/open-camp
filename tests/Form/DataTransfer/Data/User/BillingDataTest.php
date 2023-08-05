@@ -8,38 +8,101 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class BillingDataTest extends KernelTestCase
 {
-    public function testName(): void
+    public function testNameFirst(): void
     {
-        $data = new BillingData();
-        $this->assertSame(null, $data->getName());
+        $data = new BillingData(true);
+        $this->assertNull($data->getNameFirst());
 
-        $data->setName('text');
-        $this->assertSame('text', $data->getName());
+        $data->setNameFirst('text');
+        $this->assertSame('text', $data->getNameFirst());
 
-        $data->setName(null);
-        $this->assertSame(null, $data->getName());
+        $data->setNameFirst(null);
+        $this->assertNull($data->getNameFirst());
     }
 
-    public function testNameValidation(): void
+    public function testNameFirstValidation(): void
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData();
-        $result = $validator->validateProperty($data, 'name');
+        $data = new BillingData(true);
+        $result = $validator->validateProperty($data, 'nameFirst');
         $this->assertEmpty($result); // valid
 
-        $data->setName(str_repeat('x', 255));
-        $result = $validator->validateProperty($data, 'name');
+        $data->setNameFirst('');
+        $result = $validator->validateProperty($data, 'nameFirst');
         $this->assertEmpty($result); // valid
 
-        $data->setName(str_repeat('x', 256));
-        $result = $validator->validateProperty($data, 'name');
+        $data->setNameFirst(null);
+        $result = $validator->validateProperty($data, 'nameFirst');
+        $this->assertEmpty($result); // valid
+
+        $data->setNameLast('Doe');
+        $data->setNameFirst('');
+        $result = $validator->validateProperty($data, 'nameFirst');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setNameFirst(null);
+        $result = $validator->validateProperty($data, 'nameFirst');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setNameFirst(str_repeat('x', 255));
+        $result = $validator->validateProperty($data, 'nameFirst');
+        $this->assertEmpty($result); // valid
+
+        $data->setNameFirst(str_repeat('x', 256));
+        $result = $validator->validateProperty($data, 'nameFirst');
+        $this->assertNotEmpty($result); // invalid
+    }
+
+    public function testNameLast(): void
+    {
+        $data = new BillingData(true);
+        $this->assertNull($data->getNameLast());
+
+        $data->setNameLast('text');
+        $this->assertSame('text', $data->getNameLast());
+
+        $data->setNameLast(null);
+        $this->assertNull($data->getNameLast());
+    }
+
+    public function testNameLastValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new BillingData(true);
+        $result = $validator->validateProperty($data, 'nameLast');
+        $this->assertEmpty($result); // valid
+
+        $data->setNameLast('');
+        $result = $validator->validateProperty($data, 'nameLast');
+        $this->assertEmpty($result); // valid
+
+        $data->setNameLast(null);
+        $result = $validator->validateProperty($data, 'nameLast');
+        $this->assertEmpty($result); // valid
+
+        $data->setNameFirst('John');
+        $data->setNameLast('');
+        $result = $validator->validateProperty($data, 'nameLast');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setNameLast(null);
+        $result = $validator->validateProperty($data, 'nameLast');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setNameLast(str_repeat('x', 255));
+        $result = $validator->validateProperty($data, 'nameLast');
+        $this->assertEmpty($result); // valid
+
+        $data->setNameLast(str_repeat('x', 256));
+        $result = $validator->validateProperty($data, 'nameLast');
         $this->assertNotEmpty($result); // invalid
     }
 
     public function testStreet(): void
     {
-        $data = new BillingData();
+        $data = new BillingData(true);
         $this->assertSame(null, $data->getStreet());
 
         $data->setStreet('text');
@@ -53,7 +116,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData();
+        $data = new BillingData(true);
         $result = $validator->validateProperty($data, 'street');
         $this->assertEmpty($result); // valid
 
@@ -104,7 +167,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testTown(): void
     {
-        $data = new BillingData();
+        $data = new BillingData(true);
         $this->assertSame(null, $data->getTown());
 
         $data->setTown('text');
@@ -118,7 +181,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData();
+        $data = new BillingData(true);
         $result = $validator->validateProperty($data, 'town');
         $this->assertEmpty($result); // valid
 
@@ -133,7 +196,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testCountry(): void
     {
-        $data = new BillingData();
+        $data = new BillingData(true);
         $this->assertNull($data->getCountry());
 
         $data->setCountry('text');
@@ -147,7 +210,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData();
+        $data = new BillingData(true);
         $result = $validator->validateProperty($data, 'country');
         $this->assertEmpty($result); // valid
 
@@ -162,7 +225,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testZip(): void
     {
-        $data = new BillingData();
+        $data = new BillingData(true);
         $this->assertSame(null, $data->getZip());
 
         $data->setZip('text');
@@ -176,7 +239,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData();
+        $data = new BillingData(true);
         $result = $validator->validateProperty($data, 'zip');
         $this->assertEmpty($result); // valid
 
@@ -274,6 +337,393 @@ class BillingDataTest extends KernelTestCase
         $data->setZip('xxx xx-xxxx');
         $result = $validator->validateProperty($data, 'zip');
         $this->assertNotEmpty($result); // invalid
+    }
+
+    public function testIsCompany(): void
+    {
+        $data = new BillingData(true);
+        $this->assertFalse($data->isCompany());
+
+        $data->setIsCompany(true);
+        $this->assertTrue($data->isCompany());
+
+        $data->setIsCompany(false);
+        $this->assertFalse($data->isCompany());
+    }
+
+    public function testBusinessName(): void
+    {
+        $data = new BillingData(true);
+        $this->assertSame(null, $data->getBusinessName());
+
+        $data->setBusinessName('text');
+        $this->assertSame('text', $data->getBusinessName());
+
+        $data->setBusinessName(null);
+        $this->assertSame(null, $data->getBusinessName());
+    }
+
+    public function testBusinessNameValidationIfCompanyIsTrue(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new BillingData(true);
+        $data->setIsCompany(true);
+
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName('');
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName(null);
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName(str_repeat('x', 255));
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName(str_repeat('x', 256));
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertNotEmpty($result); // invalid
+    }
+
+    public function testBusinessNameValidationIfCompanyIsFalse(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new BillingData(true);
+        $data->setIsCompany(false);
+
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName('');
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName(null);
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName(str_repeat('x', 255));
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName(str_repeat('x', 256));
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+    }
+
+    public function testBusinessNameValidationIfEuBusinessDataIsDisabled(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new BillingData(false);
+        $data->setIsCompany(true);
+
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName('');
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName(null);
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName(str_repeat('x', 255));
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessName(str_repeat('x', 256));
+        $result = $validator->validateProperty($data, 'businessName');
+        $this->assertEmpty($result); // valid
+    }
+
+    public function testBusinessCin(): void
+    {
+        $data = new BillingData(true);
+        $this->assertSame(null, $data->getBusinessCin());
+
+        $data->setBusinessCin('text');
+        $this->assertSame('text', $data->getBusinessCin());
+
+        $data->setBusinessCin(null);
+        $this->assertSame(null, $data->getBusinessCin());
+    }
+
+    public function testBusinessCinValidationIfCompanyIsTrue(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new BillingData(true);
+        $data->setIsCompany(true);
+
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setBusinessCin('');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setBusinessCin(null);
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setBusinessCin('12345678');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin('123456789');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setBusinessCin('1234567');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setBusinessCin('text');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertNotEmpty($result); // invalid
+    }
+
+    public function testBusinessCinValidationIfCompanyIsFalse(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new BillingData(true);
+        $data->setIsCompany(false);
+
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin('');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin(null);
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin('12345678');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin('123456789');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin('1234567');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin('text');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+    }
+
+    public function testBusinessCinValidationIfEuBusinessDataIsDisabled(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new BillingData(false);
+        $data->setIsCompany(true);
+
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin('');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin(null);
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin('12345678');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin('123456789');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin('1234567');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessCin('text');
+        $result = $validator->validateProperty($data, 'businessCin');
+        $this->assertEmpty($result); // valid
+    }
+
+    public function testBusinessVatId(): void
+    {
+        $data = new BillingData(true);
+        $this->assertSame(null, $data->getBusinessVatId());
+
+        $data->setBusinessVatId('text');
+        $this->assertSame('text', $data->getBusinessVatId());
+
+        $data->setBusinessVatId(null);
+        $this->assertSame(null, $data->getBusinessVatId());
+    }
+
+    public function testBusinessVatIdValidationIfCompanyIsTrue(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new BillingData(true);
+        $data->setIsCompany(true);
+
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setBusinessVatId('');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setBusinessVatId(null);
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setBusinessVatId('CZ1234567');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setBusinessVatId('CZ12345678');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ123456789');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ1234567890');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ12345678901');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setBusinessVatId('SK123456789');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setBusinessVatId('SK1234567890');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('SK12345678901');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertNotEmpty($result); // invalid
+    }
+
+    public function testBusinessVatIdValidationIfCompanyIsFalse(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new BillingData(true);
+        $data->setIsCompany(false);
+
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId(null);
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ1234567');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ12345678');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ123456789');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ1234567890');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ12345678901');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('SK123456789');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('SK1234567890');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('SK12345678901');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+    }
+
+    public function testBusinessVatIdValidationIfEuBusinessDataIsDisabled(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new BillingData(false);
+        $data->setIsCompany(true);
+
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId(null);
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ1234567');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ12345678');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ123456789');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ1234567890');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('CZ12345678901');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('SK123456789');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('SK1234567890');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
+
+        $data->setBusinessVatId('SK12345678901');
+        $result = $validator->validateProperty($data, 'businessVatId');
+        $this->assertEmpty($result); // valid
     }
 
     private function getValidator(): ValidatorInterface

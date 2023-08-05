@@ -48,19 +48,23 @@
     {% if paginator.totalItems > 0 %}
         <div class="row">
             {% for camper in paginator.currentPageItems %}
-                <div class="col-sm-12 col-md-6">
-                    <div class="card mb-4">
+                <div class="col-sm-12 col-md-6 d-flex">
+                    <div class="card mb-4 flex-fill">
                         <div class="card-body">
                             <h5 class="card-title">
-                                {{ camper.name }}
+                                {{ camper.nameFirst }} {{ camper.nameLast }}
                             </h5>
 
-                            <p>
-                                {{ 'entity_attribute.camper.gender'|trans }}: {{ ('gender.' ~ camper.gender.value)|trans }}
-                                <br>
-                                {{ 'entity_attribute.camper.born_at'|trans }}: {{ camper.bornAt|date(date_format) }}
-                            </p>
+                            <div>{{ 'entity_attribute.camper.gender'|trans }}: {{ ('gender.' ~ camper.gender.value)|trans }}</div>
 
+                            {% if national_identifier_enabled and camper.nationalIdentifier is not null %}
+                                <div>{{ 'entity_attribute.camper.national_identifier'|trans }}: {{ camper.nationalIdentifier }}</div>
+                            {% endif %}
+
+                            <div>{{ 'entity_attribute.camper.born_at'|trans }}: {{ camper.bornAt|date(date_format) }}</div>
+                        </div>
+
+                        <div class="card-footer">
                             <a href="{{ path('user_profile_camper_read', {id: camper.id.toRfc4122}) }}" class="card-link">
                                 {{ 'crud.action.common.read'|trans }}
                             </a>

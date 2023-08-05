@@ -83,7 +83,7 @@ class UserController extends AbstractController
                            RoleRepositoryInterface       $roleRepository,
                            Request                       $request): Response
     {
-        $userData = new UserData();
+        $userData = new UserData($this->getParameter('app.eu_business_data'));
 
         $roleChoices = $roleRepository->findAll();
         $form = $this->createForm(UserType::class, $userData, ['choices_roles' => $roleChoices]);
@@ -127,7 +127,7 @@ class UserController extends AbstractController
     {
         $user = $this->findUserOrThrow404($id);
 
-        $userData = new UserData();
+        $userData = new UserData($this->getParameter('app.eu_business_data'));
         $dataTransfer->fillData($userData, $user);
 
         $roleChoices = $roleRepository->findAll();

@@ -22,7 +22,7 @@ export default class FormCollectionWrapperController extends Controller
 
     addItem({ detail: { calledBy = null } })
     {
-        if (calledBy !== null && (calledBy.button !== this.collectionNameValue || calledBy.form !== this.formNameValue))
+        if (calledBy === null || (calledBy.button !== this.collectionNameValue || calledBy.form !== this.formNameValue))
         {
             return;
         }

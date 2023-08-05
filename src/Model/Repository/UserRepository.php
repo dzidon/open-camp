@@ -145,8 +145,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
             ->leftJoin('user.role', 'userRole')
             ->orWhere('user.email LIKE :email')
             ->setParameter('email', '%' . $phrase . '%')
-            ->orWhere('user.name LIKE :name')
-            ->setParameter('name', '%' . $phrase . '%')
+            ->orWhere('CONCAT(user.nameFirst, \' \', user.nameLast) LIKE :fullName')
+            ->setParameter('fullName', '%' . $phrase . '%')
             ->orderBy($sortBy->property(), $sortBy->order())
         ;
 

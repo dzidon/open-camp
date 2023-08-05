@@ -86,14 +86,14 @@ class ProfileCamperController extends AbstractController
             ];
         }
 
-        $camperData = new CamperData();
+        $camperData = new CamperData($this->getParameter('app.national_identifier'));
         $form = $this->createForm(CamperType::class, $camperData, $formOptions);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.camper.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $camper = $this->camperRepository->createCamper($camperData->getName(), $camperData->getGender(), $camperData->getBornAt(), $user);
+            $camper = $this->camperRepository->createCamper($camperData->getNameFirst(), $camperData->getNameLast(), $camperData->getGender(), $camperData->getBornAt(), $user);
             $dataTransfer->fillEntity($camperData, $camper);
             $this->camperRepository->saveCamper($camper, true);
             $this->addTransFlash('success', 'crud.action_performed.camper.create');
@@ -133,7 +133,7 @@ class ProfileCamperController extends AbstractController
             ];
         }
 
-        $camperData = new CamperData();
+        $camperData = new CamperData($this->getParameter('app.national_identifier'));
         $dataTransfer->fillData($camperData, $camper);
         $form = $this->createForm(CamperType::class, $camperData, $formOptions);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.camper.button']);

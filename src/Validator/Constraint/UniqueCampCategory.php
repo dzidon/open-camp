@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute]
 class UniqueCampCategory extends Constraint
 {
-    public string $message = 'constraint.unique_camp_category';
+    public string $message = 'unique_camp_category';
     public string $urlNameProperty = 'urlName';
     public string $parentProperty = 'parent';
     public string $idProperty = 'id';

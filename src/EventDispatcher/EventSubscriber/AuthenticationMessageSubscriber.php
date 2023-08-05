@@ -11,7 +11,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Informs the user about logging in and out.
  */
-class AuthenticationSubscriber
+class AuthenticationMessageSubscriber
 {
     public TranslatorInterface $translator;
 

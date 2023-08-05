@@ -45,9 +45,13 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
     /**
      * @inheritDoc
      */
-    public function createCamper(string $name, GenderEnum $gender, DateTimeImmutable $bornAt, User $user): Camper
+    public function createCamper(string            $nameFirst,
+                                 string            $nameLast,
+                                 GenderEnum        $gender,
+                                 DateTimeImmutable $bornAt,
+                                 User              $user): Camper
     {
-        return new Camper($name, $gender, $bornAt, $user);
+        return new Camper($nameFirst, $nameLast, $gender, $bornAt, $user);
     }
 
     /**
@@ -109,8 +113,8 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
         $sortBy = $data->getSortBy();
 
         $query = $this->createQueryBuilder('camper')
-            ->andWhere('camper.name LIKE :name')
-            ->setParameter('name', '%' . $phrase . '%')
+            ->andWhere('CONCAT(camper.nameFirst, \' \', camper.nameLast) LIKE :fullName')
+            ->setParameter('fullName', '%' . $phrase . '%')
             ->andWhere('camper.user = :userId')
             ->setParameter('userId', $user->getId(), UuidType::NAME)
             ->orderBy($sortBy->property(), $sortBy->order())

@@ -7,6 +7,7 @@ use App\Form\Type\Common\GenderType;
 use App\Model\Entity\Camper;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -19,28 +20,63 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class CamperType extends AbstractType
 {
     private bool $isSaleCamperSiblingsEnabled;
+    private bool $isNationalIdentifierEnabled;
 
-    public function __construct(bool $isSaleCamperSiblingsEnabled)
+    public function __construct(bool $isSaleCamperSiblingsEnabled, bool $isNationalIdentifierEnabled)
     {
         $this->isSaleCamperSiblingsEnabled = $isSaleCamperSiblingsEnabled;
+        $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, [
+            ->add('nameFirst', TextType::class, [
                 'attr' => [
                     'autofocus' => 'autofocus'
                 ],
-                'label' => 'form.user.camper.name',
+                'label' => 'form.user.camper.name_first',
             ])
-            ->add('gender', GenderType::class, [
-                'label' => 'form.user.camper.gender',
+            ->add('nameLast', TextType::class, [
+                'label' => 'form.user.camper.name_last',
             ])
+        ;
+
+        if ($this->isNationalIdentifierEnabled)
+        {
+            $builder
+                ->add('nationalIdentifier', TextType::class, [
+                    'label'      => 'form.user.camper.national_identifier',
+                    'label_attr' => [
+                        'class' => 'required'
+                    ],
+                    'row_attr' => [
+                        'class'                                  => 'national-id-visibility',
+                        'data-controller'                        => 'cv--field',
+                        'data-cv--field-show-when-checked-value' => '0',
+                    ],
+                    'required' => false,
+                ])
+                ->add('isNationalIdentifierAbsent', CheckboxType::class, [
+                    'label'    => 'form.user.camper.is_national_identifier_absent',
+                    'attr'     => [
+                        'data-controller'                    => 'cv--checkbox',
+                        'data-action'                        => 'cv--checkbox#updateVisibility',
+                        'data-cv--checkbox-cv--field-outlet' => '.national-id-visibility',
+                    ],
+                    'required' => false,
+                ])
+            ;
+        }
+
+        $builder
             ->add('bornAt', DateType::class, [
                 'widget' => 'single_text',
                 'input'  => 'datetime_immutable',
                 'label'  => 'form.user.camper.born_at',
+            ])
+            ->add('gender', GenderType::class, [
+                'label' => 'form.user.camper.gender',
             ])
             ->add('dietaryRestrictions', TextareaType::class, [
                 'required' => false,
@@ -50,6 +86,10 @@ class CamperType extends AbstractType
                 'required' => false,
                 'label'    => 'form.user.camper.health_restrictions',
             ])
+            ->add('medication', TextareaType::class, [
+                'required' => false,
+                'label'    => 'form.user.camper.medication',
+            ])
         ;
 
         if ($this->isSaleCamperSiblingsEnabled && !empty($options['choices_siblings']))
@@ -58,7 +98,7 @@ class CamperType extends AbstractType
                 ->add('siblings', EntityType::class, [
                     'class'        => Camper::class,
                     'choice_label' => function (Camper $camper) {
-                        return $camper->getName();
+                        return $camper->getNameFirst() . ' ' . $camper->getNameLast();
                     },
                     'choices'  => $options['choices_siblings'],
                     'multiple' => true,

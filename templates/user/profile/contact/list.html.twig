@@ -56,14 +56,14 @@
                             </h5>
 
                             {% if contact.email is not null %}
-                                <div>{{ contact.email }}</div>
+                                <div>{{ 'entity_attribute.contact.email'|trans }}: {{ contact.email }}</div>
                             {% endif %}
 
                             {% if contact.phoneNumber is not null %}
-                                <div>{{ contact.phoneNumber|phone_number_format(phone_number_format) }}</div>
+                                <div>{{ 'entity_attribute.contact.phone_number'|trans }}: {{ contact.phoneNumber|phone_number_format(phone_number_format) }}</div>
                             {% endif %}
 
-                            <div>{{ ('contact_role.' ~ contact.role.value)|trans }}</div>
+                            <div>{{ 'entity_attribute.contact.role'|trans }}: {{ ('contact_role.' ~ contact.role.value)|trans }}</div>
                         </div>
 
                         <div class="card-footer">

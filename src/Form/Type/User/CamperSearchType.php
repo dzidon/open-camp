@@ -31,6 +31,8 @@ class CamperSearchType extends AbstractType
                 'choice_label' => fn ($choice) => match ($choice) {
                     CamperSortEnum::CREATED_AT_DESC => 'form.user.camper_search.sort_by.options.created_at_desc',
                     CamperSortEnum::CREATED_AT_ASC  => 'form.user.camper_search.sort_by.options.created_at_asc',
+                    CamperSortEnum::NAME_LAST_ASC   => 'form.user.camper_search.sort_by.options.name_last_asc',
+                    CamperSortEnum::NAME_LAST_DESC  => 'form.user.camper_search.sort_by.options.name_last_desc',
                 },
             ])
         ;

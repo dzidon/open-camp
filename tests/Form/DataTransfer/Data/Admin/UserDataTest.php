@@ -14,7 +14,7 @@ class UserDataTest extends KernelTestCase
 {
     public function testId(): void
     {
-        $data = new UserData();
+        $data = new UserData(true);
         $this->assertNull($data->getId());
 
         $uid = Uuid::v4();
@@ -27,7 +27,7 @@ class UserDataTest extends KernelTestCase
 
     public function testEmail(): void
     {
-        $data = new UserData();
+        $data = new UserData(true);
         $this->assertNull($data->getEmail());
 
         $data->setEmail('text');
@@ -41,7 +41,7 @@ class UserDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new UserData();
+        $data = new UserData(true);
         $result = $validator->validateProperty($data, 'email');
         $this->assertNotEmpty($result); // invalid
 
@@ -74,7 +74,7 @@ class UserDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new UserData();
+        $data = new UserData(true);
         $data->setId(null);
         $data->setEmail('david@gmail.com');
         $result = $validator->validate($data);
@@ -100,7 +100,7 @@ class UserDataTest extends KernelTestCase
 
     public function testRole(): void
     {
-        $data = new UserData();
+        $data = new UserData(true);
         $this->assertSame(null, $data->getRole());
 
         $role = new Role('label');
@@ -113,7 +113,7 @@ class UserDataTest extends KernelTestCase
 
     public function testBillingData(): void
     {
-        $data = new UserData();
+        $data = new UserData(true);
         $billingData = $data->getBillingData();
         $this->assertInstanceOf(BillingData::class, $billingData);
     }

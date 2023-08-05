@@ -7,9 +7,15 @@ namespace App\Form\DataTransfer\Data\User;
  */
 interface BillingDataInterface
 {
-    public function getName(): ?string;
+    public function isEuBusinessDataEnabled(): bool;
 
-    public function setName(?string $name): self;
+    public function getNameFirst(): ?string;
+
+    public function setNameFirst(?string $nameFirst): self;
+
+    public function getNameLast(): ?string;
+
+    public function setNameLast(?string $nameLast): self;
 
     public function getStreet(): ?string;
 
@@ -26,4 +32,20 @@ interface BillingDataInterface
     public function getCountry(): ?string;
 
     public function setCountry(?string $country): self;
+
+    public function isCompany(): bool;
+
+    public function setIsCompany(bool $isCompany): self;
+
+    public function getBusinessName(): ?string;
+
+    public function setBusinessName(?string $businessName): self;
+
+    public function getBusinessCin(): ?string;
+
+    public function setBusinessCin(?string $businessCin): self;
+
+    public function getBusinessVatId(): ?string;
+
+    public function setBusinessVatId(?string $businessVatId): self;
 }

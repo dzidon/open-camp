@@ -36,13 +36,15 @@ interface CamperRepositoryInterface
     /**
      * Creates a camper.
      *
-     * @param string $name
+     * @param string $nameFirst
+     * @param string $nameLast
      * @param GenderEnum $gender
      * @param DateTimeImmutable $bornAt
      * @param User $user
      * @return Camper
      */
-    public function createCamper(string            $name,
+    public function createCamper(string            $nameFirst,
+                                 string            $nameLast,
                                  GenderEnum        $gender,
                                  DateTimeImmutable $bornAt,
                                  User              $user): Camper;

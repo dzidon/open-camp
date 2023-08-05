@@ -7,14 +7,14 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.user.name'|trans }}:</strong>
+                            <strong>{{ 'entity_attribute.user.name_first'|trans }} & {{ 'entity_attribute.user.name_last'|trans }}:</strong>
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            {% if user.name is null %}
-                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% if user.nameFirst is not null and user.nameLast is not null %}
+                                <span>{{ user.nameFirst }} {{ user.nameLast }}</span>
                             {% else %}
-                                <span>{{ user.name }}</span>
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                             {% endif %}
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.user.country'|trans }}:</strong>
                         </div>
@@ -109,6 +109,62 @@
                                 <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                             {% else %}
                                 <span>{{ country_name_for_code(user.country) }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.user.business_name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if user.businessName is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.businessName }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.user.business_cin'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if user.businessCin is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.businessCin }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.user.business_vat_id'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if user.businessVatId is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.businessVatId }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.user.last_active_at'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if user.lastActiveAt is null %}
+                                <em>{{ 'search.item_no_reference.neutral'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.lastActiveAt|date(date_time_format) }}</span>
                             {% endif %}
                         </div>
                     </div>

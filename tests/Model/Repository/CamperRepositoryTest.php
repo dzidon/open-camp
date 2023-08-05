@@ -24,7 +24,7 @@ class CamperRepositoryTest extends KernelTestCase
         $userRepository = $this->getUserRepository();
 
         $user = new User('bob@bing.com');
-        $camper = new Camper('Bob Bobby', GenderEnum::MALE, new DateTimeImmutable('now'), $user);
+        $camper = new Camper('Bob', 'Bobby', GenderEnum::MALE, new DateTimeImmutable('now'), $user);
 
         $userRepository->saveUser($user, false);
         $camperRepository->saveCamper($camper, true);
@@ -44,9 +44,10 @@ class CamperRepositoryTest extends KernelTestCase
         $repository = $this->getCamperRepository();
         $bornAtDate = new DateTimeImmutable('2000-01-01');
         $user = new User('bob@bing.com');
-        $camper = $repository->createCamper('Name', GenderEnum::FEMALE, $bornAtDate, $user);
+        $camper = $repository->createCamper('Bob', 'Bobby', GenderEnum::FEMALE, $bornAtDate, $user);
 
-        $this->assertSame('Name', $camper->getName());
+        $this->assertSame('Bob', $camper->getNameFirst());
+        $this->assertSame('Bobby', $camper->getNameLast());
         $this->assertSame(GenderEnum::FEMALE, $camper->getGender());
         $this->assertSame($bornAtDate, $camper->getBornAt());
         $this->assertSame($user, $camper->getUser());
@@ -82,7 +83,7 @@ class CamperRepositoryTest extends KernelTestCase
         $userRepository = $this->getUserRepository();
 
         $user = $userRepository->findOneByEmail('david@gmail.com');
-        $camper = new Camper('Camper 3', GenderEnum::MALE, new DateTimeImmutable(), $user);
+        $camper = new Camper('Camper', '3', GenderEnum::MALE, new DateTimeImmutable(), $user);
         $camperRepository->saveCamper($camper, true);
 
         $campers = $camperRepository->findOwnedBySameUser($camper);
@@ -166,6 +167,44 @@ class CamperRepositoryTest extends KernelTestCase
         $this->assertSame(['Camper 1', 'Camper 2'], $names);
     }
 
+    public function testGetUserPaginatorSortByNameDesc(): void
+    {
+        $camperRepository = $this->getCamperRepository();
+        $userRepository = $this->getUserRepository();
+        $user = $userRepository->findOneByEmail('david@gmail.com');
+
+        $data = new CamperSearchData();
+        $data->setSortBy(CamperSortEnum::NAME_LAST_DESC);
+
+        $paginator = $camperRepository->getUserPaginator($data, $user, 1, 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $names = $this->getCamperNames($paginator->getCurrentPageItems());
+        $this->assertSame(['Camper 2', 'Camper 1'], $names);
+    }
+
+    public function testGetUserPaginatorSortByNameAsc(): void
+    {
+        $camperRepository = $this->getCamperRepository();
+        $userRepository = $this->getUserRepository();
+        $user = $userRepository->findOneByEmail('david@gmail.com');
+
+        $data = new CamperSearchData();
+        $data->setSortBy(CamperSortEnum::NAME_LAST_ASC);
+
+        $paginator = $camperRepository->getUserPaginator($data, $user, 1, 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $names = $this->getCamperNames($paginator->getCurrentPageItems());
+        $this->assertSame(['Camper 1', 'Camper 2'], $names);
+    }
+
     private function getCamperNames(array $campers): array
     {
         $names = [];
@@ -173,7 +212,7 @@ class CamperRepositoryTest extends KernelTestCase
         /** @var Camper $camper */
         foreach ($campers as $camper)
         {
-            $names[] = $camper->getName();
+            $names[] = $camper->getNameFirst() . ' ' . $camper->getNameLast();
         }
 
         return $names;

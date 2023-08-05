@@ -7,7 +7,6 @@ use App\Form\DataTransfer\Transfer\Admin\UserDataTransfer;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use PHPUnit\Framework\MockObject\MockObject;
-use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\SecurityBundle\Security;
 
@@ -19,21 +18,29 @@ class UserDataTransferTest extends KernelTestCase
 
         $expectedEmail = 'abc@gmail.com';
         $expectedRole = new Role('label');
-        $expectedName = 'Name';
+        $expectedNameFirst = 'John';
+        $expectedNameLast = 'Doe';
         $expectedStreet = 'Street';
         $expectedTown = 'Town';
         $expectedZip = 'Zip';
         $expectedCountry = 'Country';
+        $expectedBusinessName = 'Business name';
+        $expectedBusinessCin = '1234';
+        $expectedBusinessVatId = '4321';
 
         $user = new User($expectedEmail);
         $user->setRole($expectedRole);
-        $user->setName($expectedName);
+        $user->setNameFirst($expectedNameFirst);
+        $user->setNameLast($expectedNameLast);
         $user->setStreet($expectedStreet);
         $user->setTown($expectedTown);
         $user->setZip($expectedZip);
         $user->setCountry($expectedCountry);
+        $user->setBusinessName($expectedBusinessName);
+        $user->setBusinessCin($expectedBusinessCin);
+        $user->setBusinessVatId($expectedBusinessVatId);
 
-        $data = new UserData();
+        $data = new UserData(true);
         $dataTransfer->fillData($data, $user);
 
         $this->assertSame($user->getId(), $data->getId());
@@ -41,11 +48,15 @@ class UserDataTransferTest extends KernelTestCase
         $this->assertSame($expectedRole, $data->getRole());
 
         $billingData = $data->getBillingData();
-        $this->assertSame($expectedName, $billingData->getName());
+        $this->assertSame($expectedNameFirst, $billingData->getNameFirst());
+        $this->assertSame($expectedNameLast, $billingData->getNameLast());
         $this->assertSame($expectedStreet, $billingData->getStreet());
         $this->assertSame($expectedTown, $billingData->getTown());
         $this->assertSame($expectedZip, $billingData->getZip());
         $this->assertSame($expectedCountry, $billingData->getCountry());
+        $this->assertSame($expectedBusinessName, $billingData->getBusinessName());
+        $this->assertSame($expectedBusinessCin, $billingData->getBusinessCin());
+        $this->assertSame($expectedBusinessVatId, $billingData->getBusinessVatId());
     }
 
     public function testFillEntityUserUpdateGranted(): void
@@ -54,22 +65,31 @@ class UserDataTransferTest extends KernelTestCase
 
         $expectedEmail = 'abc@gmail.com';
         $expectedRole = new Role('label');
-        $expectedName = 'Name';
+        $expectedNameFirst = 'John';
+        $expectedNameLast = 'Doe';
         $expectedStreet = 'Street';
         $expectedTown = 'Town';
         $expectedZip = 'Zip';
         $expectedCountry = 'Country';
+        $expectedBusinessName = 'Business name';
+        $expectedBusinessCin = '1234';
+        $expectedBusinessVatId = '4321';
 
-        $data = new UserData();
+        $data = new UserData(true);
         $data->setEmail($expectedEmail);
         $data->setRole($expectedRole);
 
         $billingData = $data->getBillingData();
-        $billingData->setName($expectedName);
+        $billingData->setNameFirst($expectedNameFirst);
+        $billingData->setNameLast($expectedNameLast);
         $billingData->setStreet($expectedStreet);
         $billingData->setTown($expectedTown);
         $billingData->setZip($expectedZip);
         $billingData->setCountry($expectedCountry);
+        $billingData->setIsCompany(true);
+        $billingData->setBusinessName($expectedBusinessName);
+        $billingData->setBusinessCin($expectedBusinessCin);
+        $billingData->setBusinessVatId($expectedBusinessVatId);
 
         $user = new User('bob@gmail.com');
         $dataTransfer->fillEntity($data, $user);
@@ -77,11 +97,15 @@ class UserDataTransferTest extends KernelTestCase
         $this->assertNotSame($user->getId(), $data->getId());
         $this->assertSame($expectedEmail, $user->getEmail());
         $this->assertNull($user->getRole());
-        $this->assertSame($expectedName, $user->getName());
+        $this->assertSame($expectedNameFirst, $user->getNameFirst());
+        $this->assertSame($expectedNameLast, $user->getNameLast());
         $this->assertSame($expectedStreet, $user->getStreet());
         $this->assertSame($expectedTown, $user->getTown());
         $this->assertSame($expectedZip, $user->getZip());
         $this->assertSame($expectedCountry, $user->getCountry());
+        $this->assertSame($expectedBusinessName, $user->getBusinessName());
+        $this->assertSame($expectedBusinessCin, $user->getBusinessCin());
+        $this->assertSame($expectedBusinessVatId, $user->getBusinessVatId());
     }
 
     public function testFillEntityUserUpdateRoleGranted(): void
@@ -90,22 +114,31 @@ class UserDataTransferTest extends KernelTestCase
 
         $expectedEmail = 'abc@gmail.com';
         $expectedRole = new Role('label');
-        $expectedName = 'Name';
+        $expectedNameFirst = 'John';
+        $expectedNameLast = 'Doe';
         $expectedStreet = 'Street';
         $expectedTown = 'Town';
         $expectedZip = 'Zip';
         $expectedCountry = 'Country';
+        $expectedBusinessName = 'Business name';
+        $expectedBusinessCin = '1234';
+        $expectedBusinessVatId = '4321';
 
-        $data = new UserData();
+        $data = new UserData(true);
         $data->setEmail($expectedEmail);
         $data->setRole($expectedRole);
 
         $billingData = $data->getBillingData();
-        $billingData->setName($expectedName);
+        $billingData->setNameFirst($expectedNameFirst);
+        $billingData->setNameLast($expectedNameLast);
         $billingData->setStreet($expectedStreet);
         $billingData->setTown($expectedTown);
         $billingData->setZip($expectedZip);
         $billingData->setCountry($expectedCountry);
+        $billingData->setIsCompany(true);
+        $billingData->setBusinessName($expectedBusinessName);
+        $billingData->setBusinessCin($expectedBusinessCin);
+        $billingData->setBusinessVatId($expectedBusinessVatId);
 
         $user = new User('bob@gmail.com');
         $dataTransfer->fillEntity($data, $user);
@@ -113,11 +146,15 @@ class UserDataTransferTest extends KernelTestCase
         $this->assertNotSame($user->getId(), $data->getId());
         $this->assertSame('bob@gmail.com', $user->getEmail());
         $this->assertSame($expectedRole, $user->getRole());
-        $this->assertNull($user->getName());
+        $this->assertNull($user->getNameFirst());
+        $this->assertNull($user->getNameLast());
         $this->assertNull($user->getStreet());
         $this->assertNull($user->getTown());
         $this->assertNull($user->getZip());
         $this->assertNull($user->getCountry());
+        $this->assertNull($user->getBusinessName());
+        $this->assertNull($user->getBusinessCin());
+        $this->assertNull($user->getBusinessVatId());
     }
 
     private function getUserDataTransfer(array $userRoles = []): UserDataTransfer

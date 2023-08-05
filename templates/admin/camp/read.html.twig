@@ -67,7 +67,7 @@
                         <div class="col-12 col-sm-9">
                             <span>
                                 {% if camp.descriptionShort is null %}
-                                    -
+                                    <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                                 {% else %}
                                     {{ camp.descriptionShort }}
                                 {% endif %}
@@ -83,7 +83,7 @@
                         <div class="col-12 col-sm-9">
                             <span>
                                 {% if camp.descriptionLong is null %}
-                                    -
+                                    <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                                 {% else %}
                                     {{ camp.descriptionLong|raw }}
                                 {% endif %}

@@ -26,9 +26,9 @@ class UserData implements UserDataInterface
     #[Assert\Valid]
     private BillingData $billingData;
 
-    public function __construct()
+    public function __construct(bool $isEuBusinessDataEnabled)
     {
-        $this->billingData = new BillingData();
+        $this->billingData = new BillingData($isEuBusinessDataEnabled);
     }
 
     public function getId(): ?UuidV4

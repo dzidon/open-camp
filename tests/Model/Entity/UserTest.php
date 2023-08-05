@@ -93,15 +93,26 @@ class UserTest extends TestCase
         $this->assertNull($this->user->getRole());
     }
 
-    public function testName(): void
+    public function testNameFirst(): void
     {
-        $this->assertNull($this->user->getName());
+        $this->assertNull($this->user->getNameFirst());
 
-        $this->user->setName('text');
-        $this->assertSame('text', $this->user->getName());
+        $this->user->setNameFirst('text');
+        $this->assertSame('text', $this->user->getNameFirst());
 
-        $this->user->setName(null);
-        $this->assertNull($this->user->getName());
+        $this->user->setNameFirst(null);
+        $this->assertNull($this->user->getNameFirst());
+    }
+
+    public function testNameLast(): void
+    {
+        $this->assertNull($this->user->getNameLast());
+
+        $this->user->setNameLast('text');
+        $this->assertSame('text', $this->user->getNameLast());
+
+        $this->user->setNameLast(null);
+        $this->assertNull($this->user->getNameLast());
     }
 
     public function testStreet(): void
@@ -146,6 +157,50 @@ class UserTest extends TestCase
 
         $this->user->setCountry(null);
         $this->assertNull($this->user->getCountry());
+    }
+
+    public function testBusinessName(): void
+    {
+        $this->assertNull($this->user->getBusinessName());
+
+        $this->user->setBusinessName('text');
+        $this->assertSame('text', $this->user->getBusinessName());
+
+        $this->user->setBusinessName(null);
+        $this->assertNull($this->user->getBusinessName());
+    }
+
+    public function testBusinessCin(): void
+    {
+        $this->assertNull($this->user->getBusinessCin());
+
+        $this->user->setBusinessCin('text');
+        $this->assertSame('text', $this->user->getBusinessCin());
+
+        $this->user->setBusinessCin(null);
+        $this->assertNull($this->user->getBusinessCin());
+    }
+
+    public function testBusinessVatId(): void
+    {
+        $this->assertNull($this->user->getBusinessVatId());
+
+        $this->user->setBusinessVatId('text');
+        $this->assertSame('text', $this->user->getBusinessVatId());
+
+        $this->user->setBusinessVatId(null);
+        $this->assertNull($this->user->getBusinessVatId());
+    }
+
+    public function testLastActiveAt(): void
+    {
+        $this->assertNull($this->user->getLastActiveAt());
+
+        $newLastActiveAtString = '2024-07-11 13:00:00';
+        $newLastActiveAt = new DateTimeImmutable($newLastActiveAtString);
+        $this->user->setLastActiveAt($newLastActiveAt);
+        $lastActiveAt = $this->user->getLastActiveAt();
+        $this->assertSame($newLastActiveAtString, $lastActiveAt->format('Y-m-d H:i:s'));
     }
 
     public function testCreatedAt(): void

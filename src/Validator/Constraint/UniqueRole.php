@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraint;
 #[Attribute]
 class UniqueRole extends Constraint
 {
-    public string $message = 'constraint.unique_role';
+    public string $message = 'unique_role';
     public string $labelProperty = 'label';
     public string $idProperty = 'id';
 

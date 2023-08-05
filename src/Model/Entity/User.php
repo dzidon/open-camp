@@ -34,7 +34,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?Role $role = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $name = null;
+    private ?string $nameFirst = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nameLast = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $street = null;
@@ -47,6 +50,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 2, nullable: true)]
     private ?string $country = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $businessName = null;
+
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $businessCin = null;
+
+    #[ORM\Column(length: 32, nullable: true)]
+    private ?string $businessVatId = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $lastActiveAt = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
@@ -168,14 +183,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getName(): ?string
+    public function getNameFirst(): ?string
     {
-        return $this->name;
+        return $this->nameFirst;
     }
 
-    public function setName(?string $name): self
+    public function setNameFirst(?string $nameFirst): self
     {
-        $this->name = $name;
+        $this->nameFirst = $nameFirst;
+
+        return $this;
+    }
+
+    public function getNameLast(): ?string
+    {
+        return $this->nameLast;
+    }
+
+    public function setNameLast(?string $nameLast): self
+    {
+        $this->nameLast = $nameLast;
 
         return $this;
     }
@@ -224,6 +251,54 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCountry(?string $country): self
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function getBusinessName(): ?string
+    {
+        return $this->businessName;
+    }
+
+    public function setBusinessName(?string $businessName): self
+    {
+        $this->businessName = $businessName;
+
+        return $this;
+    }
+
+    public function getBusinessCin(): ?string
+    {
+        return $this->businessCin;
+    }
+
+    public function setBusinessCin(?string $businessCin): self
+    {
+        $this->businessCin = $businessCin;
+
+        return $this;
+    }
+
+    public function getBusinessVatId(): ?string
+    {
+        return $this->businessVatId;
+    }
+
+    public function setBusinessVatId(?string $businessVatId): self
+    {
+        $this->businessVatId = $businessVatId;
+
+        return $this;
+    }
+
+    public function getLastActiveAt(): ?DateTimeImmutable
+    {
+        return $this->lastActiveAt;
+    }
+
+    public function setLastActiveAt(?DateTimeImmutable $lastActiveAt): self
+    {
+        $this->lastActiveAt = $lastActiveAt;
 
         return $this;
     }

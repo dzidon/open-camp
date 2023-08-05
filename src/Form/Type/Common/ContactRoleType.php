@@ -16,12 +16,21 @@ class ContactRoleType extends AbstractType
     {
         $resolver->setDefaults([
             'class'        => ContactRoleEnum::class,
-            'expanded'     => true,
+            'expanded'     => false,
             'multiple'     => false,
+            'placeholder'  => 'form.common.choice.choose',
+            'placeholder_attr' => [
+                'disabled' => 'disabled'
+            ],
             'choice_label' => fn ($choice) => match ($choice) {
-                ContactRoleEnum::MOTHER => 'contact_role.mother',
-                ContactRoleEnum::FATHER => 'contact_role.father',
-                ContactRoleEnum::TUTOR  => 'contact_role.tutor',
+                ContactRoleEnum::MOTHER   => 'contact_role.mother',
+                ContactRoleEnum::FATHER   => 'contact_role.father',
+                ContactRoleEnum::GRANDMA  => 'contact_role.grandma',
+                ContactRoleEnum::GRANDPA  => 'contact_role.grandpa',
+                ContactRoleEnum::AUNT     => 'contact_role.aunt',
+                ContactRoleEnum::UNCLE    => 'contact_role.uncle',
+                ContactRoleEnum::RELATIVE => 'contact_role.relative',
+                ContactRoleEnum::TUTOR    => 'contact_role.tutor',
             },
         ]);
     }

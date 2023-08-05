@@ -11,9 +11,23 @@ use App\Validator\Constraint as CustomAssert;
 class BillingData implements BillingDataInterface
 {
     #[Assert\Length(max: 255)]
-    private ?string $name = null;
+    #[Assert\When(
+        expression: 'this.getNameLast() !== null',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
+    private ?string $nameFirst = null;
 
     #[Assert\Length(max: 255)]
+    #[Assert\When(
+        expression: 'this.getNameFirst() !== null',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
+    private ?string $nameLast = null;
+
     #[CustomAssert\Compound\StreetRequirements]
     private ?string $street = null;
 
@@ -26,14 +40,68 @@ class BillingData implements BillingDataInterface
     #[Assert\Country]
     private ?string $country = null;
 
-    public function getName(): ?string
+    private bool $isCompany = false;
+
+    #[Assert\When(
+        expression: 'this.isEuBusinessDataEnabled() and this.isCompany()',
+        constraints: [
+            new Assert\Length(max: 255),
+        ],
+    )]
+    private ?string $businessName = null;
+
+    #[Assert\When(
+        expression: 'this.isEuBusinessDataEnabled() and this.isCompany()',
+        constraints: [
+            new Assert\Length(max: 32),
+            new CustomAssert\EuCin(),
+            new Assert\NotBlank(),
+        ],
+    )]
+    private ?string $businessCin = null;
+
+    #[Assert\When(
+        expression: 'this.isEuBusinessDataEnabled() and this.isCompany()',
+        constraints: [
+            new Assert\Length(max: 32),
+            new CustomAssert\EuVatId(),
+            new Assert\NotBlank(),
+        ],
+    )]
+    private ?string $businessVatId = null;
+
+    private bool $isEuBusinessDataEnabled;
+
+    public function __construct(bool $isEuBusinessDataEnabled)
     {
-        return $this->name;
+        $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
     }
 
-    public function setName(?string $name): self
+    public function isEuBusinessDataEnabled(): bool
     {
-        $this->name = $name;
+        return $this->isEuBusinessDataEnabled;
+    }
+
+    public function getNameFirst(): ?string
+    {
+        return $this->nameFirst;
+    }
+
+    public function setNameFirst(?string $nameFirst): self
+    {
+        $this->nameFirst = $nameFirst;
+
+        return $this;
+    }
+
+    public function getNameLast(): ?string
+    {
+        return $this->nameLast;
+    }
+
+    public function setNameLast(?string $nameLast): self
+    {
+        $this->nameLast = $nameLast;
 
         return $this;
     }
@@ -82,6 +150,54 @@ class BillingData implements BillingDataInterface
     public function setCountry(?string $country): self
     {
         $this->country = $country;
+
+        return $this;
+    }
+
+    public function isCompany(): bool
+    {
+        return $this->isCompany;
+    }
+
+    public function setIsCompany(bool $isCompany): self
+    {
+        $this->isCompany = $isCompany;
+
+        return $this;
+    }
+
+    public function getBusinessName(): ?string
+    {
+        return $this->businessName;
+    }
+
+    public function setBusinessName(?string $businessName): self
+    {
+        $this->businessName = $businessName;
+
+        return $this;
+    }
+
+    public function getBusinessCin(): ?string
+    {
+        return $this->businessCin;
+    }
+
+    public function setBusinessCin(?string $businessCin): self
+    {
+        $this->businessCin = $businessCin;
+
+        return $this;
+    }
+
+    public function getBusinessVatId(): ?string
+    {
+        return $this->businessVatId;
+    }
+
+    public function setBusinessVatId(?string $businessVatId): self
+    {
+        $this->businessVatId = $businessVatId;
 
         return $this;
     }

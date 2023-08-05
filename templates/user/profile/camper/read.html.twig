@@ -3,11 +3,11 @@
 {% block profile_content %}
     <div class="row mb-3">
         <div class="col-12 col-sm-3">
-            <strong>{{ 'entity_attribute.camper.name'|trans }}:</strong>
+            <strong>{{ 'entity_attribute.camper.name_first'|trans }} & {{ 'entity_attribute.camper.name_last'|trans }}:</strong>
         </div>
 
         <div class="col-12 col-sm-9">
-            <span>{{ camper.name }}</span>
+            <span>{{ camper.nameFirst }} {{ camper.nameLast }}</span>
         </div>
     </div>
 
@@ -20,6 +20,24 @@
             <span>{{ ('gender.' ~ camper.gender.value)|trans }}</span>
         </div>
     </div>
+
+    {% if national_identifier_enabled %}
+        <div class="row mb-3">
+            <div class="col-12 col-sm-3">
+                <strong>{{ 'entity_attribute.camper.national_identifier'|trans }}:</strong>
+            </div>
+
+            <div class="col-12 col-sm-9">
+                <span>
+                    {% if camper.nationalIdentifier is null %}
+                        <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                    {% else %}
+                        {{ camper.nationalIdentifier }}
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="row mb-3">
         <div class="col-12 col-sm-3">
@@ -39,7 +57,7 @@
         <div class="col-12 col-sm-9">
             <span>
                 {% if camper.dietaryRestrictions is null %}
-                    -
+                    <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                 {% else %}
                     {{ camper.dietaryRestrictions|nl2br }}
                 {% endif %}
@@ -55,9 +73,25 @@
         <div class="col-12 col-sm-9">
             <span>
                 {% if camper.healthRestrictions is null %}
-                    -
+                    <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                 {% else %}
                     {{ camper.healthRestrictions|nl2br }}
+                {% endif %}
+            </span>
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3">
+            <strong>{{ 'entity_attribute.camper.medication'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9">
+            <span>
+                {% if camper.medication is null %}
+                    <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                {% else %}
+                    {{ camper.medication|nl2br }}
                 {% endif %}
             </span>
         </div>
@@ -75,7 +109,7 @@
                 {% else %}
                     {% for sibling in camper.siblings %}
                         <div>
-                            <span>{{ sibling.name }}</span>
+                            <span>{{ sibling.nameFirst }} {{ sibling.nameLast }}</span>
                         </div>
                     {% endfor %}
                 {% endif %}

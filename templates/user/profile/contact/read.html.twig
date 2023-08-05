@@ -19,7 +19,7 @@
         <div class="col-12 col-sm-9">
             <span>
                 {% if contact.email is null %}
-                    -
+                    <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                 {% else %}
                     {{ contact.email }}
                 {% endif %}
@@ -35,7 +35,7 @@
         <div class="col-12 col-sm-9">
             <span>
                 {% if contact.phoneNumber is null %}
-                    -
+                    <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                 {% else %}
                     {{ contact.phoneNumber|phone_number_format(phone_number_format) }}
                 {% endif %}

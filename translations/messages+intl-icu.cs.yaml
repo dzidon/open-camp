@@ -8,6 +8,11 @@ gender:
 contact_role:
     mother: 'Matka'
     father: 'Otec'
+    grandma: 'Babička'
+    grandpa: 'Děda'
+    aunt: 'Teta'
+    uncle: 'Strýc'
+    relative: 'Příbuzný'
     tutor: 'Vychovatel'
 
 auth:
@@ -75,7 +80,7 @@ crud:
 
     confirmation:
         contact_delete: 'Opravdu si přejete odstranit kontakt "{full_name}"?'
-        camper_delete: 'Opravdu si přejete odstranit táborníka "{name}"?'
+        camper_delete: 'Opravdu si přejete odstranit táborníka "{full_name}"?'
         role_delete: 'Opravdu si přejete odstranit roli "{label}"?'
         user_delete: 'Opravdu si přejete odstranit uživatele "{email}"?'
         camp_category_delete: 'Opravdu si přejete odstranit kategorii tábora "{name}"?'
@@ -184,11 +189,14 @@ entity_attribute:
 
     camper:
         id: 'ID'
-        name: 'Celé jméno'
+        name_first: 'Jméno'
+        name_last: 'Příjmení'
         gender: 'Pohlaví'
+        national_identifier: 'Rodné číslo'
         born_at: 'Datum narození'
         dietary_restrictions: 'Dietní omezení'
         health_restrictions: 'Zdravotní omezení'
+        medication: 'Léky'
         siblings: 'Sourozenci'
         user: 'Uživatel'
         created_at: 'Datum vytvoření'
@@ -222,11 +230,16 @@ entity_attribute:
         email: 'E-mail'
         password: 'Heslo'
         role: 'Role'
-        name: 'Celé jméno'
+        name_first: 'Jméno'
+        name_last: 'Příjmení'
         street: 'Ulice a číslo popisné'
         town: 'Obec'
         zip: 'PSČ'
         country: 'Země'
+        business_name: 'Obchodní název'
+        business_cin: 'IČO'
+        business_vat_id: 'DIČ'
+        last_active_at: 'Datum posledního přihlášení'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -280,7 +293,7 @@ search:
     item_no_reference:
         male: 'Žádný'
         female: 'Žádná'
-        neutral: 'Žádný'
+        neutral: 'Žádné'
 
     error:
         no_results: 'Žádné výsledky'
@@ -304,15 +317,10 @@ menu:
     navbar_admin_vertical:
         browse: 'Procházet'
 
-constraint:
-    unique_user: 'Už existuje uživatel s tímto e-mailem.'
-    unique_role: 'Už existuje role s tímto názvem.'
-    unique_camp_category: 'Zvolená nadřazená kategorie už má kategorii s tímto názvem v odkazu.'
-    unique_camp: 'Už existuje tábor s tímto názvem v odkazu.'
-
 form:
     common:
         choice:
+            choose: '-- vyberte --'
             irrelevant: '-- nezáleží --'
             none:
                 male: '-- žádný --'
@@ -352,7 +360,7 @@ form:
             button: 'Uložit'
 
         user_search:
-            phrase: 'Hledat podle e-mailu nebo jména'
+            phrase: 'Hledat podle e-mailu nebo celého jména'
             sort_by:
                 label: 'Řazení'
                 options:
@@ -360,8 +368,9 @@ form:
                     created_at_asc: 'Od nejstaršího'
                     email_desc: 'E-mail (Z-A)'
                     email_asc: 'E-mail (A-Z)'
-                    name_asc: 'Jméno (A-Z)'
-                    name_desc: 'Jméno (Z-A)'
+                    name_last_asc: 'Příjmení (A-Z)'
+                    name_last_desc: 'Příjmení (Z-A)'
+                    last_active_at_desc: 'Od naposledy přihlášeného'
 
             role: 'Role'
             button: 'Hledat'
@@ -449,11 +458,16 @@ form:
             button: 'Přihlásit se'
 
         profile_billing:
-            name: 'Celé jméno'
+            name_first: 'Jméno'
+            name_last: 'Příjmení'
             street: 'Ulice a číslo popisné'
             town: 'Obec'
             zip: 'PSČ'
             country: 'Země'
+            is_company: 'Nakupuji na firmu'
+            business_name: 'Obchodní název'
+            business_cin: 'IČO'
+            business_vat_id: 'DIČ'
             button: 'Uložit'
 
         profile_password_change:
@@ -487,12 +501,16 @@ form:
             button: 'Hledat'
 
         camper:
-            name: 'Celé jméno'
+            name_first: 'Jméno'
+            name_last: 'Příjmení'
             gender: 'Pohlaví'
+            national_identifier: 'Rodné číslo'
+            is_national_identifier_absent: 'Nemám české/slovenské rodné číslo'
             born_at: 'Datum narození'
             health_insurance_company: 'Zdravotní pojišťovna'
             dietary_restrictions: 'Dietní omezení'
             health_restrictions: 'Další zdravotní omezení'
+            medication: 'Léky'
             siblings: 'Sourozenci'
             button: 'Uložit'
 
@@ -500,12 +518,14 @@ form:
             button: 'Odstranit'
 
         camper_search:
-            phrase: 'Hledat podle jména'
+            phrase: 'Hledat podle celého jména'
             sort_by:
                 label: 'Řazení'
                 options:
                     created_at_asc: 'Od nejstaršího'
                     created_at_desc: 'Od nejnovějšího'
+                    name_last_asc: 'Příjmení (A-Z)'
+                    name_last_desc: 'Příjmení (Z-A)'
 
             button: 'Hledat'
 
