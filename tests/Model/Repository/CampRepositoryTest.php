@@ -2,8 +2,8 @@
 
 namespace App\Tests\Model\Repository;
 
-use App\Enum\Search\Data\Admin\CampSortEnum;
-use App\Form\DataTransfer\Data\Admin\CampSearchData;
+use App\Library\Data\Admin\CampSearchData;
+use App\Library\Enum\Search\Data\Admin\CampSortEnum;
 use App\Model\Entity\Camp;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampRepository;

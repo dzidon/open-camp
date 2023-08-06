@@ -2,11 +2,11 @@
 
 namespace App\Model\Repository;
 
-use App\Enum\GenderEnum;
-use App\Form\DataTransfer\Data\User\CamperSearchDataInterface;
+use App\Library\Data\User\CamperSearchDataInterface;
+use App\Library\Enum\GenderEnum;
+use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camper;
 use App\Model\Entity\User;
-use App\Search\Paginator\PaginatorInterface;
 use DateTimeImmutable;
 use Symfony\Component\Uid\UuidV4;
 

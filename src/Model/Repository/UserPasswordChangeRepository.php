@@ -2,10 +2,10 @@
 
 namespace App\Model\Repository;
 
-use App\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Model\Entity\User;
 use App\Model\Entity\UserPasswordChange;
-use App\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
+use App\Model\Enum\Entity\UserPasswordChangeStateEnum;
+use App\Service\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;

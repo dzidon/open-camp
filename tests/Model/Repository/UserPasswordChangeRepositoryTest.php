@@ -5,7 +5,7 @@ namespace App\Tests\Model\Repository;
 use App\Model\Entity\UserPasswordChange;
 use App\Model\Repository\UserPasswordChangeRepository;
 use App\Model\Repository\UserRepositoryInterface;
-use App\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
+use App\Service\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 

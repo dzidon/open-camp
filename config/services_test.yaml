@@ -48,14 +48,14 @@ parameters:
 services:
     # Interfaces
     Symfony\Contracts\Translation\TranslatorInterface:
-        class: App\Tests\Translation\TranslatorMock
+        class: App\Tests\Service\Translation\TranslatorMock
 
     Symfony\Component\Mailer\MailerInterface:
-        class: App\Tests\Mailer\MailerMock
+        class: App\Tests\Service\Mailer\MailerMock
 
-    App\Security\Token\TokenSplitterInterface:
-        class: App\Tests\Security\Token\TokenSplitterMock
+    App\Service\Security\Token\TokenSplitterInterface:
+        class: App\Tests\Service\Security\Token\TokenSplitterMock
 
     # Classes
-    App\Security\Token\TokenSplitter:
+    App\Service\Security\Token\TokenSplitter:
         public: true

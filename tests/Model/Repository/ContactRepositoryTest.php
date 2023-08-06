@@ -2,11 +2,11 @@
 
 namespace App\Tests\Model\Repository;
 
-use App\Enum\Entity\ContactRoleEnum;
-use App\Enum\Search\Data\User\ContactSortEnum;
-use App\Form\DataTransfer\Data\User\ContactSearchData;
+use App\Library\Data\User\ContactSearchData;
+use App\Library\Enum\Search\Data\User\ContactSortEnum;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
+use App\Model\Enum\Entity\ContactRoleEnum;
 use App\Model\Repository\ContactRepository;
 use App\Model\Repository\UserRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

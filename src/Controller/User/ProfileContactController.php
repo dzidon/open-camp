@@ -3,17 +3,17 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Form\DataTransfer\Data\User\ContactData;
-use App\Form\DataTransfer\Data\User\ContactSearchData;
-use App\Form\DataTransfer\Registry\DataTransferRegistryInterface;
-use App\Form\Type\Common\HiddenTrueType;
-use App\Form\Type\User\ContactSearchType;
-use App\Form\Type\User\ContactType;
-use App\Menu\Breadcrumbs\User\ProfileContactBreadcrumbsInterface;
-use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Library\Data\User\ContactData;
+use App\Library\Data\User\ContactSearchData;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
 use App\Model\Repository\ContactRepositoryInterface;
+use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\Common\HiddenTrueType;
+use App\Service\Form\Type\User\ContactSearchType;
+use App\Service\Form\Type\User\ContactType;
+use App\Service\Menu\Breadcrumbs\User\ProfileContactBreadcrumbsInterface;
+use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;

@@ -2,11 +2,11 @@
 
 namespace App\Model\Repository;
 
-use App\Enum\GenderEnum;
-use App\Form\DataTransfer\Data\User\CamperSearchDataInterface;
+use App\Library\Data\User\CamperSearchDataInterface;
+use App\Library\Enum\GenderEnum;
+use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Camper;
 use App\Model\Entity\User;
-use App\Search\Paginator\DqlPaginator;
 use DateTimeImmutable;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;

@@ -2,8 +2,8 @@
 
 namespace App\Model\Module\Security\UserPasswordChange;
 
-use App\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Model\Entity\UserPasswordChange;
+use App\Model\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Model\Repository\UserPasswordChangeRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;

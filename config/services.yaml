@@ -62,35 +62,26 @@ services:
     App\:
         resource: '../src/'
         exclude:
-            - '../src/DataStructure/'
-            - '../src/DependencyInjection/'
-            - '../src/Enum/'
-            - '../src/EventDispatcher/Event/'
-            - '../src/Form/DataTransfer/Data/'
-            - '../src/Form/DataTransfer/Target/'
-            - '../src/Menu/Type/'
+            - '../src/Library/'
             - '../src/Model/Attribute/'
             - '../src/Model/Entity/'
+            - '../src/Model/Enum/'
             - '../src/Model/Module/Security/UserRegistration/UserRegistrationResult.php'
             - '../src/Model/Module/Security/UserPasswordChange/UserPasswordChangeResult.php'
-            - '../src/Search/Paginator/'
-            - '../src/Security/Authentication/Exception/'
-            - '../src/Security/Token/TokenSplit.php'
-            - '../src/Validator/Constraint/'
             - '../src/Kernel.php'
 
     _instanceof:
-        App\Menu\Factory\MenuTypeFactoryInterface:
+        App\Service\Menu\Factory\MenuTypeFactoryInterface:
             tags: [ 'app.menu_factory' ]
 
-        App\Form\DataTransfer\Transfer\DataTransferInterface:
+        App\Service\Data\Transfer\DataTransferInterface:
             tags: [ 'app.data_transfer' ]
 
-    App\Security\Authentication\SocialLoginRedirectResponseFactory:
+    App\Service\Security\Authentication\SocialLoginRedirectResponseFactory:
         arguments:
             $scopes: '%app.social_login_scopes%'
 
-    App\Security\Authentication\SocialAuthenticator:
+    App\Service\Security\Authentication\SocialAuthenticator:
         arguments:
             $services: '%app.social_login_services%'
 
@@ -104,71 +95,71 @@ services:
             $maxActivePasswordChangesPerUser: '%app.max_active_password_changes_per_user%'
             $passwordChangeLifespan: '%app.password_change_lifespan%'
 
-    App\Menu\Renderer\MenuTypeRenderer:
+    App\Service\Menu\Renderer\MenuTypeRenderer:
         arguments:
             $menuTheme: '%app.menu_theme%'
 
-    App\Menu\Factory\LocaleSwitchMenuTypeFactory:
+    App\Service\Menu\Factory\LocaleSwitchMenuTypeFactory:
         arguments:
             $locales: '%app.locales%'
             $localeNames: '%app.locale_names%'
 
-    App\Translation\LocaleGuesser:
+    App\Service\Translation\LocaleGuesser:
         arguments:
             $locales: '%app.locales%'
             $defaultLocale: '%kernel.default_locale%'
 
-    App\Translation\LocaleRedirectResponseFactory:
+    App\Service\Translation\LocaleRedirectResponseFactory:
         arguments:
             $locales: '%app.locales%'
 
-    App\EventDispatcher\EventSubscriber\LocaleCookieSubscriber:
+    App\Service\EventSubscriber\LocaleCookieSubscriber:
         arguments:
             $locales: '%app.locales%'
             $cookieLifespan: '%app.cookie_lifespan_locale%'
 
-    App\Mailer\UserRegistrationMailer:
+    App\Service\Mailer\UserRegistrationMailer:
         arguments:
             $emailFrom: '%app.email_no_reply%'
             $dateTimeFormat: '%app.date_time_format%'
 
-    App\Mailer\UserPasswordChangeMailer:
+    App\Service\Mailer\UserPasswordChangeMailer:
         arguments:
             $emailFrom: '%app.email_no_reply%'
             $dateTimeFormat: '%app.date_time_format%'
 
-    App\Form\DataTransfer\Transfer\User\BillingDataTransfer:
+    App\Service\Data\Transfer\User\BillingDataTransfer:
         arguments:
             $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
-    App\Form\DataTransfer\Transfer\User\CamperDataTransfer:
+    App\Service\Data\Transfer\User\CamperDataTransfer:
         arguments:
             $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'
             $isNationalIdentifierEnabled: '%app.national_identifier%'
 
-    App\Form\Type\User\BillingType:
+    App\Service\Form\Type\User\BillingType:
         arguments:
             $preferredCountries: '%app.preferred_country_choices%'
             $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
-    App\Form\Type\User\ContactType:
+    App\Service\Form\Type\User\ContactType:
         arguments:
             $phoneNumberDefaultLocale: '%app.phone_number_default_locale%'
             $phoneNumberFormat: '%app.phone_number_format%'
 
-    App\Form\Type\User\CamperType:
+    App\Service\Form\Type\User\CamperType:
         arguments:
             $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'
             $isNationalIdentifierEnabled: '%app.national_identifier%'
 
-    App\Validator\Validator\NationalIdentifierValidator:
+    App\Service\Validator\NationalIdentifierValidator:
         arguments:
             $nationalIdentifierRegex: '%app.national_identifier_regex%'
 
-    App\Validator\Validator\EuCinValidator:
+    App\Service\Validator\EuCinValidator:
         arguments:
             $euCinRegex: '%app.eu_cin_regex%'
 
-    App\Validator\Validator\EuVatIdValidator:
+    App\Service\Validator\EuVatIdValidator:
         arguments:
             $euVatIdRegex: '%app.eu_vat_id_regex%'

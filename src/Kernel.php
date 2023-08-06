@@ -2,9 +2,9 @@
 
 namespace App;
 
-use App\DependencyInjection\Compiler\DataTransferRegistryPass;
-use App\DependencyInjection\Compiler\MenuTypeFactoryRegistryPass;
-use App\DependencyInjection\Compiler\PublicServicesInTestCompilerPass;
+use App\Library\DependencyInjection\Compiler\DataTransferRegistryPass;
+use App\Library\DependencyInjection\Compiler\MenuTypeFactoryRegistryPass;
+use App\Library\DependencyInjection\Compiler\PublicServicesInTestCompilerPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;

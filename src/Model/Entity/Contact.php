@@ -2,8 +2,8 @@
 
 namespace App\Model\Entity;
 
-use App\Enum\Entity\ContactRoleEnum;
 use App\Model\Attribute\UpdatedAtProperty;
+use App\Model\Enum\Entity\ContactRoleEnum;
 use App\Model\Repository\ContactRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;

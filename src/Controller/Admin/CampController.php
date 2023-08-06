@@ -3,17 +3,17 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
-use App\Form\DataTransfer\Data\Admin\CampData;
-use App\Form\DataTransfer\Data\Admin\CampSearchData;
-use App\Form\DataTransfer\Registry\DataTransferRegistryInterface;
-use App\Form\Type\Admin\CampSearchType;
-use App\Form\Type\Admin\CampType;
-use App\Form\Type\Common\HiddenTrueType;
-use App\Menu\Breadcrumbs\Admin\CampBreadcrumbsInterface;
-use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Library\Data\Admin\CampData;
+use App\Library\Data\Admin\CampSearchData;
 use App\Model\Entity\Camp;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
+use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\Admin\CampSearchType;
+use App\Service\Form\Type\Admin\CampType;
+use App\Service\Form\Type\Common\HiddenTrueType;
+use App\Service\Menu\Breadcrumbs\Admin\CampBreadcrumbsInterface;
+use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;

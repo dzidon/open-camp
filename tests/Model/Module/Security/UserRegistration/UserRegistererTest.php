@@ -2,7 +2,7 @@
 
 namespace App\Tests\Model\Module\Security\UserRegistration;
 
-use App\Enum\Entity\UserRegistrationStateEnum;
+use App\Model\Enum\Entity\UserRegistrationStateEnum;
 use App\Model\Module\Security\UserRegistration\UserRegisterer;
 use App\Model\Repository\UserRegistrationRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;

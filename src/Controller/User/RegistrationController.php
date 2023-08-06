@@ -3,17 +3,17 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Form\DataTransfer\Data\User\PlainPasswordData;
-use App\Form\DataTransfer\Data\User\RegistrationData;
-use App\Form\Type\User\RegistrationType;
-use App\Form\Type\User\RepeatedPasswordType;
-use App\Mailer\UserRegistrationMailerInterface;
-use App\Menu\Breadcrumbs\User\RegistrationBreadcrumbsInterface;
+use App\Library\Data\User\PlainPasswordData;
+use App\Library\Data\User\RegistrationData;
 use App\Model\Module\Security\UserRegistration\UserRegistererInterface;
 use App\Model\Module\Security\UserRegistration\UserRegistrationFactoryInterface;
 use App\Model\Repository\UserRegistrationRepositoryInterface;
-use App\Security\Hasher\UserRegistrationVerifierHasherInterface;
-use App\Security\Token\TokenSplitterInterface;
+use App\Service\Form\Type\User\RegistrationType;
+use App\Service\Form\Type\User\RepeatedPasswordType;
+use App\Service\Mailer\UserRegistrationMailerInterface;
+use App\Service\Menu\Breadcrumbs\User\RegistrationBreadcrumbsInterface;
+use App\Service\Security\Hasher\UserRegistrationVerifierHasherInterface;
+use App\Service\Security\Token\TokenSplitterInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;

@@ -2,9 +2,9 @@
 
 namespace App\Model\Repository;
 
-use App\Form\DataTransfer\Data\Admin\CampSearchDataInterface;
+use App\Library\Data\Admin\CampSearchDataInterface;
+use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camp;
-use App\Search\Paginator\PaginatorInterface;
 use Symfony\Component\Uid\UuidV4;
 
 /**

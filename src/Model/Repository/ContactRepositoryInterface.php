@@ -2,12 +2,11 @@
 
 namespace App\Model\Repository;
 
-use App\Enum\Entity\ContactRoleEnum;
-use App\Form\DataTransfer\Data\User\ContactSearchDataInterface;
+use App\Library\Data\User\ContactSearchDataInterface;
+use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
-use App\Search\Paginator\PaginatorInterface;
-use libphonenumber\PhoneNumber;
+use App\Model\Enum\Entity\ContactRoleEnum;
 use Symfony\Component\Uid\UuidV4;
 
 /**

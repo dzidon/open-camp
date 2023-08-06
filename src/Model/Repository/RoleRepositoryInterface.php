@@ -2,9 +2,9 @@
 
 namespace App\Model\Repository;
 
-use App\Form\DataTransfer\Data\Admin\RoleSearchDataInterface;
+use App\Library\Data\Admin\RoleSearchDataInterface;
+use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Role;
-use App\Search\Paginator\PaginatorInterface;
 use Symfony\Component\Uid\UuidV4;
 
 /**

@@ -3,8 +3,8 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
-use App\Menu\Breadcrumbs\Admin\ProfileBreadcrumbsInterface;
 use App\Model\Entity\User;
+use App\Service\Menu\Breadcrumbs\Admin\ProfileBreadcrumbsInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;

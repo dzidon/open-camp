@@ -3,7 +3,7 @@
 namespace App\Tests\Model\Entity;
 
 use App\Model\Entity\CampCategory;
-use App\Tests\DataStructure\GraphNodeMock;
+use App\Tests\Library\DataStructure\GraphNodeMock;
 use DateTimeImmutable;
 use LogicException;
 use PHPUnit\Framework\TestCase;

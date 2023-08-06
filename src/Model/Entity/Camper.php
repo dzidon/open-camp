@@ -2,7 +2,7 @@
 
 namespace App\Model\Entity;
 
-use App\Enum\GenderEnum;
+use App\Library\Enum\GenderEnum;
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\CamperRepository;
 use DateTimeImmutable;

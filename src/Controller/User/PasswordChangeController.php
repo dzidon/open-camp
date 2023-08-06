@@ -3,18 +3,18 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Form\DataTransfer\Data\User\PasswordChangeData;
-use App\Form\DataTransfer\Data\User\PlainPasswordData;
-use App\Form\Type\User\PasswordChangeType;
-use App\Form\Type\User\RepeatedPasswordType;
-use App\Mailer\UserPasswordChangeMailerInterface;
-use App\Menu\Breadcrumbs\User\PasswordChangeBreadcrumbsInterface;
+use App\Library\Data\User\PasswordChangeData;
+use App\Library\Data\User\PlainPasswordData;
 use App\Model\Entity\User;
 use App\Model\Module\Security\UserPasswordChange\UserPasswordChangeFactoryInterface;
 use App\Model\Module\Security\UserPasswordChange\UserPasswordChangerInterface;
 use App\Model\Repository\UserPasswordChangeRepositoryInterface;
-use App\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
-use App\Security\Token\TokenSplitterInterface;
+use App\Service\Form\Type\User\PasswordChangeType;
+use App\Service\Form\Type\User\RepeatedPasswordType;
+use App\Service\Mailer\UserPasswordChangeMailerInterface;
+use App\Service\Menu\Breadcrumbs\User\PasswordChangeBreadcrumbsInterface;
+use App\Service\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
+use App\Service\Security\Token\TokenSplitterInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;

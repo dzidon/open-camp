@@ -2,9 +2,9 @@
 
 namespace App\Tests\Model\Entity;
 
-use App\Enum\Entity\ContactRoleEnum;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
+use App\Model\Enum\Entity\ContactRoleEnum;
 use DateTimeImmutable;
 use libphonenumber\PhoneNumber;
 use PHPUnit\Framework\TestCase;

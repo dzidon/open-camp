@@ -2,8 +2,8 @@
 
 namespace App\Tests\Model\Repository;
 
-use App\Enum\Search\Data\Admin\RoleSortEnum;
-use App\Form\DataTransfer\Data\Admin\RoleSearchData;
+use App\Library\Data\Admin\RoleSearchData;
+use App\Library\Enum\Search\Data\Admin\RoleSortEnum;
 use App\Model\Entity\Role;
 use App\Model\Repository\RoleRepository;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;

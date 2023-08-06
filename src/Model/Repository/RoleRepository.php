@@ -2,9 +2,9 @@
 
 namespace App\Model\Repository;
 
-use App\Form\DataTransfer\Data\Admin\RoleSearchDataInterface;
+use App\Library\Data\Admin\RoleSearchDataInterface;
+use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Role;
-use App\Search\Paginator\DqlPaginator;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;

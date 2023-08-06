@@ -2,9 +2,9 @@
 
 namespace App\Tests\Model\Repository;
 
-use App\Enum\GenderEnum;
-use App\Enum\Search\Data\User\CamperSortEnum;
-use App\Form\DataTransfer\Data\User\CamperSearchData;
+use App\Library\Data\User\CamperSearchData;
+use App\Library\Enum\GenderEnum;
+use App\Library\Enum\Search\Data\User\CamperSortEnum;
 use App\Model\Entity\Camper;
 use App\Model\Entity\User;
 use App\Model\Repository\CamperRepository;

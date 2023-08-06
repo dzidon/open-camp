@@ -2,7 +2,7 @@
 
 namespace App\Tests\Model\Module\Security\UserPasswordChange;
 
-use App\Enum\Entity\UserPasswordChangeStateEnum;
+use App\Model\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Model\Module\Security\UserPasswordChange\UserPasswordChanger;
 use App\Model\Repository\UserPasswordChangeRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;

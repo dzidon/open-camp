@@ -2,18 +2,18 @@
 
 namespace App\Model\Entity;
 
-use App\DataStructure\GraphNodeInterface;
+use App\Library\DataStructure\GraphNodeInterface;
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\CampCategoryRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 use LogicException;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Camp category.

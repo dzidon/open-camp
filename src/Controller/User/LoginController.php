@@ -3,10 +3,10 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Form\DataTransfer\Data\User\LoginData;
-use App\Form\Type\User\LoginType;
-use App\Menu\Breadcrumbs\User\LoginBreadcrumbsInterface;
-use App\Security\Authentication\SocialLoginRedirectResponseFactoryInterface;
+use App\Library\Data\User\LoginData;
+use App\Service\Form\Type\User\LoginType;
+use App\Service\Menu\Breadcrumbs\User\LoginBreadcrumbsInterface;
+use App\Service\Security\Authentication\SocialLoginRedirectResponseFactoryInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

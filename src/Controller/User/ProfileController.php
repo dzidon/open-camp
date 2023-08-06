@@ -3,17 +3,17 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Form\DataTransfer\Data\User\BillingData;
-use App\Form\DataTransfer\Data\User\ProfilePasswordChangeData;
-use App\Form\DataTransfer\Registry\DataTransferRegistryInterface;
-use App\Form\Type\Common\HiddenTrueType;
-use App\Form\Type\User\BillingType;
-use App\Form\Type\User\ProfilePasswordChangeType;
-use App\Mailer\UserPasswordChangeMailerInterface;
-use App\Menu\Breadcrumbs\User\ProfileBreadcrumbsInterface;
+use App\Library\Data\User\BillingData;
+use App\Library\Data\User\ProfilePasswordChangeData;
 use App\Model\Entity\User;
 use App\Model\Module\Security\UserPasswordChange\UserPasswordChangeFactoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
+use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\Common\HiddenTrueType;
+use App\Service\Form\Type\User\BillingType;
+use App\Service\Form\Type\User\ProfilePasswordChangeType;
+use App\Service\Mailer\UserPasswordChangeMailerInterface;
+use App\Service\Menu\Breadcrumbs\User\ProfileBreadcrumbsInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

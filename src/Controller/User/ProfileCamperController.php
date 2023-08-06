@@ -3,17 +3,17 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Form\DataTransfer\Data\User\CamperData;
-use App\Form\DataTransfer\Data\User\CamperSearchData;
-use App\Form\DataTransfer\Registry\DataTransferRegistryInterface;
-use App\Form\Type\Common\HiddenTrueType;
-use App\Form\Type\User\CamperSearchType;
-use App\Form\Type\User\CamperType;
-use App\Menu\Breadcrumbs\User\ProfileCamperBreadcrumbsInterface;
-use App\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Library\Data\User\CamperData;
+use App\Library\Data\User\CamperSearchData;
 use App\Model\Entity\Camper;
 use App\Model\Entity\User;
 use App\Model\Repository\CamperRepositoryInterface;
+use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\Common\HiddenTrueType;
+use App\Service\Form\Type\User\CamperSearchType;
+use App\Service\Form\Type\User\CamperType;
+use App\Service\Menu\Breadcrumbs\User\ProfileCamperBreadcrumbsInterface;
+use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;

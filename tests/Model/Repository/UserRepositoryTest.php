@@ -2,8 +2,8 @@
 
 namespace App\Tests\Model\Repository;
 
-use App\Enum\Search\Data\Admin\UserSortEnum;
-use App\Form\DataTransfer\Data\Admin\UserSearchData;
+use App\Library\Data\Admin\UserSearchData;
+use App\Library\Enum\Search\Data\Admin\UserSortEnum;
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepository;
 use PHPUnit\Framework\MockObject\MockObject;

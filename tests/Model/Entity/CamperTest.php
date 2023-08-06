@@ -2,7 +2,7 @@
 
 namespace App\Tests\Model\Entity;
 
-use App\Enum\GenderEnum;
+use App\Library\Enum\GenderEnum;
 use App\Model\Entity\Camper;
 use App\Model\Entity\User;
 use DateTimeImmutable;

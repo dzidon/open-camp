@@ -2,6 +2,7 @@ controllers:
     resource:
         path: ../src/Controller/
         namespace: App\Controller
+
     type: attribute
     # prefix: '/{_locale<%app.locales%>}'
 
@@ -25,6 +26,7 @@ when@test:
         resource:
             path: ../src/Controller/
             namespace: App\Controller
+
         type: attribute
         prefix: ''
 

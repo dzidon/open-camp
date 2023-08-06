@@ -2,8 +2,8 @@
 
 namespace App\Model\Entity;
 
-use App\Enum\Entity\UserRegistrationStateEnum;
 use App\Model\Attribute\UpdatedAtProperty;
+use App\Model\Enum\Entity\UserRegistrationStateEnum;
 use App\Model\Repository\UserRegistrationRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;

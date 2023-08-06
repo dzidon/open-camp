@@ -3,8 +3,8 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Service\RouteNamerInterface;
-use App\Translation\LocaleRedirectResponseFactoryInterface;
+use App\Service\Routing\RouteNamerInterface;
+use App\Service\Translation\LocaleRedirectResponseFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

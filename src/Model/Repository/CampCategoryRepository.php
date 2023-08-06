@@ -3,10 +3,10 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\CampCategory;
-use App\Search\DataStructure\GraphSearchInterface;
+use App\Service\Search\DataStructure\GraphSearchInterface;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\UuidV4;
-use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method CampCategory|null find($id, $lockMode = null, $lockVersion = null)

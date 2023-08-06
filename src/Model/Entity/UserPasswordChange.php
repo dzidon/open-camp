@@ -2,8 +2,8 @@
 
 namespace App\Model\Entity;
 
-use App\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Model\Attribute\UpdatedAtProperty;
+use App\Model\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Model\Repository\UserPasswordChangeRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;

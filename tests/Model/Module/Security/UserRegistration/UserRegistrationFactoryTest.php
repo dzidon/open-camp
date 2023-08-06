@@ -4,8 +4,8 @@ namespace App\Tests\Model\Module\Security\UserRegistration;
 
 use App\Model\Module\Security\UserRegistration\UserRegistrationFactory;
 use App\Model\Repository\UserRegistrationRepositoryInterface;
-use App\Security\Token\TokenSplitterInterface;
-use App\Tests\Security\Token\TokenSplitterMock;
+use App\Service\Security\Token\TokenSplitterInterface;
+use App\Tests\Service\Security\Token\TokenSplitterMock;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

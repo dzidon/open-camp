@@ -2,13 +2,13 @@
 
 namespace App\Model\Repository;
 
-use App\Form\DataTransfer\Data\Admin\CampSearchDataInterface;
+use App\Library\Data\Admin\CampSearchDataInterface;
+use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Camp;
-use App\Search\Paginator\DqlPaginator;
+use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\UuidV4;
-use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 
 /**
  * @method Camp|null find($id, $lockMode = null, $lockVersion = null)

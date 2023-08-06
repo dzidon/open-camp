@@ -2,8 +2,8 @@
 
 namespace App\Tests\Model\Entity;
 
-use App\Enum\Entity\UserRegistrationStateEnum;
 use App\Model\Entity\UserRegistration;
+use App\Model\Enum\Entity\UserRegistrationStateEnum;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\UuidV4;

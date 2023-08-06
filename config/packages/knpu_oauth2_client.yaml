@@ -8,6 +8,7 @@ knpu_oauth2_client:
             redirect_route: user_login_oauth_check
             redirect_params:
                 service: facebook
+
         google:
             type: google
             client_id: '%env(OAUTH_GOOGLE_CLIENT_ID)%'

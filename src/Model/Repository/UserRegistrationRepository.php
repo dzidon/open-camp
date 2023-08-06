@@ -2,9 +2,9 @@
 
 namespace App\Model\Repository;
 
-use App\Enum\Entity\UserRegistrationStateEnum;
 use App\Model\Entity\UserRegistration;
-use App\Security\Hasher\UserRegistrationVerifierHasherInterface;
+use App\Model\Enum\Entity\UserRegistrationStateEnum;
+use App\Service\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;

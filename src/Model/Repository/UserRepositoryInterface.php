@@ -2,10 +2,10 @@
 
 namespace App\Model\Repository;
 
-use App\Form\DataTransfer\Data\Admin\UserSearchDataInterface;
+use App\Library\Data\Admin\UserSearchDataInterface;
+use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
-use App\Search\Paginator\PaginatorInterface;
 use Symfony\Component\Uid\UuidV4;
 
 /**

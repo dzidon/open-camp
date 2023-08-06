@@ -2,9 +2,9 @@
 
 namespace App\Tests\Model\Entity;
 
-use App\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Model\Entity\User;
 use App\Model\Entity\UserPasswordChange;
+use App\Model\Enum\Entity\UserPasswordChangeStateEnum;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\UuidV4;

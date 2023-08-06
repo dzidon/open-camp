@@ -4,7 +4,7 @@ namespace App\Model\Module\Security\UserRegistration;
 
 use App\Model\Repository\UserRegistrationRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
-use App\Security\Token\TokenSplitterInterface;
+use App\Service\Security\Token\TokenSplitterInterface;
 use DateTimeImmutable;
 
 /**

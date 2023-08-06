@@ -3,13 +3,13 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
-use App\Form\DataTransfer\Data\Admin\CampCategoryData;
-use App\Form\DataTransfer\Registry\DataTransferRegistryInterface;
-use App\Form\Type\Admin\CampCategoryType;
-use App\Form\Type\Common\HiddenTrueType;
-use App\Menu\Breadcrumbs\Admin\CampCategoryBreadcrumbsInterface;
+use App\Library\Data\Admin\CampCategoryData;
 use App\Model\Entity\CampCategory;
 use App\Model\Repository\CampCategoryRepositoryInterface;
+use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\Admin\CampCategoryType;
+use App\Service\Form\Type\Common\HiddenTrueType;
+use App\Service\Menu\Breadcrumbs\Admin\CampCategoryBreadcrumbsInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;

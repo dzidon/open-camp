@@ -17,22 +17,28 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
             lazy: true
             provider: app_user_provider
-            entry_point: App\Security\Authentication\AuthenticationEntryPoint
+            entry_point: App\Service\Security\Authentication\AuthenticationEntryPoint
+
             custom_authenticators:
-                - App\Security\Authentication\SocialAuthenticator
+                - App\Service\Security\Authentication\SocialAuthenticator
+
             login_throttling:
                 max_attempts: 5
                 interval: 5 minutes
+
             remember_me:
                 secret: '%kernel.secret%'
                 lifetime: 604800 # 7 days
+
             form_login:
                 login_path: user_login
                 check_path: user_login
                 enable_csrf: true
+
             logout:
                 path: user_logout
                 target: user_login

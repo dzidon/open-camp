@@ -4,7 +4,7 @@ namespace App\Tests\Model\Repository;
 
 use App\Model\Entity\UserRegistration;
 use App\Model\Repository\UserRegistrationRepository;
-use App\Security\Hasher\UserRegistrationVerifierHasherInterface;
+use App\Service\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
