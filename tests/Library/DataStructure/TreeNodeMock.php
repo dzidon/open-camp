@@ -2,15 +2,15 @@
 
 namespace App\Tests\Library\DataStructure;
 
-use App\Library\DataStructure\GraphNodeInterface;
+use App\Library\DataStructure\TreeNodeInterface;
 
 /**
- * Basic graph node mock for testing.
+ * Basic tree node mock for testing.
  */
-class GraphNodeMock implements GraphNodeInterface
+class TreeNodeMock implements TreeNodeInterface
 {
     protected string $identifier;
-    protected ?GraphNodeInterface $parent = null;
+    protected ?TreeNodeInterface $parent = null;
     protected array $children = [];
 
     public function __construct(string $identifier)
@@ -29,7 +29,7 @@ class GraphNodeMock implements GraphNodeInterface
     /**
      * @inheritDoc
      */
-    public function setParent(?GraphNodeInterface $parent): self
+    public function setParent(?TreeNodeInterface $parent): self
     {
         if ($this->parent === $parent)
         {
@@ -54,7 +54,7 @@ class GraphNodeMock implements GraphNodeInterface
     /**
      * @inheritDoc
      */
-    public function getParent(): ?GraphNodeInterface
+    public function getParent(): ?TreeNodeInterface
     {
         return $this->parent;
     }
@@ -62,11 +62,11 @@ class GraphNodeMock implements GraphNodeInterface
     /**
      * @inheritDoc
      */
-    public function addChild(GraphNodeInterface $child): self
+    public function addChild(TreeNodeInterface $child): self
     {
         $identifier = $child->getIdentifier();
 
-        /** @var GraphNodeInterface $existingChild */
+        /** @var TreeNodeInterface $existingChild */
         foreach ($this->children as $key => $existingChild)
         {
             if ($child === $existingChild)
@@ -90,7 +90,7 @@ class GraphNodeMock implements GraphNodeInterface
     /**
      * @inheritDoc
      */
-    public function removeChild(string|GraphNodeInterface $child): self
+    public function removeChild(string|TreeNodeInterface $child): self
     {
         if (is_string($child))
         {
@@ -101,7 +101,7 @@ class GraphNodeMock implements GraphNodeInterface
             $identifier = $child->getIdentifier();
         }
 
-        /** @var GraphNodeInterface $existingChild */
+        /** @var TreeNodeInterface $existingChild */
         foreach ($this->children as $key => $existingChild)
         {
             if ($existingChild->getIdentifier() === $identifier)
@@ -126,9 +126,9 @@ class GraphNodeMock implements GraphNodeInterface
     /**
      * @inheritDoc
      */
-    public function getChild(string $identifier): ?GraphNodeInterface
+    public function getChild(string $identifier): ?TreeNodeInterface
     {
-        /** @var GraphNodeInterface $existingChild */
+        /** @var TreeNodeInterface $existingChild */
         foreach ($this->children as $existingChild)
         {
             if ($existingChild->getIdentifier() === $identifier)

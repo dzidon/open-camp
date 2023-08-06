@@ -3,7 +3,7 @@
 namespace App\Tests\Model\Entity;
 
 use App\Model\Entity\CampCategory;
-use App\Tests\Library\DataStructure\GraphNodeMock;
+use App\Tests\Library\DataStructure\TreeNodeMock;
 use DateTimeImmutable;
 use LogicException;
 use PHPUnit\Framework\TestCase;
@@ -140,7 +140,7 @@ class CampCategoryTest extends TestCase
 
     public function testUnsupportedRelationType(): void
     {
-        $unsupportedType = new GraphNodeMock('id');
+        $unsupportedType = new TreeNodeMock('id');
 
         $this->expectException(LogicException::class);
         $this->campCategory->setParent($unsupportedType);

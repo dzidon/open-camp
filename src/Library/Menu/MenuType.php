@@ -2,7 +2,7 @@
 
 namespace App\Library\Menu;
 
-use App\Library\DataStructure\GraphNodeInterface;
+use App\Library\DataStructure\TreeNodeInterface;
 use LogicException;
 
 /**
@@ -43,7 +43,7 @@ class MenuType implements MenuTypeInterface
      * @param MenuTypeInterface|null $parent
      * @return $this
      */
-    public function setParent(?GraphNodeInterface $parent): self
+    public function setParent(?TreeNodeInterface $parent): self
     {
         $this->assertSelfReferencedType($parent);
 
@@ -83,7 +83,7 @@ class MenuType implements MenuTypeInterface
      * @param MenuTypeInterface $child
      * @return $this
      */
-    public function addChild(GraphNodeInterface $child): self
+    public function addChild(TreeNodeInterface $child): self
     {
         $this->assertSelfReferencedType($child);
 
@@ -118,7 +118,7 @@ class MenuType implements MenuTypeInterface
      * @param string|MenuTypeInterface $child Identifier or instance.
      * @return $this
      */
-    public function removeChild(string|GraphNodeInterface $child): self
+    public function removeChild(string|TreeNodeInterface $child): self
     {
         $this->assertSelfReferencedType($child);
 
@@ -313,15 +313,15 @@ class MenuType implements MenuTypeInterface
     /**
      * Throws a LogicException if the specified node type is not supported in a child/parent relationship.
      *
-     * @param mixed $graphNode
+     * @param mixed $treeNode
      * @return void
      */
-    protected function assertSelfReferencedType(mixed $graphNode): void
+    protected function assertSelfReferencedType(mixed $treeNode): void
     {
-        if (is_object($graphNode) && !$graphNode instanceof MenuTypeInterface)
+        if (is_object($treeNode) && !$treeNode instanceof MenuTypeInterface)
         {
             throw new LogicException(
-                sprintf('%s cannot be used as a parent/child with %s.', $graphNode::class, $this::class)
+                sprintf('%s cannot be used as a parent/child with %s.', $treeNode::class, $this::class)
             );
         }
     }

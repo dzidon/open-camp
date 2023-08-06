@@ -2,14 +2,14 @@
 
 namespace App\Tests\Library\DataStructure;
 
-use App\Library\DataStructure\GraphNodeInterface;
-use App\Library\DataStructure\SortableGraphNodeInterface;
+use App\Library\DataStructure\TreeNodeInterface;
+use App\Library\DataStructure\SortableTreeNodeInterface;
 use LogicException;
 
 /**
- * Graph node mock with sortable children.
+ * Tree node mock with sortable children.
  */
-class SortableGraphNodeMock extends GraphNodeMock implements SortableGraphNodeInterface
+class SortableTreeNodeMock extends TreeNodeMock implements SortableTreeNodeInterface
 {
     protected int $priority = 0;
 
@@ -17,19 +17,19 @@ class SortableGraphNodeMock extends GraphNodeMock implements SortableGraphNodeIn
      * Returns a sortable child node using its identifier.
      *
      * @param string $identifier
-     * @return SortableGraphNodeInterface|null
+     * @return SortableTreeNodeInterface|null
      */
-    public function getChild(string $identifier): ?SortableGraphNodeInterface
+    public function getChild(string $identifier): ?SortableTreeNodeInterface
     {
         return parent::getChild($identifier);
     }
 
     /**
-     * Return the sortable parent graph node.
+     * Return the sortable parent tree node.
      *
-     * @return SortableGraphNodeInterface|null
+     * @return SortableTreeNodeInterface|null
      */
-    public function getParent(): ?SortableGraphNodeInterface
+    public function getParent(): ?SortableTreeNodeInterface
     {
         return parent::getParent();
     }
@@ -37,10 +37,10 @@ class SortableGraphNodeMock extends GraphNodeMock implements SortableGraphNodeIn
     /**
      * Sets parent node.
      *
-     * @param SortableGraphNodeMock|null $parent
+     * @param SortableTreeNodeMock|null $parent
      * @return self
      */
-    public function setParent(?GraphNodeInterface $parent): self
+    public function setParent(?TreeNodeInterface $parent): self
     {
         $this->assertSelfReferencedType($parent);
 
@@ -50,10 +50,10 @@ class SortableGraphNodeMock extends GraphNodeMock implements SortableGraphNodeIn
     /**
      * Adds a child node.
      *
-     * @param SortableGraphNodeMock $child
+     * @param SortableTreeNodeMock $child
      * @return self
      */
-    public function addChild(GraphNodeInterface $child): self
+    public function addChild(TreeNodeInterface $child): self
     {
         $this->assertSelfReferencedType($child);
 
@@ -63,10 +63,10 @@ class SortableGraphNodeMock extends GraphNodeMock implements SortableGraphNodeIn
     /**
      * Removes a child node.
      *
-     * @param SortableGraphNodeMock|string $child
+     * @param SortableTreeNodeMock|string $child
      * @return self
      */
-    public function removeChild(GraphNodeInterface|string $child): self
+    public function removeChild(TreeNodeInterface|string $child): self
     {
         $this->assertSelfReferencedType($child);
 
@@ -105,7 +105,7 @@ class SortableGraphNodeMock extends GraphNodeMock implements SortableGraphNodeIn
     {
         if (!empty($this->children))
         {
-            usort($this->children, function (SortableGraphNodeMock $a, SortableGraphNodeMock $b)
+            usort($this->children, function (SortableTreeNodeMock $a, SortableTreeNodeMock $b)
             {
                 return $b->getPriority() <=> $a->getPriority();
             });
@@ -117,15 +117,15 @@ class SortableGraphNodeMock extends GraphNodeMock implements SortableGraphNodeIn
     /**
      * Throws a LogicException if the specified node type is not supported in a child/parent relationship.
      *
-     * @param mixed $graphNode
+     * @param mixed $treeNode
      * @return void
      */
-    protected function assertSelfReferencedType(mixed $graphNode): void
+    protected function assertSelfReferencedType(mixed $treeNode): void
     {
-        if (is_object($graphNode) && !$graphNode instanceof SortableGraphNodeMock)
+        if (is_object($treeNode) && !$treeNode instanceof SortableTreeNodeMock)
         {
             throw new LogicException(
-                sprintf('%s cannot be used as a parent/child with %s.', $graphNode::class, $this::class)
+                sprintf('%s cannot be used as a parent/child with %s.', $treeNode::class, $this::class)
             );
         }
     }

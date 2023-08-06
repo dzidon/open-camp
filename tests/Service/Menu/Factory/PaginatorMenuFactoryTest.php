@@ -4,7 +4,7 @@ namespace App\Tests\Service\Menu\Factory;
 
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Service\Menu\Factory\PaginatorMenuTypeFactory;
-use App\Tests\Library\DataStructure\GraphNodeChildrenIdentifiersTrait;
+use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -17,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class PaginatorMenuFactoryTest extends KernelTestCase
 {
-    use GraphNodeChildrenIdentifiersTrait;
+    use TreeNodeChildrenIdentifiersTrait;
 
     private const ROUTE = 'route_mock';
 
@@ -138,7 +138,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
             'template_block_root' => 'pagination_root',
             'template_block_item' => 'pagination_item',
         ]);
-        $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
+        $identifiers = $this->getTreeNodeChildrenIdentifiers($menu);
 
         $this->assertSame(['page_1', 'page_2', 'page_3', 'page_4', 'page_5'], $identifiers);
     }
@@ -233,7 +233,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
                 'template_block_root' => 'pagination_root',
                 'template_block_item' => 'pagination_item',
             ]);
-            $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
+            $identifiers = $this->getTreeNodeChildrenIdentifiers($menu);
 
             $this->assertSame($expectedSequence, $identifiers);
 
@@ -245,7 +245,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
                 'template_block_root' => 'pagination_root',
                 'template_block_item' => 'pagination_item',
             ]);
-            $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
+            $identifiers = $this->getTreeNodeChildrenIdentifiers($menu);
 
             $this->assertSame($expectedSequence, $identifiers);
         }
@@ -274,7 +274,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
                 'template_block_root' => 'pagination_root',
                 'template_block_item' => 'pagination_item',
             ]);
-            $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
+            $identifiers = $this->getTreeNodeChildrenIdentifiers($menu);
 
             $this->assertSame($expectedSequence, $identifiers);
         }
@@ -288,7 +288,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
             'template_block_root' => 'pagination_root',
             'template_block_item' => 'pagination_item',
         ]);
-        $identifiers = $this->getGraphNodeChildrenIdentifiers($menu);
+        $identifiers = $this->getTreeNodeChildrenIdentifiers($menu);
 
         $this->assertSame(['page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'page_7', 'page_8', 'page_9'], $identifiers);
     }

@@ -2,8 +2,8 @@
 
 namespace App\Service\Search\DataStructure;
 
-use App\Library\DataStructure\GraphNodeInterface;
-use App\Library\DataStructure\SortableGraphNodeInterface;
+use App\Library\DataStructure\TreeNodeInterface;
+use App\Library\DataStructure\SortableTreeNodeInterface;
 use App\Library\DataStructure\Stack;
 use App\Library\Event\Search\DepthFirstSearch\ChildIterationEndEvent;
 use App\Library\Event\Search\DepthFirstSearch\ChildIterationStartEvent;
@@ -20,7 +20,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 /**
  * @inheritDoc
  */
-class GraphSearch implements GraphSearchInterface
+class TreeSearch implements TreeSearchInterface
 {
     private PropertyAccessorInterface $propertyAccessor;
 
@@ -32,7 +32,7 @@ class GraphSearch implements GraphSearchInterface
     /**
      * @inheritDoc
      */
-    public function depthFirstSearch(GraphNodeInterface $start, EventDispatcherInterface $eventDispatcher): void
+    public function depthFirstSearch(TreeNodeInterface $start, EventDispatcherInterface $eventDispatcher): void
     {
         $stack = new Stack();
         $stack->push($start);
@@ -42,7 +42,7 @@ class GraphSearch implements GraphSearchInterface
 
         while (!$stack->isEmpty())
         {
-            /** @var GraphNodeInterface $currentNode */
+            /** @var TreeNodeInterface $currentNode */
             $currentNode = $stack->pop();
             $eventDispatcher->dispatch(
                 new StackPopEvent($stack, $expandedNodes, $currentNode),
@@ -96,7 +96,7 @@ class GraphSearch implements GraphSearchInterface
     /**
      * @inheritDoc
      */
-    public function containsCycle(GraphNodeInterface $start): bool
+    public function containsCycle(TreeNodeInterface $start): bool
     {
         $found = false;
         $dispatcher = new EventDispatcher();
@@ -113,7 +113,7 @@ class GraphSearch implements GraphSearchInterface
     /**
      * @inheritDoc
      */
-    public function getDescendentByPath(GraphNodeInterface $from, string $path, string $property = 'identifier'): ?GraphNodeInterface
+    public function getDescendentByPath(TreeNodeInterface $from, string $path, string $property = 'identifier'): ?TreeNodeInterface
     {
         $names = explode('/', trim($path, '/'));
         if (empty($names))
@@ -159,7 +159,7 @@ class GraphSearch implements GraphSearchInterface
     /**
      * @inheritDoc
      */
-    public function getDescendentsOfNode(GraphNodeInterface $node): array
+    public function getDescendentsOfNode(TreeNodeInterface $node): array
     {
         $descendents = [];
         $dispatcher = new EventDispatcher();
@@ -181,13 +181,13 @@ class GraphSearch implements GraphSearchInterface
     /**
      * @inheritDoc
      */
-    public function sortChildrenRecursively(SortableGraphNodeInterface $start): void
+    public function sortChildrenRecursively(SortableTreeNodeInterface $start): void
     {
         $dispatcher = new EventDispatcher();
         $dispatcher->addListener(StackPopEvent::NAME, function (StackPopEvent $event)
         {
             $currentNode = $event->getCurrentNode();
-            if ($currentNode instanceof SortableGraphNodeInterface)
+            if ($currentNode instanceof SortableTreeNodeInterface)
             {
                 $currentNode->sortChildren();
             }

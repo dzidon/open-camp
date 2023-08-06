@@ -4,12 +4,12 @@ namespace App\Tests\Service\Menu\Breadcrumbs\Admin;
 
 use App\Service\Menu\Breadcrumbs\Admin\ProfileBreadcrumbs;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
-use App\Tests\Library\DataStructure\GraphNodeChildrenIdentifiersTrait;
+use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ProfileBreadcrumbsTest extends KernelTestCase
 {
-    use GraphNodeChildrenIdentifiersTrait;
+    use TreeNodeChildrenIdentifiersTrait;
 
     private MenuTypeFactoryRegistryInterface $factoryRegistry;
     private ProfileBreadcrumbs $breadcrumbs;
@@ -18,7 +18,7 @@ class ProfileBreadcrumbsTest extends KernelTestCase
     {
         $breadcrumbsMenu = $this->breadcrumbs->buildProfile();
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
-        $this->assertSame(['admin_home', 'admin_profile'], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
+        $this->assertSame(['admin_home', 'admin_profile'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
         $homeButton = $breadcrumbsMenu->getChild('admin_home');
         $this->assertSame(false, $homeButton->isActive());

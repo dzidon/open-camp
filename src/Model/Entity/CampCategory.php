@@ -2,7 +2,7 @@
 
 namespace App\Model\Entity;
 
-use App\Library\DataStructure\GraphNodeInterface;
+use App\Library\DataStructure\TreeNodeInterface;
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\CampCategoryRepository;
 use DateTimeImmutable;
@@ -19,7 +19,7 @@ use Symfony\Component\Uid\UuidV4;
  * Camp category.
  */
 #[ORM\Entity(repositoryClass: CampCategoryRepository::class)]
-class CampCategory implements GraphNodeInterface
+class CampCategory implements TreeNodeInterface
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
@@ -97,7 +97,7 @@ class CampCategory implements GraphNodeInterface
      * @param CampCategory|null $parent
      * @return $this
      */
-    public function setParent(?GraphNodeInterface $parent): self
+    public function setParent(?TreeNodeInterface $parent): self
     {
         $this->assertSelfReferencedType($parent);
 
@@ -130,7 +130,7 @@ class CampCategory implements GraphNodeInterface
      * @param CampCategory $child
      * @return $this
      */
-    public function addChild(GraphNodeInterface $child): self
+    public function addChild(TreeNodeInterface $child): self
     {
         $this->assertSelfReferencedType($child);
 
@@ -171,7 +171,7 @@ class CampCategory implements GraphNodeInterface
      * @param CampCategory|string $child Instance or a Rfc4122 string
      * @return $this
      */
-    public function removeChild(GraphNodeInterface|string $child): self
+    public function removeChild(TreeNodeInterface|string $child): self
     {
         $this->assertSelfReferencedType($child);
 
@@ -299,15 +299,15 @@ class CampCategory implements GraphNodeInterface
     /**
      * Throws a LogicException if the specified node type is not supported in a child/parent relationship.
      *
-     * @param mixed $graphNode
+     * @param mixed $treeNode
      * @return void
      */
-    protected function assertSelfReferencedType(mixed $graphNode): void
+    protected function assertSelfReferencedType(mixed $treeNode): void
     {
-        if (is_object($graphNode) && !$graphNode instanceof CampCategory)
+        if (is_object($treeNode) && !$treeNode instanceof CampCategory)
         {
             throw new LogicException(
-                sprintf('%s cannot be used as a parent/child with %s.', $graphNode::class, $this::class)
+                sprintf('%s cannot be used as a parent/child with %s.', $treeNode::class, $this::class)
             );
         }
     }

@@ -2,7 +2,7 @@
 
 namespace App\Library\Event\Search\DepthFirstSearch;
 
-use App\Library\DataStructure\GraphNodeInterface;
+use App\Library\DataStructure\TreeNodeInterface;
 use App\Library\DataStructure\StackInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -15,9 +15,9 @@ class StackPopEvent extends Event
 
     private array $expandedNodes;
     private StackInterface $stack;
-    private GraphNodeInterface $currentNode;
+    private TreeNodeInterface $currentNode;
 
-    public function __construct(StackInterface $stack, array $expandedNodes, GraphNodeInterface $currentNode)
+    public function __construct(StackInterface $stack, array $expandedNodes, TreeNodeInterface $currentNode)
     {
         $this->stack = $stack;
         $this->expandedNodes = $expandedNodes;
@@ -34,7 +34,7 @@ class StackPopEvent extends Event
         return $this->expandedNodes;
     }
 
-    public function getCurrentNode(): GraphNodeInterface
+    public function getCurrentNode(): TreeNodeInterface
     {
         return $this->currentNode;
     }

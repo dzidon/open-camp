@@ -4,12 +4,12 @@ namespace App\Tests\Service\Menu\Breadcrumbs\User;
 
 use App\Service\Menu\Breadcrumbs\User\RegistrationBreadcrumbs;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
-use App\Tests\Library\DataStructure\GraphNodeChildrenIdentifiersTrait;
+use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class RegistrationBreadcrumbsTest extends KernelTestCase
 {
-    use GraphNodeChildrenIdentifiersTrait;
+    use TreeNodeChildrenIdentifiersTrait;
 
     private MenuTypeFactoryRegistryInterface $menuTypeRegistry;
     private RegistrationBreadcrumbs $breadcrumbs;
@@ -21,7 +21,7 @@ class RegistrationBreadcrumbsTest extends KernelTestCase
         $this->assertSame([
             'user_home',
             'user_registration',
-        ], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
+        ], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
         $homeButton = $breadcrumbsMenu->getChild('user_home');
         $this->assertSame(false, $homeButton->isActive());
@@ -41,7 +41,7 @@ class RegistrationBreadcrumbsTest extends KernelTestCase
             'user_home',
             'user_registration',
             'user_registration_complete',
-        ], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
+        ], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
         $homeButton = $breadcrumbsMenu->getChild('user_home');
         $this->assertSame(false, $homeButton->isActive());

@@ -4,12 +4,12 @@ namespace App\Tests\Service\Menu\Breadcrumbs\User;
 
 use App\Service\Menu\Breadcrumbs\User\LoginBreadcrumbs;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
-use App\Tests\Library\DataStructure\GraphNodeChildrenIdentifiersTrait;
+use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class LoginBreadcrumbsTest extends KernelTestCase
 {
-    use GraphNodeChildrenIdentifiersTrait;
+    use TreeNodeChildrenIdentifiersTrait;
 
     private MenuTypeFactoryRegistryInterface $menuTypeRegistry;
     private LoginBreadcrumbs $breadcrumbs;
@@ -18,7 +18,7 @@ class LoginBreadcrumbsTest extends KernelTestCase
     {
         $breadcrumbsMenu = $this->breadcrumbs->buildLogin();
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
-        $this->assertSame(['user_home', 'user_login'], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
+        $this->assertSame(['user_home', 'user_login'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
         $homeButton = $breadcrumbsMenu->getChild('user_home');
         $this->assertSame(false, $homeButton->isActive());

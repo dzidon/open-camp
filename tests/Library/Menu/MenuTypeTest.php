@@ -3,8 +3,8 @@
 namespace App\Tests\Library\Menu;
 
 use App\Library\Menu\MenuType;
-use App\Tests\Library\DataStructure\GraphNodeChildrenIdentifiersTrait;
-use App\Tests\Library\DataStructure\GraphNodeMock;
+use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
+use App\Tests\Library\DataStructure\TreeNodeMock;
 use LogicException;
 use PHPUnit\Framework\TestCase;
 
@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 class MenuTypeTest extends TestCase
 {
-    use GraphNodeChildrenIdentifiersTrait;
+    use TreeNodeChildrenIdentifiersTrait;
 
     /**
      * Tests setting and getting the identifier.
@@ -106,14 +106,14 @@ class MenuTypeTest extends TestCase
     }
 
     /**
-     * Tests that unsupported graph node types cannot be used as a parent/child.
+     * Tests that unsupported tree node types cannot be used as a parent/child.
      *
      * @return void
      */
     public function testUnsupportedRelationType(): void
     {
         $menuType = $this->createMenuType(false, false);
-        $unsupportedType = new GraphNodeMock('id');
+        $unsupportedType = new TreeNodeMock('id');
 
         $this->expectException(LogicException::class);
         $menuType->setParent($unsupportedType);
@@ -222,14 +222,14 @@ class MenuTypeTest extends TestCase
     public function testSortChildren(): void
     {
         $menuType = $this->createMenuType(false, true);
-        $this->assertSame(['child_button1', 'child_button2'], $this->getGraphNodeChildrenIdentifiers($menuType));
+        $this->assertSame(['child_button1', 'child_button2'], $this->getTreeNodeChildrenIdentifiers($menuType));
 
         $button1 = $menuType->getChild('child_button1');
         $button1->setPriority(1);
         $button2 = $menuType->getChild('child_button2');
         $button2->setPriority(2);
         $menuType->sortChildren();
-        $this->assertSame(['child_button2', 'child_button1'], $this->getGraphNodeChildrenIdentifiers($menuType));
+        $this->assertSame(['child_button2', 'child_button1'], $this->getTreeNodeChildrenIdentifiers($menuType));
     }
 
     /**

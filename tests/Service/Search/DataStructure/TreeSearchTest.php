@@ -10,21 +10,21 @@ use App\Library\Event\Search\DepthFirstSearch\InitialPushEvent;
 use App\Library\Event\Search\DepthFirstSearch\NodeMarkAsExpandedEvent;
 use App\Library\Event\Search\DepthFirstSearch\StackIterationEndEvent;
 use App\Library\Event\Search\DepthFirstSearch\StackPopEvent;
-use App\Service\Search\DataStructure\GraphSearch;
-use App\Tests\Library\DataStructure\GraphNodeChildrenIdentifiersTrait;
-use App\Tests\Library\DataStructure\GraphNodeMock;
-use App\Tests\Library\DataStructure\SortableGraphNodeMock;
+use App\Service\Search\DataStructure\TreeSearch;
+use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
+use App\Tests\Library\DataStructure\TreeNodeMock;
+use App\Tests\Library\DataStructure\SortableTreeNodeMock;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
-class GraphSearchTest extends KernelTestCase
+class TreeSearchTest extends KernelTestCase
 {
-    use GraphNodeChildrenIdentifiersTrait;
+    use TreeNodeChildrenIdentifiersTrait;
 
     public function testDepthFirstSearchOrder(): void
     {
-        $tree = $this->createGraphNodeMock();
-        $treeSearch = $this->getGraphSearch();
+        $tree = $this->createTreeNodeMock();
+        $treeSearch = $this->getTreeSearch();
         $dispatcher = new EventDispatcher();
         $visitedLog = '';
 
@@ -58,8 +58,8 @@ class GraphSearchTest extends KernelTestCase
             CycleFoundEvent::NAME => false,
         ];
 
-        $graph = $this->createGraphNodeMock(true);
-        $graphSearch = $this->getGraphSearch();
+        $tree = $this->createTreeNodeMock(true);
+        $treeSearch = $this->getTreeSearch();
         $dispatcher = new EventDispatcher();
 
         foreach ($eventsDispatched as $eventName => $dispatched)
@@ -70,7 +70,7 @@ class GraphSearchTest extends KernelTestCase
             });
         }
 
-        $graphSearch->depthFirstSearch($graph, $dispatcher);
+        $treeSearch->depthFirstSearch($tree, $dispatcher);
         $this->assertSame([
             ChildIterationEndEvent::NAME => true,
             ChildIterationStartEvent::NAME => true,
@@ -85,44 +85,44 @@ class GraphSearchTest extends KernelTestCase
 
     public function testContainsCycle(): void
     {
-        $menuWithoutCycle = $this->createGraphNodeMock();
-        $menuWithCycle = $this->createGraphNodeMock(true);
-        $graphSearch = $this->getGraphSearch();
+        $menuWithoutCycle = $this->createTreeNodeMock();
+        $menuWithCycle = $this->createTreeNodeMock(true);
+        $treeSearch = $this->getTreeSearch();
 
-        $this->assertSame(false, $graphSearch->containsCycle($menuWithoutCycle));
-        $this->assertSame(true, $graphSearch->containsCycle($menuWithCycle));
+        $this->assertSame(false, $treeSearch->containsCycle($menuWithoutCycle));
+        $this->assertSame(true, $treeSearch->containsCycle($menuWithCycle));
     }
 
     public function testGetDescendentByPath(): void
     {
-        $menu = $this->createGraphNodeMock();
-        $graphSearch = $this->getGraphSearch();
+        $menu = $this->createTreeNodeMock();
+        $treeSearch = $this->getTreeSearch();
 
-        $itemC = $graphSearch->getDescendentByPath($menu, 'a/b/c');
+        $itemC = $treeSearch->getDescendentByPath($menu, 'a/b/c');
         $this->assertNotNull($itemC);
         $this->assertSame('c', $itemC->getIdentifier());
 
-        $itemB = $graphSearch->getDescendentByPath($menu, 'a/b');
+        $itemB = $treeSearch->getDescendentByPath($menu, 'a/b');
         $this->assertNotNull($itemB);
         $this->assertSame('b', $itemB->getIdentifier());
 
-        $itemC = $graphSearch->getDescendentByPath($itemB, 'c');
+        $itemC = $treeSearch->getDescendentByPath($itemB, 'c');
         $this->assertNotNull($itemC);
         $this->assertSame('c', $itemC->getIdentifier());
 
-        $item = $graphSearch->getDescendentByPath($menu, 'a/y');
+        $item = $treeSearch->getDescendentByPath($menu, 'a/y');
         $this->assertSame(null, $item);
     }
 
     public function testGetDescendentsOfNode(): void
     {
-        $menu = $this->createGraphNodeMock();
-        $graphSearch = $this->getGraphSearch();
+        $menu = $this->createTreeNodeMock();
+        $treeSearch = $this->getTreeSearch();
 
         $descendentIdentifiers = [];
-        $descendents = $graphSearch->getDescendentsOfNode($menu);
+        $descendents = $treeSearch->getDescendentsOfNode($menu);
 
-        /** @var GraphNodeMock $descendent */
+        /** @var TreeNodeMock $descendent */
         foreach ($descendents as $descendent)
         {
             $descendentIdentifiers[] = $descendent->getIdentifier();
@@ -133,36 +133,36 @@ class GraphSearchTest extends KernelTestCase
 
     public function testSortRecursively(): void
     {
-        $menuType = $this->createSortableGraphNodeMock();
-        $search = $this->getGraphSearch();
+        $menuType = $this->createSortableTreeNodeMock();
+        $search = $this->getTreeSearch();
         $button1 = $menuType->getChild('button1');
 
-        $this->assertSame(['button1', 'button2'], $this->getGraphNodeChildrenIdentifiers($menuType));
-        $this->assertSame(['button3', 'button4'], $this->getGraphNodeChildrenIdentifiers($button1));
+        $this->assertSame(['button1', 'button2'], $this->getTreeNodeChildrenIdentifiers($menuType));
+        $this->assertSame(['button3', 'button4'], $this->getTreeNodeChildrenIdentifiers($button1));
 
         $search->sortChildrenRecursively($menuType);
-        $this->assertSame(['button2', 'button1'], $this->getGraphNodeChildrenIdentifiers($menuType));
-        $this->assertSame(['button4', 'button3'], $this->getGraphNodeChildrenIdentifiers($button1));
+        $this->assertSame(['button2', 'button1'], $this->getTreeNodeChildrenIdentifiers($menuType));
+        $this->assertSame(['button4', 'button3'], $this->getTreeNodeChildrenIdentifiers($button1));
     }
 
-    private function getGraphSearch(): GraphSearch
+    private function getTreeSearch(): TreeSearch
     {
         $container = static::getContainer();
 
-        /** @var GraphSearch $graphSearch */
-        $graphSearch = $container->get(GraphSearch::class);
+        /** @var TreeSearch $treeSearch */
+        $treeSearch = $container->get(TreeSearch::class);
 
-        return $graphSearch;
+        return $treeSearch;
     }
 
-    private function createGraphNodeMock(bool $withCycle = false): GraphNodeMock
+    private function createTreeNodeMock(bool $withCycle = false): TreeNodeMock
     {
-        $root = new GraphNodeMock('root');
-        $itemA = new GraphNodeMock('a');
-        $itemB = new GraphNodeMock('b');
-        $itemC = new GraphNodeMock('c');
-        $itemX = new GraphNodeMock('x');
-        $itemY = new GraphNodeMock('y');
+        $root = new TreeNodeMock('root');
+        $itemA = new TreeNodeMock('a');
+        $itemB = new TreeNodeMock('b');
+        $itemC = new TreeNodeMock('c');
+        $itemX = new TreeNodeMock('x');
+        $itemY = new TreeNodeMock('y');
 
         $root
             ->addChild($itemA)
@@ -181,17 +181,17 @@ class GraphSearchTest extends KernelTestCase
         return $root;
     }
 
-    private function createSortableGraphNodeMock(): SortableGraphNodeMock
+    private function createSortableTreeNodeMock(): SortableTreeNodeMock
     {
-        $root = new SortableGraphNodeMock('root');
-        $button1 = new SortableGraphNodeMock('button1');
+        $root = new SortableTreeNodeMock('root');
+        $button1 = new SortableTreeNodeMock('button1');
         $button1->setPriority(1);
-        $button2 = new SortableGraphNodeMock('button2');
+        $button2 = new SortableTreeNodeMock('button2');
         $button2->setPriority(2);
 
-        $button3 = new SortableGraphNodeMock('button3');
+        $button3 = new SortableTreeNodeMock('button3');
         $button3->setPriority(1);
-        $button4 = new SortableGraphNodeMock('button4');
+        $button4 = new SortableTreeNodeMock('button4');
         $button4->setPriority(2);
 
         $root

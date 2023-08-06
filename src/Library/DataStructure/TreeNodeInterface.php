@@ -3,9 +3,9 @@
 namespace App\Library\DataStructure;
 
 /**
- * Interface for all graph nodes.
+ * Interface for all tree nodes.
  */
-interface GraphNodeInterface
+interface TreeNodeInterface
 {
     /**
      * Returns a unique identifier of the node.
@@ -17,48 +17,48 @@ interface GraphNodeInterface
     /**
      * Returns null or the parent node.
      *
-     * @return GraphNodeInterface|null
+     * @return TreeNodeInterface|null
      */
-    public function getParent(): ?GraphNodeInterface;
+    public function getParent(): ?TreeNodeInterface;
 
     /**
      * Sets the parent node.
      *
-     * @param GraphNodeInterface|null $parent
+     * @param TreeNodeInterface|null $parent
      * @return $this
      */
-    public function setParent(?GraphNodeInterface $parent): self;
+    public function setParent(?TreeNodeInterface $parent): self;
 
     /**
      * Returns all child nodes.
      *
-     * @return GraphNodeInterface[]
+     * @return TreeNodeInterface[]
      */
     public function getChildren(): array;
 
     /**
      * Adds a child node.
      *
-     * @param GraphNodeInterface $child
+     * @param TreeNodeInterface $child
      * @return $this
      */
-    public function addChild(GraphNodeInterface $child): self;
+    public function addChild(TreeNodeInterface $child): self;
 
     /**
      * Removes a child node.
      *
-     * @param string|GraphNodeInterface $child Identifier or instance.
+     * @param string|TreeNodeInterface $child Identifier or instance.
      * @return $this
      */
-    public function removeChild(string|GraphNodeInterface $child): self;
+    public function removeChild(string|TreeNodeInterface $child): self;
 
     /**
      * Returns a child node using its identifier.
      *
      * @param string $identifier
-     * @return GraphNodeInterface|null
+     * @return TreeNodeInterface|null
      */
-    public function getChild(string $identifier): ?GraphNodeInterface;
+    public function getChild(string $identifier): ?TreeNodeInterface;
 
     /**
      * Returns true if the node has a child with the specified identifier.

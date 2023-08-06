@@ -3,24 +3,24 @@
 namespace App\Library\DataStructure;
 
 /**
- * Interface for graph nodes that can sort their children.
+ * Interface for tree nodes that can sort their children.
  */
-interface SortableGraphNodeInterface extends GraphNodeInterface
+interface SortableTreeNodeInterface extends TreeNodeInterface
 {
     /**
      * Returns null or the sortable parent node.
      *
-     * @return SortableGraphNodeInterface|null
+     * @return SortableTreeNodeInterface|null
      */
-    public function getParent(): ?SortableGraphNodeInterface;
+    public function getParent(): ?SortableTreeNodeInterface;
 
     /**
      * Returns a sortable child node using its identifier.
      *
      * @param string $identifier
-     * @return SortableGraphNodeInterface|null
+     * @return SortableTreeNodeInterface|null
      */
-    public function getChild(string $identifier): ?SortableGraphNodeInterface;
+    public function getChild(string $identifier): ?SortableTreeNodeInterface;
 
     /**
      * Sorts its child nodes based on some attribute.

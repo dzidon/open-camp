@@ -2,12 +2,12 @@
 
 namespace App\Library\Event\Search\DepthFirstSearch;
 
-use App\Library\DataStructure\GraphNodeInterface;
+use App\Library\DataStructure\TreeNodeInterface;
 use App\Library\DataStructure\StackInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
- * Dispatched when a cycle is found in a graph.
+ * Dispatched when a cycle is found in a tree.
  */
 class CycleFoundEvent extends Event
 {
@@ -15,10 +15,10 @@ class CycleFoundEvent extends Event
 
     private StackInterface $stack;
     private array $expandedNodes;
-    private GraphNodeInterface $childNode;
-    private GraphNodeInterface $parentNode;
+    private TreeNodeInterface $childNode;
+    private TreeNodeInterface $parentNode;
 
-    public function __construct(StackInterface $stack, array $expandedNodes, GraphNodeInterface $childNode, GraphNodeInterface $parentNode)
+    public function __construct(StackInterface $stack, array $expandedNodes, TreeNodeInterface $childNode, TreeNodeInterface $parentNode)
     {
         $this->stack = $stack;
         $this->expandedNodes = $expandedNodes;
@@ -36,12 +36,12 @@ class CycleFoundEvent extends Event
         return $this->expandedNodes;
     }
 
-    public function getChildNode(): GraphNodeInterface
+    public function getChildNode(): TreeNodeInterface
     {
         return $this->childNode;
     }
 
-    public function getParentNode(): GraphNodeInterface
+    public function getParentNode(): TreeNodeInterface
     {
         return $this->parentNode;
     }

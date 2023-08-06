@@ -4,12 +4,12 @@ namespace App\Tests\Service\Menu\Breadcrumbs\User;
 
 use App\Service\Menu\Breadcrumbs\User\ProfileBreadcrumbs;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
-use App\Tests\Library\DataStructure\GraphNodeChildrenIdentifiersTrait;
+use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ProfileBreadcrumbsTest extends KernelTestCase
 {
-    use GraphNodeChildrenIdentifiersTrait;
+    use TreeNodeChildrenIdentifiersTrait;
 
     private MenuTypeFactoryRegistryInterface $menuTypeRegistry;
     private ProfileBreadcrumbs $breadcrumbs;
@@ -21,7 +21,7 @@ class ProfileBreadcrumbsTest extends KernelTestCase
         $this->assertSame([
             'user_home',
             'user_profile_billing',
-        ], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
+        ], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
         $homeButton = $breadcrumbsMenu->getChild('user_home');
         $this->assertSame(false, $homeButton->isActive());
@@ -39,7 +39,7 @@ class ProfileBreadcrumbsTest extends KernelTestCase
         $this->assertSame([
             'user_home',
             'user_profile_password_change',
-        ], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
+        ], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
         $homeButton = $breadcrumbsMenu->getChild('user_home');
         $this->assertSame(false, $homeButton->isActive());
@@ -57,7 +57,7 @@ class ProfileBreadcrumbsTest extends KernelTestCase
         $this->assertSame([
             'user_home',
             'user_profile_password_change_create',
-        ], $this->getGraphNodeChildrenIdentifiers($breadcrumbsMenu));
+        ], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
         $homeButton = $breadcrumbsMenu->getChild('user_home');
         $this->assertSame(false, $homeButton->isActive());

@@ -2,12 +2,12 @@
 
 namespace App\Library\Menu;
 
-use App\Library\DataStructure\SortableGraphNodeInterface;
+use App\Library\DataStructure\SortableTreeNodeInterface;
 
 /**
  * Interface for all menus and menu links. Menu types can form a tree structure and their children can be sorted.
  */
-interface MenuTypeInterface extends SortableGraphNodeInterface
+interface MenuTypeInterface extends SortableTreeNodeInterface
 {
     /**
      * Returns null or the parent menu type.

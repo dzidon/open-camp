@@ -3,7 +3,7 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\CampCategory;
-use App\Service\Search\DataStructure\GraphSearchInterface;
+use App\Service\Search\DataStructure\TreeSearchInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\UuidV4;
@@ -15,13 +15,13 @@ use Symfony\Component\Uid\UuidV4;
  */
 class CampCategoryRepository extends AbstractRepository implements CampCategoryRepositoryInterface
 {
-    private GraphSearchInterface $graphSearch;
+    private TreeSearchInterface $treeSearch;
 
-    public function __construct(ManagerRegistry $registry, GraphSearchInterface $graphSearch)
+    public function __construct(ManagerRegistry $registry, TreeSearchInterface $treeSearch)
     {
         parent::__construct($registry, CampCategory::class);
 
-        $this->graphSearch = $graphSearch;
+        $this->treeSearch = $treeSearch;
     }
 
     /**
@@ -114,7 +114,7 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
     {
         $possibleParents = $this->findAll();
 
-        $illegalParents = $this->graphSearch->getDescendentsOfNode($category);
+        $illegalParents = $this->treeSearch->getDescendentsOfNode($category);
         $illegalParents[] = $category;
 
         foreach ($possibleParents as $key => $possibleParent)
