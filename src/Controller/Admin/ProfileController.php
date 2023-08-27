@@ -28,8 +28,8 @@ class ProfileController extends AbstractController
         $admin = $this->getUser();
 
         return $this->render('admin/profile/profile.html.twig', [
-            'admin'        => $admin,
-            '_breadcrumbs' => $this->breadcrumbs->buildProfile(),
+            'admin'       => $admin,
+            'breadcrumbs' => $this->breadcrumbs->buildProfile(),
         ]);
     }
 }

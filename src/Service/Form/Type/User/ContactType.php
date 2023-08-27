@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\User\ContactDataInterface;
+use App\Library\Data\User\ContactData;
 use App\Service\Form\Type\Common\ContactRoleType;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\AbstractType;
@@ -16,15 +16,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ContactType extends AbstractType
 {
-    private string $phoneNumberDefaultLocale;
-    private int $phoneNumberFormat;
-
-    public function __construct(string $phoneNumberDefaultLocale, int $phoneNumberFormat)
-    {
-        $this->phoneNumberDefaultLocale = $phoneNumberDefaultLocale;
-        $this->phoneNumberFormat = $phoneNumberFormat;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -45,11 +36,9 @@ class ContactType extends AbstractType
                 ],
             ])
             ->add('phoneNumber', PhoneNumberType::class, [
-                'required'       => false,
-                'label'          => 'form.user.contact.phone_number',
-                'default_region' => $this->phoneNumberDefaultLocale,
-                'format'         => $this->phoneNumberFormat,
-                'label_attr'     => [
+                'required'   => false,
+                'label'      => 'form.user.contact.phone_number',
+                'label_attr' => [
                     'class' => 'required-conditional'
                 ],
             ])
@@ -62,7 +51,7 @@ class ContactType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ContactDataInterface::class,
+            'data_class' => ContactData::class,
         ]);
     }
 }

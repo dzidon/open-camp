@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\User\LoginDataInterface;
+use App\Library\Data\User\LoginData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -40,7 +40,7 @@ class LoginType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'      => LoginDataInterface::class,
+            'data_class'      => LoginData::class,
             'csrf_field_name' => '_csrf_token',
             'csrf_token_id'   => 'authenticate',
         ]);

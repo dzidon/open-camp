@@ -2,10 +2,7 @@
 
 namespace App\Library\Data\User;
 
-/**
- * @inheritDoc
- */
-class LoginData implements LoginDataInterface
+class LoginData
 {
     private ?string $email = null;
 

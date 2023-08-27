@@ -5,7 +5,9 @@ namespace App\Model\DataFixture;
 use App\Library\Enum\GenderEnum;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
+use App\Model\Entity\CampDate;
 use App\Model\Entity\Camper;
+use App\Model\Entity\CampImage;
 use App\Model\Entity\Contact;
 use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
@@ -311,16 +313,48 @@ class TestFixtures extends Fixture
         /*
          * Camp
          */
-        $camp1 = new Camp('Camp 1', 'camp-1', 6, 12);
+        $camp1 = new Camp('Camp 1', 'camp-1', 6, 12, 'Street 123', 'Town 1', '12345', 'CS');
         $this->setUid($camp1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $camp1->setCampCategory($campCategory1);
         $this->setCreatedAt($camp1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($camp1);
 
-        $camp2 = new Camp('Camp 2', 'camp-2', 13, 18);
-        $camp2->setCampCategory($campCategory2);
+        $camp2 = new Camp('Camp 2', 'camp-2', 13, 18, 'Street 321', 'Town 2', '54321', 'SK');
+        $this->setUid($camp2, 'a08f6f48-3a52-40db-b031-5eb3a468c57a');
+        $camp2->setFeaturedPriority(100);
         $this->setCreatedAt($camp2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($camp2);
+
+        /*
+         * CampImage
+         */
+        $campImage1 = new CampImage(100, 'jpg', $camp1);
+        $this->setUid($campImage1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($campImage1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($campImage1);
+
+        $campImage2 = new CampImage(200, 'png', $camp1);
+        $this->setUid($campImage2, '550e8400-e29b-41d4-a716-446655440000');
+        $this->setCreatedAt($campImage2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($campImage2);
+
+        /*
+         * CampDate
+         */
+        $campDate1 = new CampDate(new DateTimeImmutable('2000-07-01'), new DateTimeImmutable('2000-07-07'), 1000, 10, $camp1);
+        $this->setUid($campDate1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($campDate1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($campDate1);
+
+        $campDate2 = new CampDate(new DateTimeImmutable('3000-07-08'), new DateTimeImmutable('3000-07-14'), 2000, 20, $camp1);
+        $this->setUid($campDate2, '550e8400-e29b-41d4-a716-446655440000');
+        $this->setCreatedAt($campDate2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($campDate2);
+
+        $campDate3 = new CampDate(new DateTimeImmutable('4000-01-05'), new DateTimeImmutable('4000-01-10'), 3000, 30, $camp2);
+        $this->setUid($campDate3, 'c097941e-52c4-405a-9823-49b7b71ead6e');
+        $this->setCreatedAt($campDate3, new DateTimeImmutable('2000-01-03'));
+        $manager->persist($campDate3);
 
         // save
         $manager->flush();

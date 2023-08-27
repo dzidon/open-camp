@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\Admin;
 
-use App\Library\Data\Admin\RoleDataInterface;
+use App\Library\Data\Admin\RoleData;
 use App\Model\Entity\Permission;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -36,12 +36,14 @@ class RoleType extends AbstractType
                 'class'        => Permission::class,
                 'choice_label' => function (Permission $permission) {
                     $label = $permission->getLabel();
+
                     return $this->translator->trans($label);
                 },
                 'choices'  => $options['choices_permissions'],
                 'group_by' => function (Permission $permission) {
                     $group = $permission->getPermissionGroup();
                     $label = $group->getLabel();
+
                     return $this->translator->trans($label);
                 },
                 'multiple' => true,
@@ -55,7 +57,7 @@ class RoleType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'          => RoleDataInterface::class,
+            'data_class'          => RoleData::class,
             'choices_permissions' => [],
         ]);
 

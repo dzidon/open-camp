@@ -1,9 +1,32 @@
 app:
     site_name: 'Kemp'
 
+bool:
+    yes: 'Ano'
+    no: 'Ne'
+
 gender:
     m: 'Muž'
     f: 'Žena'
+
+more:
+    camp_images: '{more_camp_images, plural,
+          =0    {Žádné další obrázky tábora...}
+          =1    {# další obrázek tábora...}
+          =2    {# další obrázky tábora...}
+          =3    {# další obrázky tábora...}
+          =4    {# další obrázky tábora...}
+          other {# dalších obrázků tábora...}
+        }'
+
+    camp_dates: '{more_camp_dates, plural,
+          =0    {Žádné další termíny tábora...}
+          =1    {# další termín tábora...}
+          =2    {# další termíny tábora...}
+          =3    {# další termíny tábora...}
+          =4    {# další termíny tábora...}
+          other {# dalších termínů tábora...}
+        }'
 
 contact_role:
     mother: 'Matka'
@@ -85,6 +108,8 @@ crud:
         user_delete: 'Opravdu si přejete odstranit uživatele "{email}"?'
         camp_category_delete: 'Opravdu si přejete odstranit kategorii tábora "{name}"?'
         camp_delete: 'Opravdu si přejete odstranit tábor "{name}"?'
+        camp_image_delete: 'Opravdu si přejete odstranit obrázek tábora?'
+        camp_date_delete: 'Opravdu si přejete odstranit termín tábora "{name}" mezi {start_at} a {end_at}?'
 
     action:
         common:
@@ -92,6 +117,7 @@ crud:
             create: 'Vytvořit'
             update: 'Upravit'
             delete: 'Odstranit'
+            upload: 'Nahrát'
 
         user:
             update_password: 'Nastavit heslo'
@@ -129,6 +155,17 @@ crud:
             create: 'Tábor vytvořen!'
             update: 'Tábor uložen!'
             delete: 'Tábor odstraněn!'
+
+        camp_image:
+            create: 'Obrázek tábora vytvořen!'
+            update: 'Obrázek tábora uložen!'
+            delete: 'Obrázek tábora odstraněn!'
+            upload: 'Nahrávání dokončeno!'
+
+        camp_date:
+            create: 'Termín tábora vytvořen!'
+            update: 'Termín tábora uložen!'
+            delete: 'Termín tábora odstraněn!'
 
 entity:
     contact:
@@ -170,6 +207,14 @@ entity:
     camp:
         singular: 'Tábor'
         plural: 'Tábory'
+
+    camp_image:
+        singular: 'Obrázek tábora'
+        plural: 'Obrázky tábora'
+
+    camp_date:
+        singular: 'Termín tábora'
+        plural: 'Termíny tábora'
 
 entity_attribute:
     common:
@@ -278,10 +323,37 @@ entity_attribute:
         url_name: 'Název v odkazu'
         age_min: 'Min. věk'
         age_max: 'Max. věk'
+        street: 'Ulice a číslo popisné'
+        town: 'Obec'
+        zip: 'PSČ'
+        country: 'Země'
         gender: 'Pohlaví táborníka'
         description_short: 'Krátký popis'
         description_long: 'Dlouhý popis'
         camp_category: 'Kategorie tábora'
+        featured_priority: 'Priorita v doporučených'
+        period: 'Období'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    camp_image:
+        id: 'ID'
+        priority: 'Priorita'
+        extension: 'Formát'
+        camp: 'Tábor'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    camp_date:
+        id: 'ID'
+        start_at: 'Datum odjezdu'
+        end_at: 'Datum návratu'
+        price: 'Cena'
+        capacity: 'Kapacita'
+        is_closed: 'Přihlášování zablokováno'
+        trip_instructions: 'Pokyny k odjezdu'
+        camp: 'Tábor'
+        leaders: 'Vedoucí'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -321,17 +393,20 @@ form:
     common:
         choice:
             choose: '-- vyberte --'
-            irrelevant: '-- nezáleží --'
+            irrelevant: 'Nezáleží'
             none:
-                male: '-- žádný --'
-                female: '-- žádná --'
-                neutral: '-- žádné --'
+                male: 'Žádný'
+                female: 'Žádná'
+                neutral: 'Žádné'
 
             yes: 'Ano'
             no: 'Ne'
 
         collection:
             remove: 'Odebrat'
+
+        file:
+            browse: 'Procházet'
 
     admin:
         role_search:
@@ -399,9 +474,20 @@ form:
             url_name: 'Název v odkazu'
             age_min: 'Min. věk'
             age_max: 'Max. věk'
+            street: 'Ulice a číslo popisné'
+            town: 'Obec'
+            zip: 'PSČ'
+            country: 'Země'
             description_short: 'Krátký popis'
             description_long: 'Dlouhý popis'
+            featured_priority: 'Priorita v doporučených'
             camp_category: 'Kategorie tábora'
+            button: 'Uložit'
+
+        camp_creation:
+            images: 'Obrázky'
+            camp_dates: 'Termíny'
+            add_camp_date: 'Přidat termín'
             button: 'Uložit'
 
         camp_search:
@@ -415,15 +501,60 @@ form:
                     name_desc: 'Název (Z-A)'
                     url_name_asc: 'Název v odkazu (A-Z)'
                     url_name_desc: 'Název v odkazu (Z-A)'
+                    featured_priority_desc: 'Od největší priority v doporučených'
 
             age: 'Věk'
-            date_start: 'Datum odjezdu'
-            date_end: 'Datum návratu'
+            start_at: 'Datum odjezdu'
+            end_at: 'Datum návratu'
             camp_category: 'Kategorie tábora'
-            active: 'Přijímá přihlášky'
+            is_active: 'Přijímá přihlášky'
             button: 'Hledat'
 
         camp_delete:
+            button: 'Odstranit'
+
+        camp_image:
+            priority: 'Priorita'
+            button: 'Uložit'
+
+        camp_images_upload:
+            images: 'Obrázky'
+            button: 'Nahrát'
+
+        camp_image_delete:
+            button: 'Odstranit'
+
+        camp_date:
+            start_at: 'Datum od'
+            end_at: 'Datum do'
+            price: 'Cena'
+            capacity: 'Kapacita'
+            is_closed: 'Zablokovat přihlášení'
+            trip_instructions: 'Pokyny k odjezdu'
+            leaders: 'Vedoucí'
+            button: 'Uložit'
+
+        camp_date_search:
+            start_at: 'Datum odjezdu'
+            end_at: 'Datum návratu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    start_at_asc: 'Datum odjezdu (vzestupně)'
+                    start_at_desc: 'Datum odjezdu (sestupně)'
+                    price_asc: 'Cena (od nejmenší)'
+                    price_desc: 'Cena (od největší)'
+                    capacity_asc: 'Kapacita (od nejmenší)'
+                    capacity_desc: 'Kapacita (od největší)'
+
+            is_active: 'Přijímá přihlášky'
+            is_historical:
+                label: 'Typ termínu'
+                choices:
+                    current_and_upcoming: 'Probíhající a nadcházející'
+                    historical: 'Historický'
+
+        camp_date_delete:
             button: 'Odstranit'
 
     user:
@@ -577,6 +708,17 @@ route:
     admin_camp_category_read: 'Zobrazení kategorie tábora'
     admin_camp_category_update: 'Editace kategorie tábora'
     admin_camp_category_delete: 'Odstranění kategorie tábora'
+
+    admin_camp_image_list: 'Obrázky tábora'
+    admin_camp_image_upload: 'Nahrání obrázků tábora'
+    admin_camp_image_update: 'Editace obrázku tábora'
+    admin_camp_image_delete: 'Odstranění obrázku tábora'
+
+    admin_camp_date_list: 'Termíny tábora'
+    admin_camp_date_create: 'Nový termín tábora'
+    admin_camp_date_read: 'Zobrazení termínu tábora'
+    admin_camp_date_update: 'Editace termínu tábora'
+    admin_camp_date_delete: 'Odstranění termínu tábora'
 
     user_home: 'Domů'
     user_login: 'Přihlášení'

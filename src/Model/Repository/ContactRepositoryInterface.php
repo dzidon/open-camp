@@ -2,7 +2,7 @@
 
 namespace App\Model\Repository;
 
-use App\Library\Data\User\ContactSearchDataInterface;
+use App\Library\Data\User\ContactSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
@@ -54,11 +54,11 @@ interface ContactRepositoryInterface
     /**
      * Returns user contact search paginator.
      *
-     * @param ContactSearchDataInterface $data
+     * @param ContactSearchData $data
      * @param User $user
      * @param int $currentPage
      * @param int $pageSize
      * @return PaginatorInterface
      */
-    public function getUserPaginator(ContactSearchDataInterface $data, User $user, int $currentPage, int $pageSize): PaginatorInterface;
+    public function getUserPaginator(ContactSearchData $data, User $user, int $currentPage, int $pageSize): PaginatorInterface;
 }

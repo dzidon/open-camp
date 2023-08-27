@@ -47,8 +47,8 @@ class LoginController extends AbstractController
         $request->getSession()->remove(Security::LAST_USERNAME);
 
         return $this->render('user/auth/login.html.twig', [
-            'form_login' => $form->createView(),
-            '_breadcrumbs' => $this->breadcrumbs->buildLogin(),
+            'form_login'  => $form->createView(),
+            'breadcrumbs' => $this->breadcrumbs->buildLogin(),
         ]);
     }
 

@@ -1,0 +1,66 @@
+{% extends "admin/camp/base_update.html.twig" %}
+
+{% block camp_update_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header d-flex w-100 align-items-center">
+                    <h3 class="card-title">
+                        {% if paginator.totalItems > 0 %}
+                            {{ 'search.results'|trans }} ({{ 'search.total'|trans }} {{ paginator.totalItems }})
+                        {% else %}
+                            {{ 'search.error.no_results'|trans }}
+                        {% endif %}
+                    </h3>
+
+                    <a href="{{ path('admin_camp_image_upload', {id: camp.id.toRfc4122}) }}" class="btn btn-success ml-3">{{ 'crud.action.common.upload'|trans }}</a>
+                </div>
+
+                {% if paginator.totalItems > 0 %}
+                    <div class="card-body table-responsive p-0">
+                        <table class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'entity.camp_image.singular'|trans }}</th>
+                                    <th>{{ 'entity_attribute.camp_image.priority'|trans }}</th>
+                                    <th class="cell-25">{{ 'search.item_action'|trans }}</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for camp_image in paginator.currentPageItems %}
+                                    <tr class="align-items-center">
+                                        <td class="align-middle cell-5">
+                                            <div class="bg-black">
+                                                <a href="{{ asset(camp_image_path(camp_image)) }}">
+                                                    <img class="image-contained-16-9"
+                                                         src="{{ asset(camp_image_path(camp_image)) }}"
+                                                         alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
+                                                    >
+                                                </a>
+                                            </div>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <span>{{ camp_image.priority }}</span>
+                                        </td>
+
+                                        <td class="align-middle cell-25">
+                                            <a href="{{ asset(camp_image_path(camp_image)) }}" class="btn btn-secondary">{{ 'crud.action.common.read'|trans }}</a>
+                                            <a href="{{ path('admin_camp_image_update', {id: camp_image.id.toRfc4122}) }}" class="btn btn-primary">{{ 'crud.action.common.update'|trans }}</a>
+                                            <a href="{{ path('admin_camp_image_delete', {id: camp_image.id.toRfc4122}) }}" class="btn btn-danger">{{ 'crud.action.common.delete'|trans }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-footer clearfix">
+                        {{ menu(pagination_menu) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

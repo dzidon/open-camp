@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\Admin;
 
-use App\Library\Data\Admin\CampCategoryDataInterface;
+use App\Library\Data\Admin\CampCategoryData;
 use App\Model\Entity\CampCategory;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -43,7 +43,7 @@ class CampCategoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'              => CampCategoryDataInterface::class,
+            'data_class'              => CampCategoryData::class,
             'choices_camp_categories' => [],
         ]);
 

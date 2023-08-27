@@ -52,75 +52,6 @@
     </li>
 {% endblock %}
 
-{# Admin vertical navigation #}
-{% block navbar_admin_vertical_root %}
-    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        {% for menu_child in menu_type.children %}
-            {% with {'menu_type': menu_child} %}
-                {{ block(menu_child.templateBlock, menu_theme) }}
-            {% endwith %}
-        {% endfor %}
-    </ul>
-{% endblock %}
-
-{% block navbar_admin_vertical_item %}
-    <li class="nav-item">
-        <a href="{{ menu_type.url }}" class="nav-link{% if menu_type.active %} active{% endif %}">
-            {% if menu_type.icon is not null %}
-                <i class="nav-icon {{ menu_type.icon }}"></i>
-            {% endif %}
-
-            <p>
-                {{ menu_type.text }}
-                {% if menu_type.children is not empty %}
-                    <i class="right fas fa-angle-left"></i>
-                {% endif %}
-            </p>
-        </a>
-
-        {% if menu_type.children is not empty %}
-            <ul class="nav nav-treeview">
-                {% for menu_child in menu_type.children %}
-                    {% with {'menu_type': menu_child} %}
-                        {{ block(menu_child.templateBlock, menu_theme) }}
-                    {% endwith %}
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </li>
-{% endblock %}
-
-{# Admin horizontal navigation #}
-{% block navbar_admin_horizontal_root %}
-    <ul class="navbar-nav ml-auto">
-        {% for menu_child in menu_type.children %}
-            {% with {'menu_type': menu_child} %}
-                {{ block(menu_child.templateBlock, menu_theme) }}
-            {% endwith %}
-        {% endfor %}
-    </ul>
-{% endblock %}
-
-{% block navbar_admin_horizontal_item %}
-    {% set _has_children = menu_type.children is not empty %}
-
-    <li class="nav-item {% if _has_children %} dropdown {% endif %}">
-        <a class="nav-link {% if _has_children %} dropdown-toggle {% endif %}" href="{{ menu_type.url }}" {% if _has_children %} data-toggle="dropdown" {% endif %}>
-            {{ menu_type.text }}
-        </a>
-
-        {% if _has_children %}
-            <ul class="dropdown-menu border-0 shadow">
-                {% for menu_child in menu_type.children %}
-                    {% with {'menu_type': menu_child} %}
-                        {{ block(menu_child.templateBlock, menu_theme) }}
-                    {% endwith %}
-                {% endfor %}
-            </ul>
-        {% endif %}
-    </li>
-{% endblock %}
-
 {# Pagination #}
 {% block pagination_root %}
     <ul class="pagination pagination-sm m-0">
@@ -193,5 +124,93 @@
                 {% endfor %}
             </ul>
         {% endif %}
+    </li>
+{% endblock %}
+
+{# Admin vertical navigation #}
+{% block navbar_admin_vertical_root %}
+    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        {% for menu_child in menu_type.children %}
+            {% with {'menu_type': menu_child} %}
+                {{ block(menu_child.templateBlock, menu_theme) }}
+            {% endwith %}
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block navbar_admin_vertical_item %}
+    <li class="nav-item">
+        <a href="{{ menu_type.url }}" class="nav-link{% if menu_type.active %} active{% endif %}">
+            {% if menu_type.icon is not null %}
+                <i class="nav-icon {{ menu_type.icon }}"></i>
+            {% endif %}
+
+            <p>
+                {{ menu_type.text }}
+                {% if menu_type.children is not empty %}
+                    <i class="right fas fa-angle-left"></i>
+                {% endif %}
+            </p>
+        </a>
+
+        {% if menu_type.children is not empty %}
+            <ul class="nav nav-treeview">
+                {% for menu_child in menu_type.children %}
+                    {% with {'menu_type': menu_child} %}
+                        {{ block(menu_child.templateBlock, menu_theme) }}
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endblock %}
+
+{# Admin horizontal navigation #}
+{% block navbar_admin_horizontal_root %}
+    <ul class="navbar-nav ml-auto">
+        {% for menu_child in menu_type.children %}
+            {% with {'menu_type': menu_child} %}
+                {{ block(menu_child.templateBlock, menu_theme) }}
+            {% endwith %}
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block navbar_admin_horizontal_item %}
+    {% set _has_children = menu_type.children is not empty %}
+
+    <li class="nav-item {% if _has_children %} dropdown {% endif %}">
+        <a class="nav-link {% if _has_children %} dropdown-toggle {% endif %}" href="{{ menu_type.url }}" {% if _has_children %} data-toggle="dropdown" {% endif %}>
+            {{ menu_type.text }}
+        </a>
+
+        {% if _has_children %}
+            <ul class="dropdown-menu border-0 shadow">
+                {% for menu_child in menu_type.children %}
+                    {% with {'menu_type': menu_child} %}
+                        {{ block(menu_child.templateBlock, menu_theme) }}
+                    {% endwith %}
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+{% endblock %}
+
+{# Admin navbar camp update #}
+{% block navbar_admin_camp_update_root %}
+    <ul class="nav nav-tabs" role="tablist">
+        {% for menu_child in menu_type.children %}
+            {% with {'menu_type': menu_child} %}
+                {{ block(menu_child.templateBlock, menu_theme) }}
+            {% endwith %}
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block navbar_admin_camp_update_item %}
+    <li class="nav-item">
+        <a class="nav-link{% if menu_type.active %} active{% endif %}" href="{{ menu_type.url }}" role="tab" aria-selected="{% if menu_type.active %}true{% else %}false{% endif %}">
+            {{ menu_type.text }}
+        </a>
     </li>
 {% endblock %}

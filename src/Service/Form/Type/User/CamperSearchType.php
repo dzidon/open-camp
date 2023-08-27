@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\User\CamperSearchDataInterface;
+use App\Library\Data\User\CamperSearchData;
 use App\Library\Enum\Search\Data\User\CamperSortEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -41,7 +41,7 @@ class CamperSearchType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'         => CamperSearchDataInterface::class,
+            'data_class'         => CamperSearchData::class,
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

@@ -2,7 +2,7 @@
 
 namespace App\Model\Repository;
 
-use App\Library\Data\User\CamperSearchDataInterface;
+use App\Library\Data\User\CamperSearchData;
 use App\Library\Enum\GenderEnum;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camper;
@@ -76,11 +76,11 @@ interface CamperRepositoryInterface
     /**
      * Returns user camper search paginator.
      *
-     * @param CamperSearchDataInterface $data
+     * @param CamperSearchData $data
      * @param User $user
      * @param int $currentPage
      * @param int $pageSize
      * @return PaginatorInterface
      */
-    public function getUserPaginator(CamperSearchDataInterface $data, User $user, int $currentPage, int $pageSize): PaginatorInterface;
+    public function getUserPaginator(CamperSearchData $data, User $user, int $currentPage, int $pageSize): PaginatorInterface;
 }

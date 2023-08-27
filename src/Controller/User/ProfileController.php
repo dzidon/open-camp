@@ -39,7 +39,6 @@ class ProfileController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-
         $billingData = new BillingData($this->getParameter('app.eu_business_data'));
         $dataTransfer->fillData($billingData, $user);
 
@@ -58,7 +57,7 @@ class ProfileController extends AbstractController
 
         return $this->render('user/profile/billing.html.twig', [
             'form_billing' => $form,
-            '_breadcrumbs' => $this->breadcrumbs->buildBilling(),
+            'breadcrumbs'  => $this->breadcrumbs->buildBilling(),
         ]);
     }
 
@@ -92,7 +91,7 @@ class ProfileController extends AbstractController
 
         return $this->render('user/profile/password_change.html.twig', [
             'form_password_change' => $form,
-            '_breadcrumbs' => $this->breadcrumbs->buildPasswordChange(),
+            'breadcrumbs'          => $this->breadcrumbs->buildPasswordChange(),
         ]);
     }
 
@@ -124,7 +123,7 @@ class ProfileController extends AbstractController
 
         return $this->render('user/profile/password_change_create.html.twig', [
             'form_password_change_create' => $form,
-            '_breadcrumbs' => $this->breadcrumbs->buildPasswordChangeCreate(),
+            'breadcrumbs'                 => $this->breadcrumbs->buildPasswordChangeCreate(),
         ]);
     }
 }

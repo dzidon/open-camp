@@ -2,7 +2,7 @@
 
 namespace App\Model\Repository;
 
-use App\Library\Data\Admin\RoleSearchDataInterface;
+use App\Library\Data\Admin\RoleSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Role;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
@@ -101,7 +101,7 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function getAdminPaginator(RoleSearchDataInterface $data, int $currentPage, int $pageSize): DqlPaginator
+    public function getAdminPaginator(RoleSearchData $data, int $currentPage, int $pageSize): DqlPaginator
     {
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();

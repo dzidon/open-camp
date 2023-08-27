@@ -17,4 +17,5 @@ enum CampSortEnum: string
     case NAME_DESC = 'camp.name DESC';
     case URL_NAME_ASC = 'camp.urlName ASC';
     case URL_NAME_DESC = 'camp.urlName DESC';
+    case FEATURED_PRIORITY_DESC = 'camp.featuredPriority DESC';
 }

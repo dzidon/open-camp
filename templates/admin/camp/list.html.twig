@@ -25,11 +25,11 @@
                             </div>
 
                             <div class="form-group col-md-6">
-                                {{ form_row(form_search.dateStart) }}
+                                {{ form_row(form_search.startAt) }}
                             </div>
 
                             <div class="form-group col-md-6">
-                                {{ form_row(form_search.dateEnd) }}
+                                {{ form_row(form_search.endAt) }}
                             </div>
 
                             <div class="form-group col-md-6">
@@ -41,7 +41,7 @@
                             </div>
 
                             <div class="form-group col-md-3">
-                                {{ form_row(form_search.active) }}
+                                {{ form_row(form_search.isActive) }}
                             </div>
                         </div>
 
@@ -94,6 +94,8 @@
                                     <th>{{ 'entity_attribute.camp.age_min'|trans }}</th>
                                     <th>{{ 'entity_attribute.camp.age_max'|trans }}</th>
                                     <th>{{ 'entity_attribute.camp.camp_category'|trans }}</th>
+                                    <th>{{ 'entity_attribute.camp.period'|trans }}</th>
+                                    <th>{{ 'entity_attribute.camp.featured_priority'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
                                 </tr>
                             </thead>
@@ -127,6 +129,26 @@
                                             {% else %}
                                                 <span>{{ camp.campCategory.path }}</span>
                                             {% endif %}
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% set camp_lifespan = camp_lifespans.getCampLifespan(camp.id.toRfc4122) %}
+
+                                            {% if camp_lifespan is not null and camp_lifespan.startAt is not null and camp_lifespan.endAt is not null %}
+                                                <span>{{ camp_lifespan.startAt|date(date_format) }} - {{ camp_lifespan.endAt|date(date_format) }}</span>
+                                            {% else %}
+                                                <em>{{ 'search.item_no_reference.neutral'|trans }}</em>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <span>
+                                                {% if camp.featuredPriority is null %}
+                                                    <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                                                {% else %}
+                                                    {{ camp.featuredPriority }}
+                                                {% endif %}
+                                            </span>
                                         </td>
 
                                         <td class="align-middle cell-25">

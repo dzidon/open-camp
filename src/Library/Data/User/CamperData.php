@@ -8,10 +8,7 @@ use App\Model\Entity\Camper;
 use DateTimeImmutable;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @inheritDoc
- */
-class CamperData implements CamperDataInterface
+class CamperData
 {
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]

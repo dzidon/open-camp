@@ -5,10 +5,7 @@ namespace App\Library\Data\User;
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints as Recaptcha;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @inheritDoc
- */
-class PasswordChangeData implements PasswordChangeDataInterface
+class PasswordChangeData
 {
     #[Assert\Length(max: 180)]
     #[Assert\Email]

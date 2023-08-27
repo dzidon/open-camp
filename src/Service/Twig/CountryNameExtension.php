@@ -30,6 +30,11 @@ class CountryNameExtension extends AbstractExtension
      */
     public function getCountryNameForCode(string $countryCode, string $displayLocale = null): string
     {
+        if (!Countries::exists($countryCode))
+        {
+            return '';
+        }
+
         return Countries::getName($countryCode, $displayLocale);
     }
 }

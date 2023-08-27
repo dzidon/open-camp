@@ -33,11 +33,26 @@ class Camp
     #[ORM\Column(type: Types::INTEGER)]
     private int $ageMax;
 
+    #[ORM\Column(length: 255)]
+    private string $street;
+
+    #[ORM\Column(length: 255)]
+    private string $town;
+
+    #[ORM\Column(length: 11)]
+    private string $zip;
+
+    #[ORM\Column(length: 2)]
+    private string $country;
+
     #[ORM\Column(length: 160, nullable: true)]
     private ?string $descriptionShort = null;
 
     #[ORM\Column(length: 5000, nullable: true)]
     private ?string $descriptionLong = null;
+
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $featuredPriority = null;
 
     #[ORM\ManyToOne(targetEntity: CampCategory::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
@@ -50,13 +65,24 @@ class Camp
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $name, string $urlName, int $ageMin, int $ageMax)
+    public function __construct(string $name,
+                                string $urlName,
+                                int    $ageMin,
+                                int    $ageMax,
+                                string $street,
+                                string $town,
+                                string $zip,
+                                string $country)
     {
         $this->id = Uuid::v4();
         $this->name = $name;
         $this->urlName = $urlName;
         $this->ageMin = $ageMin;
         $this->ageMax = $ageMax;
+        $this->street = $street;
+        $this->town = $town;
+        $this->zip = $zip;
+        $this->country = $country;
         $this->createdAt = new DateTimeImmutable('now');
     }
 
@@ -113,6 +139,54 @@ class Camp
         return $this;
     }
 
+    public function getStreet(): string
+    {
+        return $this->street;
+    }
+
+    public function setStreet(string $street): self
+    {
+        $this->street = $street;
+
+        return $this;
+    }
+
+    public function getTown(): string
+    {
+        return $this->town;
+    }
+
+    public function setTown(string $town): self
+    {
+        $this->town = $town;
+
+        return $this;
+    }
+
+    public function getZip(): string
+    {
+        return $this->zip;
+    }
+
+    public function setZip(string $zip): self
+    {
+        $this->zip = $zip;
+
+        return $this;
+    }
+
+    public function getCountry(): string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(string $country): self
+    {
+        $this->country = $country;
+
+        return $this;
+    }
+
     public function getDescriptionShort(): ?string
     {
         return $this->descriptionShort;
@@ -133,6 +207,18 @@ class Camp
     public function setDescriptionLong(?string $descriptionLong): self
     {
         $this->descriptionLong = $descriptionLong;
+
+        return $this;
+    }
+
+    public function getFeaturedPriority(): ?int
+    {
+        return $this->featuredPriority;
+    }
+
+    public function setFeaturedPriority(?string $featuredPriority): self
+    {
+        $this->featuredPriority = $featuredPriority;
 
         return $this;
     }

@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\User\RegistrationDataInterface;
+use App\Library\Data\User\RegistrationData;
 use App\Service\Form\Type\Common\CheckboxWithUrlType;
 use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
 use Symfony\Component\Form\AbstractType;
@@ -47,7 +47,7 @@ class RegistrationType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => RegistrationDataInterface::class,
+            'data_class' => RegistrationData::class,
         ]);
     }
 }

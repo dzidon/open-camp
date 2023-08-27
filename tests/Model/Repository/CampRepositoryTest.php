@@ -7,6 +7,7 @@ use App\Library\Enum\Search\Data\Admin\CampSortEnum;
 use App\Model\Entity\Camp;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampRepository;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Uid\UuidV4;
 
@@ -16,7 +17,7 @@ class CampRepositoryTest extends KernelTestCase
     {
         $campRepository = $this->getCampRepository();
 
-        $camp = new Camp('Camp', 'camp', 5, 10);
+        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
         $campRepository->saveCamp($camp, true);
         $id = $camp->getId();
 
@@ -33,12 +34,16 @@ class CampRepositoryTest extends KernelTestCase
     {
         $campRepository = $this->getCampRepository();
 
-        $camp = $campRepository->createCamp('Camp', 'camp', 5, 10);
+        $camp = $campRepository->createCamp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
 
         $this->assertSame('Camp', $camp->getName());
         $this->assertSame('camp', $camp->getUrlName());
         $this->assertSame(5, $camp->getAgeMin());
         $this->assertSame(10, $camp->getAgeMax());
+        $this->assertSame('Street 123', $camp->getStreet());
+        $this->assertSame('Town', $camp->getTown());
+        $this->assertSame('12345', $camp->getZip());
+        $this->assertSame('CS', $camp->getCountry());
     }
 
     public function testFindOneById(): void
@@ -206,12 +211,60 @@ class CampRepositoryTest extends KernelTestCase
         $this->assertSame(['camp-1', 'camp-2'], $urlNames);
     }
 
+    public function testGetAdminPaginatorSortByFeaturedPriorityDesc(): void
+    {
+        $repository = $this->getCampRepository();
+
+        $data = new CampSearchData();
+        $data->setSortBy(CampSortEnum::FEATURED_PRIORITY_DESC);
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
+        $this->assertSame(['camp-2', 'camp-1'], $urlNames);
+    }
+
     public function testGetAdminPaginatorWithAge(): void
     {
         $repository = $this->getCampRepository();
 
         $data = new CampSearchData();
         $data->setAge(8);
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
+        $this->assertSame(['camp-1'], $urlNames);
+    }
+
+    public function testGetAdminPaginatorWithStartAt(): void
+    {
+        $repository = $this->getCampRepository();
+
+        $data = new CampSearchData();
+        $data->setStartAt(new DateTimeImmutable('2000-07-01'));
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
+        $this->assertSame(['camp-1'], $urlNames);
+    }
+
+    public function testGetAdminPaginatorWithEndAt(): void
+    {
+        $repository = $this->getCampRepository();
+
+        $data = new CampSearchData();
+        $data->setEndAt(new DateTimeImmutable('2000-07-07'));
         $paginator = $repository->getAdminPaginator($data, 1, 2);
         $this->assertSame(1, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
@@ -240,6 +293,44 @@ class CampRepositoryTest extends KernelTestCase
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
         $this->assertSame(['camp-1'], $urlNames);
+    }
+
+    public function testGetAdminPaginatorWithFalseCampCategory(): void
+    {
+        $repository = $this->getCampRepository();
+
+        $data = new CampSearchData();
+        $data->setCampCategory(false);
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
+        $this->assertSame(['camp-2'], $urlNames);
+    }
+
+    public function testGetCampLifespanCollection(): void
+    {
+        $repository = $this->getCampRepository();
+
+        $camp1 = $repository->findOneById(new UuidV4('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
+        $camp2 = $repository->findOneById(new UuidV4('a08f6f48-3a52-40db-b031-5eb3a468c57a'));
+
+        $campLifespanCollection = $repository->getCampLifespanCollection([$camp1, $camp2]);
+
+        $this->assertArrayHasKey('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b', $campLifespanCollection->getCampLifespans());
+        $this->assertArrayHasKey('a08f6f48-3a52-40db-b031-5eb3a468c57a', $campLifespanCollection->getCampLifespans());
+
+        $campLifespan1 = $campLifespanCollection->getCampLifespan('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $campLifespan2 = $campLifespanCollection->getCampLifespan('a08f6f48-3a52-40db-b031-5eb3a468c57a');
+
+        $this->assertSame((new DateTimeImmutable('2000-07-01'))->getTimestamp(), $campLifespan1->getStartAt()->getTimestamp());
+        $this->assertSame((new DateTimeImmutable('3000-07-14'))->getTimestamp(), $campLifespan1->getEndAt()->getTimestamp());
+
+        $this->assertSame((new DateTimeImmutable('4000-01-05'))->getTimestamp(), $campLifespan2->getStartAt()->getTimestamp());
+        $this->assertSame((new DateTimeImmutable('4000-01-10'))->getTimestamp(), $campLifespan2->getEndAt()->getTimestamp());
     }
 
     private function getCampUrlNames(array $camps): array

@@ -5,10 +5,7 @@ namespace App\Library\Data\User;
 use Symfony\Component\Security\Core\Validator\Constraints as SecurityAssert;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @inheritDoc
- */
-class ProfilePasswordChangeData implements ProfilePasswordChangeDataInterface
+class ProfilePasswordChangeData
 {
     #[SecurityAssert\UserPassword]
     private ?string $currentPassword = null;

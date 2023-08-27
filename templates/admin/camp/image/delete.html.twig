@@ -1,0 +1,32 @@
+{% extends "admin/camp/base_update.html.twig" %}
+
+{% block camp_update_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-8 col-xl-5">
+                            <p>{{ 'crud.confirmation.camp_image_delete'|trans }}</p>
+
+                            <div class="row mb-3">
+                                <div class="col-12 col-sm-6 col-lg-4">
+                                    <div class="bg-black">
+                                        <a href="{{ asset(camp_image_path(camp_image)) }}">
+                                            <img class="image-contained-16-9"
+                                                 src="{{ asset(camp_image_path(camp_image)) }}"
+                                                 alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
+                                            >
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{ form(form_delete) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

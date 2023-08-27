@@ -4,10 +4,7 @@ namespace App\Library\Data\User;
 
 use App\Library\Enum\Search\Data\User\CamperSortEnum;
 
-/**
- * @inheritDoc
- */
-class CamperSearchData implements CamperSearchDataInterface
+class CamperSearchData
 {
     private string $phrase = '';
 

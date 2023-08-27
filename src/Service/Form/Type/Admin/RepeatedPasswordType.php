@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\Admin;
 
-use App\Library\Data\Admin\PlainPasswordDataInterface;
+use App\Library\Data\Admin\PlainPasswordData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -41,7 +41,7 @@ class RepeatedPasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => PlainPasswordDataInterface::class,
+            'data_class' => PlainPasswordData::class,
         ]);
     }
 }

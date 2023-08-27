@@ -47,6 +47,78 @@
 
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp.street'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp.street is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp.street }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp.town'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp.town is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp.town }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp.zip'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp.zip is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp.zip }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp.country'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp.country is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ country_name_for_code(camp.country) }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp.featured_priority'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {% if camp.featuredPriority is null %}
+                                    <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                                {% else %}
+                                    {{ camp.featuredPriority }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.camp.camp_category'|trans }}:</strong>
                         </div>
 
@@ -75,7 +147,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.camp.description_long'|trans }}:</strong>
                         </div>
@@ -88,6 +160,63 @@
                                     {{ camp.descriptionLong|raw }}
                                 {% endif %}
                             </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity.camp_image.plural'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_images is empty %}
+                                <em>{{ 'search.error.no_results'|trans }}</em>
+                            {% else %}
+                                <div class="row">
+                                    {% for camp_image in camp_images %}
+                                        <div class="col-6 col-md-4 col-xl-2 mb-3">
+                                            <div class="bg-black">
+                                                <a href="{{ asset(camp_image_path(camp_image)) }}">
+                                                    <img class="image-contained-16-9"
+                                                         src="{{ asset(camp_image_path(camp_image)) }}"
+                                                         alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
+                                                    >
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
+                                    {% if more_camp_images > 0 %}
+                                        <div class="col-12 mb-3">
+                                            <em>{{ 'more.camp_images'|trans({more_camp_images: more_camp_images}) }}</em>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity.camp_date.plural'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_dates is empty %}
+                                <em>{{ 'search.error.no_results'|trans }}</em>
+                            {% else %}
+                                {% for camp_date in camp_dates %}
+                                    <div>
+                                        <span>{{ camp_date.startAt|date(date_time_format) }} - {{ camp_date.endAt|date(date_time_format) }}</span>
+                                    </div>
+                                {% endfor %}
+
+                                {% if more_camp_dates > 0 %}
+                                    <div>
+                                        <em>{{ 'more.camp_dates'|trans({more_camp_dates: more_camp_dates}) }}</em>
+                                    </div>
+                                {% endif %}
+                            {% endif %}
                         </div>
                     </div>
                 </div>

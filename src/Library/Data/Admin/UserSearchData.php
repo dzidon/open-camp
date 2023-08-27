@@ -5,16 +5,13 @@ namespace App\Library\Data\Admin;
 use App\Library\Enum\Search\Data\Admin\UserSortEnum;
 use App\Model\Entity\Role;
 
-/**
- * @inheritDoc
- */
-class UserSearchData implements UserSearchDataInterface
+class UserSearchData
 {
     private string $phrase = '';
 
     private UserSortEnum $sortBy = UserSortEnum::CREATED_AT_DESC;
 
-    private ?Role $role = null;
+    private null|false|Role $role = null;
 
     public function getPhrase(): string
     {
@@ -43,12 +40,12 @@ class UserSearchData implements UserSearchDataInterface
         $this->sortBy = $sortBy;
     }
 
-    public function getRole(): ?Role
+    public function getRole(): null|false|Role
     {
         return $this->role;
     }
 
-    public function setRole(?Role $role): self
+    public function setRole(null|false|Role $role): self
     {
         $this->role = $role;
 

@@ -3,12 +3,19 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
+use App\Library\Data\Admin\CampCreationData;
 use App\Library\Data\Admin\CampData;
+use App\Library\Data\Admin\CampDateData;
+use App\Library\Data\Admin\CampDateSearchData;
 use App\Library\Data\Admin\CampSearchData;
+use App\Library\Enum\Search\Data\Admin\CampDateSortEnum;
 use App\Model\Entity\Camp;
 use App\Model\Repository\CampCategoryRepositoryInterface;
+use App\Model\Repository\CampDateRepositoryInterface;
+use App\Model\Repository\CampImageRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\Admin\CampCreationType;
 use App\Service\Form\Type\Admin\CampSearchType;
 use App\Service\Form\Type\Admin\CampType;
 use App\Service\Form\Type\Common\HiddenTrueType;
@@ -17,6 +24,7 @@ use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -64,13 +72,15 @@ class CampController extends AbstractController
         }
 
         $paginationMenu = $menuFactory->buildMenuType('pagination', ['paginator' => $paginator]);
+        $campLifespans = $this->campRepository->getCampLifespanCollection($paginator->getCurrentPageItems());
 
         return $this->render('admin/camp/list.html.twig', [
             'form_search'       => $form->createView(),
+            'camp_lifespans'    => $campLifespans,
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            '_breadcrumbs'      => $this->campBreadcrumbs->buildList(),
+            'breadcrumbs'       => $this->campBreadcrumbs->buildList(),
         ]);
     }
 
@@ -78,19 +88,47 @@ class CampController extends AbstractController
     #[Route('/admin/camp/create', name: 'admin_camp_create')]
     public function create(DataTransferRegistryInterface   $dataTransfer,
                            CampCategoryRepositoryInterface $campCategoryRepository,
+                           CampImageRepositoryInterface    $campImageRepository,
+                           CampDateRepositoryInterface     $campDateRepository,
                            Request                         $request): Response
     {
         $campCategoryChoices = $campCategoryRepository->findAll();
 
-        $campData = new CampData();
-        $form = $this->createForm(CampType::class, $campData, ['choices_camp_categories' => $campCategoryChoices]);
-        $form->add('submit', SubmitType::class, ['label' => 'form.admin.camp.button']);
+        $campCreationData = new CampCreationData();
+        $form = $this->createForm(CampCreationType::class, $campCreationData, ['choices_camp_categories' => $campCategoryChoices]);
+        $form->add('submit', SubmitType::class, ['label' => 'form.admin.camp_creation.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $camp = $this->campRepository->createCamp($campData->getName(), $campData->getUrlName(), $campData->getAgeMin(), $campData->getAgeMax());
+            // camp
+            $campData = $campCreationData->getCampData();
+            $camp = $this->campRepository->createCamp(
+                $campData->getName(), $campData->getUrlName(), $campData->getAgeMin(), $campData->getAgeMax(), $campData->getStreet(), $campData->getTown(), $campData->getZip(), $campData->getCountry()
+            );
             $dataTransfer->fillEntity($campData, $camp);
+
+            // images
+            $uploadedImages = $campCreationData->getImages();
+
+            /** @var File $uploadedImage */
+            foreach ($uploadedImages as $uploadedImage)
+            {
+                $campImage = $campImageRepository->createCampImage($uploadedImage, 0, $camp);
+                $campImageRepository->saveCampImage($campImage, false);
+            }
+
+            // dates
+            $campDatesData = $campCreationData->getCampDatesData();
+
+            /** @var CampDateData $campDateData */
+            foreach ($campDatesData as $campDateData)
+            {
+                $campDate = $campDateRepository->createCampDate($campDateData->getStartAt(), $campDateData->getEndAt(), $campDateData->getPrice(), $campDateData->getCapacity(), $camp);
+                $dataTransfer->fillEntity($campDateData, $campDate);
+                $campDateRepository->saveCampDate($campDate, false);
+            }
+
             $this->campRepository->saveCamp($camp, true);
             $this->addTransFlash('success', 'crud.action_performed.camp.create');
 
@@ -98,23 +136,51 @@ class CampController extends AbstractController
         }
 
         return $this->render('admin/camp/update.html.twig', [
-            'form_camp'    => $form->createView(),
-            '_breadcrumbs' => $this->campBreadcrumbs->buildCreate(),
+            'form_camp'   => $form->createView(),
+            'breadcrumbs' => $this->campBreadcrumbs->buildCreate(),
         ]);
     }
 
     #[IsGranted('camp_read')]
     #[Route('/admin/camp/{id}/read', name: 'admin_camp_read')]
-    public function read(CampCategoryRepositoryInterface $campCategoryRepository, UuidV4 $id): Response
+    public function read(CampCategoryRepositoryInterface $campCategoryRepository,
+                         CampImageRepositoryInterface    $campImageRepository,
+                         CampDateRepositoryInterface     $campDateRepository,
+                         UuidV4                          $id): Response
     {
         $camp = $this->findCampOrThrow404($id);
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $campCategoryRepository->findAll();
 
+        // images
+        $campImagePaginator = $campImageRepository->getAdminPaginator($camp, 1, 20);
+        $campImages = $campImagePaginator->getCurrentPageItems();
+        $moreCampImages = $campImagePaginator->getTotalItems() - $campImagePaginator->getPageSize();
+        if ($moreCampImages < 0)
+        {
+            $moreCampImages = 0;
+        }
+
+        // camp dates
+        $searchData = new CampDateSearchData();
+        $searchData->setIsHistorical(null);
+        $searchData->setSortBy(CampDateSortEnum::START_AT_DESC);
+        $campDatePaginator = $campDateRepository->getAdminPaginator($searchData, $camp, 1, 20);
+        $campDates = $campDatePaginator->getCurrentPageItems();
+        $moreCampDates = $campDatePaginator->getTotalItems() - $campDatePaginator->getPageSize();
+        if ($moreCampDates < 0)
+        {
+            $moreCampDates = 0;
+        }
+
         return $this->render('admin/camp/read.html.twig', [
-            'camp' => $camp,
-            '_breadcrumbs'  => $this->campBreadcrumbs->buildRead($camp->getId()),
+            'camp'             => $camp,
+            'camp_images'      => $campImages,
+            'more_camp_images' => $moreCampImages,
+            'camp_dates'       => $campDates,
+            'more_camp_dates'  => $moreCampDates,
+            'breadcrumbs'      => $this->campBreadcrumbs->buildRead($camp->getId()),
         ]);
     }
 
@@ -145,9 +211,9 @@ class CampController extends AbstractController
         }
 
         return $this->render('admin/camp/update.html.twig', [
-            'camp'         => $camp,
-            'form_camp'    => $form->createView(),
-            '_breadcrumbs' => $this->campBreadcrumbs->buildUpdate($camp->getId()),
+            'camp'        => $camp,
+            'form_camp'   => $form->createView(),
+            'breadcrumbs' => $this->campBreadcrumbs->buildUpdate($camp->getId()),
         ]);
     }
 
@@ -173,9 +239,9 @@ class CampController extends AbstractController
         }
 
         return $this->render('admin/camp/delete.html.twig', [
-            'camp'          => $camp,
-            'form_delete'   => $form->createView(),
-            '_breadcrumbs'  => $this->campBreadcrumbs->buildDelete($camp->getId()),
+            'camp'        => $camp,
+            'form_delete' => $form->createView(),
+            'breadcrumbs' => $this->campBreadcrumbs->buildDelete($camp->getId()),
         ]);
     }
 

@@ -4,10 +4,7 @@ namespace App\Library\Data\User;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @inheritDoc
- */
-class PlainPasswordData implements PlainPasswordDataInterface
+class PlainPasswordData
 {
     #[Assert\Length(min: 6, max: 4096)]
     #[Assert\NotBlank]

@@ -46,30 +46,30 @@ class CampSearchDataTest extends TestCase
         $this->assertNull($data->getAge());
     }
 
-    public function testDateStart(): void
+    public function testStartAt(): void
     {
         $data = new CampSearchData();
-        $this->assertNull($data->getDateStart());
+        $this->assertNull($data->getStartAt());
 
         $expectedDateStart = new DateTimeImmutable('now');
-        $data->setDateStart($expectedDateStart);
-        $this->assertSame($expectedDateStart, $data->getDateStart());
+        $data->setStartAt($expectedDateStart);
+        $this->assertSame($expectedDateStart, $data->getStartAt());
 
-        $data->setDateStart(null);
-        $this->assertNull($data->getDateStart());
+        $data->setStartAt(null);
+        $this->assertNull($data->getStartAt());
     }
 
-    public function testDateEnd(): void
+    public function testEndAt(): void
     {
         $data = new CampSearchData();
-        $this->assertNull($data->getDateEnd());
+        $this->assertNull($data->getEndAt());
 
         $expectedDateEnd = new DateTimeImmutable('now');
-        $data->setDateEnd($expectedDateEnd);
-        $this->assertSame($expectedDateEnd, $data->getDateEnd());
+        $data->setEndAt($expectedDateEnd);
+        $this->assertSame($expectedDateEnd, $data->getEndAt());
 
-        $data->setDateEnd(null);
-        $this->assertNull($data->getDateEnd());
+        $data->setEndAt(null);
+        $this->assertNull($data->getEndAt());
     }
 
     public function testCampCategory(): void
@@ -83,17 +83,23 @@ class CampSearchDataTest extends TestCase
 
         $data->setCampCategory(null);
         $this->assertNull($data->getCampCategory());
+
+        $data->setCampCategory(false);
+        $this->assertFalse($data->getCampCategory());
     }
 
     public function testActive(): void
     {
         $data = new CampSearchData();
-        $this->assertNull($data->getActive());
+        $this->assertNull($data->isActive());
 
-        $data->setActive(true);
-        $this->assertTrue($data->getActive());
+        $data->setIsActive(true);
+        $this->assertTrue($data->isActive());
 
-        $data->setActive(null);
-        $this->assertNull($data->getActive());
+        $data->setIsActive(false);
+        $this->assertFalse($data->isActive());
+
+        $data->setIsActive(null);
+        $this->assertNull($data->isActive());
     }
 }

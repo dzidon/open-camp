@@ -2,10 +2,9 @@
 
 namespace App\Service\Form\Type\Admin;
 
-use App\Library\Data\Admin\CampSearchDataInterface;
+use App\Library\Data\Admin\CampSearchData;
 use App\Library\Enum\Search\Data\Admin\CampSortEnum;
 use App\Model\Entity\CampCategory;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -14,14 +13,24 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Admin camp search.
  */
 class CampSearchType extends AbstractType
 {
+    private TranslatorInterface $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        array_unshift($options['choices_camp_categories'], false);
+
         $builder
             ->add('phrase', TextType::class, [
                 'attr' => [
@@ -34,12 +43,13 @@ class CampSearchType extends AbstractType
                 'class'        => CampSortEnum::class,
                 'label'        => 'form.admin.camp_search.sort_by.label',
                 'choice_label' => fn ($choice) => match ($choice) {
-                    CampSortEnum::CREATED_AT_DESC => 'form.admin.camp_search.sort_by.options.created_at_desc',
-                    CampSortEnum::CREATED_AT_ASC  => 'form.admin.camp_search.sort_by.options.created_at_asc',
-                    CampSortEnum::NAME_ASC        => 'form.admin.camp_search.sort_by.options.name_asc',
-                    CampSortEnum::NAME_DESC       => 'form.admin.camp_search.sort_by.options.name_desc',
-                    CampSortEnum::URL_NAME_ASC    => 'form.admin.camp_search.sort_by.options.url_name_asc',
-                    CampSortEnum::URL_NAME_DESC   => 'form.admin.camp_search.sort_by.options.url_name_desc',
+                    CampSortEnum::CREATED_AT_DESC        => 'form.admin.camp_search.sort_by.options.created_at_desc',
+                    CampSortEnum::CREATED_AT_ASC         => 'form.admin.camp_search.sort_by.options.created_at_asc',
+                    CampSortEnum::NAME_ASC               => 'form.admin.camp_search.sort_by.options.name_asc',
+                    CampSortEnum::NAME_DESC              => 'form.admin.camp_search.sort_by.options.name_desc',
+                    CampSortEnum::URL_NAME_ASC           => 'form.admin.camp_search.sort_by.options.url_name_asc',
+                    CampSortEnum::URL_NAME_DESC          => 'form.admin.camp_search.sort_by.options.url_name_desc',
+                    CampSortEnum::FEATURED_PRIORITY_DESC => 'form.admin.camp_search.sort_by.options.featured_priority_desc',
                 },
             ])
             ->add('age', IntegerType::class, [
@@ -49,36 +59,42 @@ class CampSearchType extends AbstractType
                 'required' => false,
                 'label'    => 'form.admin.camp_search.age',
             ])
-            ->add('dateStart', DateType::class, [
+            ->add('startAt', DateType::class, [
                 'required' => false,
                 'widget'   => 'single_text',
                 'input'    => 'datetime_immutable',
-                'label'    => 'form.admin.camp_search.date_start',
+                'label'    => 'form.admin.camp_search.start_at',
             ])
-            ->add('dateEnd', DateType::class, [
+            ->add('endAt', DateType::class, [
                 'required' => false,
                 'widget'   => 'single_text',
                 'input'    => 'datetime_immutable',
-                'label'    => 'form.admin.camp_search.date_end',
+                'label'    => 'form.admin.camp_search.end_at',
             ])
-            ->add('campCategory', EntityType::class, [
-                'class'        => CampCategory::class,
-                'choice_label' => function (CampCategory $campCategory) {
+            ->add('campCategory', ChoiceType::class, [
+                'choices'      => $options['choices_camp_categories'],
+                'choice_label' => function (false|CampCategory $campCategory)
+                {
+                    if ($campCategory === false)
+                    {
+                        return $this->translator->trans('search.item_no_reference.female');
+                    }
+
                     return $campCategory->getPath();
                 },
-                'choices'     => $options['choices_camp_categories'],
-                'placeholder' => 'form.common.choice.irrelevant',
-                'required'    => false,
-                'label'       => 'form.admin.camp_search.camp_category',
+                'placeholder'               => 'form.common.choice.irrelevant',
+                'required'                  => false,
+                'label'                     => 'form.admin.camp_search.camp_category',
+                'choice_translation_domain' => false,
             ])
-            ->add('active', ChoiceType::class, [
+            ->add('isActive', ChoiceType::class, [
                 'placeholder' => 'form.common.choice.irrelevant',
                 'choices'  => [
                     'form.common.choice.yes' => true,
                     'form.common.choice.no'  => false,
                 ],
                 'required' => false,
-                'label'    => 'form.admin.camp_search.active',
+                'label'    => 'form.admin.camp_search.is_active',
             ])
         ;
     }
@@ -86,7 +102,7 @@ class CampSearchType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'              => CampSearchDataInterface::class,
+            'data_class'              => CampSearchData::class,
             'choices_camp_categories' => [],
             'csrf_protection'         => false,
             'method'                  => 'GET',

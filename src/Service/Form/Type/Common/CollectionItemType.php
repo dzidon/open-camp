@@ -26,8 +26,8 @@ class CollectionItemType extends AbstractType
             ->add('removeItem', ButtonType::class, [
                 'attr' => [
                     'class'                    => 'btn btn-danger',
-                    'data-bs-toggle'           => 'modal',
-                    'data-bs-target'           => '#fc-removal-modal',
+                    'data-toggle'              => 'modal',
+                    'data-target'              => '#fc-removal-modal',
                     'data-controller'          => 'fc--rem-prep',
                     'data-fc--rem-prep-target' => 'button',
                     'data-action'              => 'fc--rem-prep#prepareItemForRemoval',

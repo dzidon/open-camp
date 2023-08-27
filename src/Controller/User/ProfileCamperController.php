@@ -68,7 +68,7 @@ class ProfileCamperController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            '_breadcrumbs'      => $this->breadcrumbs->buildList(),
+            'breadcrumbs'       => $this->breadcrumbs->buildList(),
         ]);
     }
 
@@ -77,17 +77,11 @@ class ProfileCamperController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-
-        $formOptions = [];
-        if ($this->getParameter('app.sale_camper_siblings'))
-        {
-            $formOptions = [
-                'choices_siblings' => $this->camperRepository->findByUser($user),
-            ];
-        }
-
         $camperData = new CamperData($this->getParameter('app.national_identifier'));
-        $form = $this->createForm(CamperType::class, $camperData, $formOptions);
+
+        $form = $this->createForm(CamperType::class, $camperData, [
+            'choices_siblings' => $this->camperRepository->findByUser($user),
+        ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.camper.button']);
         $form->handleRequest($request);
 
@@ -103,7 +97,7 @@ class ProfileCamperController extends AbstractController
 
         return $this->render('user/profile/camper/update.html.twig', [
             'form_camper' => $form->createView(),
-            '_breadcrumbs' => $this->breadcrumbs->buildCreate(),
+            'breadcrumbs' => $this->breadcrumbs->buildCreate(),
         ]);
     }
 
@@ -114,8 +108,8 @@ class ProfileCamperController extends AbstractController
         $this->denyAccessUnlessGranted('camper_read', $camper);
 
         return $this->render('user/profile/camper/read.html.twig', [
-            'camper'       => $camper,
-            '_breadcrumbs' => $this->breadcrumbs->buildRead($camper->getId()),
+            'camper'      => $camper,
+            'breadcrumbs' => $this->breadcrumbs->buildRead($camper->getId()),
         ]);
     }
 
@@ -125,17 +119,12 @@ class ProfileCamperController extends AbstractController
         $camper = $this->findCamperOrThrow404($id);
         $this->denyAccessUnlessGranted('camper_update', $camper);
 
-        $formOptions = [];
-        if ($this->getParameter('app.sale_camper_siblings') === true)
-        {
-            $formOptions = [
-                'choices_siblings' => $this->camperRepository->findOwnedBySameUser($camper),
-            ];
-        }
-
         $camperData = new CamperData($this->getParameter('app.national_identifier'));
         $dataTransfer->fillData($camperData, $camper);
-        $form = $this->createForm(CamperType::class, $camperData, $formOptions);
+
+        $form = $this->createForm(CamperType::class, $camperData, [
+            'choices_siblings' => $this->camperRepository->findOwnedBySameUser($camper),
+        ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.camper.button']);
         $form->handleRequest($request);
 
@@ -150,7 +139,7 @@ class ProfileCamperController extends AbstractController
 
         return $this->render('user/profile/camper/update.html.twig', [
             'form_camper' => $form->createView(),
-            '_breadcrumbs' => $this->breadcrumbs->buildUpdate($camper->getId()),
+            'breadcrumbs' => $this->breadcrumbs->buildUpdate($camper->getId()),
         ]);
     }
 
@@ -177,8 +166,8 @@ class ProfileCamperController extends AbstractController
 
         return $this->render('user/profile/camper/delete.html.twig', [
             'camper'      => $camper,
-            'form_delete'  => $form->createView(),
-            '_breadcrumbs' => $this->breadcrumbs->buildDelete($camper->getId()),
+            'form_delete' => $form->createView(),
+            'breadcrumbs' => $this->breadcrumbs->buildDelete($camper->getId()),
         ]);
     }
 

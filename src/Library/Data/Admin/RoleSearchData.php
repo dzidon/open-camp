@@ -4,10 +4,7 @@ namespace App\Library\Data\Admin;
 
 use App\Library\Enum\Search\Data\Admin\RoleSortEnum;
 
-/**
- * @inheritDoc
- */
-class RoleSearchData implements RoleSearchDataInterface
+class RoleSearchData
 {
     private string $phrase = '';
 

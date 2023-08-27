@@ -2,36 +2,43 @@
 
 legend.required:before,
 label.required:before {
-  content: "* ";
-  color: red;
+    content: "* ";
+    color: red;
 }
 
 legend.required-conditional:before,
 label.required-conditional:before {
-  content: "* ";
-  color: gray;
+    content: "* ";
+    color: gray;
 }
 
 input[type="radio"] + label:before {
-  content: none;
-  color: initial;
+    content: none;
+    color: initial;
 }
 
 label:not(.form-check-label):not(.custom-file-label) {
-  font-weight: 700;
+    font-weight: 700;
 }
 
 legend {
-  font-weight: 700;
+    font-weight: 700;
 }
 
 .checkbox-group-legend {
-  padding: 0;
-  margin: 0;
-  font-size: initial;
-  font-weight: initial;
+    padding: 0;
+    margin: 0;
+    font-size: initial;
+    font-weight: initial;
 }
 
 .checkbox-group:not(:last-child) {
-  margin-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.image-contained-16-9 {
+    max-inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 16/9;
+    object-fit: contain;
 }

@@ -2,7 +2,7 @@
 
 namespace App\Model\Repository;
 
-use App\Library\Data\User\CamperSearchDataInterface;
+use App\Library\Data\User\CamperSearchData;
 use App\Library\Enum\GenderEnum;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Camper;
@@ -107,7 +107,7 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
     /**
      * @inheritDoc
      */
-    public function getUserPaginator(CamperSearchDataInterface $data, User $user, int $currentPage, int $pageSize): DqlPaginator
+    public function getUserPaginator(CamperSearchData $data, User $user, int $currentPage, int $pageSize): DqlPaginator
     {
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();

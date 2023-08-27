@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\User\BillingDataInterface;
+use App\Library\Data\User\BillingData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
@@ -15,12 +15,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class BillingType extends AbstractType
 {
-    private array $preferredCountries;
     private bool $isEuBusinessDataEnabled;
 
-    public function __construct(array $preferredCountries, bool $isEuBusinessDataEnabled)
+    public function __construct(bool $isEuBusinessDataEnabled)
     {
-        $this->preferredCountries = $preferredCountries;
         $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
     }
 
@@ -51,10 +49,9 @@ class BillingType extends AbstractType
                 'label'    => 'form.user.profile_billing.zip',
             ])
             ->add('country', CountryType::class, [
-                'preferred_choices' => $this->preferredCountries,
-                'placeholder'       => 'form.common.choice.none.female',
-                'required'          => false,
-                'label'             => 'form.user.profile_billing.country',
+                'placeholder' => 'form.common.choice.none.female',
+                'required'    => false,
+                'label'       => 'form.user.profile_billing.country',
             ])
         ;
 
@@ -110,7 +107,10 @@ class BillingType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => BillingDataInterface::class,
+            'data_class' => BillingData::class,
+            'empty_data' => function (): BillingData {
+                return new BillingData($this->isEuBusinessDataEnabled);
+            },
         ]);
     }
 }

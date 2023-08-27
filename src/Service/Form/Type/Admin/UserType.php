@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\Admin;
 
-use App\Library\Data\Admin\UserDataInterface;
+use App\Library\Data\Admin\UserData;
 use App\Model\Entity\Role;
 use App\Service\Form\Type\User\BillingType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -17,11 +17,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class UserType extends AbstractType
 {
+    private bool $isEuBusinessDataEnabled;
+
     private Security $security;
 
-    public function __construct(Security $security)
+    public function __construct(Security $security, bool $isEuBusinessDataEnabled)
     {
         $this->security = $security;
+
+        $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -59,8 +63,11 @@ class UserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'    => UserDataInterface::class,
+            'data_class'    => UserData::class,
             'choices_roles' => [],
+            'empty_data' => function (): UserData {
+                return new UserData($this->isEuBusinessDataEnabled);
+            },
         ]);
 
         $resolver->setAllowedTypes('choices_roles', ['array']);

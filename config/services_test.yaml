@@ -1,12 +1,16 @@
 parameters:
     app.menu_theme: '_fragment/_menu_theme/_test.html.twig'
 
+    # Directories
+    app.camp_image_directory: 'img/dynamic/camp'
+
     # Mailer
     app.email_no_reply: 'noreply@camp.com'
 
     # Internationalization
     app.date_format: 'd. m. Y'
     app.date_time_format: 'd. m. Y H:i:s'
+    app.currency: 'CZK'
     app.locales: 'en|cs|de'
     app.locale_names:
         en: 'English'

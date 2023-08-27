@@ -2,9 +2,11 @@
 
 namespace App\Model\Repository;
 
-use App\Library\Data\Admin\CampSearchDataInterface;
+use App\Library\Data\Admin\CampSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camp;
+use App\Model\Module\CampCatalog\Camp\CampLifespanCollectionInterface;
+use App\Model\Module\CampCatalog\Camp\CampLifespanInterface;
 use Symfony\Component\Uid\UuidV4;
 
 /**
@@ -37,9 +39,20 @@ interface CampRepositoryInterface
      * @param string $urlName
      * @param int $ageMin
      * @param int $ageMax
+     * @param string $street
+     * @param string $town
+     * @param string $zip
+     * @param string $country
      * @return Camp
      */
-    public function createCamp(string $name, string $urlName, int $ageMin, int $ageMax): Camp;
+    public function createCamp(string $name,
+                               string $urlName,
+                               int    $ageMin,
+                               int    $ageMax,
+                               string $street,
+                               string $town,
+                               string $zip,
+                               string $country): Camp;
 
     /**
      * Finds one camp by id.
@@ -60,10 +73,18 @@ interface CampRepositoryInterface
     /**
      * Returns admin camp search paginator.
      *
-     * @param CampSearchDataInterface $data
+     * @param CampSearchData $data
      * @param int $currentPage
      * @param int $pageSize
      * @return PaginatorInterface
      */
-    public function getAdminPaginator(CampSearchDataInterface $data, int $currentPage, int $pageSize): PaginatorInterface;
+    public function getAdminPaginator(CampSearchData $data, int $currentPage, int $pageSize): PaginatorInterface;
+
+    /**
+     * Takes an array of camps and fetches a collection of their min start dates and max end dates.
+     *
+     * @param Camp[] $camps
+     * @return CampLifespanCollectionInterface
+     */
+    public function getCampLifespanCollection(array $camps): CampLifespanCollectionInterface;
 }

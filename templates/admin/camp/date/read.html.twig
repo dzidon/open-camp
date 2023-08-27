@@ -1,0 +1,113 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.start_at'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ camp_date.startAt|date(date_time_format) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.end_at'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ camp_date.endAt|date(date_time_format) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.price'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ camp_date.price }} {{ currency }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.capacity'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ camp_date.capacity }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.is_closed'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.isClosed %}
+                                <span>{{ 'bool.yes'|trans }}</span>
+                            {% else %}
+                                <span>{{ 'bool.no'|trans }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.trip_instructions'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.tripInstructions is null %}
+                                <em>{{ 'search.item_no_reference.neutral'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp_date.tripInstructions|nl2br }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.leaders'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.leaders is empty %}
+                                <em>{{ 'search.error.no_results'|trans }}</em>
+                            {% else %}
+                                {% for leader in camp_date.leaders %}
+                                    <div>
+                                        <span>
+                                            {{ leader.email }}
+
+                                            {% if leader.nameFirst is not null and leader.nameLast is not null %}
+                                                ({{ leader.nameFirst }} {{ leader.nameLast }})
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <a href="{{ path('admin_camp_date_update', {id: camp_date.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                        {{ 'crud.action.common.update'|trans }}
+                    </a>
+
+                    <a href="{{ path('admin_camp_date_delete', {id: camp_date.id.toRfc4122}) }}" class="btn btn-danger">
+                        {{ 'crud.action.common.delete'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

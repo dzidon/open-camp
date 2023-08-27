@@ -40,7 +40,7 @@ class CampCategoryController extends AbstractController
 
         return $this->render('admin/camp_category/list.html.twig', [
             'root_categories' => $rootCategories,
-            '_breadcrumbs'    => $this->campCategoryBreadcrumbs->buildList(),
+            'breadcrumbs'     => $this->campCategoryBreadcrumbs->buildList(),
         ]);
     }
 
@@ -67,7 +67,7 @@ class CampCategoryController extends AbstractController
 
         return $this->render('admin/camp_category/update.html.twig', [
             'form_camp_category' => $form->createView(),
-            '_breadcrumbs'       => $this->campCategoryBreadcrumbs->buildCreate(),
+            'breadcrumbs'        => $this->campCategoryBreadcrumbs->buildCreate(),
         ]);
     }
 
@@ -79,7 +79,7 @@ class CampCategoryController extends AbstractController
 
         return $this->render('admin/camp_category/read.html.twig', [
             'camp_category' => $campCategory,
-            '_breadcrumbs'  => $this->campCategoryBreadcrumbs->buildRead($campCategory->getId()),
+            'breadcrumbs'   => $this->campCategoryBreadcrumbs->buildRead($campCategory->getId()),
         ]);
     }
 
@@ -109,7 +109,7 @@ class CampCategoryController extends AbstractController
         return $this->render('admin/camp_category/update.html.twig', [
             'camp_category'      => $campCategory,
             'form_camp_category' => $form->createView(),
-            '_breadcrumbs'       => $this->campCategoryBreadcrumbs->buildUpdate($campCategory->getId()),
+            'breadcrumbs'        => $this->campCategoryBreadcrumbs->buildUpdate($campCategory->getId()),
         ]);
     }
 
@@ -137,7 +137,7 @@ class CampCategoryController extends AbstractController
         return $this->render('admin/camp_category/delete.html.twig', [
             'camp_category' => $campCategory,
             'form_delete'   => $form->createView(),
-            '_breadcrumbs'  => $this->campCategoryBreadcrumbs->buildDelete($campCategory->getId()),
+            'breadcrumbs'   => $this->campCategoryBreadcrumbs->buildDelete($campCategory->getId()),
         ]);
     }
 

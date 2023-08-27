@@ -6,12 +6,16 @@
 parameters:
     app.menu_theme: '_fragment/_menu_theme/_main.html.twig'
 
+    # Directories
+    app.camp_image_directory: '/img/dynamic/camp/'
+
     # Mailer
     app.email_no_reply: 'noreply@camp.com'
 
     # Internationalization
     app.date_format: 'd.m.Y'
     app.date_time_format: 'd.m.Y H:i:s'
+    app.currency: 'CZK'
     app.locales: 'cs' # Enabled locales (languages) divided by "|"
     app.locale_names:
         cs: 'Česky'
@@ -85,6 +89,10 @@ services:
         arguments:
             $services: '%app.social_login_services%'
 
+    App\Model\Repository\CampImageRepository:
+        arguments:
+            $campImageUploadDirectory: '%kernel.project_dir%/public/%app.camp_image_directory%'
+
     App\Model\Module\Security\UserRegistration\UserRegistrationFactory:
         arguments:
             $maxActiveRegistrationsPerEmail: '%app.max_active_registrations_per_email%'
@@ -94,6 +102,37 @@ services:
         arguments:
             $maxActivePasswordChangesPerUser: '%app.max_active_password_changes_per_user%'
             $passwordChangeLifespan: '%app.password_change_lifespan%'
+
+    App\Model\Module\CampCatalog\CampImage\CampImageFilesystem:
+        arguments:
+            $kernelProjectDirectory: '%kernel.project_dir%'
+            $campImageDirectory: '%app.camp_image_directory%'
+
+    App\Service\Form\Extension\CountryTypeDefaultsExtension:
+        arguments:
+            $preferredCountries: '%app.preferred_country_choices%'
+
+    App\Service\Form\Extension\PhoneNumberTypeDefaultsExtension:
+        arguments:
+            $phoneNumberDefaultLocale: '%app.phone_number_default_locale%'
+            $phoneNumberFormat: '%app.phone_number_format%'
+
+    App\Service\Form\Extension\MoneyTypeDefaultsExtension:
+        arguments:
+            $currency: '%app.currency%'
+
+    App\Service\Form\Type\Admin\UserType:
+        arguments:
+            $isEuBusinessDataEnabled: '%app.eu_business_data%'
+
+    App\Service\Form\Type\User\BillingType:
+        arguments:
+            $isEuBusinessDataEnabled: '%app.eu_business_data%'
+
+    App\Service\Form\Type\User\CamperType:
+        arguments:
+            $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'
+            $isNationalIdentifierEnabled: '%app.national_identifier%'
 
     App\Service\Menu\Renderer\MenuTypeRenderer:
         arguments:
@@ -133,21 +172,6 @@ services:
             $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
     App\Service\Data\Transfer\User\CamperDataTransfer:
-        arguments:
-            $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'
-            $isNationalIdentifierEnabled: '%app.national_identifier%'
-
-    App\Service\Form\Type\User\BillingType:
-        arguments:
-            $preferredCountries: '%app.preferred_country_choices%'
-            $isEuBusinessDataEnabled: '%app.eu_business_data%'
-
-    App\Service\Form\Type\User\ContactType:
-        arguments:
-            $phoneNumberDefaultLocale: '%app.phone_number_default_locale%'
-            $phoneNumberFormat: '%app.phone_number_format%'
-
-    App\Service\Form\Type\User\CamperType:
         arguments:
             $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'
             $isNationalIdentifierEnabled: '%app.national_identifier%'

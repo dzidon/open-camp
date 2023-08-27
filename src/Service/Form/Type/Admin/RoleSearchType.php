@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\Admin;
 
-use App\Library\Data\Admin\RoleSearchDataInterface;
+use App\Library\Data\Admin\RoleSearchData;
 use App\Library\Enum\Search\Data\Admin\RoleSortEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -41,7 +41,7 @@ class RoleSearchType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'         => RoleSearchDataInterface::class,
+            'data_class'         => RoleSearchData::class,
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

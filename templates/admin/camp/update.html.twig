@@ -1,6 +1,6 @@
-{% extends "admin/base.html.twig" %}
+{% extends "admin/camp/base_update.html.twig" %}
 
-{% block main %}
+{% block camp_update_content %}
     <div class="row">
         <div class="col-12">
             <div class="card card-outline card-primary">
@@ -14,4 +14,6 @@
             </div>
         </div>
     </div>
+
+    {{ include('_fragment/_modal/_form_collection_removal.html.twig') }}
 {% endblock %}

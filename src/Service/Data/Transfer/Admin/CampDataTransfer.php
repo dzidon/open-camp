@@ -34,8 +34,13 @@ class CampDataTransfer implements DataTransferInterface
         $campData->setUrlName($camp->getUrlName());
         $campData->setAgeMin($camp->getAgeMin());
         $campData->setAgeMax($camp->getAgeMax());
+        $campData->setStreet($camp->getStreet());
+        $campData->setTown($camp->getTown());
+        $campData->setZip($camp->getZip());
+        $campData->setCountry($camp->getCountry());
         $campData->setDescriptionShort($camp->getDescriptionShort());
         $campData->setDescriptionLong($camp->getDescriptionLong());
+        $campData->setFeaturedPriority($camp->getFeaturedPriority());
         $campData->setCampCategory($camp->getCampCategory());
     }
 
@@ -53,8 +58,13 @@ class CampDataTransfer implements DataTransferInterface
         $camp->setUrlName($campData->getUrlName());
         $camp->setAgeMin($campData->getAgeMin());
         $camp->setAgeMax($campData->getAgeMax());
+        $camp->setStreet($campData->getStreet());
+        $camp->setTown($campData->getTown());
+        $camp->setZip($campData->getZip());
+        $camp->setCountry($campData->getCountry());
         $camp->setDescriptionShort($campData->getDescriptionShort());
         $camp->setDescriptionLong($campData->getDescriptionLong());
+        $camp->setFeaturedPriority($campData->getFeaturedPriority());
         $camp->setCampCategory($campData->getCampCategory());
     }
 }

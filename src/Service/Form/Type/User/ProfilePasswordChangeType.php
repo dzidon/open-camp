@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\User\ProfilePasswordChangeDataInterface;
+use App\Library\Data\User\ProfilePasswordChangeData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,7 +31,7 @@ class ProfilePasswordChangeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ProfilePasswordChangeDataInterface::class,
+            'data_class' => ProfilePasswordChangeData::class,
         ]);
     }
 }

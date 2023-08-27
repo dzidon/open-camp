@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\User\CamperDataInterface;
+use App\Library\Data\User\CamperData;
 use App\Model\Entity\Camper;
 use App\Service\Form\Type\Common\GenderType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -113,13 +113,13 @@ class CamperType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => CamperDataInterface::class,
+            'data_class' => CamperData::class,
+            'empty_data' => function (): CamperData {
+                return new CamperData($this->isNationalIdentifierEnabled);
+            },
         ]);
 
-        if ($this->isSaleCamperSiblingsEnabled)
-        {
-            $resolver->setDefault('choices_siblings', []);
-            $resolver->setAllowedTypes('choices_siblings', ['array']);
-        }
+        $resolver->setDefault('choices_siblings', []);
+        $resolver->setAllowedTypes('choices_siblings', ['array']);
     }
 }

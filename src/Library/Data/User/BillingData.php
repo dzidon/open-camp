@@ -8,10 +8,7 @@ use App\Library\Constraint\EuCin;
 use App\Library\Constraint\EuVatId;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @inheritDoc
- */
-class BillingData implements BillingDataInterface
+class BillingData
 {
     #[Assert\Length(max: 255)]
     #[Assert\When(

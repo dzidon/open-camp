@@ -68,7 +68,7 @@ class RoleController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            '_breadcrumbs'      => $this->roleBreadcrumbs->buildList(),
+            'breadcrumbs'       => $this->roleBreadcrumbs->buildList(),
         ]);
     }
 
@@ -96,8 +96,8 @@ class RoleController extends AbstractController
         }
 
         return $this->render('admin/role/update.html.twig', [
-            'form_role'    => $form->createView(),
-            '_breadcrumbs' => $this->roleBreadcrumbs->buildCreate(),
+            'form_role'   => $form->createView(),
+            'breadcrumbs' => $this->roleBreadcrumbs->buildCreate(),
         ]);
     }
 
@@ -109,9 +109,9 @@ class RoleController extends AbstractController
         $users = $userRepository->findByRole($role);
 
         return $this->render('admin/role/read.html.twig', [
-            'role'         => $role,
-            'users'        => $users,
-            '_breadcrumbs' => $this->roleBreadcrumbs->buildRead($role->getId()),
+            'role'        => $role,
+            'users'       => $users,
+            'breadcrumbs' => $this->roleBreadcrumbs->buildRead($role->getId()),
         ]);
     }
 
@@ -142,9 +142,9 @@ class RoleController extends AbstractController
         }
 
         return $this->render('admin/role/update.html.twig', [
-            'role'         => $role,
-            'form_role'    => $form->createView(),
-            '_breadcrumbs' => $this->roleBreadcrumbs->buildUpdate($role->getId()),
+            'role'        => $role,
+            'form_role'   => $form->createView(),
+            'breadcrumbs' => $this->roleBreadcrumbs->buildUpdate($role->getId()),
         ]);
     }
 
@@ -170,9 +170,9 @@ class RoleController extends AbstractController
         }
 
         return $this->render('admin/role/delete.html.twig', [
-            'role'         => $role,
-            'form_delete'  => $form->createView(),
-            '_breadcrumbs' => $this->roleBreadcrumbs->buildDelete($role->getId()),
+            'role'        => $role,
+            'form_delete' => $form->createView(),
+            'breadcrumbs' => $this->roleBreadcrumbs->buildDelete($role->getId()),
         ]);
     }
 

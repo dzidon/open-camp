@@ -84,8 +84,15 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
             if ($isGrantedCamp)
             {
                 $active =
-                    $route === 'admin_camp_list'   || $route === 'admin_camp_create' || $route === 'admin_camp_read' ||
-                    $route === 'admin_camp_update' || $route === 'admin_camp_delete'
+                    $route === 'admin_camp_list'          || $route === 'admin_camp_create' || $route === 'admin_camp_read' ||
+                    $route === 'admin_camp_update'        || $route === 'admin_camp_delete' ||
+
+                    $route === 'admin_camp_image_list'   || $route === 'admin_camp_image_upload' ||
+                    $route === 'admin_camp_image_update' || $route === 'admin_camp_image_delete' ||
+
+                    $route === 'admin_camp_date_list' || $route === 'admin_camp_date_create' ||
+                    $route === 'admin_camp_date_read' || $route === 'admin_camp_date_update' ||
+                    $route === 'admin_camp_date_delete'
                 ;
 
                 $text = $this->translator->trans('menu.navbar_admin_vertical.browse');

@@ -2,10 +2,11 @@
 
 namespace App\Service\Form\Type\Admin;
 
-use App\Library\Data\Admin\CampDataInterface;
+use App\Library\Data\Admin\CampData;
 use App\Model\Entity\CampCategory;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,26 +32,35 @@ class CampType extends AbstractType
             ])
             ->add('ageMin', IntegerType::class, [
                 'attr' => [
-                    'min' => 1,
+                    'min' => 0,
                 ],
                 'label' => 'form.admin.camp.age_min',
             ])
             ->add('ageMax', IntegerType::class, [
                 'attr' => [
-                    'min' => 1,
+                    'min' => 0,
                 ],
                 'label' => 'form.admin.camp.age_max',
             ])
-            ->add('descriptionShort', TextareaType::class, [
-                'required' => false,
-                'label'    => 'form.admin.camp.description_short',
+            ->add('street', TextType::class, [
+                'label' => 'form.admin.camp.street',
             ])
-            ->add('descriptionLong', TextareaType::class, [
-                'required' => false,
-                'label'    => 'form.admin.camp.description_long',
-                'attr'     => [
-                    'class' => 'tinymce'
+            ->add('town', TextType::class, [
+                'label' => 'form.admin.camp.town',
+            ])
+            ->add('zip', TextType::class, [
+                'label' => 'form.admin.camp.zip',
+            ])
+            ->add('country', CountryType::class, [
+                'placeholder'  => 'form.common.choice.choose',
+                'placeholder_attr' => [
+                    'disabled' => 'disabled'
                 ],
+                'label' => 'form.admin.camp.country',
+            ])
+            ->add('featuredPriority', IntegerType::class, [
+                'required' => false,
+                'label'    => 'form.admin.camp.featured_priority',
             ])
             ->add('campCategory', EntityType::class, [
                 'class'        => CampCategory::class,
@@ -62,13 +72,24 @@ class CampType extends AbstractType
                 'required'    => false,
                 'label'       => 'form.admin.camp.camp_category',
             ])
+            ->add('descriptionShort', TextareaType::class, [
+                'required' => false,
+                'label'    => 'form.admin.camp.description_short',
+            ])
+            ->add('descriptionLong', TextareaType::class, [
+                'required'  => false,
+                'label'     => 'form.admin.camp.description_long',
+                'attr'      => [
+                    'class' => 'tinymce'
+                ],
+            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'              => CampDataInterface::class,
+            'data_class'              => CampData::class,
             'choices_camp_categories' => [],
         ]);
 

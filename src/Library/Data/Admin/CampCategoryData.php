@@ -8,11 +8,8 @@ use App\Model\Entity\CampCategory;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @inheritDoc
- */
 #[UniqueCampCategory]
-class CampCategoryData implements CampCategoryDataInterface
+class CampCategoryData
 {
     private ?UuidV4 $id = null;
 

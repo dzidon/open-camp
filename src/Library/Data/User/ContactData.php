@@ -7,10 +7,7 @@ use libphonenumber\PhoneNumber;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @inheritDoc
- */
-class ContactData implements ContactDataInterface
+class ContactData
 {
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]

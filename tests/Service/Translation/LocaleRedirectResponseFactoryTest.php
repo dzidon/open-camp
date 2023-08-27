@@ -23,7 +23,7 @@ class LocaleRedirectResponseFactoryTest extends KernelTestCase
         $factory = $this->getLocaleRedirectResponseFactory();
         $request = $this->createRequest(null);
         $response = $factory->createRedirectResponse($request, 'locale_route_mock');
-        $this->assertSame('/en/route/mock', $response->getTargetUrl());
+        $this->assertSame('/cs/route/mock', $response->getTargetUrl());
     }
 
     /**
@@ -51,7 +51,7 @@ class LocaleRedirectResponseFactoryTest extends KernelTestCase
         $factory = $this->getLocaleRedirectResponseFactory();
         $request = $this->createRequest('fr');
         $response = $factory->createRedirectResponse($request, 'locale_route_mock');
-        $this->assertSame('/en/route/mock', $response->getTargetUrl());
+        $this->assertSame('/cs/route/mock', $response->getTargetUrl());
     }
 
     /**
@@ -66,7 +66,7 @@ class LocaleRedirectResponseFactoryTest extends KernelTestCase
         $request = $this->createRequest(null);
         $request->query->set('abc', 123);
         $response = $factory->createRedirectResponse($request, 'locale_route_mock');
-        $this->assertSame('/en/route/mock?abc=123', $response->getTargetUrl());
+        $this->assertSame('/cs/route/mock?abc=123', $response->getTargetUrl());
     }
 
     /**

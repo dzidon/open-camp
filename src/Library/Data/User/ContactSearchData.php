@@ -4,10 +4,7 @@ namespace App\Library\Data\User;
 
 use App\Library\Enum\Search\Data\User\ContactSortEnum;
 
-/**
- * @inheritDoc
- */
-class ContactSearchData implements ContactSearchDataInterface
+class ContactSearchData
 {
     private string $phrase = '';
 

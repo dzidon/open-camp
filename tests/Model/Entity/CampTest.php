@@ -14,6 +14,10 @@ class CampTest extends TestCase
     private const URL_NAME = 'url-name';
     private const AGE_MIN = 1;
     private const AGE_MAX = 2;
+    private const STREET = 'Street 123';
+    private const TOWN = 'Test town';
+    private const ZIP = '12345';
+    private const COUNTRY = 'CZ';
 
     private Camp $camp;
 
@@ -57,6 +61,53 @@ class CampTest extends TestCase
         $newAgeMax = 6;
         $this->camp->setAgeMax($newAgeMax);
         $this->assertSame($newAgeMax, $this->camp->getAgeMax());
+    }
+
+    public function testStreet(): void
+    {
+        $this->assertSame(self::STREET, $this->camp->getStreet());
+
+        $newStreet = 'New street 123';
+        $this->camp->setStreet($newStreet);
+        $this->assertSame($newStreet, $this->camp->getStreet());
+    }
+
+    public function testTown(): void
+    {
+        $this->assertSame(self::TOWN, $this->camp->getTown());
+
+        $newTown = 'New town';
+        $this->camp->setTown($newTown);
+        $this->assertSame($newTown, $this->camp->getTown());
+    }
+
+    public function testZip(): void
+    {
+        $this->assertSame(self::ZIP, $this->camp->getZip());
+
+        $newZip = '54321';
+        $this->camp->setZip($newZip);
+        $this->assertSame($newZip, $this->camp->getZip());
+    }
+
+    public function testCountry(): void
+    {
+        $this->assertSame(self::COUNTRY, $this->camp->getCountry());
+
+        $newCountry = 'SK';
+        $this->camp->setCountry($newCountry);
+        $this->assertSame($newCountry, $this->camp->getCountry());
+    }
+
+    public function testFeaturedPriority(): void
+    {
+        $this->assertNull($this->camp->getFeaturedPriority());
+
+        $this->camp->setFeaturedPriority(123);
+        $this->assertSame(123, $this->camp->getFeaturedPriority());
+
+        $this->camp->setFeaturedPriority(null);
+        $this->assertNull($this->camp->getFeaturedPriority());
     }
 
     public function testDescriptionShort(): void
@@ -106,6 +157,6 @@ class CampTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->camp = new Camp(self::NAME, self::URL_NAME, self::AGE_MIN, self::AGE_MAX);
+        $this->camp = new Camp(self::NAME, self::URL_NAME, self::AGE_MIN, self::AGE_MAX, self::STREET, self::TOWN, self::ZIP, self::COUNTRY);
     }
 }

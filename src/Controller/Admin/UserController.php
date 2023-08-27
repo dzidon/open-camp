@@ -73,7 +73,7 @@ class UserController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            '_breadcrumbs'      => $this->userBreadcrumbs->buildList(),
+            'breadcrumbs'       => $this->userBreadcrumbs->buildList(),
         ]);
     }
 
@@ -101,8 +101,8 @@ class UserController extends AbstractController
         }
 
         return $this->render('admin/user/update.html.twig', [
-            'form_user'    => $form->createView(),
-            '_breadcrumbs' => $this->userBreadcrumbs->buildCreate(),
+            'form_user'   => $form->createView(),
+            'breadcrumbs' => $this->userBreadcrumbs->buildCreate(),
         ]);
     }
 
@@ -113,8 +113,8 @@ class UserController extends AbstractController
         $user = $this->findUserOrThrow404($id);
 
         return $this->render('admin/user/read.html.twig', [
-            'user'         => $user,
-            '_breadcrumbs' => $this->userBreadcrumbs->buildRead($user->getId()),
+            'user'        => $user,
+            'breadcrumbs' => $this->userBreadcrumbs->buildRead($user->getId()),
         ]);
     }
 
@@ -145,9 +145,9 @@ class UserController extends AbstractController
         }
 
         return $this->render('admin/user/update.html.twig', [
-            'user'         => $user,
-            'form_user'    => $form->createView(),
-            '_breadcrumbs' => $this->userBreadcrumbs->buildUpdate($user->getId()),
+            'user'        => $user,
+            'form_user'   => $form->createView(),
+            'breadcrumbs' => $this->userBreadcrumbs->buildUpdate($user->getId()),
         ]);
     }
 
@@ -185,7 +185,7 @@ class UserController extends AbstractController
         return $this->render('admin/user/update_password.html.twig', [
             'user'          => $user,
             'form_password' => $form->createView(),
-            '_breadcrumbs'  => $this->userBreadcrumbs->buildUpdatePassword($user->getId()),
+            'breadcrumbs'   => $this->userBreadcrumbs->buildUpdatePassword($user->getId()),
         ]);
     }
 
@@ -211,9 +211,9 @@ class UserController extends AbstractController
         }
 
         return $this->render('admin/user/delete.html.twig', [
-            'user'         => $user,
-            'form_delete'  => $form->createView(),
-            '_breadcrumbs' => $this->userBreadcrumbs->buildDelete($user->getId()),
+            'user'        => $user,
+            'form_delete' => $form->createView(),
+            'breadcrumbs' => $this->userBreadcrumbs->buildDelete($user->getId()),
         ]);
     }
 

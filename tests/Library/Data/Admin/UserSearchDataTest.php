@@ -36,13 +36,16 @@ class UserSearchDataTest extends TestCase
     public function testRole(): void
     {
         $data = new UserSearchData();
-        $this->assertSame(null, $data->getRole());
+        $this->assertNull($data->getRole());
 
         $role = new Role('label');
         $data->setRole($role);
         $this->assertSame($role, $data->getRole());
 
         $data->setRole(null);
-        $this->assertSame(null, $data->getRole());
+        $this->assertNull($data->getRole());
+
+        $data->setRole(false);
+        $this->assertFalse($data->getRole());
     }
 }

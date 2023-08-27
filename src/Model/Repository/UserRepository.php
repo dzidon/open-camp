@@ -2,7 +2,7 @@
 
 namespace App\Model\Repository;
 
-use App\Library\Data\Admin\UserSearchDataInterface;
+use App\Library\Data\Admin\UserSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
@@ -134,7 +134,7 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function getAdminPaginator(UserSearchDataInterface $data, int $currentPage, int $pageSize): DqlPaginator
+    public function getAdminPaginator(UserSearchData $data, int $currentPage, int $pageSize): DqlPaginator
     {
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();
@@ -150,7 +150,11 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
             ->orderBy($sortBy->property(), $sortBy->order())
         ;
 
-        if ($role !== null)
+        if ($role === false)
+        {
+            $queryBuilder->andWhere('user.role IS NULL');
+        }
+        else if ($role !== null)
         {
             $queryBuilder
                 ->andWhere('user.role = :roleId')

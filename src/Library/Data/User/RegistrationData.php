@@ -5,10 +5,7 @@ namespace App\Library\Data\User;
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints as Recaptcha;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @inheritDoc
- */
-class RegistrationData implements RegistrationDataInterface
+class RegistrationData
 {
     #[Assert\Length(max: 180)]
     #[Assert\Email]

@@ -8,11 +8,8 @@ use App\Model\Entity\Role;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @inheritDoc
- */
 #[UniqueUser]
-class UserData implements UserDataInterface
+class UserData
 {
     private ?UuidV4 $id = null;
 

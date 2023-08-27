@@ -19,7 +19,7 @@
     {{ form_label(form, label, {translation_domain: false}) }}
 {% endblock %}
 
-{# Expanded choice with group_by support #}
+{# Expanded choice with "group_by" support #}
 {% block choice_widget_expanded %}
     <div {{ block('widget_container_attributes') }}>
         {% if form.vars.choices|length != form.children|length %}
@@ -41,3 +41,12 @@
         {% endif %}
     </div>
 {% endblock choice_widget_expanded %}
+
+{# Suppresses "required" rendering #}
+{% block collection_label %}
+    {% if suppress_required_rendering is defined and suppress_required_rendering %}
+        {% set required = false %}
+    {% endif %}
+
+    {{ block('form_label') }}
+{% endblock collection_label %}

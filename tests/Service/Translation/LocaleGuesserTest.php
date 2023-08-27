@@ -32,7 +32,7 @@ class LocaleGuesserTest extends KernelTestCase
 
         $request = $this->createRequest('fr;q=0.8,es;q=0.7');
         $guessedLocale = $guesser->guessLocale($request);
-        $this->assertSame('en', $guessedLocale);
+        $this->assertSame('cs', $guessedLocale);
 
         $request = $this->createRequest('fr;q=0.8,es;q=0.7,de;q=0.6');
         $guessedLocale = $guesser->guessLocale($request);
@@ -44,11 +44,11 @@ class LocaleGuesserTest extends KernelTestCase
 
         $request = $this->createRequest('fr;q=0.8,es;q=0.7,*;q=0.6,de;q=0.5');
         $guessedLocale = $guesser->guessLocale($request);
-        $this->assertSame('en', $guessedLocale);
+        $this->assertSame('cs', $guessedLocale);
 
         $request = $this->createRequest('*');
         $guessedLocale = $guesser->guessLocale($request);
-        $this->assertSame('en', $guessedLocale);
+        $this->assertSame('cs', $guessedLocale);
 
         $request = $this->createRequest('cs');
         $guessedLocale = $guesser->guessLocale($request);

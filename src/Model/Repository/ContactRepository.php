@@ -2,7 +2,7 @@
 
 namespace App\Model\Repository;
 
-use App\Library\Data\User\ContactSearchDataInterface;
+use App\Library\Data\User\ContactSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
@@ -67,7 +67,7 @@ class ContactRepository extends AbstractRepository implements ContactRepositoryI
     /**
      * @inheritDoc
      */
-    public function getUserPaginator(ContactSearchDataInterface $data, User $user, int $currentPage, int $pageSize): DqlPaginator
+    public function getUserPaginator(ContactSearchData $data, User $user, int $currentPage, int $pageSize): DqlPaginator
     {
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();

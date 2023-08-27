@@ -6,10 +6,7 @@ use App\Library\Enum\Search\Data\Admin\CampSortEnum;
 use App\Model\Entity\CampCategory;
 use DateTimeImmutable;
 
-/**
- * @inheritDoc
- */
-class CampSearchData implements CampSearchDataInterface
+class CampSearchData
 {
     private string $phrase = '';
 
@@ -17,13 +14,13 @@ class CampSearchData implements CampSearchDataInterface
 
     private ?int $age = null;
 
-    private ?DateTimeImmutable $dateStart = null;
+    private ?DateTimeImmutable $startAt = null;
 
-    private ?DateTimeImmutable $dateEnd = null;
+    private ?DateTimeImmutable $endAt = null;
 
-    private ?CampCategory $campCategory = null;
+    private false|null|CampCategory $campCategory = null;
 
-    private ?bool $active = null;
+    private ?bool $isActive = null;
 
     public function getPhrase(): string
     {
@@ -64,50 +61,50 @@ class CampSearchData implements CampSearchDataInterface
         return $this;
     }
 
-    public function getDateStart(): ?DateTimeImmutable
+    public function getStartAt(): ?DateTimeImmutable
     {
-        return $this->dateStart;
+        return $this->startAt;
     }
 
-    public function setDateStart(?DateTimeImmutable $dateStart): self
+    public function setStartAt(?DateTimeImmutable $startAt): self
     {
-        $this->dateStart = $dateStart;
+        $this->startAt = $startAt;
 
         return $this;
     }
 
-    public function getDateEnd(): ?DateTimeImmutable
+    public function getEndAt(): ?DateTimeImmutable
     {
-        return $this->dateEnd;
+        return $this->endAt;
     }
 
-    public function setDateEnd(?DateTimeImmutable $dateEnd): self
+    public function setEndAt(?DateTimeImmutable $endAt): self
     {
-        $this->dateEnd = $dateEnd;
+        $this->endAt = $endAt;
 
         return $this;
     }
 
-    public function getCampCategory(): ?CampCategory
+    public function getCampCategory(): false|null|CampCategory
     {
         return $this->campCategory;
     }
 
-    public function setCampCategory(?CampCategory $campCategory): self
+    public function setCampCategory(false|null|CampCategory $campCategory): self
     {
         $this->campCategory = $campCategory;
 
         return $this;
     }
 
-    public function getActive(): ?bool
+    public function isActive(): ?bool
     {
-        return $this->active;
+        return $this->isActive;
     }
 
-    public function setActive(?bool $active): self
+    public function setIsActive(?bool $isActive): self
     {
-        $this->active = $active;
+        $this->isActive = $isActive;
 
         return $this;
     }

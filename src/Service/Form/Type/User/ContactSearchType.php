@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\User\ContactSearchDataInterface;
+use App\Library\Data\User\ContactSearchData;
 use App\Library\Enum\Search\Data\User\ContactSortEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -41,7 +41,7 @@ class ContactSearchType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'         => ContactSearchDataInterface::class,
+            'data_class'         => ContactSearchData::class,
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

@@ -1,0 +1,25 @@
+{% extends "admin/camp/base_update.html.twig" %}
+
+{% block camp_update_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-8 col-xl-5">
+                            <p>
+                                {{ 'crud.confirmation.camp_date_delete'|trans({
+                                    name: camp.name,
+                                    start_at: camp_date.startAt|date(date_time_format),
+                                    end_at: camp_date.endAt|date(date_time_format),
+                                }) }}
+                            </p>
+
+                            {{ form(form_delete) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

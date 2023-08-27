@@ -68,7 +68,7 @@ class ProfileContactController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            '_breadcrumbs'      => $this->breadcrumbs->buildList(),
+            'breadcrumbs'       => $this->breadcrumbs->buildList(),
         ]);
     }
 
@@ -95,7 +95,7 @@ class ProfileContactController extends AbstractController
 
         return $this->render('user/profile/contact/update.html.twig', [
             'form_contact' => $form->createView(),
-            '_breadcrumbs' => $this->breadcrumbs->buildCreate(),
+            'breadcrumbs'  => $this->breadcrumbs->buildCreate(),
         ]);
     }
 
@@ -106,8 +106,8 @@ class ProfileContactController extends AbstractController
         $this->denyAccessUnlessGranted('contact_read', $contact);
 
         return $this->render('user/profile/contact/read.html.twig', [
-            'contact'      => $contact,
-            '_breadcrumbs' => $this->breadcrumbs->buildRead($contact->getId()),
+            'contact'     => $contact,
+            'breadcrumbs' => $this->breadcrumbs->buildRead($contact->getId()),
         ]);
     }
 
@@ -134,7 +134,7 @@ class ProfileContactController extends AbstractController
 
         return $this->render('user/profile/contact/update.html.twig', [
             'form_contact' => $form->createView(),
-            '_breadcrumbs' => $this->breadcrumbs->buildUpdate($contact->getId()),
+            'breadcrumbs'  => $this->breadcrumbs->buildUpdate($contact->getId()),
         ]);
     }
 
@@ -160,9 +160,9 @@ class ProfileContactController extends AbstractController
         }
 
         return $this->render('user/profile/contact/delete.html.twig', [
-            'contact'      => $contact,
-            'form_delete'  => $form->createView(),
-            '_breadcrumbs' => $this->breadcrumbs->buildDelete($contact->getId()),
+            'contact'     => $contact,
+            'form_delete' => $form->createView(),
+            'breadcrumbs' => $this->breadcrumbs->buildDelete($contact->getId()),
         ]);
     }
 

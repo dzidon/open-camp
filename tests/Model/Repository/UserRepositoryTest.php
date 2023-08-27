@@ -286,6 +286,23 @@ class UserRepositoryTest extends KernelTestCase
         $this->assertSame(['david@gmail.com'], $emails);
     }
 
+    public function testGetAdminPaginatorWithFalseRole(): void
+    {
+        $userRepository = $this->getUserRepository();
+
+        $data = new UserSearchData();
+        $data->setRole(false);
+
+        $paginator = $userRepository->getAdminPaginator($data, 1, 5);
+        $this->assertSame(3, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(5, $paginator->getPageSize());
+
+        $emails = $this->getUserEmails($paginator->getCurrentPageItems());
+        $this->assertSame(['mark@gmail.com', 'xena@gmail.com', 'jeff@gmail.com'], $emails);
+    }
+
     public function testSupportsClass(): void
     {
         $repository = $this->getUserRepository();

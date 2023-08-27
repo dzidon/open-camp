@@ -14,11 +14,11 @@ use Symfony\Component\Form\Test\TypeTestCase;
 class CollectionTypeStimulusExtensionTest extends TypeTestCase
 {
     /**
-     * Tests that the CollectionType receives the required attributes.
+     * Tests that the CollectionType view receives the required attributes.
      *
      * @return void
      */
-    public function testAttributes(): void
+    public function testView(): void
     {
         $form = $this->factory->create(CollectionMockType::class);
         $collection = $form->get('collection');

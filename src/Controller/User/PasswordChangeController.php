@@ -57,7 +57,7 @@ class PasswordChangeController extends AbstractController
 
         return $this->render('user/auth/password_change.html.twig', [
             'form_password_change' => $form->createView(),
-            '_breadcrumbs' => $this->passwordChangeBreadcrumbs->buildPasswordChange(),
+            'breadcrumbs'          => $this->passwordChangeBreadcrumbs->buildPasswordChange(),
         ]);
     }
 
@@ -102,7 +102,7 @@ class PasswordChangeController extends AbstractController
 
         return $this->render('user/auth/password_change_complete.html.twig', [
             'form_plain_password' => $form->createView(),
-            '_breadcrumbs' => $this->passwordChangeBreadcrumbs->buildPasswordChangeComplete($token),
+            'breadcrumbs'         => $this->passwordChangeBreadcrumbs->buildPasswordChangeComplete($token),
         ]);
     }
 }

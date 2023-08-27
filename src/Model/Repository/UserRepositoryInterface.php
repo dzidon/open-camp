@@ -2,7 +2,7 @@
 
 namespace App\Model\Repository;
 
-use App\Library\Data\Admin\UserSearchDataInterface;
+use App\Library\Data\Admin\UserSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
@@ -75,10 +75,10 @@ interface UserRepositoryInterface
     /**
      * Returns admin user search paginator.
      *
-     * @param UserSearchDataInterface $data
+     * @param UserSearchData $data
      * @param int $currentPage
      * @param int $pageSize
      * @return PaginatorInterface
      */
-    public function getAdminPaginator(UserSearchDataInterface $data, int $currentPage, int $pageSize): PaginatorInterface;
+    public function getAdminPaginator(UserSearchData $data, int $currentPage, int $pageSize): PaginatorInterface;
 }

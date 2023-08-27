@@ -2,7 +2,7 @@
 
 namespace App\Model\Repository;
 
-use App\Library\Data\Admin\RoleSearchDataInterface;
+use App\Library\Data\Admin\RoleSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Role;
 use Symfony\Component\Uid\UuidV4;
@@ -64,10 +64,10 @@ interface RoleRepositoryInterface
     /**
      * Returns admin role search paginator.
      *
-     * @param RoleSearchDataInterface $data
+     * @param RoleSearchData $data
      * @param int $currentPage
      * @param int $pageSize
      * @return PaginatorInterface
      */
-    public function getAdminPaginator(RoleSearchDataInterface $data, int $currentPage, int $pageSize): PaginatorInterface;
+    public function getAdminPaginator(RoleSearchData $data, int $currentPage, int $pageSize): PaginatorInterface;
 }

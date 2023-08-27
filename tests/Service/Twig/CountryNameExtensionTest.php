@@ -4,7 +4,6 @@ namespace App\Tests\Service\Twig;
 
 use App\Service\Twig\CountryNameExtension;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Intl\Exception\MissingResourceException;
 
 class CountryNameExtensionTest extends KernelTestCase
 {
@@ -20,8 +19,7 @@ class CountryNameExtensionTest extends KernelTestCase
     {
         $extension = $this->getCountryNameExtension();
 
-        $this->expectException(MissingResourceException::class);
-        $extension->getCountryNameForCode('xx', 'en');
+        $this->assertEmpty($extension->getCountryNameForCode('xx', 'en'));
     }
 
     private function getCountryNameExtension(): CountryNameExtension

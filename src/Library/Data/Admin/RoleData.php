@@ -7,11 +7,8 @@ use App\Model\Entity\Permission;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @inheritDoc
- */
 #[UniqueRole]
-class RoleData implements RoleDataInterface
+class RoleData
 {
     private ?UuidV4 $id = null;
 

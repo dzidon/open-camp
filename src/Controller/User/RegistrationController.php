@@ -54,7 +54,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('user/auth/registration.html.twig', [
             'form_registration' => $form->createView(),
-            '_breadcrumbs' => $this->registrationBreadcrumbs->buildRegistration(),
+            'breadcrumbs'       => $this->registrationBreadcrumbs->buildRegistration(),
         ]);
     }
 
@@ -89,7 +89,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('user/auth/registration_complete.html.twig', [
             'form_plain_password' => $form->createView(),
-            '_breadcrumbs' => $this->registrationBreadcrumbs->buildRegistrationComplete($token),
+            'breadcrumbs'         => $this->registrationBreadcrumbs->buildRegistrationComplete($token),
         ]);
     }
 }
