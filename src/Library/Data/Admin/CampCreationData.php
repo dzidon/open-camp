@@ -18,13 +18,13 @@ class CampCreationData
     #[Assert\All([
         new Assert\Image(),
     ])]
-    private iterable $images = [];
+    private array $images = [];
 
     /**
      * @var CampDateData[]
      */
     #[Assert\Valid]
-    private iterable $campDatesData = [];
+    private array $campDatesData = [];
 
     public function __construct()
     {
@@ -36,26 +36,45 @@ class CampCreationData
         return $this->campData;
     }
 
-    public function getImages(): iterable
+    public function getImages(): array
     {
         return $this->images;
     }
 
-    public function setImages(iterable $images): self
+    public function setImages(array $images): self
     {
         $this->images = $images;
 
         return $this;
     }
 
-    public function getCampDatesData(): iterable
+    public function getCampDatesData(): array
     {
         return $this->campDatesData;
     }
 
-    public function setCampDatesData(iterable $campDatesData): self
+    public function addCampDateData(CampDateData $campDateData): self
     {
-        $this->campDatesData = $campDatesData;
+        if (in_array($campDateData, $this->campDatesData, true))
+        {
+            return $this;
+        }
+
+        $this->campDatesData[] = $campDateData;
+
+        return $this;
+    }
+
+    public function removeCampDateData(CampDateData $campDateData): self
+    {
+        $key = array_search($campDateData, $this->campDatesData, true);
+
+        if ($key === false)
+        {
+            return $this;
+        }
+
+        unset($this->campDatesData[$key]);
 
         return $this;
     }

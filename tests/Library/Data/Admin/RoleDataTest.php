@@ -100,8 +100,15 @@ class RoleDataTest extends KernelTestCase
             new Permission('y', 'Y', 1, new PermissionGroup('group', 'Group', 1)),
         ];
 
-        $data->setPermissions($permissions);
+        foreach ($permissions as $permission)
+        {
+            $data->addPermission($permission);
+        }
+
         $this->assertSame($permissions, $data->getPermissions());
+
+        $data->removePermission($permissions[0]);
+        $this->assertNotContains($permissions[0], $data->getPermissions());
     }
 
     private function getRoleRepository(): RoleRepositoryInterface

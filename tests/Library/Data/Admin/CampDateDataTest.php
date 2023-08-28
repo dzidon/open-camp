@@ -223,8 +223,15 @@ class CampDateDataTest extends KernelTestCase
             new User('bob2@test.com'),
         ];
 
-        $data->setLeaders($newLeaders);
+        foreach ($newLeaders as $newLeader)
+        {
+            $data->addLeader($newLeader);
+        }
+
         $this->assertSame($newLeaders, $data->getLeaders());
+
+        $data->removeLeader($newLeaders[0]);
+        $this->assertNotContains($newLeaders[0], $data->getLeaders());
     }
 
     public function testIntervalCollision(): void

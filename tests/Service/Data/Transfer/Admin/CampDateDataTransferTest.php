@@ -30,6 +30,7 @@ class CampDateDataTransferTest extends KernelTestCase
         $campDate = new CampDate($expectedStartAt, $expectedEndAt, $expectedPrice, $expectedCapacity, $expectedCamp);
         $campDate->setIsClosed(true);
         $campDate->setTripInstructions($expectedTripInstructions);
+
         foreach ($expectedLeaders as $expectedLeader)
         {
             $campDate->addLeader($expectedLeader);
@@ -70,7 +71,11 @@ class CampDateDataTransferTest extends KernelTestCase
         $data->setPrice($expectedPrice);
         $data->setCapacity($expectedCapacity);
         $data->setTripInstructions($expectedTripInstructions);
-        $data->setLeaders($expectedLeaders);
+
+        foreach ($expectedLeaders as $expectedLeader)
+        {
+            $data->addLeader($expectedLeader);
+        }
 
         $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
         $campDate = new CampDate(new DateTimeImmutable('3000-01-02'), new DateTimeImmutable('3000-01-06'), 0.0, 0, $camp);

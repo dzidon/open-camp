@@ -45,7 +45,7 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDateData->setCapacity($campDate->getCapacity());
         $campDateData->setIsClosed($campDate->isClosed());
         $campDateData->setTripInstructions($campDate->getTripInstructions());
-        $campDateData->setLeaders($campDate->getLeaders());
+        $this->propertyAccessor->setValue($campDateData, 'leaders', $campDate->getLeaders());
     }
 
     /**

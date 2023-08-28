@@ -49,7 +49,7 @@ class CamperData
     /**
      * @var Camper[]
      */
-    private iterable $siblings = [];
+    private array $siblings = [];
 
     private bool $isNationalIdentifierEnabled;
 
@@ -171,14 +171,33 @@ class CamperData
         return $this;
     }
 
-    public function getSiblings(): iterable
+    public function getSiblings(): array
     {
         return $this->siblings;
     }
 
-    public function setSiblings(iterable $siblings): self
+    public function addSibling(Camper $sibling): self
     {
-        $this->siblings = $siblings;
+        if (in_array($sibling, $this->siblings))
+        {
+            return $this;
+        }
+
+        $this->siblings[] = $sibling;
+
+        return $this;
+    }
+
+    public function removeSibling(Camper $sibling): self
+    {
+        $key = array_search($sibling, $this->siblings, true);
+
+        if ($key === false)
+        {
+            return $this;
+        }
+
+        unset($this->siblings[$key]);
 
         return $this;
     }

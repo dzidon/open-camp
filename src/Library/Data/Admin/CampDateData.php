@@ -39,7 +39,7 @@ class CampDateData
     /**
      * @var User[]
      */
-    private iterable $leaders = [];
+    private array $leaders = [];
 
     public function getId(): ?UuidV4
     {
@@ -137,14 +137,33 @@ class CampDateData
         return $this;
     }
 
-    public function getLeaders(): iterable
+    public function getLeaders(): array
     {
         return $this->leaders;
     }
 
-    public function setLeaders(iterable $leaders): self
+    public function addLeader(User $leader): self
     {
-        $this->leaders = $leaders;
+        if (in_array($leader, $this->leaders))
+        {
+            return $this;
+        }
+
+        $this->leaders[] = $leader;
+
+        return $this;
+    }
+
+    public function removeLeader(User $leader): self
+    {
+        $key = array_search($leader, $this->leaders, true);
+
+        if ($key === false)
+        {
+            return $this;
+        }
+
+        unset($this->leaders[$key]);
 
         return $this;
     }

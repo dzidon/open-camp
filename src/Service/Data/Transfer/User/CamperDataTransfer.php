@@ -52,7 +52,7 @@ class CamperDataTransfer implements DataTransferInterface
         $camperData->setDietaryRestrictions($camper->getDietaryRestrictions());
         $camperData->setHealthRestrictions($camper->getHealthRestrictions());
         $camperData->setMedication($camper->getMedication());
-        $camperData->setSiblings($camper->getSiblings());
+        $this->propertyAccessor->setValue($camperData, 'siblings', $camper->getSiblings());
 
         if ($this->isNationalIdentifierEnabled)
         {

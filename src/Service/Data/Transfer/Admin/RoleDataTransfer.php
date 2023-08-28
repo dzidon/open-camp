@@ -39,7 +39,7 @@ class RoleDataTransfer implements DataTransferInterface
 
         $roleData->setId($role->getId());
         $roleData->setLabel($role->getLabel());
-        $roleData->setPermissions($role->getPermissions());
+        $this->propertyAccessor->setValue($roleData, 'permissions', $role->getPermissions());
     }
 
     /**

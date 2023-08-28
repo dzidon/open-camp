@@ -44,7 +44,11 @@ class RoleDataTransferTest extends KernelTestCase
         $role = new Role('abc');
         $data = new RoleData();
         $data->setLabel('xyz');
-        $data->setPermissions($permissions);
+
+        foreach ($permissions as $permission)
+        {
+            $data->addPermission($permission);
+        }
 
         $dataTransfer->fillEntity($data, $role);
         $this->assertSame('xyz', $role->getLabel());

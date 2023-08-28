@@ -611,8 +611,15 @@ class CamperDataTest extends KernelTestCase
             new Camper('Camper', '2', GenderEnum::FEMALE, new DateTimeImmutable(), $user),
         ];
 
-        $data->setSiblings($siblings);
+        foreach ($siblings as $sibling)
+        {
+            $data->addSibling($sibling);
+        }
+
         $this->assertSame($siblings, $data->getSiblings());
+
+        $data->removeSibling($siblings[0]);
+        $this->assertNotContains($siblings[0], $data->getSiblings());
     }
 
     private function getValidator(): ValidatorInterface

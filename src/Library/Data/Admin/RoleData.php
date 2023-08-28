@@ -19,7 +19,7 @@ class RoleData
     /**
      * @var Permission[]
      */
-    private iterable $permissions = [];
+    private array $permissions = [];
 
     public function getId(): ?UuidV4
     {
@@ -45,14 +45,33 @@ class RoleData
         return $this;
     }
 
-    public function getPermissions(): iterable
+    public function getPermissions(): array
     {
         return $this->permissions;
     }
 
-    public function setPermissions(iterable $permissions): self
+    public function addPermission(Permission $permission): self
     {
-        $this->permissions = $permissions;
+        if (in_array($permission, $this->permissions))
+        {
+            return $this;
+        }
+
+        $this->permissions[] = $permission;
+
+        return $this;
+    }
+
+    public function removePermission(Permission $permission): self
+    {
+        $key = array_search($permission, $this->permissions, true);
+
+        if ($key === false)
+        {
+            return $this;
+        }
+
+        unset($this->permissions[$key]);
 
         return $this;
     }

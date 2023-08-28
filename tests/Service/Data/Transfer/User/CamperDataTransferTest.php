@@ -105,7 +105,11 @@ class CamperDataTransferTest extends KernelTestCase
         $data->setDietaryRestrictions($expectedDietaryRestrictions);
         $data->setHealthRestrictions($expectedHealthRestrictions);
         $data->setMedication($expectedMedication);
-        $data->setSiblings($expectedSiblings);
+
+        foreach ($expectedSiblings as $expectedSibling)
+        {
+            $data->addSibling($expectedSibling);
+        }
 
         $dataTransfer->fillEntity($data, $camper);
 
@@ -175,7 +179,11 @@ class CamperDataTransferTest extends KernelTestCase
         $data->setNameLast('Doe');
         $data->setBornAt(new DateTimeImmutable('now'));
         $data->setGender(GenderEnum::MALE);
-        $data->setSiblings($expectedSiblings);
+
+        foreach ($expectedSiblings as $expectedSibling)
+        {
+            $data->addSibling($expectedSibling);
+        }
 
         $dataTransfer->fillEntity($data, $camper);
 
