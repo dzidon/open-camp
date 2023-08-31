@@ -326,19 +326,6 @@ class TestFixtures extends Fixture
         $manager->persist($camp2);
 
         /*
-         * CampImage
-         */
-        $campImage1 = new CampImage(100, 'jpg', $camp1);
-        $this->setUid($campImage1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
-        $this->setCreatedAt($campImage1, new DateTimeImmutable('2000-01-01'));
-        $manager->persist($campImage1);
-
-        $campImage2 = new CampImage(200, 'png', $camp1);
-        $this->setUid($campImage2, '550e8400-e29b-41d4-a716-446655440000');
-        $this->setCreatedAt($campImage2, new DateTimeImmutable('2000-01-02'));
-        $manager->persist($campImage2);
-
-        /*
          * CampDate
          */
         $campDate1 = new CampDate(new DateTimeImmutable('2000-07-01'), new DateTimeImmutable('2000-07-07'), 1000, 10, $camp1);
@@ -355,6 +342,19 @@ class TestFixtures extends Fixture
         $this->setUid($campDate3, 'c097941e-52c4-405a-9823-49b7b71ead6e');
         $this->setCreatedAt($campDate3, new DateTimeImmutable('2000-01-03'));
         $manager->persist($campDate3);
+
+        /*
+         * CampImage
+         */
+        $campImage1 = new CampImage(100, 'jpg', $camp1);
+        $this->setUid($campImage1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($campImage1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($campImage1);
+
+        $campImage2 = new CampImage(200, 'png', $camp1);
+        $this->setUid($campImage2, '550e8400-e29b-41d4-a716-446655440000');
+        $this->setCreatedAt($campImage2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($campImage2);
 
         // save
         $manager->flush();

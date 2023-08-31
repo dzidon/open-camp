@@ -255,6 +255,34 @@ class CampCategory implements TreeNodeInterface
         return $this->updatedAt;
     }
 
+    /**
+     * @return CampCategory[]
+     */
+    public function getAncestors(): array
+    {
+        $ancestors = [];
+        $expandedNodes = [];
+        $currentNode = $this->getParent();
+
+        while ($currentNode !== null)
+        {
+            foreach ($expandedNodes as $expandedNode)
+            {
+                if ($currentNode->getId()->toRfc4122() === $expandedNode->getId()->toRfc4122())
+                {
+                    throw new LogicException(sprintf('Found a cycle in "%s".', __METHOD__));
+                }
+            }
+
+            array_unshift($ancestors, $currentNode);
+
+            $expandedNodes[] = $currentNode;
+            $currentNode = $currentNode->getParent();
+        }
+
+        return $ancestors;
+    }
+
     public function getPath(bool $useHumanName = false): string
     {
         $path = '';

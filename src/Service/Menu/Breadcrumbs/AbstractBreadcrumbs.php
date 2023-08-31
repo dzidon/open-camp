@@ -42,17 +42,24 @@ abstract class AbstractBreadcrumbs
      * @param MenuType $root
      * @param string $route
      * @param array $urlParameters
+     * @param string|null $identifier
      * @param string $block
      * @return MenuType
      */
     protected function addChildRoute(MenuType $root,
                                      string   $route,
                                      array    $urlParameters = [],
+                                     ?string  $identifier = null,
                                      string   $block = 'breadcrumb'): MenuType
     {
+        if ($identifier === null)
+        {
+            $identifier = $route;
+        }
+
         $name = $this->translator->trans("route.$route");
         $url = $this->urlGenerator->generate($route, $urlParameters);
-        $child = new MenuType($route, $block, $name, $url);
+        $child = new MenuType($identifier, $block, $name, $url);
         $root->addChild($child);
 
         return $child;

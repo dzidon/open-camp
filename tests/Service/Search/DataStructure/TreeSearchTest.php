@@ -98,6 +98,9 @@ class TreeSearchTest extends KernelTestCase
         $menu = $this->createTreeNodeMock();
         $treeSearch = $this->getTreeSearch();
 
+        $itemMenu = $treeSearch->getDescendentByPath($menu, '');
+        $this->assertSame($itemMenu, $menu);
+
         $itemC = $treeSearch->getDescendentByPath($menu, 'a/b/c');
         $this->assertNotNull($itemC);
         $this->assertSame('c', $itemC->getIdentifier());

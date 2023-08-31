@@ -28,16 +28,6 @@ more:
           other {# dalších termínů tábora...}
         }'
 
-contact_role:
-    mother: 'Matka'
-    father: 'Otec'
-    grandma: 'Babička'
-    grandpa: 'Děda'
-    aunt: 'Teta'
-    uncle: 'Strýc'
-    relative: 'Příbuzný'
-    tutor: 'Vychovatel'
-
 auth:
     no_account_yet: 'Ještě u nás nemáte účet?'
     no_account_yet_link: 'Zaregistrovat se'
@@ -94,6 +84,19 @@ permission:
     camp_create: 'Tvorba tábora'
     camp_update: 'Editace tábora'
     camp_delete: 'Odstranění tábora'
+
+contact_role:
+    mother: 'Matka'
+    father: 'Otec'
+    grandma: 'Babička'
+    grandpa: 'Děda'
+    aunt: 'Teta'
+    uncle: 'Strýc'
+    relative: 'Příbuzný'
+    tutor: 'Vychovatel'
+
+camp_catalog:
+    no_available_camp_dates: 'Žádné dostupné termíny'
 
 crud:
     instruction:
@@ -321,6 +324,7 @@ entity_attribute:
         id: 'ID'
         name: 'Název'
         url_name: 'Název v odkazu'
+        age: 'Věk'
         age_min: 'Min. věk'
         age_max: 'Max. věk'
         street: 'Ulice a číslo popisné'
@@ -588,6 +592,13 @@ form:
             remember_me: 'Zůstat přihlášen'
             button: 'Přihlásit se'
 
+        camp_search:
+            phrase: 'Hledat podle názvu'
+            age: 'Věk'
+            from: 'Odjezd od'
+            to: 'Příjezd do'
+            button: 'Hledat'
+
         profile_billing:
             name_first: 'Jméno'
             name_last: 'Příjmení'
@@ -727,6 +738,7 @@ route:
     user_registration_complete: 'Dokončení registrace'
     user_password_change: 'Změna hesla'
     user_password_change_complete: 'Nové heslo'
+    user_camp_catalog: 'Katalog táborů'
 
     user_profile_billing: 'Fakturační údaje'
     user_profile_contact_list: 'Kontakty'

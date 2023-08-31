@@ -55,7 +55,7 @@ interface CampCategoryRepositoryInterface
     /**
      * Finds camp categories that have no parent.
      *
-     * @return array
+     * @return CampCategory[]
      */
     public function findRoots(): array;
 
@@ -63,9 +63,17 @@ interface CampCategoryRepositoryInterface
      * Finds camp categories that can be set as parents of the given camp category.
      *
      * @param CampCategory $category
-     * @return array
+     * @return CampCategory[]
      */
     public function findPossibleParents(CampCategory $category): array;
+
+    /**
+     * Finds one camp category by its absolute url name path.
+     *
+     * @param string $path
+     * @return CampCategory|null
+     */
+    public function findOneByPath(string $path): ?CampCategory;
 
     /**
      * Returns an array of camp categories with the given url name.

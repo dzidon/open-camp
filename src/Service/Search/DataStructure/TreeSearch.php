@@ -115,23 +115,24 @@ class TreeSearch implements TreeSearchInterface
      */
     public function getDescendentByPath(TreeNodeInterface $from, string $path, string $property = 'identifier'): ?TreeNodeInterface
     {
-        $names = explode('/', trim($path, '/'));
-        if (empty($names))
+        $path = trim($path, '/');
+        if ($path === '')
         {
-            return null;
+            return $from;
         }
 
+        $pathParts = explode('/', $path);
         $currentNode = $from;
 
         while (true)
         {
-            if (empty($names) || $currentNode === null)
+            if (empty($pathParts) || $currentNode === null)
             {
                 return $currentNode;
             }
 
-            $currentKey = array_key_first($names);
-            $currentName = $names[$currentKey];
+            $currentKey = array_key_first($pathParts);
+            $currentName = $pathParts[$currentKey];
             $foundChild = false;
 
             foreach ($currentNode->getChildren() as $child)
@@ -152,7 +153,7 @@ class TreeSearch implements TreeSearchInterface
                 $currentNode = null;
             }
 
-            unset($names[$currentKey]);
+            unset($pathParts[$currentKey]);
         }
     }
 

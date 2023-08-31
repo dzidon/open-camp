@@ -6,8 +6,9 @@
 parameters:
     app.menu_theme: '_fragment/_menu_theme/_main.html.twig'
 
-    # Directories
-    app.camp_image_directory: '/img/dynamic/camp/'
+    # Directories & paths
+    app.camp_image_directory: 'img/dynamic/camp'
+    app.no_camp_image_path: 'img/static/camp/placeholder.jpg'
 
     # Mailer
     app.email_no_reply: 'noreply@camp.com'
@@ -70,6 +71,7 @@ services:
             - '../src/Model/Attribute/'
             - '../src/Model/Entity/'
             - '../src/Model/Enum/'
+            - '../src/Model/Module/CampCatalog/Camp/UserCampCatalogResult.php'
             - '../src/Model/Module/Security/UserRegistration/UserRegistrationResult.php'
             - '../src/Model/Module/Security/UserPasswordChange/UserPasswordChangeResult.php'
             - '../src/Kernel.php'
@@ -106,6 +108,7 @@ services:
     App\Model\Module\CampCatalog\CampImage\CampImageFilesystem:
         arguments:
             $kernelProjectDirectory: '%kernel.project_dir%'
+            $noImagePath: '%app.no_camp_image_path%'
             $campImageDirectory: '%app.camp_image_directory%'
 
     App\Service\Form\Extension\CountryTypeDefaultsExtension:

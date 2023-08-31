@@ -2,13 +2,18 @@
 
 namespace App\Model\Repository;
 
-use App\Library\Data\Admin\CampSearchData;
+use App\Library\Data\Admin\CampSearchData as AdminCampSearchData;
+use App\Library\Data\User\CampSearchData as UserCampSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Camp;
+use App\Model\Entity\CampCategory;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\CampImage;
 use App\Model\Module\CampCatalog\Camp\CampLifespan;
 use App\Model\Module\CampCatalog\Camp\CampLifespanCollection;
+use App\Model\Module\CampCatalog\Camp\UserCampCatalogResult;
 use App\Model\Module\CampCatalog\CampImage\CampImageFilesystemInterface;
+use App\Service\Search\DataStructure\TreeSearchInterface;
 use DateTimeImmutable;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -26,15 +31,18 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
 {
     private CampImageRepositoryInterface $campImageRepository;
     private CampImageFilesystemInterface $campImageFilesystem;
+    private TreeSearchInterface $treeSearch;
 
     public function __construct(ManagerRegistry              $registry,
                                 CampImageRepositoryInterface $campImageRepository,
-                                CampImageFilesystemInterface $campImageFilesystem)
+                                CampImageFilesystemInterface $campImageFilesystem,
+                                TreeSearchInterface          $treeSearch)
     {
         parent::__construct($registry, Camp::class);
 
         $this->campImageRepository = $campImageRepository;
         $this->campImageFilesystem = $campImageFilesystem;
+        $this->treeSearch = $treeSearch;
     }
 
     /**
@@ -108,7 +116,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function getAdminPaginator(CampSearchData $data, int $currentPage, int $pageSize): DqlPaginator
+    public function getAdminPaginator(AdminCampSearchData $data, int $currentPage, int $pageSize): DqlPaginator
     {
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();
@@ -167,7 +175,131 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
 
         $query = $queryBuilder->getQuery();
 
-        return new DqlPaginator(new DoctrinePaginator($query, true), $currentPage, $pageSize);
+        return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUserCampCatalogResult(UserCampSearchData $data,
+                                             ?CampCategory      $campCategory,
+                                             int                $currentPage,
+                                             int                $pageSize): UserCampCatalogResult
+    {
+        $phrase = $data->getPhrase();
+        $age = $data->getAge();
+        $from = $data->getFrom();
+        $to = $data->getTo();
+
+        $queryBuilder = $this->createQueryBuilder('camp')
+            ->select('DISTINCT camp')
+            ->leftJoin(CampDate::class, 'campDate', 'WITH', 'camp.id = campDate.camp')
+            ->andWhere('camp.name LIKE :phrase')
+            ->setParameter('phrase', '%' . $phrase . '%')
+            // todo: prioritize camps with open dates
+            ->orderBy('camp.featuredPriority', 'DESC')
+        ;
+
+        if ($age !== null)
+        {
+            $queryBuilder
+                ->andWhere(':age >= camp.ageMin')
+                ->andWhere(':age <= camp.ageMax')
+                ->setParameter('age', $age)
+            ;
+        }
+
+        if ($from !== null)
+        {
+            $from = $from->setTime(0, 0);
+
+            $queryBuilder
+                ->andWhere('campDate.startAt >= :from')
+                ->setParameter('from', $from)
+            ;
+        }
+
+        if ($to !== null)
+        {
+            $to = $to->setTime(23, 59, 59);
+
+            $queryBuilder
+                ->andWhere('campDate.endAt <= :to')
+                ->setParameter('to', $to)
+            ;
+        }
+
+        if ($from !== null || $to !== null)
+        {
+            // todo: only search camps with open dates
+
+            $queryBuilder
+                ->andWhere('campDate.startAt > :now')
+                ->setParameter('now', new DateTimeImmutable('now'))
+            ;
+        }
+
+        if ($campCategory !== null)
+        {
+            $campCategories = $this->treeSearch->getDescendentsOfNode($campCategory);
+            $campCategories[] = $campCategory;
+
+            $campCategoryIds = array_map(function (CampCategory $campCategory) {
+                return $campCategory->getId()->toBinary();
+            }, $campCategories);
+
+            $queryBuilder
+                ->andWhere('camp.campCategory IN (:campCategoryIds)')
+                ->setParameter('campCategoryIds', $campCategoryIds)
+            ;
+        }
+
+        $query = $queryBuilder->getQuery();
+        $paginator = new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
+
+        /*
+         * Fetch dates for camps
+         */
+        $camps = $paginator->getCurrentPageItems();
+
+        $campIds = array_map(function (Camp $camp) {
+            return $camp->getId()->toBinary();
+        }, $camps);
+
+        $campDates = $this->_em->createQueryBuilder()
+            ->select('campDate, camp')
+            ->from(CampDate::class, 'campDate')
+            ->leftJoin('campDate.camp', 'camp')
+            ->andWhere('campDate.camp IN (:campIds)')
+            ->setParameter('campIds', $campIds)
+            // todo: only search open dates
+            ->andWhere('campDate.startAt > :now')
+            ->setParameter('now', new DateTimeImmutable('now'))
+            ->orderBy('campDate.startAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        /*
+         * Fetch images for camps
+         */
+        $campImages = $this->_em->createQuery('
+                SELECT campImage, camp
+                FROM ' . CampImage::class . ' campImage
+                LEFT JOIN campImage.camp camp
+                LEFT JOIN ' . CampImage::class . ' campImageJoined
+                    WITH campImage.camp = campImageJoined.camp
+                    AND campImage.priority < campImageJoined.priority
+                WHERE campImageJoined.priority IS NULL
+                    AND campImage.camp IN (:campIds)
+                GROUP BY campImage.camp
+                ORDER BY campImage.priority DESC
+            ')
+            ->setParameter('campIds', $campIds)
+            ->getResult()
+        ;
+
+        return new UserCampCatalogResult($paginator, $campImages, $campDates);
     }
 
     /**

@@ -122,6 +122,19 @@ class CampCategoryTest extends TestCase
         $this->assertNull($this->campCategory->getUpdatedAt());
     }
 
+    public function testAncestors(): void
+    {
+        $child1 = new CampCategory('Child', 'child');
+        $child1->setParent($this->campCategory);
+
+        $child2 = new CampCategory('Child 2', 'child-2');
+        $child2->setParent($child1);
+
+        $ancestors = $child2->getAncestors();
+
+        $this->assertSame([$this->campCategory, $child1], $ancestors);
+    }
+
     public function testPathWithUrlNames(): void
     {
         $child = new CampCategory('Child', 'child');

@@ -311,6 +311,11 @@ class CampRepositoryTest extends KernelTestCase
         $this->assertSame(['camp-2'], $urlNames);
     }
 
+    public function testGetUserCampCatalogResult(): void
+    {
+
+    }
+
     public function testGetCampLifespanCollection(): void
     {
         $repository = $this->getCampRepository();

@@ -1,0 +1,149 @@
+{% extends "user/base.html.twig" %}
+
+{% block main %}
+    {% if camp_category_children is not empty %}
+        <div class="row mb-3">
+            <div class="col">
+                <a data-toggle="collapse" href="#camp-category-children" role="button" aria-expanded="false" aria-controls="camp-category-children">
+                    <i class="fas fa-bars mr-1"></i> {{ 'entity.camp_category.plural'|trans }}
+                </a>
+            </div>
+        </div>
+
+        <div id="camp-category-children" class="row collapse show-collapsed-lg">
+            {% for camp_category_child in camp_category_children %}
+                <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
+                    <div class="card mb-4 flex-fill">
+                        <div class="card-body bg-white">
+                            <a class="stretched-link" href="{{ path('user_camp_catalog', {path: camp_category_child.path}) }}">
+                                <strong>{{ camp_category_child.name }}</strong>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12 col-lg-3">
+            <div class="mb-3">
+                <a data-toggle="collapse" href="#camp-category-filter" role="button" aria-expanded="false" aria-controls="camp-category-filter">
+                    <i class="fas fa-search mr-1"></i> {{ 'search.label'|trans }}
+                </a>
+            </div>
+
+            <div id="camp-category-filter" class="collapse show-collapsed-lg mb-3">
+                {{ form_start(form_search) }}
+                    <div class="row">
+                        <div class="col-12">
+                            {{ form_row(form_search.phrase) }}
+                        </div>
+
+                        <div class="col-12">
+                            {{ form_row(form_search.age) }}
+                        </div>
+
+                        <div class="col-12 col-md-12">
+                            {{ form_row(form_search.from) }}
+                        </div>
+
+                        <div class="col-12 col-md-12">
+                            {{ form_row(form_search.to) }}
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block mt-2">
+                        <i class="fas fa-search mr-2"></i> {{ 'form.user.camp_search.button'|trans }}
+                    </button>
+                {{ form_end(form_search) }}
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-9">
+            <div class="mb-3">
+                <strong>
+                    {% if catalog_result.paginator.totalItems > 0 %}
+                        {{ 'search.results'|trans }} ({{ 'search.total'|trans }} {{ catalog_result.paginator.totalItems }})
+                    {% else %}
+                        {{ 'search.error.no_results'|trans }}
+                    {% endif %}
+                </strong>
+            </div>
+
+            {% if is_search_invalid %}
+                <div class="row">
+                    <div class="col-12">
+                        <div class="alert alert-danger" role="alert">
+                            <span>
+                                {{ 'search.error.invalid_filter'|trans }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if catalog_result.paginator.totalItems > 0 %}
+                <div class="row">
+                    {% for camp in catalog_result.paginator.currentPageItems %}
+                        {% set camp_image = catalog_result.getCampImage(camp) %}
+                        {% set camp_dates = catalog_result.getCampDates(camp) %}
+
+                        <div class="col-12 col-sm-6 col-lg-4 mb-4 d-flex">
+                            <div class="card flex-fill">
+                                <img src="{{ asset(camp_image_path(camp_image)) }}"
+                                     alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
+                                     class="card-img-top"
+                                >
+
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        {{ camp.name }}
+                                    </h5>
+
+                                    <p class="card-text">
+                                        {{ 'entity_attribute.camp.age'|trans }}:
+
+                                        {% if camp.ageMin is same as(camp.ageMax) %}
+                                            {{ camp.ageMin }}
+                                        {% else %}
+                                            {{ camp.ageMin }} - {{ camp.ageMax }}
+                                        {% endif %}
+                                    </p>
+
+                                    <a href="#" class="btn btn-primary stretched-link">
+                                        {{ 'crud.action.common.read'|trans }}
+                                    </a>
+                                </div>
+
+                                <div class="card-footer clearfix">
+                                    {% if camp_dates is empty %}
+                                        <div>
+                                            <span class="badge badge-danger">
+                                                {{ 'camp_catalog.no_available_camp_dates'|trans }}
+                                            </span>
+                                        </div>
+                                    {% else %}
+                                        {% for camp_date in camp_dates %}
+                                            <div>
+                                                <span class="badge badge-success">
+                                                    {{ camp_date.startAt|date(date_format) }} - {{ camp_date.endAt|date(date_format) }}
+                                                </span>
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        {{ menu(pagination_menu) }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

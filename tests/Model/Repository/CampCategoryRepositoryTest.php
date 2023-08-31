@@ -66,6 +66,24 @@ class CampCategoryRepositoryTest extends KernelTestCase
         $this->assertSame(['category-1', 'category-3'], $categoryUrlNames);
     }
 
+    public function testFindOneByPath(): void
+    {
+        $repository = $this->getCampCategoryRepository();
+
+        $this->assertNull($repository->findOneByPath(''));
+        $this->assertNull($repository->findOneByPath('abc'));
+        $this->assertNull($repository->findOneByPath('category-2'));
+
+        $campCategory = $repository->findOneByPath('category-1');
+        $this->assertSame('category-1', $campCategory->getUrlName());
+
+        $campCategory = $repository->findOneByPath('category-1/category-2');
+        $this->assertSame('category-2', $campCategory->getUrlName());
+
+        $campCategory = $repository->findOneByPath('/category-1/category-2/');
+        $this->assertSame('category-2', $campCategory->getUrlName());
+    }
+
     public function testFindPossibleParents(): void
     {
         $repository = $this->getCampCategoryRepository();

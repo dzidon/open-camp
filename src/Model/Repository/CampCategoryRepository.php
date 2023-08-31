@@ -110,6 +110,41 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
     /**
      * @inheritDoc
      */
+    public function findOneByPath(string $path): ?CampCategory
+    {
+        $path = trim($path, '/');
+        if ($path === '')
+        {
+            return null;
+        }
+
+        $urlNames = explode('/', $path);
+        $urlNameKeyFirst = array_key_first($urlNames);
+        $urlNameFirst = $urlNames[$urlNameKeyFirst];
+        unset($urlNames[$urlNameKeyFirst]);
+        $relativePath = implode('/', $urlNames);
+
+        $roots = $this->findRoots();
+
+        foreach ($roots as $root)
+        {
+            if ($root->getUrlName() !== $urlNameFirst)
+            {
+                continue;
+            }
+
+            /** @var CampCategory $campCategory */
+            $campCategory = $this->treeSearch->getDescendentByPath($root, $relativePath, 'urlName');
+
+            return $campCategory;
+        }
+
+        return null;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findPossibleParents(CampCategory $category): array
     {
         $possibleParents = $this->findAll();

@@ -12,10 +12,10 @@ interface CampImageFilesystemInterface
     /**
      * Gets the path to the given camp image.
      *
-     * @param CampImage $campImage
+     * @param null|CampImage $campImage
      * @return string
      */
-    public function getFilePath(CampImage $campImage): string;
+    public function getFilePath(?CampImage $campImage): string;
 
     /**
      * Removes the file of the given camp image.

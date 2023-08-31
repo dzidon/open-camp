@@ -8,8 +8,12 @@
     {{ encore_entry_script_tags('user') }}
 {% endblock %}
 
+{% block body_class %}
+    d-flex flex-column min-vh-100
+{% endblock %}
+
 {% block body %}
-    <main role="main">
+    <main role="main" class="flex-fill mb-4">
         <!-- Navbar -->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
@@ -58,4 +62,9 @@
         </div>
     </main>
 
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <span class="text-muted">Footer...</span>
+        </div>
+    </footer>
 {% endblock %}
