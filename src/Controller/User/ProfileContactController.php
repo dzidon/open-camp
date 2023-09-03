@@ -107,7 +107,7 @@ class ProfileContactController extends AbstractController
 
         return $this->render('user/profile/contact/read.html.twig', [
             'contact'     => $contact,
-            'breadcrumbs' => $this->breadcrumbs->buildRead($contact->getId()),
+            'breadcrumbs' => $this->breadcrumbs->buildRead($contact),
         ]);
     }
 
@@ -134,7 +134,7 @@ class ProfileContactController extends AbstractController
 
         return $this->render('user/profile/contact/update.html.twig', [
             'form_contact' => $form->createView(),
-            'breadcrumbs'  => $this->breadcrumbs->buildUpdate($contact->getId()),
+            'breadcrumbs'  => $this->breadcrumbs->buildUpdate($contact),
         ]);
     }
 
@@ -162,7 +162,7 @@ class ProfileContactController extends AbstractController
         return $this->render('user/profile/contact/delete.html.twig', [
             'contact'     => $contact,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildDelete($contact->getId()),
+            'breadcrumbs' => $this->breadcrumbs->buildDelete($contact),
         ]);
     }
 

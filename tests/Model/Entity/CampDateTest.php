@@ -73,15 +73,15 @@ class CampDateTest extends TestCase
         $this->assertTrue($this->campDate->isClosed());
     }
 
-    public function testTripInstructions(): void
+    public function testDescription(): void
     {
-        $this->assertNull($this->campDate->getTripInstructions());
+        $this->assertNull($this->campDate->getDescription());
 
-        $this->campDate->setTripInstructions('text');
-        $this->assertSame('text', $this->campDate->getTripInstructions());
+        $this->campDate->setDescription('text');
+        $this->assertSame('text', $this->campDate->getDescription());
 
-        $this->campDate->setTripInstructions(null);
-        $this->assertNull($this->campDate->getTripInstructions());
+        $this->campDate->setDescription(null);
+        $this->assertNull($this->campDate->getDescription());
     }
 
     public function testCamp(): void

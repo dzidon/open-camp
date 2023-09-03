@@ -3,6 +3,7 @@
 namespace App\Service\Menu\Breadcrumbs\User;
 
 use App\Library\Menu\MenuType;
+use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
 use App\Service\Menu\Breadcrumbs\AbstractBreadcrumbs;
 use LogicException;
@@ -37,10 +38,48 @@ class CampCatalogBreadcrumbs extends AbstractBreadcrumbs implements CampCatalogB
 
             $path = $campCategory->getPath();
             $text = $campCategory->getName();
-            $child = $this->addChildRoute($root, 'user_camp_catalog', ['path' => $path], 'user_camp_catalog_' . $key);
-            $child->setText($text);
-            $child->setActive($key === array_key_last($campCategories));
+            $this->addChildRoute($root, 'user_camp_catalog', ['path' => $path], 'user_camp_catalog_' . $key)
+                ->setText($text)
+                ->setActive($key === array_key_last($campCategories))
+            ;
         }
+
+        return $root;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function buildDetail(Camp $camp): MenuType
+    {
+        $root = $this->createRoot();
+        $this->addChildRoute($root, 'user_home');
+        $this->addChildRoute($root, 'user_camp_catalog');
+
+        $campCategory = $camp->getCampCategory();
+        $campCategories = [];
+
+        if ($campCategory !== null)
+        {
+            $campCategories = $campCategory->getAncestors();
+            $campCategories[] = $campCategory;
+        }
+
+        foreach ($campCategories as $key => $campCategory)
+        {
+            $path = $campCategory->getPath();
+            $text = $campCategory->getName();
+
+            $this->addChildRoute($root, 'user_camp_catalog', ['path' => $path], 'user_camp_catalog_' . $key)
+                ->setText($text)
+            ;
+        }
+
+        $text = $camp->getName();
+        $this->addChildRoute($root, 'user_camp_detail', ['urlName' => $camp->getUrlName()])
+            ->setText($text)
+            ->setActive()
+        ;
 
         return $root;
     }

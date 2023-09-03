@@ -36,9 +36,40 @@ legend {
     margin-bottom: 0.5rem;
 }
 
-.image-contained-16-9 {
+.aspect-ratio-16-9 {
+    aspect-ratio: 16/9;
+    max-inline-size: 100%;
+    block-size: auto;
+}
+
+.image-contain-16-9 {
     max-inline-size: 100%;
     block-size: auto;
     aspect-ratio: 16/9;
     object-fit: contain;
+}
+
+.image-cover-16-9 {
+    max-inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+}
+
+.image-black-and-white {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+
+.carousel .carousel-control-prev-icon,
+.carousel .carousel-control-next-icon {
+    background-color: black;
+    border: 7px solid black;
+    border-radius: 20px;
+    width: 30px;
+    height: 30px;
+}
+
+.white-space-nowrap {
+    white-space: nowrap;
 }

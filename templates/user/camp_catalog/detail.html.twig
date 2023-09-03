@@ -1,0 +1,165 @@
+{% extends "user/base.html.twig" %}
+
+{% block h1 %}{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12 col-lg-6 mb-3" {{ stimulus_controller('img--carousel') }}>
+            <div id="camp-images-carousel" class="carousel slide" data-ride="carousel" data-interval="false" {{ stimulus_target('img--carousel', 'carousel') }}>
+                <div class="carousel-inner">
+                    {% if camp_images is empty %}
+                        <div class="carousel-item active">
+                            <img class="d-block w-100"
+                                 src="{{ asset(camp_image_path(null)) }}"
+                                 alt="{{ 'image_carousel.no_image'|trans }}"
+                            >
+                        </div>
+                    {% else %}
+                        {% for camp_image in camp_images %}
+                            <div class="carousel-item  {% if loop.first %} active {% endif %}">
+                                <a href="{{ asset(camp_image_path(camp_image)) }}">
+                                    <img class="d-block w-100 image-cover-16-9"
+                                         src="{{ asset(camp_image_path(camp_image)) }}"
+                                         alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
+                                    >
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                {% if camp_images|length >= 2 %}
+                    <button class="carousel-control-prev" type="button" data-target="#camp-images-carousel" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">{{ 'image_carousel.previous'|trans }}</span>
+                    </button>
+
+                    <button class="carousel-control-next" type="button" data-target="#camp-images-carousel" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">{{ 'image_carousel.next'|trans }}</span>
+                    </button>
+                {% endif %}
+            </div>
+
+            {% if camp_images|length >= 2 %}
+                <div class="row mt-3">
+                    {% for key, camp_image in camp_images %}
+                        <div class="col-3">
+                            <a href="#camp-images-carousel" data-slide-to="{{ key }}">
+                                <img class="image-cover-16-9"
+                                     src="{{ asset(camp_image_path(camp_image)) }}"
+                                     alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
+                                        {{ stimulus_target('img--carousel', 'indicator') }}
+                                >
+                            </a>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-12 col-lg-6 pl-lg-5">
+            {% if is_route_name_set() %}
+                <h1 class="mb-3">{{ route_name() }}</h1>
+            {% endif %}
+
+            <p>
+                {{ 'entity_attribute.camp.age'|trans }}:
+
+                {% if camp.ageMin is same as(camp.ageMax) %}
+                    {{ camp.ageMin }}
+                {% else %}
+                    {{ camp.ageMin }} - {{ camp.ageMax }}
+                {% endif %}
+            </p>
+
+            {% if camp.descriptionShort is not null %}
+                <p>{{ camp.descriptionShort }}</p>
+            {% endif %}
+
+            {% if camp_dates is empty %}
+                <div class="alert alert-danger" role="alert">
+                    {{ 'camp_catalog.no_available_camp_dates'|trans }}
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-bordered mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">{{ 'entity.camp_date.singular'|trans }}</th>
+                                <th scope="col">{{ 'entity_attribute.camp_date.capacity'|trans }}</th>
+                                <th scope="col">{{ 'search.item_action'|trans }}</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for camp_date in camp_dates %}
+                                <tr>
+                                    <td class="white-space-nowrap">
+                                        <span class="badge badge-secondary">
+                                            {{ camp_date.startAt|date(date_format) }} - {{ camp_date.endAt|date(date_format) }}
+                                        </span>
+
+                                        {% if camp_date.description is not null %}
+                                            <a href="#trip-instructions-{{ camp_date.id.toRfc4122 }}" data-toggle="modal" data-target="#trip-instructions-{{ camp_date.id.toRfc4122 }}">
+                                                <i class="fas fa-info-circle ml-2"></i>
+                                            </a>
+
+                                            <div class="modal fade" id="trip-instructions-{{ camp_date.id.toRfc4122 }}" tabindex="-1" aria-labelledby="trip-instructions-{{ camp_date.id.toRfc4122 }}" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="trip-instructions-{{ camp_date.id.toRfc4122 }}Label">
+                                                                {{ 'entity_attribute.camp_date.description'|trans }}
+                                                            </h5>
+
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+
+                                                        <div class="modal-body">
+                                                            {{ camp_date.description|nl2br }}
+                                                        </div>
+
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                                {{ 'modal.button_close'|trans }}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        <span class="badge badge-success">
+                                            ? / {{ camp_date.capacity }}
+                                        </span>
+                                    </td>
+
+                                    <td>
+                                        <a href="#">
+                                            {{ 'entity.application.singular'|trans }}
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if camp.descriptionLong is not null %}
+        <div class="row mt-3">
+            <div class="col-12 col-lg-8">
+                <h3>{{ 'entity_attribute.camp.description_long'|trans }}</h3>
+
+                <p>{{ camp.descriptionLong|raw }}</p>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

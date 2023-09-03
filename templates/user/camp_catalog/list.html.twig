@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-9">
+        <div class="col-12 col-lg-9 pl-lg-4">
             <div class="mb-3">
                 <strong>
                     {% if catalog_result.paginator.totalItems > 0 %}
@@ -111,7 +111,7 @@
                                         {% endif %}
                                     </p>
 
-                                    <a href="#" class="btn btn-primary stretched-link">
+                                    <a href="{{ path('user_camp_detail', {urlName: camp.urlName}) }}" class="btn btn-primary stretched-link">
                                         {{ 'crud.action.common.read'|trans }}
                                     </a>
                                 </div>

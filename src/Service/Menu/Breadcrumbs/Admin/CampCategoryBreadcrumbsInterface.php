@@ -4,7 +4,7 @@ namespace App\Service\Menu\Breadcrumbs\Admin;
 
 use App\Controller\Admin\CampCategoryController;
 use App\Library\Menu\MenuTypeInterface;
-use Symfony\Component\Uid\UuidV4;
+use App\Model\Entity\CampCategory;
 
 /**
  * Creates breadcrumbs for {@link CampCategoryController}.
@@ -24,15 +24,15 @@ interface CampCategoryBreadcrumbsInterface
     /**
      * Creates breadcrumbs for the path "admin_camp_category_read".
      */
-    public function buildRead(UuidV4 $campCategoryId): MenuTypeInterface;
+    public function buildRead(CampCategory $campCategory): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "admin_camp_category_update".
      */
-    public function buildUpdate(UuidV4 $campCategoryId): MenuTypeInterface;
+    public function buildUpdate(CampCategory $campCategory): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "admin_camp_category_delete".
      */
-    public function buildDelete(UuidV4 $campCategoryId): MenuTypeInterface;
+    public function buildDelete(CampCategory $campCategory): MenuTypeInterface;
 }

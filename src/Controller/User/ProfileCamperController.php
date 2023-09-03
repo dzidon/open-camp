@@ -109,7 +109,7 @@ class ProfileCamperController extends AbstractController
 
         return $this->render('user/profile/camper/read.html.twig', [
             'camper'      => $camper,
-            'breadcrumbs' => $this->breadcrumbs->buildRead($camper->getId()),
+            'breadcrumbs' => $this->breadcrumbs->buildRead($camper),
         ]);
     }
 
@@ -139,7 +139,7 @@ class ProfileCamperController extends AbstractController
 
         return $this->render('user/profile/camper/update.html.twig', [
             'form_camper' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildUpdate($camper->getId()),
+            'breadcrumbs' => $this->breadcrumbs->buildUpdate($camper),
         ]);
     }
 
@@ -167,7 +167,7 @@ class ProfileCamperController extends AbstractController
         return $this->render('user/profile/camper/delete.html.twig', [
             'camper'      => $camper,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildDelete($camper->getId()),
+            'breadcrumbs' => $this->breadcrumbs->buildDelete($camper),
         ]);
     }
 

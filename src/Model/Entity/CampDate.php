@@ -39,7 +39,7 @@ class CampDate
     private bool $isClosed = false;
 
     #[ORM\Column(length: 2000, nullable: true)]
-    private ?string $tripInstructions = null;
+    private ?string $description = null;
 
     #[ORM\ManyToOne(targetEntity: Camp::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
@@ -132,14 +132,14 @@ class CampDate
         return $this;
     }
 
-    public function getTripInstructions(): ?string
+    public function getDescription(): ?string
     {
-        return $this->tripInstructions;
+        return $this->description;
     }
 
-    public function setTripInstructions(?string $tripInstructions): self
+    public function setDescription(?string $description): self
     {
-        $this->tripInstructions = $tripInstructions;
+        $this->description = $description;
 
         return $this;
     }

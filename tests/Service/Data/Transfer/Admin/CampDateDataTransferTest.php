@@ -21,7 +21,7 @@ class CampDateDataTransferTest extends KernelTestCase
         $expectedEndAt = new DateTimeImmutable('2000-01-05');
         $expectedPrice = 1000.0;
         $expectedCapacity = 10;
-        $expectedTripInstructions = 'Instructions...';
+        $expectedDescription = 'Instructions...';
         $expectedLeaders = [
             new User('bob1@gmail.com'),
             new User('bob2@gmail.com'),
@@ -29,7 +29,7 @@ class CampDateDataTransferTest extends KernelTestCase
 
         $campDate = new CampDate($expectedStartAt, $expectedEndAt, $expectedPrice, $expectedCapacity, $expectedCamp);
         $campDate->setIsClosed(true);
-        $campDate->setTripInstructions($expectedTripInstructions);
+        $campDate->setDescription($expectedDescription);
 
         foreach ($expectedLeaders as $expectedLeader)
         {
@@ -46,7 +46,7 @@ class CampDateDataTransferTest extends KernelTestCase
         $this->assertSame($expectedPrice, $data->getPrice());
         $this->assertSame($expectedCapacity, $data->getCapacity());
         $this->assertTrue($data->isClosed());
-        $this->assertSame($expectedTripInstructions, $data->getTripInstructions());
+        $this->assertSame($expectedDescription, $data->getDescription());
         $this->assertSame($expectedLeaders, $data->getLeaders());
     }
 
@@ -58,7 +58,7 @@ class CampDateDataTransferTest extends KernelTestCase
         $expectedEndAt = new DateTimeImmutable('2000-01-05');
         $expectedPrice = 1000.0;
         $expectedCapacity = 10;
-        $expectedTripInstructions = 'Instructions...';
+        $expectedDescription = 'Instructions...';
         $expectedLeaders = [
             new User('bob1@gmail.com'),
             new User('bob2@gmail.com'),
@@ -70,7 +70,7 @@ class CampDateDataTransferTest extends KernelTestCase
         $data->setEndAt($expectedEndAt);
         $data->setPrice($expectedPrice);
         $data->setCapacity($expectedCapacity);
-        $data->setTripInstructions($expectedTripInstructions);
+        $data->setDescription($expectedDescription);
 
         foreach ($expectedLeaders as $expectedLeader)
         {
@@ -86,7 +86,7 @@ class CampDateDataTransferTest extends KernelTestCase
         $this->assertSame($expectedPrice, $campDate->getPrice());
         $this->assertSame($expectedCapacity, $campDate->getCapacity());
         $this->assertTrue($campDate->isClosed());
-        $this->assertSame($expectedTripInstructions, $campDate->getTripInstructions());
+        $this->assertSame($expectedDescription, $campDate->getDescription());
         $this->assertSame($expectedLeaders, $campDate->getLeaders());
     }
 

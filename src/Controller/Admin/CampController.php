@@ -5,7 +5,6 @@ namespace App\Controller\Admin;
 use App\Controller\AbstractController;
 use App\Library\Data\Admin\CampCreationData;
 use App\Library\Data\Admin\CampData;
-use App\Library\Data\Admin\CampDateData;
 use App\Library\Data\Admin\CampDateSearchData;
 use App\Library\Data\Admin\CampSearchData;
 use App\Library\Enum\Search\Data\Admin\CampDateSortEnum;
@@ -24,7 +23,6 @@ use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -110,8 +108,6 @@ class CampController extends AbstractController
 
             // images
             $uploadedImages = $campCreationData->getImages();
-
-            /** @var File $uploadedImage */
             foreach ($uploadedImages as $uploadedImage)
             {
                 $campImage = $campImageRepository->createCampImage($uploadedImage, 0, $camp);
@@ -120,8 +116,6 @@ class CampController extends AbstractController
 
             // dates
             $campDatesData = $campCreationData->getCampDatesData();
-
-            /** @var CampDateData $campDateData */
             foreach ($campDatesData as $campDateData)
             {
                 $campDate = $campDateRepository->createCampDate($campDateData->getStartAt(), $campDateData->getEndAt(), $campDateData->getPrice(), $campDateData->getCapacity(), $camp);
@@ -180,7 +174,7 @@ class CampController extends AbstractController
             'more_camp_images' => $moreCampImages,
             'camp_dates'       => $campDates,
             'more_camp_dates'  => $moreCampDates,
-            'breadcrumbs'      => $this->campBreadcrumbs->buildRead($camp->getId()),
+            'breadcrumbs'      => $this->campBreadcrumbs->buildRead($camp),
         ]);
     }
 
@@ -213,7 +207,7 @@ class CampController extends AbstractController
         return $this->render('admin/camp/update.html.twig', [
             'camp'        => $camp,
             'form_camp'   => $form->createView(),
-            'breadcrumbs' => $this->campBreadcrumbs->buildUpdate($camp->getId()),
+            'breadcrumbs' => $this->campBreadcrumbs->buildUpdate($camp),
         ]);
     }
 
@@ -241,7 +235,7 @@ class CampController extends AbstractController
         return $this->render('admin/camp/delete.html.twig', [
             'camp'        => $camp,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->campBreadcrumbs->buildDelete($camp->getId()),
+            'breadcrumbs' => $this->campBreadcrumbs->buildDelete($camp),
         ]);
     }
 

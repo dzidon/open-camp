@@ -3,8 +3,8 @@
 namespace App\Service\Menu\Breadcrumbs\User;
 
 use App\Library\Menu\MenuType;
+use App\Model\Entity\Contact;
 use App\Service\Menu\Breadcrumbs\AbstractBreadcrumbs;
-use Symfony\Component\Uid\UuidV4;
 
 /**
  * @inheritDoc
@@ -43,8 +43,10 @@ class ProfileContactBreadcrumbs extends AbstractBreadcrumbs implements ProfileCo
     /**
      * @inheritDoc
      */
-    public function buildRead(UuidV4 $contactId): MenuType
+    public function buildRead(Contact $contact): MenuType
     {
+        $contactId = $contact->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
         $this->addChildRoute($root, 'user_profile_contact_list');
@@ -58,8 +60,10 @@ class ProfileContactBreadcrumbs extends AbstractBreadcrumbs implements ProfileCo
     /**
      * @inheritDoc
      */
-    public function buildUpdate(UuidV4 $contactId): MenuType
+    public function buildUpdate(Contact $contact): MenuType
     {
+        $contactId = $contact->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
         $this->addChildRoute($root, 'user_profile_contact_list');
@@ -73,8 +77,10 @@ class ProfileContactBreadcrumbs extends AbstractBreadcrumbs implements ProfileCo
     /**
      * @inheritDoc
      */
-    public function buildDelete(UuidV4 $contactId): MenuType
+    public function buildDelete(Contact $contact): MenuType
     {
+        $contactId = $contact->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
         $this->addChildRoute($root, 'user_profile_contact_list');

@@ -2,15 +2,19 @@
 
 namespace App\Tests\Service\Menu\Breadcrumbs\Admin;
 
+use App\Model\Entity\User;
 use App\Service\Menu\Breadcrumbs\Admin\UserBreadcrumbs;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
+use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Uid\UuidV4;
 
 class UserBreadcrumbsTest extends KernelTestCase
 {
     use TreeNodeChildrenIdentifiersTrait;
+
+    private User $user;
 
     private MenuTypeFactoryRegistryInterface $factoryRegistry;
     private UserBreadcrumbs $breadcrumbs;
@@ -51,8 +55,7 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $uid = UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($uid);
+        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->user);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_read'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -71,8 +74,7 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $uid = UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($uid);
+        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->user);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_update'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -91,8 +93,7 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     public function testUpdatePassword(): void
     {
-        $uid = UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdatePassword($uid);
+        $breadcrumbsMenu = $this->breadcrumbs->buildUpdatePassword($this->user);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_update', 'admin_user_update_password'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -115,8 +116,7 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $uid = UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($uid);
+        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->user);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_delete'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -136,6 +136,11 @@ class UserBreadcrumbsTest extends KernelTestCase
     protected function setUp(): void
     {
         $this->container = static::getContainer();
+
+        $this->user = new User('bob@gmail.com');
+        $reflectionClass = new ReflectionClass($this->user);
+        $property = $reflectionClass->getProperty('id');
+        $property->setValue($this->user, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
         /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
         $menuTypeRegistry = $this->container->get(MenuTypeFactoryRegistryInterface::class);

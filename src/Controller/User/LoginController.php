@@ -53,7 +53,7 @@ class LoginController extends AbstractController
     }
 
     #[Route('/{service<%app.social_login_services%>}', name: 'user_login_oauth')]
-    public function loginSocial(SocialLoginRedirectResponseFactoryInterface $responseFactory, $service): RedirectResponse
+    public function loginSocial(SocialLoginRedirectResponseFactoryInterface $responseFactory, string $service): RedirectResponse
     {
         return $responseFactory->createRedirectResponse($service);
     }

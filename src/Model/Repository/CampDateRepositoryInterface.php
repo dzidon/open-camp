@@ -54,6 +54,14 @@ interface CampDateRepositoryInterface
     public function findOneById(UuidV4 $id): ?CampDate;
 
     /**
+     * Finds all upcoming camp dates for the given camp.
+     *
+     * @param Camp $camp
+     * @return CampDate[]
+     */
+    public function findUpcomingByCamp(Camp $camp): array;
+
+    /**
      * Finds dates of the given camp that collide with the given datetime interval.
      *
      * @param null|Camp $camp

@@ -28,6 +28,11 @@ more:
           other {# dalších termínů tábora...}
         }'
 
+image_carousel:
+    next: 'Další'
+    previous: 'Předchozí'
+    no_image: 'Obrázek není k dispozici'
+
 auth:
     no_account_yet: 'Ještě u nás nemáte účet?'
     no_account_yet_link: 'Zaregistrovat se'
@@ -219,6 +224,10 @@ entity:
         singular: 'Termín tábora'
         plural: 'Termíny tábora'
 
+    application:
+        singular: 'Přihláška'
+        plural: 'Přihlášky'
+
 entity_attribute:
     common:
         set: 'Nastaveno'
@@ -333,7 +342,7 @@ entity_attribute:
         country: 'Země'
         gender: 'Pohlaví táborníka'
         description_short: 'Krátký popis'
-        description_long: 'Dlouhý popis'
+        description_long: 'O táboře'
         camp_category: 'Kategorie tábora'
         featured_priority: 'Priorita v doporučených'
         period: 'Období'
@@ -355,7 +364,7 @@ entity_attribute:
         price: 'Cena'
         capacity: 'Kapacita'
         is_closed: 'Přihlášování zablokováno'
-        trip_instructions: 'Pokyny k odjezdu'
+        description: 'Informace k termínu'
         camp: 'Tábor'
         leaders: 'Vedoucí'
         created_at: 'Datum vytvoření'
@@ -534,7 +543,7 @@ form:
             price: 'Cena'
             capacity: 'Kapacita'
             is_closed: 'Zablokovat přihlášení'
-            trip_instructions: 'Pokyny k odjezdu'
+            description: 'Informace k termínu'
             leaders: 'Vedoucí'
             button: 'Uložit'
 
@@ -739,6 +748,7 @@ route:
     user_password_change: 'Změna hesla'
     user_password_change_complete: 'Nové heslo'
     user_camp_catalog: 'Katalog táborů'
+    user_camp_detail: 'Tábor'
 
     user_profile_billing: 'Fakturační údaje'
     user_profile_contact_list: 'Kontakty'

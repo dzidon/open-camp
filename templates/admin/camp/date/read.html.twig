@@ -61,14 +61,14 @@
 
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.camp_date.trip_instructions'|trans }}:</strong>
+                            <strong>{{ 'entity_attribute.camp_date.description'|trans }}:</strong>
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            {% if camp_date.tripInstructions is null %}
+                            {% if camp_date.description is null %}
                                 <em>{{ 'search.item_no_reference.neutral'|trans }}</em>
                             {% else %}
-                                <span>{{ camp_date.tripInstructions|nl2br }}</span>
+                                <span>{{ camp_date.description|nl2br }}</span>
                             {% endif %}
                         </div>
                     </div>

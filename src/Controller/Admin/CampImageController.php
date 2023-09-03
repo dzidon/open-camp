@@ -61,7 +61,7 @@ class CampImageController extends AbstractController
             'camp'            => $camp,
             'pagination_menu' => $paginationMenu,
             'paginator'       => $paginator,
-            'breadcrumbs'     => $this->breadcrumbs->buildList($camp->getId()),
+            'breadcrumbs'     => $this->breadcrumbs->buildList($camp),
         ]);
     }
 
@@ -95,7 +95,7 @@ class CampImageController extends AbstractController
         return $this->render('admin/camp/image/upload.html.twig', [
             'camp'        => $camp,
             'form_upload' => $form,
-            'breadcrumbs' => $this->breadcrumbs->buildUpload($camp->getId()),
+            'breadcrumbs' => $this->breadcrumbs->buildUpload($camp),
         ]);
     }
 
@@ -127,7 +127,7 @@ class CampImageController extends AbstractController
             'camp'            => $camp,
             'camp_image'      => $campImage,
             'form_camp_image' => $form->createView(),
-            'breadcrumbs'     => $this->breadcrumbs->buildUpdate($camp->getId(), $campImage->getId()),
+            'breadcrumbs'     => $this->breadcrumbs->buildUpdate($camp, $campImage),
         ]);
     }
 
@@ -158,7 +158,7 @@ class CampImageController extends AbstractController
             'camp'        => $camp,
             'camp_image'  => $campImage,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildDelete($camp->getId(), $campImage->getId()),
+            'breadcrumbs' => $this->breadcrumbs->buildDelete($camp, $campImage),
         ]);
     }
 

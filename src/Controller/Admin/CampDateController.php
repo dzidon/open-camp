@@ -75,7 +75,7 @@ class CampDateController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->breadcrumbs->buildList($camp->getId()),
+            'breadcrumbs'       => $this->breadcrumbs->buildList($camp),
         ]);
     }
 
@@ -106,7 +106,7 @@ class CampDateController extends AbstractController
         return $this->render('admin/camp/date/update.html.twig', [
             'camp'           => $camp,
             'form_camp_date' => $form,
-            'breadcrumbs'    => $this->breadcrumbs->buildCreate($camp->getId()),
+            'breadcrumbs'    => $this->breadcrumbs->buildCreate($camp),
         ]);
     }
 
@@ -119,7 +119,7 @@ class CampDateController extends AbstractController
         return $this->render('admin/camp/date/read.html.twig', [
             'camp'         => $camp,
             'camp_date'    => $campDate,
-            'breadcrumbs'  => $this->breadcrumbs->buildRead($camp->getId(), $campDate->getId()),
+            'breadcrumbs'  => $this->breadcrumbs->buildRead($camp, $campDate),
         ]);
     }
 
@@ -151,7 +151,7 @@ class CampDateController extends AbstractController
             'camp'           => $camp,
             'camp_date'      => $campDate,
             'form_camp_date' => $form->createView(),
-            'breadcrumbs'    => $this->breadcrumbs->buildUpdate($camp->getId(), $campDate->getId()),
+            'breadcrumbs'    => $this->breadcrumbs->buildUpdate($camp, $campDate),
         ]);
     }
 
@@ -182,7 +182,7 @@ class CampDateController extends AbstractController
             'camp'         => $camp,
             'camp_date'    => $campDate,
             'form_delete'  => $form->createView(),
-            'breadcrumbs'  => $this->breadcrumbs->buildDelete($camp->getId(), $campDate->getId()),
+            'breadcrumbs'  => $this->breadcrumbs->buildDelete($camp, $campDate),
         ]);
     }
 

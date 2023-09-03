@@ -4,6 +4,7 @@ namespace App\Service\Menu\Breadcrumbs\User;
 
 use App\Controller\User\CampCatalogController;
 use App\Library\Menu\MenuTypeInterface;
+use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
 
 /**
@@ -18,4 +19,12 @@ interface CampCatalogBreadcrumbsInterface
      * @return MenuTypeInterface
      */
     public function buildList(array $campCategories): MenuTypeInterface;
+
+    /**
+     * Creates breadcrumbs for the path "user_camp_detail".
+     *
+     * @param Camp $camp
+     * @return MenuTypeInterface
+     */
+    public function buildDetail(Camp $camp): MenuTypeInterface;
 }

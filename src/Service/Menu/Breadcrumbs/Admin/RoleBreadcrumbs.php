@@ -3,8 +3,8 @@
 namespace App\Service\Menu\Breadcrumbs\Admin;
 
 use App\Library\Menu\MenuType;
+use App\Model\Entity\Role;
 use App\Service\Menu\Breadcrumbs\AbstractBreadcrumbs;
-use Symfony\Component\Uid\UuidV4;
 
 /**
  * @inheritDoc
@@ -43,8 +43,10 @@ class RoleBreadcrumbs extends AbstractBreadcrumbs implements RoleBreadcrumbsInte
     /**
      * @inheritDoc
      */
-    public function buildRead(UuidV4 $roleId): MenuType
+    public function buildRead(Role $role): MenuType
     {
+        $roleId = $role->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_role_list');
@@ -58,8 +60,10 @@ class RoleBreadcrumbs extends AbstractBreadcrumbs implements RoleBreadcrumbsInte
     /**
      * @inheritDoc
      */
-    public function buildUpdate(UuidV4 $roleId): MenuType
+    public function buildUpdate(Role $role): MenuType
     {
+        $roleId = $role->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_role_list');
@@ -73,8 +77,10 @@ class RoleBreadcrumbs extends AbstractBreadcrumbs implements RoleBreadcrumbsInte
     /**
      * @inheritDoc
      */
-    public function buildDelete(UuidV4 $roleId): MenuType
+    public function buildDelete(Role $role): MenuType
     {
+        $roleId = $role->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_role_list');

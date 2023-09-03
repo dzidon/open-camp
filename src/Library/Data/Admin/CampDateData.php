@@ -34,7 +34,7 @@ class CampDateData
     private bool $isClosed = false;
 
     #[Assert\Length(max: 2000)]
-    private ?string $tripInstructions = null;
+    private ?string $description = null;
 
     /**
      * @var User[]
@@ -125,14 +125,14 @@ class CampDateData
         return $this;
     }
 
-    public function getTripInstructions(): ?string
+    public function getDescription(): ?string
     {
-        return $this->tripInstructions;
+        return $this->description;
     }
 
-    public function setTripInstructions(?string $tripInstructions): self
+    public function setDescription(?string $description): self
     {
-        $this->tripInstructions = $tripInstructions;
+        $this->description = $description;
 
         return $this;
     }

@@ -4,7 +4,7 @@ namespace App\Service\Menu\Breadcrumbs\User;
 
 use App\Controller\User\ProfileCamperController;
 use App\Library\Menu\MenuTypeInterface;
-use Symfony\Component\Uid\UuidV4;
+use App\Model\Entity\Camper;
 
 /**
  * Creates breadcrumbs for {@link ProfileCamperController}.
@@ -24,15 +24,15 @@ interface ProfileCamperBreadcrumbsInterface
     /**
      * Creates breadcrumbs for the path "user_profile_camper_read".
      */
-    public function buildRead(UuidV4 $camperId): MenuTypeInterface;
+    public function buildRead(Camper $camper): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "user_profile_camper_update".
      */
-    public function buildUpdate(UuidV4 $camperId): MenuTypeInterface;
+    public function buildUpdate(Camper $camper): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "user_profile_camper_delete".
      */
-    public function buildDelete(UuidV4 $camperId): MenuTypeInterface;
+    public function buildDelete(Camper $camper): MenuTypeInterface;
 }

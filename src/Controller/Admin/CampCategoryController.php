@@ -79,7 +79,7 @@ class CampCategoryController extends AbstractController
 
         return $this->render('admin/camp_category/read.html.twig', [
             'camp_category' => $campCategory,
-            'breadcrumbs'   => $this->campCategoryBreadcrumbs->buildRead($campCategory->getId()),
+            'breadcrumbs'   => $this->campCategoryBreadcrumbs->buildRead($campCategory),
         ]);
     }
 
@@ -109,7 +109,7 @@ class CampCategoryController extends AbstractController
         return $this->render('admin/camp_category/update.html.twig', [
             'camp_category'      => $campCategory,
             'form_camp_category' => $form->createView(),
-            'breadcrumbs'        => $this->campCategoryBreadcrumbs->buildUpdate($campCategory->getId()),
+            'breadcrumbs'        => $this->campCategoryBreadcrumbs->buildUpdate($campCategory),
         ]);
     }
 
@@ -137,7 +137,7 @@ class CampCategoryController extends AbstractController
         return $this->render('admin/camp_category/delete.html.twig', [
             'camp_category' => $campCategory,
             'form_delete'   => $form->createView(),
-            'breadcrumbs'   => $this->campCategoryBreadcrumbs->buildDelete($campCategory->getId()),
+            'breadcrumbs'   => $this->campCategoryBreadcrumbs->buildDelete($campCategory),
         ]);
     }
 

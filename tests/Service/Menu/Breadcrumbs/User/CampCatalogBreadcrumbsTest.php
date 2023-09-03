@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Service\Menu\Breadcrumbs\Admin;
+namespace App\Tests\Service\Menu\Breadcrumbs\User;
 
 use App\Model\Entity\CampCategory;
 use App\Service\Menu\Breadcrumbs\User\CampCatalogBreadcrumbs;

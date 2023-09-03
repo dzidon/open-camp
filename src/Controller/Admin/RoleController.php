@@ -111,7 +111,7 @@ class RoleController extends AbstractController
         return $this->render('admin/role/read.html.twig', [
             'role'        => $role,
             'users'       => $users,
-            'breadcrumbs' => $this->roleBreadcrumbs->buildRead($role->getId()),
+            'breadcrumbs' => $this->roleBreadcrumbs->buildRead($role),
         ]);
     }
 
@@ -144,7 +144,7 @@ class RoleController extends AbstractController
         return $this->render('admin/role/update.html.twig', [
             'role'        => $role,
             'form_role'   => $form->createView(),
-            'breadcrumbs' => $this->roleBreadcrumbs->buildUpdate($role->getId()),
+            'breadcrumbs' => $this->roleBreadcrumbs->buildUpdate($role),
         ]);
     }
 
@@ -172,7 +172,7 @@ class RoleController extends AbstractController
         return $this->render('admin/role/delete.html.twig', [
             'role'        => $role,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->roleBreadcrumbs->buildDelete($role->getId()),
+            'breadcrumbs' => $this->roleBreadcrumbs->buildDelete($role),
         ]);
     }
 

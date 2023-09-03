@@ -4,7 +4,10 @@ namespace App\Controller\User;
 
 use App\Controller\AbstractController;
 use App\Library\Data\User\CampSearchData;
+use App\Model\Entity\Camp;
 use App\Model\Repository\CampCategoryRepositoryInterface;
+use App\Model\Repository\CampDateRepositoryInterface;
+use App\Model\Repository\CampImageRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
 use App\Service\Form\Type\User\CampSearchType;
 use App\Service\Menu\Breadcrumbs\User\CampCatalogBreadcrumbsInterface;
@@ -91,5 +94,39 @@ class CampCatalogController extends AbstractController
             'is_search_invalid'      => $isSearchInvalid,
             'breadcrumbs'            => $this->breadcrumbs->buildList($pathCampCategories),
         ]);
+    }
+
+    #[Route('/camp/{urlName}', name: 'user_camp_detail', requirements: ['urlName' => '([a-zA-Z0-9-])+'])]
+    public function detail(CampDateRepositoryInterface  $campDateRepository,
+                           CampImageRepositoryInterface $campImageRepository,
+                           string                       $urlName): Response
+    {
+        $camp = $this->findCampOrThrow404($urlName);
+        $campImages = $campImageRepository->findByCamp($camp);
+        $campDates = $campDateRepository->findUpcomingByCamp($camp);
+
+        // load all camp categories so that the camp category path does not trigger additional queries
+        $this->campCategoryRepository->findAll();
+
+        $campName = $camp->getName();
+        $this->routeNamer->setCurrentRouteName($campName);
+
+        return $this->render('user/camp_catalog/detail.html.twig', [
+            'camp'        => $camp,
+            'camp_images' => $campImages,
+            'camp_dates'  => $campDates,
+            'breadcrumbs' => $this->breadcrumbs->buildDetail($camp),
+        ]);
+    }
+
+    private function findCampOrThrow404(string $urlName): Camp
+    {
+        $camp = $this->campRepository->findOneByUrlName($urlName);
+        if ($camp === null)
+        {
+            throw $this->createNotFoundException();
+        }
+
+        return $camp;
     }
 }

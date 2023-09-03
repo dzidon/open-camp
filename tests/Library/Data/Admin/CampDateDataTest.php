@@ -176,40 +176,40 @@ class CampDateDataTest extends KernelTestCase
         $this->assertFalse($data->isClosed());
     }
 
-    public function testTripInstructions(): void
+    public function testDescription(): void
     {
         $data = new CampDateData();
-        $this->assertNull($data->getTripInstructions());
+        $this->assertNull($data->getDescription());
 
-        $data->setTripInstructions('text');
-        $this->assertSame('text', $data->getTripInstructions());
+        $data->setDescription('text');
+        $this->assertSame('text', $data->getDescription());
 
-        $data->setTripInstructions(null);
-        $this->assertNull($data->getTripInstructions());
+        $data->setDescription(null);
+        $this->assertNull($data->getDescription());
     }
 
-    public function testTripInstructionsValidation(): void
+    public function testDescriptionValidation(): void
     {
         $validator = $this->getValidator();
 
         $data = new CampDateData();
-        $result = $validator->validateProperty($data, 'tripInstructions');
+        $result = $validator->validateProperty($data, 'description');
         $this->assertEmpty($result); // valid
 
-        $data->setTripInstructions('');
-        $result = $validator->validateProperty($data, 'tripInstructions');
+        $data->setDescription('');
+        $result = $validator->validateProperty($data, 'description');
         $this->assertEmpty($result); // valid
 
-        $data->setTripInstructions(null);
-        $result = $validator->validateProperty($data, 'tripInstructions');
+        $data->setDescription(null);
+        $result = $validator->validateProperty($data, 'description');
         $this->assertEmpty($result); // valid
 
-        $data->setTripInstructions(str_repeat('x', 2000));
-        $result = $validator->validateProperty($data, 'tripInstructions');
+        $data->setDescription(str_repeat('x', 2000));
+        $result = $validator->validateProperty($data, 'description');
         $this->assertEmpty($result); // valid
 
-        $data->setTripInstructions(str_repeat('x', 2001));
-        $result = $validator->validateProperty($data, 'tripInstructions');
+        $data->setDescription(str_repeat('x', 2001));
+        $result = $validator->validateProperty($data, 'description');
         $this->assertNotEmpty($result); // invalid
     }
 

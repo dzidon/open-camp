@@ -3,8 +3,9 @@
 namespace App\Service\Menu\Breadcrumbs\Admin;
 
 use App\Library\Menu\MenuType;
+use App\Model\Entity\Camp;
+use App\Model\Entity\CampDate;
 use App\Service\Menu\Breadcrumbs\AbstractBreadcrumbs;
-use Symfony\Component\Uid\UuidV4;
 
 /**
  * @inheritDoc
@@ -14,8 +15,10 @@ class CampDateBreadcrumbs extends AbstractBreadcrumbs implements CampDateBreadcr
     /**
      * @inheritDoc
      */
-    public function buildList(UuidV4 $campId): MenuType
+    public function buildList(Camp $camp): MenuType
     {
+        $campId = $camp->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_list');
@@ -30,8 +33,10 @@ class CampDateBreadcrumbs extends AbstractBreadcrumbs implements CampDateBreadcr
     /**
      * @inheritDoc
      */
-    public function buildCreate(UuidV4 $campId): MenuType
+    public function buildCreate(Camp $camp): MenuType
     {
+        $campId = $camp->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_list');
@@ -47,8 +52,11 @@ class CampDateBreadcrumbs extends AbstractBreadcrumbs implements CampDateBreadcr
     /**
      * @inheritDoc
      */
-    public function buildRead(UuidV4 $campId, UuidV4 $campDateId): MenuType
+    public function buildRead(Camp $camp, CampDate $campDate): MenuType
     {
+        $campId = $camp->getId();
+        $campDateId = $campDate->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_list');
@@ -64,8 +72,11 @@ class CampDateBreadcrumbs extends AbstractBreadcrumbs implements CampDateBreadcr
     /**
      * @inheritDoc
      */
-    public function buildUpdate(UuidV4 $campId, UuidV4 $campDateId): MenuType
+    public function buildUpdate(Camp $camp, CampDate $campDate): MenuType
     {
+        $campId = $camp->getId();
+        $campDateId = $campDate->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_list');
@@ -81,8 +92,11 @@ class CampDateBreadcrumbs extends AbstractBreadcrumbs implements CampDateBreadcr
     /**
      * @inheritDoc
      */
-    public function buildDelete(UuidV4 $campId, UuidV4 $campDateId): MenuType
+    public function buildDelete(Camp $camp, CampDate $campDate): MenuType
     {
+        $campId = $camp->getId();
+        $campDateId = $campDate->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_list');

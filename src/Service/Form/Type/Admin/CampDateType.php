@@ -44,9 +44,9 @@ class CampDateType extends AbstractType
                 ],
                 'label' => 'form.admin.camp_date.capacity',
             ])
-            ->add('tripInstructions', TextareaType::class, [
+            ->add('description', TextareaType::class, [
                 'required' => false,
-                'label'    => 'form.admin.camp_date.trip_instructions',
+                'label'    => 'form.admin.camp_date.description',
             ])
             ->add('leaders', UserAutocompleteType::class, [
                 'required' => false,

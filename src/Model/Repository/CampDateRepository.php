@@ -69,6 +69,25 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     /**
      * @inheritDoc
      */
+    public function findUpcomingByCamp(Camp $camp): array
+    {
+        return $this->createQueryBuilder('campDate')
+            ->select('campDate, camp, leader')
+            ->leftJoin('campDate.camp', 'camp')
+            ->leftJoin('campDate.leaders', 'leader')
+            ->andWhere('campDate.camp = :campId')
+            ->setParameter('campId', $camp->getId(), UuidType::NAME)
+            ->andWhere('campDate.startAt > :now')
+            ->setParameter('now', new DateTimeImmutable('now'))
+            ->orderBy('campDate.startAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findThoseThatCollideWithInterval(?Camp $camp, DateTimeInterface $startAt, DateTimeInterface $endAt): array
     {
         $queryBuilder = $this->createQueryBuilder('campDate')

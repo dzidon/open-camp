@@ -3,8 +3,8 @@
 namespace App\Service\Menu\Breadcrumbs\Admin;
 
 use App\Library\Menu\MenuType;
+use App\Model\Entity\CampCategory;
 use App\Service\Menu\Breadcrumbs\AbstractBreadcrumbs;
-use Symfony\Component\Uid\UuidV4;
 
 /**
  * @inheritDoc
@@ -43,8 +43,10 @@ class CampCategoryBreadcrumbs extends AbstractBreadcrumbs implements CampCategor
     /**
      * @inheritDoc
      */
-    public function buildRead(UuidV4 $campCategoryId): MenuType
+    public function buildRead(CampCategory $campCategory): MenuType
     {
+        $campCategoryId = $campCategory->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_category_list');
@@ -58,8 +60,10 @@ class CampCategoryBreadcrumbs extends AbstractBreadcrumbs implements CampCategor
     /**
      * @inheritDoc
      */
-    public function buildUpdate(UuidV4 $campCategoryId): MenuType
+    public function buildUpdate(CampCategory $campCategory): MenuType
     {
+        $campCategoryId = $campCategory->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_category_list');
@@ -73,8 +77,10 @@ class CampCategoryBreadcrumbs extends AbstractBreadcrumbs implements CampCategor
     /**
      * @inheritDoc
      */
-    public function buildDelete(UuidV4 $campCategoryId): MenuType
+    public function buildDelete(CampCategory $campCategory): MenuType
     {
+        $campCategoryId = $campCategory->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_category_list');

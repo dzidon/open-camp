@@ -4,8 +4,9 @@ namespace App\Service\Menu\Breadcrumbs\Admin;
 
 use App\Library\Menu\MenuType;
 use App\Library\Menu\MenuTypeInterface;
+use App\Model\Entity\Camp;
+use App\Model\Entity\CampImage;
 use App\Service\Menu\Breadcrumbs\AbstractBreadcrumbs;
-use Symfony\Component\Uid\UuidV4;
 
 /**
  * @inheritDoc
@@ -15,8 +16,10 @@ class CampImageBreadcrumbs extends AbstractBreadcrumbs implements CampImageBread
     /**
      * @inheritDoc
      */
-    public function buildList(UuidV4 $campId): MenuType
+    public function buildList(Camp $camp): MenuType
     {
+        $campId = $camp->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_list');
@@ -31,8 +34,10 @@ class CampImageBreadcrumbs extends AbstractBreadcrumbs implements CampImageBread
     /**
      * @inheritDoc
      */
-    public function buildUpload(UuidV4 $campId): MenuType
+    public function buildUpload(Camp $camp): MenuType
     {
+        $campId = $camp->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_list');
@@ -48,8 +53,11 @@ class CampImageBreadcrumbs extends AbstractBreadcrumbs implements CampImageBread
     /**
      * @inheritDoc
      */
-    public function buildUpdate(UuidV4 $campId, UuidV4 $campImageId): MenuTypeInterface
+    public function buildUpdate(Camp $camp, CampImage $campImage): MenuTypeInterface
     {
+        $campId = $camp->getId();
+        $campImageId = $campImage->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_list');
@@ -65,8 +73,11 @@ class CampImageBreadcrumbs extends AbstractBreadcrumbs implements CampImageBread
     /**
      * @inheritDoc
      */
-    public function buildDelete(UuidV4 $campId, UuidV4 $campImageId): MenuTypeInterface
+    public function buildDelete(Camp $camp, CampImage $campImage): MenuTypeInterface
     {
+        $campId = $camp->getId();
+        $campImageId = $campImage->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_camp_list');

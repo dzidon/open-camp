@@ -3,8 +3,8 @@
 namespace App\Service\Menu\Breadcrumbs\Admin;
 
 use App\Library\Menu\MenuType;
+use App\Model\Entity\User;
 use App\Service\Menu\Breadcrumbs\AbstractBreadcrumbs;
-use Symfony\Component\Uid\UuidV4;
 
 /**
  * @inheritDoc
@@ -43,8 +43,10 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     /**
      * @inheritDoc
      */
-    public function buildRead(UuidV4 $userId): MenuType
+    public function buildRead(User $user): MenuType
     {
+        $userId = $user->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_user_list');
@@ -58,8 +60,10 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     /**
      * @inheritDoc
      */
-    public function buildUpdate(UuidV4 $userId): MenuType
+    public function buildUpdate(User $user): MenuType
     {
+        $userId = $user->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_user_list');
@@ -73,8 +77,10 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     /**
      * @inheritDoc
      */
-    public function buildUpdatePassword(UuidV4 $userId): MenuType
+    public function buildUpdatePassword(User $user): MenuType
     {
+        $userId = $user->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_user_list');
@@ -89,8 +95,10 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     /**
      * @inheritDoc
      */
-    public function buildDelete(UuidV4 $userId): MenuType
+    public function buildDelete(User $user): MenuType
     {
+        $userId = $user->getId();
+
         $root = $this->createRoot();
         $this->addChildRoute($root, 'admin_home');
         $this->addChildRoute($root, 'admin_user_list');
