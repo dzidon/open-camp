@@ -179,8 +179,8 @@
 {% block navbar_admin_horizontal_item %}
     {% set _has_children = menu_type.children is not empty %}
 
-    <li class="nav-item {% if _has_children %} dropdown {% endif %}">
-        <a class="nav-link {% if _has_children %} dropdown-toggle {% endif %}" href="{{ menu_type.url }}" {% if _has_children %} data-toggle="dropdown" {% endif %}>
+    <li class="nav-item {% if _has_children %}dropdown{% endif %}">
+        <a class="nav-link {% if _has_children %}dropdown-toggle{% endif %}" href="{{ menu_type.url }}" {% if _has_children %}data-toggle="dropdown" aria-expanded="false"{% endif %}>
             {{ menu_type.text }}
         </a>
 

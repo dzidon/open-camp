@@ -23,9 +23,13 @@ class UserData
     #[Assert\Valid]
     private BillingData $billingData;
 
+    #[Assert\Valid]
+    private ProfileData $profileData;
+
     public function __construct(bool $isEuBusinessDataEnabled)
     {
         $this->billingData = new BillingData($isEuBusinessDataEnabled);
+        $this->profileData = new ProfileData();
     }
 
     public function getId(): ?UuidV4
@@ -67,5 +71,10 @@ class UserData
     public function getBillingData(): BillingData
     {
         return $this->billingData;
+    }
+
+    public function getProfileData(): ProfileData
+    {
+        return $this->profileData;
     }
 }

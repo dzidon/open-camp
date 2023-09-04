@@ -172,6 +172,7 @@ class ContactDataTest extends KernelTestCase
         $phoneNumber = new PhoneNumber();
         $phoneNumber->setCountryCode(420);
         $phoneNumber->setNationalNumber('123');
+        $data->setPhoneNumber($phoneNumber);
         $result = $validator->validateProperty($data, 'phoneNumber');
         $this->assertNotEmpty($result); // invalid
 

@@ -6,6 +6,7 @@ use App\Library\Data\Admin\UserData;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Service\Data\Transfer\Admin\UserDataTransfer;
+use libphonenumber\PhoneNumber;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -27,6 +28,9 @@ class UserDataTransferTest extends KernelTestCase
         $expectedBusinessName = 'Business name';
         $expectedBusinessCin = '1234';
         $expectedBusinessVatId = '4321';
+        $expectedLeaderPhoneNumber = new PhoneNumber();
+        $expectedLeaderPhoneNumber->setCountryCode(420);
+        $expectedLeaderPhoneNumber->setNationalNumber('724888999');
 
         $user = new User($expectedEmail);
         $user->setRole($expectedRole);
@@ -39,6 +43,7 @@ class UserDataTransferTest extends KernelTestCase
         $user->setBusinessName($expectedBusinessName);
         $user->setBusinessCin($expectedBusinessCin);
         $user->setBusinessVatId($expectedBusinessVatId);
+        $user->setLeaderPhoneNumber($expectedLeaderPhoneNumber);
 
         $data = new UserData(true);
         $dataTransfer->fillData($data, $user);
@@ -57,6 +62,11 @@ class UserDataTransferTest extends KernelTestCase
         $this->assertSame($expectedBusinessName, $billingData->getBusinessName());
         $this->assertSame($expectedBusinessCin, $billingData->getBusinessCin());
         $this->assertSame($expectedBusinessVatId, $billingData->getBusinessVatId());
+
+        $profileData = $data->getProfileData();
+        $phoneNumber = $profileData->getLeaderPhoneNumber();
+        $this->assertSame(420, $phoneNumber->getCountryCode());
+        $this->assertSame('724888999', $phoneNumber->getNationalNumber());
     }
 
     public function testFillEntityUserUpdateGranted(): void
@@ -74,6 +84,9 @@ class UserDataTransferTest extends KernelTestCase
         $expectedBusinessName = 'Business name';
         $expectedBusinessCin = '1234';
         $expectedBusinessVatId = '4321';
+        $expectedLeaderPhoneNumber = new PhoneNumber();
+        $expectedLeaderPhoneNumber->setCountryCode(420);
+        $expectedLeaderPhoneNumber->setNationalNumber('724888999');
 
         $data = new UserData(true);
         $data->setEmail($expectedEmail);
@@ -91,6 +104,9 @@ class UserDataTransferTest extends KernelTestCase
         $billingData->setBusinessCin($expectedBusinessCin);
         $billingData->setBusinessVatId($expectedBusinessVatId);
 
+        $profileData = $data->getProfileData();
+        $profileData->setLeaderPhoneNumber($expectedLeaderPhoneNumber);
+
         $user = new User('bob@gmail.com');
         $dataTransfer->fillEntity($data, $user);
 
@@ -106,6 +122,10 @@ class UserDataTransferTest extends KernelTestCase
         $this->assertSame($expectedBusinessName, $user->getBusinessName());
         $this->assertSame($expectedBusinessCin, $user->getBusinessCin());
         $this->assertSame($expectedBusinessVatId, $user->getBusinessVatId());
+
+        $phoneNumber = $user->getLeaderPhoneNumber();
+        $this->assertSame(420, $phoneNumber->getCountryCode());
+        $this->assertSame('724888999', $phoneNumber->getNationalNumber());
     }
 
     public function testFillEntityUserUpdateRoleGranted(): void
@@ -123,6 +143,9 @@ class UserDataTransferTest extends KernelTestCase
         $expectedBusinessName = 'Business name';
         $expectedBusinessCin = '1234';
         $expectedBusinessVatId = '4321';
+        $expectedLeaderPhoneNumber = new PhoneNumber();
+        $expectedLeaderPhoneNumber->setCountryCode(420);
+        $expectedLeaderPhoneNumber->setNationalNumber('724888999');
 
         $data = new UserData(true);
         $data->setEmail($expectedEmail);
@@ -140,6 +163,9 @@ class UserDataTransferTest extends KernelTestCase
         $billingData->setBusinessCin($expectedBusinessCin);
         $billingData->setBusinessVatId($expectedBusinessVatId);
 
+        $profileData = $data->getProfileData();
+        $profileData->setLeaderPhoneNumber($expectedLeaderPhoneNumber);
+
         $user = new User('bob@gmail.com');
         $dataTransfer->fillEntity($data, $user);
 
@@ -155,6 +181,7 @@ class UserDataTransferTest extends KernelTestCase
         $this->assertNull($user->getBusinessName());
         $this->assertNull($user->getBusinessCin());
         $this->assertNull($user->getBusinessVatId());
+        $this->assertNull($user->getLeaderPhoneNumber());
     }
 
     private function getUserDataTransfer(array $userRoles = []): UserDataTransfer

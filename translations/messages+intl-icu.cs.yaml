@@ -10,15 +10,6 @@ gender:
     f: 'Žena'
 
 more:
-    camp_images: '{more_camp_images, plural,
-          =0    {Žádné další obrázky tábora...}
-          =1    {# další obrázek tábora...}
-          =2    {# další obrázky tábora...}
-          =3    {# další obrázky tábora...}
-          =4    {# další obrázky tábora...}
-          other {# dalších obrázků tábora...}
-        }'
-
     camp_dates: '{more_camp_dates, plural,
           =0    {Žádné další termíny tábora...}
           =1    {# další termín tábora...}
@@ -151,6 +142,7 @@ crud:
             update: 'Uživatel uložen!'
             update_billing: 'Fakturační údaje uloženy!'
             update_password: 'Heslo nastaveno!'
+            update_admin_profile: 'Administrátorský profil uložen!'
             reset_password: 'Heslo odstraněno!'
             delete: 'Uživatel odstraněn!'
 
@@ -296,6 +288,7 @@ entity_attribute:
         business_name: 'Obchodní název'
         business_cin: 'IČO'
         business_vat_id: 'DIČ'
+        leader_phone_number: 'Telefonní číslo na vedoucího'
         last_active_at: 'Datum posledního přihlášení'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -422,6 +415,10 @@ form:
             browse: 'Procházet'
 
     admin:
+        profile:
+            leader_phone_number: 'Telefonní číslo na vedoucího'
+            button: 'Uložit'
+
         role_search:
             phrase: 'Hledat podle názvu'
             sort_by:
@@ -492,7 +489,7 @@ form:
             zip: 'PSČ'
             country: 'Země'
             description_short: 'Krátký popis'
-            description_long: 'Dlouhý popis'
+            description_long: 'O táboře'
             featured_priority: 'Priorita v doporučených'
             camp_category: 'Kategorie tábora'
             button: 'Uložit'

@@ -30,6 +30,24 @@ class UserType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        if ($this->security->isGranted('user_update'))
+        {
+            $builder
+                ->add('email', EmailType::class, [
+                    'attr' => [
+                        'autofocus' => 'autofocus'
+                    ],
+                    'label' => 'form.admin.user.email',
+                ])
+                ->add('profileData', ProfileType::class, [
+                    'label' => false,
+                ])
+                ->add('billingData', BillingType::class, [
+                    'label' => false,
+                ])
+            ;
+        }
+
         if ($this->security->isGranted('user_update_role'))
         {
             $builder
@@ -40,21 +58,6 @@ class UserType extends AbstractType
                     'placeholder'  => 'form.common.choice.none.female',
                     'required'     => false,
                     'label'        => 'form.admin.user.role',
-                ])
-            ;
-        }
-
-        if ($this->security->isGranted('user_update'))
-        {
-            $builder
-                ->add('email', EmailType::class, [
-                    'attr' => [
-                        'autofocus' => 'autofocus'
-                    ],
-                    'label' => 'form.admin.user.email',
-                ])
-                ->add('billingData', BillingType::class, [
-                    'label' => false,
                 ])
             ;
         }

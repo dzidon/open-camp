@@ -2,6 +2,7 @@
 
 namespace App\Tests\Library\Data\Admin;
 
+use App\Library\Data\Admin\ProfileData;
 use App\Library\Data\Admin\UserData;
 use App\Library\Data\User\BillingData;
 use App\Model\Entity\Role;
@@ -116,6 +117,13 @@ class UserDataTest extends KernelTestCase
         $data = new UserData(true);
         $billingData = $data->getBillingData();
         $this->assertInstanceOf(BillingData::class, $billingData);
+    }
+
+    public function testUserData(): void
+    {
+        $data = new UserData(true);
+        $profileData = $data->getProfileData();
+        $this->assertInstanceOf(ProfileData::class, $profileData);
     }
 
     private function getUserRepository(): UserRepositoryInterface

@@ -7,6 +7,7 @@ use App\Model\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use libphonenumber\PhoneNumber;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -59,6 +60,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $businessVatId = null;
+
+    #[ORM\Column(type: 'phone_number', nullable: true)]
+    private ?PhoneNumber $leaderPhoneNumber = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $lastActiveAt = null;
@@ -287,6 +291,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBusinessVatId(?string $businessVatId): self
     {
         $this->businessVatId = $businessVatId;
+
+        return $this;
+    }
+
+    public function getLeaderPhoneNumber(): ?PhoneNumber
+    {
+        return $this->leaderPhoneNumber === null ? null : clone $this->leaderPhoneNumber;
+    }
+
+    public function setLeaderPhoneNumber(?PhoneNumber $leaderPhoneNumber): self
+    {
+        if ($leaderPhoneNumber === null)
+        {
+            $this->leaderPhoneNumber = $leaderPhoneNumber;
+
+            return $this;
+        }
+
+        if ($this->leaderPhoneNumber !== null && $this->leaderPhoneNumber->equals($leaderPhoneNumber))
+        {
+            return $this;
+        }
+
+        $this->leaderPhoneNumber = clone $leaderPhoneNumber;
 
         return $this;
     }

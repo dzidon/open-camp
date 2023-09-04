@@ -148,13 +148,7 @@ class CampController extends AbstractController
         $campCategoryRepository->findAll();
 
         // images
-        $campImagePaginator = $campImageRepository->getAdminPaginator($camp, 1, 20);
-        $campImages = $campImagePaginator->getCurrentPageItems();
-        $moreCampImages = $campImagePaginator->getTotalItems() - $campImagePaginator->getPageSize();
-        if ($moreCampImages < 0)
-        {
-            $moreCampImages = 0;
-        }
+        $campImages = $campImageRepository->findByCamp($camp);
 
         // camp dates
         $searchData = new CampDateSearchData();
@@ -171,7 +165,6 @@ class CampController extends AbstractController
         return $this->render('admin/camp/read.html.twig', [
             'camp'             => $camp,
             'camp_images'      => $campImages,
-            'more_camp_images' => $moreCampImages,
             'camp_dates'       => $campDates,
             'more_camp_dates'  => $moreCampDates,
             'breadcrumbs'      => $this->campBreadcrumbs->buildRead($camp),

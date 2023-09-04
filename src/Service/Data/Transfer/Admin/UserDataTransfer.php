@@ -46,6 +46,9 @@ class UserDataTransfer implements DataTransferInterface
 
         $billingData = $userData->getBillingData();
         $this->transferRegistry->fillData($billingData, $user);
+
+        $profileData = $userData->getProfileData();
+        $this->transferRegistry->fillData($profileData, $user);
     }
 
     /**
@@ -64,6 +67,9 @@ class UserDataTransfer implements DataTransferInterface
 
             $billingData = $userData->getBillingData();
             $this->transferRegistry->fillEntity($billingData, $user);
+
+            $profileData = $userData->getProfileData();
+            $this->transferRegistry->fillEntity($profileData, $user);
         }
 
         if ($this->security->isGranted('user_update_role'))

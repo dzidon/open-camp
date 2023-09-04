@@ -7,20 +7,6 @@
                 <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.user.name_first'|trans }} & {{ 'entity_attribute.user.name_last'|trans }}:</strong>
-                        </div>
-
-                        <div class="col-12 col-sm-9">
-                            {% if user.nameFirst is not null and user.nameLast is not null %}
-                                <span>{{ user.nameFirst }} {{ user.nameLast }}</span>
-                            {% else %}
-                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.user.email'|trans }}:</strong>
                         </div>
 
@@ -45,6 +31,20 @@
 
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.user.leader_phone_number'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if user.leaderPhoneNumber is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.leaderPhoneNumber|phone_number_format(phone_number_format) }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.user.role'|trans }}:</strong>
                         </div>
 
@@ -53,6 +53,20 @@
                                 <em>{{ 'search.item_no_reference.female'|trans }}</em>
                             {% else %}
                                 <span>{{ user.role.label }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.user.name_first'|trans }} & {{ 'entity_attribute.user.name_last'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if user.nameFirst is not null and user.nameLast is not null %}
+                                <span>{{ user.nameFirst }} {{ user.nameLast }}</span>
+                            {% else %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                             {% endif %}
                         </div>
                     </div>

@@ -67,7 +67,7 @@ class ContactTest extends TestCase
 
     public function testPhoneNumber(): void
     {
-        $this->assertNull($this->contact->getEmail());
+        $this->assertNull($this->contact->getPhoneNumber());
 
         $phoneNumber = new PhoneNumber();
         $phoneNumber->setCountryCode(421);

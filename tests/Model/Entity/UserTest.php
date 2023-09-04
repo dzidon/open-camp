@@ -7,6 +7,7 @@ use App\Model\Entity\PermissionGroup;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use DateTimeImmutable;
+use libphonenumber\PhoneNumber;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\UuidV4;
 
@@ -190,6 +191,24 @@ class UserTest extends TestCase
 
         $this->user->setBusinessVatId(null);
         $this->assertNull($this->user->getBusinessVatId());
+    }
+
+    public function testLeaderPhoneNumber(): void
+    {
+        $this->assertNull($this->user->getLeaderPhoneNumber());
+
+        $phoneNumber = new PhoneNumber();
+        $phoneNumber->setCountryCode(421);
+        $phoneNumber->setNationalNumber('605222333');
+
+        $this->user->setLeaderPhoneNumber($phoneNumber);
+
+        $this->assertNotSame($phoneNumber, $this->user->getLeaderPhoneNumber());
+        $this->assertSame(421, $this->user->getLeaderPhoneNumber()->getCountryCode());
+        $this->assertSame('605222333', $this->user->getLeaderPhoneNumber()->getNationalNumber());
+
+        $this->user->setLeaderPhoneNumber(null);
+        $this->assertNull($this->user->getLeaderPhoneNumber());
     }
 
     public function testLastActiveAt(): void
