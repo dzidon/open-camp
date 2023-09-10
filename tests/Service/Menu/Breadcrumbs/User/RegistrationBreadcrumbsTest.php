@@ -59,14 +59,14 @@ class RegistrationBreadcrumbsTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->container = static::getContainer();
+        $container = static::getContainer();
 
         /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $this->container->get(MenuTypeFactoryRegistryInterface::class);
+        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
         $this->menuTypeRegistry = $menuTypeRegistry;
 
         /** @var RegistrationBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->container->get(RegistrationBreadcrumbs::class);
+        $breadcrumbs = $container->get(RegistrationBreadcrumbs::class);
         $this->breadcrumbs = $breadcrumbs;
     }
 }

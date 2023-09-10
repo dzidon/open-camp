@@ -117,6 +117,7 @@ class CreatePermissionsCommand extends Command
         $groups['role'] = $this->permissionGroupRepository->createPermissionGroup('role', 'permission_group.role', 200);
         $groups['camp_category'] = $this->permissionGroupRepository->createPermissionGroup('camp_category', 'permission_group.camp_category', 300);
         $groups['camp'] = $this->permissionGroupRepository->createPermissionGroup('camp', 'permission_group.camp', 400);
+        $groups['trip_location_path'] = $this->permissionGroupRepository->createPermissionGroup('trip_location_path', 'permission_group.trip_location_path', 500);
 
         return $groups;
     }
@@ -149,6 +150,11 @@ class CreatePermissionsCommand extends Command
         $permissions['camp_read'] = $this->permissionRepository->createPermission('camp_read', 'permission.camp_read', 200, $groups['camp']);
         $permissions['camp_update'] = $this->permissionRepository->createPermission('camp_update', 'permission.camp_update', 300, $groups['camp']);
         $permissions['camp_delete'] = $this->permissionRepository->createPermission('camp_delete', 'permission.camp_delete', 400, $groups['camp']);
+
+        $permissions['trip_location_path_create'] = $this->permissionRepository->createPermission('trip_location_path_create', 'permission.trip_location_path_create', 100, $groups['trip_location_path']);
+        $permissions['trip_location_path_read'] = $this->permissionRepository->createPermission('trip_location_path_read', 'permission.trip_location_path_read', 200, $groups['trip_location_path']);
+        $permissions['trip_location_path_update'] = $this->permissionRepository->createPermission('trip_location_path_update', 'permission.trip_location_path_update', 300, $groups['trip_location_path']);
+        $permissions['trip_location_path_delete'] = $this->permissionRepository->createPermission('trip_location_path_delete', 'permission.trip_location_path_delete', 400, $groups['trip_location_path']);
 
         return $permissions;
     }

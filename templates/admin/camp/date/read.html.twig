@@ -47,6 +47,20 @@
 
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.is_open_above_capacity'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.isOpenAboveCapacity %}
+                                <span>{{ 'bool.yes'|trans }}</span>
+                            {% else %}
+                                <span>{{ 'bool.no'|trans }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.camp_date.is_closed'|trans }}:</strong>
                         </div>
 

@@ -44,6 +44,14 @@ class CampDateType extends AbstractType
                 ],
                 'label' => 'form.admin.camp_date.capacity',
             ])
+            ->add('isOpenAboveCapacity', CheckboxType::class, [
+                'required' => false,
+                'label'    => 'form.admin.camp_date.is_open_above_capacity',
+            ])
+            ->add('isClosed', CheckboxType::class, [
+                'required' => false,
+                'label'    => 'form.admin.camp_date.is_closed',
+            ])
             ->add('description', TextareaType::class, [
                 'required' => false,
                 'label'    => 'form.admin.camp_date.description',
@@ -52,10 +60,6 @@ class CampDateType extends AbstractType
                 'required' => false,
                 'multiple' => true,
                 'label'    => 'form.admin.camp_date.leaders',
-            ])
-            ->add('isClosed', CheckboxType::class, [
-                'required' => false,
-                'label'    => 'form.admin.camp_date.is_closed',
             ])
         ;
     }

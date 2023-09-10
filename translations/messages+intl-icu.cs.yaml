@@ -9,6 +9,9 @@ gender:
     m: 'Muž'
     f: 'Žena'
 
+price:
+    free: 'Zdarma'
+
 more:
     camp_dates: '{more_camp_dates, plural,
           =0    {Žádné další termíny tábora...}
@@ -58,6 +61,7 @@ permission_group:
     role: 'Role'
     camp_category: 'Kategorie tábora'
     camp: 'Tábory'
+    trip_location_path: 'Trasy'
 
 permission:
     user_read: 'Zobrazení uživatele'
@@ -80,6 +84,11 @@ permission:
     camp_create: 'Tvorba tábora'
     camp_update: 'Editace tábora'
     camp_delete: 'Odstranění tábora'
+
+    trip_location_path_read: 'Zobrazení trasy'
+    trip_location_path_create: 'Tvorba trasy'
+    trip_location_path_update: 'Editace trasy'
+    trip_location_path_delete: 'Odstranění trasy'
 
 contact_role:
     mother: 'Matka'
@@ -109,6 +118,8 @@ crud:
         camp_delete: 'Opravdu si přejete odstranit tábor "{name}"?'
         camp_image_delete: 'Opravdu si přejete odstranit obrázek tábora?'
         camp_date_delete: 'Opravdu si přejete odstranit termín tábora "{name}" mezi {start_at} a {end_at}?'
+        trip_location_path_delete: 'Opravdu si přejete odstranit trasu "{name}"?'
+        trip_location_delete: 'Opravdu si přejete odstranit lokaci "{name}"?'
 
     action:
         common:
@@ -167,6 +178,16 @@ crud:
             update: 'Termín tábora uložen!'
             delete: 'Termín tábora odstraněn!'
 
+        trip_location_path:
+            create: 'Trasa vytvořena!'
+            update: 'Trasa uložena!'
+            delete: 'Trasa odstraněna!'
+
+        trip_location:
+            create: 'Lokace vytvořena!'
+            update: 'Lokace uložena!'
+            delete: 'Lokace odstraněna!'
+
 entity:
     contact:
         singular: 'Kontakt'
@@ -215,6 +236,14 @@ entity:
     camp_date:
         singular: 'Termín tábora'
         plural: 'Termíny tábora'
+
+    trip_location_path:
+        singular: 'Trasa'
+        plural: 'Trasy'
+
+    trip_location:
+        singular: 'Lokace'
+        plural: 'Lokace'
 
     application:
         singular: 'Přihláška'
@@ -356,10 +385,27 @@ entity_attribute:
         end_at: 'Datum návratu'
         price: 'Cena'
         capacity: 'Kapacita'
+        is_open_above_capacity: 'Přijímá přihlášky nad kapacitou'
         is_closed: 'Přihlášování zablokováno'
         description: 'Informace k termínu'
         camp: 'Tábor'
         leaders: 'Vedoucí'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    trip_location_path:
+        id: 'ID'
+        name: 'Název'
+        trip_locations: 'Lokace'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    trip_location:
+        id: 'ID'
+        name: 'Název'
+        price: 'Cena'
+        priority: 'Priorita'
+        trip_location_path: 'Trasa'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -539,6 +585,7 @@ form:
             end_at: 'Datum do'
             price: 'Cena'
             capacity: 'Kapacita'
+            is_open_above_capacity: 'Přijímat přihlášky nad kapacitou'
             is_closed: 'Zablokovat přihlášení'
             description: 'Informace k termínu'
             leaders: 'Vedoucí'
@@ -564,8 +611,59 @@ form:
                     current_and_upcoming: 'Probíhající a nadcházející'
                     historical: 'Historický'
 
+            button: 'Hledat'
+
         camp_date_delete:
             button: 'Odstranit'
+
+        trip_location_path_creation:
+            trip_locations: 'Lokace'
+            add_trip_location: 'Přidat lokaci'
+            button: 'Uložit'
+
+        trip_location_path:
+            name: 'Název'
+            button: 'Uložit'
+
+        trip_location_path_search:
+            phrase: 'Hledat podle názvu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovějšího'
+                    created_at_asc: 'Od nejstaršího'
+                    name_asc: 'Název (A-Z)'
+                    name_desc: 'Název (Z-A)'
+
+            button: 'Hledat'
+
+        trip_location_path_delete:
+            button: 'Odstranit'
+
+        trip_location:
+            name: 'Název'
+            price: 'Cena'
+            priority: 'Priorita'
+            button: 'Uložit'
+
+        trip_location_delete:
+            button: 'Odstranit'
+
+        trip_location_search:
+            phrase: 'Hledat podle názvu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovějšího'
+                    created_at_asc: 'Od nejstaršího'
+                    name_asc: 'Název (A-Z)'
+                    name_desc: 'Název (Z-A)'
+                    price_asc: 'Cena (od nejmenší)'
+                    price_desc: 'Cena (od největší)'
+                    priority_asc: 'Priorita (od nejmenší)'
+                    priority_desc: 'Priorita (od největší)'
+
+            button: 'Hledat'
 
     user:
         registration:
@@ -736,6 +834,19 @@ route:
     admin_camp_date_read: 'Zobrazení termínu tábora'
     admin_camp_date_update: 'Editace termínu tábora'
     admin_camp_date_delete: 'Odstranění termínu tábora'
+
+    admin_trip_location_path_list: 'Trasy'
+    admin_trip_location_path_create: 'Nová trasa'
+    admin_trip_location_path_read: 'Zobrazení trasy'
+    admin_trip_location_path_update: 'Editace trasy'
+    admin_trip_location_path_delete: 'Odstranění trasy'
+
+    admin_trip_location_create: 'Nová lokace'
+    admin_trip_location_read: 'Zobrazení lokace'
+    admin_trip_location_update: 'Editace lokace'
+    admin_trip_location_delete: 'Odstranění lokace'
+
+    admin_application_list: 'Přihlášky'
 
     user_home: 'Domů'
     user_login: 'Přihlášení'

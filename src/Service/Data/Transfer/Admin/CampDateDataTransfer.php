@@ -43,6 +43,7 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDateData->setEndAt($campDate->getEndAt());
         $campDateData->setPrice($campDate->getPrice());
         $campDateData->setCapacity($campDate->getCapacity());
+        $campDateData->setIsOpenAboveCapacity($campDate->isOpenAboveCapacity());
         $campDateData->setIsClosed($campDate->isClosed());
         $campDateData->setDescription($campDate->getDescription());
         $this->propertyAccessor->setValue($campDateData, 'leaders', $campDate->getLeaders());
@@ -62,6 +63,7 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDate->setEndAt($campDateData->getEndAt());
         $campDate->setPrice($campDateData->getPrice());
         $campDate->setCapacity($campDateData->getCapacity());
+        $campDate->setIsOpenAboveCapacity($campDateData->isOpenAboveCapacity());
         $campDate->setIsClosed($campDateData->isClosed());
         $campDate->setDescription($campDateData->getDescription());
         $this->propertyAccessor->setValue($campDate, 'leaders', $campDateData->getLeaders());

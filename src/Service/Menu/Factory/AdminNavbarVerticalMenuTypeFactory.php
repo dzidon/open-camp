@@ -64,6 +64,36 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
             $itemDashboard->setActive($route === 'admin_home');
         }
 
+        // applications
+        $isGrantedTripLocationPath =
+            $this->security->isGranted('trip_location_path_create') || $this->security->isGranted('trip_location_path_read') ||
+            $this->security->isGranted('trip_location_path_update') || $this->security->isGranted('trip_location_path_delete')
+        ;
+
+        if ($isGrantedTripLocationPath /* || */)
+        {
+            $text = $this->translator->trans('route.admin_application_list');
+            $itemApplicationsParent = new MenuIconType('parent_applications', 'navbar_admin_vertical_item', $text, '#', 'fas fa-sticky-note');
+            $menu->addChild($itemApplicationsParent);
+
+            if ($isGrantedTripLocationPath)
+            {
+                $active =
+                    $route === 'admin_trip_location_path_list'   || $route === 'admin_trip_location_path_create' || $route === 'admin_trip_location_path_read' ||
+                    $route === 'admin_trip_location_path_update' || $route === 'admin_trip_location_path_delete' ||
+
+                    $route === 'admin_trip_location_create' || $route === 'admin_trip_location_read'   ||
+                    $route === 'admin_trip_location_update' || $route === 'admin_trip_location_delete'
+                ;
+
+                $text = $this->translator->trans('route.admin_trip_location_path_list');
+                $url = $this->urlGenerator->generate('admin_trip_location_path_list');
+                $itemTripLocationPaths = new MenuIconType('admin_trip_location_path_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
+                $itemApplicationsParent->addChild($itemTripLocationPaths);
+                $itemTripLocationPaths->setActive($active, $active);
+            }
+        }
+
         // camps
         $isGrantedCamp =
             $this->security->isGranted('camp_create') || $this->security->isGranted('camp_read') ||

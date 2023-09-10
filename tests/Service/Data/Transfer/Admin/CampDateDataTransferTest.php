@@ -29,6 +29,7 @@ class CampDateDataTransferTest extends KernelTestCase
 
         $campDate = new CampDate($expectedStartAt, $expectedEndAt, $expectedPrice, $expectedCapacity, $expectedCamp);
         $campDate->setIsClosed(true);
+        $campDate->setIsOpenAboveCapacity(true);
         $campDate->setDescription($expectedDescription);
 
         foreach ($expectedLeaders as $expectedLeader)
@@ -46,6 +47,7 @@ class CampDateDataTransferTest extends KernelTestCase
         $this->assertSame($expectedPrice, $data->getPrice());
         $this->assertSame($expectedCapacity, $data->getCapacity());
         $this->assertTrue($data->isClosed());
+        $this->assertTrue($data->isOpenAboveCapacity());
         $this->assertSame($expectedDescription, $data->getDescription());
         $this->assertSame($expectedLeaders, $data->getLeaders());
     }
@@ -66,6 +68,7 @@ class CampDateDataTransferTest extends KernelTestCase
 
         $data = new CampDateData();
         $data->setIsClosed(true);
+        $data->setIsOpenAboveCapacity(true);
         $data->setStartAt($expectedStartAt);
         $data->setEndAt($expectedEndAt);
         $data->setPrice($expectedPrice);
@@ -86,6 +89,7 @@ class CampDateDataTransferTest extends KernelTestCase
         $this->assertSame($expectedPrice, $campDate->getPrice());
         $this->assertSame($expectedCapacity, $campDate->getCapacity());
         $this->assertTrue($campDate->isClosed());
+        $this->assertTrue($campDate->isOpenAboveCapacity());
         $this->assertSame($expectedDescription, $campDate->getDescription());
         $this->assertSame($expectedLeaders, $campDate->getLeaders());
     }

@@ -115,7 +115,7 @@ class ProfileCamperBreadcrumbsTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->container = static::getContainer();
+        $container = static::getContainer();
 
         $user = new User('bob@gmail.com');
         $this->camper = new Camper('Camper', '1', GenderEnum::MALE, new DateTimeImmutable(), $user);
@@ -124,11 +124,11 @@ class ProfileCamperBreadcrumbsTest extends KernelTestCase
         $property->setValue($this->camper, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
         /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $this->container->get(MenuTypeFactoryRegistryInterface::class);
+        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
         $this->factoryRegistry = $menuTypeRegistry;
 
         /** @var ProfileCamperBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->container->get(ProfileCamperBreadcrumbs::class);
+        $breadcrumbs = $container->get(ProfileCamperBreadcrumbs::class);
         $this->breadcrumbs = $breadcrumbs;
     }
 }

@@ -1,0 +1,61 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.trip_location.name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ trip_location.name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.trip_location.price'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ trip_location.price }} {{ currency }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.trip_location.priority'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ trip_location.priority }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.trip_location.trip_location_path'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ trip_location.tripLocationPath.name }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <a href="{{ path('admin_trip_location_update', {id: trip_location.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                        {{ 'crud.action.common.update'|trans }}
+                    </a>
+
+                    <a href="{{ path('admin_trip_location_delete', {id: trip_location.id.toRfc4122}) }}" class="btn btn-danger">
+                        {{ 'crud.action.common.delete'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

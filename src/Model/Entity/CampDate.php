@@ -36,6 +36,9 @@ class CampDate
     private int $capacity;
 
     #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isOpenAboveCapacity = false;
+
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isClosed = false;
 
     #[ORM\Column(length: 2000, nullable: true)]
@@ -116,6 +119,18 @@ class CampDate
     public function setCapacity(int $capacity): self
     {
         $this->capacity = $capacity;
+
+        return $this;
+    }
+
+    public function isOpenAboveCapacity(): bool
+    {
+        return $this->isOpenAboveCapacity;
+    }
+
+    public function setIsOpenAboveCapacity(bool $isOpenAboveCapacity): self
+    {
+        $this->isOpenAboveCapacity = $isOpenAboveCapacity;
 
         return $this;
     }

@@ -1,0 +1,68 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.trip_location_path.name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ trip_location_path.name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.trip_location_path.trip_locations'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if trip_locations is empty %}
+                                <div>
+                                    <em>{{ 'search.error.no_results'|trans }}</em>
+                                </div>
+                            {% else %}
+                                {% for trip_location in trip_locations %}
+                                    <div>
+                                        <span>
+                                            {{ trip_location.name }}
+
+                                            {% if trip_location.price > 0.0  %}
+                                                ({{ trip_location.price }} {{ currency }})
+                                            {% else %}
+                                                ({{ 'price.free'|trans }})
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% set granted_update = is_granted('trip_location_path_update') %}
+                {% set granted_delete = is_granted('trip_location_path_delete') %}
+
+                {% if granted_update or granted_delete %}
+                    <div class="card-footer">
+                        {% if granted_update %}
+                            <a href="{{ path('admin_trip_location_path_update', {id: trip_location_path.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if granted_delete %}
+                            <a href="{{ path('admin_trip_location_path_delete', {id: trip_location_path.id.toRfc4122}) }}" class="btn btn-danger">
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

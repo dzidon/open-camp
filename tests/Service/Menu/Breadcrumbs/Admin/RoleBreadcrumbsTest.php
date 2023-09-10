@@ -112,7 +112,7 @@ class RoleBreadcrumbsTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->container = static::getContainer();
+        $container = static::getContainer();
 
         $this->role = new Role('Role');
         $reflectionClass = new ReflectionClass($this->role);
@@ -120,11 +120,11 @@ class RoleBreadcrumbsTest extends KernelTestCase
         $property->setValue($this->role, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
         /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $this->container->get(MenuTypeFactoryRegistryInterface::class);
+        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
         $this->factoryRegistry = $menuTypeRegistry;
 
         /** @var RoleBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->container->get(RoleBreadcrumbs::class);
+        $breadcrumbs = $container->get(RoleBreadcrumbs::class);
         $this->breadcrumbs = $breadcrumbs;
     }
 }

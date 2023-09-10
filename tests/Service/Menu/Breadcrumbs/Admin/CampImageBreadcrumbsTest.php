@@ -139,7 +139,7 @@ class CampImageBreadcrumbsTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->container = static::getContainer();
+        $container = static::getContainer();
 
         $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
         $reflectionClass = new ReflectionClass($this->camp);
@@ -152,11 +152,11 @@ class CampImageBreadcrumbsTest extends KernelTestCase
         $property->setValue($this->campImage, UuidV4::fromString('a37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
         /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $this->container->get(MenuTypeFactoryRegistryInterface::class);
+        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
         $this->factoryRegistry = $menuTypeRegistry;
 
         /** @var CampImageBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->container->get(CampImageBreadcrumbs::class);
+        $breadcrumbs = $container->get(CampImageBreadcrumbs::class);
         $this->breadcrumbs = $breadcrumbs;
     }
 }

@@ -33,12 +33,12 @@ class CampCreationDataTest extends KernelTestCase
 
         foreach ($newCampDatesData as $newCampDateData)
         {
-            $data->addCampDateData($newCampDateData);
+            $data->addCampDatesDatum($newCampDateData);
         }
 
         $this->assertSame($newCampDatesData, $data->getCampDatesData());
 
-        $data->removeCampDateData($newCampDatesData[0]);
+        $data->removeCampDatesDatum($newCampDatesData[0]);
         $this->assertNotContains($newCampDatesData[0], $data->getCampDatesData());
     }
 
@@ -113,8 +113,8 @@ class CampCreationDataTest extends KernelTestCase
         $campDateData2->setPrice(2000.0);
         $campDateData2->setCapacity(20);
 
-        $data->addCampDateData($campDateData1);
-        $data->addCampDateData($campDateData2);
+        $data->addCampDatesDatum($campDateData1);
+        $data->addCampDatesDatum($campDateData2);
 
         $campDateData1->setStartAt(new DateTimeImmutable('2000-01-01'));
         $campDateData1->setEndAt(new DateTimeImmutable('2000-01-04'));

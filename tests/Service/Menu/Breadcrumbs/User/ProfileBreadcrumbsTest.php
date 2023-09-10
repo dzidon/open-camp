@@ -70,14 +70,14 @@ class ProfileBreadcrumbsTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->container = static::getContainer();
+        $container = static::getContainer();
 
         /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $this->container->get(MenuTypeFactoryRegistryInterface::class);
+        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
         $this->menuTypeRegistry = $menuTypeRegistry;
 
         /** @var ProfileBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->container->get(ProfileBreadcrumbs::class);
+        $breadcrumbs = $container->get(ProfileBreadcrumbs::class);
         $this->breadcrumbs = $breadcrumbs;
     }
 }

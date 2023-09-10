@@ -176,6 +176,18 @@ class CampDateDataTest extends KernelTestCase
         $this->assertFalse($data->isClosed());
     }
 
+    public function testIsOpenAboveCapacity(): void
+    {
+        $data = new CampDateData();
+        $this->assertFalse($data->isOpenAboveCapacity());
+
+        $data->setIsOpenAboveCapacity(true);
+        $this->assertTrue($data->isOpenAboveCapacity());
+
+        $data->setIsOpenAboveCapacity(false);
+        $this->assertFalse($data->isOpenAboveCapacity());
+    }
+
     public function testDescription(): void
     {
         $data = new CampDateData();

@@ -31,14 +31,14 @@ class LoginBreadcrumbsTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->container = static::getContainer();
+        $container = static::getContainer();
 
         /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $this->container->get(MenuTypeFactoryRegistryInterface::class);
+        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
         $this->menuTypeRegistry = $menuTypeRegistry;
 
         /** @var LoginBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->container->get(LoginBreadcrumbs::class);
+        $breadcrumbs = $container->get(LoginBreadcrumbs::class);
         $this->breadcrumbs = $breadcrumbs;
     }
 }

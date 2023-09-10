@@ -114,7 +114,7 @@ class ProfileContactBreadcrumbsTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->container = static::getContainer();
+        $container = static::getContainer();
 
         $user = new User('bob@gmail.com');
         $this->contact = new Contact('David', 'Smith', ContactRoleEnum::FATHER, $user);
@@ -123,11 +123,11 @@ class ProfileContactBreadcrumbsTest extends KernelTestCase
         $property->setValue($this->contact, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
         /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $this->container->get(MenuTypeFactoryRegistryInterface::class);
+        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
         $this->factoryRegistry = $menuTypeRegistry;
 
         /** @var ProfileContactBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->container->get(ProfileContactBreadcrumbs::class);
+        $breadcrumbs = $container->get(ProfileContactBreadcrumbs::class);
         $this->breadcrumbs = $breadcrumbs;
     }
 }

@@ -39,7 +39,7 @@ class DataTransferRegistry implements DataTransferRegistryInterface
         }
 
         throw new LogicException(
-            sprintf('Method "fillData" cannot be used. There is no Data that supports data "%s" and entity "%s".', $data::class, $entity::class)
+            sprintf('Method "fillData" cannot be used. There is no data transfer class that supports data "%s" and entity "%s".', $data::class, $entity::class)
         );
     }
 
@@ -59,7 +59,7 @@ class DataTransferRegistry implements DataTransferRegistryInterface
         }
 
         throw new LogicException(
-            sprintf('Method "fillEntity" cannot be used. There is no Data that supports data "%s" and entity "%s".', $data::class, $entity::class)
+            sprintf('Method "fillEntity" cannot be used. There is no data transfer class that supports data "%s" and entity "%s".', $data::class, $entity::class)
         );
     }
 }

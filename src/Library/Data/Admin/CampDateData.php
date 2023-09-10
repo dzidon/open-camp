@@ -31,6 +31,8 @@ class CampDateData
     #[Assert\NotBlank]
     private ?int $capacity = null;
 
+    private bool $isOpenAboveCapacity = false;
+
     private bool $isClosed = false;
 
     #[Assert\Length(max: 2000)]
@@ -109,6 +111,18 @@ class CampDateData
     public function setCapacity(?int $capacity): self
     {
         $this->capacity = $capacity;
+
+        return $this;
+    }
+
+    public function isOpenAboveCapacity(): bool
+    {
+        return $this->isOpenAboveCapacity;
+    }
+
+    public function setIsOpenAboveCapacity(bool $isOpenAboveCapacity): self
+    {
+        $this->isOpenAboveCapacity = $isOpenAboveCapacity;
 
         return $this;
     }

@@ -53,7 +53,7 @@ class CampCreationData
         return $this->campDatesData;
     }
 
-    public function addCampDateData(CampDateData $campDateData): self
+    public function addCampDatesDatum(CampDateData $campDateData): self
     {
         if (in_array($campDateData, $this->campDatesData, true))
         {
@@ -65,7 +65,7 @@ class CampCreationData
         return $this;
     }
 
-    public function removeCampDateData(CampDateData $campDateData): self
+    public function removeCampDatesDatum(CampDateData $campDateData): self
     {
         $key = array_search($campDateData, $this->campDatesData, true);
 

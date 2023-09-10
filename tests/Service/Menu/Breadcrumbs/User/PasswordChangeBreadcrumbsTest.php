@@ -69,14 +69,14 @@ class PasswordChangeBreadcrumbsTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->container = static::getContainer();
+        $container = static::getContainer();
 
         /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $this->container->get(MenuTypeFactoryRegistryInterface::class);
+        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
         $this->menuTypeRegistry = $menuTypeRegistry;
 
         /** @var PasswordChangeBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->container->get(PasswordChangeBreadcrumbs::class);
+        $breadcrumbs = $container->get(PasswordChangeBreadcrumbs::class);
         $this->breadcrumbs = $breadcrumbs;
     }
 }

@@ -61,14 +61,14 @@ class CampCatalogBreadcrumbsTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->container = static::getContainer();
+        $container = static::getContainer();
 
         /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $this->container->get(MenuTypeFactoryRegistryInterface::class);
+        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
         $this->factoryRegistry = $menuTypeRegistry;
 
         /** @var CampCatalogBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->container->get(CampCatalogBreadcrumbs::class);
+        $breadcrumbs = $container->get(CampCatalogBreadcrumbs::class);
         $this->breadcrumbs = $breadcrumbs;
     }
 }

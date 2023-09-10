@@ -135,7 +135,7 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->container = static::getContainer();
+        $container = static::getContainer();
 
         $this->user = new User('bob@gmail.com');
         $reflectionClass = new ReflectionClass($this->user);
@@ -143,11 +143,11 @@ class UserBreadcrumbsTest extends KernelTestCase
         $property->setValue($this->user, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
         /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $this->container->get(MenuTypeFactoryRegistryInterface::class);
+        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
         $this->factoryRegistry = $menuTypeRegistry;
 
         /** @var UserBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $this->container->get(UserBreadcrumbs::class);
+        $breadcrumbs = $container->get(UserBreadcrumbs::class);
         $this->breadcrumbs = $breadcrumbs;
     }
 }

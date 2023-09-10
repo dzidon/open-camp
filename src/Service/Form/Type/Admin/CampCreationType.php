@@ -33,6 +33,7 @@ class CampCreationType extends AbstractType
                 'suppress_required_rendering' => true,
                 'allow_add'                   => true,
                 'allow_delete'                => true,
+                'by_reference'                => false,
                 'entry_options'               => [
                     'label'         => false,
                     'remove_button' => true,

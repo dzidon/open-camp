@@ -12,6 +12,8 @@ use App\Model\Entity\Contact;
 use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
 use App\Model\Entity\Role;
+use App\Model\Entity\TripLocation;
+use App\Model\Entity\TripLocationPath;
 use App\Model\Entity\User;
 use App\Model\Entity\UserPasswordChange;
 use App\Model\Entity\UserRegistration;
@@ -355,6 +357,34 @@ class TestFixtures extends Fixture
         $this->setUid($campImage2, '550e8400-e29b-41d4-a716-446655440000');
         $this->setCreatedAt($campImage2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($campImage2);
+
+        /*
+         * TripLocationPath
+         */
+        $tripLocationPath1 = new TripLocationPath('Path 1');
+        $this->setUid($tripLocationPath1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($tripLocationPath1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($tripLocationPath1);
+
+        $tripLocationPath2 = new TripLocationPath('Path 2');
+        $this->setCreatedAt($tripLocationPath2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($tripLocationPath2);
+
+        /*
+         * TripLocation
+         */
+        $tripLocation1 = new TripLocation('Location 1', 1000.0, 200, $tripLocationPath1);
+        $this->setUid($tripLocation1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($tripLocation1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($tripLocation1);
+
+        $tripLocation2 = new TripLocation('Location 2', 2000.0, 100, $tripLocationPath1);
+        $this->setCreatedAt($tripLocation2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($tripLocation2);
+
+        $tripLocation3 = new TripLocation('Location 3', 300.0, 100, $tripLocationPath2);
+        $this->setCreatedAt($tripLocation3, new DateTimeImmutable('2000-01-03'));
+        $manager->persist($tripLocation3);
 
         // save
         $manager->flush();

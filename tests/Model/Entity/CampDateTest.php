@@ -73,6 +73,14 @@ class CampDateTest extends TestCase
         $this->assertTrue($this->campDate->isClosed());
     }
 
+    public function testIsOpenAboveCapacity(): void
+    {
+        $this->assertFalse($this->campDate->isOpenAboveCapacity());
+
+        $this->campDate->setIsOpenAboveCapacity(true);
+        $this->assertTrue($this->campDate->isOpenAboveCapacity());
+    }
+
     public function testDescription(): void
     {
         $this->assertNull($this->campDate->getDescription());
