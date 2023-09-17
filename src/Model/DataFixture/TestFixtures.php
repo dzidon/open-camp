@@ -3,12 +3,14 @@
 namespace App\Model\DataFixture;
 
 use App\Library\Enum\GenderEnum;
+use App\Model\Entity\AttachmentConfig;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\Camper;
 use App\Model\Entity\CampImage;
 use App\Model\Entity\Contact;
+use App\Model\Entity\FileExtension;
 use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
 use App\Model\Entity\Role;
@@ -17,6 +19,7 @@ use App\Model\Entity\TripLocationPath;
 use App\Model\Entity\User;
 use App\Model\Entity\UserPasswordChange;
 use App\Model\Entity\UserRegistration;
+use App\Model\Enum\Entity\AttachmentConfigRequiredTypeEnum;
 use App\Model\Enum\Entity\ContactRoleEnum;
 use App\Model\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Model\Enum\Entity\UserRegistrationStateEnum;
@@ -385,6 +388,47 @@ class TestFixtures extends Fixture
         $tripLocation3 = new TripLocation('Location 3', 300.0, 100, $tripLocationPath2);
         $this->setCreatedAt($tripLocation3, new DateTimeImmutable('2000-01-03'));
         $manager->persist($tripLocation3);
+
+        /*
+         * FileExtension
+         */
+        $fileExtensionPng = new FileExtension('png');
+        $this->setUid($fileExtensionPng, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($fileExtensionPng, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($fileExtensionPng);
+
+        $fileExtensionJpg = new FileExtension('jpg');
+        $this->setCreatedAt($fileExtensionJpg, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($fileExtensionJpg);
+
+        $fileExtensionTxt = new FileExtension('txt');
+        $this->setCreatedAt($fileExtensionTxt, new DateTimeImmutable('2000-01-03'));
+        $manager->persist($fileExtensionTxt);
+
+        $fileExtensionDocx = new FileExtension('docx');
+        $this->setCreatedAt($fileExtensionDocx, new DateTimeImmutable('2000-01-04'));
+        $manager->persist($fileExtensionDocx);
+
+        $fileExtensionXlsx = new FileExtension('xlsx');
+        $this->setCreatedAt($fileExtensionXlsx, new DateTimeImmutable('2000-01-05'));
+        $manager->persist($fileExtensionXlsx);
+
+        /*
+         * AttachmentConfig
+         */
+        $attachmentConfig1 = new AttachmentConfig('Text file', 10.0);
+        $this->setUid($attachmentConfig1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $attachmentConfig1->addFileExtension($fileExtensionTxt);
+        $attachmentConfig1->addFileExtension($fileExtensionDocx);
+        $this->setCreatedAt($attachmentConfig1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($attachmentConfig1);
+
+        $attachmentConfig2 = new AttachmentConfig('Image', 50.0);
+        $attachmentConfig2->setRequiredType(AttachmentConfigRequiredTypeEnum::REQUIRED);
+        $attachmentConfig2->addFileExtension($fileExtensionPng);
+        $attachmentConfig2->addFileExtension($fileExtensionJpg);
+        $this->setCreatedAt($attachmentConfig2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($attachmentConfig2);
 
         // save
         $manager->flush();

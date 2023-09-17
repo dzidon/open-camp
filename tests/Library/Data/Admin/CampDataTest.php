@@ -546,6 +546,11 @@ class CampDataTest extends KernelTestCase
         $data->setUrlName('camp-2');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
+
+        $data->setId($camp->getId());
+        $data->setUrlName('text');
+        $result = $validator->validate($data);
+        $this->assertEmpty($result); // valid
     }
 
     private function getCampRepository(): CampRepositoryInterface

@@ -65,16 +65,35 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
         }
 
         // applications
+        $isGrantedAttachmentConfig =
+            $this->security->isGranted('attachment_config_create') || $this->security->isGranted('attachment_config_read') ||
+            $this->security->isGranted('attachment_config_update') || $this->security->isGranted('attachment_config_delete')
+        ;
+
         $isGrantedTripLocationPath =
             $this->security->isGranted('trip_location_path_create') || $this->security->isGranted('trip_location_path_read') ||
             $this->security->isGranted('trip_location_path_update') || $this->security->isGranted('trip_location_path_delete')
         ;
 
-        if ($isGrantedTripLocationPath /* || */)
+        if ($isGrantedAttachmentConfig || $isGrantedTripLocationPath)
         {
             $text = $this->translator->trans('route.admin_application_list');
             $itemApplicationsParent = new MenuIconType('parent_applications', 'navbar_admin_vertical_item', $text, '#', 'fas fa-sticky-note');
             $menu->addChild($itemApplicationsParent);
+
+            if ($isGrantedAttachmentConfig)
+            {
+                $active =
+                    $route === 'admin_attachment_config_list'   || $route === 'admin_attachment_config_create' || $route === 'admin_attachment_config_read' ||
+                    $route === 'admin_attachment_config_update' || $route === 'admin_attachment_config_delete'
+                ;
+
+                $text = $this->translator->trans('route.admin_attachment_config_list');
+                $url = $this->urlGenerator->generate('admin_attachment_config_list');
+                $itemAttachmentConfigs = new MenuIconType('admin_attachment_config_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
+                $itemApplicationsParent->addChild($itemAttachmentConfigs);
+                $itemAttachmentConfigs->setActive($active, $active);
+            }
 
             if ($isGrantedTripLocationPath)
             {

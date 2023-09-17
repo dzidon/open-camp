@@ -97,6 +97,11 @@ class UserDataTest extends KernelTestCase
         $data->setEmail('jeff@gmail.com');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
+
+        $data->setId($user->getId());
+        $data->setEmail('bob@gmail.com');
+        $result = $validator->validate($data);
+        $this->assertEmpty($result); // valid
     }
 
     public function testRole(): void

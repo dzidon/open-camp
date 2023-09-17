@@ -118,6 +118,7 @@ class CreatePermissionsCommand extends Command
         $groups['camp_category'] = $this->permissionGroupRepository->createPermissionGroup('camp_category', 'permission_group.camp_category', 300);
         $groups['camp'] = $this->permissionGroupRepository->createPermissionGroup('camp', 'permission_group.camp', 400);
         $groups['trip_location_path'] = $this->permissionGroupRepository->createPermissionGroup('trip_location_path', 'permission_group.trip_location_path', 500);
+        $groups['attachment_config'] = $this->permissionGroupRepository->createPermissionGroup('attachment_config', 'permission_group.attachment_config', 600);
 
         return $groups;
     }
@@ -155,6 +156,11 @@ class CreatePermissionsCommand extends Command
         $permissions['trip_location_path_read'] = $this->permissionRepository->createPermission('trip_location_path_read', 'permission.trip_location_path_read', 200, $groups['trip_location_path']);
         $permissions['trip_location_path_update'] = $this->permissionRepository->createPermission('trip_location_path_update', 'permission.trip_location_path_update', 300, $groups['trip_location_path']);
         $permissions['trip_location_path_delete'] = $this->permissionRepository->createPermission('trip_location_path_delete', 'permission.trip_location_path_delete', 400, $groups['trip_location_path']);
+
+        $permissions['attachment_config_create'] = $this->permissionRepository->createPermission('attachment_config_create', 'permission.attachment_config_create', 100, $groups['attachment_config']);
+        $permissions['attachment_config_read'] = $this->permissionRepository->createPermission('attachment_config_read', 'permission.attachment_config_read', 200, $groups['attachment_config']);
+        $permissions['attachment_config_update'] = $this->permissionRepository->createPermission('attachment_config_update', 'permission.attachment_config_update', 300, $groups['attachment_config']);
+        $permissions['attachment_config_delete'] = $this->permissionRepository->createPermission('attachment_config_delete', 'permission.attachment_config_delete', 400, $groups['attachment_config']);
 
         return $permissions;
     }

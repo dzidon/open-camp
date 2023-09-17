@@ -13,7 +13,10 @@ use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\UuidV4;
 
 /**
- * @inheritDoc
+ * @method TripLocation|null find($id, $lockMode = null, $lockVersion = null)
+ * @method TripLocation|null findOneBy(array $criteria, array $orderBy = null)
+ * @method TripLocation[]    findAll()
+ * @method TripLocation[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class TripLocationRepository extends AbstractRepository implements TripLocationRepositoryInterface
 {

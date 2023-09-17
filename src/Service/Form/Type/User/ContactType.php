@@ -43,6 +43,10 @@ class ContactType extends AbstractType
                 ],
             ])
             ->add('role', ContactRoleType::class, [
+                'placeholder'      => 'form.common.choice.choose',
+                'placeholder_attr' => [
+                    'disabled' => 'disabled'
+                ],
                 'label' => 'form.user.contact.role',
             ])
         ;

@@ -86,6 +86,11 @@ class TripLocationPathDataTest extends KernelTestCase
         $data->setName('Path 2');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
+
+        $data->setId($path->getId());
+        $data->setName('text');
+        $result = $validator->validate($data);
+        $this->assertEmpty($result); // valid
     }
 
     private function getTripLocationPathRepository(): TripLocationPathRepositoryInterface

@@ -88,6 +88,11 @@ class RoleDataTest extends KernelTestCase
         $data->setLabel('Super admin');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
+
+        $data->setId($role->getId());
+        $data->setLabel('text');
+        $result = $validator->validate($data);
+        $this->assertEmpty($result); // valid
     }
 
     public function testPermissions(): void

@@ -18,10 +18,6 @@ class ContactRoleType extends AbstractType
             'class'        => ContactRoleEnum::class,
             'expanded'     => false,
             'multiple'     => false,
-            'placeholder'  => 'form.common.choice.choose',
-            'placeholder_attr' => [
-                'disabled' => 'disabled'
-            ],
             'choice_label' => fn ($choice) => match ($choice) {
                 ContactRoleEnum::MOTHER   => 'contact_role.mother',
                 ContactRoleEnum::FATHER   => 'contact_role.father',
