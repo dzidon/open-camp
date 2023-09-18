@@ -42,13 +42,11 @@ class UserDataTransfer implements DataTransferInterface
 
         $userData->setId($user->getId());
         $userData->setEmail($user->getEmail());
+        $userData->setLeaderPhoneNumber($user->getLeaderPhoneNumber());
         $userData->setRole($user->getRole());
 
         $billingData = $userData->getBillingData();
         $this->transferRegistry->fillData($billingData, $user);
-
-        $profileData = $userData->getProfileData();
-        $this->transferRegistry->fillData($profileData, $user);
     }
 
     /**
@@ -64,12 +62,10 @@ class UserDataTransfer implements DataTransferInterface
         if ($this->security->isGranted('user_update'))
         {
             $user->setEmail($userData->getEmail());
+            $user->setLeaderPhoneNumber($userData->getLeaderPhoneNumber());
 
             $billingData = $userData->getBillingData();
             $this->transferRegistry->fillEntity($billingData, $user);
-
-            $profileData = $userData->getProfileData();
-            $this->transferRegistry->fillEntity($profileData, $user);
         }
 
         if ($this->security->isGranted('user_update_role'))

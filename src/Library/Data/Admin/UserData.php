@@ -5,6 +5,8 @@ namespace App\Library\Data\Admin;
 use App\Library\Constraint\UniqueUser;
 use App\Library\Data\User\BillingData;
 use App\Model\Entity\Role;
+use libphonenumber\PhoneNumber;
+use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,16 +22,15 @@ class UserData
 
     private ?Role $role = null;
 
-    #[Assert\Valid]
-    private BillingData $billingData;
+    #[AssertPhoneNumber]
+    private ?PhoneNumber $leaderPhoneNumber = null;
 
     #[Assert\Valid]
-    private ProfileData $profileData;
+    private BillingData $billingData;
 
     public function __construct(bool $isEuBusinessDataEnabled)
     {
         $this->billingData = new BillingData($isEuBusinessDataEnabled);
-        $this->profileData = new ProfileData();
     }
 
     public function getId(): ?UuidV4
@@ -68,13 +69,30 @@ class UserData
         return $this;
     }
 
+    public function getLeaderPhoneNumber(): ?PhoneNumber
+    {
+        if ($this->leaderPhoneNumber !== null)
+        {
+            return clone $this->leaderPhoneNumber;
+        }
+
+        return $this->leaderPhoneNumber;
+    }
+
+    public function setLeaderPhoneNumber(?PhoneNumber $leaderPhoneNumber): self
+    {
+        if ($leaderPhoneNumber !== null)
+        {
+            $leaderPhoneNumber = clone $leaderPhoneNumber;
+        }
+
+        $this->leaderPhoneNumber = $leaderPhoneNumber;
+
+        return $this;
+    }
+
     public function getBillingData(): BillingData
     {
         return $this->billingData;
-    }
-
-    public function getProfileData(): ProfileData
-    {
-        return $this->profileData;
     }
 }

@@ -23,6 +23,8 @@ class ProfileDataTransfer implements DataTransferInterface
         $profileData = $data;
         $user = $entity;
 
+        $profileData->setNameFirst($user->getNameFirst());
+        $profileData->setNameLast($user->getNameLast());
         $profileData->setLeaderPhoneNumber($user->getLeaderPhoneNumber());
     }
 
@@ -33,6 +35,8 @@ class ProfileDataTransfer implements DataTransferInterface
         $profileData = $data;
         $user = $entity;
 
+        $user->setNameFirst($profileData->getNameFirst());
+        $user->setNameLast($profileData->getNameLast());
         $user->setLeaderPhoneNumber($profileData->getLeaderPhoneNumber());
     }
 }

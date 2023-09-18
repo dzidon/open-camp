@@ -5,20 +5,32 @@
         <div class="col-12">
             <div class="card card-outline card-primary">
                 <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.user.name_first'|trans }} & {{ 'entity_attribute.user.name_last'|trans }}:</strong>
-                        </div>
+                    <div class="row">
+                        <div class="col-12 col-md-8 col-xl-5">
+                            {{ form_start(form_profile) }}
+                                <div class="form-row">
+                                    <div class="col-md-6">
+                                        {{ form_row(form_profile.nameFirst) }}
+                                    </div>
 
-                        <div class="col-12 col-sm-9">
-                            {% if admin.nameFirst is not null and admin.nameLast is not null %}
-                                <span>{{ admin.nameFirst }} {{ admin.nameLast }}</span>
-                            {% else %}
-                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
-                            {% endif %}
+                                    <div class="col-md-6">
+                                        {{ form_row(form_profile.nameLast) }}
+                                    </div>
+                                </div>
+
+                                {{ form_rest(form_profile) }}
+                            {{ form_end(form_profile) }}
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.user.email'|trans }}:</strong>
@@ -62,20 +74,6 @@
                                     {% endfor %}
                                 {% endif %}
                             {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-12">
-            <div class="card card-outline card-primary">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12 col-md-8 col-xl-5">
-                            {{ form(form_profile) }}
                         </div>
                     </div>
                 </div>

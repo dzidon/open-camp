@@ -492,6 +492,8 @@ form:
 
     admin:
         profile:
+            name_first: 'Jméno'
+            name_last: 'Příjmení'
             leader_phone_number: 'Telefonní číslo na vedoucího'
             button: 'Uložit'
 
@@ -518,6 +520,7 @@ form:
         user:
             email: 'E-mail'
             role: 'Role'
+            leader_phone_number: 'Telefonní číslo na vedoucího'
             button: 'Uložit'
 
         user_search:

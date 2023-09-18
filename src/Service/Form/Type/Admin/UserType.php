@@ -5,6 +5,7 @@ namespace App\Service\Form\Type\Admin;
 use App\Library\Data\Admin\UserData;
 use App\Model\Entity\Role;
 use App\Service\Form\Type\User\BillingType;
+use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
@@ -39,8 +40,9 @@ class UserType extends AbstractType
                     ],
                     'label' => 'form.admin.user.email',
                 ])
-                ->add('profileData', ProfileType::class, [
-                    'label' => false,
+                ->add('leaderPhoneNumber', PhoneNumberType::class, [
+                    'required' => false,
+                    'label'    => 'form.admin.user.leader_phone_number',
                 ])
                 ->add('billingData', BillingType::class, [
                     'label' => false,
