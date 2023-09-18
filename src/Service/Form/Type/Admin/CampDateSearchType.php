@@ -19,17 +19,17 @@ class CampDateSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('startAt', DateType::class, [
+            ->add('from', DateType::class, [
                 'required' => false,
                 'widget'   => 'single_text',
                 'input'    => 'datetime_immutable',
-                'label'    => 'form.admin.camp_date_search.start_at',
+                'label'    => 'form.admin.camp_date_search.from',
             ])
-            ->add('endAt', DateType::class, [
+            ->add('to', DateType::class, [
                 'required' => false,
                 'widget'   => 'single_text',
                 'input'    => 'datetime_immutable',
-                'label'    => 'form.admin.camp_date_search.end_at',
+                'label'    => 'form.admin.camp_date_search.to',
             ])
             ->add('sortBy', EnumType::class, [
                 'class'        => CampDateSortEnum::class,

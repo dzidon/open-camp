@@ -59,17 +59,17 @@ class CampSearchType extends AbstractType
                 'required' => false,
                 'label'    => 'form.admin.camp_search.age',
             ])
-            ->add('startAt', DateType::class, [
+            ->add('from', DateType::class, [
                 'required' => false,
                 'widget'   => 'single_text',
                 'input'    => 'datetime_immutable',
-                'label'    => 'form.admin.camp_search.start_at',
+                'label'    => 'form.admin.camp_search.from',
             ])
-            ->add('endAt', DateType::class, [
+            ->add('to', DateType::class, [
                 'required' => false,
                 'widget'   => 'single_text',
                 'input'    => 'datetime_immutable',
-                'label'    => 'form.admin.camp_search.end_at',
+                'label'    => 'form.admin.camp_search.to',
             ])
             ->add('campCategory', ChoiceType::class, [
                 'choices'      => $options['choices_camp_categories'],

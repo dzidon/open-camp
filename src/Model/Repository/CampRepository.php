@@ -121,8 +121,8 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();
         $age = $data->getAge();
-        $startAt = $data->getStartAt();
-        $endAt = $data->getEndAt();
+        $from = $data->getFrom();
+        $to = $data->getTo();
         $campCategory = $data->getCampCategory();
         $isActive = $data->isActive();
 
@@ -143,21 +143,19 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             ;
         }
 
-        if ($startAt !== null)
+        if ($from !== null)
         {
             $queryBuilder
-                ->andWhere($queryBuilder->expr()->between('campDate.startAt', ':dayStart', ':dayEnd'))
-                ->setParameter('dayStart', $startAt->format('Y-m-d 00:00:00'))
-                ->setParameter('dayEnd', $startAt->format('Y-m-d 23:59:59'))
+                ->andWhere('campDate.startAt >= :from')
+                ->setParameter('from', $from->format('Y-m-d 00:00:00'))
             ;
         }
 
-        if ($endAt !== null)
+        if ($to !== null)
         {
             $queryBuilder
-                ->andWhere($queryBuilder->expr()->between('campDate.endAt', ':dayStart', ':dayEnd'))
-                ->setParameter('dayStart', $endAt->format('Y-m-d 00:00:00'))
-                ->setParameter('dayEnd', $endAt->format('Y-m-d 23:59:59'))
+                ->andWhere('campDate.endAt <= :to')
+                ->setParameter('to', $to->format('Y-m-d 23:59:59'))
             ;
         }
 

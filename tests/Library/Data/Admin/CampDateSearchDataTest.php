@@ -9,30 +9,30 @@ use PHPUnit\Framework\TestCase;
 
 class CampDateSearchDataTest extends TestCase
 {
-    public function testStartAt(): void
+    public function testFrom(): void
     {
         $data = new CampDateSearchData();
-        $this->assertNull($data->getStartAt());
+        $this->assertNull($data->getFrom());
 
-        $expectedDateStart = new DateTimeImmutable('now');
-        $data->setStartAt($expectedDateStart);
-        $this->assertSame($expectedDateStart, $data->getStartAt());
+        $expectedDateFrom = new DateTimeImmutable('now');
+        $data->setFrom($expectedDateFrom);
+        $this->assertSame($expectedDateFrom, $data->getFrom());
 
-        $data->setStartAt(null);
-        $this->assertNull($data->getStartAt());
+        $data->setFrom(null);
+        $this->assertNull($data->getFrom());
     }
 
-    public function testEndAt(): void
+    public function testTo(): void
     {
         $data = new CampDateSearchData();
-        $this->assertNull($data->getEndAt());
+        $this->assertNull($data->getTo());
 
-        $expectedDateEnd = new DateTimeImmutable('now');
-        $data->setEndAt($expectedDateEnd);
-        $this->assertSame($expectedDateEnd, $data->getEndAt());
+        $expectedDateTo = new DateTimeImmutable('now');
+        $data->setTo($expectedDateTo);
+        $this->assertSame($expectedDateTo, $data->getTo());
 
-        $data->setEndAt(null);
-        $this->assertNull($data->getEndAt());
+        $data->setTo(null);
+        $this->assertNull($data->getTo());
     }
 
     public function testSortBy(): void

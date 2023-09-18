@@ -593,8 +593,8 @@ form:
                     featured_priority_desc: 'Od největší priority v doporučených'
 
             age: 'Věk'
-            start_at: 'Datum odjezdu'
-            end_at: 'Datum návratu'
+            from: 'Odjezd od'
+            to: 'Návrat do'
             camp_category: 'Kategorie tábora'
             is_active: 'Přijímá přihlášky'
             button: 'Hledat'
@@ -625,8 +625,8 @@ form:
             button: 'Uložit'
 
         camp_date_search:
-            start_at: 'Datum odjezdu'
-            end_at: 'Datum návratu'
+            from: 'Odjezd od'
+            to: 'Návrat do'
             sort_by:
                 label: 'Řazení'
                 options:
@@ -663,8 +663,8 @@ form:
             sort_by:
                 label: 'Řazení'
                 options:
-                    created_at_desc: 'Od nejnovějšího'
-                    created_at_asc: 'Od nejstaršího'
+                    created_at_desc: 'Od nejnovější'
+                    created_at_asc: 'Od nejstarší'
                     name_asc: 'Název (A-Z)'
                     name_desc: 'Název (Z-A)'
 
@@ -687,8 +687,8 @@ form:
             sort_by:
                 label: 'Řazení'
                 options:
-                    created_at_desc: 'Od nejnovějšího'
-                    created_at_asc: 'Od nejstaršího'
+                    created_at_desc: 'Od nejnovější'
+                    created_at_asc: 'Od nejstarší'
                     name_asc: 'Název (A-Z)'
                     name_desc: 'Název (Z-A)'
                     price_asc: 'Cena (od nejmenší)'
@@ -711,8 +711,8 @@ form:
             sort_by:
                 label: 'Řazení'
                 options:
-                    created_at_desc: 'Od nejnovějšího'
-                    created_at_asc: 'Od nejstaršího'
+                    created_at_desc: 'Od nejnovější'
+                    created_at_asc: 'Od nejstarší'
                     name_asc: 'Název (A-Z)'
                     name_desc: 'Název (Z-A)'
                     max_size_asc: 'Maximální velikost (Od nejmenší)'

@@ -14,9 +14,9 @@ class CampSearchData
 
     private ?int $age = null;
 
-    private ?DateTimeImmutable $startAt = null;
+    private ?DateTimeImmutable $from = null;
 
-    private ?DateTimeImmutable $endAt = null;
+    private ?DateTimeImmutable $to = null;
 
     private false|null|CampCategory $campCategory = null;
 
@@ -61,26 +61,26 @@ class CampSearchData
         return $this;
     }
 
-    public function getStartAt(): ?DateTimeImmutable
+    public function getFrom(): ?DateTimeImmutable
     {
-        return $this->startAt;
+        return $this->from;
     }
 
-    public function setStartAt(?DateTimeImmutable $startAt): self
+    public function setFrom(?DateTimeImmutable $from): self
     {
-        $this->startAt = $startAt;
+        $this->from = $from;
 
         return $this;
     }
 
-    public function getEndAt(): ?DateTimeImmutable
+    public function getTo(): ?DateTimeImmutable
     {
-        return $this->endAt;
+        return $this->to;
     }
 
-    public function setEndAt(?DateTimeImmutable $endAt): self
+    public function setTo(?DateTimeImmutable $to): self
     {
-        $this->endAt = $endAt;
+        $this->to = $to;
 
         return $this;
     }

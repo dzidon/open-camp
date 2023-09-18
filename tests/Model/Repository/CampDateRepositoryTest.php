@@ -231,7 +231,7 @@ class CampDateRepositoryTest extends KernelTestCase
         $this->assertSame(['e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b', '550e8400-e29b-41d4-a716-446655440000'], $idStrings);
     }
 
-    public function testGetAdminPaginatorWithStartAt(): void
+    public function testGetAdminPaginatorWithFrom(): void
     {
         $campDateRepository = $this->getCampDateRepository();
         $campRepository = $this->getCampRepository();
@@ -240,7 +240,7 @@ class CampDateRepositoryTest extends KernelTestCase
         $camp = $campRepository->findOneById(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
         $data = new CampDateSearchData();
-        $data->setStartAt(new DateTimeImmutable('2000-07-01'));
+        $data->setFrom(new DateTimeImmutable('3000-07-08'));
         $data->setIsHistorical(null);
         $paginator = $campDateRepository->getAdminPaginator($data, $camp, 1, 2);
         $this->assertSame(1, $paginator->getTotalItems());
@@ -249,10 +249,10 @@ class CampDateRepositoryTest extends KernelTestCase
         $this->assertSame(2, $paginator->getPageSize());
 
         $idStrings = $this->getCampDateIdStrings($paginator->getCurrentPageItems());
-        $this->assertSame(['e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'], $idStrings);
+        $this->assertSame(['550e8400-e29b-41d4-a716-446655440000'], $idStrings);
     }
 
-    public function testGetAdminPaginatorWithEndAt(): void
+    public function testGetAdminPaginatorWithTo(): void
     {
         $campDateRepository = $this->getCampDateRepository();
         $campRepository = $this->getCampRepository();
@@ -261,7 +261,7 @@ class CampDateRepositoryTest extends KernelTestCase
         $camp = $campRepository->findOneById(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
         $data = new CampDateSearchData();
-        $data->setEndAt(new DateTimeImmutable('2000-07-07'));
+        $data->setTo(new DateTimeImmutable('2000-07-07'));
         $data->setIsHistorical(null);
         $paginator = $campDateRepository->getAdminPaginator($data, $camp, 1, 2);
         $this->assertSame(1, $paginator->getTotalItems());

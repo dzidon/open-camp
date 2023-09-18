@@ -243,12 +243,12 @@ class CampRepositoryTest extends KernelTestCase
         $this->assertSame(['camp-1'], $urlNames);
     }
 
-    public function testGetAdminPaginatorWithStartAt(): void
+    public function testGetAdminPaginatorWithFrom(): void
     {
         $repository = $this->getCampRepository();
 
         $data = new CampSearchData();
-        $data->setStartAt(new DateTimeImmutable('2000-07-01'));
+        $data->setFrom(new DateTimeImmutable('4000-01-05'));
         $paginator = $repository->getAdminPaginator($data, 1, 2);
         $this->assertSame(1, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
@@ -256,15 +256,15 @@ class CampRepositoryTest extends KernelTestCase
         $this->assertSame(2, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-1'], $urlNames);
+        $this->assertSame(['camp-2'], $urlNames);
     }
 
-    public function testGetAdminPaginatorWithEndAt(): void
+    public function testGetAdminPaginatorWithTo(): void
     {
         $repository = $this->getCampRepository();
 
         $data = new CampSearchData();
-        $data->setEndAt(new DateTimeImmutable('2000-07-07'));
+        $data->setTo(new DateTimeImmutable('2000-07-07'));
         $paginator = $repository->getAdminPaginator($data, 1, 2);
         $this->assertSame(1, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
