@@ -87,7 +87,6 @@ class CampController extends AbstractController
     public function create(DataTransferRegistryInterface   $dataTransfer,
                            CampCategoryRepositoryInterface $campCategoryRepository,
                            CampImageRepositoryInterface    $campImageRepository,
-                           CampDateRepositoryInterface     $campDateRepository,
                            Request                         $request): Response
     {
         $campCategoryChoices = $campCategoryRepository->findAll();
@@ -112,15 +111,6 @@ class CampController extends AbstractController
             {
                 $campImage = $campImageRepository->createCampImage($uploadedImage, 0, $camp);
                 $campImageRepository->saveCampImage($campImage, false);
-            }
-
-            // dates
-            $campDatesData = $campCreationData->getCampDatesData();
-            foreach ($campDatesData as $campDateData)
-            {
-                $campDate = $campDateRepository->createCampDate($campDateData->getStartAt(), $campDateData->getEndAt(), $campDateData->getPrice(), $campDateData->getCapacity(), $camp);
-                $dataTransfer->fillEntity($campDateData, $campDate);
-                $campDateRepository->saveCampDate($campDate, false);
             }
 
             $this->campRepository->saveCamp($camp, true);

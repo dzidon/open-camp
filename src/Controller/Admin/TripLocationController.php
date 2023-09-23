@@ -117,6 +117,15 @@ class TripLocationController extends AbstractController
         $tripLocation = $this->findTripLocationOrThrow404($id);
         $tripLocationPath = $tripLocation->getTripLocationPath();
 
+        if (!$this->tripLocationRepository->canRemoveTripLocation($tripLocation))
+        {
+            $this->addTransFlash('failure', 'crud.error.trip_location_delete');
+
+            return $this->redirectToRoute('admin_trip_location_path_update', [
+                'id' => $tripLocationPath->getId()->toRfc4122(),
+            ]);
+        }
+
         $form = $this->createForm(HiddenTrueType::class);
         $form->add('submit', SubmitType::class, [
             'label' => 'form.admin.trip_location_delete.button',

@@ -169,6 +169,21 @@ class UserDataTest extends KernelTestCase
         $this->assertInstanceOf(BillingData::class, $billingData);
     }
 
+    public function testBillingDataValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new UserData(true);
+        $billingData = $data->getBillingData();
+        $billingData->setNameFirst('John');
+        $result = $validator->validateProperty($data, 'billingData');
+        $this->assertNotEmpty($result); // invalid
+
+        $billingData->setNameLast('Doe');
+        $result = $validator->validateProperty($data, 'billingData');
+        $this->assertEmpty($result); // valid
+    }
+
     private function getUserRepository(): UserRepositoryInterface
     {
         $container = static::getContainer();

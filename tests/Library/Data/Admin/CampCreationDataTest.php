@@ -4,8 +4,6 @@ namespace App\Tests\Library\Data\Admin;
 
 use App\Library\Data\Admin\CampCreationData;
 use App\Library\Data\Admin\CampData;
-use App\Library\Data\Admin\CampDateData;
-use DateTimeImmutable;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -21,25 +19,26 @@ class CampCreationDataTest extends KernelTestCase
         $this->assertInstanceOf(CampData::class, $data->getCampData());
     }
 
-    public function testCampDatesData(): void
+    public function testCampDataValidation(): void
     {
         $data = new CampCreationData();
-        $this->assertSame([], $data->getCampDatesData());
+        $validator = $this->getValidator();
 
-        $newCampDatesData = [
-            new CampDateData(),
-            new CampDateData(),
-        ];
+        $result = $validator->validateProperty($data, 'campData');
+        $this->assertNotEmpty($result); // invalid
 
-        foreach ($newCampDatesData as $newCampDateData)
-        {
-            $data->addCampDatesDatum($newCampDateData);
-        }
+        $campData = $data->getCampData();
+        $campData->setName('Camp');
+        $campData->setUrlName('camp');
+        $campData->setAgeMin(5);
+        $campData->setAgeMax(10);
+        $campData->setStreet('Street 123');
+        $campData->setTown('Town');
+        $campData->setZip('12345');
+        $campData->setCountry('DE');
 
-        $this->assertSame($newCampDatesData, $data->getCampDatesData());
-
-        $data->removeCampDatesDatum($newCampDatesData[0]);
-        $this->assertNotContains($newCampDatesData[0], $data->getCampDatesData());
+        $result = $validator->validateProperty($data, 'campData');
+        $this->assertEmpty($result); // valid
     }
 
     public function testImages(): void
@@ -88,89 +87,6 @@ class CampCreationDataTest extends KernelTestCase
         }
 
         $this->assertInstanceOf(Image::class, $constraintImage);
-    }
-
-    public function testCampDatesCollisions(): void
-    {
-        $validator = $this->getValidator();
-
-        $data = new CampCreationData();
-        $campData = $data->getCampData();
-        $campData->setName('Name');
-        $campData->setUrlName('name');
-        $campData->setAgeMin(1);
-        $campData->setAgeMax(2);
-        $campData->setStreet('Street 123');
-        $campData->setTown('Town');
-        $campData->setZip('12345');
-        $campData->setCountry('CZ');
-
-        $campDateData1 = new CampDateData();
-        $campDateData1->setPrice(1000.0);
-        $campDateData1->setCapacity(10);
-
-        $campDateData2 = new CampDateData();
-        $campDateData2->setPrice(2000.0);
-        $campDateData2->setCapacity(20);
-
-        $data->addCampDatesDatum($campDateData1);
-        $data->addCampDatesDatum($campDateData2);
-
-        $campDateData1->setStartAt(new DateTimeImmutable('2000-01-01'));
-        $campDateData1->setEndAt(new DateTimeImmutable('2000-01-04'));
-        $campDateData2->setStartAt(new DateTimeImmutable('2000-01-05'));
-        $campDateData2->setEndAt(new DateTimeImmutable('2000-01-10'));
-        $result = $validator->validate($data);
-        $this->assertEmpty($result); // valid
-
-        $campDateData1->setStartAt(new DateTimeImmutable('2000-01-01'));
-        $campDateData1->setEndAt(new DateTimeImmutable('2000-01-07'));
-        $campDateData2->setStartAt(new DateTimeImmutable('2000-01-05'));
-        $campDateData2->setEndAt(new DateTimeImmutable('2000-01-10'));
-        $result = $validator->validate($data);
-        $this->assertNotEmpty($result); // invalid
-
-        $campDateData1->setStartAt(new DateTimeImmutable('2000-01-05'));
-        $campDateData1->setEndAt(new DateTimeImmutable('2000-01-10'));
-        $campDateData2->setStartAt(new DateTimeImmutable('2000-01-01'));
-        $campDateData2->setEndAt(new DateTimeImmutable('2000-01-07'));
-        $result = $validator->validate($data);
-        $this->assertNotEmpty($result); // invalid
-
-        $campDateData1->setStartAt(new DateTimeImmutable('2000-01-05'));
-        $campDateData1->setEndAt(new DateTimeImmutable('2000-01-10'));
-        $campDateData2->setStartAt(new DateTimeImmutable('2000-01-06'));
-        $campDateData2->setEndAt(new DateTimeImmutable('2000-01-09'));
-        $result = $validator->validate($data);
-        $this->assertNotEmpty($result); // invalid
-
-        $campDateData1->setStartAt(new DateTimeImmutable('2000-01-05'));
-        $campDateData1->setEndAt(new DateTimeImmutable('2000-01-10'));
-        $campDateData2->setStartAt(new DateTimeImmutable('2000-01-04'));
-        $campDateData2->setEndAt(new DateTimeImmutable('2000-01-11'));
-        $result = $validator->validate($data);
-        $this->assertNotEmpty($result); // invalid
-
-        $campDateData1->setStartAt(new DateTimeImmutable('2000-01-01'));
-        $campDateData1->setEndAt(new DateTimeImmutable('2000-01-05'));
-        $campDateData2->setStartAt(new DateTimeImmutable('2000-01-05'));
-        $campDateData2->setEndAt(new DateTimeImmutable('2000-01-10'));
-        $result = $validator->validate($data);
-        $this->assertNotEmpty($result); // invalid
-
-        $campDateData1->setStartAt(new DateTimeImmutable('2000-01-10'));
-        $campDateData1->setEndAt(new DateTimeImmutable('2000-01-15'));
-        $campDateData2->setStartAt(new DateTimeImmutable('2000-01-05'));
-        $campDateData2->setEndAt(new DateTimeImmutable('2000-01-10'));
-        $result = $validator->validate($data);
-        $this->assertNotEmpty($result); // invalid
-
-        $campDateData1->setStartAt(new DateTimeImmutable('2000-01-10'));
-        $campDateData1->setEndAt(new DateTimeImmutable('2000-01-15'));
-        $campDateData2->setStartAt(new DateTimeImmutable('2000-01-10'));
-        $campDateData2->setEndAt(new DateTimeImmutable('2000-01-15'));
-        $result = $validator->validate($data);
-        $this->assertNotEmpty($result); // invalid
     }
 
     private function getValidator(): ValidatorInterface

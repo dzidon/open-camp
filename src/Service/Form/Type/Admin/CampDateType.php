@@ -3,7 +3,6 @@
 namespace App\Service\Form\Type\Admin;
 
 use App\Library\Data\Admin\CampDateData;
-use App\Service\Form\Type\Common\CollectionItemType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
@@ -62,11 +61,6 @@ class CampDateType extends AbstractType
                 'label'    => 'form.admin.camp_date.leaders',
             ])
         ;
-    }
-
-    public function getParent(): string
-    {
-        return CollectionItemType::class;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -13,6 +13,7 @@ class TripLocationPathCreationData
 
     /** @var TripLocationData[] */
     #[Assert\Valid]
+    #[Assert\NotBlank(message: 'trip_locations_mandatory')]
     private array $tripLocationsData = [];
 
     public function __construct()

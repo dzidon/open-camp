@@ -16,6 +16,20 @@ class TripLocationPathCreationDataTest extends KernelTestCase
         $this->assertInstanceOf(TripLocationPathData::class, $data->getTripLocationPathData());
     }
 
+    public function testTripLocationPathDataValidation(): void
+    {
+        $validator = $this->getValidator();
+        $data = new TripLocationPathCreationData();
+
+        $result = $validator->validateProperty($data, 'tripLocationPathData');
+        $this->assertNotEmpty($result); // invalid
+
+        $tripLocationPathData = $data->getTripLocationPathData();
+        $tripLocationPathData->setName('Path');
+        $result = $validator->validateProperty($data, 'tripLocationPathData');
+        $this->assertEmpty($result); // valid
+    }
+
     public function testTripLocationsData(): void
     {
         $data = new TripLocationPathCreationData();
@@ -35,6 +49,24 @@ class TripLocationPathCreationDataTest extends KernelTestCase
 
         $data->removeTripLocationsDatum($newTripLocationsData[0]);
         $this->assertNotContains($newTripLocationsData[0], $data->getTripLocationsData());
+    }
+
+    public function testTripLocationsDataValidation(): void
+    {
+        $data = new TripLocationPathCreationData();
+        $validator = $this->getValidator();
+
+        $result = $validator->validateProperty($data, 'tripLocationsData');
+        $this->assertNotEmpty($result); // invalid
+
+        $tripLocationData = new TripLocationData();
+        $tripLocationData->setName('Location');
+        $tripLocationData->setPrice(100.0);
+        $tripLocationData->setPriority(0);
+        $data->addTripLocationsDatum($tripLocationData);
+
+        $result = $validator->validateProperty($data, 'tripLocationsData');
+        $this->assertEmpty($result); // valid
     }
 
     public function testTripLocationUniqueValidation(): void

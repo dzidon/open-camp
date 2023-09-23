@@ -102,6 +102,24 @@ class TripLocationRepository extends AbstractRepository implements TripLocationR
     /**
      * @inheritDoc
      */
+    public function canRemoveTripLocation(TripLocation $tripLocation): bool
+    {
+        $tripLocationPath = $tripLocation->getTripLocationPath();
+
+        $count = $this->createQueryBuilder('tripLocation')
+            ->select('count(tripLocation.id)')
+            ->andWhere('tripLocation.tripLocationPath = :tripLocationPathId')
+            ->setParameter('tripLocationPathId', $tripLocationPath->getId(), UuidType::NAME)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 1;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getAdminPaginator(TripLocationSearchData $data,
                                       TripLocationPath       $tripLocationPath,
                                       int                    $currentPage,

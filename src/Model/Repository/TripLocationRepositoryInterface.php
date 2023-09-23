@@ -70,6 +70,14 @@ interface TripLocationRepositoryInterface
     public function findByTripLocationPath(TripLocationPath $tripLocationPath): array;
 
     /**
+     * Returns true if the given trip location can be removed.
+     *
+     * @param TripLocation $tripLocation
+     * @return bool
+     */
+    public function canRemoveTripLocation(TripLocation $tripLocation): bool;
+
+    /**
      * Returns admin trip location search paginator.
      *
      * @param TripLocationSearchData $data

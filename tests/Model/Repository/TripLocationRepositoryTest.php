@@ -76,6 +76,17 @@ class TripLocationRepositoryTest extends KernelTestCase
         $this->assertSame(['Location 1', 'Location 2'], $names);
     }
 
+    public function testCanRemoveTripLocation(): void
+    {
+        $repository = $this->getTripLocationRepository();
+
+        $tripLocation = $repository->findOneById(new UuidV4('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
+        $this->assertTrue($repository->canRemoveTripLocation($tripLocation));
+
+        $tripLocation = $repository->findOneById(new UuidV4('550e8400-e29b-41d4-a716-446655440000'));
+        $this->assertFalse($repository->canRemoveTripLocation($tripLocation));
+    }
+
     public function testGetAdminPaginator(): void
     {
         $tripLocationPathRepository = $this->getTripLocationPathRepository();

@@ -133,6 +133,9 @@ crud:
         trip_location_delete: 'Opravdu si přejete odstranit lokaci "{name}"?'
         attachment_config_delete: 'Opravdu si přejete odstranit konfiguraci přílohy "{name}"?'
 
+    error:
+        trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
+
     action:
         common:
             read: 'Zobrazit'

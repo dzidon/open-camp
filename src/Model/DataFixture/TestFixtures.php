@@ -386,6 +386,7 @@ class TestFixtures extends Fixture
         $manager->persist($tripLocation2);
 
         $tripLocation3 = new TripLocation('Location 3', 300.0, 100, $tripLocationPath2);
+        $this->setUid($tripLocation3, '550e8400-e29b-41d4-a716-446655440000');
         $this->setCreatedAt($tripLocation3, new DateTimeImmutable('2000-01-03'));
         $manager->persist($tripLocation3);
 

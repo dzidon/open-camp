@@ -2,6 +2,7 @@
 
 namespace App\Tests\Library\Data\User;
 
+use App\Library\Data\User\PlainPasswordData;
 use App\Library\Data\User\ProfilePasswordChangeData;
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepositoryInterface;
@@ -41,6 +42,27 @@ class ProfilePasswordChangeDataTest extends KernelTestCase
 
         $data->setCurrentPassword('123456');
         $result = $validator->validateProperty($data, 'currentPassword');
+        $this->assertEmpty($result); // valid
+    }
+
+    public function testNewPasswordData(): void
+    {
+        $data = new ProfilePasswordChangeData();
+        $newPasswordData = $data->getNewPasswordData();
+        $this->assertInstanceOf(PlainPasswordData::class, $newPasswordData);
+    }
+
+    public function testNewPasswordDataValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new ProfilePasswordChangeData();
+        $result = $validator->validateProperty($data, 'newPasswordData');
+        $this->assertNotEmpty($result); // invalid
+
+        $newPasswordData = $data->getNewPasswordData();
+        $newPasswordData->setPlainPassword('123456');
+        $result = $validator->validateProperty($data, 'newPasswordData');
         $this->assertEmpty($result); // valid
     }
 
