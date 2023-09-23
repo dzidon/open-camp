@@ -87,7 +87,7 @@ class ProfileCamperController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $camper = $this->camperRepository->createCamper($camperData->getNameFirst(), $camperData->getNameLast(), $camperData->getGender(), $camperData->getBornAt(), $user);
+            $camper = new Camper($camperData->getNameFirst(), $camperData->getNameLast(), $camperData->getGender(), $camperData->getBornAt(), $user);
             $dataTransfer->fillEntity($camperData, $camper);
             $this->camperRepository->saveCamper($camper, true);
             $this->addTransFlash('success', 'crud.action_performed.camper.create');

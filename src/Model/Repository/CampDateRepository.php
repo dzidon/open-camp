@@ -45,14 +45,6 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     /**
      * @inheritDoc
      */
-    public function createCampDate(DateTimeImmutable $startAt, DateTimeImmutable $endAt, float $price, int $capacity, Camp $camp): CampDate
-    {
-        return new CampDate($startAt, $endAt, $price, $capacity, $camp);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findOneById(UuidV4 $id): ?CampDate
     {
         return $this->createQueryBuilder('campDate')

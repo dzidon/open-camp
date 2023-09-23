@@ -8,9 +8,6 @@ use App\Model\Entity\TripLocation;
 use App\Model\Entity\TripLocationPath;
 use Symfony\Component\Uid\UuidV4;
 
-/**
- * Trip location CRUD.
- */
 interface TripLocationRepositoryInterface
 {
     /**
@@ -30,20 +27,6 @@ interface TripLocationRepositoryInterface
      * @return void
      */
     public function removeTripLocation(TripLocation $tripLocation, bool $flush): void;
-
-    /**
-     * Creates a trip location.
-     *
-     * @param string $name
-     * @param float $price
-     * @param int $priority
-     * @param TripLocationPath $tripLocationPath
-     * @return TripLocation
-     */
-    public function createTripLocation(string           $name,
-                                       float            $price,
-                                       int              $priority,
-                                       TripLocationPath $tripLocationPath): TripLocation;
 
     /**
      * Finds one trip location by id.

@@ -33,19 +33,6 @@ class TripLocationRepositoryTest extends KernelTestCase
         $this->assertNull($loadedTripLocation);
     }
 
-    public function testCreate(): void
-    {
-        $tripLocationRepository = $this->getTripLocationRepository();
-
-        $tripLocationPath = new TripLocationPath('Name');
-        $tripLocation = $tripLocationRepository->createTripLocation('Location', 1000.0, 100, $tripLocationPath);
-
-        $this->assertSame('Location', $tripLocation->getName());
-        $this->assertSame(1000.0, $tripLocation->getPrice());
-        $this->assertSame(100, $tripLocation->getPriority());
-        $this->assertSame($tripLocationPath, $tripLocation->getTripLocationPath());
-    }
-
     public function testFindOneById(): void
     {
         $repository = $this->getTripLocationRepository();

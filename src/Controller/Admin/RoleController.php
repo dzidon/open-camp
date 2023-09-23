@@ -87,7 +87,7 @@ class RoleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $role = $this->roleRepository->createRole($roleData->getLabel());
+            $role = new Role($roleData->getLabel());
             $dataTransfer->fillEntity($roleData, $role);
             $this->roleRepository->saveRole($role, true);
             $this->addTransFlash('success', 'crud.action_performed.role.create');

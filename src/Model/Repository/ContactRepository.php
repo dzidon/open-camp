@@ -6,7 +6,6 @@ use App\Library\Data\User\ContactSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
-use App\Model\Enum\Entity\ContactRoleEnum;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -39,14 +38,6 @@ class ContactRepository extends AbstractRepository implements ContactRepositoryI
     public function removeContact(Contact $contact, bool $flush): void
     {
         $this->remove($contact, $flush);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function createContact(string $nameFirst, string $nameLast, ContactRoleEnum $role, User $user): Contact
-    {
-        return new Contact($nameFirst, $nameLast, $role, $user);
     }
 
     /**

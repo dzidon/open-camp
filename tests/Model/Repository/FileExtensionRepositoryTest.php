@@ -25,14 +25,6 @@ class FileExtensionRepositoryTest extends KernelTestCase
         $this->assertNull($loadedFileExtension);
     }
 
-    public function testCreate(): void
-    {
-        $fileExtensionRepository = $this->getFileExtensionRepository();
-
-        $fileExtension = $fileExtensionRepository->createFileExtension('exe');
-        $this->assertSame('exe', $fileExtension->getExtension());
-    }
-
     public function testFindForAttachmentConfigs(): void
     {
         $fileExtensionRepository = $this->getFileExtensionRepository();

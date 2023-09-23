@@ -43,14 +43,6 @@ class AttachmentConfigRepository extends AbstractRepository implements Attachmen
     /**
      * @inheritDoc
      */
-    public function createAttachmentConfig(string $name, float $maxSize): AttachmentConfig
-    {
-        return new AttachmentConfig($name, $maxSize);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findOneById(UuidV4 $id): ?AttachmentConfig
     {
         return $this->createQueryBuilder('attachmentConfig')

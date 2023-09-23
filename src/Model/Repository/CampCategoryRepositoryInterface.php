@@ -5,9 +5,6 @@ namespace App\Model\Repository;
 use App\Model\Entity\CampCategory;
 use Symfony\Component\Uid\UuidV4;
 
-/**
- * Camp category CRUD.
- */
 interface CampCategoryRepositoryInterface
 {
     /**
@@ -27,15 +24,6 @@ interface CampCategoryRepositoryInterface
      * @return void
      */
     public function removeCampCategory(CampCategory $campCategory, bool $flush): void;
-
-    /**
-     * Creates a camp category.
-     *
-     * @param string $name
-     * @param string $urlName
-     * @return CampCategory
-     */
-    public function createCampCategory(string $name, string $urlName): CampCategory;
 
     /**
      * Finds one camp category by id.

@@ -30,15 +30,6 @@ class AttachmentConfigRepositoryTest extends KernelTestCase
         $this->assertNull($loadedAttachmentConfig);
     }
 
-    public function testCreate(): void
-    {
-        $attachmentConfigRepository = $this->getAttachmentConfigRepository();
-
-        $attachmentConfig = $attachmentConfigRepository->createAttachmentConfig('Config', 10.0);
-        $this->assertSame('Config', $attachmentConfig->getName());
-        $this->assertSame(10.0, $attachmentConfig->getMaxSize());
-    }
-
     public function testFindOneById(): void
     {
         $attachmentConfigRepository = $this->getAttachmentConfigRepository();

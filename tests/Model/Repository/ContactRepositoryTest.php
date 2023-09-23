@@ -38,18 +38,6 @@ class ContactRepositoryTest extends KernelTestCase
         $this->assertNull($loadedContact);
     }
 
-    public function testCreate(): void
-    {
-        $repository = $this->getContactRepository();
-
-        $user = new User('bob@bing.com');
-        $contact = $repository->createContact('Bob', 'Bobby', ContactRoleEnum::MOTHER, $user);
-        $this->assertSame('Bob', $contact->getNameFirst());
-        $this->assertSame('Bobby', $contact->getNameLast());
-        $this->assertSame(ContactRoleEnum::MOTHER, $contact->getRole());
-        $this->assertSame($user, $contact->getUser());
-    }
-
     public function testFindOneById(): void
     {
         $repository = $this->getContactRepository();

@@ -34,18 +34,6 @@ class PermissionRepositoryTest extends KernelTestCase
         $this->assertNull($loadedPermission);
     }
 
-    public function testCreate(): void
-    {
-        $permissionRepository = $this->getPermissionRepository();
-        $group = new PermissionGroup('new_group', 'New group', 1);
-
-        $permission = $permissionRepository->createPermission('new_permission', 'New permission', 1, $group);
-        $this->assertSame('new_permission', $permission->getName());
-        $this->assertSame('New permission', $permission->getLabel());
-        $this->assertSame(1, $permission->getPriority());
-        $this->assertSame($group, $permission->getPermissionGroup());
-    }
-
     public function testFindAll(): void
     {
         $permissionRepository = $this->getPermissionRepository();

@@ -28,14 +28,6 @@ class TripLocationPathRepositoryTest extends KernelTestCase
         $this->assertNull($loadedTripLocationPath);
     }
 
-    public function testCreate(): void
-    {
-        $repository = $this->getTripLocationPathRepository();
-        $role = $repository->createTripLocationPath('Path');
-
-        $this->assertSame('Path', $role->getName());
-    }
-
     public function testFindOneById(): void
     {
         $repository = $this->getTripLocationPathRepository();

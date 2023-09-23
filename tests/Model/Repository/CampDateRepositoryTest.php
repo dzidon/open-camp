@@ -34,20 +34,6 @@ class CampDateRepositoryTest extends KernelTestCase
         $this->assertNull($loadedCampDate);
     }
 
-    public function testCreate(): void
-    {
-        $campDateRepository = $this->getCampDateRepository();
-
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
-        $campDate = $campDateRepository->createCampDate(new DateTimeImmutable('2000-07-01'), new DateTimeImmutable('2000-07-07'), 1000.0, 10, $camp);
-
-        $this->assertSame((new DateTimeImmutable('2000-07-01'))->getTimestamp(), $campDate->getStartAt()->getTimestamp());
-        $this->assertSame((new DateTimeImmutable('2000-07-07'))->getTimestamp(), $campDate->getEndAt()->getTimestamp());
-        $this->assertSame(1000.0, $campDate->getPrice());
-        $this->assertSame(10, $campDate->getCapacity());
-        $this->assertSame($camp, $campDate->getCamp());
-    }
-
     public function testFindOneById(): void
     {
         $campDateRepository = $this->getCampDateRepository();

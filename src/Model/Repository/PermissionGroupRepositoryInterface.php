@@ -4,9 +4,6 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\PermissionGroup;
 
-/**
- * Admin permission group CRUD.
- */
 interface PermissionGroupRepositoryInterface
 {
     /**
@@ -26,16 +23,6 @@ interface PermissionGroupRepositoryInterface
      * @return void
      */
     public function removePermissionGroup(PermissionGroup $permissionGroup, bool $flush): void;
-
-    /**
-     * Creates a permission group.
-     *
-     * @param string $name
-     * @param string $label
-     * @param int $priority
-     * @return PermissionGroup
-     */
-    public function createPermissionGroup(string $name, string $label, int $priority): PermissionGroup;
 
     /**
      * Finds all available permission groups.

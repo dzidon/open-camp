@@ -3,7 +3,6 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\Permission;
-use App\Model\Entity\PermissionGroup;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -32,14 +31,6 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
     public function removePermission(Permission $permission, bool $flush): void
     {
         $this->remove($permission, $flush);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function createPermission(string $name, string $label, int $priority, PermissionGroup $group): Permission
-    {
-        return new Permission($name, $label, $priority, $group);
     }
 
     /**

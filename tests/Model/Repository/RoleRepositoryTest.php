@@ -31,14 +31,6 @@ class RoleRepositoryTest extends KernelTestCase
         $this->assertNull($loadedRole);
     }
 
-    public function testCreate(): void
-    {
-        $repository = $this->getRoleRepository();
-        $role = $repository->createRole('New role');
-
-        $this->assertSame('New role', $role->getLabel());
-    }
-
     public function testFindAll(): void
     {
         $repository = $this->getRoleRepository();

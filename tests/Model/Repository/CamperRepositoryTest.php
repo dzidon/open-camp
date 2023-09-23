@@ -39,20 +39,6 @@ class CamperRepositoryTest extends KernelTestCase
         $this->assertNull($loadedCamper);
     }
 
-    public function testCreate(): void
-    {
-        $repository = $this->getCamperRepository();
-        $bornAtDate = new DateTimeImmutable('2000-01-01');
-        $user = new User('bob@bing.com');
-        $camper = $repository->createCamper('Bob', 'Bobby', GenderEnum::FEMALE, $bornAtDate, $user);
-
-        $this->assertSame('Bob', $camper->getNameFirst());
-        $this->assertSame('Bobby', $camper->getNameLast());
-        $this->assertSame(GenderEnum::FEMALE, $camper->getGender());
-        $this->assertSame($bornAtDate, $camper->getBornAt());
-        $this->assertSame($user, $camper->getUser());
-    }
-
     public function testFindOneById(): void
     {
         $repository = $this->getCamperRepository();

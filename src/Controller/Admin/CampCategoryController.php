@@ -57,7 +57,7 @@ class CampCategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $campCategory = $this->campCategoryRepository->createCampCategory($campCategoryData->getName(), $campCategoryData->getUrlName());
+            $campCategory = new CampCategory($campCategoryData->getName(), $campCategoryData->getUrlName());
             $dataTransfer->fillEntity($campCategoryData, $campCategory);
             $this->campCategoryRepository->saveCampCategory($campCategory, true);
             $this->addTransFlash('success', 'crud.action_performed.camp_category.create');

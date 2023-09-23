@@ -36,14 +36,6 @@ class PermissionGroupRepository extends AbstractRepository implements Permission
     /**
      * @inheritDoc
      */
-    public function createPermissionGroup(string $name, string $label, int $priority): PermissionGroup
-    {
-        return new PermissionGroup($name, $label, $priority);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findAll(): array
     {
         return $this->createQueryBuilder('permissionGroup')

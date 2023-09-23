@@ -38,14 +38,6 @@ class FileExtensionRepository extends AbstractRepository implements FileExtensio
     /**
      * @inheritDoc
      */
-    public function createFileExtension(string $extension): FileExtension
-    {
-        return new FileExtension($extension);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findForAttachmentConfigs(): array
     {
         return $this->_em->createQueryBuilder()

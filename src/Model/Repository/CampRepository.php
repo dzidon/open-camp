@@ -71,21 +71,6 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function createCamp(string $name,
-                               string $urlName,
-                               int    $ageMin,
-                               int    $ageMax,
-                               string $street,
-                               string $town,
-                               string $zip,
-                               string $country): Camp
-    {
-        return new Camp($name, $urlName, $ageMin, $ageMax, $street, $town, $zip, $country);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findOneById(UuidV4 $id): ?Camp
     {
         return $this->createQueryBuilder('camp')

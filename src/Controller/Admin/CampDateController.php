@@ -93,7 +93,7 @@ class CampDateController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $campDate = $this->campDateRepository->createCampDate($campDateData->getStartAt(), $campDateData->getEndAt(), $campDateData->getPrice(), $campDateData->getCapacity(), $camp);
+            $campDate = new CampDate($campDateData->getStartAt(), $campDateData->getEndAt(), $campDateData->getPrice(), $campDateData->getCapacity(), $camp);
             $dataTransfer->fillEntity($campDateData, $campDate);
             $this->campDateRepository->saveCampDate($campDate, true);
             $this->addTransFlash('success', 'crud.action_performed.camp_date.create');

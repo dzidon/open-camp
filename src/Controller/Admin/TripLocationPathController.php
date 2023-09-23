@@ -7,6 +7,7 @@ use App\Library\Data\Admin\TripLocationPathCreationData;
 use App\Library\Data\Admin\TripLocationPathData;
 use App\Library\Data\Admin\TripLocationPathSearchData;
 use App\Library\Data\Admin\TripLocationSearchData;
+use App\Model\Entity\TripLocation;
 use App\Model\Entity\TripLocationPath;
 use App\Model\Repository\TripLocationPathRepositoryInterface;
 use App\Model\Repository\TripLocationRepositoryInterface;
@@ -92,14 +93,14 @@ class TripLocationPathController extends AbstractController
         {
             // path
             $tripLocationPathData = $pathCreationData->getTripLocationPathData();
-            $tripLocationPath = $this->tripLocationPathRepository->createTripLocationPath($tripLocationPathData->getName());
+            $tripLocationPath = new TripLocationPath($tripLocationPathData->getName());
             $dataTransfer->fillEntity($tripLocationPathData, $tripLocationPath);
 
             // locations
             $tripLocationsData = $pathCreationData->getTripLocationsData();
             foreach ($tripLocationsData as $tripLocationData)
             {
-                $tripLocation = $tripLocationRepository->createTripLocation($tripLocationData->getName(), $tripLocationData->getPrice(), $tripLocationData->getPriority(), $tripLocationPath);
+                $tripLocation = new TripLocation($tripLocationData->getName(), $tripLocationData->getPrice(), $tripLocationData->getPriority(), $tripLocationPath);
                 $dataTransfer->fillEntity($tripLocationData, $tripLocation);
                 $tripLocationRepository->saveTripLocation($tripLocation, false);
             }

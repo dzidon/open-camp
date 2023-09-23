@@ -7,9 +7,6 @@ use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\AttachmentConfig;
 use Symfony\Component\Uid\UuidV4;
 
-/**
- * Application file attachment config CRUD.
- */
 interface AttachmentConfigRepositoryInterface
 {
     /**
@@ -29,15 +26,6 @@ interface AttachmentConfigRepositoryInterface
      * @return void
      */
     public function removeAttachmentConfig(AttachmentConfig $attachmentConfig, bool $flush): void;
-
-    /**
-     * Creates an attachment config.
-     *
-     * @param string $name
-     * @param float $maxSize
-     * @return AttachmentConfig
-     */
-    public function createAttachmentConfig(string $name, float $maxSize): AttachmentConfig;
 
     /**
      * Finds one attachment config by id.

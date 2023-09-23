@@ -43,14 +43,6 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
     /**
      * @inheritDoc
      */
-    public function createCampCategory(string $name, string $urlName): CampCategory
-    {
-        return new CampCategory($name, $urlName);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findOneById(UuidV4 $id): ?CampCategory
     {
         return $this->createQueryBuilder('campCategory')

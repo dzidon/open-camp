@@ -41,14 +41,6 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function createRole(string $label): Role
-    {
-        return new Role($label);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findAll(): array
     {
         return $this->createQueryBuilder('role')

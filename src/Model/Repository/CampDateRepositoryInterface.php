@@ -10,9 +10,6 @@ use DateTimeImmutable;
 use DateTimeInterface;
 use Symfony\Component\Uid\UuidV4;
 
-/**
- * Camp date CRUD.
- */
 interface CampDateRepositoryInterface
 {
     /**
@@ -32,18 +29,6 @@ interface CampDateRepositoryInterface
      * @return void
      */
     public function removeCampDate(CampDate $campDate, bool $flush): void;
-
-    /**
-     * Creates a camp date.
-     *
-     * @param DateTimeImmutable $startAt
-     * @param DateTimeImmutable $endAt
-     * @param float $price
-     * @param int $capacity
-     * @param Camp $camp
-     * @return CampDate
-     */
-    public function createCampDate(DateTimeImmutable $startAt, DateTimeImmutable $endAt, float $price, int $capacity, Camp $camp): CampDate;
 
     /**
      * Finds one camp date by id.

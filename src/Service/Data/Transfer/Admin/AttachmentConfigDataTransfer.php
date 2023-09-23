@@ -5,6 +5,7 @@ namespace App\Service\Data\Transfer\Admin;
 use App\Library\Data\Admin\AttachmentConfigData;
 use App\Library\Data\Admin\FileExtensionData;
 use App\Model\Entity\AttachmentConfig;
+use App\Model\Entity\FileExtension;
 use App\Model\Repository\FileExtensionRepositoryInterface;
 use App\Service\Data\Transfer\DataTransferInterface;
 
@@ -114,7 +115,7 @@ class AttachmentConfigDataTransfer implements DataTransferInterface
         // create and add new extensions
         foreach ($dataExtensions as $extension)
         {
-            $newFileExtension = $this->fileExtensionRepository->createFileExtension($extension);
+            $newFileExtension = new FileExtension($extension);
             $this->fileExtensionRepository->saveFileExtension($newFileExtension, false);
             $attachmentConfig->addFileExtension($newFileExtension);
         }

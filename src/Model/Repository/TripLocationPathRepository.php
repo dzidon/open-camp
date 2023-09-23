@@ -42,14 +42,6 @@ class TripLocationPathRepository extends AbstractRepository implements TripLocat
     /**
      * @inheritDoc
      */
-    public function createTripLocationPath(string $name): TripLocationPath
-    {
-        return new TripLocationPath($name);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function findOneById(UuidV4 $id): ?TripLocationPath
     {
         return $this->createQueryBuilder('tripLocationPath')

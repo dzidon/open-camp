@@ -7,9 +7,6 @@ use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\TripLocationPath;
 use Symfony\Component\Uid\UuidV4;
 
-/**
- * Trip location path CRUD.
- */
 interface TripLocationPathRepositoryInterface
 {
     /**
@@ -29,14 +26,6 @@ interface TripLocationPathRepositoryInterface
      * @return void
      */
     public function removeTripLocationPath(TripLocationPath $tripLocationPath, bool $flush): void;
-
-    /**
-     * Creates a trip location path.
-     *
-     * @param string $name
-     * @return TripLocationPath
-     */
-    public function createTripLocationPath(string $name): TripLocationPath;
 
     /**
      * Finds one trip location path by id.

@@ -7,9 +7,6 @@ use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Role;
 use Symfony\Component\Uid\UuidV4;
 
-/**
- * Admin role CRUD.
- */
 interface RoleRepositoryInterface
 {
     /**
@@ -29,14 +26,6 @@ interface RoleRepositoryInterface
      * @return void
      */
     public function removeRole(Role $role, bool $flush): void;
-
-    /**
-     * Creates a role.
-     *
-     * @param string $label
-     * @return Role
-     */
-    public function createRole(string $label): Role;
 
     /**
      * Finds all roles.

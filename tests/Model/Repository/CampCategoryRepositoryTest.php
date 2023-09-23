@@ -26,16 +26,6 @@ class CampCategoryRepositoryTest extends KernelTestCase
         $this->assertNull($loadedCampCategory);
     }
 
-    public function testCreate(): void
-    {
-        $repository = $this->getCampCategoryRepository();
-
-        $campCategory = $repository->createCampCategory('Camp', 'camp');
-
-        $this->assertSame('Camp', $campCategory->getName());
-        $this->assertSame('camp', $campCategory->getUrlName());
-    }
-
     public function testFindOneById(): void
     {
         $repository = $this->getCampCategoryRepository();

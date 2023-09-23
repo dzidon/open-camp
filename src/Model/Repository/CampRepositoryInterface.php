@@ -11,9 +11,6 @@ use App\Model\Module\CampCatalog\Camp\CampLifespanCollectionInterface;
 use App\Model\Module\CampCatalog\Camp\UserCampCatalogResultInterface;
 use Symfony\Component\Uid\UuidV4;
 
-/**
- * Camp CRUD.
- */
 interface CampRepositoryInterface
 {
     /**
@@ -33,28 +30,6 @@ interface CampRepositoryInterface
      * @return void
      */
     public function removeCamp(Camp $camp, bool $flush): void;
-
-    /**
-     * Creates a camp.
-     *
-     * @param string $name
-     * @param string $urlName
-     * @param int $ageMin
-     * @param int $ageMax
-     * @param string $street
-     * @param string $town
-     * @param string $zip
-     * @param string $country
-     * @return Camp
-     */
-    public function createCamp(string $name,
-                               string $urlName,
-                               int    $ageMin,
-                               int    $ageMax,
-                               string $street,
-                               string $town,
-                               string $zip,
-                               string $country): Camp;
 
     /**
      * Finds one camp by id.

@@ -86,7 +86,7 @@ class AttachmentConfigController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $attachmentConfig = $this->attachmentConfigRepository->createAttachmentConfig($attachmentConfigData->getName(), $attachmentConfigData->getMaxSize());
+            $attachmentConfig = new AttachmentConfig($attachmentConfigData->getName(), $attachmentConfigData->getMaxSize());
             $dataTransfer->fillEntity($attachmentConfigData, $attachmentConfig);
             $this->attachmentConfigRepository->saveAttachmentConfig($attachmentConfig, true);
             $this->addTransFlash('success', 'crud.action_performed.attachment_config.create');

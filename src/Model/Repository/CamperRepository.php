@@ -3,11 +3,9 @@
 namespace App\Model\Repository;
 
 use App\Library\Data\User\CamperSearchData;
-use App\Library\Enum\GenderEnum;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Camper;
 use App\Model\Entity\User;
-use DateTimeImmutable;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -40,18 +38,6 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
     public function removeCamper(Camper $camper, bool $flush): void
     {
         $this->remove($camper, $flush);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function createCamper(string            $nameFirst,
-                                 string            $nameLast,
-                                 GenderEnum        $gender,
-                                 DateTimeImmutable $bornAt,
-                                 User              $user): Camper
-    {
-        return new Camper($nameFirst, $nameLast, $gender, $bornAt, $user);
     }
 
     /**

@@ -4,9 +4,6 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\FileExtension;
 
-/**
- * File extension CRUD.
- */
 interface FileExtensionRepositoryInterface
 {
     /**
@@ -26,14 +23,6 @@ interface FileExtensionRepositoryInterface
      * @return void
      */
     public function removeFileExtension(FileExtension $fileExtension, bool $flush): void;
-
-    /**
-     * Creates a file extension.
-     *
-     * @param string $extension
-     * @return FileExtension
-     */
-    public function createFileExtension(string $extension): FileExtension;
 
     /**
      * Finds file extensions attached to attachment configs.

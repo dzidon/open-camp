@@ -3,16 +3,11 @@
 namespace App\Model\Repository;
 
 use App\Library\Data\User\CamperSearchData;
-use App\Library\Enum\GenderEnum;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camper;
 use App\Model\Entity\User;
-use DateTimeImmutable;
 use Symfony\Component\Uid\UuidV4;
 
-/**
- * Camper CRUD.
- */
 interface CamperRepositoryInterface
 {
     /**
@@ -32,22 +27,6 @@ interface CamperRepositoryInterface
      * @return void
      */
     public function removeCamper(Camper $camper, bool $flush): void;
-
-    /**
-     * Creates a camper.
-     *
-     * @param string $nameFirst
-     * @param string $nameLast
-     * @param GenderEnum $gender
-     * @param DateTimeImmutable $bornAt
-     * @param User $user
-     * @return Camper
-     */
-    public function createCamper(string            $nameFirst,
-                                 string            $nameLast,
-                                 GenderEnum        $gender,
-                                 DateTimeImmutable $bornAt,
-                                 User              $user): Camper;
 
     /**
      * Finds one camper by id.

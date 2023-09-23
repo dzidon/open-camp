@@ -30,22 +30,6 @@ class CampRepositoryTest extends KernelTestCase
         $this->assertNull($loadedCamp);
     }
 
-    public function testCreate(): void
-    {
-        $campRepository = $this->getCampRepository();
-
-        $camp = $campRepository->createCamp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
-
-        $this->assertSame('Camp', $camp->getName());
-        $this->assertSame('camp', $camp->getUrlName());
-        $this->assertSame(5, $camp->getAgeMin());
-        $this->assertSame(10, $camp->getAgeMax());
-        $this->assertSame('Street 123', $camp->getStreet());
-        $this->assertSame('Town', $camp->getTown());
-        $this->assertSame('12345', $camp->getZip());
-        $this->assertSame('CS', $camp->getCountry());
-    }
-
     public function testFindOneById(): void
     {
         $repository = $this->getCampRepository();

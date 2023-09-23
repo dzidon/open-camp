@@ -6,12 +6,8 @@ use App\Library\Data\User\ContactSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
-use App\Model\Enum\Entity\ContactRoleEnum;
 use Symfony\Component\Uid\UuidV4;
 
-/**
- * Contact CRUD.
- */
 interface ContactRepositoryInterface
 {
     /**
@@ -31,17 +27,6 @@ interface ContactRepositoryInterface
      * @return void
      */
     public function removeContact(Contact $contact, bool $flush): void;
-
-    /**
-     * Creates a contact.
-     *
-     * @param string $nameFirst
-     * @param string $nameLast
-     * @param ContactRoleEnum $role
-     * @param User $user
-     * @return Contact
-     */
-    public function createContact(string $nameFirst, string $nameLast, ContactRoleEnum $role, User $user): Contact;
 
     /**
      * Finds one contact by id.

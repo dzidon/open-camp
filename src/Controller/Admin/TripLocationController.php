@@ -52,7 +52,7 @@ class TripLocationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $tripLocation = $this->tripLocationRepository->createTripLocation($tripLocationData->getName(), $tripLocationData->getPrice(), $tripLocationData->getPriority(), $tripLocationPath);
+            $tripLocation = new TripLocation($tripLocationData->getName(), $tripLocationData->getPrice(), $tripLocationData->getPriority(), $tripLocationPath);
             $dataTransfer->fillEntity($tripLocationData, $tripLocation);
             $this->tripLocationRepository->saveTripLocation($tripLocation, true);
             $this->addTransFlash('success', 'crud.action_performed.trip_location.create');
