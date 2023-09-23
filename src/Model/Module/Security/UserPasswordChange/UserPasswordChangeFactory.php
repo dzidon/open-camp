@@ -2,8 +2,10 @@
 
 namespace App\Model\Module\Security\UserPasswordChange;
 
+use App\Model\Entity\UserPasswordChange;
 use App\Model\Repository\UserPasswordChangeRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
+use App\Service\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
 use App\Service\Security\Token\TokenSplitterInterface;
 use DateTimeImmutable;
 
@@ -17,16 +19,19 @@ class UserPasswordChangeFactory implements UserPasswordChangeFactoryInterface
 
     private TokenSplitterInterface $tokenSplitter;
     private UserPasswordChangeRepositoryInterface $userPasswordChangeRepository;
+    private UserPasswordChangeVerifierHasherInterface $verifierHasher;
     private UserRepositoryInterface $userRepository;
 
-    public function __construct(TokenSplitterInterface $tokenSplitter,
-                                UserPasswordChangeRepositoryInterface $userPasswordChangeRepository,
-                                UserRepositoryInterface $userRepository,
-                                int $maxActivePasswordChangesPerUser,
-                                string $passwordChangeLifespan)
+    public function __construct(TokenSplitterInterface                    $tokenSplitter,
+                                UserPasswordChangeRepositoryInterface     $userPasswordChangeRepository,
+                                UserPasswordChangeVerifierHasherInterface $verifierHasher,
+                                UserRepositoryInterface                   $userRepository,
+                                int                                       $maxActivePasswordChangesPerUser,
+                                string                                    $passwordChangeLifespan)
     {
         $this->tokenSplitter = $tokenSplitter;
         $this->userPasswordChangeRepository = $userPasswordChangeRepository;
+        $this->verifierHasher = $verifierHasher;
         $this->userRepository = $userRepository;
 
         $this->maxActivePasswordChangesPerUser = $maxActivePasswordChangesPerUser;
@@ -69,9 +74,8 @@ class UserPasswordChangeFactory implements UserPasswordChangeFactoryInterface
 
         // create a password change
         $expireAt = new DateTimeImmutable(sprintf('+%s', $this->passwordChangeLifespan));
-        $userPasswordChange = $this->userPasswordChangeRepository->createUserPasswordChange(
-            $expireAt, $selector, $plainVerifier
-        );
+        $verifier = $this->verifierHasher->hashVerifier($plainVerifier);
+        $userPasswordChange = new UserPasswordChange($expireAt, $selector, $verifier);
 
         // assign user
         if ($user !== null)

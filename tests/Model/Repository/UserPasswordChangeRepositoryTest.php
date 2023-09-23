@@ -5,7 +5,6 @@ namespace App\Tests\Model\Repository;
 use App\Model\Entity\UserPasswordChange;
 use App\Model\Repository\UserPasswordChangeRepository;
 use App\Model\Repository\UserRepositoryInterface;
-use App\Service\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -30,23 +29,6 @@ class UserPasswordChangeRepositoryTest extends KernelTestCase
         $passwordChangeRepository->removeUserPasswordChange($passwordChange, true);
         $loadedPasswordChange = $passwordChangeRepository->find($id);
         $this->assertNull($loadedPasswordChange);
-    }
-
-    public function testCreate(): void
-    {
-        $passwordChangeRepository = $this->getUserPasswordChangeRepository();
-
-        $expireAt = new DateTimeImmutable('now');
-        $selector = 'abc';
-        $plainVerifier = 'xyz';
-
-        $passwordChange = $passwordChangeRepository->createUserPasswordChange($expireAt, $selector, $plainVerifier);
-        $this->assertSame($expireAt, $passwordChange->getExpireAt());
-        $this->assertSame($selector, $passwordChange->getSelector());
-
-        $hasher = $this->getPasswordHasher();
-        $valid = $hasher->isVerifierValid($passwordChange, $plainVerifier);
-        $this->assertTrue($valid);
     }
 
     public function testFindOneBySelector(): void
@@ -205,16 +187,6 @@ class UserPasswordChangeRepositoryTest extends KernelTestCase
         }
 
         return $selectors;
-    }
-
-    private function getPasswordHasher(): UserPasswordChangeVerifierHasherInterface
-    {
-        $container = static::getContainer();
-
-        /** @var UserPasswordChangeVerifierHasherInterface $hasher */
-        $hasher = $container->get(UserPasswordChangeVerifierHasherInterface::class);
-
-        return $hasher;
     }
 
     private function getUserRepository(): UserRepositoryInterface

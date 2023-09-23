@@ -5,7 +5,6 @@ namespace App\Model\Repository;
 use App\Model\Entity\User;
 use App\Model\Entity\UserPasswordChange;
 use App\Model\Enum\Entity\UserPasswordChangeStateEnum;
-use App\Service\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -22,13 +21,9 @@ use Symfony\Bridge\Doctrine\Types\UuidType;
  */
 class UserPasswordChangeRepository extends AbstractRepository implements UserPasswordChangeRepositoryInterface
 {
-    private UserPasswordChangeVerifierHasherInterface $verifierHasher;
-
-    public function __construct(ManagerRegistry $registry, UserPasswordChangeVerifierHasherInterface $verifierHasher)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UserPasswordChange::class);
-
-        $this->verifierHasher = $verifierHasher;
     }
 
     /**
@@ -45,16 +40,6 @@ class UserPasswordChangeRepository extends AbstractRepository implements UserPas
     public function removeUserPasswordChange(UserPasswordChange $userPasswordChange, bool $flush): void
     {
         $this->remove($userPasswordChange, $flush);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function createUserPasswordChange(DateTimeImmutable $expireAt, string $selector, string $plainVerifier): UserPasswordChange
-    {
-        $verifier = $this->verifierHasher->hashVerifier($plainVerifier);
-
-        return new UserPasswordChange($expireAt, $selector, $verifier);
     }
 
     /**

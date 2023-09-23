@@ -4,7 +4,6 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\User;
 use App\Model\Entity\UserPasswordChange;
-use DateTimeImmutable;
 
 /**
  * User password change CRUD.
@@ -28,16 +27,6 @@ interface UserPasswordChangeRepositoryInterface
      * @return void
      */
     public function removeUserPasswordChange(UserPasswordChange $userPasswordChange, bool $flush): void;
-
-    /**
-     * Creates a user password change.
-     *
-     * @param DateTimeImmutable $expireAt
-     * @param string $selector
-     * @param string $plainVerifier
-     * @return UserPasswordChange
-     */
-    public function createUserPasswordChange(DateTimeImmutable $expireAt, string $selector, string $plainVerifier): UserPasswordChange;
 
     /**
      * Finds one user password change by selector.
