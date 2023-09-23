@@ -9,7 +9,6 @@ use App\Model\Module\CampCatalog\CampImage\CampImageFilesystemInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Uid\UuidV4;
 
 /**
@@ -20,16 +19,13 @@ use Symfony\Component\Uid\UuidV4;
  */
 class CampImageRepository extends AbstractRepository implements CampImageRepositoryInterface
 {
-    private string $campImageUploadDirectory;
-
     private CampImageFilesystemInterface $campImageFilesystem;
 
-    public function __construct(ManagerRegistry $registry, CampImageFilesystemInterface $campImageFilesystem, string $campImageUploadDirectory)
+    public function __construct(ManagerRegistry $registry, CampImageFilesystemInterface $campImageFilesystem)
     {
         parent::__construct($registry, CampImage::class);
 
         $this->campImageFilesystem = $campImageFilesystem;
-        $this->campImageUploadDirectory = $campImageUploadDirectory;
     }
 
     /**
@@ -47,24 +43,6 @@ class CampImageRepository extends AbstractRepository implements CampImageReposit
     {
         $this->campImageFilesystem->removeFile($campImage);
         $this->remove($campImage, $flush);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function createCampImage(File $file, int $priority, Camp $camp): CampImage
-    {
-        $extension = $file->guessExtension();
-        $campImage = new CampImage($priority, $extension, $camp);
-        $idString = $campImage
-            ->getId()
-            ->toRfc4122()
-        ;
-
-        $newFileName = $idString . '.' . $extension;
-        $file->move($this->campImageUploadDirectory, $newFileName);
-
-        return $campImage;
     }
 
     /**

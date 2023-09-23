@@ -91,10 +91,6 @@ services:
         arguments:
             $services: '%app.social_login_services%'
 
-    App\Model\Repository\CampImageRepository:
-        arguments:
-            $campImageUploadDirectory: '%kernel.project_dir%/public/%app.camp_image_directory%'
-
     App\Model\Module\Security\UserRegistration\UserRegistrationFactory:
         arguments:
             $maxActiveRegistrationsPerEmail: '%app.max_active_registrations_per_email%'
@@ -104,6 +100,9 @@ services:
         arguments:
             $maxActivePasswordChangesPerUser: '%app.max_active_password_changes_per_user%'
             $passwordChangeLifespan: '%app.password_change_lifespan%'
+
+    App\Model\Module\CampCatalog\CampImage\CampImageFactory:
+        $campImageUploadDirectory: '%kernel.project_dir%/public/%app.camp_image_directory%'
 
     App\Model\Module\CampCatalog\CampImage\CampImageFilesystem:
         arguments:

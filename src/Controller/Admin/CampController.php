@@ -9,6 +9,7 @@ use App\Library\Data\Admin\CampDateSearchData;
 use App\Library\Data\Admin\CampSearchData;
 use App\Library\Enum\Search\Data\Admin\CampDateSortEnum;
 use App\Model\Entity\Camp;
+use App\Model\Module\CampCatalog\CampImage\CampImageFactoryInterface;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampImageRepositoryInterface;
@@ -86,7 +87,7 @@ class CampController extends AbstractController
     #[Route('/admin/camp/create', name: 'admin_camp_create')]
     public function create(DataTransferRegistryInterface   $dataTransfer,
                            CampCategoryRepositoryInterface $campCategoryRepository,
-                           CampImageRepositoryInterface    $campImageRepository,
+                           CampImageFactoryInterface       $campImageFactory,
                            Request                         $request): Response
     {
         $campCategoryChoices = $campCategoryRepository->findAll();
@@ -109,8 +110,7 @@ class CampController extends AbstractController
             $uploadedImages = $campCreationData->getImages();
             foreach ($uploadedImages as $uploadedImage)
             {
-                $campImage = $campImageRepository->createCampImage($uploadedImage, 0, $camp);
-                $campImageRepository->saveCampImage($campImage, false);
+                $campImageFactory->createCampImage($uploadedImage, 0, $camp, false);
             }
 
             $this->campRepository->saveCamp($camp, true);

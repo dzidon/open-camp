@@ -5,7 +5,6 @@ namespace App\Model\Repository;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampImage;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Uid\UuidV4;
 
 /**
@@ -30,16 +29,6 @@ interface CampImageRepositoryInterface
      * @return void
      */
     public function removeCampImage(CampImage $campImage, bool $flush): void;
-
-    /**
-     * Creates a camp image.
-     *
-     * @param File $file
-     * @param int $priority
-     * @param Camp $camp
-     * @return CampImage
-     */
-    public function createCampImage(File $file, int $priority, Camp $camp): CampImage;
 
     /**
      * Finds one camp image by id.

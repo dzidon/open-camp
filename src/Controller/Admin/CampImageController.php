@@ -7,6 +7,7 @@ use App\Library\Data\Admin\CampImageData;
 use App\Library\Data\Admin\CampImagesUploadData;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampImage;
+use App\Model\Module\CampCatalog\CampImage\CampImageFactoryInterface;
 use App\Model\Repository\CampImageRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
@@ -66,7 +67,7 @@ class CampImageController extends AbstractController
     }
 
     #[Route('/admin/camp/{id}/upload-images', name: 'admin_camp_image_upload')]
-    public function upload(Request $request, UuidV4 $id): Response
+    public function upload(CampImageFactoryInterface $campImageFactory, Request $request, UuidV4 $id): Response
     {
         $camp = $this->findCampOrThrow404($id);
 
@@ -81,8 +82,8 @@ class CampImageController extends AbstractController
 
             foreach ($files as $key => $uploadedImage)
             {
-                $campImage = $this->campImageRepository->createCampImage($uploadedImage, 0, $camp);
-                $this->campImageRepository->saveCampImage($campImage, $key === array_key_last($files));
+                $flush = $key === array_key_last($files);
+                $campImageFactory->createCampImage($uploadedImage, 0, $camp, $flush);
             }
 
             $this->addTransFlash('success', 'crud.action_performed.camp_image.upload');
