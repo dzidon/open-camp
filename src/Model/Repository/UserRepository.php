@@ -10,7 +10,6 @@ use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -23,17 +22,11 @@ use Symfony\Component\Uid\UuidV4;
  * @method User[]    findAll()
  * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class UserRepository extends AbstractRepository implements UserRepositoryInterface,
-                                                           UserLoaderInterface,
-                                                           UserProviderInterface
+class UserRepository extends AbstractRepository implements UserRepositoryInterface, UserLoaderInterface, UserProviderInterface
 {
-    private UserPasswordHasherInterface $passwordHasher;
-
-    public function __construct(ManagerRegistry $registry, UserPasswordHasherInterface $passwordHasher)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
-
-        $this->passwordHasher = $passwordHasher;
     }
 
     /**
@@ -50,22 +43,6 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     public function removeUser(User $user, bool $flush): void
     {
         $this->remove($user, $flush);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function createUser(string $email, ?string $plainPassword = null): User
-    {
-        $user = new User($email);
-
-        if ($plainPassword !== null)
-        {
-            $hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
-            $user->setPassword($hashedPassword);
-        }
-
-        return $user;
     }
 
     /**

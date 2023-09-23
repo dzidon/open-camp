@@ -36,23 +36,6 @@ class UserRepositoryTest extends KernelTestCase
         $this->assertNull($loadedUser);
     }
 
-    public function testCreate(): void
-    {
-        $repository = $this->getUserRepository();
-
-        $user = $repository->createUser('bob@bing.com');
-        $this->assertNotNull($user);
-        $this->assertSame('bob@bing.com', $user->getEmail());
-        $this->assertNull($user->getPassword());
-
-        $hasher = $this->getUserPasswordHasher();
-        $user = $repository->createUser('alice@bing.com', '123456');
-        $this->assertNotNull($user);
-        $this->assertSame('alice@bing.com', $user->getEmail());
-        $this->assertNotNull($user->getPassword());
-        $this->assertTrue($hasher->isPasswordValid($user, '123456'));
-    }
-
     public function testFindOneById(): void
     {
         $repository = $this->getUserRepository();
@@ -373,16 +356,6 @@ class UserRepositoryTest extends KernelTestCase
         }
 
         return $names;
-    }
-
-    private function getUserPasswordHasher(): UserPasswordHasherInterface
-    {
-        $container = static::getContainer();
-
-        /** @var UserPasswordHasherInterface $hasher */
-        $hasher = $container->get(UserPasswordHasherInterface::class);
-
-        return $hasher;
     }
 
     private function getUserRepository(): UserRepository

@@ -4,6 +4,7 @@ namespace App\Service\Security\Authentication;
 
 use App\Library\Security\Authentication\Exception\AlreadyAuthenticatedException;
 use App\Library\Security\Authentication\Exception\SocialUserNotFoundException;
+use App\Model\Entity\User;
 use App\Model\Repository\UserRepositoryInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
@@ -95,7 +96,7 @@ class SocialAuthenticator extends OAuth2Authenticator
                 $user = $this->userRepository->findOneByEmail($socialEmail);
                 if ($user === null)
                 {
-                    $user = $this->userRepository->createUser($socialEmail);
+                    $user = new User($socialEmail);
                     $this->userRepository->saveUser($user, true);
                 }
 

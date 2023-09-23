@@ -92,7 +92,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $user = $this->userRepository->createUser($userData->getEmail());
+            $user = new User($userData->getEmail());
             $dataTransfer->fillEntity($userData, $user);
             $this->userRepository->saveUser($user, true);
             $this->addTransFlash('success', 'crud.action_performed.user.create');

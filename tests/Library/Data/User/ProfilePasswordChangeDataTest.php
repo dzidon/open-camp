@@ -5,9 +5,9 @@ namespace App\Tests\Library\Data\User;
 use App\Library\Data\User\PlainPasswordData;
 use App\Library\Data\User\ProfilePasswordChangeData;
 use App\Model\Entity\User;
-use App\Model\Repository\UserRepositoryInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -70,10 +70,14 @@ class ProfilePasswordChangeDataTest extends KernelTestCase
     {
         $container = static::getContainer();
 
-        /** @var UserRepositoryInterface $userRepository */
-        $userRepository = $container->get(UserRepositoryInterface::class);
+        /** @var UserPasswordHasherInterface $hasher */
+        $hasher = $container->get(UserPasswordHasherInterface::class);
 
-        return $userRepository->createUser('bob@gmail.com', '123456');
+        $user = new User('bob@gmail.com');
+        $password = $hasher->hashPassword($user, '123456');
+        $user->setPassword($password);
+
+        return $user;
     }
 
     private function setMockedTokenStorageWithUser(User $user): void

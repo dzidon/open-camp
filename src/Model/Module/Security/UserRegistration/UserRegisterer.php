@@ -2,10 +2,12 @@
 
 namespace App\Model\Module\Security\UserRegistration;
 
+use App\Model\Entity\User;
 use App\Model\Entity\UserRegistration;
 use App\Model\Enum\Entity\UserRegistrationStateEnum;
 use App\Model\Repository\UserRegistrationRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 /**
  * @inheritDoc
@@ -13,12 +15,15 @@ use App\Model\Repository\UserRepositoryInterface;
 class UserRegisterer implements UserRegistererInterface
 {
     private UserRegistrationRepositoryInterface $userRegistrationRepository;
+    private UserPasswordHasherInterface $passwordHasher;
     private UserRepositoryInterface $userRepository;
 
     public function __construct(UserRegistrationRepositoryInterface $userRegistrationRepository,
-                                UserRepositoryInterface $userRepository)
+                                UserPasswordHasherInterface         $passwordHasher,
+                                UserRepositoryInterface             $userRepository)
     {
         $this->userRegistrationRepository = $userRegistrationRepository;
+        $this->passwordHasher = $passwordHasher;
         $this->userRepository = $userRepository;
     }
 
@@ -56,7 +61,10 @@ class UserRegisterer implements UserRegistererInterface
             $userRegistration->setState(UserRegistrationStateEnum::USED);
             $this->userRegistrationRepository->saveUserRegistration($userRegistration, false);
 
-            $user = $this->userRepository->createUser($email, $plainPassword);
+            $user = new User($email);
+            $hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
+            $user->setPassword($hashedPassword);
+
             $this->userRepository->saveUser($user, $flush);
         }
     }
