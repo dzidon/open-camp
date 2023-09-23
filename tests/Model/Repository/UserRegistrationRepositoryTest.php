@@ -4,7 +4,6 @@ namespace App\Tests\Model\Repository;
 
 use App\Model\Entity\UserRegistration;
 use App\Model\Repository\UserRegistrationRepository;
-use App\Service\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -29,25 +28,6 @@ class UserRegistrationRepositoryTest extends KernelTestCase
         $repository->removeUserRegistration($registration, true);
         $loadedRegistration = $repository->find($id);
         $this->assertNull($loadedRegistration);
-    }
-
-    public function testCreate(): void
-    {
-        $repository = $this->getUserRegistrationRepository();
-
-        $email = 'bob@gmail.com';
-        $expireAt = new DateTimeImmutable('now');
-        $selector = 'abc';
-        $plainVerifier = 'xyz';
-
-        $userRegistration = $repository->createUserRegistration($email, $expireAt, $selector, $plainVerifier);
-        $this->assertSame($email, $userRegistration->getEmail());
-        $this->assertSame($expireAt, $userRegistration->getExpireAt());
-        $this->assertSame($selector, $userRegistration->getSelector());
-
-        $hasher = $this->getPasswordHasher();
-        $valid = $hasher->isVerifierValid($userRegistration, $plainVerifier);
-        $this->assertTrue($valid);
     }
 
     public function testFindOneBySelector(): void
@@ -201,16 +181,6 @@ class UserRegistrationRepositoryTest extends KernelTestCase
         }
 
         return $selectors;
-    }
-
-    private function getPasswordHasher(): UserRegistrationVerifierHasherInterface
-    {
-        $container = static::getContainer();
-
-        /** @var UserRegistrationVerifierHasherInterface $hasher */
-        $hasher = $container->get(UserRegistrationVerifierHasherInterface::class);
-
-        return $hasher;
     }
 
     private function getUserRegistrationRepository(): UserRegistrationRepository

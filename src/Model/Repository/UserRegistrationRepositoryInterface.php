@@ -3,7 +3,6 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\UserRegistration;
-use DateTimeImmutable;
 
 /**
  * User registration CRUD.
@@ -27,20 +26,6 @@ interface UserRegistrationRepositoryInterface
      * @return void
      */
     public function removeUserRegistration(UserRegistration $userRegistration, bool $flush): void;
-
-    /**
-     * Creates a user registration.
-     *
-     * @param string $email
-     * @param DateTimeImmutable $expireAt
-     * @param string $selector
-     * @param string $plainVerifier
-     * @return UserRegistration
-     */
-    public function createUserRegistration(string $email,
-                                           DateTimeImmutable $expireAt,
-                                           string $selector,
-                                           string $plainVerifier): UserRegistration;
 
     /**
      * Finds one user registration by selector.

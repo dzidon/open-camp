@@ -4,7 +4,6 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\UserRegistration;
 use App\Model\Enum\Entity\UserRegistrationStateEnum;
-use App\Service\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -20,13 +19,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class UserRegistrationRepository extends AbstractRepository implements UserRegistrationRepositoryInterface
 {
-    private UserRegistrationVerifierHasherInterface $verifierHasher;
-
-    public function __construct(ManagerRegistry $registry, UserRegistrationVerifierHasherInterface $verifierHasher)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, UserRegistration::class);
-
-        $this->verifierHasher = $verifierHasher;
     }
 
     /**
@@ -43,19 +38,6 @@ class UserRegistrationRepository extends AbstractRepository implements UserRegis
     public function removeUserRegistration(UserRegistration $userRegistration, bool $flush): void
     {
         $this->remove($userRegistration, $flush);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function createUserRegistration(string $email,
-                                           DateTimeImmutable $expireAt,
-                                           string $selector,
-                                           string $plainVerifier): UserRegistration
-    {
-        $verifier = $this->verifierHasher->hashVerifier($plainVerifier);
-
-        return new UserRegistration($email, $expireAt, $selector, $verifier);
     }
 
     /**

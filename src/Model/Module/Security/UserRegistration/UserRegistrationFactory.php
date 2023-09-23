@@ -2,8 +2,10 @@
 
 namespace App\Model\Module\Security\UserRegistration;
 
+use App\Model\Entity\UserRegistration;
 use App\Model\Repository\UserRegistrationRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
+use App\Service\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use App\Service\Security\Token\TokenSplitterInterface;
 use DateTimeImmutable;
 
@@ -17,16 +19,19 @@ class UserRegistrationFactory implements UserRegistrationFactoryInterface
 
     private TokenSplitterInterface $tokenSplitter;
     private UserRegistrationRepositoryInterface $userRegistrationRepository;
+    private UserRegistrationVerifierHasherInterface $verifierHasher;
     private UserRepositoryInterface $userRepository;
 
-    public function __construct(TokenSplitterInterface $tokenSplitter,
-                                UserRegistrationRepositoryInterface $userRegistrationRepository,
-                                UserRepositoryInterface $userRepository,
-                                int $maxActiveRegistrationsPerEmail,
-                                string $registrationLifespan)
+    public function __construct(TokenSplitterInterface                  $tokenSplitter,
+                                UserRegistrationRepositoryInterface     $userRegistrationRepository,
+                                UserRegistrationVerifierHasherInterface $verifierHasher,
+                                UserRepositoryInterface                 $userRepository,
+                                int                                     $maxActiveRegistrationsPerEmail,
+                                string                                  $registrationLifespan)
     {
         $this->tokenSplitter = $tokenSplitter;
         $this->userRegistrationRepository = $userRegistrationRepository;
+        $this->verifierHasher = $verifierHasher;
         $this->userRepository = $userRepository;
 
         $this->maxActiveRegistrationsPerEmail = $maxActiveRegistrationsPerEmail;
@@ -66,9 +71,8 @@ class UserRegistrationFactory implements UserRegistrationFactoryInterface
 
         // create a registration and return the result
         $expireAt = new DateTimeImmutable(sprintf('+%s', $this->registrationLifespan));
-        $userRegistration = $this->userRegistrationRepository->createUserRegistration(
-            $email, $expireAt, $selector, $plainVerifier
-        );
+        $verifier = $this->verifierHasher->hashVerifier($plainVerifier);
+        $userRegistration = new UserRegistration($email, $expireAt, $selector, $verifier);
 
         // save
         if (!$fake)
