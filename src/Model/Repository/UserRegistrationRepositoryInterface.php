@@ -4,9 +4,6 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\UserRegistration;
 
-/**
- * User registration CRUD.
- */
 interface UserRegistrationRepositoryInterface
 {
     /**

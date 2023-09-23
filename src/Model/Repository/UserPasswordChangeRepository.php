@@ -6,14 +6,11 @@ use App\Model\Entity\User;
 use App\Model\Entity\UserPasswordChange;
 use App\Model\Enum\Entity\UserPasswordChangeStateEnum;
 use DateTimeImmutable;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
- * @extends ServiceEntityRepository<UserPasswordChange>
- *
  * @method UserPasswordChange|null find($id, $lockMode = null, $lockVersion = null)
  * @method UserPasswordChange|null findOneBy(array $criteria, array $orderBy = null)
  * @method UserPasswordChange[]    findAll()

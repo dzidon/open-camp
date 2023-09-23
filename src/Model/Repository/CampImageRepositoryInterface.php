@@ -7,9 +7,6 @@ use App\Model\Entity\Camp;
 use App\Model\Entity\CampImage;
 use Symfony\Component\Uid\UuidV4;
 
-/**
- * Camp image CRUD.
- */
 interface CampImageRepositoryInterface
 {
     /**

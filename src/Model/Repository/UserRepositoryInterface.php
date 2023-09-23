@@ -8,9 +8,6 @@ use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use Symfony\Component\Uid\UuidV4;
 
-/**
- * User CRUD.
- */
 interface UserRepositoryInterface
 {
     /**

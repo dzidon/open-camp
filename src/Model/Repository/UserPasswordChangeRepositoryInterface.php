@@ -5,9 +5,6 @@ namespace App\Model\Repository;
 use App\Model\Entity\User;
 use App\Model\Entity\UserPasswordChange;
 
-/**
- * User password change CRUD.
- */
 interface UserPasswordChangeRepositoryInterface
 {
     /**
