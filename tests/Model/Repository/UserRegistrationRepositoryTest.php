@@ -19,14 +19,13 @@ class UserRegistrationRepositoryTest extends KernelTestCase
         $now = new DateTimeImmutable('now');
         $registration = new UserRegistration('bob@bing.com', $now, 'bob', '123');
         $repository->saveUserRegistration($registration, true);
-        $id = $registration->getId();
 
-        $loadedRegistration = $repository->find($id);
+        $loadedRegistration = $repository->findOneBySelector('bob');
         $this->assertNotNull($loadedRegistration);
         $this->assertSame($registration->getId(), $loadedRegistration->getId());
 
         $repository->removeUserRegistration($registration, true);
-        $loadedRegistration = $repository->find($id);
+        $loadedRegistration = $repository->findOneBySelector('bob');
         $this->assertNull($loadedRegistration);
     }
 

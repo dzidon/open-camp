@@ -14,6 +14,13 @@ class NationalIdentifier extends Constraint
 {
     public string $message = 'national_identifier';
 
+    public function __construct(string $message = null, array $groups = null, mixed $payload = null)
+    {
+        parent::__construct([], $groups, $payload);
+
+        $this->message = $message ?? $this->message;
+    }
+
     /**
      * @inheritDoc
      */

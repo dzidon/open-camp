@@ -17,12 +17,12 @@ class CampCategoryRepositoryTest extends KernelTestCase
         $campCategoryRepository->saveCampCategory($campCategory, true);
         $id = $campCategory->getId();
 
-        $loadedCampCategory = $campCategoryRepository->find($id);
+        $loadedCampCategory = $campCategoryRepository->findOneById($id);
         $this->assertNotNull($loadedCampCategory);
-        $this->assertSame($campCategory->getId(), $loadedCampCategory->getId());
+        $this->assertSame($id, $loadedCampCategory->getId());
 
         $campCategoryRepository->removeCampCategory($campCategory, true);
-        $loadedCampCategory = $campCategoryRepository->find($id);
+        $loadedCampCategory = $campCategoryRepository->findOneById($id);
         $this->assertNull($loadedCampCategory);
     }
 

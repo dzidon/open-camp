@@ -21,12 +21,12 @@ class AttachmentConfigRepositoryTest extends KernelTestCase
         $attachmentConfigRepository->saveAttachmentConfig($attachmentConfig, true);
         $id = $attachmentConfig->getId();
 
-        $loadedAttachmentConfig = $attachmentConfigRepository->find($id);
+        $loadedAttachmentConfig = $attachmentConfigRepository->findOneById($id);
         $this->assertNotNull($loadedAttachmentConfig);
-        $this->assertSame($attachmentConfig->getId(), $loadedAttachmentConfig->getId());
+        $this->assertSame($id, $loadedAttachmentConfig->getId());
 
         $attachmentConfigRepository->removeAttachmentConfig($attachmentConfig, true);
-        $loadedAttachmentConfig = $attachmentConfigRepository->find($id);
+        $loadedAttachmentConfig = $attachmentConfigRepository->findOneById($id);
         $this->assertNull($loadedAttachmentConfig);
     }
 

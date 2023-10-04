@@ -10,6 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class BillingData
 {
+    private bool $isEuBusinessDataEnabled;
+
     #[Assert\Length(max: 255)]
     #[Assert\When(
         expression: 'this.getNameLast() !== null',
@@ -69,8 +71,6 @@ class BillingData
         ],
     )]
     private ?string $businessVatId = null;
-
-    private bool $isEuBusinessDataEnabled;
 
     public function __construct(bool $isEuBusinessDataEnabled)
     {

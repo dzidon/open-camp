@@ -14,7 +14,7 @@ class CampDateData
 {
     private ?UuidV4 $id = null;
 
-    private ?Camp $camp = null;
+    private Camp $camp;
 
     #[Assert\NotBlank]
     private ?DateTimeImmutable $startAt = null;
@@ -43,6 +43,11 @@ class CampDateData
      */
     private array $leaders = [];
 
+    public function __construct(Camp $camp)
+    {
+        $this->camp = $camp;
+    }
+
     public function getId(): ?UuidV4
     {
         return $this->id;
@@ -55,16 +60,9 @@ class CampDateData
         return $this;
     }
 
-    public function getCamp(): ?Camp
+    public function getCamp(): Camp
     {
         return $this->camp;
-    }
-
-    public function setCamp(?Camp $camp): self
-    {
-        $this->camp = $camp;
-
-        return $this;
     }
 
     public function getStartAt(): ?DateTimeImmutable

@@ -27,6 +27,32 @@ image_carousel:
     previous: 'Předchozí'
     no_image: 'Obrázek není k dispozici'
 
+contact_role:
+    mother: 'Matka'
+    father: 'Otec'
+    grandma: 'Babička'
+    grandpa: 'Děda'
+    aunt: 'Teta'
+    uncle: 'Strýc'
+    relative: 'Příbuzný'
+    tutor: 'Vychovatel'
+
+attachment_config_required_type:
+    optional: 'Volitelný'
+    required: 'Povinný'
+    required_later: 'Povinný později'
+
+camp_catalog:
+    no_available_camp_dates: 'Žádné dostupné termíny'
+
+admin_dashboard:
+    welcome: 'Jste přihlášeni jako {user}.'
+
+module:
+    user: 'Uživatelský web'
+    profile: 'Profil'
+    admin: 'Admin'
+
 auth:
     no_account_yet: 'Ještě u nás nemáte účet?'
     no_account_yet_link: 'Zaregistrovat se'
@@ -63,6 +89,7 @@ permission_group:
     camp: 'Tábory'
     trip_location_path: 'Trasy'
     attachment_config: 'Konfigurace přílohy'
+    purchasable_item: 'Doplňkové platby'
 
 permission:
     user_read: 'Zobrazení uživatele'
@@ -96,23 +123,10 @@ permission:
     attachment_config_update: 'Editace konfigurace přílohy'
     attachment_config_delete: 'Odstranění konfigurace přílohy'
 
-contact_role:
-    mother: 'Matka'
-    father: 'Otec'
-    grandma: 'Babička'
-    grandpa: 'Děda'
-    aunt: 'Teta'
-    uncle: 'Strýc'
-    relative: 'Příbuzný'
-    tutor: 'Vychovatel'
-
-attachment_config_required_type:
-    optional: 'Volitelný'
-    required: 'Povinný'
-    required_later: 'Povinný později'
-
-camp_catalog:
-    no_available_camp_dates: 'Žádné dostupné termíny'
+    purchasable_item_read: 'Zobrazení doplňkové platby'
+    purchasable_item_create: 'Tvorba doplňkové platby'
+    purchasable_item_update: 'Editace doplňkové platby'
+    purchasable_item_delete: 'Odstranění doplňkové platby'
 
 crud:
     instruction:
@@ -132,9 +146,13 @@ crud:
         trip_location_path_delete: 'Opravdu si přejete odstranit trasu "{name}"?'
         trip_location_delete: 'Opravdu si přejete odstranit lokaci "{name}"?'
         attachment_config_delete: 'Opravdu si přejete odstranit konfiguraci přílohy "{name}"?'
+        purchasable_item_delete: 'Opravdu si přejete odstranit doplňkovou platbu "{name}"?'
+        purchasable_item_variant_delete: 'Opravdu si přejete odstranit variantu "{name}"?'
+        purchasable_item_variant_value_delete: 'Opravdu si přejete odstranit hodnotu "{name}"?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
+        purchasable_item_variant_value_delete: 'Tuto hodnotu nejde smazat, protože by pak varianta byla prázdná.'
 
     action:
         common:
@@ -208,6 +226,21 @@ crud:
             update: 'Konfigurace přílohy uložena!'
             delete: 'Konfigurace přílohy odstraněna!'
 
+        purchasable_item:
+            create: 'Doplňková platba vytvořena!'
+            update: 'Doplňková platba uložena!'
+            delete: 'Doplňková platba odstraněna!'
+
+        purchasable_item_variant:
+            create: 'Varianta doplňkové platby vytvořena!'
+            update: 'Varianta doplňkové platby uložena!'
+            delete: 'Varianta doplňkové platby odstraněna!'
+
+        purchasable_item_variant_value:
+            create: 'Hodnota varianty doplňkové platby vytvořena!'
+            update: 'Hodnota varianty doplňkové platby uložena!'
+            delete: 'Hodnota varianty doplňkové platby odstraněna!'
+
 entity:
     contact:
         singular: 'Kontakt'
@@ -268,6 +301,22 @@ entity:
     attachment_config:
         singular: 'Konfigurace přílohy'
         plural: 'Konfigurace příloh'
+
+    file_extension:
+        singular: 'Přípona'
+        plural: 'Přípony'
+
+    purchasable_item:
+        singular: 'Doplňková platba'
+        plural: 'Doplňkové platby'
+
+    purchasable_item_variant:
+        singular: 'Varianta doplňkové platby'
+        plural: 'Varianty doplňkové platby'
+
+    purchasable_item_variant_value:
+        singular: 'Hodnota varianty doplňkové platby'
+        plural: 'Hodnoty varianty doplňkové platby'
 
     application:
         singular: 'Přihláška'
@@ -439,6 +488,37 @@ entity_attribute:
         file_extensions: 'Přípony'
         max_size: 'Maximální velikost'
         required_type: 'Povinnost'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    file_extension:
+        id: 'ID'
+        extension: 'Přípona'
+        created_at: 'Datum vytvoření'
+
+    purchasable_item:
+        id: 'ID'
+        name: 'Název'
+        price: 'Cena'
+        max_amount_per_camper: 'Maximální počet na táborníka'
+        purchasable_item_variants: 'Varianty'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    purchasable_item_variant:
+        id: 'ID'
+        name: 'Název'
+        priority: 'Priorita'
+        purchasable_item: 'Doplňková platba'
+        purchasable_item_variant_values: 'Hodnoty'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    purchasable_item_variant_value:
+        id: 'ID'
+        name: 'Název'
+        priority: 'Priorita'
+        purchasable_item_variant: 'Varianta doplňkové platby'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -732,6 +812,81 @@ form:
             extension: 'Přípona'
             button: 'Uložit'
 
+        purchasable_item:
+            name: 'Název'
+            price: 'Cena'
+            max_amount_per_camper: 'Maximální počet na táborníka'
+            button: 'Uložit'
+
+        purchasable_item_search:
+            phrase: 'Hledat podle názvu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovější'
+                    created_at_asc: 'Od nejstarší'
+                    name_asc: 'Název (A-Z)'
+                    name_desc: 'Název (Z-A)'
+                    price_asc: 'Cena (Od nejmenší)'
+                    price_desc: 'Cena (Od největší)'
+                    max_amount_per_camper_asc: 'Max. počet pro táborníka (Od nejmenšího)'
+                    max_amount_per_camper_desc: 'Max. počet pro táborníka (Od největšího)'
+
+            button: 'Hledat'
+
+        purchasable_item_delete:
+            button: 'Odstranit'
+
+        purchasable_item_variant:
+            name: 'Název'
+            priority: 'Priorita'
+            purchasable_item_variant_values: 'Hodnoty'
+            button: 'Uložit'
+
+        purchasable_item_variant_search:
+            phrase: 'Hledat podle názvu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovější'
+                    created_at_asc: 'Od nejstarší'
+                    name_asc: 'Název (A-Z)'
+                    name_desc: 'Název (Z-A)'
+                    priority_asc: 'Priorita (Od nejmenší)'
+                    priority_desc: 'Priorita (Od největší)'
+
+            button: 'Hledat'
+
+        purchasable_item_variant_creation:
+            purchasable_item_variant_values: 'Hodnoty'
+            add_purchasable_item_variant_value: 'Přidat hodnotu'
+            button: 'Hledat'
+
+        purchasable_item_variant_delete:
+            button: 'Odstranit'
+
+        purchasable_item_variant_value:
+            name: 'Název'
+            priority: 'Priorita'
+            button: 'Uložit'
+
+        purchasable_item_variant_value_search:
+            phrase: 'Hledat podle názvu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovější'
+                    created_at_asc: 'Od nejstarší'
+                    name_asc: 'Název (A-Z)'
+                    name_desc: 'Název (Z-A)'
+                    priority_asc: 'Priorita (Od nejmenší)'
+                    priority_desc: 'Priorita (Od největší)'
+
+            button: 'Hledat'
+
+        purchasable_item_variant_value_delete:
+            button: 'Odstranit'
+
     user:
         registration:
             email: 'E-mail'
@@ -857,11 +1012,6 @@ mail:
         link_text: 'ZDE'
         body2: 'Odkaz vyprší {date}.'
 
-module:
-    user: 'Uživatelský web'
-    profile: 'Profil'
-    admin: 'Admin'
-
 route:
     admin_home: 'Přehled'
     admin_profile: 'Administrátorský profil'
@@ -918,6 +1068,22 @@ route:
     admin_attachment_config_read: 'Zobrazení konfigurace přílohy'
     admin_attachment_config_update: 'Editace konfigurace přílohy'
     admin_attachment_config_delete: 'Odstranění konfigurace přílohy'
+
+    admin_purchasable_item_list: 'Doplňkové platby'
+    admin_purchasable_item_create: 'Nová doplňková platba'
+    admin_purchasable_item_read: 'Zobrazení doplňkové platby'
+    admin_purchasable_item_update: 'Editace doplňkové platby'
+    admin_purchasable_item_delete: 'Odstranění doplňkové platby'
+
+    admin_purchasable_item_variant_create: 'Nová varianta'
+    admin_purchasable_item_variant_read: 'Zobrazení varianty'
+    admin_purchasable_item_variant_update: 'Editace varianty'
+    admin_purchasable_item_variant_delete: 'Odstranění varianty'
+
+    admin_purchasable_item_variant_value_create: 'Nová hodnota'
+    admin_purchasable_item_variant_value_read: 'Zobrazení hodnoty'
+    admin_purchasable_item_variant_value_update: 'Editace hodnoty'
+    admin_purchasable_item_variant_value_delete: 'Odstranění hodnoty'
 
     admin_application_list: 'Přihlášky'
 

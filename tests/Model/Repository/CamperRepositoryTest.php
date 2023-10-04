@@ -30,12 +30,12 @@ class CamperRepositoryTest extends KernelTestCase
         $camperRepository->saveCamper($camper, true);
         $id = $camper->getId();
 
-        $loadedCamper = $camperRepository->find($id);
+        $loadedCamper = $camperRepository->findOneById($id);
         $this->assertNotNull($loadedCamper);
-        $this->assertSame($camper->getId(), $loadedCamper->getId());
+        $this->assertSame($id, $loadedCamper->getId());
 
         $camperRepository->removeCamper($camper, true);
-        $loadedCamper = $camperRepository->find($id);
+        $loadedCamper = $camperRepository->findOneById($id);
         $this->assertNull($loadedCamper);
     }
 

@@ -22,12 +22,12 @@ class RoleRepositoryTest extends KernelTestCase
         $repository->saveRole($role, true);
         $id = $role->getId();
 
-        $loadedRole = $repository->find($id);
+        $loadedRole = $repository->findOneById($id);
         $this->assertNotNull($loadedRole);
-        $this->assertSame($role->getId(), $loadedRole->getId());
+        $this->assertSame($id, $loadedRole->getId());
 
         $repository->removeRole($role, true);
-        $loadedRole = $repository->find($id);
+        $loadedRole = $repository->findOneById($id);
         $this->assertNull($loadedRole);
     }
 

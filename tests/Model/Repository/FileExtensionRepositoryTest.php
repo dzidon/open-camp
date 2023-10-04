@@ -14,14 +14,13 @@ class FileExtensionRepositoryTest extends KernelTestCase
 
         $fileExtension = new FileExtension('exe');
         $fileExtensionRepository->saveFileExtension($fileExtension, true);
-        $id = $fileExtension->getId();
 
-        $loadedFileExtension = $fileExtensionRepository->find($id);
+        $loadedFileExtension = $fileExtensionRepository->findOneByExtension('exe');
         $this->assertNotNull($loadedFileExtension);
         $this->assertSame($fileExtension->getId(), $loadedFileExtension->getId());
 
         $fileExtensionRepository->removeFileExtension($fileExtension, true);
-        $loadedFileExtension = $fileExtensionRepository->find($id);
+        $loadedFileExtension = $fileExtensionRepository->findOneByExtension('exe');
         $this->assertNull($loadedFileExtension);
     }
 

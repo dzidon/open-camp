@@ -10,8 +10,8 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 /**
  * Validates that the entered datetime interval is empty. Validation is performed against the database.
@@ -35,44 +35,44 @@ class CampDateIntervalValidator extends ConstraintValidator
     {
         if (!$constraint instanceof CampDateInterval)
         {
-            throw new UnexpectedValueException($constraint, CampDateInterval::class);
+            throw new UnexpectedTypeException($constraint, CampDateInterval::class);
         }
 
         if (!is_object($value))
         {
-            throw new UnexpectedValueException($value, 'object');
+            throw new UnexpectedTypeException($value, 'object');
         }
 
         $campDateData = $value;
         $camp = $this->propertyAccessor->getValue($campDateData, $constraint->campProperty);
 
-        if ($camp !== null && !$camp instanceof Camp)
+        if (!$camp instanceof Camp)
         {
-            throw new UnexpectedValueException($camp, Camp::class);
+            throw new UnexpectedTypeException($camp, Camp::class);
         }
 
         $id = $this->propertyAccessor->getValue($campDateData, $constraint->idProperty);
 
         if ($id !== null && !$id instanceof UuidV4)
         {
-            throw new UnexpectedValueException($id, UuidV4::class);
+            throw new UnexpectedTypeException($id, UuidV4::class);
         }
 
         $startAt = $this->propertyAccessor->getValue($campDateData, $constraint->startAtProperty);
 
         if ($startAt !== null && !$startAt instanceof DateTimeInterface)
         {
-            throw new UnexpectedValueException($startAt, DateTimeInterface::class);
+            throw new UnexpectedTypeException($startAt, DateTimeInterface::class);
         }
 
         $endAt = $this->propertyAccessor->getValue($campDateData, $constraint->endAtProperty);
 
         if ($endAt !== null && !$endAt instanceof DateTimeInterface)
         {
-            throw new UnexpectedValueException($endAt, DateTimeInterface::class);
+            throw new UnexpectedTypeException($endAt, DateTimeInterface::class);
         }
 
-        if ($camp === null || $startAt === null || $endAt === null)
+        if ($startAt === null || $endAt === null)
         {
             return;
         }

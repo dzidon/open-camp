@@ -11,7 +11,7 @@ use Symfony\Component\Uid\UuidV4;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * File extension entity for file configs.
+ * File extension entity.
  */
 #[ORM\Entity(repositoryClass: FileExtensionRepository::class)]
 class FileExtension

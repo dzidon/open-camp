@@ -16,7 +16,6 @@ class CampDateDataTransferTest extends KernelTestCase
     {
         $dataTransfer = $this->getCampDateDataTransfer();
 
-        $expectedCamp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
         $expectedStartAt = new DateTimeImmutable('2000-01-01');
         $expectedEndAt = new DateTimeImmutable('2000-01-05');
         $expectedPrice = 1000.0;
@@ -27,7 +26,8 @@ class CampDateDataTransferTest extends KernelTestCase
             new User('bob2@gmail.com'),
         ];
 
-        $campDate = new CampDate($expectedStartAt, $expectedEndAt, $expectedPrice, $expectedCapacity, $expectedCamp);
+        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+        $campDate = new CampDate($expectedStartAt, $expectedEndAt, $expectedPrice, $expectedCapacity, $camp);
         $campDate->setIsClosed(true);
         $campDate->setIsOpenAboveCapacity(true);
         $campDate->setDescription($expectedDescription);
@@ -37,11 +37,10 @@ class CampDateDataTransferTest extends KernelTestCase
             $campDate->addLeader($expectedLeader);
         }
 
-        $data = new CampDateData();
+        $data = new CampDateData($camp);
         $dataTransfer->fillData($data, $campDate);
 
         $this->assertSame($campDate->getId(), $data->getId());
-        $this->assertSame($expectedCamp, $data->getCamp());
         $this->assertSame($expectedStartAt, $data->getStartAt());
         $this->assertSame($expectedEndAt, $data->getEndAt());
         $this->assertSame($expectedPrice, $data->getPrice());
@@ -66,7 +65,9 @@ class CampDateDataTransferTest extends KernelTestCase
             new User('bob2@gmail.com'),
         ];
 
-        $data = new CampDateData();
+        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+
+        $data = new CampDateData($camp);
         $data->setIsClosed(true);
         $data->setIsOpenAboveCapacity(true);
         $data->setStartAt($expectedStartAt);
@@ -80,7 +81,6 @@ class CampDateDataTransferTest extends KernelTestCase
             $data->addLeader($expectedLeader);
         }
 
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
         $campDate = new CampDate(new DateTimeImmutable('3000-01-02'), new DateTimeImmutable('3000-01-06'), 0.0, 0, $camp);
         $dataTransfer->fillEntity($data, $campDate);
 

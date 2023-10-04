@@ -15,6 +15,9 @@ class CampImageDataTest extends KernelTestCase
 
         $data->setPriority(100);
         $this->assertSame(100, $data->getPriority());
+
+        $data->setPriority(null);
+        $this->assertNull($data->getPriority());
     }
 
     public function testPriorityValidation(): void

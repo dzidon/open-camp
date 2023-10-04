@@ -14,9 +14,11 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CampDateDataTest extends KernelTestCase
 {
+    private Camp $camp;
+
     public function testId(): void
     {
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $this->assertNull($data->getId());
 
         $uid = Uuid::v4();
@@ -29,20 +31,14 @@ class CampDateDataTest extends KernelTestCase
 
     public function testCamp(): void
     {
-        $data = new CampDateData();
-        $this->assertNull($data->getCamp());
-
         $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
-        $data->setCamp($camp);
+        $data = new CampDateData($camp);
         $this->assertSame($camp, $data->getCamp());
-
-        $data->setCamp(null);
-        $this->assertNull($data->getCamp());
     }
 
     public function testStartAt(): void
     {
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $this->assertNull($data->getStartAt());
 
         $expectedDateStart = new DateTimeImmutable('now');
@@ -57,7 +53,7 @@ class CampDateDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $result = $validator->validateProperty($data, 'startAt');
         $this->assertNotEmpty($result); // invalid
 
@@ -68,7 +64,7 @@ class CampDateDataTest extends KernelTestCase
 
     public function testEndAt(): void
     {
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $this->assertNull($data->getEndAt());
 
         $expectedDateEnd = new DateTimeImmutable('now');
@@ -83,7 +79,7 @@ class CampDateDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $result = $validator->validateProperty($data, 'endAt');
         $this->assertNotEmpty($result); // invalid
 
@@ -104,7 +100,7 @@ class CampDateDataTest extends KernelTestCase
 
     public function testPrice(): void
     {
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $this->assertNull($data->getPrice());
 
         $data->setPrice(100.5);
@@ -118,7 +114,7 @@ class CampDateDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $result = $validator->validateProperty($data, 'price');
         $this->assertNotEmpty($result); // invalid
 
@@ -137,7 +133,7 @@ class CampDateDataTest extends KernelTestCase
 
     public function testCapacity(): void
     {
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $this->assertNull($data->getCapacity());
 
         $data->setCapacity(100);
@@ -151,7 +147,7 @@ class CampDateDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $result = $validator->validateProperty($data, 'capacity');
         $this->assertNotEmpty($result); // invalid
 
@@ -166,7 +162,7 @@ class CampDateDataTest extends KernelTestCase
 
     public function testIsClosed(): void
     {
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $this->assertFalse($data->isClosed());
 
         $data->setIsClosed(true);
@@ -178,7 +174,7 @@ class CampDateDataTest extends KernelTestCase
 
     public function testIsOpenAboveCapacity(): void
     {
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $this->assertFalse($data->isOpenAboveCapacity());
 
         $data->setIsOpenAboveCapacity(true);
@@ -190,7 +186,7 @@ class CampDateDataTest extends KernelTestCase
 
     public function testDescription(): void
     {
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $this->assertNull($data->getDescription());
 
         $data->setDescription('text');
@@ -204,7 +200,7 @@ class CampDateDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $result = $validator->validateProperty($data, 'description');
         $this->assertEmpty($result); // valid
 
@@ -227,7 +223,7 @@ class CampDateDataTest extends KernelTestCase
 
     public function testLeaders(): void
     {
-        $data = new CampDateData();
+        $data = new CampDateData($this->camp);
         $this->assertSame([], $data->getLeaders());
 
         $newLeaders = [
@@ -253,10 +249,9 @@ class CampDateDataTest extends KernelTestCase
         $uid = new UuidV4('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $camp = $campRepository->findOneById($uid);
 
-        $data = new CampDateData();
+        $data = new CampDateData($camp);
         $data->setPrice(100.0);
         $data->setCapacity(5);
-        $data->setCamp($camp);
 
         $data->setStartAt(new DateTimeImmutable('3000-01-01'));
         $data->setEndAt(new DateTimeImmutable('3000-01-02'));
@@ -304,6 +299,11 @@ class CampDateDataTest extends KernelTestCase
         $data->setEndAt(new DateTimeImmutable('2000-07-07'));
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
+    }
+
+    protected function setUp(): void
+    {
+        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
     }
 
     private function getCampRepository(): CampRepositoryInterface

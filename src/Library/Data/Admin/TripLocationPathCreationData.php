@@ -2,10 +2,9 @@
 
 namespace App\Library\Data\Admin;
 
-use App\Library\Constraint\UniqueTripLocations;
+use App\Library\Constraint\UniqueElementsInArray;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[UniqueTripLocations]
 class TripLocationPathCreationData
 {
     #[Assert\Valid]
@@ -13,6 +12,7 @@ class TripLocationPathCreationData
 
     /** @var TripLocationData[] */
     #[Assert\Valid]
+    #[UniqueElementsInArray(fields: ['name'], message: 'unique_trip_locations')]
     #[Assert\NotBlank(message: 'trip_locations_mandatory')]
     private array $tripLocationsData = [];
 

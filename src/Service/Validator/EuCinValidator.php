@@ -5,7 +5,7 @@ namespace App\Service\Validator;
 use App\Library\Constraint\EuCin;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -35,14 +35,14 @@ class EuCinValidator extends ConstraintValidator
 
         if (!$constraint instanceof EuCin)
         {
-            throw new UnexpectedValueException($constraint, EuCin::class);
+            throw new UnexpectedTypeException($constraint, EuCin::class);
         }
 
         $cin = $value;
 
         if ($cin !== null && !is_string($cin))
         {
-            throw new UnexpectedValueException($cin, 'string');
+            throw new UnexpectedTypeException($cin, 'string');
         }
 
         if ($cin === null || $cin === '')

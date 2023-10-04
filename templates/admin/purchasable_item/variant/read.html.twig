@@ -1,0 +1,71 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.purchasable_item_variant.name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ purchasable_item_variant.name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.purchasable_item_variant.priority'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ purchasable_item_variant.priority }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.purchasable_item_variant.purchasable_item'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ purchasable_item_variant.purchasableItem.name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.purchasable_item_variant.purchasable_item_variant_values'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if purchasable_item_variant_values is empty %}
+                                <div>
+                                    <em>{{ 'search.error.no_results'|trans }}</em>
+                                </div>
+                            {% else %}
+                                {% for purchasable_item_variant_value in purchasable_item_variant_values %}
+                                    <div>
+                                        <span>{{ purchasable_item_variant_value.name }}</span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <a href="{{ path('admin_purchasable_item_variant_update', {id: purchasable_item_variant.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                        {{ 'crud.action.common.update'|trans }}
+                    </a>
+
+                    <a href="{{ path('admin_purchasable_item_variant_delete', {id: purchasable_item_variant.id.toRfc4122}) }}" class="btn btn-danger">
+                        {{ 'crud.action.common.delete'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

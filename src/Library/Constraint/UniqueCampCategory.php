@@ -17,6 +17,21 @@ class UniqueCampCategory extends Constraint
     public string $parentProperty = 'parent';
     public string $idProperty = 'id';
 
+    public function __construct(string $message = null,
+                                string $urlNameProperty = null,
+                                string $parentProperty = null,
+                                string $idProperty = null,
+                                array  $groups = null,
+                                mixed  $payload = null)
+    {
+        parent::__construct([], $groups, $payload);
+
+        $this->message = $message ?? $this->message;
+        $this->urlNameProperty = $urlNameProperty ?? $this->urlNameProperty;
+        $this->parentProperty = $parentProperty ?? $this->parentProperty;
+        $this->idProperty = $idProperty ?? $this->idProperty;
+    }
+
     /**
      * @inheritDoc
      */

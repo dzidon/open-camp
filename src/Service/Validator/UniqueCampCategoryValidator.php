@@ -9,7 +9,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -37,12 +37,12 @@ class UniqueCampCategoryValidator extends ConstraintValidator
     {
         if (!$constraint instanceof UniqueCampCategory)
         {
-            throw new UnexpectedValueException($constraint, UniqueCampCategory::class);
+            throw new UnexpectedTypeException($constraint, UniqueCampCategory::class);
         }
 
         if (!is_object($value))
         {
-            throw new UnexpectedValueException($value, 'object');
+            throw new UnexpectedTypeException($value, 'object');
         }
 
         $campCategoryData = $value;
@@ -50,21 +50,21 @@ class UniqueCampCategoryValidator extends ConstraintValidator
 
         if ($parent !== null && !$parent instanceof CampCategory)
         {
-            throw new UnexpectedValueException($parent, CampCategory::class);
+            throw new UnexpectedTypeException($parent, CampCategory::class);
         }
 
         $urlName = $this->propertyAccessor->getValue($campCategoryData, $constraint->urlNameProperty);
 
         if ($urlName !== null && !is_string($urlName))
         {
-            throw new UnexpectedValueException($urlName, 'string');
+            throw new UnexpectedTypeException($urlName, 'string');
         }
 
         $id = $this->propertyAccessor->getValue($campCategoryData, $constraint->idProperty);
 
         if ($id !== null && !$id instanceof UuidV4)
         {
-            throw new UnexpectedValueException($id, UuidV4::class);
+            throw new UnexpectedTypeException($id, UuidV4::class);
         }
 
         if ($urlName === null || $urlName === '')

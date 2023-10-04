@@ -21,12 +21,12 @@ class CampRepositoryTest extends KernelTestCase
         $campRepository->saveCamp($camp, true);
         $id = $camp->getId();
 
-        $loadedCamp = $campRepository->find($id);
+        $loadedCamp = $campRepository->findOneById($id);
         $this->assertNotNull($loadedCamp);
-        $this->assertSame($camp->getId(), $loadedCamp->getId());
+        $this->assertSame($id, $loadedCamp->getId());
 
         $campRepository->removeCamp($camp, true);
-        $loadedCamp = $campRepository->find($id);
+        $loadedCamp = $campRepository->findOneById($id);
         $this->assertNull($loadedCamp);
     }
 

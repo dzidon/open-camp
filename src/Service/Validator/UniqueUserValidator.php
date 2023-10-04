@@ -8,7 +8,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -36,12 +36,12 @@ class UniqueUserValidator extends ConstraintValidator
     {
         if (!$constraint instanceof UniqueUser)
         {
-            throw new UnexpectedValueException($constraint, UniqueUser::class);
+            throw new UnexpectedTypeException($constraint, UniqueUser::class);
         }
 
         if (!is_object($value))
         {
-            throw new UnexpectedValueException($value, 'object');
+            throw new UnexpectedTypeException($value, 'object');
         }
 
         $userData = $value;
@@ -49,14 +49,14 @@ class UniqueUserValidator extends ConstraintValidator
 
         if ($email !== null && !is_string($email))
         {
-            throw new UnexpectedValueException($email, 'string');
+            throw new UnexpectedTypeException($email, 'string');
         }
 
         $id = $this->propertyAccessor->getValue($userData, $constraint->idProperty);
 
         if ($id !== null && !$id instanceof UuidV4)
         {
-            throw new UnexpectedValueException($id, UuidV4::class);
+            throw new UnexpectedTypeException($id, UuidV4::class);
         }
 
         if ($email === null || $email === '')

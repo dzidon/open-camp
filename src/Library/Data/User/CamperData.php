@@ -10,6 +10,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class CamperData
 {
+    private bool $isNationalIdentifierEnabled;
+
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
     private ?string $nameFirst = null;
@@ -50,8 +52,6 @@ class CamperData
      * @var Camper[]
      */
     private array $siblings = [];
-
-    private bool $isNationalIdentifierEnabled;
 
     public function __construct(bool $isNationalIdentifierEnabled)
     {

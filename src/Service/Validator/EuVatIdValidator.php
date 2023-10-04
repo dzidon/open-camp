@@ -5,7 +5,7 @@ namespace App\Service\Validator;
 use App\Library\Constraint\EuVatId;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -35,14 +35,14 @@ class EuVatIdValidator extends ConstraintValidator
 
         if (!$constraint instanceof EuVatId)
         {
-            throw new UnexpectedValueException($constraint, EuVatId::class);
+            throw new UnexpectedTypeException($constraint, EuVatId::class);
         }
 
         $vatId = $value;
 
         if ($vatId !== null && !is_string($vatId))
         {
-            throw new UnexpectedValueException($vatId, 'string');
+            throw new UnexpectedTypeException($vatId, 'string');
         }
 
         if ($vatId === null || $vatId === '')

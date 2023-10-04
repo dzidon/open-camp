@@ -21,12 +21,12 @@ class TripLocationPathCreationType extends AbstractType
                 'label' => false,
             ])
             ->add('tripLocationsData', CollectionType::class, [
-                'entry_type'                  => TripLocationType::class,
-                'label'                       => 'form.admin.trip_location_path_creation.trip_locations',
-                'allow_add'                   => true,
-                'allow_delete'                => true,
-                'by_reference'                => false,
-                'entry_options'               => [
+                'entry_type'    => TripLocationType::class,
+                'label'         => 'form.admin.trip_location_path_creation.trip_locations',
+                'allow_add'     => true,
+                'allow_delete'  => true,
+                'by_reference'  => false,
+                'entry_options' => [
                     'label'         => false,
                     'remove_button' => true,
                 ],

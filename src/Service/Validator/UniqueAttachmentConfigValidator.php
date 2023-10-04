@@ -8,7 +8,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -36,12 +36,12 @@ class UniqueAttachmentConfigValidator extends ConstraintValidator
     {
         if (!$constraint instanceof UniqueAttachmentConfig)
         {
-            throw new UnexpectedValueException($constraint, UniqueAttachmentConfig::class);
+            throw new UnexpectedTypeException($constraint, UniqueAttachmentConfig::class);
         }
 
         if (!is_object($value))
         {
-            throw new UnexpectedValueException($value, 'object');
+            throw new UnexpectedTypeException($value, 'object');
         }
 
         $attachmentConfigData = $value;
@@ -49,14 +49,14 @@ class UniqueAttachmentConfigValidator extends ConstraintValidator
 
         if ($name !== null && !is_string($name))
         {
-            throw new UnexpectedValueException($name, 'string');
+            throw new UnexpectedTypeException($name, 'string');
         }
 
         $id = $this->propertyAccessor->getValue($attachmentConfigData, $constraint->idProperty);
 
         if ($id !== null && !$id instanceof UuidV4)
         {
-            throw new UnexpectedValueException($id, UuidV4::class);
+            throw new UnexpectedTypeException($id, UuidV4::class);
         }
 
         if ($name === null || $name === '')

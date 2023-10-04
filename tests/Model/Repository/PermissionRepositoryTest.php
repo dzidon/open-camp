@@ -27,7 +27,7 @@ class PermissionRepositoryTest extends KernelTestCase
 
         $loadedPermission = $permissionRepository->find($id);
         $this->assertNotNull($loadedPermission);
-        $this->assertSame($permission->getId(), $loadedPermission->getId());
+        $this->assertSame($id, $loadedPermission->getId());
 
         $permissionRepository->removePermission($permission, true);
         $loadedPermission = $permissionRepository->find($id);

@@ -13,6 +13,9 @@ use App\Model\Entity\Contact;
 use App\Model\Entity\FileExtension;
 use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
+use App\Model\Entity\PurchasableItem;
+use App\Model\Entity\PurchasableItemVariant;
+use App\Model\Entity\PurchasableItemVariantValue;
 use App\Model\Entity\Role;
 use App\Model\Entity\TripLocation;
 use App\Model\Entity\TripLocationPath;
@@ -430,6 +433,51 @@ class TestFixtures extends Fixture
         $attachmentConfig2->addFileExtension($fileExtensionJpg);
         $this->setCreatedAt($attachmentConfig2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($attachmentConfig2);
+
+        /*
+         * PurchasableItem
+         */
+        $purchasableItem1 = new PurchasableItem('Item 1', 1000.0, 5);
+        $this->setUid($purchasableItem1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($purchasableItem1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($purchasableItem1);
+
+        $purchasableItem2 = new PurchasableItem('Item 2', 2000.0, 10);
+        $this->setCreatedAt($purchasableItem2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($purchasableItem2);
+
+        /*
+         * PurchasableVariant
+         */
+        $purchasableItemVariant1 = new PurchasableItemVariant('Variant 1', 100, $purchasableItem1);
+        $this->setUid($purchasableItemVariant1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($purchasableItemVariant1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($purchasableItemVariant1);
+
+        $purchasableItemVariant2 = new PurchasableItemVariant('Variant 2', 50, $purchasableItem1);
+        $this->setCreatedAt($purchasableItemVariant2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($purchasableItemVariant2);
+
+        $purchasableItemVariant3 = new PurchasableItemVariant('Variant 3', 100, $purchasableItem2);
+        $this->setCreatedAt($purchasableItemVariant3, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($purchasableItemVariant3);
+
+        /*
+         * PurchasableVariantValue
+         */
+        $purchasableItemVariantValue1 = new PurchasableItemVariantValue('Value 1', 100, $purchasableItemVariant1);
+        $this->setUid($purchasableItemVariantValue1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($purchasableItemVariantValue1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($purchasableItemVariantValue1);
+
+        $purchasableItemVariantValue2 = new PurchasableItemVariantValue('Value 2', 50, $purchasableItemVariant1);
+        $this->setCreatedAt($purchasableItemVariantValue2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($purchasableItemVariantValue2);
+
+        $purchasableItemVariantValue3 = new PurchasableItemVariantValue('Value 3', 100, $purchasableItemVariant3);
+        $this->setUid($purchasableItemVariantValue3, '550e8400-e29b-41d4-a716-446655440000');
+        $this->setCreatedAt($purchasableItemVariantValue3, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($purchasableItemVariantValue3);
 
         // save
         $manager->flush();

@@ -9,7 +9,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -37,12 +37,12 @@ class UniqueTripLocationValidator extends ConstraintValidator
     {
         if (!$constraint instanceof UniqueTripLocation)
         {
-            throw new UnexpectedValueException($constraint, UniqueTripLocation::class);
+            throw new UnexpectedTypeException($constraint, UniqueTripLocation::class);
         }
 
         if (!is_object($value))
         {
-            throw new UnexpectedValueException($value, 'object');
+            throw new UnexpectedTypeException($value, 'object');
         }
 
         $tripLocationData = $value;
@@ -50,21 +50,21 @@ class UniqueTripLocationValidator extends ConstraintValidator
 
         if ($tripLocationPath !== null && !$tripLocationPath instanceof TripLocationPath)
         {
-            throw new UnexpectedValueException($tripLocationPath, TripLocationPath::class);
+            throw new UnexpectedTypeException($tripLocationPath, TripLocationPath::class);
         }
 
         $name = $this->propertyAccessor->getValue($tripLocationData, $constraint->nameProperty);
 
         if ($name !== null && !is_string($name))
         {
-            throw new UnexpectedValueException($name, 'string');
+            throw new UnexpectedTypeException($name, 'string');
         }
 
         $id = $this->propertyAccessor->getValue($tripLocationData, $constraint->idProperty);
 
         if ($id !== null && !$id instanceof UuidV4)
         {
-            throw new UnexpectedValueException($id, UuidV4::class);
+            throw new UnexpectedTypeException($id, UuidV4::class);
         }
 
         if ($tripLocationPath === null || $name === null || $name === '')

@@ -21,7 +21,7 @@ class PermissionGroupRepositoryTest extends KernelTestCase
 
         $loadedGroup = $repository->find($id);
         $this->assertNotNull($loadedGroup);
-        $this->assertSame($group->getId(), $loadedGroup->getId());
+        $this->assertSame($id, $loadedGroup->getId());
 
         $repository->removePermissionGroup($group, true);
         $loadedGroup = $repository->find($id);

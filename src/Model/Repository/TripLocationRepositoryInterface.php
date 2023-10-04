@@ -37,7 +37,7 @@ interface TripLocationRepositoryInterface
     public function findOneById(UuidV4 $id): ?TripLocation;
 
     /**
-     * Finds one trip location by name.
+     * Finds trip locations by name.
      *
      * @param string $name
      * @return TripLocation[]

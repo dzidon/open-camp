@@ -14,6 +14,13 @@ class EuVatId extends Constraint
 {
     public string $message = 'eu_vat_id';
 
+    public function __construct(string $message = null, array $groups = null, mixed $payload = null)
+    {
+        parent::__construct([], $groups, $payload);
+
+        $this->message = $message ?? $this->message;
+    }
+
     /**
      * @inheritDoc
      */

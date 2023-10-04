@@ -29,12 +29,12 @@ class ContactRepositoryTest extends KernelTestCase
         $contactRepository->saveContact($contact, true);
         $id = $contact->getId();
 
-        $loadedContact = $contactRepository->find($id);
+        $loadedContact = $contactRepository->findOneById($id);
         $this->assertNotNull($loadedContact);
-        $this->assertSame($contact->getId(), $loadedContact->getId());
+        $this->assertSame($id, $loadedContact->getId());
 
         $contactRepository->removeContact($contact, true);
-        $loadedContact = $contactRepository->find($id);
+        $loadedContact = $contactRepository->findOneById($id);
         $this->assertNull($loadedContact);
     }
 

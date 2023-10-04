@@ -25,12 +25,12 @@ class CampDateRepositoryTest extends KernelTestCase
         $campDateRepository->saveCampDate($campDate, true);
         $id = $campDate->getId();
 
-        $loadedCampDate = $campDateRepository->find($id);
+        $loadedCampDate = $campDateRepository->findOneById($id);
         $this->assertNotNull($loadedCampDate);
-        $this->assertSame($campDate->getId(), $loadedCampDate->getId());
+        $this->assertSame($id, $loadedCampDate->getId());
 
         $campDateRepository->removeCampDate($campDate, true);
-        $loadedCampDate = $campDateRepository->find($id);
+        $loadedCampDate = $campDateRepository->findOneById($id);
         $this->assertNull($loadedCampDate);
     }
 

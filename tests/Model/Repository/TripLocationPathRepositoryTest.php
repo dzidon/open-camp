@@ -19,12 +19,12 @@ class TripLocationPathRepositoryTest extends KernelTestCase
         $repository->saveTripLocationPath($tripLocationPath, true);
         $id = $tripLocationPath->getId();
 
-        $loadedTripLocationPath = $repository->find($id);
+        $loadedTripLocationPath = $repository->findOneById($id);
         $this->assertNotNull($loadedTripLocationPath);
-        $this->assertSame($tripLocationPath->getId(), $loadedTripLocationPath->getId());
+        $this->assertSame($id, $loadedTripLocationPath->getId());
 
         $repository->removeTripLocationPath($tripLocationPath, true);
-        $loadedTripLocationPath = $repository->find($id);
+        $loadedTripLocationPath = $repository->findOneById($id);
         $this->assertNull($loadedTripLocationPath);
     }
 

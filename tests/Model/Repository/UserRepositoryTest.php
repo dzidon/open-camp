@@ -27,12 +27,12 @@ class UserRepositoryTest extends KernelTestCase
         $repository->saveUser($user, true);
         $id = $user->getId();
 
-        $loadedUser = $repository->find($id);
+        $loadedUser = $repository->findOneById($id);
         $this->assertNotNull($loadedUser);
-        $this->assertSame($user->getId(), $loadedUser->getId());
+        $this->assertSame($id, $loadedUser->getId());
 
         $repository->removeUser($user, true);
-        $loadedUser = $repository->find($id);
+        $loadedUser = $repository->findOneById($id);
         $this->assertNull($loadedUser);
     }
 

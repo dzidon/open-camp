@@ -5,7 +5,7 @@ namespace App\Service\Validator;
 use App\Library\Constraint\NationalIdentifier;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -35,14 +35,14 @@ class NationalIdentifierValidator extends ConstraintValidator
 
         if (!$constraint instanceof NationalIdentifier)
         {
-            throw new UnexpectedValueException($constraint, NationalIdentifier::class);
+            throw new UnexpectedTypeException($constraint, NationalIdentifier::class);
         }
 
         $nationalIdentifier = $value;
 
         if ($nationalIdentifier !== null && !is_string($nationalIdentifier))
         {
-            throw new UnexpectedValueException($nationalIdentifier, 'string');
+            throw new UnexpectedTypeException($nationalIdentifier, 'string');
         }
 
         if ($nationalIdentifier === null || $nationalIdentifier === '')

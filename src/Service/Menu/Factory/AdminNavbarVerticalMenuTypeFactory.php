@@ -75,7 +75,12 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
             $this->security->isGranted('trip_location_path_update') || $this->security->isGranted('trip_location_path_delete')
         ;
 
-        if ($isGrantedAttachmentConfig || $isGrantedTripLocationPath)
+        $isGrantedPurchasableItem =
+            $this->security->isGranted('purchasable_item_create') || $this->security->isGranted('purchasable_item_read') ||
+            $this->security->isGranted('purchasable_item_update') || $this->security->isGranted('purchasable_item_delete')
+        ;
+
+        if ($isGrantedAttachmentConfig || $isGrantedTripLocationPath || $isGrantedPurchasableItem)
         {
             $text = $this->translator->trans('route.admin_application_list');
             $itemApplicationsParent = new MenuIconType('parent_applications', 'navbar_admin_vertical_item', $text, '#', 'fas fa-sticky-note');
@@ -110,6 +115,26 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                 $itemTripLocationPaths = new MenuIconType('admin_trip_location_path_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
                 $itemApplicationsParent->addChild($itemTripLocationPaths);
                 $itemTripLocationPaths->setActive($active, $active);
+            }
+
+            if ($isGrantedPurchasableItem)
+            {
+                $active =
+                    $route === 'admin_purchasable_item_list'   || $route === 'admin_purchasable_item_create' || $route === 'admin_purchasable_item_read' ||
+                    $route === 'admin_purchasable_item_update' || $route === 'admin_purchasable_item_delete' ||
+
+                    $route === 'admin_purchasable_item_variant_create' || $route === 'admin_purchasable_item_variant_read'   ||
+                    $route === 'admin_purchasable_item_variant_update' || $route === 'admin_purchasable_item_variant_delete' ||
+
+                    $route === 'admin_purchasable_item_variant_value_create' || $route === 'admin_purchasable_item_variant_value_read' ||
+                    $route === 'admin_purchasable_item_variant_value_update' || $route === 'admin_purchasable_item_variant_value_delete'
+                ;
+
+                $text = $this->translator->trans('route.admin_purchasable_item_list');
+                $url = $this->urlGenerator->generate('admin_purchasable_item_list');
+                $itemPurchasableItems = new MenuIconType('admin_purchasable_item_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
+                $itemApplicationsParent->addChild($itemPurchasableItems);
+                $itemPurchasableItems->setActive($active, $active);
             }
         }
 

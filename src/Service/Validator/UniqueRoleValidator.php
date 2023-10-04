@@ -8,7 +8,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -36,12 +36,12 @@ class UniqueRoleValidator extends ConstraintValidator
     {
         if (!$constraint instanceof UniqueRole)
         {
-            throw new UnexpectedValueException($constraint, UniqueRole::class);
+            throw new UnexpectedTypeException($constraint, UniqueRole::class);
         }
 
         if (!is_object($value))
         {
-            throw new UnexpectedValueException($value, 'object');
+            throw new UnexpectedTypeException($value, 'object');
         }
 
         $roleData = $value;
@@ -49,14 +49,14 @@ class UniqueRoleValidator extends ConstraintValidator
 
         if ($label !== null && !is_string($label))
         {
-            throw new UnexpectedValueException($label, 'string');
+            throw new UnexpectedTypeException($label, 'string');
         }
 
         $id = $this->propertyAccessor->getValue($roleData, $constraint->idProperty);
 
         if ($id !== null && !$id instanceof UuidV4)
         {
-            throw new UnexpectedValueException($id, UuidV4::class);
+            throw new UnexpectedTypeException($id, UuidV4::class);
         }
 
         if ($label === null || $label === '')

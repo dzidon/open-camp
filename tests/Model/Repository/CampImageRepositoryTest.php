@@ -28,12 +28,12 @@ class CampImageRepositoryTest extends KernelTestCase
         $campImageRepository->saveCampImage($campImage, true);
         $id = $campImage->getId();
 
-        $loadedCampImage = $campImageRepository->find($id);
+        $loadedCampImage = $campImageRepository->findOneById($id);
         $this->assertNotNull($loadedCampImage);
-        $this->assertSame($campImage->getId(), $loadedCampImage->getId());
+        $this->assertSame($id, $loadedCampImage->getId());
 
         $campImageRepository->removeCampImage($campImage, true);
-        $loadedCampImage = $campImageRepository->find($id);
+        $loadedCampImage = $campImageRepository->findOneById($id);
         $this->assertNull($loadedCampImage);
 
         $fileName = $id->toRfc4122() . '.png';

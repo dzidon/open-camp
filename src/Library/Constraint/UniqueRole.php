@@ -16,6 +16,19 @@ class UniqueRole extends Constraint
     public string $labelProperty = 'label';
     public string $idProperty = 'id';
 
+    public function __construct(string $message = null,
+                                string $labelProperty = null,
+                                string $idProperty = null,
+                                array  $groups = null,
+                                mixed  $payload = null)
+    {
+        parent::__construct([], $groups, $payload);
+
+        $this->message = $message ?? $this->message;
+        $this->labelProperty = $labelProperty ?? $this->labelProperty;
+        $this->idProperty = $idProperty ?? $this->idProperty;
+    }
+
     /**
      * @inheritDoc
      */

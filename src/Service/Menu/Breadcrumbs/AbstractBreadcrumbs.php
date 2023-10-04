@@ -8,7 +8,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Abstraction for classes that initialize breadcrumbs.
+ * Abstraction for classes that create breadcrumbs.
  */
 abstract class AbstractBreadcrumbs
 {

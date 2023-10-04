@@ -24,12 +24,12 @@ class TripLocationRepositoryTest extends KernelTestCase
         $tripLocationRepository->saveTripLocation($tripLocation, true);
         $id = $tripLocation->getId();
 
-        $loadedTripLocation = $tripLocationRepository->find($id);
+        $loadedTripLocation = $tripLocationRepository->findOneById($id);
         $this->assertNotNull($loadedTripLocation);
-        $this->assertSame($tripLocation->getId(), $loadedTripLocation->getId());
+        $this->assertSame($id, $loadedTripLocation->getId());
 
         $tripLocationRepository->removeTripLocation($tripLocation, true);
-        $loadedTripLocation = $tripLocationRepository->find($id);
+        $loadedTripLocation = $tripLocationRepository->findOneById($id);
         $this->assertNull($loadedTripLocation);
     }
 

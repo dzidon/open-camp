@@ -16,6 +16,19 @@ class UniqueUser extends Constraint
     public string $emailProperty = 'email';
     public string $idProperty = 'id';
 
+    public function __construct(string $message = null,
+                                string $emailProperty = null,
+                                string $idProperty = null,
+                                array  $groups = null,
+                                mixed  $payload = null)
+    {
+        parent::__construct([], $groups, $payload);
+
+        $this->message = $message ?? $this->message;
+        $this->emailProperty = $emailProperty ?? $this->emailProperty;
+        $this->idProperty = $idProperty ?? $this->idProperty;
+    }
+
     /**
      * @inheritDoc
      */

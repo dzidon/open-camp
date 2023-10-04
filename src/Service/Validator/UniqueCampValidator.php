@@ -8,7 +8,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -36,12 +36,12 @@ class UniqueCampValidator extends ConstraintValidator
     {
         if (!$constraint instanceof UniqueCamp)
         {
-            throw new UnexpectedValueException($constraint, UniqueCamp::class);
+            throw new UnexpectedTypeException($constraint, UniqueCamp::class);
         }
 
         if (!is_object($value))
         {
-            throw new UnexpectedValueException($value, 'object');
+            throw new UnexpectedTypeException($value, 'object');
         }
 
         $campData = $value;
@@ -49,14 +49,14 @@ class UniqueCampValidator extends ConstraintValidator
 
         if ($urlName !== null && !is_string($urlName))
         {
-            throw new UnexpectedValueException($urlName, 'string');
+            throw new UnexpectedTypeException($urlName, 'string');
         }
 
         $id = $this->propertyAccessor->getValue($campData, $constraint->idProperty);
 
         if ($id !== null && !$id instanceof UuidV4)
         {
-            throw new UnexpectedValueException($id, UuidV4::class);
+            throw new UnexpectedTypeException($id, UuidV4::class);
         }
 
         if ($urlName === null || $urlName === '')

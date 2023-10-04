@@ -18,6 +18,23 @@ class CampDateInterval extends Constraint
     public string $startAtProperty = 'startAt';
     public string $endAtProperty = 'endAt';
 
+    public function __construct(string $message = null,
+                                string $idProperty = null,
+                                string $campProperty = null,
+                                string $startAtProperty = null,
+                                string $endAtProperty = null,
+                                array  $groups = null,
+                                mixed  $payload = null)
+    {
+        parent::__construct([], $groups, $payload);
+
+        $this->message = $message ?? $this->message;
+        $this->idProperty = $idProperty ?? $this->idProperty;
+        $this->campProperty = $campProperty ?? $this->campProperty;
+        $this->startAtProperty = $startAtProperty ?? $this->startAtProperty;
+        $this->endAtProperty = $endAtProperty ?? $this->endAtProperty;
+    }
+
     /**
      * @inheritDoc
      */

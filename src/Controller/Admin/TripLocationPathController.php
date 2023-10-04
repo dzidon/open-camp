@@ -148,13 +148,13 @@ class TripLocationPathController extends AbstractController
             return $updatePartPathResult;
         }
 
-        $updatePartLocations = $this->updatePartLocations($tripLocationRepository, $menuFactory, $formFactory, $tripLocationPath, $request);
-        if ($updatePartLocations instanceof RedirectResponse)
+        $updatePartLocationsResult = $this->updatePartLocations($tripLocationRepository, $menuFactory, $formFactory, $tripLocationPath, $request);
+        if ($updatePartLocationsResult instanceof RedirectResponse)
         {
-            return $updatePartLocations;
+            return $updatePartLocationsResult;
         }
 
-        return $this->render('admin/trip/location_path/update.html.twig', array_merge($updatePartPathResult, $updatePartLocations, [
+        return $this->render('admin/trip/location_path/update.html.twig', array_merge($updatePartPathResult, $updatePartLocationsResult, [
             'breadcrumbs' => $this->breadcrumbs->buildUpdate($tripLocationPath),
         ]));
     }

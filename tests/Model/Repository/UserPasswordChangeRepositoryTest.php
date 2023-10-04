@@ -20,14 +20,13 @@ class UserPasswordChangeRepositoryTest extends KernelTestCase
         $now = new DateTimeImmutable('now');
         $passwordChange = new UserPasswordChange($now, 'bob', '123');
         $passwordChangeRepository->saveUserPasswordChange($passwordChange, true);
-        $id = $passwordChange->getId();
 
-        $loadedPasswordChange = $passwordChangeRepository->find($id);
+        $loadedPasswordChange = $passwordChangeRepository->findOneBySelector('bob');
         $this->assertNotNull($loadedPasswordChange);
         $this->assertSame($passwordChange->getId(), $loadedPasswordChange->getId());
 
         $passwordChangeRepository->removeUserPasswordChange($passwordChange, true);
-        $loadedPasswordChange = $passwordChangeRepository->find($id);
+        $loadedPasswordChange = $passwordChangeRepository->findOneBySelector('bob');
         $this->assertNull($loadedPasswordChange);
     }
 

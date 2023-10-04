@@ -14,6 +14,13 @@ class EuCin extends Constraint
 {
     public string $message = 'eu_cin';
 
+    public function __construct(string $message = null, array $groups = null, mixed $payload = null)
+    {
+        parent::__construct([], $groups, $payload);
+
+        $this->message = $message ?? $this->message;
+    }
+
     /**
      * @inheritDoc
      */

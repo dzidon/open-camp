@@ -16,6 +16,19 @@ class UniqueAttachmentConfig extends Constraint
     public string $nameProperty = 'name';
     public string $idProperty = 'id';
 
+    public function __construct(string $message = null,
+                                string $nameProperty = null,
+                                string $idProperty = null,
+                                array  $groups = null,
+                                mixed  $payload = null)
+    {
+        parent::__construct([], $groups, $payload);
+
+        $this->message = $message ?? $this->message;
+        $this->nameProperty = $nameProperty ?? $this->nameProperty;
+        $this->idProperty = $idProperty ?? $this->idProperty;
+    }
+
     /**
      * @inheritDoc
      */

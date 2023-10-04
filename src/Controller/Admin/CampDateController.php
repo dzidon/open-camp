@@ -84,9 +84,7 @@ class CampDateController extends AbstractController
     {
         $camp = $this->findCampOrThrow404($id);
 
-        $campDateData = new CampDateData();
-        $campDateData->setCamp($camp);
-
+        $campDateData = new CampDateData($camp);
         $form = $this->createForm(CampDateType::class, $campDateData);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.camp_date.button']);
         $form->handleRequest($request);
@@ -129,7 +127,7 @@ class CampDateController extends AbstractController
         $campDate = $this->findCampDateOrThrow404($id);
         $camp = $campDate->getCamp();
 
-        $campDateData = new CampDateData();
+        $campDateData = new CampDateData($camp);
         $dataTransfer->fillData($campDateData, $campDate);
 
         $form = $this->createForm(CampDateType::class, $campDateData);
