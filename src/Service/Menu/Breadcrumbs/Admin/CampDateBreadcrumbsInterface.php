@@ -25,15 +25,15 @@ interface CampDateBreadcrumbsInterface
     /**
      * Creates breadcrumbs for the path "admin_camp_date_read".
      */
-    public function buildRead(Camp $camp, CampDate $campDate): MenuTypeInterface;
+    public function buildRead(CampDate $campDate): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "admin_camp_date_update".
      */
-    public function buildUpdate(Camp $camp, CampDate $campDate): MenuTypeInterface;
+    public function buildUpdate(CampDate $campDate): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "admin_camp_date_delete".
      */
-    public function buildDelete(Camp $camp, CampDate $campDate): MenuTypeInterface;
+    public function buildDelete(CampDate $campDate): MenuTypeInterface;
 }

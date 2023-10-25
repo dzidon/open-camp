@@ -80,7 +80,7 @@ class CampDateBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->camp, $this->campDate);
+        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->campDate);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_date_list', 'admin_camp_date_read'],
@@ -110,7 +110,7 @@ class CampDateBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->camp, $this->campDate);
+        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->campDate);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_date_list', 'admin_camp_date_update'],
@@ -140,7 +140,7 @@ class CampDateBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->camp, $this->campDate);
+        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->campDate);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_date_list', 'admin_camp_date_delete'],

@@ -33,8 +33,9 @@ class TripLocationBreadcrumbs extends AbstractBreadcrumbs implements TripLocatio
     /**
      * @inheritDoc
      */
-    public function buildRead(TripLocationPath $tripLocationPath, TripLocation $tripLocation): MenuType
+    public function buildRead(TripLocation $tripLocation): MenuType
     {
+        $tripLocationPath = $tripLocation->getTripLocationPath();
         $tripLocationPathId = $tripLocationPath->getId();
         $tripLocationId = $tripLocation->getId();
 
@@ -52,8 +53,9 @@ class TripLocationBreadcrumbs extends AbstractBreadcrumbs implements TripLocatio
     /**
      * @inheritDoc
      */
-    public function buildUpdate(TripLocationPath $tripLocationPath, TripLocation $tripLocation): MenuType
+    public function buildUpdate(TripLocation $tripLocation): MenuType
     {
+        $tripLocationPath = $tripLocation->getTripLocationPath();
         $tripLocationPathId = $tripLocationPath->getId();
         $tripLocationId = $tripLocation->getId();
 
@@ -71,8 +73,9 @@ class TripLocationBreadcrumbs extends AbstractBreadcrumbs implements TripLocatio
     /**
      * @inheritDoc
      */
-    public function buildDelete(TripLocationPath $tripLocationPath, TripLocation $tripLocation): MenuType
+    public function buildDelete(TripLocation $tripLocation): MenuType
     {
+        $tripLocationPath = $tripLocation->getTripLocationPath();
         $tripLocationPathId = $tripLocationPath->getId();
         $tripLocationId = $tripLocation->getId();
 

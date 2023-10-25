@@ -53,8 +53,9 @@ class CampImageBreadcrumbs extends AbstractBreadcrumbs implements CampImageBread
     /**
      * @inheritDoc
      */
-    public function buildUpdate(Camp $camp, CampImage $campImage): MenuTypeInterface
+    public function buildUpdate(CampImage $campImage): MenuTypeInterface
     {
+        $camp = $campImage->getCamp();
         $campId = $camp->getId();
         $campImageId = $campImage->getId();
 
@@ -73,8 +74,9 @@ class CampImageBreadcrumbs extends AbstractBreadcrumbs implements CampImageBread
     /**
      * @inheritDoc
      */
-    public function buildDelete(Camp $camp, CampImage $campImage): MenuTypeInterface
+    public function buildDelete(CampImage $campImage): MenuTypeInterface
     {
+        $camp = $campImage->getCamp();
         $campId = $camp->getId();
         $campImageId = $campImage->getId();
 

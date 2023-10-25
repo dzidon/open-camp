@@ -46,7 +46,7 @@ class TripLocationBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->tripLocationPath, $this->tripLocation);
+        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->tripLocation);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_trip_location_path_list', 'admin_trip_location_path_update', 'admin_trip_location_read'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -69,7 +69,7 @@ class TripLocationBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->tripLocationPath, $this->tripLocation);
+        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->tripLocation);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_trip_location_path_list', 'admin_trip_location_path_update', 'admin_trip_location_update'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -92,7 +92,7 @@ class TripLocationBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->tripLocationPath, $this->tripLocation);
+        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->tripLocation);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_trip_location_path_list', 'admin_trip_location_path_update', 'admin_trip_location_delete'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 

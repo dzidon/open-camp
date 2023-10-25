@@ -117,7 +117,7 @@ class CampDateController extends AbstractController
         return $this->render('admin/camp/date/read.html.twig', [
             'camp'         => $camp,
             'camp_date'    => $campDate,
-            'breadcrumbs'  => $this->breadcrumbs->buildRead($camp, $campDate),
+            'breadcrumbs'  => $this->breadcrumbs->buildRead($campDate),
         ]);
     }
 
@@ -149,7 +149,7 @@ class CampDateController extends AbstractController
             'camp'           => $camp,
             'camp_date'      => $campDate,
             'form_camp_date' => $form->createView(),
-            'breadcrumbs'    => $this->breadcrumbs->buildUpdate($camp, $campDate),
+            'breadcrumbs'    => $this->breadcrumbs->buildUpdate($campDate),
         ]);
     }
 
@@ -180,7 +180,7 @@ class CampDateController extends AbstractController
             'camp'         => $camp,
             'camp_date'    => $campDate,
             'form_delete'  => $form->createView(),
-            'breadcrumbs'  => $this->breadcrumbs->buildDelete($camp, $campDate),
+            'breadcrumbs'  => $this->breadcrumbs->buildDelete($campDate),
         ]);
     }
 

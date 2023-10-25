@@ -52,8 +52,9 @@ class CampDateBreadcrumbs extends AbstractBreadcrumbs implements CampDateBreadcr
     /**
      * @inheritDoc
      */
-    public function buildRead(Camp $camp, CampDate $campDate): MenuType
+    public function buildRead(CampDate $campDate): MenuType
     {
+        $camp = $campDate->getCamp();
         $campId = $camp->getId();
         $campDateId = $campDate->getId();
 
@@ -72,8 +73,9 @@ class CampDateBreadcrumbs extends AbstractBreadcrumbs implements CampDateBreadcr
     /**
      * @inheritDoc
      */
-    public function buildUpdate(Camp $camp, CampDate $campDate): MenuType
+    public function buildUpdate(CampDate $campDate): MenuType
     {
+        $camp = $campDate->getCamp();
         $campId = $camp->getId();
         $campDateId = $campDate->getId();
 
@@ -92,8 +94,9 @@ class CampDateBreadcrumbs extends AbstractBreadcrumbs implements CampDateBreadcr
     /**
      * @inheritDoc
      */
-    public function buildDelete(Camp $camp, CampDate $campDate): MenuType
+    public function buildDelete(CampDate $campDate): MenuType
     {
+        $camp = $campDate->getCamp();
         $campId = $camp->getId();
         $campDateId = $campDate->getId();
 

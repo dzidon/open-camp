@@ -128,7 +128,7 @@ class CampImageController extends AbstractController
             'camp'            => $camp,
             'camp_image'      => $campImage,
             'form_camp_image' => $form->createView(),
-            'breadcrumbs'     => $this->breadcrumbs->buildUpdate($camp, $campImage),
+            'breadcrumbs'     => $this->breadcrumbs->buildUpdate($campImage),
         ]);
     }
 
@@ -159,7 +159,7 @@ class CampImageController extends AbstractController
             'camp'        => $camp,
             'camp_image'  => $campImage,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildDelete($camp, $campImage),
+            'breadcrumbs' => $this->breadcrumbs->buildDelete($campImage),
         ]);
     }
 

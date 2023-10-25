@@ -79,7 +79,7 @@ class CampImageBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->camp, $this->campImage);
+        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->campImage);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_image_list', 'admin_camp_image_update'],
@@ -109,7 +109,7 @@ class CampImageBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->camp, $this->campImage);
+        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->campImage);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_image_list', 'admin_camp_image_delete'],

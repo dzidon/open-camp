@@ -25,10 +25,10 @@ interface CampImageBreadcrumbsInterface
     /**
      * Creates breadcrumbs for the path "admin_camp_image_update".
      */
-    public function buildUpdate(Camp $camp, CampImage $campImage): MenuTypeInterface;
+    public function buildUpdate(CampImage $campImage): MenuTypeInterface;
 
     /**
      * Creates breadcrumbs for the path "admin_camp_image_delete".
      */
-    public function buildDelete(Camp $camp, CampImage $campImage): MenuTypeInterface;
+    public function buildDelete(CampImage $campImage): MenuTypeInterface;
 }

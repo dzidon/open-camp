@@ -72,11 +72,10 @@ class TripLocationController extends AbstractController
     public function read(UuidV4 $id): Response
     {
         $tripLocation = $this->findTripLocationOrThrow404($id);
-        $tripLocationPath = $tripLocation->getTripLocationPath();
 
         return $this->render('admin/trip/location/read.html.twig', [
             'trip_location' => $tripLocation,
-            'breadcrumbs'   => $this->breadcrumbs->buildRead($tripLocationPath, $tripLocation),
+            'breadcrumbs'   => $this->breadcrumbs->buildRead($tripLocation),
         ]);
     }
 
@@ -107,7 +106,7 @@ class TripLocationController extends AbstractController
 
         return $this->render('admin/trip/location/update.html.twig', [
             'form_trip_location' => $form->createView(),
-            'breadcrumbs'        => $this->breadcrumbs->buildUpdate($tripLocationPath, $tripLocation),
+            'breadcrumbs'        => $this->breadcrumbs->buildUpdate($tripLocation),
         ]);
     }
 
@@ -146,7 +145,7 @@ class TripLocationController extends AbstractController
         return $this->render('admin/trip/location/delete.html.twig', [
             'trip_location' => $tripLocation,
             'form_delete'   => $form->createView(),
-            'breadcrumbs'   => $this->breadcrumbs->buildDelete($tripLocationPath, $tripLocation),
+            'breadcrumbs'   => $this->breadcrumbs->buildDelete($tripLocation),
         ]);
     }
 
