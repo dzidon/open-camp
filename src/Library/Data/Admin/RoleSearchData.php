@@ -27,7 +27,7 @@ class RoleSearchData
         return $this->sortBy;
     }
 
-    public function setSortBy(?RoleSortEnum $sortBy): void
+    public function setSortBy(?RoleSortEnum $sortBy): self
     {
         if ($sortBy === null)
         {
@@ -35,5 +35,7 @@ class RoleSearchData
         }
 
         $this->sortBy = $sortBy;
+
+        return $this;
     }
 }

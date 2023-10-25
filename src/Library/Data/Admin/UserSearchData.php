@@ -30,7 +30,7 @@ class UserSearchData
         return $this->sortBy;
     }
 
-    public function setSortBy(?UserSortEnum $sortBy): void
+    public function setSortBy(?UserSortEnum $sortBy): self
     {
         if ($sortBy === null)
         {
@@ -38,6 +38,8 @@ class UserSearchData
         }
 
         $this->sortBy = $sortBy;
+
+        return $this;
     }
 
     public function getRole(): null|false|Role

@@ -1,0 +1,105 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.form_field.name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ form_field.name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.form_field.label'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ form_field.label }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.form_field.type'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ ('form_field_type.' ~ form_field.type.value)|trans }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.form_field.is_required'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {% if form_field.isRequired %}
+                                    <span>{{ 'bool.yes'|trans }}</span>
+                                {% else %}
+                                    <span>{{ 'bool.no'|trans }}</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.form_field.help'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {% if form_field.help is null %}
+                                    <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                                {% else %}
+                                    {{ form_field.help }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    {% for option_name, option_value in form_field.options %}
+                        <div class="row {% if not loop.last %} mb-3 {% endif %}">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ ('entity_attribute.form_field.option.' ~ option_name)|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>
+                                    {% if option_value is iterable %}
+                                        {{ option_value|join(', ') }}
+                                    {% elseif option_value is same as(true) %}
+                                        {{ 'bool.yes'|trans }}
+                                    {% elseif option_value is same as(false) %}
+                                        {{ 'bool.no'|trans }}
+                                    {% else %}
+                                        {{ option_value }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="card-footer">
+                    <a href="{{ path('admin_form_field_update', {id: form_field.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                        {{ 'crud.action.common.update'|trans }}
+                    </a>
+
+                    <a href="{{ path('admin_form_field_delete', {id: form_field.id.toRfc4122}) }}" class="btn btn-danger">
+                        {{ 'crud.action.common.delete'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

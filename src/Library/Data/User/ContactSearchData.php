@@ -27,7 +27,7 @@ class ContactSearchData
         return $this->sortBy;
     }
 
-    public function setSortBy(?ContactSortEnum $sortBy): void
+    public function setSortBy(?ContactSortEnum $sortBy): self
     {
         if ($sortBy === null)
         {
@@ -35,5 +35,7 @@ class ContactSearchData
         }
 
         $this->sortBy = $sortBy;
+
+        return $this;
     }
 }

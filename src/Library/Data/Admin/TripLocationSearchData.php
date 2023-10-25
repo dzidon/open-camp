@@ -27,7 +27,7 @@ class TripLocationSearchData
         return $this->sortBy;
     }
 
-    public function setSortBy(?TripLocationSortEnum $sortBy): void
+    public function setSortBy(?TripLocationSortEnum $sortBy): self
     {
         if ($sortBy === null)
         {
@@ -35,5 +35,7 @@ class TripLocationSearchData
         }
 
         $this->sortBy = $sortBy;
+
+        return $this;
     }
 }

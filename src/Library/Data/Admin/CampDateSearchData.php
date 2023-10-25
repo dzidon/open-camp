@@ -46,7 +46,7 @@ class CampDateSearchData
         return $this->sortBy;
     }
 
-    public function setSortBy(?CampDateSortEnum $sortBy): void
+    public function setSortBy(?CampDateSortEnum $sortBy): self
     {
         if ($sortBy === null)
         {
@@ -54,6 +54,8 @@ class CampDateSearchData
         }
 
         $this->sortBy = $sortBy;
+
+        return $this;
     }
 
     public function isHistorical(): ?bool

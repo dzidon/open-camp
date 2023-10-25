@@ -1,6 +1,13 @@
 app:
     site_name: 'Kemp'
 
+api:
+    fragment:
+        form:
+            form_field_options: 'Byly zadány neplatné volby editovatelného formálářového pole.'
+
+loading: 'Načítání'
+
 bool:
     yes: 'Ano'
     no: 'Ne'
@@ -42,6 +49,12 @@ attachment_config_required_type:
     required: 'Povinný'
     required_later: 'Povinný později'
 
+form_field_type:
+    text: 'Text'
+    text_area: 'Textová oblast'
+    number: 'Číslo'
+    choice: 'Volba'
+
 camp_catalog:
     no_available_camp_dates: 'Žádné dostupné termíny'
 
@@ -82,6 +95,53 @@ auth:
     profile_password_change_created: 'Na e-mail {email} jsme poslali e-mail pro nastavení hesla!'
     profile_password_change_create_instruction: 'Na tento účet se momentálně nejde přihlásit pomocí hesla, protože žádné nemáte nastavené. Kliknutím na následující tlačítko Vám pošleme e-mail pro nastavení hesla.'
 
+mail:
+    greeting: 'Zdravíme!'
+
+    user_registration:
+        subject: 'Registrace'
+        body1: 'Pro dokončení registrace klikněte'
+        link_text: 'ZDE'
+        body2: 'Odkaz vyprší {date}.'
+
+    user_password_change:
+        subject: 'Změna hesla'
+        body1: 'Pro nastevení nového hesla k Vašemu účtu klikněte '
+        link_text: 'ZDE'
+        body2: 'Odkaz vyprší {date}.'
+
+search:
+    label: 'Vyhledávání'
+    results: 'Výsledky'
+    total: 'celkem'
+    item_action: 'Akce'
+    item_no_reference:
+        male: 'Žádný'
+        female: 'Žádná'
+        neutral: 'Žádné'
+
+    error:
+        no_results: 'Žádné výsledky'
+        invalid_filter: 'Váš filtr obsahuje nesprávné hodnoty, bylo provedeno základní hledání.'
+
+flash_message:
+    success: 'Úspěch'
+    failure: 'Chyba'
+    warning: 'Varování'
+    info: 'Info'
+
+modal:
+    title: 'Varování'
+    button_close: 'Zavřít'
+    form_collection_remove:
+        question: 'Opravdu chcete odstranit tuto položku?'
+        warning: 'Změny se projeví až po odeslání formuláře.'
+        button_remove: 'Odstranit'
+
+menu:
+    navbar_admin_vertical:
+        browse: 'Procházet'
+
 permission_group:
     user: 'Uživatelé'
     role: 'Role'
@@ -90,6 +150,7 @@ permission_group:
     trip_location_path: 'Trasy'
     attachment_config: 'Konfigurace přílohy'
     purchasable_item: 'Doplňkové platby'
+    form_field: 'Formulářová pole'
 
 permission:
     user_read: 'Zobrazení uživatele'
@@ -128,6 +189,11 @@ permission:
     purchasable_item_update: 'Editace doplňkové platby'
     purchasable_item_delete: 'Odstranění doplňkové platby'
 
+    form_field_read: 'Zobrazení formulářového pole'
+    form_field_create: 'Tvorba formulářového pole'
+    form_field_update: 'Editace formulářového pole'
+    form_field_delete: 'Odstranění formulářového pole'
+
 crud:
     instruction:
         user:
@@ -149,6 +215,7 @@ crud:
         purchasable_item_delete: 'Opravdu si přejete odstranit doplňkovou platbu "{name}"?'
         purchasable_item_variant_delete: 'Opravdu si přejete odstranit variantu "{name}"?'
         purchasable_item_variant_value_delete: 'Opravdu si přejete odstranit hodnotu "{name}"?'
+        form_field_delete: 'Opravdu si přejete odstranit formulářové pole "{name}"?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
@@ -241,6 +308,11 @@ crud:
             update: 'Hodnota varianty doplňkové platby uložena!'
             delete: 'Hodnota varianty doplňkové platby odstraněna!'
 
+        form_field:
+            create: 'Formulářové pole vytvořeno!'
+            update: 'Formulářové pole uloženo!'
+            delete: 'Formulářové pole odstraněno!'
+
 entity:
     contact:
         singular: 'Kontakt'
@@ -317,6 +389,10 @@ entity:
     purchasable_item_variant_value:
         singular: 'Hodnota varianty doplňkové platby'
         plural: 'Hodnoty varianty doplňkové platby'
+
+    form_field:
+        singular: 'Formulářové pole'
+        plural: 'Formulářová pole'
 
     application:
         singular: 'Přihláška'
@@ -522,37 +598,27 @@ entity_attribute:
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
-search:
-    label: 'Vyhledávání'
-    results: 'Výsledky'
-    total: 'celkem'
-    item_action: 'Akce'
-    item_no_reference:
-        male: 'Žádný'
-        female: 'Žádná'
-        neutral: 'Žádné'
+    form_field:
+        id: 'ID'
+        name: 'Název'
+        type: 'Typ'
+        label: 'Nadpis'
+        options: 'Nastavení'
+        option:
+            length_min: 'Min. délka'
+            length_max: 'Max. délka'
+            regex: 'Regulární výraz'
+            min: 'Minimální hodnota'
+            max: 'Maximální hodnota'
+            decimal: 'Desetinné číslo'
+            multiple: 'Povolit výběr několika položek naráz'
+            expanded: 'Zobrazovat všechny položky naráz'
+            items: 'Položky'
 
-    error:
-        no_results: 'Žádné výsledky'
-        invalid_filter: 'Váš filtr obsahuje nesprávné hodnoty, bylo provedeno základní hledání.'
-
-flash_message:
-    success: 'Úspěch'
-    failure: 'Chyba'
-    warning: 'Varování'
-    info: 'Info'
-
-modal:
-    title: 'Varování'
-    button_close: 'Zavřít'
-    form_collection_remove:
-        question: 'Opravdu chcete odstranit tuto položku?'
-        warning: 'Změny se projeví až po odeslání formuláře.'
-        button_remove: 'Odstranit'
-
-menu:
-    navbar_admin_vertical:
-        browse: 'Procházet'
+        is_required: 'Povinné'
+        help: 'Pomocný text'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
 form:
     common:
@@ -887,6 +953,43 @@ form:
         purchasable_item_variant_value_delete:
             button: 'Odstranit'
 
+        form_field:
+            name: 'Název'
+            label: 'Nadpis'
+            help: 'Pomocný text'
+            is_required: 'Povinné'
+            type: 'Typ'
+            options:
+                length_min: 'Min. počet znaků'
+                length_max: 'Max. počet znaků'
+                regex: 'Regulární výraz'
+                min: 'Minimální hodnota'
+                max: 'Maximální hodnota'
+                decimal: 'Desetinné číslo'
+                multiple: 'Povolit výběr několika položek naráz'
+                expanded: 'Zobrazovat všechny položky naráz'
+                items: 'Položky'
+                add_item: 'Přidat položku'
+
+            button: 'Uložit'
+
+        form_field_search:
+            phrase: 'Hledat podle názvu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovější'
+                    created_at_asc: 'Od nejstarší'
+                    name_asc: 'Název (A-Z)'
+                    name_desc: 'Název (Z-A)'
+
+            type: 'Typ'
+            is_required: 'Povinný'
+            button: 'Hledat'
+
+        form_field_delete:
+            button: 'Odstranit'
+
     user:
         registration:
             email: 'E-mail'
@@ -997,21 +1100,6 @@ form:
 
             button: 'Hledat'
 
-mail:
-    greeting: 'Zdravíme!'
-
-    user_registration:
-        subject: 'Registrace'
-        body1: 'Pro dokončení registrace klikněte'
-        link_text: 'ZDE'
-        body2: 'Odkaz vyprší {date}.'
-
-    user_password_change:
-        subject: 'Změna hesla'
-        body1: 'Pro nastevení nového hesla k Vašemu účtu klikněte '
-        link_text: 'ZDE'
-        body2: 'Odkaz vyprší {date}.'
-
 route:
     admin_home: 'Přehled'
     admin_profile: 'Administrátorský profil'
@@ -1084,6 +1172,12 @@ route:
     admin_purchasable_item_variant_value_read: 'Zobrazení hodnoty'
     admin_purchasable_item_variant_value_update: 'Editace hodnoty'
     admin_purchasable_item_variant_value_delete: 'Odstranění hodnoty'
+
+    admin_form_field_list: 'Formulářová pole'
+    admin_form_field_create: 'Nové formulářové pole'
+    admin_form_field_read: 'Zobrazení formulářového pole'
+    admin_form_field_update: 'Editace formulářového pole'
+    admin_form_field_delete: 'Odstranění formulářového pole'
 
     admin_application_list: 'Přihlášky'
 

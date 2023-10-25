@@ -65,6 +65,11 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
         }
 
         // applications
+        $isGrantedFormField =
+            $this->security->isGranted('form_field_create') || $this->security->isGranted('form_field_read') ||
+            $this->security->isGranted('form_field_update') || $this->security->isGranted('form_field_delete')
+        ;
+
         $isGrantedAttachmentConfig =
             $this->security->isGranted('attachment_config_create') || $this->security->isGranted('attachment_config_read') ||
             $this->security->isGranted('attachment_config_update') || $this->security->isGranted('attachment_config_delete')
@@ -80,11 +85,25 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
             $this->security->isGranted('purchasable_item_update') || $this->security->isGranted('purchasable_item_delete')
         ;
 
-        if ($isGrantedAttachmentConfig || $isGrantedTripLocationPath || $isGrantedPurchasableItem)
+        if ($isGrantedFormField || $isGrantedAttachmentConfig || $isGrantedTripLocationPath || $isGrantedPurchasableItem)
         {
             $text = $this->translator->trans('route.admin_application_list');
             $itemApplicationsParent = new MenuIconType('parent_applications', 'navbar_admin_vertical_item', $text, '#', 'fas fa-sticky-note');
             $menu->addChild($itemApplicationsParent);
+
+            if ($isGrantedFormField)
+            {
+                $active =
+                    $route === 'admin_form_field_list'   || $route === 'admin_form_field_create' || $route === 'admin_form_field_read' ||
+                    $route === 'admin_form_field_update' || $route === 'admin_form_field_delete'
+                ;
+
+                $text = $this->translator->trans('route.admin_form_field_list');
+                $url = $this->urlGenerator->generate('admin_form_field_list');
+                $itemFormFields = new MenuIconType('admin_form_field_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
+                $itemApplicationsParent->addChild($itemFormFields);
+                $itemFormFields->setActive($active, $active);
+            }
 
             if ($isGrantedAttachmentConfig)
             {

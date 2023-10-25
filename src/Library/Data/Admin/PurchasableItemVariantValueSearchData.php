@@ -27,7 +27,7 @@ class PurchasableItemVariantValueSearchData
         return $this->sortBy;
     }
 
-    public function setSortBy(?PurchasableItemVariantValueSortEnum $sortBy): void
+    public function setSortBy(?PurchasableItemVariantValueSortEnum $sortBy): self
     {
         if ($sortBy === null)
         {
@@ -35,5 +35,7 @@ class PurchasableItemVariantValueSearchData
         }
 
         $this->sortBy = $sortBy;
+
+        return $this;
     }
 }

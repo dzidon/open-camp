@@ -2,11 +2,12 @@
 
 namespace App\Service\Menu\Breadcrumbs\Admin;
 
+use App\Controller\Admin\PurchasableItemController;
 use App\Library\Menu\MenuTypeInterface;
 use App\Model\Entity\PurchasableItem;
 
 /**
- * Creates breadcrumbs for {@link }.
+ * Creates breadcrumbs for {@link PurchasableItemController}.
  */
 interface PurchasableItemBreadcrumbsInterface
 {

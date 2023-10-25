@@ -39,7 +39,7 @@ class CampSearchData
         return $this->sortBy;
     }
 
-    public function setSortBy(?CampSortEnum $sortBy): void
+    public function setSortBy(?CampSortEnum $sortBy): self
     {
         if ($sortBy === null)
         {
@@ -47,6 +47,8 @@ class CampSearchData
         }
 
         $this->sortBy = $sortBy;
+
+        return $this;
     }
 
     public function getAge(): ?int

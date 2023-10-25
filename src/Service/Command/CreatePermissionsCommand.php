@@ -120,6 +120,7 @@ class CreatePermissionsCommand extends Command
         $groups['trip_location_path'] = new PermissionGroup('trip_location_path', 'permission_group.trip_location_path', 500);
         $groups['attachment_config'] = new PermissionGroup('attachment_config', 'permission_group.attachment_config', 600);
         $groups['purchasable_item'] = new PermissionGroup('purchasable_item', 'permission_group.purchasable_item', 700);
+        $groups['form_field'] = new PermissionGroup('form_field', 'permission_group.form_field', 800);
 
         return $groups;
     }
@@ -167,6 +168,11 @@ class CreatePermissionsCommand extends Command
         $permissions['purchasable_item_read'] = new Permission('purchasable_item_read', 'permission.purchasable_item_read', 200, $groups['purchasable_item']);
         $permissions['purchasable_item_update'] = new Permission('purchasable_item_update', 'permission.purchasable_item_update', 300, $groups['purchasable_item']);
         $permissions['purchasable_item_delete'] = new Permission('purchasable_item_delete', 'permission.purchasable_item_delete', 400, $groups['purchasable_item']);
+
+        $permissions['form_field_create'] = new Permission('form_field_create', 'permission.form_field_create', 100, $groups['form_field']);
+        $permissions['form_field_read'] = new Permission('form_field_read', 'permission.form_field_read', 200, $groups['form_field']);
+        $permissions['form_field_update'] = new Permission('form_field_update', 'permission.form_field_update', 300, $groups['form_field']);
+        $permissions['form_field_delete'] = new Permission('form_field_delete', 'permission.form_field_delete', 400, $groups['form_field']);
 
         return $permissions;
     }

@@ -34,7 +34,7 @@ class AttachmentConfigSearchData
         return $this->sortBy;
     }
 
-    public function setSortBy(?AttachmentConfigSortEnum $sortBy): void
+    public function setSortBy(?AttachmentConfigSortEnum $sortBy): self
     {
         if ($sortBy === null)
         {
@@ -42,6 +42,8 @@ class AttachmentConfigSearchData
         }
 
         $this->sortBy = $sortBy;
+
+        return $this;
     }
 
     public function getRequiredType(): ?AttachmentConfigRequiredTypeEnum

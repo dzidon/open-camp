@@ -27,7 +27,7 @@ class CamperSearchData
         return $this->sortBy;
     }
 
-    public function setSortBy(?CamperSortEnum $sortBy): void
+    public function setSortBy(?CamperSortEnum $sortBy): self
     {
         if ($sortBy === null)
         {
@@ -35,5 +35,7 @@ class CamperSearchData
         }
 
         $this->sortBy = $sortBy;
+
+        return $this;
     }
 }

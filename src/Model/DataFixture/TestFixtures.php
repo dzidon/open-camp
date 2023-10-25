@@ -11,6 +11,7 @@ use App\Model\Entity\Camper;
 use App\Model\Entity\CampImage;
 use App\Model\Entity\Contact;
 use App\Model\Entity\FileExtension;
+use App\Model\Entity\FormField;
 use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
 use App\Model\Entity\PurchasableItem;
@@ -24,6 +25,7 @@ use App\Model\Entity\UserPasswordChange;
 use App\Model\Entity\UserRegistration;
 use App\Model\Enum\Entity\AttachmentConfigRequiredTypeEnum;
 use App\Model\Enum\Entity\ContactRoleEnum;
+use App\Model\Enum\Entity\FormFieldTypeEnum;
 use App\Model\Enum\Entity\UserPasswordChangeStateEnum;
 use App\Model\Enum\Entity\UserRegistrationStateEnum;
 use App\Service\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
@@ -478,6 +480,19 @@ class TestFixtures extends Fixture
         $this->setUid($purchasableItemVariantValue3, '550e8400-e29b-41d4-a716-446655440000');
         $this->setCreatedAt($purchasableItemVariantValue3, new DateTimeImmutable('2000-01-01'));
         $manager->persist($purchasableItemVariantValue3);
+
+        /*
+         * FormField
+         */
+        $formField1 = new FormField('Field 1', FormFieldTypeEnum::TEXT, 'Field 1:');
+        $this->setUid($formField1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($formField1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($formField1);
+
+        $formField2 = new FormField('Field 2', FormFieldTypeEnum::NUMBER, 'Field 2:');
+        $formField2->setIsRequired(true);
+        $this->setCreatedAt($formField2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($formField2);
 
         // save
         $manager->flush();
