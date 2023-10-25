@@ -49,7 +49,7 @@
                                 <img class="image-cover-16-9"
                                      src="{{ asset(camp_image_path(camp_image)) }}"
                                      alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
-                                        {{ stimulus_target('img--carousel', 'indicator') }}
+                                     {{ stimulus_target('img--carousel', 'indicator') }}
                                 >
                             </a>
                         </div>
@@ -76,6 +76,18 @@
             {% if camp.descriptionShort is not null %}
                 <p>{{ camp.descriptionShort }}</p>
             {% endif %}
+
+            <p>
+                {{ camp.street }}
+
+                <br>
+
+                {{ camp.zip }} {{ camp.town }}
+
+                <br>
+
+                {{ country_name_for_code(camp.country) }}
+            </p>
 
             {% if camp_dates is empty %}
                 <div class="alert alert-danger" role="alert">
