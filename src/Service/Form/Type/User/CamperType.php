@@ -3,9 +3,7 @@
 namespace App\Service\Form\Type\User;
 
 use App\Library\Data\User\CamperData;
-use App\Model\Entity\Camper;
 use App\Service\Form\Type\Common\GenderType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -19,12 +17,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CamperType extends AbstractType
 {
-    private bool $isSaleCamperSiblingsEnabled;
     private bool $isNationalIdentifierEnabled;
 
-    public function __construct(bool $isSaleCamperSiblingsEnabled, bool $isNationalIdentifierEnabled)
+    public function __construct(bool $isNationalIdentifierEnabled)
     {
-        $this->isSaleCamperSiblingsEnabled = $isSaleCamperSiblingsEnabled;
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
     }
 
@@ -91,23 +87,6 @@ class CamperType extends AbstractType
                 'label'    => 'form.user.camper.medication',
             ])
         ;
-
-        if ($this->isSaleCamperSiblingsEnabled && !empty($options['choices_siblings']))
-        {
-            $builder
-                ->add('siblings', EntityType::class, [
-                    'class'        => Camper::class,
-                    'choice_label' => function (Camper $camper) {
-                        return $camper->getNameFirst() . ' ' . $camper->getNameLast();
-                    },
-                    'choices'  => $options['choices_siblings'],
-                    'multiple' => true,
-                    'expanded' => true,
-                    'required' => false,
-                    'label'    => 'form.user.camper.siblings',
-                ])
-            ;
-        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -118,8 +97,5 @@ class CamperType extends AbstractType
                 return new CamperData($this->isNationalIdentifierEnabled);
             },
         ]);
-
-        $resolver->setDefault('choices_siblings', []);
-        $resolver->setAllowedTypes('choices_siblings', ['array']);
     }
 }

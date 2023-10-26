@@ -46,9 +46,8 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
     public function findOneById(UuidV4 $id): ?Camper
     {
         return $this->createQueryBuilder('camper')
-            ->select('camper, camperUser, camperSiblings')
+            ->select('camper, camperUser')
             ->leftJoin('camper.user', 'camperUser')
-            ->leftJoin('camper.siblings', 'camperSiblings')
             ->andWhere('camper.id = :id')
             ->setParameter('id', $id, UuidType::NAME)
             ->getQuery()
@@ -62,8 +61,6 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
     public function findByUser(User $user): array
     {
         return $this->createQueryBuilder('camper')
-            ->select('camper, camperSiblings')
-            ->leftJoin('camper.siblings', 'camperSiblings')
             ->andWhere('camper.user = :userId')
             ->setParameter('userId', $user->getId(), UuidType::NAME)
             ->getQuery()
@@ -79,8 +76,6 @@ class CamperRepository extends AbstractRepository implements CamperRepositoryInt
         $user = $camper->getUser();
 
         return $this->createQueryBuilder('camper')
-            ->select('camper, camperSiblings')
-            ->leftJoin('camper.siblings', 'camperSiblings')
             ->andWhere('camper.user = :userId')
             ->setParameter('userId', $user->getId(), UuidType::NAME)
             ->andWhere('camper.id != :id')

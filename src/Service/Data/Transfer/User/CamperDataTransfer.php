@@ -5,25 +5,16 @@ namespace App\Service\Data\Transfer\User;
 use App\Library\Data\User\CamperData;
 use App\Model\Entity\Camper;
 use App\Service\Data\Transfer\DataTransferInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
  * Transfers data from {@link CamperData} to {@link Camper} and vice versa.
  */
 class CamperDataTransfer implements DataTransferInterface
 {
-    private bool $isSaleCamperSiblingsEnabled;
     private bool $isNationalIdentifierEnabled;
 
-    private PropertyAccessorInterface $propertyAccessor;
-
-    public function __construct(PropertyAccessorInterface $propertyAccessor,
-                                bool $isSaleCamperSiblingsEnabled,
-                                bool $isNationalIdentifierEnabled)
+    public function __construct(bool $isNationalIdentifierEnabled)
     {
-        $this->propertyAccessor = $propertyAccessor;
-
-        $this->isSaleCamperSiblingsEnabled = $isSaleCamperSiblingsEnabled;
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
     }
 
@@ -52,7 +43,6 @@ class CamperDataTransfer implements DataTransferInterface
         $camperData->setDietaryRestrictions($camper->getDietaryRestrictions());
         $camperData->setHealthRestrictions($camper->getHealthRestrictions());
         $camperData->setMedication($camper->getMedication());
-        $this->propertyAccessor->setValue($camperData, 'siblings', $camper->getSiblings());
 
         if ($this->isNationalIdentifierEnabled)
         {
@@ -84,11 +74,6 @@ class CamperDataTransfer implements DataTransferInterface
         $camper->setDietaryRestrictions($camperData->getDietaryRestrictions());
         $camper->setHealthRestrictions($camperData->getHealthRestrictions());
         $camper->setMedication($camperData->getMedication());
-
-        if ($this->isSaleCamperSiblingsEnabled)
-        {
-            $this->propertyAccessor->setValue($camper, 'siblings', $camperData->getSiblings());
-        }
 
         if ($this->isNationalIdentifierEnabled)
         {

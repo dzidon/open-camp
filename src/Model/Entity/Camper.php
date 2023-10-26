@@ -6,8 +6,6 @@ use App\Library\Enum\GenderEnum;
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\CamperRepository;
 use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -52,9 +50,6 @@ class Camper
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $user;
 
-    #[ORM\ManyToMany(targetEntity: Camper::class)]
-    private Collection $siblings;
-
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -70,7 +65,6 @@ class Camper
         $this->gender = $gender->value;
         $this->bornAt = $bornAt;
         $this->user = $user;
-        $this->siblings = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable('now');
     }
 
@@ -183,66 +177,6 @@ class Camper
     public function setUser(User $user): self
     {
         $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * @return Camper[]
-     */
-    public function getSiblings(): array
-    {
-        return $this->siblings->toArray();
-    }
-
-    public function addSibling(Camper $sibling): self
-    {
-        if ($sibling === $this || $this->siblings->contains($sibling))
-        {
-            return $this;
-        }
-
-        $this->siblings->add($sibling);
-        $sibling->addSibling($this);
-
-        foreach ($this->siblings as $otherSibling)
-        {
-            if ($otherSibling === $sibling)
-            {
-                continue;
-            }
-
-            $otherSibling->addSibling($sibling);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Camper $sibling
-     * @param bool $recursive Intended for internal use only.
-     * @return $this
-     */
-    public function removeSibling(Camper $sibling, bool $recursive = true): self
-    {
-        $key = array_search($sibling, $this->siblings->toArray(), true);
-
-        if ($key === false)
-        {
-            return $this;
-        }
-
-        unset($this->siblings[$key]);
-
-        if ($recursive)
-        {
-            foreach ($this->siblings as $otherSibling)
-            {
-                $otherSibling->removeSibling($sibling);
-            }
-        }
-
-        $sibling->removeSibling($this, false);
 
         return $this;
     }

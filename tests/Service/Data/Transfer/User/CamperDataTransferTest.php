@@ -8,14 +8,13 @@ use App\Model\Entity\Camper;
 use App\Model\Entity\User;
 use App\Service\Data\Transfer\User\CamperDataTransfer;
 use DateTimeImmutable;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
+use PHPUnit\Framework\TestCase;
 
-class CamperDataTransferTest extends KernelTestCase
+class CamperDataTransferTest extends TestCase
 {
     public function testFillData(): void
     {
-        $dataTransfer = $this->getCamperDataTransfer(true, true);
+        $dataTransfer = $this->getCamperDataTransfer(true);
 
         $expectedNameFirst = 'John';
         $expectedNameLast = 'Doe';
@@ -49,7 +48,7 @@ class CamperDataTransferTest extends KernelTestCase
 
     public function testFillDataWithDisabledNationalId(): void
     {
-        $dataTransfer = $this->getCamperDataTransfer(true, false);
+        $dataTransfer = $this->getCamperDataTransfer(false);
 
         $user = new User('bob@gmail.com');
         $camper = new Camper('John', 'Doe', GenderEnum::MALE, new DateTimeImmutable(), $user);
@@ -64,7 +63,7 @@ class CamperDataTransferTest extends KernelTestCase
 
     public function testFillDataWithNullNationalId(): void
     {
-        $dataTransfer = $this->getCamperDataTransfer(true, true);
+        $dataTransfer = $this->getCamperDataTransfer(true);
 
         $user = new User('bob@gmail.com');
         $camper = new Camper('John', 'Doe', GenderEnum::MALE, new DateTimeImmutable(), $user);
@@ -78,7 +77,7 @@ class CamperDataTransferTest extends KernelTestCase
 
     public function testFillEntity(): void
     {
-        $dataTransfer = $this->getCamperDataTransfer(true, true);
+        $dataTransfer = $this->getCamperDataTransfer(true);
 
         $expectedNameFirst = 'John';
         $expectedNameLast = 'Doe';
@@ -91,10 +90,6 @@ class CamperDataTransferTest extends KernelTestCase
 
         $user = new User('bob@gmail.com');
         $camper = new Camper('', '', GenderEnum::MALE, new DateTimeImmutable('2000-01-01 12:00:00'), $user);
-        $expectedSiblings = [
-            new Camper('Camper', '1', GenderEnum::MALE, new DateTimeImmutable(), $user),
-            new Camper('Camper', '2', GenderEnum::FEMALE, new DateTimeImmutable(), $user),
-        ];
 
         $data = new CamperData(true);
         $data->setNameFirst($expectedNameFirst);
@@ -106,11 +101,6 @@ class CamperDataTransferTest extends KernelTestCase
         $data->setHealthRestrictions($expectedHealthRestrictions);
         $data->setMedication($expectedMedication);
 
-        foreach ($expectedSiblings as $expectedSibling)
-        {
-            $data->addSibling($expectedSibling);
-        }
-
         $dataTransfer->fillEntity($data, $camper);
 
         $this->assertSame($expectedNameFirst, $camper->getNameFirst());
@@ -121,12 +111,11 @@ class CamperDataTransferTest extends KernelTestCase
         $this->assertSame($expectedDietaryRestrictions, $camper->getDietaryRestrictions());
         $this->assertSame($expectedHealthRestrictions, $camper->getHealthRestrictions());
         $this->assertSame($expectedMedication, $data->getMedication());
-        $this->assertSame($expectedSiblings, $camper->getSiblings());
     }
 
     public function testFillEntityWithDisabledNationalId(): void
     {
-        $dataTransfer = $this->getCamperDataTransfer(true, false);
+        $dataTransfer = $this->getCamperDataTransfer(false);
 
         $user = new User('bob@gmail.com');
         $camper = new Camper('', '', GenderEnum::MALE, new DateTimeImmutable('2000-01-01 12:00:00'), $user);
@@ -145,7 +134,7 @@ class CamperDataTransferTest extends KernelTestCase
 
     public function testFillEntityWithAbsentNationalId(): void
     {
-        $dataTransfer = $this->getCamperDataTransfer(true, true);
+        $dataTransfer = $this->getCamperDataTransfer(true);
 
         $user = new User('bob@gmail.com');
         $camper = new Camper('', '', GenderEnum::MALE, new DateTimeImmutable('2000-01-01 12:00:00'), $user);
@@ -163,40 +152,8 @@ class CamperDataTransferTest extends KernelTestCase
         $this->assertNull($camper->getNationalIdentifier());
     }
 
-    public function testFillEntityWithoutSiblings(): void
+    private function getCamperDataTransfer(bool $isNationalIdentifierEnabled): CamperDataTransfer
     {
-        $dataTransfer = $this->getCamperDataTransfer(false, true);
-
-        $user = new User('bob@gmail.com');
-        $camper = new Camper('', '', GenderEnum::MALE, new DateTimeImmutable('2000-01-01 12:00:00'), $user);
-        $expectedSiblings = [
-            new Camper('Camper', '1', GenderEnum::MALE, new DateTimeImmutable(), $user),
-            new Camper('Camper', '2', GenderEnum::FEMALE, new DateTimeImmutable(), $user),
-        ];
-
-        $data = new CamperData(true);
-        $data->setNameFirst('John');
-        $data->setNameLast('Doe');
-        $data->setBornAt(new DateTimeImmutable('now'));
-        $data->setGender(GenderEnum::MALE);
-
-        foreach ($expectedSiblings as $expectedSibling)
-        {
-            $data->addSibling($expectedSibling);
-        }
-
-        $dataTransfer->fillEntity($data, $camper);
-
-        $this->assertEmpty($camper->getSiblings());
-    }
-
-    private function getCamperDataTransfer(bool $isSaleCamperRecurringEnabled, bool $isNationalIdentifierEnabled): CamperDataTransfer
-    {
-        $container = static::getContainer();
-
-        /** @var PropertyAccessorInterface $propertyAccessor */
-        $propertyAccessor = $container->get(PropertyAccessorInterface::class);
-
-        return new CamperDataTransfer($propertyAccessor, $isSaleCamperRecurringEnabled, $isNationalIdentifierEnabled);
+        return new CamperDataTransfer($isNationalIdentifierEnabled);
     }
 }

@@ -97,26 +97,6 @@
         </div>
     </div>
 
-    {% if sale_camper_siblings_enabled %}
-        <div class="row mb-3">
-            <div class="col-12 col-sm-3">
-                <strong>{{ 'entity_attribute.camper.siblings'|trans }}:</strong>
-            </div>
-
-            <div class="col-12 col-sm-9">
-                {% if camper.siblings is empty %}
-                    <em>{{ 'search.error.no_results'|trans }}</em>
-                {% else %}
-                    {% for sibling in camper.siblings %}
-                        <div>
-                            <span>{{ sibling.nameFirst }} {{ sibling.nameLast }}</span>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
-
     <div class="row">
         <div class="col">
             <a href="{{ path('user_profile_camper_update', {id: camper.id.toRfc4122}) }}" class="card-link">

@@ -424,7 +424,6 @@ entity_attribute:
         dietary_restrictions: 'Dietní omezení'
         health_restrictions: 'Zdravotní omezení'
         medication: 'Léky'
-        siblings: 'Sourozenci'
         user: 'Uživatel'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -1082,7 +1081,6 @@ form:
             dietary_restrictions: 'Dietní omezení'
             health_restrictions: 'Další zdravotní omezení'
             medication: 'Léky'
-            siblings: 'Sourozenci'
             button: 'Uložit'
 
         camper_delete:

@@ -122,35 +122,6 @@ class CamperTest extends TestCase
         $this->assertNull($this->camper->getMedication());
     }
 
-    public function testSiblings(): void
-    {
-        $this->assertEmpty($this->camper->getSiblings());
-
-        $sibling1 = new Camper('Sibling', '1', GenderEnum::FEMALE, new DateTimeImmutable(), $this->user);
-        $sibling2 = new Camper('Sibling', '2', GenderEnum::MALE, new DateTimeImmutable(), $this->user);
-
-        // add
-        $this->camper->addSibling($sibling1);
-        $this->assertSame(['Sibling 1'], $this->getSiblingNames($this->camper));
-        $this->assertSame(['John Doe'], $this->getSiblingNames($sibling1));
-
-        $this->camper->addSibling($sibling2);
-        $this->assertSame(['Sibling 1', 'Sibling 2'], $this->getSiblingNames($this->camper));
-        $this->assertSame(['John Doe', 'Sibling 2'], $this->getSiblingNames($sibling1));
-        $this->assertSame(['John Doe', 'Sibling 1'], $this->getSiblingNames($sibling2));
-
-        // remove
-        $this->camper->removeSibling($sibling2);
-        $this->assertEmpty($this->getSiblingNames($sibling2));
-        $this->assertSame(['Sibling 1'], $this->getSiblingNames($this->camper));
-        $this->assertSame(['John Doe'], $this->getSiblingNames($sibling1));
-
-        $this->camper->removeSibling($sibling1);
-        $this->assertEmpty($this->getSiblingNames($sibling2));
-        $this->assertEmpty($this->getSiblingNames($this->camper));
-        $this->assertEmpty($this->getSiblingNames($sibling1));
-    }
-
     public function testCreatedAt(): void
     {
         $this->assertSame((new DateTimeImmutable('now'))->getTimestamp(), $this->camper->getCreatedAt()->getTimestamp());
@@ -159,18 +130,6 @@ class CamperTest extends TestCase
     public function testUpdatedAt(): void
     {
         $this->assertNull($this->camper->getUpdatedAt());
-    }
-
-    public function getSiblingNames(Camper $camper): array
-    {
-        $names = [];
-
-        foreach ($camper->getSiblings() as $sibling)
-        {
-            $names[] = $sibling->getNameFirst() . ' ' . $sibling->getNameLast();
-        }
-
-        return $names;
     }
 
     protected function setUp(): void

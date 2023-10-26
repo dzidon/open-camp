@@ -4,8 +4,6 @@ namespace App\Tests\Library\Data\User;
 
 use App\Library\Data\User\CamperData;
 use App\Library\Enum\GenderEnum;
-use App\Model\Entity\Camper;
-use App\Model\Entity\User;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -598,28 +596,6 @@ class CamperDataTest extends KernelTestCase
         $data->setMedication(str_repeat('x', 1001));
         $result = $validator->validateProperty($data, 'medication');
         $this->assertNotEmpty($result); // invalid
-    }
-
-    public function testSiblings(): void
-    {
-        $data = new CamperData(false);
-        $this->assertEmpty($data->getSiblings());
-
-        $user = new User('bob@gmail.com');
-        $siblings = [
-            new Camper('Camper', '1', GenderEnum::MALE, new DateTimeImmutable(), $user),
-            new Camper('Camper', '2', GenderEnum::FEMALE, new DateTimeImmutable(), $user),
-        ];
-
-        foreach ($siblings as $sibling)
-        {
-            $data->addSibling($sibling);
-        }
-
-        $this->assertSame($siblings, $data->getSiblings());
-
-        $data->removeSibling($siblings[0]);
-        $this->assertNotContains($siblings[0], $data->getSiblings());
     }
 
     private function getValidator(): ValidatorInterface

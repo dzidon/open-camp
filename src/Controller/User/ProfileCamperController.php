@@ -79,9 +79,7 @@ class ProfileCamperController extends AbstractController
         $user = $this->getUser();
         $camperData = new CamperData($this->getParameter('app.national_identifier'));
 
-        $form = $this->createForm(CamperType::class, $camperData, [
-            'choices_siblings' => $this->camperRepository->findByUser($user),
-        ]);
+        $form = $this->createForm(CamperType::class, $camperData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.camper.button']);
         $form->handleRequest($request);
 
@@ -122,9 +120,7 @@ class ProfileCamperController extends AbstractController
         $camperData = new CamperData($this->getParameter('app.national_identifier'));
         $dataTransfer->fillData($camperData, $camper);
 
-        $form = $this->createForm(CamperType::class, $camperData, [
-            'choices_siblings' => $this->camperRepository->findOwnedBySameUser($camper),
-        ]);
+        $form = $this->createForm(CamperType::class, $camperData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.camper.button']);
         $form->handleRequest($request);
 

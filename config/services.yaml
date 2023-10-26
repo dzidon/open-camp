@@ -133,7 +133,6 @@ services:
 
     App\Service\Form\Type\User\CamperType:
         arguments:
-            $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'
             $isNationalIdentifierEnabled: '%app.national_identifier%'
 
     App\Service\Menu\Renderer\MenuTypeRenderer:
@@ -175,7 +174,6 @@ services:
 
     App\Service\Data\Transfer\User\CamperDataTransfer:
         arguments:
-            $isSaleCamperSiblingsEnabled: '%app.sale_camper_siblings%'
             $isNationalIdentifierEnabled: '%app.national_identifier%'
 
     App\Service\Validator\NationalIdentifierValidator:

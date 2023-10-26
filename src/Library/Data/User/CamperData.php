@@ -4,7 +4,6 @@ namespace App\Library\Data\User;
 
 use App\Library\Constraint\NationalIdentifier;
 use App\Library\Enum\GenderEnum;
-use App\Model\Entity\Camper;
 use DateTimeImmutable;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -47,11 +46,6 @@ class CamperData
 
     #[Assert\Length(max: 1000)]
     private ?string $medication = null;
-
-    /**
-     * @var Camper[]
-     */
-    private array $siblings = [];
 
     public function __construct(bool $isNationalIdentifierEnabled)
     {
@@ -167,37 +161,6 @@ class CamperData
     public function setMedication(?string $medication): self
     {
         $this->medication = $medication;
-
-        return $this;
-    }
-
-    public function getSiblings(): array
-    {
-        return $this->siblings;
-    }
-
-    public function addSibling(Camper $sibling): self
-    {
-        if (in_array($sibling, $this->siblings))
-        {
-            return $this;
-        }
-
-        $this->siblings[] = $sibling;
-
-        return $this;
-    }
-
-    public function removeSibling(Camper $sibling): self
-    {
-        $key = array_search($sibling, $this->siblings, true);
-
-        if ($key === false)
-        {
-            return $this;
-        }
-
-        unset($this->siblings[$key]);
 
         return $this;
     }
