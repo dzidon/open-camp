@@ -29,7 +29,6 @@ class CampCategoryDataTransfer implements DataTransferInterface
         $campCategoryData = $data;
         $campCategory = $entity;
 
-        $campCategoryData->setId($campCategory->getId());
         $campCategoryData->setName($campCategory->getName());
         $campCategoryData->setUrlName($campCategory->getUrlName());
         $campCategoryData->setParent($campCategory->getParent());

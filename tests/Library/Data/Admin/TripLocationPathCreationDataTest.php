@@ -5,11 +5,14 @@ namespace App\Tests\Library\Data\Admin;
 use App\Library\Data\Admin\TripLocationData;
 use App\Library\Data\Admin\TripLocationPathCreationData;
 use App\Library\Data\Admin\TripLocationPathData;
+use App\Model\Entity\TripLocationPath;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TripLocationPathCreationDataTest extends KernelTestCase
 {
+    private TripLocationPath $tripLocationPath;
+
     public function testTripLocationPathData(): void
     {
         $data = new TripLocationPathCreationData();
@@ -77,12 +80,12 @@ class TripLocationPathCreationDataTest extends KernelTestCase
         $pathData = $creationData->getTripLocationPathData();
         $pathData->setName('Path');
 
-        $locationData1 = new TripLocationData();
+        $locationData1 = new TripLocationData(null, $this->tripLocationPath);
         $locationData1->setName('Location 1');
         $locationData1->setPrice(1000.0);
         $locationData1->setPriority(100);
 
-        $locationData2 = new TripLocationData();
+        $locationData2 = new TripLocationData(null, $this->tripLocationPath);
         $locationData2->setName('Location 2');
         $locationData2->setPrice(2000.0);
         $locationData2->setPriority(200);
@@ -98,6 +101,11 @@ class TripLocationPathCreationDataTest extends KernelTestCase
         $locationData2->setName('Location 1');
         $result = $validator->validate($creationData);
         $this->assertNotEmpty($result); // invalid
+    }
+
+    protected function setUp(): void
+    {
+        $this->tripLocationPath = new TripLocationPath('Path');
     }
 
     private function getValidator(): ValidatorInterface

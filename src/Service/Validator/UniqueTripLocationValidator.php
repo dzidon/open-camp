@@ -3,10 +3,10 @@
 namespace App\Service\Validator;
 
 use App\Library\Constraint\UniqueTripLocation;
+use App\Model\Entity\TripLocation;
 use App\Model\Entity\TripLocationPath;
 use App\Model\Repository\TripLocationRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -60,11 +60,11 @@ class UniqueTripLocationValidator extends ConstraintValidator
             throw new UnexpectedTypeException($name, 'string');
         }
 
-        $id = $this->propertyAccessor->getValue($tripLocationData, $constraint->idProperty);
+        $tripLocation = $this->propertyAccessor->getValue($tripLocationData, $constraint->tripLocationProperty);
 
-        if ($id !== null && !$id instanceof UuidV4)
+        if ($tripLocation !== null && !$tripLocation instanceof TripLocation)
         {
-            throw new UnexpectedTypeException($id, UuidV4::class);
+            throw new UnexpectedTypeException($tripLocation, TripLocation::class);
         }
 
         if ($tripLocationPath === null || $name === null || $name === '')
@@ -72,20 +72,15 @@ class UniqueTripLocationValidator extends ConstraintValidator
             return;
         }
 
+        $id = $tripLocation?->getId();
         $existingTripLocations = $this->tripLocationRepository->findByTripLocationPath($tripLocationPath);
 
         foreach ($existingTripLocations as $existingTripLocation)
         {
             $existingId = $existingTripLocation->getId();
-
-            if ($id !== null && $existingId->toRfc4122() === $id->toRfc4122())
-            {
-                continue;
-            }
-
             $existingName = $existingTripLocation->getName();
 
-            if ($existingName === $name)
+            if (($id === null || $existingId->toRfc4122() !== $id->toRfc4122()) && $existingName === $name)
             {
                 $message = $this->translator->trans($constraint->message, [], 'validators');
 

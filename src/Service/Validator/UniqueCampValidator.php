@@ -3,9 +3,9 @@
 namespace App\Service\Validator;
 
 use App\Library\Constraint\UniqueCamp;
+use App\Model\Entity\Camp;
 use App\Model\Repository\CampRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -52,11 +52,11 @@ class UniqueCampValidator extends ConstraintValidator
             throw new UnexpectedTypeException($urlName, 'string');
         }
 
-        $id = $this->propertyAccessor->getValue($campData, $constraint->idProperty);
+        $camp = $this->propertyAccessor->getValue($campData, $constraint->campProperty);
 
-        if ($id !== null && !$id instanceof UuidV4)
+        if ($camp !== null && !$camp instanceof Camp)
         {
-            throw new UnexpectedTypeException($id, UuidV4::class);
+            throw new UnexpectedTypeException($camp, Camp::class);
         }
 
         if ($urlName === null || $urlName === '')
@@ -71,6 +71,7 @@ class UniqueCampValidator extends ConstraintValidator
             return;
         }
 
+        $id = $camp?->getId();
         $existingId = $existingCamp->getId();
 
         if ($id === null || $id->toRfc4122() !== $existingId->toRfc4122())

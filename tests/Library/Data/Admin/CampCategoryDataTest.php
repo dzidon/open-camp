@@ -6,22 +6,19 @@ use App\Library\Data\Admin\CampCategoryData;
 use App\Model\Entity\CampCategory;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CampCategoryDataTest extends KernelTestCase
 {
-    public function testId(): void
+    public function testAttachmentConfig(): void
     {
         $data = new CampCategoryData();
-        $this->assertNull($data->getId());
+        $this->assertNull($data->getCampCategory());
 
-        $uid = Uuid::v4();
-        $data->setId($uid);
-        $this->assertSame($uid, $data->getId());
+        $campCategory = new CampCategory('Category', 'category');
 
-        $data->setId(null);
-        $this->assertNull($data->getId());
+        $data = new CampCategoryData($campCategory);
+        $this->assertSame($campCategory, $data->getCampCategory());
     }
 
     public function testName(): void
@@ -146,7 +143,8 @@ class CampCategoryDataTest extends KernelTestCase
         $this->assertEmpty($result); // valid
 
         $category1 = $repository->findByUrlName('category-1')[0];
-        $data->setId($category1->getId());
+        $data = new CampCategoryData($category1);
+        $data->setName('name');
         $data->setUrlName('category-1');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
@@ -175,7 +173,8 @@ class CampCategoryDataTest extends KernelTestCase
         $this->assertEmpty($result); // valid
 
         $category2 = $repository->findByUrlName('category-2')[0];
-        $data->setId($category2->getId());
+        $data = new CampCategoryData($category2);
+        $data->setName('name');
         $data->setUrlName('category-2');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid

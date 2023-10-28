@@ -14,11 +14,11 @@ class UniqueRole extends Constraint
 {
     public string $message = 'unique_role';
     public string $labelProperty = 'label';
-    public string $idProperty = 'id';
+    public string $roleProperty = 'role';
 
     public function __construct(string $message = null,
                                 string $labelProperty = null,
-                                string $idProperty = null,
+                                string $roleProperty = null,
                                 array  $groups = null,
                                 mixed  $payload = null)
     {
@@ -26,7 +26,7 @@ class UniqueRole extends Constraint
 
         $this->message = $message ?? $this->message;
         $this->labelProperty = $labelProperty ?? $this->labelProperty;
-        $this->idProperty = $idProperty ?? $this->idProperty;
+        $this->roleProperty = $roleProperty ?? $this->roleProperty;
     }
 
     /**

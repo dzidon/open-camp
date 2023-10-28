@@ -29,7 +29,6 @@ class TripLocationDataTransfer implements DataTransferInterface
         $tripLocationData = $data;
         $tripLocation = $entity;
 
-        $tripLocationData->setId($tripLocation->getId());
         $tripLocationData->setName($tripLocation->getName());
         $tripLocationData->setPrice($tripLocation->getPrice());
         $tripLocationData->setPriority($tripLocation->getPriority());

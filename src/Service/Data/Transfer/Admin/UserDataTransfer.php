@@ -40,7 +40,6 @@ class UserDataTransfer implements DataTransferInterface
         $userData = $data;
         $user = $entity;
 
-        $userData->setId($user->getId());
         $userData->setEmail($user->getEmail());
         $userData->setLeaderPhoneNumber($user->getLeaderPhoneNumber());
         $userData->setRole($user->getRole());

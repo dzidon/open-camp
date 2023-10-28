@@ -15,12 +15,12 @@ class UniqueCampCategory extends Constraint
     public string $message = 'unique_camp_category';
     public string $urlNameProperty = 'urlName';
     public string $parentProperty = 'parent';
-    public string $idProperty = 'id';
+    public string $campCategoryProperty = 'campCategory';
 
     public function __construct(string $message = null,
                                 string $urlNameProperty = null,
                                 string $parentProperty = null,
-                                string $idProperty = null,
+                                string $campCategoryProperty = null,
                                 array  $groups = null,
                                 mixed  $payload = null)
     {
@@ -29,7 +29,7 @@ class UniqueCampCategory extends Constraint
         $this->message = $message ?? $this->message;
         $this->urlNameProperty = $urlNameProperty ?? $this->urlNameProperty;
         $this->parentProperty = $parentProperty ?? $this->parentProperty;
-        $this->idProperty = $idProperty ?? $this->idProperty;
+        $this->campCategoryProperty = $campCategoryProperty ?? $this->campCategoryProperty;
     }
 
     /**

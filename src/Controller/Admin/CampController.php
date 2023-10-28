@@ -169,7 +169,7 @@ class CampController extends AbstractController
         $camp = $this->findCampOrThrow404($id);
         $campCategoryChoices = $campCategoryRepository->findAll();
 
-        $campData = new CampData();
+        $campData = new CampData($camp);
         $dataTransfer->fillData($campData, $camp);
 
         $form = $this->createForm(CampType::class, $campData, ['choices_camp_categories' => $campCategoryChoices]);

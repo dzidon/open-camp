@@ -13,13 +13,13 @@ use Symfony\Component\Validator\Constraint;
 class CampDateInterval extends Constraint
 {
     public string $message = 'camp_date_interval';
-    public string $idProperty = 'id';
+    public string $campDateProperty = 'campDate';
     public string $campProperty = 'camp';
     public string $startAtProperty = 'startAt';
     public string $endAtProperty = 'endAt';
 
     public function __construct(string $message = null,
-                                string $idProperty = null,
+                                string $campDateProperty = null,
                                 string $campProperty = null,
                                 string $startAtProperty = null,
                                 string $endAtProperty = null,
@@ -29,7 +29,7 @@ class CampDateInterval extends Constraint
         parent::__construct([], $groups, $payload);
 
         $this->message = $message ?? $this->message;
-        $this->idProperty = $idProperty ?? $this->idProperty;
+        $this->campDateProperty = $campDateProperty ?? $this->campDateProperty;
         $this->campProperty = $campProperty ?? $this->campProperty;
         $this->startAtProperty = $startAtProperty ?? $this->startAtProperty;
         $this->endAtProperty = $endAtProperty ?? $this->endAtProperty;

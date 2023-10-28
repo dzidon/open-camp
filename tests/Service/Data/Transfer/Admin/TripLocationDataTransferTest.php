@@ -21,10 +21,9 @@ class TripLocationDataTransferTest extends KernelTestCase
         $tripLocationPath = new TripLocationPath('Path');
         $tripLocation = new TripLocation($expectedName, $expectedPrice, $expectedPriority, $tripLocationPath);
 
-        $data = new TripLocationData();
+        $data = new TripLocationData($tripLocation);
         $dataTransfer->fillData($data, $tripLocation);
 
-        $this->assertSame($tripLocation->getId(), $data->getId());
         $this->assertSame($expectedName, $data->getName());
         $this->assertSame($expectedPrice, $data->getPrice());
         $this->assertSame($expectedPriority, $data->getPriority());
@@ -40,7 +39,7 @@ class TripLocationDataTransferTest extends KernelTestCase
         $expectedPrice = 1000.0;
         $expectedPriority = 100;
 
-        $data = new TripLocationData();
+        $data = new TripLocationData($tripLocation);
         $data->setName($expectedName);
         $data->setPrice($expectedPrice);
         $data->setPriority($expectedPriority);

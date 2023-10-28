@@ -42,9 +42,7 @@ class TripLocationController extends AbstractController
                            UuidV4                        $id): Response
     {
         $tripLocationPath = $this->findTripLocationPathOrThrow404($id);
-
-        $tripLocationData = new TripLocationData();
-        $tripLocationData->setTripLocationPath($tripLocationPath);
+        $tripLocationData = new TripLocationData(null, $tripLocationPath);
 
         $form = $this->createForm(TripLocationType::class, $tripLocationData);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.trip_location.button']);
@@ -84,9 +82,7 @@ class TripLocationController extends AbstractController
     {
         $tripLocation = $this->findTripLocationOrThrow404($id);
         $tripLocationPath = $tripLocation->getTripLocationPath();
-
-        $tripLocationData = new TripLocationData();
-        $tripLocationData->setTripLocationPath($tripLocationPath);
+        $tripLocationData = new TripLocationData($tripLocation, $tripLocationPath);
 
         $dataTransfer->fillData($tripLocationData, $tripLocation);
         $form = $this->createForm(TripLocationType::class, $tripLocationData);

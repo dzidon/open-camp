@@ -6,7 +6,6 @@ use App\Library\Constraint\UniqueCampCategory;
 use App\Model\Entity\CampCategory;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -60,11 +59,11 @@ class UniqueCampCategoryValidator extends ConstraintValidator
             throw new UnexpectedTypeException($urlName, 'string');
         }
 
-        $id = $this->propertyAccessor->getValue($campCategoryData, $constraint->idProperty);
+        $campCategory = $this->propertyAccessor->getValue($campCategoryData, $constraint->campCategoryProperty);
 
-        if ($id !== null && !$id instanceof UuidV4)
+        if ($campCategory !== null && !$campCategory instanceof CampCategory)
         {
-            throw new UnexpectedTypeException($id, UuidV4::class);
+            throw new UnexpectedTypeException($campCategory, CampCategory::class);
         }
 
         if ($urlName === null || $urlName === '')
@@ -78,6 +77,8 @@ class UniqueCampCategoryValidator extends ConstraintValidator
         {
             return;
         }
+
+        $id = $campCategory?->getId();
 
         foreach ($existingCampCategories as $existingCampCategory)
         {

@@ -14,13 +14,13 @@ class UniqueTripLocation extends Constraint
 {
     public string $message = 'unique_trip_location';
     public string $tripLocationPathProperty = 'tripLocationPath';
+    public string $tripLocationProperty = 'tripLocation';
     public string $nameProperty = 'name';
-    public string $idProperty = 'id';
 
     public function __construct(string $message = null,
                                 string $tripLocationPathProperty = null,
+                                string $tripLocationProperty = null,
                                 string $nameProperty = null,
-                                string $idProperty = null,
                                 array  $groups = null,
                                 mixed  $payload = null)
     {
@@ -28,8 +28,8 @@ class UniqueTripLocation extends Constraint
 
         $this->message = $message ?? $this->message;
         $this->tripLocationPathProperty = $tripLocationPathProperty ?? $this->tripLocationPathProperty;
+        $this->tripLocationProperty = $tripLocationProperty ?? $this->tripLocationProperty;
         $this->nameProperty = $nameProperty ?? $this->nameProperty;
-        $this->idProperty = $idProperty ?? $this->idProperty;
     }
 
     /**

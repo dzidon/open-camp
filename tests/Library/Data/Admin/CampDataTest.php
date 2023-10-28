@@ -3,25 +3,23 @@
 namespace App\Tests\Library\Data\Admin;
 
 use App\Library\Data\Admin\CampData;
+use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
 use App\Model\Repository\CampRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CampDataTest extends KernelTestCase
 {
-    public function testId(): void
+    public function testCamp(): void
     {
         $data = new CampData();
-        $this->assertNull($data->getId());
+        $this->assertNull($data->getCamp());
 
-        $uid = Uuid::v4();
-        $data->setId($uid);
-        $this->assertSame($uid, $data->getId());
+        $camp = new Camp('Photo', 'camp', 1, 5, 'Street', 'Town', 12345, 'CS');
 
-        $data->setId(null);
-        $this->assertNull($data->getId());
+        $data = new CampData($camp);
+        $this->assertSame($camp, $data->getCamp());
     }
 
     public function testName(): void
@@ -525,29 +523,34 @@ class CampDataTest extends KernelTestCase
         $data->setZip('12345');
         $data->setCountry('CZ');
 
-        $data->setId(null);
         $data->setUrlName('camp-1');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
 
-        $data->setId(null);
         $data->setUrlName('url-name');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
         $campRepository = $this->getCampRepository();
         $camp = $campRepository->findOneByUrlName('camp-1');
-        $data->setId($camp->getId());
+
+        $data = new CampData($camp);
+        $data->setName('Name');
+        $data->setAgeMin(1);
+        $data->setAgeMax(2);
+        $data->setStreet('Street 123');
+        $data->setTown('Town');
+        $data->setZip('12345');
+        $data->setCountry('CZ');
+
         $data->setUrlName('camp-1');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
-        $data->setId($camp->getId());
         $data->setUrlName('camp-2');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
 
-        $data->setId($camp->getId());
         $data->setUrlName('text');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid

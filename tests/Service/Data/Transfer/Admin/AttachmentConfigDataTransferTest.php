@@ -35,7 +35,6 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
         $data = new AttachmentConfigData();
         $dataTransfer->fillData($data, $attachmentConfig);
 
-        $this->assertSame($attachmentConfig->getId(), $data->getId());
         $this->assertSame($expectedName, $data->getName());
         $this->assertSame($expectedRequiredType, $data->getRequiredType());
         $this->assertSame($expectedMaxSize, $data->getMaxSize());

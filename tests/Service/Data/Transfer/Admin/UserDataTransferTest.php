@@ -48,7 +48,6 @@ class UserDataTransferTest extends KernelTestCase
         $data = new UserData(true);
         $dataTransfer->fillData($data, $user);
 
-        $this->assertSame($user->getId(), $data->getId());
         $this->assertSame($expectedEmail, $data->getEmail());
         $this->assertSame($expectedRole, $data->getRole());
         $phoneNumber = $data->getLeaderPhoneNumber();
@@ -106,7 +105,6 @@ class UserDataTransferTest extends KernelTestCase
         $user = new User('bob@gmail.com');
         $dataTransfer->fillEntity($data, $user);
 
-        $this->assertNotSame($user->getId(), $data->getId());
         $this->assertSame($expectedEmail, $user->getEmail());
         $this->assertNull($user->getRole());
         $this->assertSame($expectedNameFirst, $user->getNameFirst());
@@ -163,7 +161,6 @@ class UserDataTransferTest extends KernelTestCase
         $user = new User('bob@gmail.com');
         $dataTransfer->fillEntity($data, $user);
 
-        $this->assertNotSame($user->getId(), $data->getId());
         $this->assertSame('bob@gmail.com', $user->getEmail());
         $this->assertSame($expectedRole, $user->getRole());
         $this->assertNull($user->getNameFirst());

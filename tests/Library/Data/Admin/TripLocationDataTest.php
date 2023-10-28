@@ -3,39 +3,33 @@
 namespace App\Tests\Library\Data\Admin;
 
 use App\Library\Data\Admin\TripLocationData;
+use App\Model\Entity\TripLocation;
 use App\Model\Entity\TripLocationPath;
 use App\Model\Repository\TripLocationRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TripLocationDataTest extends KernelTestCase
 {
-    public function testId(): void
+    private TripLocationPath $tripLocationPath;
+
+    public function testTripLocation(): void
     {
         $data = new TripLocationData();
-        $this->assertNull($data->getId());
+        $this->assertNull($data->getTripLocation());
 
-        $uid = Uuid::v4();
-        $data->setId($uid);
-        $this->assertSame($uid, $data->getId());
+        $tripLocation = new TripLocation('Location', 100.0, 1, $this->tripLocationPath);
 
-        $data->setId(null);
-        $this->assertNull($data->getId());
+        $data = new TripLocationData($tripLocation);
+        $this->assertSame($tripLocation, $data->getTripLocation());
     }
 
     public function testTripLocationPath(): void
     {
-        $data = new TripLocationData();
-        $this->assertNull($data->getTripLocationPath());
+        $data = new TripLocationData(null, $this->tripLocationPath);
 
-        $tripLocationPath = new TripLocationPath('Path...');
-        $data->setTripLocationPath($tripLocationPath);
-        $this->assertSame($tripLocationPath, $data->getTripLocationPath());
-
-        $data->setTripLocationPath(null);
-        $this->assertNull($data->getTripLocationPath());
+        $this->assertSame($this->tripLocationPath, $data->getTripLocationPath());
     }
 
     public function testName(): void
@@ -144,38 +138,40 @@ class TripLocationDataTest extends KernelTestCase
         $tripLocationRepository = $this->getTripLocationRepository();
         $uid = new UuidV4('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $tripLocation = $tripLocationRepository->findOneById($uid);
+        $tripLocationPath = $tripLocation->getTripLocationPath();
 
-        $data = new TripLocationData();
+        $data = new TripLocationData(null, $tripLocationPath);
+        $data->setPrice(1000.0);
+        $data->setPriority(100);
+
+        // new (existing name)
+        $data->setName('Location 1');
+        $result = $validator->validate($data);
+        $this->assertNotEmpty($result); // invalid
+
+        $data = new TripLocationData($tripLocation, $tripLocationPath);
         $data->setPrice(1000.0);
         $data->setPriority(100);
 
         // editing (no change of name)
-        $data->setTripLocationPath($tripLocation->getTripLocationPath());
         $data->setName('Location 1');
-        $data->setId($tripLocation->getId());
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
-        // new (existing name)
-        $data->setTripLocationPath($tripLocation->getTripLocationPath());
-        $data->setName('Location 1');
-        $data->setId(null);
-        $result = $validator->validate($data);
-        $this->assertNotEmpty($result); // invalid
-
         // editing (existing name)
-        $data->setTripLocationPath($tripLocation->getTripLocationPath());
         $data->setName('Location 2');
-        $data->setId($tripLocation->getId());
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
 
         // editing (new name)
-        $data->setTripLocationPath($tripLocation->getTripLocationPath());
         $data->setName('Location 3');
-        $data->setId($tripLocation->getId());
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
+    }
+
+    protected function setUp(): void
+    {
+        $this->tripLocationPath = new TripLocationPath('Path');
     }
 
     private function getTripLocationRepository(): TripLocationRepositoryInterface

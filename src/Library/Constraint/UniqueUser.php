@@ -13,20 +13,20 @@ use Symfony\Component\Validator\Constraint;
 class UniqueUser extends Constraint
 {
     public string $message = 'unique_user';
+    public string $userProperty = 'user';
     public string $emailProperty = 'email';
-    public string $idProperty = 'id';
 
     public function __construct(string $message = null,
+                                string $userProperty = null,
                                 string $emailProperty = null,
-                                string $idProperty = null,
                                 array  $groups = null,
                                 mixed  $payload = null)
     {
         parent::__construct([], $groups, $payload);
 
         $this->message = $message ?? $this->message;
+        $this->userProperty = $userProperty ?? $this->userProperty;
         $this->emailProperty = $emailProperty ?? $this->emailProperty;
-        $this->idProperty = $idProperty ?? $this->idProperty;
     }
 
     /**

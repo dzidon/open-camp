@@ -4,15 +4,15 @@ namespace App\Library\Data\Admin;
 
 use App\Library\Constraint\CampDateInterval;
 use App\Model\Entity\Camp;
+use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
 use DateTimeImmutable;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[CampDateInterval]
 class CampDateData
 {
-    private ?UuidV4 $id = null;
+    private ?CampDate $campDate;
 
     private Camp $camp;
 
@@ -43,21 +43,15 @@ class CampDateData
      */
     private array $leaders = [];
 
-    public function __construct(Camp $camp)
+    public function __construct(Camp $camp, ?CampDate $campDate = null)
     {
         $this->camp = $camp;
+        $this->campDate = $campDate;
     }
 
-    public function getId(): ?UuidV4
+    public function getCampDate(): ?CampDate
     {
-        return $this->id;
-    }
-
-    public function setId(?UuidV4 $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->campDate;
     }
 
     public function getCamp(): Camp

@@ -4,11 +4,12 @@ namespace App\Tests\Library\Data\Admin;
 
 use App\Library\Data\Admin\CampDateData;
 use App\Model\Entity\Camp;
+use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
+use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -16,17 +17,15 @@ class CampDateDataTest extends KernelTestCase
 {
     private Camp $camp;
 
-    public function testId(): void
+    public function testCampDate(): void
     {
         $data = new CampDateData($this->camp);
-        $this->assertNull($data->getId());
+        $this->assertNull($data->getCampDate());
 
-        $uid = Uuid::v4();
-        $data->setId($uid);
-        $this->assertSame($uid, $data->getId());
+        $campDate = new CampDate(new DateTimeImmutable('now'), new DateTimeImmutable('now'), 100.0, 10, $this->camp);
 
-        $data->setId(null);
-        $this->assertNull($data->getId());
+        $data = new CampDateData($this->camp, $campDate);
+        $this->assertSame($campDate, $data->getCampDate());
     }
 
     public function testCamp(): void
@@ -246,6 +245,7 @@ class CampDateDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
         $campRepository = $this->getCampRepository();
+        $campDateRepository = $this->getCampDateRepository();
         $uid = new UuidV4('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $camp = $campRepository->findOneById($uid);
 
@@ -258,13 +258,6 @@ class CampDateDataTest extends KernelTestCase
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
-        $data->setId(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
-        $data->setStartAt(new DateTimeImmutable('2000-06-20'));
-        $data->setEndAt(new DateTimeImmutable('2000-07-03'));
-        $result = $validator->validate($data);
-        $this->assertEmpty($result); // valid
-
-        $data->setId(null);
         $data->setStartAt(new DateTimeImmutable('2000-06-20'));
         $data->setEndAt(new DateTimeImmutable('2000-07-03'));
         $result = $validator->validate($data);
@@ -299,6 +292,17 @@ class CampDateDataTest extends KernelTestCase
         $data->setEndAt(new DateTimeImmutable('2000-07-07'));
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
+
+        $campDate = $campDateRepository->findOneById(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
+
+        $data = new CampDateData($camp, $campDate);
+        $data->setPrice(100.0);
+        $data->setCapacity(5);
+
+        $data->setStartAt(new DateTimeImmutable('2000-06-20'));
+        $data->setEndAt(new DateTimeImmutable('2000-07-03'));
+        $result = $validator->validate($data);
+        $this->assertEmpty($result); // valid
     }
 
     protected function setUp(): void
@@ -312,6 +316,16 @@ class CampDateDataTest extends KernelTestCase
 
         /** @var CampRepositoryInterface $repository */
         $repository = $container->get(CampRepositoryInterface::class);
+
+        return $repository;
+    }
+
+    private function getCampDateRepository(): CampDateRepositoryInterface
+    {
+        $container = static::getContainer();
+
+        /** @var CampDateRepositoryInterface $repository */
+        $repository = $container->get(CampDateRepositoryInterface::class);
 
         return $repository;
     }

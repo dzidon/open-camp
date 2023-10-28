@@ -23,7 +23,6 @@ class CampCategoryDataTransferTest extends KernelTestCase
         $data = new CampCategoryData();
         $dataTransfer->fillData($data, $campCategory);
 
-        $this->assertSame($campCategory->getId(), $data->getId());
         $this->assertSame($expectedName, $data->getName());
         $this->assertSame($expectedUrlName, $data->getUrlName());
         $this->assertSame($expectedParent, $data->getParent());

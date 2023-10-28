@@ -3,9 +3,9 @@
 namespace App\Service\Validator;
 
 use App\Library\Constraint\UniqueRole;
+use App\Model\Entity\Role;
 use App\Model\Repository\RoleRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -52,11 +52,11 @@ class UniqueRoleValidator extends ConstraintValidator
             throw new UnexpectedTypeException($label, 'string');
         }
 
-        $id = $this->propertyAccessor->getValue($roleData, $constraint->idProperty);
+        $role = $this->propertyAccessor->getValue($roleData, $constraint->roleProperty);
 
-        if ($id !== null && !$id instanceof UuidV4)
+        if ($role !== null && !$role instanceof Role)
         {
-            throw new UnexpectedTypeException($id, UuidV4::class);
+            throw new UnexpectedTypeException($role, Role::class);
         }
 
         if ($label === null || $label === '')
@@ -71,6 +71,7 @@ class UniqueRoleValidator extends ConstraintValidator
             return;
         }
 
+        $id = $role?->getId();
         $existingId = $existingRole->getId();
 
         if ($id === null || $id->toRfc4122() !== $existingId->toRfc4122())

@@ -3,16 +3,16 @@
 namespace App\Library\Data\Admin;
 
 use App\Library\Constraint\UniqueTripLocation;
+use App\Model\Entity\TripLocation;
 use App\Model\Entity\TripLocationPath;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueTripLocation]
 class TripLocationData
 {
-    private ?UuidV4 $id = null;
+    private ?TripLocation $tripLocation;
 
-    private ?TripLocationPath $tripLocationPath = null;
+    private ?TripLocationPath $tripLocationPath;
 
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
@@ -25,28 +25,20 @@ class TripLocationData
     #[Assert\NotBlank]
     private ?int $priority = 0;
 
-    public function getId(): ?UuidV4
+    public function __construct(?TripLocation $tripLocation = null, ?TripLocationPath $tripLocationPath = null)
     {
-        return $this->id;
+        $this->tripLocationPath = $tripLocationPath;
+        $this->tripLocation = $tripLocation;
     }
 
-    public function setId(?UuidV4 $id): self
+    public function getTripLocation(): ?TripLocation
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->tripLocation;
     }
 
     public function getTripLocationPath(): ?TripLocationPath
     {
         return $this->tripLocationPath;
-    }
-
-    public function setTripLocationPath(?TripLocationPath $tripLocationPath): self
-    {
-        $this->tripLocationPath = $tripLocationPath;
-
-        return $this;
     }
 
     public function getName(): ?string

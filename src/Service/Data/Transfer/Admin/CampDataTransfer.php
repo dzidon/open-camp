@@ -29,7 +29,6 @@ class CampDataTransfer implements DataTransferInterface
         $campData = $data;
         $camp = $entity;
 
-        $campData->setId($camp->getId());
         $campData->setName($camp->getName());
         $campData->setUrlName($camp->getUrlName());
         $campData->setAgeMin($camp->getAgeMin());

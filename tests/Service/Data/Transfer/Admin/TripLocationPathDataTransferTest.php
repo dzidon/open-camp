@@ -19,7 +19,6 @@ class TripLocationPathDataTransferTest extends KernelTestCase
         $data = new TripLocationPathData();
         $dataTransfer->fillData($data, $tripLocationPath);
 
-        $this->assertSame($tripLocationPath->getId(), $data->getId());
         $this->assertSame($expectedName, $data->getName());
     }
 

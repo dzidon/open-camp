@@ -127,7 +127,7 @@ class UserController extends AbstractController
     {
         $user = $this->findUserOrThrow404($id);
 
-        $userData = new UserData($this->getParameter('app.eu_business_data'));
+        $userData = new UserData($this->getParameter('app.eu_business_data'), $user);
         $dataTransfer->fillData($userData, $user);
 
         $roleChoices = $roleRepository->findAll();

@@ -14,11 +14,11 @@ class UniqueCamp extends Constraint
 {
     public string $message = 'unique_camp';
     public string $urlNameProperty = 'urlName';
-    public string $idProperty = 'id';
+    public string $campProperty = 'camp';
 
     public function __construct(string $message = null,
                                 string $urlNameProperty = null,
-                                string $idProperty = null,
+                                string $campProperty = null,
                                 array  $groups = null,
                                 mixed  $payload = null)
     {
@@ -26,7 +26,7 @@ class UniqueCamp extends Constraint
 
         $this->message = $message ?? $this->message;
         $this->urlNameProperty = $urlNameProperty ?? $this->urlNameProperty;
-        $this->idProperty = $idProperty ?? $this->idProperty;
+        $this->campProperty = $campProperty ?? $this->campProperty;
     }
 
     /**

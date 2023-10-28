@@ -3,9 +3,9 @@
 namespace App\Service\Validator;
 
 use App\Library\Constraint\UniqueAttachmentConfig;
+use App\Model\Entity\AttachmentConfig;
 use App\Model\Repository\AttachmentConfigRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -52,11 +52,11 @@ class UniqueAttachmentConfigValidator extends ConstraintValidator
             throw new UnexpectedTypeException($name, 'string');
         }
 
-        $id = $this->propertyAccessor->getValue($attachmentConfigData, $constraint->idProperty);
+        $attachmentConfig = $this->propertyAccessor->getValue($attachmentConfigData, $constraint->attachmentConfigProperty);
 
-        if ($id !== null && !$id instanceof UuidV4)
+        if ($attachmentConfig !== null && !$attachmentConfig instanceof AttachmentConfig)
         {
-            throw new UnexpectedTypeException($id, UuidV4::class);
+            throw new UnexpectedTypeException($attachmentConfig, AttachmentConfig::class);
         }
 
         if ($name === null || $name === '')
@@ -71,6 +71,7 @@ class UniqueAttachmentConfigValidator extends ConstraintValidator
             return;
         }
 
+        $id = $attachmentConfig?->getId();
         $existingId = $existingAttachmentConfig->getId();
 
         if ($id === null || $id->toRfc4122() !== $existingId->toRfc4122())

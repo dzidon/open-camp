@@ -29,7 +29,6 @@ class TripLocationPathDataTransfer implements DataTransferInterface
         $tripLocationPathData = $data;
         $tripLocationPath = $entity;
 
-        $tripLocationPathData->setId($tripLocationPath->getId());
         $tripLocationPathData->setName($tripLocationPath->getName());
     }
 

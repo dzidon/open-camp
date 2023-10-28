@@ -14,11 +14,11 @@ class UniqueAttachmentConfig extends Constraint
 {
     public string $message = 'unique_attachment_config';
     public string $nameProperty = 'name';
-    public string $idProperty = 'id';
+    public string $attachmentConfigProperty = 'attachmentConfig';
 
     public function __construct(string $message = null,
                                 string $nameProperty = null,
-                                string $idProperty = null,
+                                string $attachmentConfigProperty = null,
                                 array  $groups = null,
                                 mixed  $payload = null)
     {
@@ -26,7 +26,7 @@ class UniqueAttachmentConfig extends Constraint
 
         $this->message = $message ?? $this->message;
         $this->nameProperty = $nameProperty ?? $this->nameProperty;
-        $this->idProperty = $idProperty ?? $this->idProperty;
+        $this->attachmentConfigProperty = $attachmentConfigProperty ?? $this->attachmentConfigProperty;
     }
 
     /**

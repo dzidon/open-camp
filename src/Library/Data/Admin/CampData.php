@@ -6,14 +6,14 @@ use App\Library\Constraint\Compound\SlugRequirements;
 use App\Library\Constraint\Compound\StreetRequirements;
 use App\Library\Constraint\Compound\ZipCodeRequirements;
 use App\Library\Constraint\UniqueCamp;
+use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueCamp]
 class CampData
 {
-    private ?UuidV4 $id = null;
+    private ?Camp $camp;
 
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
@@ -58,16 +58,14 @@ class CampData
 
     private ?CampCategory $campCategory = null;
 
-    public function getId(): ?UuidV4
+    public function __construct(?Camp $camp = null)
     {
-        return $this->id;
+        $this->camp = $camp;
     }
 
-    public function setId(?UuidV4 $id): self
+    public function getCamp(): ?Camp
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->camp;
     }
 
     public function getName(): ?string

@@ -4,13 +4,13 @@ namespace App\Library\Data\Admin;
 
 use App\Library\Constraint\UniqueRole;
 use App\Model\Entity\Permission;
-use Symfony\Component\Uid\UuidV4;
+use App\Model\Entity\Role;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueRole]
 class RoleData
 {
-    private ?UuidV4 $id = null;
+    private ?Role $role;
 
     #[Assert\Length(max: 64)]
     #[Assert\NotBlank]
@@ -21,16 +21,14 @@ class RoleData
      */
     private array $permissions = [];
 
-    public function getId(): ?UuidV4
+    public function __construct(?Role $role = null)
     {
-        return $this->id;
+        $this->role = $role;
     }
 
-    public function setId(?UuidV4 $id): self
+    public function getRole(): ?Role
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->role;
     }
 
     public function getLabel(): ?string

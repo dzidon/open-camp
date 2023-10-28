@@ -4,25 +4,23 @@ namespace App\Tests\Library\Data\Admin;
 
 use App\Library\Data\Admin\AttachmentConfigData;
 use App\Library\Data\Admin\FileExtensionData;
+use App\Model\Entity\AttachmentConfig;
 use App\Model\Enum\Entity\AttachmentConfigRequiredTypeEnum;
 use App\Model\Repository\AttachmentConfigRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AttachmentConfigDataTest extends KernelTestCase
 {
-    public function testId(): void
+    public function testAttachmentConfig(): void
     {
         $data = new AttachmentConfigData();
-        $this->assertNull($data->getId());
+        $this->assertNull($data->getAttachmentConfig());
 
-        $uid = Uuid::v4();
-        $data->setId($uid);
-        $this->assertSame($uid, $data->getId());
+        $attachmentConfig = new AttachmentConfig('Photo', 10.0);
 
-        $data->setId(null);
-        $this->assertNull($data->getId());
+        $data = new AttachmentConfigData($attachmentConfig);
+        $this->assertSame($attachmentConfig, $data->getAttachmentConfig());
     }
 
     public function testName(): void
@@ -172,7 +170,6 @@ class AttachmentConfigDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new AttachmentConfigData();
-        $data->setId(null);
         $data->setMaxSize(10.0);
         $data->setRequiredType(AttachmentConfigRequiredTypeEnum::REQUIRED);
         $data->addFileExtensionsDatum((new FileExtensionData())->setExtension('pdf'));
@@ -180,24 +177,24 @@ class AttachmentConfigDataTest extends KernelTestCase
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
 
-        $data->setId(null);
         $data->setName('text');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
         $attachmentConfigRepository = $this->getAttachmentConfigRepository();
         $attachmentConfig = $attachmentConfigRepository->findOneByName('Image');
-        $data->setId($attachmentConfig->getId());
+        $data = new AttachmentConfigData($attachmentConfig);
+        $data->setMaxSize(10.0);
+        $data->setRequiredType(AttachmentConfigRequiredTypeEnum::REQUIRED);
+        $data->addFileExtensionsDatum((new FileExtensionData())->setExtension('pdf'));
         $data->setName('Image');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
-        $data->setId($attachmentConfig->getId());
         $data->setName('Text file');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
 
-        $data->setId($attachmentConfig->getId());
         $data->setName('text');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid

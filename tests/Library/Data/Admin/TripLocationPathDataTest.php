@@ -3,24 +3,22 @@
 namespace App\Tests\Library\Data\Admin;
 
 use App\Library\Data\Admin\TripLocationPathData;
+use App\Model\Entity\TripLocationPath;
 use App\Model\Repository\TripLocationPathRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class TripLocationPathDataTest extends KernelTestCase
 {
-    public function testId(): void
+    public function testTripLocation(): void
     {
         $data = new TripLocationPathData();
-        $this->assertNull($data->getId());
+        $this->assertNull($data->getTripLocationPath());
 
-        $uid = Uuid::v4();
-        $data->setId($uid);
-        $this->assertSame($uid, $data->getId());
+        $tripLocationPath = new TripLocationPath('Path');
 
-        $data->setId(null);
-        $this->assertNull($data->getId());
+        $data = new TripLocationPathData($tripLocationPath);
+        $this->assertSame($tripLocationPath, $data->getTripLocationPath());
     }
 
     public function testName(): void
@@ -65,29 +63,26 @@ class TripLocationPathDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new TripLocationPathData();
-        $data->setId(null);
         $data->setName('Path 1');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
 
-        $data->setId(null);
         $data->setName('Path 100');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
         $tripLocationPathRepository = $this->getTripLocationPathRepository();
         $path = $tripLocationPathRepository->findOneByName('Path 1');
-        $data->setId($path->getId());
+        $data = new TripLocationPathData($path);
+
         $data->setName('Path 1');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
-        $data->setId($path->getId());
         $data->setName('Path 2');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
 
-        $data->setId($path->getId());
         $data->setName('text');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid

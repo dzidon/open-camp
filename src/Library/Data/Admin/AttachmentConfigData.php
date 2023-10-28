@@ -3,14 +3,14 @@
 namespace App\Library\Data\Admin;
 
 use App\Library\Constraint\UniqueAttachmentConfig;
+use App\Model\Entity\AttachmentConfig;
 use App\Model\Enum\Entity\AttachmentConfigRequiredTypeEnum;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueAttachmentConfig]
 class AttachmentConfigData
 {
-    private ?UuidV4 $id = null;
+    private ?AttachmentConfig $attachmentConfig;
 
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
@@ -30,16 +30,14 @@ class AttachmentConfigData
     #[Assert\NotBlank(message: 'file_extensions_mandatory')]
     private array $fileExtensionsData = [];
 
-    public function getId(): ?UuidV4
+    public function __construct(?AttachmentConfig $attachmentConfig = null)
     {
-        return $this->id;
+        $this->attachmentConfig = $attachmentConfig;
     }
 
-    public function setId(?UuidV4 $id): self
+    public function getAttachmentConfig(): ?AttachmentConfig
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->attachmentConfig;
     }
 
     public function getName(): ?string

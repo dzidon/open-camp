@@ -118,7 +118,7 @@ class AttachmentConfigController extends AbstractController
     {
         $attachmentConfig = $this->findAttachmentConfigOrThrow404($id);
 
-        $attachmentConfigData = new AttachmentConfigData();
+        $attachmentConfigData = new AttachmentConfigData($attachmentConfig);
         $dataTransfer->fillData($attachmentConfigData, $attachmentConfig);
 
         $form = $this->createForm(AttachmentConfigType::class, $attachmentConfigData);

@@ -5,15 +5,15 @@ namespace App\Library\Data\Admin;
 use App\Library\Constraint\UniqueUser;
 use App\Library\Data\User\BillingData;
 use App\Model\Entity\Role;
+use App\Model\Entity\User;
 use libphonenumber\PhoneNumber;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueUser]
 class UserData
 {
-    private ?UuidV4 $id = null;
+    private ?User $user;
 
     #[Assert\Length(max: 180)]
     #[Assert\Email]
@@ -28,21 +28,15 @@ class UserData
     #[Assert\Valid]
     private BillingData $billingData;
 
-    public function __construct(bool $isEuBusinessDataEnabled)
+    public function __construct(bool $isEuBusinessDataEnabled, ?User $user = null)
     {
         $this->billingData = new BillingData($isEuBusinessDataEnabled);
+        $this->user = $user;
     }
 
-    public function getId(): ?UuidV4
+    public function getUser(): ?User
     {
-        return $this->id;
-    }
-
-    public function setId(?UuidV4 $id): self
-    {
-        $this->id = $id;
-
-        return $this;
+        return $this->user;
     }
 
     public function getEmail(): ?string

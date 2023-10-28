@@ -5,25 +5,23 @@ namespace App\Tests\Library\Data\Admin;
 use App\Library\Data\Admin\UserData;
 use App\Library\Data\User\BillingData;
 use App\Model\Entity\Role;
+use App\Model\Entity\User;
 use App\Model\Repository\UserRepositoryInterface;
 use libphonenumber\PhoneNumber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserDataTest extends KernelTestCase
 {
-    public function testId(): void
+    public function testTripLocation(): void
     {
         $data = new UserData(true);
-        $this->assertNull($data->getId());
+        $this->assertNull($data->getUser());
 
-        $uid = Uuid::v4();
-        $data->setId($uid);
-        $this->assertSame($uid, $data->getId());
+        $user = new User('bob@gmail.com');
 
-        $data->setId(null);
-        $this->assertNull($data->getId());
+        $data = new UserData(true, $user);
+        $this->assertSame($user, $data->getUser());
     }
 
     public function testEmail(): void
@@ -76,29 +74,26 @@ class UserDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new UserData(true);
-        $data->setId(null);
         $data->setEmail('david@gmail.com');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
 
-        $data->setId(null);
         $data->setEmail('bob@gmail.com');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
         $userRepository = $this->getUserRepository();
         $user = $userRepository->findOneByEmail('david@gmail.com');
-        $data->setId($user->getId());
+        $data = new UserData(true, $user);
+
         $data->setEmail('david@gmail.com');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
-        $data->setId($user->getId());
         $data->setEmail('jeff@gmail.com');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
 
-        $data->setId($user->getId());
         $data->setEmail('bob@gmail.com');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid

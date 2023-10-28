@@ -4,10 +4,10 @@ namespace App\Service\Validator;
 
 use App\Library\Constraint\CampDateInterval;
 use App\Model\Entity\Camp;
+use App\Model\Entity\CampDate;
 use App\Model\Repository\CampDateRepositoryInterface;
 use DateTimeInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -51,11 +51,11 @@ class CampDateIntervalValidator extends ConstraintValidator
             throw new UnexpectedTypeException($camp, Camp::class);
         }
 
-        $id = $this->propertyAccessor->getValue($campDateData, $constraint->idProperty);
+        $campDate = $this->propertyAccessor->getValue($campDateData, $constraint->campDateProperty);
 
-        if ($id !== null && !$id instanceof UuidV4)
+        if ($campDate !== null && !$campDate instanceof CampDate)
         {
-            throw new UnexpectedTypeException($id, UuidV4::class);
+            throw new UnexpectedTypeException($campDate, CampDate::class);
         }
 
         $startAt = $this->propertyAccessor->getValue($campDateData, $constraint->startAtProperty);
@@ -77,6 +77,7 @@ class CampDateIntervalValidator extends ConstraintValidator
             return;
         }
 
+        $id = $campDate?->getId();
         $collidingDates = $this->campDateRepository->findThoseThatCollideWithInterval($camp, $startAt, $endAt);
 
         foreach ($collidingDates as $collidingDate)

@@ -3,9 +3,9 @@
 namespace App\Service\Validator;
 
 use App\Library\Constraint\UniqueTripLocationPath;
+use App\Model\Entity\TripLocationPath;
 use App\Model\Repository\TripLocationPathRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -52,11 +52,11 @@ class UniqueTripLocationPathValidator extends ConstraintValidator
             throw new UnexpectedTypeException($name, 'string');
         }
 
-        $id = $this->propertyAccessor->getValue($tripLocationPathData, $constraint->idProperty);
+        $tripLocationPath = $this->propertyAccessor->getValue($tripLocationPathData, $constraint->tripLocationPathProperty);
 
-        if ($id !== null && !$id instanceof UuidV4)
+        if ($tripLocationPath !== null && !$tripLocationPath instanceof TripLocationPath)
         {
-            throw new UnexpectedTypeException($id, UuidV4::class);
+            throw new UnexpectedTypeException($tripLocationPath, TripLocationPath::class);
         }
 
         if ($name === null || $name === '')
@@ -71,6 +71,7 @@ class UniqueTripLocationPathValidator extends ConstraintValidator
             return;
         }
 
+        $id = $tripLocationPath?->getId();
         $existingId = $existingTripLocationPath->getId();
 
         if ($id === null || $id->toRfc4122() !== $existingId->toRfc4122())

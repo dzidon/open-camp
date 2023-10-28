@@ -5,13 +5,12 @@ namespace App\Library\Data\Admin;
 use App\Library\Constraint\Compound\SlugRequirements;
 use App\Library\Constraint\UniqueCampCategory;
 use App\Model\Entity\CampCategory;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueCampCategory]
 class CampCategoryData
 {
-    private ?UuidV4 $id = null;
+    private ?CampCategory $campCategory;
 
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
@@ -24,16 +23,14 @@ class CampCategoryData
 
     private ?CampCategory $parent = null;
 
-    public function getId(): ?UuidV4
+    public function __construct(?CampCategory $campCategory = null)
     {
-        return $this->id;
+        $this->campCategory = $campCategory;
     }
 
-    public function setId(?UuidV4 $id): self
+    public function getCampCategory(): ?CampCategory
     {
-        $this->id = $id;
-
-        return $this;
+        return $this->campCategory;
     }
 
     public function getName(): ?string

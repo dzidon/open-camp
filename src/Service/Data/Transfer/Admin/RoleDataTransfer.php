@@ -37,7 +37,6 @@ class RoleDataTransfer implements DataTransferInterface
         $roleData = $data;
         $role = $entity;
 
-        $roleData->setId($role->getId());
         $roleData->setLabel($role->getLabel());
         $this->propertyAccessor->setValue($roleData, 'permissions', $role->getPermissions());
     }

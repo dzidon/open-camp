@@ -163,7 +163,7 @@ class TripLocationPathController extends AbstractController
                                     TripLocationPath              $tripLocationPath,
                                     Request                       $request): array|RedirectResponse
     {
-        $tripLocationPathData = new TripLocationPathData();
+        $tripLocationPathData = new TripLocationPathData($tripLocationPath);
         $dataTransfer->fillData($tripLocationPathData, $tripLocationPath);
 
         $form = $this->createForm(TripLocationPathType::class, $tripLocationPathData);

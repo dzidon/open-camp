@@ -40,7 +40,6 @@ class CampDateDataTransferTest extends KernelTestCase
         $data = new CampDateData($camp);
         $dataTransfer->fillData($data, $campDate);
 
-        $this->assertSame($campDate->getId(), $data->getId());
         $this->assertSame($expectedStartAt, $data->getStartAt());
         $this->assertSame($expectedEndAt, $data->getEndAt());
         $this->assertSame($expectedPrice, $data->getPrice());

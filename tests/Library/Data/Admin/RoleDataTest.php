@@ -5,24 +5,22 @@ namespace App\Tests\Library\Data\Admin;
 use App\Library\Data\Admin\RoleData;
 use App\Model\Entity\Permission;
 use App\Model\Entity\PermissionGroup;
+use App\Model\Entity\Role;
 use App\Model\Repository\RoleRepositoryInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class RoleDataTest extends KernelTestCase
 {
-    public function testId(): void
+    public function testRole(): void
     {
         $data = new RoleData();
-        $this->assertNull($data->getId());
+        $this->assertNull($data->getRole());
 
-        $uid = Uuid::v4();
-        $data->setId($uid);
-        $this->assertSame($uid, $data->getId());
+        $role = new Role('Role');
 
-        $data->setId(null);
-        $this->assertNull($data->getId());
+        $data = new RoleData($role);
+        $this->assertSame($role, $data->getRole());
     }
 
     public function testLabel(): void
@@ -67,29 +65,28 @@ class RoleDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new RoleData();
-        $data->setId(null);
         $data->setLabel('Super admin');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
 
-        $data->setId(null);
         $data->setLabel('text');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
         $roleRepository = $this->getRoleRepository();
         $role = $roleRepository->findOneByLabel('Admin');
-        $data->setId($role->getId());
+
+        $data = new RoleData($role);
+        $data->setLabel('Admin');
+
         $data->setLabel('Admin');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid
 
-        $data->setId($role->getId());
         $data->setLabel('Super admin');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
 
-        $data->setId($role->getId());
         $data->setLabel('text');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid

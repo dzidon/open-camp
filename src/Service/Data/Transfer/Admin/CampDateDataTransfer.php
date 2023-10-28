@@ -37,7 +37,6 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDateData = $data;
         $campDate = $entity;
 
-        $campDateData->setId($campDate->getId());
         $campDateData->setStartAt($campDate->getStartAt());
         $campDateData->setEndAt($campDate->getEndAt());
         $campDateData->setPrice($campDate->getPrice());

@@ -39,7 +39,6 @@ class AttachmentConfigDataTransfer implements DataTransferInterface
         $attachmentConfigData = $data;
         $attachmentConfig = $entity;
 
-        $attachmentConfigData->setId($attachmentConfig->getId());
         $attachmentConfigData->setName($attachmentConfig->getName());
         $attachmentConfigData->setRequiredType($attachmentConfig->getRequiredType());
         $attachmentConfigData->setMaxSize($attachmentConfig->getMaxSize());
