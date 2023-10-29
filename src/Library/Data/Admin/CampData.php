@@ -54,7 +54,9 @@ class CampData
     #[Assert\Length(max: 5000)]
     private ?string $descriptionLong = null;
 
-    private ?int $featuredPriority = null;
+    private ?int $priority = null;
+
+    private bool $isFeatured = false;
 
     private ?CampCategory $campCategory = null;
 
@@ -188,14 +190,26 @@ class CampData
         return $this;
     }
 
-    public function getFeaturedPriority(): ?int
+    public function getPriority(): ?int
     {
-        return $this->featuredPriority;
+        return $this->priority;
     }
 
-    public function setFeaturedPriority(?int $featuredPriority): self
+    public function setPriority(?int $priority): self
     {
-        $this->featuredPriority = $featuredPriority;
+        $this->priority = $priority;
+
+        return $this;
+    }
+
+    public function isFeatured(): bool
+    {
+        return $this->isFeatured;
+    }
+
+    public function setIsFeatured(bool $isFeatured): self
+    {
+        $this->isFeatured = $isFeatured;
 
         return $this;
     }

@@ -22,6 +22,8 @@ class CampSearchData
 
     private ?bool $isActive = null;
 
+    private ?bool $isFeatured = null;
+
     public function getPhrase(): string
     {
         return $this->phrase;
@@ -107,6 +109,18 @@ class CampSearchData
     public function setIsActive(?bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function isFeatured(): ?bool
+    {
+        return $this->isFeatured;
+    }
+
+    public function setIsFeatured(?bool $isFeatured): self
+    {
+        $this->isFeatured = $isFeatured;
 
         return $this;
     }

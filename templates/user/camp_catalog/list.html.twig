@@ -10,18 +10,16 @@
             </div>
         </div>
 
-        <div id="camp-category-children" class="row collapse show-collapsed-lg">
-            {% for camp_category_child in camp_category_children %}
-                <div class="col-6 col-sm-4 col-md-3 col-lg-2 d-flex">
-                    <div class="card mb-4 flex-fill">
-                        <div class="card-body bg-white">
-                            <a class="stretched-link" href="{{ path('user_camp_catalog', {path: camp_category_child.path}) }}">
-                                <strong>{{ camp_category_child.name }}</strong>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+        <div id="camp-category-children" class="collapse show-collapsed-lg">
+            <div class="d-flex pb-3">
+                {% for camp_category_child in camp_category_children %}
+                    <a class="mr-2" href="{{ path('user_camp_catalog', {path: camp_category_child.path}) }}">
+                        <h5>
+                            <span class="badge badge-pill badge-primary">{{ camp_category_child.name }}</span>
+                        </h5>
+                    </a>
+                {% endfor %}
+            </div>
         </div>
     {% endif %}
 
@@ -44,12 +42,16 @@
                             {{ form_row(form_search.age) }}
                         </div>
 
-                        <div class="col-12 col-md-12">
+                        <div class="col-12">
                             {{ form_row(form_search.from) }}
                         </div>
 
-                        <div class="col-12 col-md-12">
+                        <div class="col-12">
                             {{ form_row(form_search.to) }}
+                        </div>
+
+                        <div class="col-12">
+                            {{ form_row(form_search.isOpenOnly) }}
                         </div>
                     </div>
 
@@ -111,12 +113,6 @@
                                         {% endif %}
                                     </p>
 
-                                    <a href="{{ path('user_camp_detail', {urlName: camp.urlName}) }}" class="btn btn-primary stretched-link">
-                                        {{ 'crud.action.common.read'|trans }}
-                                    </a>
-                                </div>
-
-                                <div class="card-footer clearfix">
                                     {% if camp_dates is empty %}
                                         <div>
                                             <span class="badge badge-danger">
@@ -132,6 +128,12 @@
                                             </div>
                                         {% endfor %}
                                     {% endif %}
+                                </div>
+
+                                <div class="card-footer clearfix">
+                                    <a href="{{ path('user_camp_detail', {urlName: camp.urlName}) }}" class="btn btn-primary stretched-link">
+                                        {{ 'crud.action.common.read'|trans }}
+                                    </a>
                                 </div>
                             </div>
                         </div>

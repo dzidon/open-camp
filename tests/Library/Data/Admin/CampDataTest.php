@@ -485,16 +485,25 @@ class CampDataTest extends KernelTestCase
         $this->assertNotEmpty($result); // invalid
     }
 
-    public function testFeaturedPriority(): void
+    public function testPriority(): void
     {
         $data = new CampData();
-        $this->assertNull($data->getFeaturedPriority());
+        $this->assertNull($data->getPriority());
 
-        $data->setFeaturedPriority(100);
-        $this->assertSame(100, $data->getFeaturedPriority());
+        $data->setPriority(100);
+        $this->assertSame(100, $data->getPriority());
 
-        $data->setFeaturedPriority(null);
-        $this->assertNull($data->getFeaturedPriority());
+        $data->setPriority(null);
+        $this->assertNull($data->getPriority());
+    }
+
+    public function testIsFeatured(): void
+    {
+        $data = new CampData();
+        $this->assertFalse($data->isFeatured());
+
+        $data->setIsFeatured(true);
+        $this->assertTrue($data->isFeatured());
     }
 
     public function testCampCategory(): void

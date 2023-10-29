@@ -99,15 +99,23 @@ class CampTest extends TestCase
         $this->assertSame($newCountry, $this->camp->getCountry());
     }
 
-    public function testFeaturedPriority(): void
+    public function testPriority(): void
     {
-        $this->assertNull($this->camp->getFeaturedPriority());
+        $this->assertNull($this->camp->getPriority());
 
-        $this->camp->setFeaturedPriority(123);
-        $this->assertSame(123, $this->camp->getFeaturedPriority());
+        $this->camp->setPriority(123);
+        $this->assertSame(123, $this->camp->getPriority());
 
-        $this->camp->setFeaturedPriority(null);
-        $this->assertNull($this->camp->getFeaturedPriority());
+        $this->camp->setPriority(null);
+        $this->assertNull($this->camp->getPriority());
+    }
+
+    public function testIsFeatured(): void
+    {
+        $this->assertFalse($this->camp->isFeatured());
+
+        $this->camp->setIsFeatured(true);
+        $this->assertTrue($this->camp->isFeatured());
     }
 
     public function testDescriptionShort(): void

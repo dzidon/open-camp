@@ -331,7 +331,8 @@ class TestFixtures extends Fixture
 
         $camp2 = new Camp('Camp 2', 'camp-2', 13, 18, 'Street 321', 'Town 2', '54321', 'SK');
         $this->setUid($camp2, 'a08f6f48-3a52-40db-b031-5eb3a468c57a');
-        $camp2->setFeaturedPriority(100);
+        $camp2->setPriority(100);
+        $camp2->setIsFeatured(true);
         $this->setCreatedAt($camp2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($camp2);
 

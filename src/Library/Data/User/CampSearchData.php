@@ -14,6 +14,8 @@ class CampSearchData
 
     private ?DateTimeImmutable $to = null;
 
+    private bool $isOpenOnly = false;
+
     public function getPhrase(): string
     {
         return $this->phrase;
@@ -46,6 +48,7 @@ class CampSearchData
     public function setFrom(?DateTimeImmutable $from): self
     {
         $this->from = $from;
+        $this->setIsOpenOnlyIfDatesAreNotNull();
 
         return $this;
     }
@@ -58,7 +61,29 @@ class CampSearchData
     public function setTo(?DateTimeImmutable $to): self
     {
         $this->to = $to;
+        $this->setIsOpenOnlyIfDatesAreNotNull();
 
         return $this;
+    }
+
+    public function isOpenOnly(): bool
+    {
+        return $this->isOpenOnly;
+    }
+
+    public function setIsOpenOnly(bool $isOpenOnly): self
+    {
+        $this->isOpenOnly = $isOpenOnly;
+        $this->setIsOpenOnlyIfDatesAreNotNull();
+
+        return $this;
+    }
+
+    private function setIsOpenOnlyIfDatesAreNotNull(): void
+    {
+        if ($this->from !== null || $this->to !== null)
+        {
+            $this->isOpenOnly = true;
+        }
     }
 }

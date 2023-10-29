@@ -109,6 +109,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         $from = $data->getFrom();
         $to = $data->getTo();
         $campCategory = $data->getCampCategory();
+        $isFeatured = $data->isFeatured();
         $isActive = $data->isActive();
 
         $queryBuilder = $this->createQueryBuilder('camp')
@@ -156,6 +157,14 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             ;
         }
 
+        if ($isFeatured !== null)
+        {
+            $queryBuilder
+                ->andWhere('camp.isFeatured = :isFeatured')
+                ->setParameter('isFeatured', $isFeatured)
+            ;
+        }
+
         $query = $queryBuilder->getQuery();
 
         return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
@@ -173,14 +182,14 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         $age = $data->getAge();
         $from = $data->getFrom();
         $to = $data->getTo();
+        $isOpenOnly = $data->isOpenOnly();
 
         $queryBuilder = $this->createQueryBuilder('camp')
             ->select('DISTINCT camp')
             ->leftJoin(CampDate::class, 'campDate', 'WITH', 'camp.id = campDate.camp')
             ->andWhere('camp.name LIKE :phrase')
             ->setParameter('phrase', '%' . $phrase . '%')
-            // todo: prioritize camps with open dates
-            ->orderBy('camp.featuredPriority', 'DESC')
+            ->orderBy('camp.priority', 'DESC')
         ;
 
         if ($age !== null)
@@ -212,7 +221,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             ;
         }
 
-        if ($from !== null || $to !== null)
+        if ($isOpenOnly)
         {
             // todo: only search camps with open dates
 

@@ -30,8 +30,9 @@ class CampDataTransferTest extends KernelTestCase
         $camp = new Camp($expectedName, $expectedUrlName, $expectedAgeMin, $expectedAgeMax, $expectedStreet, $expectedTown, $expectedZip, $expectedCountry);
         $camp->setDescriptionShort($expectedDescriptionShort);
         $camp->setDescriptionLong($expectedDescriptionLong);
-        $camp->setFeaturedPriority($expectedFeaturedPriority);
+        $camp->setPriority($expectedFeaturedPriority);
         $camp->setCampCategory($expectedCampCategory);
+        $camp->setIsFeatured(true);
 
         $data = new CampData();
         $dataTransfer->fillData($data, $camp);
@@ -46,8 +47,9 @@ class CampDataTransferTest extends KernelTestCase
         $this->assertSame($expectedCountry, $data->getCountry());
         $this->assertSame($expectedDescriptionShort, $data->getDescriptionShort());
         $this->assertSame($expectedDescriptionLong, $data->getDescriptionLong());
-        $this->assertSame($expectedFeaturedPriority, $data->getFeaturedPriority());
+        $this->assertSame($expectedFeaturedPriority, $data->getPriority());
         $this->assertSame($expectedCampCategory, $data->getCampCategory());
+        $this->assertTrue($data->isFeatured());
     }
 
     public function testFillEntity(): void
@@ -78,8 +80,9 @@ class CampDataTransferTest extends KernelTestCase
         $data->setCountry($expectedCountry);
         $data->setDescriptionShort($expectedDescriptionShort);
         $data->setDescriptionLong($expectedDescriptionLong);
-        $data->setFeaturedPriority($expectedFeaturedPriority);
+        $data->setPriority($expectedFeaturedPriority);
         $data->setCampCategory($expectedCampCategory);
+        $data->setIsFeatured(true);
 
         $camp = new Camp('', '', 0, 0, '', '', '', '');
         $dataTransfer->fillEntity($data, $camp);
@@ -94,8 +97,9 @@ class CampDataTransferTest extends KernelTestCase
         $this->assertSame($expectedCountry, $camp->getCountry());
         $this->assertSame($expectedDescriptionShort, $camp->getDescriptionShort());
         $this->assertSame($expectedDescriptionLong, $camp->getDescriptionLong());
-        $this->assertSame($expectedFeaturedPriority, $camp->getFeaturedPriority());
+        $this->assertSame($expectedFeaturedPriority, $camp->getPriority());
         $this->assertSame($expectedCampCategory, $camp->getCampCategory());
+        $this->assertTrue($camp->isFeatured());
     }
 
     private function getCampDataTransfer(): CampDataTransfer

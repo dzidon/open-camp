@@ -56,7 +56,7 @@ form_field_type:
     choice: 'Volba'
 
 camp_catalog:
-    no_available_camp_dates: 'Žádné dostupné termíny'
+    no_available_camp_dates: 'Žádné volné termíny'
 
 admin_dashboard:
     welcome: 'Jste přihlášeni jako {user}.'
@@ -514,7 +514,8 @@ entity_attribute:
         description_short: 'Krátký popis'
         description_long: 'O táboře'
         camp_category: 'Kategorie tábora'
-        featured_priority: 'Priorita v doporučených'
+        priority: 'Priorita'
+        is_featured: 'Doporučený'
         period: 'Období'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -717,7 +718,8 @@ form:
             country: 'Země'
             description_short: 'Krátký popis'
             description_long: 'O táboře'
-            featured_priority: 'Priorita v doporučených'
+            priority: 'Priorita'
+            is_featured: 'Doporučený'
             camp_category: 'Kategorie tábora'
             button: 'Uložit'
 
@@ -738,13 +740,14 @@ form:
                     name_desc: 'Název (Z-A)'
                     url_name_asc: 'Název v odkazu (A-Z)'
                     url_name_desc: 'Název v odkazu (Z-A)'
-                    featured_priority_desc: 'Od největší priority v doporučených'
+                    priority_desc: 'Od největší priority'
 
             age: 'Věk'
             from: 'Odjezd od'
             to: 'Návrat do'
             camp_category: 'Kategorie tábora'
             is_active: 'Přijímá přihlášky'
+            is_featured: 'Je doporučený'
             button: 'Hledat'
 
         camp_delete:
@@ -1025,6 +1028,7 @@ form:
             age: 'Věk'
             from: 'Odjezd od'
             to: 'Příjezd do'
+            is_open_only: 'Pouze volné termíny'
             button: 'Hledat'
 
         profile_billing:

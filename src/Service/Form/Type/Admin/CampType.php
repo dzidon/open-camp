@@ -6,6 +6,7 @@ use App\Library\Data\Admin\CampData;
 use App\Model\Entity\CampCategory;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -58,9 +59,13 @@ class CampType extends AbstractType
                 ],
                 'label' => 'form.admin.camp.country',
             ])
-            ->add('featuredPriority', IntegerType::class, [
+            ->add('priority', IntegerType::class, [
                 'required' => false,
-                'label'    => 'form.admin.camp.featured_priority',
+                'label'    => 'form.admin.camp.priority',
+            ])
+            ->add('isFeatured', CheckboxType::class, [
+                'required' => false,
+                'label'    => 'form.admin.camp.is_featured',
             ])
             ->add('campCategory', EntityType::class, [
                 'class'        => CampCategory::class,

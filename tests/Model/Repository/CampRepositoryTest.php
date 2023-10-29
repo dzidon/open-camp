@@ -195,12 +195,12 @@ class CampRepositoryTest extends KernelTestCase
         $this->assertSame(['camp-1', 'camp-2'], $urlNames);
     }
 
-    public function testGetAdminPaginatorSortByFeaturedPriorityDesc(): void
+    public function testGetAdminPaginatorSortByPriorityDesc(): void
     {
         $repository = $this->getCampRepository();
 
         $data = new CampSearchData();
-        $data->setSortBy(CampSortEnum::FEATURED_PRIORITY_DESC);
+        $data->setSortBy(CampSortEnum::PRIORITY_DESC);
         $paginator = $repository->getAdminPaginator($data, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
@@ -293,6 +293,38 @@ class CampRepositoryTest extends KernelTestCase
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
         $this->assertSame(['camp-2'], $urlNames);
+    }
+
+    public function testGetAdminPaginatorWithFeatured(): void
+    {
+        $repository = $this->getCampRepository();
+
+        $data = new CampSearchData();
+        $data->setIsFeatured(true);
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
+        $this->assertSame(['camp-2'], $urlNames);
+    }
+
+    public function testGetAdminPaginatorWithNonFeatured(): void
+    {
+        $repository = $this->getCampRepository();
+
+        $data = new CampSearchData();
+        $data->setIsFeatured(false);
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
+        $this->assertSame(['camp-1'], $urlNames);
     }
 
     public function testGetUserCampCatalogResult(): void

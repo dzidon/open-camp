@@ -45,6 +45,9 @@ class Camp
     #[ORM\Column(length: 2)]
     private string $country;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isFeatured = false;
+
     #[ORM\Column(length: 160, nullable: true)]
     private ?string $descriptionShort = null;
 
@@ -52,7 +55,7 @@ class Camp
     private ?string $descriptionLong = null;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    private ?int $featuredPriority = null;
+    private ?int $priority = null;
 
     #[ORM\ManyToOne(targetEntity: CampCategory::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
@@ -187,6 +190,18 @@ class Camp
         return $this;
     }
 
+    public function isFeatured(): bool
+    {
+        return $this->isFeatured;
+    }
+
+    public function setIsFeatured(bool $isFeatured): self
+    {
+        $this->isFeatured = $isFeatured;
+
+        return $this;
+    }
+
     public function getDescriptionShort(): ?string
     {
         return $this->descriptionShort;
@@ -211,14 +226,14 @@ class Camp
         return $this;
     }
 
-    public function getFeaturedPriority(): ?int
+    public function getPriority(): ?int
     {
-        return $this->featuredPriority;
+        return $this->priority;
     }
 
-    public function setFeaturedPriority(?string $featuredPriority): self
+    public function setPriority(?string $priority): self
     {
-        $this->featuredPriority = $featuredPriority;
+        $this->priority = $priority;
 
         return $this;
     }

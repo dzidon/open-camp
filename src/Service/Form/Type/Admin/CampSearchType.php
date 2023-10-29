@@ -43,13 +43,13 @@ class CampSearchType extends AbstractType
                 'class'        => CampSortEnum::class,
                 'label'        => 'form.admin.camp_search.sort_by.label',
                 'choice_label' => fn ($choice) => match ($choice) {
-                    CampSortEnum::CREATED_AT_DESC        => 'form.admin.camp_search.sort_by.options.created_at_desc',
-                    CampSortEnum::CREATED_AT_ASC         => 'form.admin.camp_search.sort_by.options.created_at_asc',
-                    CampSortEnum::NAME_ASC               => 'form.admin.camp_search.sort_by.options.name_asc',
-                    CampSortEnum::NAME_DESC              => 'form.admin.camp_search.sort_by.options.name_desc',
-                    CampSortEnum::URL_NAME_ASC           => 'form.admin.camp_search.sort_by.options.url_name_asc',
-                    CampSortEnum::URL_NAME_DESC          => 'form.admin.camp_search.sort_by.options.url_name_desc',
-                    CampSortEnum::FEATURED_PRIORITY_DESC => 'form.admin.camp_search.sort_by.options.featured_priority_desc',
+                    CampSortEnum::CREATED_AT_DESC => 'form.admin.camp_search.sort_by.options.created_at_desc',
+                    CampSortEnum::CREATED_AT_ASC  => 'form.admin.camp_search.sort_by.options.created_at_asc',
+                    CampSortEnum::NAME_ASC        => 'form.admin.camp_search.sort_by.options.name_asc',
+                    CampSortEnum::NAME_DESC       => 'form.admin.camp_search.sort_by.options.name_desc',
+                    CampSortEnum::URL_NAME_ASC    => 'form.admin.camp_search.sort_by.options.url_name_asc',
+                    CampSortEnum::URL_NAME_DESC   => 'form.admin.camp_search.sort_by.options.url_name_desc',
+                    CampSortEnum::PRIORITY_DESC   => 'form.admin.camp_search.sort_by.options.priority_desc',
                 },
             ])
             ->add('age', IntegerType::class, [
@@ -89,12 +89,21 @@ class CampSearchType extends AbstractType
             ])
             ->add('isActive', ChoiceType::class, [
                 'placeholder' => 'form.common.choice.irrelevant',
-                'choices'  => [
+                'choices'     => [
                     'form.common.choice.yes' => true,
                     'form.common.choice.no'  => false,
                 ],
                 'required' => false,
                 'label'    => 'form.admin.camp_search.is_active',
+            ])
+            ->add('isFeatured', ChoiceType::class, [
+                'placeholder' => 'form.common.choice.irrelevant',
+                'choices'     => [
+                    'form.common.choice.yes' => true,
+                    'form.common.choice.no'  => false,
+                ],
+                'required' => false,
+                'label'    => 'form.admin.camp_search.is_featured',
             ])
         ;
     }
