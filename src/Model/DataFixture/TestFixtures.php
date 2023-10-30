@@ -281,12 +281,12 @@ class TestFixtures extends Fixture
         /*
          * Contact
          */
-        $contact1 = new Contact('David', 'Smith', ContactRoleEnum::FATHER, $user1);
+        $contact1 = new Contact('David', 'Smith', $user1, ContactRoleEnum::FATHER);
         $this->setUid($contact1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($contact1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($contact1);
 
-        $contact2 = new Contact('Jessica', 'Smith', ContactRoleEnum::MOTHER, $user1);
+        $contact2 = new Contact('Jessica', 'Smith', $user1, ContactRoleEnum::MOTHER);
         $this->setCreatedAt($contact2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($contact2);
 

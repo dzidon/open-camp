@@ -41,8 +41,8 @@ contact_role:
     grandpa: 'Děda'
     aunt: 'Teta'
     uncle: 'Strýc'
-    relative: 'Příbuzný'
     tutor: 'Vychovatel'
+    other: 'Jiná'
 
 attachment_config_required_type:
     optional: 'Volitelný'
@@ -410,6 +410,7 @@ entity_attribute:
         email: 'E-mail'
         phone_number: 'Telefonní číslo'
         role: 'Role'
+        role_other: 'Upřesnění role'
         user: 'Uživatel'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -1057,6 +1058,7 @@ form:
             email: 'E-mail'
             phone_number: 'Telefonní číslo'
             role: 'Role'
+            role_other: 'Upřesnění role'
             button: 'Uložit'
 
         contact_delete:

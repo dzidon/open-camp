@@ -13,6 +13,6 @@ enum ContactRoleEnum: string
     case GRANDPA = 'grandpa';
     case AUNT = 'aunt';
     case UNCLE = 'uncle';
-    case RELATIVE = 'relative';
     case TUTOR = 'tutor';
+    case OTHER = 'other';
 }

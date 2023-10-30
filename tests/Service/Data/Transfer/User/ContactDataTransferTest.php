@@ -22,10 +22,11 @@ class ContactDataTransferTest extends KernelTestCase
         $expectedPhoneNumber = new PhoneNumber();
         $expectedPhoneNumber->setCountryCode(420);
         $expectedPhoneNumber->setNationalNumber('724888999');
-        $expectedRole = ContactRoleEnum::MOTHER;
+        $expectedRole = ContactRoleEnum::OTHER;
+        $expectedRoleOther = 'Other role';
 
         $user = new User('bob@gmail.com');
-        $contact = new Contact($expectedNameFirst, $expectedNameLast, $expectedRole, $user);
+        $contact = new Contact($expectedNameFirst, $expectedNameLast, $user, $expectedRole, $expectedRoleOther);
         $contact->setEmail($expectedEmail);
         $contact->setPhoneNumber($expectedPhoneNumber);
 
@@ -36,6 +37,7 @@ class ContactDataTransferTest extends KernelTestCase
         $this->assertSame($expectedNameLast, $data->getNameLast());
         $this->assertSame($expectedEmail, $data->getEmail());
         $this->assertSame($expectedRole, $data->getRole());
+        $this->assertSame($expectedRoleOther, $data->getRoleOther());
 
         $phoneNumber = $data->getPhoneNumber();
         $this->assertSame(420, $phoneNumber->getCountryCode());
@@ -52,10 +54,11 @@ class ContactDataTransferTest extends KernelTestCase
         $expectedPhoneNumber = new PhoneNumber();
         $expectedPhoneNumber->setCountryCode(420);
         $expectedPhoneNumber->setNationalNumber('724888999');
-        $expectedRole = ContactRoleEnum::MOTHER;
+        $expectedRole = ContactRoleEnum::OTHER;
+        $expectedRoleOther = 'Other role';
 
         $user = new User('bob@gmail.com');
-        $contact = new Contact('', '', ContactRoleEnum::TUTOR, $user);
+        $contact = new Contact('', '', $user, ContactRoleEnum::TUTOR, '');
 
         $data = new ContactData();
         $data->setNameFirst($expectedNameFirst);
@@ -63,6 +66,7 @@ class ContactDataTransferTest extends KernelTestCase
         $data->setEmail($expectedEmail);
         $data->setPhoneNumber($expectedPhoneNumber);
         $data->setRole($expectedRole);
+        $data->setRoleOther($expectedRoleOther);
 
         $dataTransfer->fillEntity($data, $contact);
 
@@ -70,6 +74,7 @@ class ContactDataTransferTest extends KernelTestCase
         $this->assertSame($expectedNameLast, $contact->getNameLast());
         $this->assertSame($expectedEmail, $contact->getEmail());
         $this->assertSame($expectedRole, $contact->getRole());
+        $this->assertSame($expectedRoleOther, $contact->getRoleOther());
 
         $phoneNumber = $contact->getPhoneNumber();
         $this->assertSame(420, $phoneNumber->getCountryCode());

@@ -23,7 +23,7 @@ class ContactRepositoryTest extends KernelTestCase
         $userRepository = $this->getUserRepository();
 
         $user = new User('bob@bing.com');
-        $contact = new Contact('Bob', 'Bobby', ContactRoleEnum::MOTHER, $user);
+        $contact = new Contact('Bob', 'Bobby', $user, ContactRoleEnum::MOTHER);
 
         $userRepository->saveUser($user, false);
         $contactRepository->saveContact($contact, true);

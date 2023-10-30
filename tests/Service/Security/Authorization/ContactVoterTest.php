@@ -19,7 +19,7 @@ class ContactVoterTest extends KernelTestCase
         $voter = $this->getContactVoter();
 
         $user = new User('bob@gmail.com');
-        $contact = new Contact('Name', 'bob@gmail.com', ContactRoleEnum::MOTHER, $user);
+        $contact = new Contact('Name', 'bob@gmail.com', $user, ContactRoleEnum::MOTHER);
         $tokenMock = $this->createTokenMock($user);
 
         $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, $contact, ['contact_read']));
@@ -33,7 +33,7 @@ class ContactVoterTest extends KernelTestCase
 
         $loggedInUser = new User('bob2@gmail.com');
         $user = new User('bob@gmail.com');
-        $contact = new Contact('Name', 'bob@gmail.com', ContactRoleEnum::MOTHER, $user);
+        $contact = new Contact('Name', 'bob@gmail.com', $user, ContactRoleEnum::MOTHER);
         $tokenMock = $this->createTokenMock($loggedInUser);
 
         $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, $contact, ['contact_read']));
@@ -46,7 +46,7 @@ class ContactVoterTest extends KernelTestCase
         $voter = $this->getContactVoter();
 
         $user = new User('bob@gmail.com');
-        $contact = new Contact('Name', 'bob@gmail.com', ContactRoleEnum::MOTHER, $user);
+        $contact = new Contact('Name', 'bob@gmail.com', $user, ContactRoleEnum::MOTHER);
         $tokenMock = $this->createTokenMock($user);
 
         $this->assertSame(VoterInterface::ACCESS_ABSTAIN, $voter->vote($tokenMock, $contact, ['']));
@@ -75,7 +75,7 @@ class ContactVoterTest extends KernelTestCase
         ;
 
         $tokenMock = $this->createTokenMock($userMock);
-        $contact = new Contact('Name', 'bob@gmail.com', ContactRoleEnum::MOTHER, new User('bob@gmail.com'));
+        $contact = new Contact('Name', 'bob@gmail.com', new User('bob@gmail.com'), ContactRoleEnum::MOTHER);
 
         $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, $contact, ['contact_read']));
         $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, $contact, ['contact_update']));

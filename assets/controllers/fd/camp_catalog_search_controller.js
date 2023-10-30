@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus';
 
 /**
- * Handles checking and deactivating the "show only available dates" checkbox when date form fields are updated.
+ * Handles hiding and showing the "show only available dates" checkbox when date form fields are updated.
  */
 export default class CampCatalogSearchController extends Controller
 {

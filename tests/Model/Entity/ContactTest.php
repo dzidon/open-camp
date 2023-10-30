@@ -7,6 +7,7 @@ use App\Model\Entity\User;
 use App\Model\Enum\Entity\ContactRoleEnum;
 use DateTimeImmutable;
 use libphonenumber\PhoneNumber;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\UuidV4;
 
@@ -14,7 +15,8 @@ class ContactTest extends TestCase
 {
     private const NAME_FIRST = 'John';
     private const NAME_LAST = 'Doe';
-    private const ROLE = ContactRoleEnum::MOTHER;
+    private const ROLE = ContactRoleEnum::OTHER;
+    private const ROLE_OTHER = 'Role other';
 
     private Contact $contact;
     private User $user;
@@ -83,13 +85,41 @@ class ContactTest extends TestCase
         $this->assertNull($this->contact->getPhoneNumber());
     }
 
-    public function testGender(): void
+    public function testRole(): void
     {
         $this->assertSame(self::ROLE, $this->contact->getRole());
+        $this->assertSame(self::ROLE_OTHER, $this->contact->getRoleOther());
+
+        $newRoleOther = 'New role other';
+        $this->contact->setRoleOther($newRoleOther);
+        $this->assertSame($newRoleOther, $this->contact->getRoleOther());
 
         $newRole = ContactRoleEnum::MOTHER;
-        $this->contact->setRole($newRole);
+        $this->contact->setRole($newRole, self::ROLE_OTHER);
         $this->assertSame($newRole, $this->contact->getRole());
+        $this->assertNull($this->contact->getRoleOther());
+
+        $this->contact->setRoleOther(self::ROLE_OTHER);
+        $this->assertNull($this->contact->getRoleOther());
+
+        $this->contact->setRole(self::ROLE, self::ROLE_OTHER);
+        $this->assertSame(self::ROLE, $this->contact->getRole());
+        $this->assertSame(self::ROLE_OTHER, $this->contact->getRoleOther());
+
+        $this->contact->setRoleOther($newRoleOther);
+        $this->assertSame($newRoleOther, $this->contact->getRoleOther());
+    }
+
+    public function testRoleOtherNullInConstructor(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->contact = new Contact(self::NAME_FIRST, self::NAME_LAST, $this->user, ContactRoleEnum::OTHER, null);
+    }
+
+    public function testRoleOtherNullInSetter(): void
+    {
+        $this->expectException(LogicException::class);
+        $this->contact->setRoleOther(null);
     }
 
     public function testCreatedAt(): void
@@ -105,6 +135,6 @@ class ContactTest extends TestCase
     protected function setUp(): void
     {
         $this->user = new User('user@test.com');
-        $this->contact = new Contact(self::NAME_FIRST, self::NAME_LAST, self::ROLE, $this->user);
+        $this->contact = new Contact(self::NAME_FIRST, self::NAME_LAST, $this->user, self::ROLE, self::ROLE_OTHER);
     }
 }

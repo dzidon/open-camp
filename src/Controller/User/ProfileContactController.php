@@ -85,7 +85,7 @@ class ProfileContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $contact = new Contact($contactData->getNameFirst(), $contactData->getNameLast(), $contactData->getRole(), $user);
+            $contact = new Contact($contactData->getNameFirst(), $contactData->getNameLast(), $user, $contactData->getRole(), $contactData->getRoleOther());
             $dataTransfer->fillEntity($contactData, $contact);
             $this->contactRepository->saveContact($contact, true);
             $this->addTransFlash('success', 'crud.action_performed.contact.create');

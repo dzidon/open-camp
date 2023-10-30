@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use libphonenumber\PhoneNumber;
+use LogicException;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
@@ -38,6 +39,9 @@ class Contact
     #[ORM\Column(length: 32)]
     private string $role;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $roleOther = null;
+
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private User $user;
@@ -49,14 +53,14 @@ class Contact
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $nameFirst, string $nameLast, ContactRoleEnum $role, User $user)
+    public function __construct(string $nameFirst, string $nameLast, User $user, ContactRoleEnum $role, ?string $roleOther = null)
     {
         $this->id = Uuid::v4();
         $this->nameFirst = $nameFirst;
         $this->nameLast = $nameLast;
-        $this->role = $role->value;
         $this->user = $user;
         $this->createdAt = new DateTimeImmutable('now');
+        $this->setRole($role, $roleOther);
     }
 
     public function getId(): UuidV4
@@ -124,18 +128,6 @@ class Contact
         return $this;
     }
 
-    public function getRole(): ContactRoleEnum
-    {
-        return ContactRoleEnum::tryFrom($this->role);
-    }
-
-    public function setRole(ContactRoleEnum $role): self
-    {
-        $this->role = $role->value;
-
-        return $this;
-    }
-
     public function getUser(): User
     {
         return $this->user;
@@ -148,6 +140,37 @@ class Contact
         return $this;
     }
 
+    public function getRole(): ContactRoleEnum
+    {
+        return ContactRoleEnum::tryFrom($this->role);
+    }
+
+    public function setRole(ContactRoleEnum $role, ?string $roleOther = null): self
+    {
+        $this->role = $role->value;
+        $this->roleOther = $roleOther;
+
+        $this->assertRoleOther();
+        $this->setNullRoleOtherIfRoleIsNotOther();
+
+        return $this;
+    }
+
+    public function getRoleOther(): ?string
+    {
+        return $this->roleOther;
+    }
+
+    public function setRoleOther(?string $roleOther): self
+    {
+        $this->roleOther = $roleOther;
+
+        $this->assertRoleOther();
+        $this->setNullRoleOtherIfRoleIsNotOther();
+
+        return $this;
+    }
+
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
@@ -156,5 +179,21 @@ class Contact
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    private function assertRoleOther(): void
+    {
+        if ($this->getRole() === ContactRoleEnum::OTHER && $this->getRoleOther() === null)
+        {
+            throw new LogicException('Contact entity cannot have attribute "roleOther" set to null when attribute "role" is set to "other".');
+        }
+    }
+
+    private function setNullRoleOtherIfRoleIsNotOther(): void
+    {
+        if ($this->getRole() !== ContactRoleEnum::OTHER)
+        {
+            $this->roleOther = null;
+        }
     }
 }

@@ -47,7 +47,21 @@ class ContactType extends AbstractType
                 'placeholder_attr' => [
                     'disabled' => 'disabled'
                 ],
+                'attr' => [
+                    'data-fd--contact-target' => 'roleInput',
+                    'data-action'             => 'fd--contact#onRoleInputChange',
+                ],
                 'label' => 'form.user.contact.role',
+            ])
+            ->add('roleOther', TextType::class, [
+                'required'   => false,
+                'label'      => 'form.user.contact.role_other',
+                'label_attr' => [
+                    'class' => 'required'
+                ],
+                'row_attr' => [
+                    'data-fd--contact-target' => 'roleOtherRow',
+                ],
             ])
         ;
     }
@@ -56,6 +70,9 @@ class ContactType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => ContactData::class,
+            'attr'       => [
+                'data-controller' => 'fd--contact',
+            ],
         ]);
     }
 }

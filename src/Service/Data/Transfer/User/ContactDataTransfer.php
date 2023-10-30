@@ -34,6 +34,7 @@ class ContactDataTransfer implements DataTransferInterface
         $contactData->setEmail($contact->getEmail());
         $contactData->setPhoneNumber($contact->getPhoneNumber());
         $contactData->setRole($contact->getRole());
+        $contactData->setRoleOther($contact->getRoleOther());
     }
 
     /**
@@ -50,6 +51,6 @@ class ContactDataTransfer implements DataTransferInterface
         $contact->setNameLast($contactData->getNameLast());
         $contact->setEmail($contactData->getEmail());
         $contact->setPhoneNumber($contactData->getPhoneNumber());
-        $contact->setRole($contactData->getRole());
+        $contact->setRole($contactData->getRole(), $contactData->getRoleOther());
     }
 }

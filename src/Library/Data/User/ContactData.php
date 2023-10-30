@@ -39,6 +39,15 @@ class ContactData
     #[Assert\NotBlank]
     private ?ContactRoleEnum $role = null;
 
+    #[Assert\When(
+        expression: 'this.getRole() === enum("App\\\Model\\\Enum\\\Entity\\\ContactRoleEnum::OTHER")',
+        constraints: [
+            new Assert\Length(max: 255),
+            new Assert\NotBlank,
+        ],
+    )]
+    private ?string $roleOther = null;
+
     public function getNameFirst(): ?string
     {
         return $this->nameFirst;
@@ -105,6 +114,18 @@ class ContactData
     public function setRole(?ContactRoleEnum $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getRoleOther(): ?string
+    {
+        return $this->roleOther;
+    }
+
+    public function setRoleOther(?string $roleOther): self
+    {
+        $this->roleOther = $roleOther;
 
         return $this;
     }

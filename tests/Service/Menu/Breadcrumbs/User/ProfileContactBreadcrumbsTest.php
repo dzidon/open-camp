@@ -117,7 +117,7 @@ class ProfileContactBreadcrumbsTest extends KernelTestCase
         $container = static::getContainer();
 
         $user = new User('bob@gmail.com');
-        $this->contact = new Contact('David', 'Smith', ContactRoleEnum::FATHER, $user);
+        $this->contact = new Contact('David', 'Smith', $user, ContactRoleEnum::FATHER);
         $reflectionClass = new ReflectionClass($this->contact);
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->contact, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));

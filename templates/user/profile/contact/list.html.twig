@@ -63,7 +63,15 @@
                                 <div>{{ 'entity_attribute.contact.phone_number'|trans }}: {{ contact.phoneNumber|phone_number_format(phone_number_format) }}</div>
                             {% endif %}
 
-                            <div>{{ 'entity_attribute.contact.role'|trans }}: {{ ('contact_role.' ~ contact.role.value)|trans }}</div>
+                            <div>
+                                {{ 'entity_attribute.contact.role'|trans }}:
+
+                                {% if contact.role.value == 'other' %}
+                                    {{ contact.roleOther }}
+                                {% else %}
+                                    {{ ('contact_role.' ~ contact.role.value)|trans }}
+                                {% endif %}
+                            </div>
                         </div>
 
                         <div class="card-footer">

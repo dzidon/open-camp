@@ -216,6 +216,56 @@ class ContactDataTest extends KernelTestCase
         $this->assertNotEmpty($result); // invalid
     }
 
+    public function testRoleOther(): void
+    {
+        $data = new ContactData();
+        $this->assertNull($data->getRoleOther());
+
+        $data->setRoleOther('Other role');
+        $this->assertSame('Other role', $data->getRoleOther());
+
+        $data->setRoleOther(null);
+        $this->assertNull($data->getRoleOther());
+    }
+
+    public function testRoleOtherValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new ContactData();
+        $result = $validator->validateProperty($data, 'roleOther');
+        $this->assertEmpty($result); // valid
+
+        $data->setRoleOther(null);
+        $result = $validator->validateProperty($data, 'roleOther');
+        $this->assertEmpty($result); // valid
+
+        $data->setRoleOther('');
+        $result = $validator->validateProperty($data, 'roleOther');
+        $this->assertEmpty($result); // valid
+
+        $data->setRoleOther('Other role');
+        $result = $validator->validateProperty($data, 'roleOther');
+        $this->assertEmpty($result); // valid
+
+        $data->setRole(ContactRoleEnum::OTHER);
+        $data->setRoleOther(null);
+        $result = $validator->validateProperty($data, 'roleOther');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setRoleOther('');
+        $result = $validator->validateProperty($data, 'roleOther');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setRoleOther(str_repeat('x', 255));
+        $result = $validator->validateProperty($data, 'roleOther');
+        $this->assertEmpty($result); // valid
+
+        $data->setRoleOther(str_repeat('x', 256));
+        $result = $validator->validateProperty($data, 'roleOther');
+        $this->assertNotEmpty($result); // invalid
+    }
+
     private function getValidator(): ValidatorInterface
     {
         $container = static::getContainer();
