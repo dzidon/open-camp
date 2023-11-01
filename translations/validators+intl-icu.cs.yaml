@@ -1,5 +1,7 @@
 date_in_past: 'Datum musí být v minulosti.'
-email_or_phone_number: 'Vyplňte email nebo telefonní číslo.'
+email_mandatory: 'Musíte vyplnit email.'
+phone_number_mandatory: 'Musíte vyplnit telefonní číslo.'
+email_or_phone_number_mandatory: 'Musíte vyplnit email nebo telefonní číslo.'
 eu_cin: 'IČO musí být ve správném tvaru.'
 eu_vat_id: 'DIČ musí být ve správném tvaru.'
 national_identifier: 'Rodné číslo musí mít správný formát.'

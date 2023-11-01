@@ -44,6 +44,8 @@ parameters:
     # Applications
     app.sale_camper_recurring: true
     app.sale_camper_siblings: true
+    app.contact_email_mandatory: false
+    app.contact_phone_number_mandatory: false
 
     # Validation
     app.national_identifier_regex: '#^\s*(\d\d)(\d\d)(\d\d)[ /]*(\d\d\d)(\d?)\s*$#'

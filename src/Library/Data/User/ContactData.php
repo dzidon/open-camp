@@ -2,11 +2,15 @@
 
 namespace App\Library\Data\User;
 
+use App\Library\Constraint\NotBlankContactEmail;
+use App\Library\Constraint\NotBlankContactPhoneNumber;
 use App\Model\Enum\Entity\ContactRoleEnum;
 use libphonenumber\PhoneNumber;
 use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[NotBlankContactEmail]
+#[NotBlankContactPhoneNumber]
 class ContactData
 {
     #[Assert\Length(max: 255)]
@@ -19,21 +23,9 @@ class ContactData
 
     #[Assert\Length(max: 180)]
     #[Assert\Email]
-    #[Assert\When(
-        expression: 'this.getPhoneNumber() === null',
-        constraints: [
-            new Assert\NotBlank(message: 'email_or_phone_number')
-        ],
-    )]
     private ?string $email = null;
 
     #[AssertPhoneNumber]
-    #[Assert\When(
-        expression: 'this.getEmail() === null',
-        constraints: [
-            new Assert\NotBlank(message: 'email_or_phone_number')
-        ],
-    )]
     private ?PhoneNumber $phoneNumber = null;
 
     #[Assert\NotBlank]
@@ -43,7 +35,7 @@ class ContactData
         expression: 'this.getRole() === enum("App\\\Model\\\Enum\\\Entity\\\ContactRoleEnum::OTHER")',
         constraints: [
             new Assert\Length(max: 255),
-            new Assert\NotBlank,
+            new Assert\NotBlank(),
         ],
     )]
     private ?string $roleOther = null;

@@ -50,6 +50,8 @@ parameters:
     # Applications
     app.sale_camper_recurring: true
     app.sale_camper_siblings: true
+    app.contact_email_mandatory: false
+    app.contact_phone_number_mandatory: true
 
     # Validation
     app.national_identifier_regex: '#^(\d\d)(\d\d)(\d\d)( |/)?(\d\d\d)(\d?)$#'
@@ -135,6 +137,11 @@ services:
         arguments:
             $isNationalIdentifierEnabled: '%app.national_identifier%'
 
+    App\Service\Form\Type\User\ContactType:
+        arguments:
+            $isEmailMandatory: '%app.contact_email_mandatory%'
+            $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
+
     App\Service\Menu\Renderer\MenuTypeRenderer:
         arguments:
             $menuTheme: '%app.menu_theme%'
@@ -187,3 +194,13 @@ services:
     App\Service\Validator\EuVatIdValidator:
         arguments:
             $euVatIdRegex: '%app.eu_vat_id_regex%'
+
+    App\Service\Validator\NotBlankContactEmailValidator:
+        arguments:
+            $isEmailMandatory: '%app.contact_email_mandatory%'
+            $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
+
+    App\Service\Validator\NotBlankContactPhoneNumberValidator:
+        arguments:
+            $isEmailMandatory: '%app.contact_email_mandatory%'
+            $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'

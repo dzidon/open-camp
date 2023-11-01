@@ -16,8 +16,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ContactType extends AbstractType
 {
+    private bool $isEmailMandatory;
+    private bool $isPhoneNumberMandatory;
+
+    public function __construct(bool $isEmailMandatory, bool $isPhoneNumberMandatory)
+    {
+        $this->isEmailMandatory = $isEmailMandatory;
+        $this->isPhoneNumberMandatory = $isPhoneNumberMandatory;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $emailAndPhoneLabelAttr = !$this->isEmailMandatory && !$this->isPhoneNumberMandatory
+            ? ['class' => 'required-conditional']
+            : []
+        ;
+
         $builder
             ->add('nameFirst', TextType::class, [
                 'attr' => [
@@ -29,18 +43,14 @@ class ContactType extends AbstractType
                 'label' => 'form.user.contact.name_last',
             ])
             ->add('email', EmailType::class, [
-                'required'   => false,
+                'required'   => $this->isEmailMandatory,
                 'label'      => 'form.user.contact.email',
-                'label_attr' => [
-                    'class' => 'required-conditional'
-                ],
+                'label_attr' => $emailAndPhoneLabelAttr,
             ])
             ->add('phoneNumber', PhoneNumberType::class, [
-                'required'   => false,
+                'required'   => $this->isPhoneNumberMandatory,
                 'label'      => 'form.user.contact.phone_number',
-                'label_attr' => [
-                    'class' => 'required-conditional'
-                ],
+                'label_attr' => $emailAndPhoneLabelAttr,
             ])
             ->add('role', ContactRoleType::class, [
                 'placeholder'      => 'form.common.choice.choose',
