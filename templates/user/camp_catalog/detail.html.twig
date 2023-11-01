@@ -94,65 +94,40 @@
                     {{ 'camp_catalog.no_available_camp_dates'|trans }}
                 </div>
             {% else %}
-                <div class="table-responsive">
-                    <table class="table table-bordered mt-3">
+                <div class="table-responsive d-none d-md-block">
+                    <table class="table table-bordered table-hover mt-3">
                         <thead>
                             <tr>
                                 <th scope="col">{{ 'entity.camp_date.singular'|trans }}</th>
-                                <th scope="col">{{ 'entity_attribute.camp_date.capacity'|trans }}</th>
+                                <th scope="col">{{ 'entity_attribute.camp_date.price'|trans }}</th>
+                                <th scope="col">{{ 'camp_catalog.camp_availability.label'|trans }}</th>
                                 <th scope="col">{{ 'search.item_action'|trans }}</th>
                             </tr>
                         </thead>
 
                         <tbody>
                             {% for camp_date in camp_dates %}
-                                <tr>
-                                    <td class="white-space-nowrap">
-                                        <span class="badge badge-secondary">
+                                <tr class="position-relative">
+                                    <td>
+                                        <span class="badge badge-primary">
                                             {{ camp_date.startAt|date(date_format) }} - {{ camp_date.endAt|date(date_format) }}
                                         </span>
+                                    </td>
 
-                                        {% if camp_date.description is not null %}
-                                            <a href="#trip-instructions-{{ camp_date.id.toRfc4122 }}" data-toggle="modal" data-target="#trip-instructions-{{ camp_date.id.toRfc4122 }}">
-                                                <i class="fas fa-info-circle ml-2"></i>
-                                            </a>
-
-                                            <div class="modal fade" id="trip-instructions-{{ camp_date.id.toRfc4122 }}" tabindex="-1" aria-labelledby="trip-instructions-{{ camp_date.id.toRfc4122 }}" aria-hidden="true">
-                                                <div class="modal-dialog">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="trip-instructions-{{ camp_date.id.toRfc4122 }}Label">
-                                                                {{ 'entity_attribute.camp_date.description'|trans }}
-                                                            </h5>
-
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'modal.button_close'|trans }}">
-                                                                <span aria-hidden="true">&times;</span>
-                                                            </button>
-                                                        </div>
-
-                                                        <div class="modal-body">
-                                                            {{ camp_date.description|nl2br }}
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                                {{ 'modal.button_close'|trans }}
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        {% endif %}
+                                    <td>
+                                        <span class="badge badge-primary">
+                                            {{ camp_date.price }} {{ currency }}
+                                        </span>
                                     </td>
 
                                     <td>
                                         <span class="badge badge-success">
-                                            ? / {{ camp_date.capacity }}
+                                            {{ 'camp_catalog.camp_availability.available'|trans }}
                                         </span>
                                     </td>
 
                                     <td>
-                                        <a href="#">
+                                        <a href="#" class="stretched-link">
                                             {{ 'entity.application.singular'|trans }}
                                         </a>
                                     </td>
@@ -160,6 +135,38 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                </div>
+
+                <div class="row mt-3 d-md-none">
+                    <div class="col-12">
+                        <h3>{{ 'entity.camp_date.plural'|trans }}</h3>
+
+                        {% for camp_date in camp_dates %}
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="card-title">
+                                                {{ camp_date.startAt|date(date_format) }} - {{ camp_date.endAt|date(date_format) }}
+                                            </h5>
+
+                                            <p class="card-text">
+                                                <span class="badge badge-primary">
+                                                    Cena: {{ camp_date.price }} {{ currency }}
+                                                </span>
+
+                                                <span class="badge badge-success">
+                                                    {{ 'camp_catalog.camp_availability.available'|trans }}
+                                                </span>
+                                            </p>
+
+                                            <a href="#" class="card-link stretched-link">Přihláška</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
             {% endif %}
         </div>

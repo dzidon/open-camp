@@ -59,6 +59,10 @@ camp_catalog:
     no_available_camp_dates: 'Žádné volné termíny'
     show_map: 'Ukázat na mapě'
     map: 'Mapa'
+    camp_availability:
+        label: 'Dostupnost'
+        available: 'Volná místa'
+        not_available: 'Žádná volná místa'
 
 admin_dashboard:
     welcome: 'Jste přihlášeni jako {user}.'
