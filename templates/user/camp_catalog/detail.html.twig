@@ -63,7 +63,7 @@
                 <h1 class="mb-3">{{ route_name() }}</h1>
             {% endif %}
 
-            <p>
+            <div class="mb-3">
                 {{ 'entity_attribute.camp.age'|trans }}:
 
                 {% if camp.ageMin is same as(camp.ageMax) %}
@@ -71,23 +71,23 @@
                 {% else %}
                     {{ camp.ageMin }} - {{ camp.ageMax }}
                 {% endif %}
-            </p>
+            </div>
 
             {% if camp.descriptionShort is not null %}
-                <p>{{ camp.descriptionShort }}</p>
+                <div class="mb-3">
+                    {{ camp.descriptionShort }}
+                </div>
             {% endif %}
 
-            <p>
-                {{ camp.street }}
+            <div class="mb-3">
+                <div>{{ camp.street }}</div>
+                <div>{{ camp.zip }} {{ camp.town }}</div>
+                <div>{{ country_name_for_code(camp.country) }}</div>
 
-                <br>
-
-                {{ camp.zip }} {{ camp.town }}
-
-                <br>
-
-                {{ country_name_for_code(camp.country) }}
-            </p>
+                <div>
+                    <a href="#map" data-toggle="modal" data-target="#map">{{ 'camp_catalog.show_map'|trans }}</a>
+                </div>
+            </div>
 
             {% if camp_dates is empty %}
                 <div class="alert alert-danger" role="alert">
@@ -125,7 +125,7 @@
                                                                 {{ 'entity_attribute.camp_date.description'|trans }}
                                                             </h5>
 
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'modal.button_close'|trans }}">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
@@ -174,4 +174,33 @@
             </div>
         </div>
     {% endif %}
+
+    <div class="modal fade" id="map" tabindex="-1" aria-labelledby="map" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-xl h-75">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mapLabel">
+                        {{ 'camp_catalog.map'|trans }}
+                    </h5>
+
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'modal.button_close'|trans }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    {% set address = camp.street ~ ', ' ~ camp.zip ~ ' ' ~ camp.town ~ ', ' ~ country_name_for_code(camp.country) %}
+
+                    <iframe src="https://maps.google.com/maps?output=embed&q={{ address }}"
+                            class="w-100 border-0"
+                            height="98%"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                    >
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

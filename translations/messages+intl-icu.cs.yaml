@@ -57,6 +57,8 @@ form_field_type:
 
 camp_catalog:
     no_available_camp_dates: 'Žádné volné termíny'
+    show_map: 'Ukázat na mapě'
+    map: 'Mapa'
 
 admin_dashboard:
     welcome: 'Jste přihlášeni jako {user}.'
