@@ -14,7 +14,6 @@ use Symfony\Component\Uid\UuidV4;
 /**
  * @method AttachmentConfig|null find($id, $lockMode = null, $lockVersion = null)
  * @method AttachmentConfig|null findOneBy(array $criteria, array $orderBy = null)
- * @method AttachmentConfig[]    findAll()
  * @method AttachmentConfig[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class AttachmentConfigRepository extends AbstractRepository implements AttachmentConfigRepositoryInterface
@@ -38,6 +37,17 @@ class AttachmentConfigRepository extends AbstractRepository implements Attachmen
     public function removeAttachmentConfig(AttachmentConfig $attachmentConfig, bool $flush): void
     {
         $this->remove($attachmentConfig, $flush);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('attachmentConfig')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**

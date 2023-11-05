@@ -28,6 +28,13 @@ interface PurchasableItemRepositoryInterface
     public function removePurchasableItem(PurchasableItem $purchasableItem, bool $flush): void;
 
     /**
+     * Finds all available purchasable items.
+     *
+     * @return PurchasableItem[]
+     */
+    public function findAll(): array;
+
+    /**
      * Finds one purchasable item by id.
      *
      * @param UuidV4 $id

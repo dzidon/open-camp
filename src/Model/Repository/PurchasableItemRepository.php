@@ -13,7 +13,6 @@ use Symfony\Component\Uid\UuidV4;
 /**
  * @method PurchasableItem|null find($id, $lockMode = null, $lockVersion = null)
  * @method PurchasableItem|null findOneBy(array $criteria, array $orderBy = null)
- * @method PurchasableItem[]    findAll()
  * @method PurchasableItem[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class PurchasableItemRepository extends AbstractRepository implements PurchasableItemRepositoryInterface
@@ -37,6 +36,17 @@ class PurchasableItemRepository extends AbstractRepository implements Purchasabl
     public function removePurchasableItem(PurchasableItem $purchasableItem, bool $flush): void
     {
         $this->remove($purchasableItem, $flush);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('purchasableItem')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**

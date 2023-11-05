@@ -29,14 +29,14 @@ class PurchasableItemSearchType extends AbstractType
                 'class'        => PurchasableItemSortEnum::class,
                 'label'        => 'form.admin.purchasable_item_search.sort_by.label',
                 'choice_label' => fn ($choice) => match ($choice) {
-                    PurchasableItemSortEnum::CREATED_AT_DESC            => 'form.admin.purchasable_item_search.sort_by.options.created_at_desc',
-                    PurchasableItemSortEnum::CREATED_AT_ASC             => 'form.admin.purchasable_item_search.sort_by.options.created_at_asc',
-                    PurchasableItemSortEnum::NAME_ASC                   => 'form.admin.purchasable_item_search.sort_by.options.name_asc',
-                    PurchasableItemSortEnum::NAME_DESC                  => 'form.admin.purchasable_item_search.sort_by.options.name_desc',
-                    PurchasableItemSortEnum::PRICE_ASC                  => 'form.admin.purchasable_item_search.sort_by.options.price_asc',
-                    PurchasableItemSortEnum::PRICE_DESC                 => 'form.admin.purchasable_item_search.sort_by.options.price_desc',
-                    PurchasableItemSortEnum::MAX_AMOUNT_PER_CAMPER_ASC  => 'form.admin.purchasable_item_search.sort_by.options.max_amount_per_camper_asc',
-                    PurchasableItemSortEnum::MAX_AMOUNT_PER_CAMPER_DESC => 'form.admin.purchasable_item_search.sort_by.options.max_amount_per_camper_desc',
+                    PurchasableItemSortEnum::CREATED_AT_DESC => 'form.admin.purchasable_item_search.sort_by.options.created_at_desc',
+                    PurchasableItemSortEnum::CREATED_AT_ASC  => 'form.admin.purchasable_item_search.sort_by.options.created_at_asc',
+                    PurchasableItemSortEnum::NAME_ASC        => 'form.admin.purchasable_item_search.sort_by.options.name_asc',
+                    PurchasableItemSortEnum::NAME_DESC       => 'form.admin.purchasable_item_search.sort_by.options.name_desc',
+                    PurchasableItemSortEnum::PRICE_ASC       => 'form.admin.purchasable_item_search.sort_by.options.price_asc',
+                    PurchasableItemSortEnum::PRICE_DESC      => 'form.admin.purchasable_item_search.sort_by.options.price_desc',
+                    PurchasableItemSortEnum::MAX_AMOUNT_ASC  => 'form.admin.purchasable_item_search.sort_by.options.max_amount_asc',
+                    PurchasableItemSortEnum::MAX_AMOUNT_DESC => 'form.admin.purchasable_item_search.sort_by.options.max_amount_desc',
                 },
             ])
         ;

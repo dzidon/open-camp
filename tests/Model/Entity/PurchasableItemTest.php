@@ -11,7 +11,7 @@ class PurchasableItemTest extends TestCase
 {
     private const NAME = 'name';
     private const PRICE = 1000.0;
-    private const MAX_AMOUNT_PER_CAMPER = 10;
+    private const MAX_AMOUNT = 10;
 
     private PurchasableItem $purchasableItem;
 
@@ -39,13 +39,13 @@ class PurchasableItemTest extends TestCase
         $this->assertSame($newPrice, $this->purchasableItem->getPrice());
     }
 
-    public function testMaxAmountPerCamper(): void
+    public function testMaxAmount(): void
     {
-        $this->assertSame(self::MAX_AMOUNT_PER_CAMPER, $this->purchasableItem->getMaxAmountPerCamper());
+        $this->assertSame(self::MAX_AMOUNT, $this->purchasableItem->getMaxAmount());
 
         $newMaxAmount = 20;
-        $this->purchasableItem->setMaxAmountPerCamper($newMaxAmount);
-        $this->assertSame($newMaxAmount, $this->purchasableItem->getMaxAmountPerCamper());
+        $this->purchasableItem->setMaxAmount($newMaxAmount);
+        $this->assertSame($newMaxAmount, $this->purchasableItem->getMaxAmount());
     }
 
     public function testCreatedAt(): void
@@ -60,6 +60,6 @@ class PurchasableItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->purchasableItem = new PurchasableItem(self::NAME, self::PRICE, self::MAX_AMOUNT_PER_CAMPER);
+        $this->purchasableItem = new PurchasableItem(self::NAME, self::PRICE, self::MAX_AMOUNT);
     }
 }

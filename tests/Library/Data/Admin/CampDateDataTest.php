@@ -2,10 +2,18 @@
 
 namespace App\Tests\Library\Data\Admin;
 
+use App\Library\Data\Admin\CampDateAttachmentConfigData;
 use App\Library\Data\Admin\CampDateData;
+use App\Library\Data\Admin\CampDateFormFieldData;
+use App\Library\Data\Admin\CampDatePurchasableItemData;
+use App\Model\Entity\AttachmentConfig;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\FormField;
+use App\Model\Entity\PurchasableItem;
+use App\Model\Entity\TripLocationPath;
 use App\Model\Entity\User;
+use App\Model\Enum\Entity\FormFieldTypeEnum;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
 use DateTimeImmutable;
@@ -239,6 +247,92 @@ class CampDateDataTest extends KernelTestCase
 
         $data->removeLeader($newLeaders[0]);
         $this->assertNotContains($newLeaders[0], $data->getLeaders());
+    }
+
+    public function testTripLocationPathThere(): void
+    {
+        $data = new CampDateData($this->camp);
+        $this->assertNull($data->getTripLocationPathThere());
+
+        $tripLocationPath = new TripLocationPath('Path');
+        $data->setTripLocationPathThere($tripLocationPath);
+        $this->assertSame($tripLocationPath, $data->getTripLocationPathThere());
+
+        $data->setTripLocationPathThere(null);
+        $this->assertNull($data->getTripLocationPathThere());
+    }
+
+    public function testTripLocationPathBack(): void
+    {
+        $data = new CampDateData($this->camp);
+        $this->assertNull($data->getTripLocationPathBack());
+
+        $tripLocationPath = new TripLocationPath('Path');
+        $data->setTripLocationPathBack($tripLocationPath);
+        $this->assertSame($tripLocationPath, $data->getTripLocationPathBack());
+
+        $data->setTripLocationPathBack(null);
+        $this->assertNull($data->getTripLocationPathBack());
+    }
+
+    public function tesCampDateFormFieldsDataValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new CampDateData($this->camp);
+        $result = $validator->validateProperty($data, 'campDateFormFieldsData');
+        $this->assertNotEmpty($result); // invalid
+
+        $campDateFormFieldData = new CampDateFormFieldData();
+        $data->addCampDateFormFieldsDatum($campDateFormFieldData);
+        $result = $validator->validateProperty($data, 'campDateFormFieldsData');
+        $this->assertNotEmpty($result); // invalid
+
+        $formField = new FormField('Field', FormFieldTypeEnum::TEXT, 'Field:');
+        $campDateFormFieldData->setFormField($formField);
+        $campDateFormFieldData->setPriority(1);
+        $result = $validator->validateProperty($data, 'campDateFormFieldsData');
+        $this->assertEmpty($result); // valid
+    }
+
+    public function tesCampDateAttachmentConfigsDataValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new CampDateData($this->camp);
+        $result = $validator->validateProperty($data, 'campDateAttachmentConfigsData');
+        $this->assertNotEmpty($result); // invalid
+
+        $campDateAttachmentConfigData = new CampDateAttachmentConfigData();
+        $data->addCampDateAttachmentConfigsDatum($campDateAttachmentConfigData);
+        $result = $validator->validateProperty($data, 'campDateAttachmentConfigsData');
+        $this->assertNotEmpty($result); // invalid
+
+        $attachmentConfig = new AttachmentConfig('Field', 10.0);
+        $campDateAttachmentConfigData->setAttachmentConfig($attachmentConfig);
+        $campDateAttachmentConfigData->setPriority(1);
+        $result = $validator->validateProperty($data, 'campDateAttachmentConfigsData');
+        $this->assertEmpty($result); // valid
+    }
+
+    public function tesCampDatePurchasableItemsDataValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new CampDateData($this->camp);
+        $result = $validator->validateProperty($data, 'campDatePurchasableItemsData');
+        $this->assertNotEmpty($result); // invalid
+
+        $campDatePurchasableItemData = new CampDatePurchasableItemData();
+        $data->addCampDatePurchasableItemsDatum($campDatePurchasableItemData);
+        $result = $validator->validateProperty($data, 'campDatePurchasableItemsData');
+        $this->assertNotEmpty($result); // invalid
+
+        $purchasableItem = new PurchasableItem('Item', 1000.0, 2);
+        $campDatePurchasableItemData->setPurchasableItem($purchasableItem);
+        $campDatePurchasableItemData->setPriority(1);
+        $result = $validator->validateProperty($data, 'campDatePurchasableItemsData');
+        $this->assertEmpty($result); // valid
     }
 
     public function testIntervalCollision(): void

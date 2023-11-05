@@ -28,6 +28,13 @@ interface FormFieldRepositoryInterface
     public function removeFormField(FormField $formField, bool $flush): void;
 
     /**
+     * Finds all available form fields.
+     *
+     * @return FormField[]
+     */
+    public function findAll(): array;
+
+    /**
      * Finds one form field by id.
      *
      * @param UuidV4 $id

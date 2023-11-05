@@ -15,15 +15,15 @@ class PurchasableItemDataTransferTest extends KernelTestCase
 
         $expectedName = 'Name';
         $expectedPrice = 1000.0;
-        $maxAmountPerCamper = 10;
-        $purchasableItem = new PurchasableItem($expectedName, $expectedPrice, $maxAmountPerCamper);
+        $maxAmount = 10;
+        $purchasableItem = new PurchasableItem($expectedName, $expectedPrice, $maxAmount);
 
         $data = new PurchasableItemData();
         $dataTransfer->fillData($data, $purchasableItem);
 
         $this->assertSame($expectedName, $data->getName());
         $this->assertSame($expectedPrice, $data->getPrice());
-        $this->assertSame($maxAmountPerCamper, $data->getMaxAmountPerCamper());
+        $this->assertSame($maxAmount, $data->getMaxAmount());
     }
 
     public function testFillEntity(): void
@@ -32,18 +32,18 @@ class PurchasableItemDataTransferTest extends KernelTestCase
 
         $expectedName = 'Name';
         $expectedPrice = 1000.0;
-        $maxAmountPerCamper = 10;
+        $maxAmount = 10;
         $purchasableItem = new PurchasableItem('', 0.0, 0);
 
         $data = new PurchasableItemData();
         $data->setName($expectedName);
         $data->setPrice($expectedPrice);
-        $data->setMaxAmountPerCamper($maxAmountPerCamper);
+        $data->setMaxAmount($maxAmount);
         $dataTransfer->fillEntity($data, $purchasableItem);
 
         $this->assertSame($expectedName, $purchasableItem->getName());
         $this->assertSame($expectedPrice, $purchasableItem->getPrice());
-        $this->assertSame($maxAmountPerCamper, $purchasableItem->getMaxAmountPerCamper());
+        $this->assertSame($maxAmount, $purchasableItem->getMaxAmount());
     }
 
     private function getPurchasableItemDataTransfer(): PurchasableItemDataTransfer

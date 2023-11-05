@@ -5,6 +5,7 @@ namespace App\Library\Data\Admin;
 use App\Library\Constraint\CampDateInterval;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\TripLocationPath;
 use App\Model\Entity\User;
 use DateTimeImmutable;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -42,6 +43,28 @@ class CampDateData
      * @var User[]
      */
     private array $leaders = [];
+
+    private ?TripLocationPath $tripLocationPathThere = null;
+
+    private ?TripLocationPath $tripLocationPathBack = null;
+
+    /**
+     * @var CampDateFormFieldData[]
+     */
+    #[Assert\Valid]
+    private array $campDateFormFieldsData = [];
+
+    /**
+     * @var CampDateAttachmentConfigData[]
+     */
+    #[Assert\Valid]
+    private array $campDateAttachmentConfigsData = [];
+
+    /**
+     * @var CampDatePurchasableItemData[]
+     */
+    #[Assert\Valid]
+    private array $campDatePurchasableItemsData = [];
 
     public function __construct(Camp $camp, ?CampDate $campDate = null)
     {
@@ -170,6 +193,123 @@ class CampDateData
         }
 
         unset($this->leaders[$key]);
+
+        return $this;
+    }
+
+    public function getTripLocationPathThere(): ?TripLocationPath
+    {
+        return $this->tripLocationPathThere;
+    }
+
+    public function setTripLocationPathThere(?TripLocationPath $tripLocationPathThere): self
+    {
+        $this->tripLocationPathThere = $tripLocationPathThere;
+
+        return $this;
+    }
+
+    public function getTripLocationPathBack(): ?TripLocationPath
+    {
+        return $this->tripLocationPathBack;
+    }
+
+    public function setTripLocationPathBack(?TripLocationPath $tripLocationPathBack): self
+    {
+        $this->tripLocationPathBack = $tripLocationPathBack;
+
+        return $this;
+    }
+
+    public function getCampDateFormFieldsData(): array
+    {
+        return $this->campDateFormFieldsData;
+    }
+
+    public function addCampDateFormFieldsDatum(CampDateFormFieldData $campDateFormFieldData): self
+    {
+        if (in_array($campDateFormFieldData, $this->campDateFormFieldsData, true))
+        {
+            return $this;
+        }
+
+        $this->campDateFormFieldsData[] = $campDateFormFieldData;
+
+        return $this;
+    }
+
+    public function removeCampDateFormFieldsDatum(CampDateFormFieldData $campDateFormFieldData): self
+    {
+        $key = array_search($campDateFormFieldData, $this->campDateFormFieldsData, true);
+
+        if ($key === false)
+        {
+            return $this;
+        }
+
+        unset($this->campDateFormFieldsData[$key]);
+
+        return $this;
+    }
+
+    public function getCampDateAttachmentConfigsData(): array
+    {
+        return $this->campDateAttachmentConfigsData;
+    }
+
+    public function addCampDateAttachmentConfigsDatum(CampDateAttachmentConfigData $campDateAttachmentConfigData): self
+    {
+        if (in_array($campDateAttachmentConfigData, $this->campDateAttachmentConfigsData, true))
+        {
+            return $this;
+        }
+
+        $this->campDateAttachmentConfigsData[] = $campDateAttachmentConfigData;
+
+        return $this;
+    }
+
+    public function removeCampDateAttachmentConfigsDatum(CampDateAttachmentConfigData $campDateAttachmentConfigData): self
+    {
+        $key = array_search($campDateAttachmentConfigData, $this->campDateAttachmentConfigsData, true);
+
+        if ($key === false)
+        {
+            return $this;
+        }
+
+        unset($this->campDateAttachmentConfigsData[$key]);
+
+        return $this;
+    }
+
+    public function getCampDatePurchasableItemsData(): array
+    {
+        return $this->campDatePurchasableItemsData;
+    }
+
+    public function addCampDatePurchasableItemsDatum(CampDatePurchasableItemData $campDatePurchasableItemData): self
+    {
+        if (in_array($campDatePurchasableItemData, $this->campDatePurchasableItemsData, true))
+        {
+            return $this;
+        }
+
+        $this->campDatePurchasableItemsData[] = $campDatePurchasableItemData;
+
+        return $this;
+    }
+
+    public function removeCampDatePurchasableItemsDatum(CampDatePurchasableItemData $campDatePurchasableItemData): self
+    {
+        $key = array_search($campDatePurchasableItemData, $this->campDatePurchasableItemsData, true);
+
+        if ($key === false)
+        {
+            return $this;
+        }
+
+        unset($this->campDatePurchasableItemsData[$key]);
 
         return $this;
     }

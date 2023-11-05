@@ -51,6 +51,23 @@ class CampDate
     #[ORM\ManyToMany(targetEntity: User::class)]
     private Collection $leaders;
 
+    #[ORM\ManyToOne(targetEntity: TripLocationPath::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?TripLocationPath $tripLocationPathThere = null;
+
+    #[ORM\ManyToOne(targetEntity: TripLocationPath::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?TripLocationPath $tripLocationPathBack = null;
+
+    #[ORM\OneToMany(mappedBy: 'campDate', targetEntity: CampDateFormField::class)]
+    private Collection $campDateFormFields;
+
+    #[ORM\OneToMany(mappedBy: 'campDate', targetEntity: CampDateAttachmentConfig::class)]
+    private Collection $campDateAttachmentConfigs;
+
+    #[ORM\OneToMany(mappedBy: 'campDate', targetEntity: CampDatePurchasableItem::class)]
+    private Collection $campDatePurchasableItems;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -67,6 +84,9 @@ class CampDate
         $this->capacity = $capacity;
         $this->camp = $camp;
         $this->leaders = new ArrayCollection();
+        $this->campDateFormFields = new ArrayCollection();
+        $this->campDateAttachmentConfigs = new ArrayCollection();
+        $this->campDatePurchasableItems = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable('now');
     }
 
@@ -192,6 +212,138 @@ class CampDate
     public function removeLeader(User $user): self
     {
         $this->leaders->removeElement($user);
+
+        return $this;
+    }
+
+    public function getTripLocationPathThere(): ?TripLocationPath
+    {
+        return $this->tripLocationPathThere;
+    }
+
+    public function setTripLocationPathThere(?TripLocationPath $tripLocationPathThere): self
+    {
+        $this->tripLocationPathThere = $tripLocationPathThere;
+
+        return $this;
+    }
+
+    public function getTripLocationPathBack(): ?TripLocationPath
+    {
+        return $this->tripLocationPathBack;
+    }
+
+    public function setTripLocationPathBack(?TripLocationPath $tripLocationPathBack): self
+    {
+        $this->tripLocationPathBack = $tripLocationPathBack;
+
+        return $this;
+    }
+
+    /**
+     * @return CampDateFormField[]
+     */
+    public function getCampDateFormFields(): array
+    {
+        return $this->campDateFormFields->toArray();
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param CampDateFormField $campDateFormField
+     * @return $this
+     */
+    public function addCampDateFormField(CampDateFormField $campDateFormField): self
+    {
+        if (!$this->campDateFormFields->contains($campDateFormField))
+        {
+            $this->campDateFormFields->add($campDateFormField);
+            $campDateFormField->setCampDate($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param CampDateFormField $campDateFormField
+     * @return $this
+     */
+    public function removeCampDateFormField(CampDateFormField $campDateFormField): self
+    {
+        $this->campDateFormFields->removeElement($campDateFormField);
+
+        return $this;
+    }
+
+    /**
+     * @return CampDateAttachmentConfig[]
+     */
+    public function getCampDateAttachmentConfigs(): array
+    {
+        return $this->campDateAttachmentConfigs->toArray();
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param CampDateAttachmentConfig $campDateAttachmentConfig
+     * @return $this
+     */
+    public function addCampDateAttachmentConfig(CampDateAttachmentConfig $campDateAttachmentConfig): self
+    {
+        if (!$this->campDateAttachmentConfigs->contains($campDateAttachmentConfig))
+        {
+            $this->campDateAttachmentConfigs->add($campDateAttachmentConfig);
+            $campDateAttachmentConfig->setCampDate($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param CampDateAttachmentConfig $campDateAttachmentConfig
+     * @return $this
+     */
+    public function removeCampDateAttachmentConfig(CampDateAttachmentConfig $campDateAttachmentConfig): self
+    {
+        $this->campDateAttachmentConfigs->removeElement($campDateAttachmentConfig);
+
+        return $this;
+    }
+
+    /**
+     * @return CampDatePurchasableItem[]
+     */
+    public function getCampDatePurchasableItems(): array
+    {
+        return $this->campDatePurchasableItems->toArray();
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param CampDatePurchasableItem $campDatePurchasableItem
+     * @return $this
+     */
+    public function addCampDatePurchasableItem(CampDatePurchasableItem $campDatePurchasableItem): self
+    {
+        if (!$this->campDatePurchasableItems->contains($campDatePurchasableItem))
+        {
+            $this->campDatePurchasableItems->add($campDatePurchasableItem);
+            $campDatePurchasableItem->setCampDate($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param CampDatePurchasableItem $campDatePurchasableItem
+     * @return $this
+     */
+    public function removeCampDatePurchasableItem(CampDatePurchasableItem $campDatePurchasableItem): self
+    {
+        $this->campDatePurchasableItems->removeElement($campDatePurchasableItem);
 
         return $this;
     }

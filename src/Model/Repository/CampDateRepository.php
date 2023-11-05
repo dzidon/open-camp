@@ -47,7 +47,7 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
      */
     public function findOneById(UuidV4 $id): ?CampDate
     {
-        return $this->createQueryBuilder('campDate')
+        $campDate = $this->createQueryBuilder('campDate')
             ->select('campDate, camp, leader')
             ->leftJoin('campDate.camp', 'camp')
             ->leftJoin('campDate.leaders', 'leader')
@@ -56,6 +56,12 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ->getQuery()
             ->getOneOrNullResult()
         ;
+
+        $this->loadCampDateFormFields($campDate);
+        $this->loadCampDateAttachmentConfigs($campDate);
+        $this->loadCampDatePurchasableItems($campDate);
+
+        return $campDate;
     }
 
     /**
@@ -63,7 +69,7 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
      */
     public function findUpcomingByCamp(Camp $camp): array
     {
-        return $this->createQueryBuilder('campDate')
+        $campDates = $this->createQueryBuilder('campDate')
             ->select('campDate, camp, leader')
             ->leftJoin('campDate.camp', 'camp')
             ->leftJoin('campDate.leaders', 'leader')
@@ -75,6 +81,12 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ->getQuery()
             ->getResult()
         ;
+
+        $this->loadCampDateFormFields($campDates);
+        $this->loadCampDateAttachmentConfigs($campDates);
+        $this->loadCampDatePurchasableItems($campDates);
+
+        return $campDates;
     }
 
     /**
@@ -103,10 +115,16 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ;
         }
 
-        return $queryBuilder
+        $campDates = $queryBuilder
             ->getQuery()
             ->getResult()
         ;
+
+        $this->loadCampDateFormFields($campDates);
+        $this->loadCampDateAttachmentConfigs($campDates);
+        $this->loadCampDatePurchasableItems($campDates);
+
+        return $campDates;
     }
 
     /**
@@ -160,5 +178,81 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
         $query = $queryBuilder->getQuery();
 
         return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
+    }
+
+    private function loadCampDateFormFields(null|array|CampDate $campDates): void
+    {
+        if ($campDates === null)
+        {
+            return;
+        }
+
+        $campDateIds = $this->getCampDateIds($campDates);
+
+        $this->createQueryBuilder('campDate')
+            ->select('campDate, campDateFormField, formField')
+            ->leftJoin('campDate.campDateFormFields', 'campDateFormField')
+            ->leftJoin('campDateFormField.formField', 'formField')
+            ->andWhere('campDate.id IN (:ids)')
+            ->setParameter('ids', $campDateIds)
+            ->orderBy('campDateFormField.priority', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    private function loadCampDateAttachmentConfigs(null|array|CampDate $campDates): void
+    {
+        if ($campDates === null)
+        {
+            return;
+        }
+
+        $campDateIds = $this->getCampDateIds($campDates);
+
+        $this->createQueryBuilder('campDate')
+            ->select('campDate, campDateAttachmentConfig, attachmentConfig, fileExtension')
+            ->leftJoin('campDate.campDateAttachmentConfigs', 'campDateAttachmentConfig')
+            ->leftJoin('campDateAttachmentConfig.attachmentConfig', 'attachmentConfig')
+            ->leftJoin('attachmentConfig.fileExtensions', 'fileExtension')
+            ->andWhere('campDate.id IN (:ids)')
+            ->setParameter('ids', $campDateIds)
+            ->orderBy('campDateAttachmentConfig.priority', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    private function loadCampDatePurchasableItems(null|array|CampDate $campDates): void
+    {
+        if ($campDates === null)
+        {
+            return;
+        }
+
+        $campDateIds = $this->getCampDateIds($campDates);
+
+        $this->createQueryBuilder('campDate')
+            ->select('campDate, campDatePurchasableItem, purchasableItem')
+            ->leftJoin('campDate.campDatePurchasableItems', 'campDatePurchasableItem')
+            ->leftJoin('campDatePurchasableItem.purchasableItem', 'purchasableItem')
+            ->andWhere('campDate.id IN (:ids)')
+            ->setParameter('ids', $campDateIds)
+            ->orderBy('campDatePurchasableItem.priority', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    private function getCampDateIds(array|CampDate $campDates): array
+    {
+        if ($campDates instanceof CampDate)
+        {
+            $campDates = [$campDates];
+        }
+
+        return array_map(function (CampDate $campDate) {
+            return $campDate->getId()->toBinary();
+        }, $campDates);
     }
 }

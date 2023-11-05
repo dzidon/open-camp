@@ -4,7 +4,11 @@ namespace App\Tests\Model\Entity;
 
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\CampDateFormField;
+use App\Model\Entity\FormField;
+use App\Model\Entity\TripLocationPath;
 use App\Model\Entity\User;
+use App\Model\Enum\Entity\FormFieldTypeEnum;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\UuidV4;
@@ -112,6 +116,30 @@ class CampDateTest extends TestCase
 
         $this->campDate->removeLeader($user);
         $this->assertEmpty($this->campDate->getLeaders());
+    }
+
+    public function testTripLocationPathThere(): void
+    {
+        $this->assertNull($this->campDate->getTripLocationPathThere());
+
+        $tripLocationPath = new TripLocationPath('Path');
+        $this->campDate->setTripLocationPathThere($tripLocationPath);
+        $this->assertSame($tripLocationPath, $this->campDate->getTripLocationPathThere());
+
+        $this->campDate->setTripLocationPathThere(null);
+        $this->assertNull($this->campDate->getTripLocationPathThere());
+    }
+
+    public function testTripLocationPathBack(): void
+    {
+        $this->assertNull($this->campDate->getTripLocationPathBack());
+
+        $tripLocationPath = new TripLocationPath('Path');
+        $this->campDate->setTripLocationPathBack($tripLocationPath);
+        $this->assertSame($tripLocationPath, $this->campDate->getTripLocationPathBack());
+
+        $this->campDate->setTripLocationPathBack(null);
+        $this->assertNull($this->campDate->getTripLocationPathBack());
     }
 
     public function testCreatedAt(): void

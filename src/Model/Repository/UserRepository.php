@@ -100,9 +100,21 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
      */
     public function findByRole(?Role $role): array
     {
-        return $this->createQueryBuilder('user')
-            ->andWhere('user.role = :roleId')
-            ->setParameter('roleId', $role->getId(), UuidType::NAME)
+        $queryBuilder = $this->createQueryBuilder('user');
+
+        if ($role === null)
+        {
+            $queryBuilder->andWhere('user.role IS NULL');
+        }
+        else
+        {
+            $queryBuilder
+                ->andWhere('user.role = :roleId')
+                ->setParameter('roleId', $role->getId(), UuidType::NAME)
+            ;
+        }
+
+        return $queryBuilder
             ->getQuery()
             ->getResult()
         ;

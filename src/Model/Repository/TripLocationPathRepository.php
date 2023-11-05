@@ -13,7 +13,6 @@ use Symfony\Component\Uid\UuidV4;
 /**
  * @method TripLocationPath|null find($id, $lockMode = null, $lockVersion = null)
  * @method TripLocationPath|null findOneBy(array $criteria, array $orderBy = null)
- * @method TripLocationPath[]    findAll()
  * @method TripLocationPath[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class TripLocationPathRepository extends AbstractRepository implements TripLocationPathRepositoryInterface
@@ -37,6 +36,17 @@ class TripLocationPathRepository extends AbstractRepository implements TripLocat
     public function removeTripLocationPath(TripLocationPath $tripLocationPath, bool $flush): void
     {
         $this->remove($tripLocationPath, $flush);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('tripLocationPath')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**

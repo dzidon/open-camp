@@ -7,6 +7,9 @@ use App\Model\Entity\AttachmentConfig;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\CampDateAttachmentConfig;
+use App\Model\Entity\CampDateFormField;
+use App\Model\Entity\CampDatePurchasableItem;
 use App\Model\Entity\Camper;
 use App\Model\Entity\CampImage;
 use App\Model\Entity\Contact;
@@ -438,6 +441,18 @@ class TestFixtures extends Fixture
         $manager->persist($attachmentConfig2);
 
         /*
+         * CampDateAttachmentConfig
+         */
+        $campDateAttachmentConfig1 = new CampDateAttachmentConfig($campDate1, $attachmentConfig1, 100);
+        $this->setUid($campDateAttachmentConfig1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($campDateAttachmentConfig1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($campDateAttachmentConfig1);
+
+        $campDateAttachmentConfig2 = new CampDateAttachmentConfig($campDate1, $attachmentConfig2, 200);
+        $this->setCreatedAt($campDateAttachmentConfig2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($campDateAttachmentConfig2);
+
+        /*
          * PurchasableItem
          */
         $purchasableItem1 = new PurchasableItem('Item 1', 1000.0, 5);
@@ -448,6 +463,18 @@ class TestFixtures extends Fixture
         $purchasableItem2 = new PurchasableItem('Item 2', 2000.0, 10);
         $this->setCreatedAt($purchasableItem2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($purchasableItem2);
+
+        /*
+         * CampDatePurchasableItem
+         */
+        $campDatePurchasableItem1 = new CampDatePurchasableItem($campDate1, $purchasableItem1, 100);
+        $this->setUid($campDatePurchasableItem1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($campDatePurchasableItem1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($campDatePurchasableItem1);
+
+        $campDatePurchasableItem2 = new CampDatePurchasableItem($campDate1, $purchasableItem2, 200);
+        $this->setCreatedAt($campDatePurchasableItem2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($campDatePurchasableItem2);
 
         /*
          * PurchasableVariant
@@ -494,6 +521,18 @@ class TestFixtures extends Fixture
         $formField2->setIsRequired(true);
         $this->setCreatedAt($formField2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($formField2);
+
+        /*
+         * CampDateFormField
+         */
+        $campDateFormField1 = new CampDateFormField($campDate1, $formField1, 100);
+        $this->setUid($campDateFormField1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $this->setCreatedAt($campDateFormField1, new DateTimeImmutable('2000-01-01'));
+        $manager->persist($campDateFormField1);
+
+        $campDateFormField2 = new CampDateFormField($campDate1, $formField2, 200);
+        $this->setCreatedAt($campDateFormField2, new DateTimeImmutable('2000-01-02'));
+        $manager->persist($campDateFormField2);
 
         // save
         $manager->flush();

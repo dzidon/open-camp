@@ -94,40 +94,40 @@ class PurchasableItemDataTest extends KernelTestCase
         $this->assertEmpty($result); // valid
     }
 
-    public function testMaxAmountPerCamper(): void
+    public function testMaxAmount(): void
     {
         $data = new PurchasableItemData();
-        $this->assertNull($data->getMaxAmountPerCamper());
+        $this->assertNull($data->getMaxAmount());
 
-        $data->setMaxAmountPerCamper(10);
-        $this->assertSame(10, $data->getMaxAmountPerCamper());
+        $data->setMaxAmount(10);
+        $this->assertSame(10, $data->getMaxAmount());
 
-        $data->setMaxAmountPerCamper(null);
-        $this->assertNull($data->getMaxAmountPerCamper());
+        $data->setMaxAmount(null);
+        $this->assertNull($data->getMaxAmount());
     }
 
-    public function testMaxAmountPerCamperValidation(): void
+    public function testMaxAmountValidation(): void
     {
         $validator = $this->getValidator();
 
         $data = new PurchasableItemData();
-        $result = $validator->validateProperty($data, 'maxAmountPerCamper');
+        $result = $validator->validateProperty($data, 'maxAmount');
         $this->assertNotEmpty($result); // invalid
 
-        $data->setMaxAmountPerCamper(null);
-        $result = $validator->validateProperty($data, 'maxAmountPerCamper');
+        $data->setMaxAmount(null);
+        $result = $validator->validateProperty($data, 'maxAmount');
         $this->assertNotEmpty($result); // invalid
 
-        $data->setMaxAmountPerCamper(-1);
-        $result = $validator->validateProperty($data, 'maxAmountPerCamper');
+        $data->setMaxAmount(-1);
+        $result = $validator->validateProperty($data, 'maxAmount');
         $this->assertNotEmpty($result); // invalid
 
-        $data->setMaxAmountPerCamper(0);
-        $result = $validator->validateProperty($data, 'maxAmountPerCamper');
+        $data->setMaxAmount(0);
+        $result = $validator->validateProperty($data, 'maxAmount');
         $this->assertNotEmpty($result); // invalid
 
-        $data->setMaxAmountPerCamper(1);
-        $result = $validator->validateProperty($data, 'maxAmountPerCamper');
+        $data->setMaxAmount(1);
+        $result = $validator->validateProperty($data, 'maxAmount');
         $this->assertEmpty($result); // valid
     }
 
@@ -137,7 +137,7 @@ class PurchasableItemDataTest extends KernelTestCase
 
         $data = new PurchasableItemData();
         $data->setPrice(100.0);
-        $data->setMaxAmountPerCamper(10);
+        $data->setMaxAmount(10);
         $data->setName('Item 1');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
@@ -150,7 +150,7 @@ class PurchasableItemDataTest extends KernelTestCase
         $item = $purchasableItemRepository->findOneByName('Item 2');
         $data = new PurchasableItemData($item);
         $data->setPrice(100.0);
-        $data->setMaxAmountPerCamper(10);
+        $data->setMaxAmount(10);
         $data->setName('Item 2');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid

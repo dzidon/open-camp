@@ -17,6 +17,6 @@ enum PurchasableItemSortEnum: string
     case NAME_DESC = 'purchasableItem.name DESC';
     case PRICE_ASC = 'purchasableItem.price ASC';
     case PRICE_DESC = 'purchasableItem.price DESC';
-    case MAX_AMOUNT_PER_CAMPER_ASC = 'purchasableItem.maxAmountPerCamper ASC';
-    case MAX_AMOUNT_PER_CAMPER_DESC = 'purchasableItem.maxAmountPerCamper DESC';
+    case MAX_AMOUNT_ASC = 'purchasableItem.maxAmount ASC';
+    case MAX_AMOUNT_DESC = 'purchasableItem.maxAmount DESC';
 }

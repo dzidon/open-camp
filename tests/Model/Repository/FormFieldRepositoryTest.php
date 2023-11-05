@@ -29,6 +29,16 @@ class FormFieldRepositoryTest extends KernelTestCase
         $this->assertNull($loadedFormField);
     }
 
+    public function testFindAll(): void
+    {
+        $repository = $this->getFormFieldRepository();
+
+        $formFields = $repository->findAll();
+        $names = $this->getFormFieldNames($formFields);
+        $this->assertContains('Field 1', $names);
+        $this->assertContains('Field 2', $names);
+    }
+
     public function testFindOneById(): void
     {
         $repository = $this->getFormFieldRepository();

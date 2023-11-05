@@ -21,7 +21,7 @@ class PurchasableItemData
 
     #[Assert\GreaterThanOrEqual(1)]
     #[Assert\NotBlank]
-    private ?int $maxAmountPerCamper = null;
+    private ?int $maxAmount = null;
 
     public function __construct(?PurchasableItem $purchasableItem = null)
     {
@@ -57,14 +57,14 @@ class PurchasableItemData
         return $this;
     }
 
-    public function getMaxAmountPerCamper(): ?int
+    public function getMaxAmount(): ?int
     {
-        return $this->maxAmountPerCamper;
+        return $this->maxAmount;
     }
 
-    public function setMaxAmountPerCamper(?int $maxAmountPerCamper): self
+    public function setMaxAmount(?int $maxAmount): self
     {
-        $this->maxAmountPerCamper = $maxAmountPerCamper;
+        $this->maxAmount = $maxAmount;
 
         return $this;
     }

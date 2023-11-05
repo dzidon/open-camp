@@ -7,8 +7,12 @@ use App\Library\Data\Admin\CampDateData;
 use App\Library\Data\Admin\CampDateSearchData;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
+use App\Model\Repository\AttachmentConfigRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
+use App\Model\Repository\FormFieldRepositoryInterface;
+use App\Model\Repository\PurchasableItemRepositoryInterface;
+use App\Model\Repository\TripLocationPathRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\CampDateSearchType;
 use App\Service\Form\Type\Admin\CampDateType;
@@ -80,12 +84,23 @@ class CampDateController extends AbstractController
     }
 
     #[Route('/admin/camp/{id}/create-date', name: 'admin_camp_date_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
+    public function create(DataTransferRegistryInterface       $dataTransfer,
+                           TripLocationPathRepositoryInterface $tripLocationPathRepository,
+                           FormFieldRepositoryInterface        $formFieldRepository,
+                           AttachmentConfigRepositoryInterface $attachmentConfigRepository,
+                           PurchasableItemRepositoryInterface  $purchasableItemRepository,
+                           Request                             $request,
+                           UuidV4                              $id): Response
     {
         $camp = $this->findCampOrThrow404($id);
 
         $campDateData = new CampDateData($camp);
-        $form = $this->createForm(CampDateType::class, $campDateData);
+        $form = $this->createForm(CampDateType::class, $campDateData, [
+            'choices_trip_location_paths' => $tripLocationPathRepository->findAll(),
+            'choices_form_fields'         => $formFieldRepository->findAll(),
+            'choices_attachment_configs'  => $attachmentConfigRepository->findAll(),
+            'choices_purchasable_items'   => $purchasableItemRepository->findAll(),
+        ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.camp_date.button']);
         $form->handleRequest($request);
 
@@ -122,15 +137,26 @@ class CampDateController extends AbstractController
     }
 
     #[Route('/admin/camp-date/{id}/update', name: 'admin_camp_date_update')]
-    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
+    public function update(DataTransferRegistryInterface       $dataTransfer,
+                           TripLocationPathRepositoryInterface $tripLocationPathRepository,
+                           FormFieldRepositoryInterface        $formFieldRepository,
+                           AttachmentConfigRepositoryInterface $attachmentConfigRepository,
+                           PurchasableItemRepositoryInterface  $purchasableItemRepository,
+                           Request                             $request,
+                           UuidV4                              $id): Response
     {
         $campDate = $this->findCampDateOrThrow404($id);
         $camp = $campDate->getCamp();
 
-        $campDateData = new CampDateData($camp);
+        $campDateData = new CampDateData($camp, $campDate);
         $dataTransfer->fillData($campDateData, $campDate);
 
-        $form = $this->createForm(CampDateType::class, $campDateData);
+        $form = $this->createForm(CampDateType::class, $campDateData, [
+            'choices_trip_location_paths' => $tripLocationPathRepository->findAll(),
+            'choices_form_fields'         => $formFieldRepository->findAll(),
+            'choices_attachment_configs'  => $attachmentConfigRepository->findAll(),
+            'choices_purchasable_items'   => $purchasableItemRepository->findAll(),
+        ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.camp_date.button']);
         $form->handleRequest($request);
 

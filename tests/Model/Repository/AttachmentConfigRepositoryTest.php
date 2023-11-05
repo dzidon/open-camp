@@ -30,6 +30,16 @@ class AttachmentConfigRepositoryTest extends KernelTestCase
         $this->assertNull($loadedAttachmentConfig);
     }
 
+    public function testFindAll(): void
+    {
+        $repository = $this->getAttachmentConfigRepository();
+
+        $attachmentConfigs = $repository->findAll();
+        $names = $this->getConfigNames($attachmentConfigs);
+        $this->assertContains('Text file', $names);
+        $this->assertContains('Image', $names);
+    }
+
     public function testFindOneById(): void
     {
         $attachmentConfigRepository = $this->getAttachmentConfigRepository();

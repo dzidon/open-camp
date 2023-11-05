@@ -28,7 +28,7 @@ class PurchasableItem
     private float $price;
 
     #[ORM\Column(type: Types::INTEGER)]
-    private int $maxAmountPerCamper;
+    private int $maxAmount;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
@@ -37,12 +37,12 @@ class PurchasableItem
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $name, float $price, int $maxAmountPerCamper)
+    public function __construct(string $name, float $price, int $maxAmount)
     {
         $this->id = Uuid::v4();
         $this->name = $name;
         $this->price = $price;
-        $this->maxAmountPerCamper = $maxAmountPerCamper;
+        $this->maxAmount = $maxAmount;
         $this->createdAt = new DateTimeImmutable('now');
     }
 
@@ -75,14 +75,14 @@ class PurchasableItem
         return $this;
     }
 
-    public function getMaxAmountPerCamper(): int
+    public function getMaxAmount(): int
     {
-        return $this->maxAmountPerCamper;
+        return $this->maxAmount;
     }
 
-    public function setMaxAmountPerCamper(int $maxAmountPerCamper): self
+    public function setMaxAmount(int $maxAmount): self
     {
-        $this->maxAmountPerCamper = $maxAmountPerCamper;
+        $this->maxAmount = $maxAmount;
 
         return $this;
     }

@@ -28,6 +28,13 @@ interface AttachmentConfigRepositoryInterface
     public function removeAttachmentConfig(AttachmentConfig $attachmentConfig, bool $flush): void;
 
     /**
+     * Finds all available attachment configs.
+     *
+     * @return AttachmentConfig[]
+     */
+    public function findAll(): array;
+
+    /**
      * Finds one attachment config by id.
      *
      * @param UuidV4 $id

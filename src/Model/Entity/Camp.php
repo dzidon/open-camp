@@ -231,7 +231,7 @@ class Camp
         return $this->priority;
     }
 
-    public function setPriority(?string $priority): self
+    public function setPriority(?int $priority): self
     {
         $this->priority = $priority;
 

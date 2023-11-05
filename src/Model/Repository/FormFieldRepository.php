@@ -13,7 +13,6 @@ use Symfony\Component\Uid\UuidV4;
 /**
  * @method FormField|null find($id, $lockMode = null, $lockVersion = null)
  * @method FormField|null findOneBy(array $criteria, array $orderBy = null)
- * @method FormField[]    findAll()
  * @method FormField[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class FormFieldRepository extends AbstractRepository implements FormFieldRepositoryInterface
@@ -37,6 +36,17 @@ class FormFieldRepository extends AbstractRepository implements FormFieldReposit
     public function removeFormField(FormField $formField, bool $flush): void
     {
         $this->remove($formField, $flush);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAll(): array
+    {
+        return $this->createQueryBuilder('formField')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     /**

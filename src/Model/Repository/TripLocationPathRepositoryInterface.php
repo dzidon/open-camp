@@ -28,6 +28,13 @@ interface TripLocationPathRepositoryInterface
     public function removeTripLocationPath(TripLocationPath $tripLocationPath, bool $flush): void;
 
     /**
+     * Finds all available trip location paths.
+     *
+     * @return TripLocationPath[]
+     */
+    public function findAll(): array;
+
+    /**
      * Finds one trip location path by id.
      *
      * @param UuidV4 $id

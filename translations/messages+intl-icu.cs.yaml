@@ -546,6 +546,8 @@ entity_attribute:
         description: 'Informace k termínu'
         camp: 'Tábor'
         leaders: 'Vedoucí'
+        trip_location_path_there: 'Cesta pro vyzvedávání (tam)'
+        trip_location_path_back: 'Cesta pro vyzvedávání (zpět)'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -583,7 +585,7 @@ entity_attribute:
         id: 'ID'
         name: 'Název'
         price: 'Cena'
-        max_amount_per_camper: 'Maximální počet na táborníka'
+        max_amount: 'Maximální počet'
         purchasable_item_variants: 'Varianty'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -780,6 +782,14 @@ form:
             is_closed: 'Zablokovat přihlášení'
             description: 'Informace k termínu'
             leaders: 'Vedoucí'
+            form_fields: 'Formulářová pole'
+            add_form_field: 'Přidat formulářové pole'
+            attachment_configs: 'Přílohy'
+            add_attachment_config: 'Přidat přílohu'
+            purchasable_items: 'Doplňkové platby'
+            add_purchasable_item: 'Přidat doplňkovou platbu'
+            trip_location_path_there: 'Cesta pro vyzvedávání (tam)'
+            trip_location_path_back: 'Cesta pro vyzvedávání (zpět)'
             button: 'Uložit'
 
         camp_date_search:
@@ -806,6 +816,18 @@ form:
 
         camp_date_delete:
             button: 'Odstranit'
+
+        camp_date_form_field:
+            form_field: 'Pole'
+            priority: 'Priorita'
+
+        camp_date_attachment_config:
+            attachment_config: 'Příloha'
+            priority: 'Priorita'
+
+        camp_date_purchasable_item:
+            purchasable_item: 'Doplńková platba'
+            priority: 'Priorita'
 
         trip_location_path_creation:
             trip_locations: 'Lokace'
@@ -890,7 +912,7 @@ form:
         purchasable_item:
             name: 'Název'
             price: 'Cena'
-            max_amount_per_camper: 'Maximální počet na táborníka'
+            max_amount: 'Maximální počet'
             button: 'Uložit'
 
         purchasable_item_search:
@@ -904,8 +926,8 @@ form:
                     name_desc: 'Název (Z-A)'
                     price_asc: 'Cena (Od nejmenší)'
                     price_desc: 'Cena (Od největší)'
-                    max_amount_per_camper_asc: 'Max. počet pro táborníka (Od nejmenšího)'
-                    max_amount_per_camper_desc: 'Max. počet pro táborníka (Od největšího)'
+                    max_amount_asc: 'Max. počet pro táborníka (Od nejmenšího)'
+                    max_amount_desc: 'Max. počet pro táborníka (Od největšího)'
 
             button: 'Hledat'
 

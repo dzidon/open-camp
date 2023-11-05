@@ -28,6 +28,16 @@ class PurchasableItemRepositoryTest extends KernelTestCase
         $this->assertNull($loadedPurchasableItem);
     }
 
+    public function testFindAll(): void
+    {
+        $repository = $this->getPurchasableItemRepository();
+
+        $purchasableItems = $repository->findAll();
+        $names = $this->getPurchasableItemNames($purchasableItems);
+        $this->assertContains('Item 1', $names);
+        $this->assertContains('Item 2', $names);
+    }
+
     public function testFindOneById(): void
     {
         $purchasableItemRepository = $this->getPurchasableItemRepository();
@@ -179,12 +189,12 @@ class PurchasableItemRepositoryTest extends KernelTestCase
         $this->assertSame(['Item 1', 'Item 2'], $names);
     }
 
-    public function testGetAdminPaginatorSortByMaxAmountPerCamperDesc(): void
+    public function testGetAdminPaginatorSortByMaxAmountDesc(): void
     {
         $purchasableItemRepository = $this->getPurchasableItemRepository();
 
         $data = new PurchasableItemSearchData();
-        $data->setSortBy(PurchasableItemSortEnum::MAX_AMOUNT_PER_CAMPER_DESC);
+        $data->setSortBy(PurchasableItemSortEnum::MAX_AMOUNT_DESC);
 
         $paginator = $purchasableItemRepository->getAdminPaginator($data, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());
@@ -196,12 +206,12 @@ class PurchasableItemRepositoryTest extends KernelTestCase
         $this->assertSame(['Item 2', 'Item 1'], $names);
     }
 
-    public function testGetAdminPaginatorSortByMaxAmountPerCamperAsc(): void
+    public function testGetAdminPaginatorSortByMaxAmountAsc(): void
     {
         $purchasableItemRepository = $this->getPurchasableItemRepository();
 
         $data = new PurchasableItemSearchData();
-        $data->setSortBy(PurchasableItemSortEnum::MAX_AMOUNT_PER_CAMPER_ASC);
+        $data->setSortBy(PurchasableItemSortEnum::MAX_AMOUNT_ASC);
 
         $paginator = $purchasableItemRepository->getAdminPaginator($data, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());

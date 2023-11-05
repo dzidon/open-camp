@@ -31,7 +31,7 @@ class PurchasableItemDataTransfer implements DataTransferInterface
 
         $purchasableItemData->setName($purchasableItem->getName());
         $purchasableItemData->setPrice($purchasableItem->getPrice());
-        $purchasableItemData->setMaxAmountPerCamper($purchasableItem->getMaxAmountPerCamper());
+        $purchasableItemData->setMaxAmount($purchasableItem->getMaxAmount());
     }
 
     /**
@@ -46,6 +46,6 @@ class PurchasableItemDataTransfer implements DataTransferInterface
 
         $purchasableItem->setName($purchasableItemData->getName());
         $purchasableItem->setPrice($purchasableItemData->getPrice());
-        $purchasableItem->setMaxAmountPerCamper($purchasableItemData->getMaxAmountPerCamper());
+        $purchasableItem->setMaxAmount($purchasableItemData->getMaxAmount());
     }
 }

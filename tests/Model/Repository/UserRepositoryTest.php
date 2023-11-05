@@ -80,6 +80,15 @@ class UserRepositoryTest extends KernelTestCase
         $this->assertContains($user, $usersLoadedByRole);
     }
 
+    public function testFindByNullRole(): void
+    {
+        $repository = $this->getUserRepository();
+
+        $users = $repository->findByRole(null);
+        $emails = $this->getUserEmails($users);
+        $this->assertSame(['mark@gmail.com', 'jeff@gmail.com', 'xena@gmail.com'], $emails);
+    }
+
     public function testGetAdminPaginator(): void
     {
         $repository = $this->getUserRepository();

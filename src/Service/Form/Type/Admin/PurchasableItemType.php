@@ -31,11 +31,11 @@ class PurchasableItemType extends AbstractType
                 'html5' => true,
                 'label' => 'form.admin.purchasable_item.price',
             ])
-            ->add('maxAmountPerCamper', IntegerType::class, [
+            ->add('maxAmount', IntegerType::class, [
                 'attr' => [
                     'min' => 1,
                 ],
-                'label' => 'form.admin.purchasable_item.max_amount_per_camper',
+                'label' => 'form.admin.purchasable_item.max_amount',
             ])
         ;
     }
