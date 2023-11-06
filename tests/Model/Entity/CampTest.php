@@ -116,6 +116,14 @@ class CampTest extends TestCase
         $this->assertTrue($this->camp->isFeatured());
     }
 
+    public function testIsHidden(): void
+    {
+        $this->assertFalse($this->camp->isHidden());
+
+        $this->camp->setIsHidden(true);
+        $this->assertTrue($this->camp->isHidden());
+    }
+
     public function testDescriptionShort(): void
     {
         $this->assertNull($this->camp->getDescriptionShort());

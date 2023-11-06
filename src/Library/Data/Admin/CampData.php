@@ -59,6 +59,8 @@ class CampData
 
     private bool $isFeatured = false;
 
+    private bool $isHidden = false;
+
     private ?CampCategory $campCategory = null;
 
     public function __construct(?Camp $camp = null)
@@ -211,6 +213,18 @@ class CampData
     public function setIsFeatured(bool $isFeatured): self
     {
         $this->isFeatured = $isFeatured;
+
+        return $this;
+    }
+
+    public function isHidden(): bool
+    {
+        return $this->isHidden;
+    }
+
+    public function setIsHidden(bool $isHidden): self
+    {
+        $this->isHidden = $isHidden;
 
         return $this;
     }

@@ -86,13 +86,21 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function findOneByUrlName(string $urlName): ?Camp
+    public function findOneByUrlName(string $urlName, bool $returnIfHidden = true): ?Camp
     {
-        return $this->createQueryBuilder('camp')
+        $queryBuilder = $this->createQueryBuilder('camp')
             ->select('camp, campCategory')
             ->leftJoin('camp.campCategory', 'campCategory')
             ->andWhere('camp.urlName = :urlName')
             ->setParameter('urlName', $urlName)
+        ;
+
+        if (!$returnIfHidden)
+        {
+            $queryBuilder->andWhere('camp.isHidden = FALSE');
+        }
+
+        return $queryBuilder
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -110,6 +118,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         $to = $data->getTo();
         $campCategory = $data->getCampCategory();
         $isFeatured = $data->isFeatured();
+        $isHidden = $data->isHidden();
         $isActive = $data->isActive();
 
         $queryBuilder = $this->createQueryBuilder('camp')
@@ -165,6 +174,14 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             ;
         }
 
+        if ($isHidden !== null)
+        {
+            $queryBuilder
+                ->andWhere('camp.isHidden = :isHidden')
+                ->setParameter('isHidden', $isHidden)
+            ;
+        }
+
         $query = $queryBuilder->getQuery();
 
         return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
@@ -187,6 +204,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         $queryBuilder = $this->createQueryBuilder('camp')
             ->select('DISTINCT camp')
             ->leftJoin(CampDate::class, 'campDate', 'WITH', 'camp.id = campDate.camp')
+            ->andWhere('camp.isHidden = FALSE')
             ->andWhere('camp.name LIKE :phrase')
             ->setParameter('phrase', '%' . $phrase . '%')
             ->orderBy('camp.priority', 'DESC')

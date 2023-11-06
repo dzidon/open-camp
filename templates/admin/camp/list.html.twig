@@ -16,35 +16,39 @@
                 <div class="card-body collapse {% if is_search_invalid %} show {% endif %}" id="search-content">
                     {{ form_start(form_search) }}
                         <div class="form-row">
-                            <div class="form-group col-md-9">
+                            <div class="form-group col-md-4">
                                 {{ form_row(form_search.phrase) }}
                             </div>
 
-                            <div class="form-group col-md-3">
-                                {{ form_row(form_search.sortBy) }}
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                {{ form_row(form_search.from) }}
-                            </div>
-
-                            <div class="form-group col-md-6">
-                                {{ form_row(form_search.to) }}
-                            </div>
-
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 {{ form_row(form_search.campCategory) }}
                             </div>
 
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
+                                {{ form_row(form_search.sortBy) }}
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                {{ form_row(form_search.from) }}
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                {{ form_row(form_search.to) }}
+                            </div>
+
+                            <div class="form-group col-md-4">
                                 {{ form_row(form_search.age) }}
                             </div>
 
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 {{ form_row(form_search.isActive) }}
                             </div>
 
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
+                                {{ form_row(form_search.isHidden) }}
+                            </div>
+
+                            <div class="form-group col-md-4">
                                 {{ form_row(form_search.isFeatured) }}
                             </div>
                         </div>
@@ -100,6 +104,7 @@
                                     <th>{{ 'entity_attribute.camp.camp_category'|trans }}</th>
                                     <th>{{ 'entity_attribute.camp.period'|trans }}</th>
                                     <th>{{ 'entity_attribute.camp.priority'|trans }}</th>
+                                    <th>{{ 'entity_attribute.camp.is_hidden'|trans }}</th>
                                     <th>{{ 'entity_attribute.camp.is_featured'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
                                 </tr>
@@ -154,6 +159,14 @@
                                                     {{ camp.priority }}
                                                 {% endif %}
                                             </span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if camp.isHidden %}
+                                                <span>{{ 'bool.yes'|trans }}</span>
+                                            {% else %}
+                                                <span>{{ 'bool.no'|trans }}</span>
+                                            {% endif %}
                                         </td>
 
                                         <td class="align-middle">

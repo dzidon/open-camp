@@ -338,6 +338,12 @@ class TestFixtures extends Fixture
         $this->setCreatedAt($camp2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($camp2);
 
+        $camp3 = new Camp('Camp 3', 'camp-3', 14, 16, 'Street 333', 'Town 3', '55555', 'CS', 200);
+        $this->setUid($camp3, 'c097941e-52c4-405a-9823-49b7b71ead6e');
+        $camp3->setIsHidden(true);
+        $this->setCreatedAt($camp3, new DateTimeImmutable('2000-01-03'));
+        $manager->persist($camp3);
+
         /*
          * CampDate
          */

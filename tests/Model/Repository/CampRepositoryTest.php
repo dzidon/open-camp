@@ -47,9 +47,12 @@ class CampRepositoryTest extends KernelTestCase
         $loadedCamp = $repository->findOneByUrlName('nonexistent-camp');
         $this->assertNull($loadedCamp);
 
-        $loadedCamp = $repository->findOneByUrlName('camp-1');
+        $loadedCamp = $repository->findOneByUrlName('camp-3');
         $this->assertNotNull($loadedCamp);
-        $this->assertSame('camp-1', $loadedCamp->getUrlName());
+        $this->assertSame('camp-3', $loadedCamp->getUrlName());
+
+        $loadedCamp = $repository->findOneByUrlName('camp-3', false);
+        $this->assertNull($loadedCamp);
     }
 
     public function testGetAdminPaginator(): void
@@ -57,14 +60,14 @@ class CampRepositoryTest extends KernelTestCase
         $repository = $this->getCampRepository();
 
         $data = new CampSearchData();
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame(2, $paginator->getTotalItems());
+        $paginator = $repository->getAdminPaginator($data, 1, 3);
+        $this->assertSame(3, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(3, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-2', 'camp-1'], $urlNames);
+        $this->assertSame(['camp-3', 'camp-2', 'camp-1'], $urlNames);
     }
 
     public function testGetAdminPaginatorWithName(): void
@@ -105,14 +108,14 @@ class CampRepositoryTest extends KernelTestCase
 
         $data = new CampSearchData();
         $data->setSortBy(CampSortEnum::CREATED_AT_DESC);
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame(2, $paginator->getTotalItems());
+        $paginator = $repository->getAdminPaginator($data, 1, 3);
+        $this->assertSame(3, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(3, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-2', 'camp-1'], $urlNames);
+        $this->assertSame(['camp-3', 'camp-2', 'camp-1'], $urlNames);
     }
 
     public function testGetAdminPaginatorSortByCreatedAtAsc(): void
@@ -121,14 +124,14 @@ class CampRepositoryTest extends KernelTestCase
 
         $data = new CampSearchData();
         $data->setSortBy(CampSortEnum::CREATED_AT_ASC);
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame(2, $paginator->getTotalItems());
+        $paginator = $repository->getAdminPaginator($data, 1, 3);
+        $this->assertSame(3, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(3, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-1', 'camp-2'], $urlNames);
+        $this->assertSame(['camp-1', 'camp-2', 'camp-3'], $urlNames);
     }
 
     public function testGetAdminPaginatorSortByNameDesc(): void
@@ -137,14 +140,14 @@ class CampRepositoryTest extends KernelTestCase
 
         $data = new CampSearchData();
         $data->setSortBy(CampSortEnum::NAME_DESC);
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame(2, $paginator->getTotalItems());
+        $paginator = $repository->getAdminPaginator($data, 1, 3);
+        $this->assertSame(3, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(3, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-2', 'camp-1'], $urlNames);
+        $this->assertSame(['camp-3', 'camp-2', 'camp-1'], $urlNames);
     }
 
     public function testGetAdminPaginatorSortByNameAsc(): void
@@ -153,14 +156,14 @@ class CampRepositoryTest extends KernelTestCase
 
         $data = new CampSearchData();
         $data->setSortBy(CampSortEnum::NAME_ASC);
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame(2, $paginator->getTotalItems());
+        $paginator = $repository->getAdminPaginator($data, 1, 3);
+        $this->assertSame(3, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(3, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-1', 'camp-2'], $urlNames);
+        $this->assertSame(['camp-1', 'camp-2', 'camp-3'], $urlNames);
     }
 
     public function testGetAdminPaginatorSortByUrlNameDesc(): void
@@ -169,14 +172,14 @@ class CampRepositoryTest extends KernelTestCase
 
         $data = new CampSearchData();
         $data->setSortBy(CampSortEnum::URL_NAME_DESC);
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame(2, $paginator->getTotalItems());
+        $paginator = $repository->getAdminPaginator($data, 1, 3);
+        $this->assertSame(3, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(3, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-2', 'camp-1'], $urlNames);
+        $this->assertSame(['camp-3', 'camp-2', 'camp-1'], $urlNames);
     }
 
     public function testGetAdminPaginatorSortByUrlNameAsc(): void
@@ -185,14 +188,14 @@ class CampRepositoryTest extends KernelTestCase
 
         $data = new CampSearchData();
         $data->setSortBy(CampSortEnum::URL_NAME_ASC);
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame(2, $paginator->getTotalItems());
+        $paginator = $repository->getAdminPaginator($data, 1, 3);
+        $this->assertSame(3, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(3, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-1', 'camp-2'], $urlNames);
+        $this->assertSame(['camp-1', 'camp-2', 'camp-3'], $urlNames);
     }
 
     public function testGetAdminPaginatorSortByPriorityDesc(): void
@@ -201,14 +204,14 @@ class CampRepositoryTest extends KernelTestCase
 
         $data = new CampSearchData();
         $data->setSortBy(CampSortEnum::PRIORITY_DESC);
-        $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame(2, $paginator->getTotalItems());
+        $paginator = $repository->getAdminPaginator($data, 1, 3);
+        $this->assertSame(3, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
-        $this->assertSame(2, $paginator->getPageSize());
+        $this->assertSame(3, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-2', 'camp-1'], $urlNames);
+        $this->assertSame(['camp-3', 'camp-2', 'camp-1'], $urlNames);
     }
 
     public function testGetAdminPaginatorWithAge(): void
@@ -286,13 +289,13 @@ class CampRepositoryTest extends KernelTestCase
         $data = new CampSearchData();
         $data->setCampCategory(false);
         $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(2, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
         $this->assertSame(2, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-2'], $urlNames);
+        $this->assertSame(['camp-3', 'camp-2'], $urlNames);
     }
 
     public function testGetAdminPaginatorWithFeatured(): void
@@ -318,13 +321,13 @@ class CampRepositoryTest extends KernelTestCase
         $data = new CampSearchData();
         $data->setIsFeatured(false);
         $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(2, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
         $this->assertSame(2, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-1'], $urlNames);
+        $this->assertSame(['camp-3', 'camp-1'], $urlNames);
     }
 
     public function testGetUserCampCatalogResult(): void

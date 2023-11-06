@@ -523,6 +523,7 @@ entity_attribute:
         camp_category: 'Kategorie tábora'
         priority: 'Priorita'
         is_featured: 'Doporučený'
+        is_hidden: 'Skrytý'
         period: 'Období'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -732,6 +733,7 @@ form:
             description_long: 'O táboře'
             priority: 'Priorita'
             is_featured: 'Doporučený'
+            is_hidden: 'Skrytý'
             camp_category: 'Kategorie tábora'
             button: 'Uložit'
 
@@ -759,7 +761,8 @@ form:
             to: 'Návrat do'
             camp_category: 'Kategorie tábora'
             is_active: 'Přijímá přihlášky'
-            is_featured: 'Je doporučený'
+            is_featured: 'Doporučený'
+            is_hidden: 'Skrytý'
             button: 'Hledat'
 
         camp_delete:

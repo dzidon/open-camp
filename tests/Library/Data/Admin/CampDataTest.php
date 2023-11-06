@@ -523,6 +523,15 @@ class CampDataTest extends KernelTestCase
         $this->assertTrue($data->isFeatured());
     }
 
+    public function testIsHidden(): void
+    {
+        $data = new CampData();
+        $this->assertFalse($data->isHidden());
+
+        $data->setIsHidden(true);
+        $this->assertTrue($data->isHidden());
+    }
+
     public function testCampCategory(): void
     {
         $data = new CampData();

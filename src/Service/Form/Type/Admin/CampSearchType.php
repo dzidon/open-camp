@@ -105,6 +105,15 @@ class CampSearchType extends AbstractType
                 'required' => false,
                 'label'    => 'form.admin.camp_search.is_featured',
             ])
+            ->add('isHidden', ChoiceType::class, [
+                'placeholder' => 'form.common.choice.irrelevant',
+                'choices'     => [
+                    'form.common.choice.yes' => true,
+                    'form.common.choice.no'  => false,
+                ],
+                'required' => false,
+                'label'    => 'form.admin.camp_search.is_hidden',
+            ])
         ;
     }
 

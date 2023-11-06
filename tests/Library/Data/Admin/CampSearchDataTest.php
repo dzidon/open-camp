@@ -117,4 +117,19 @@ class CampSearchDataTest extends TestCase
         $data->setIsFeatured(null);
         $this->assertNull($data->isFeatured());
     }
+
+    public function testHidden(): void
+    {
+        $data = new CampSearchData();
+        $this->assertNull($data->isHidden());
+
+        $data->setIsHidden(true);
+        $this->assertTrue($data->isHidden());
+
+        $data->setIsHidden(false);
+        $this->assertFalse($data->isHidden());
+
+        $data->setIsHidden(null);
+        $this->assertNull($data->isHidden());
+    }
 }

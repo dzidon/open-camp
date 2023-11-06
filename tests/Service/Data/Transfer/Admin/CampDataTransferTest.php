@@ -33,6 +33,7 @@ class CampDataTransferTest extends KernelTestCase
         $camp->setPriority($expectedFeaturedPriority);
         $camp->setCampCategory($expectedCampCategory);
         $camp->setIsFeatured(true);
+        $camp->setIsHidden(true);
 
         $data = new CampData();
         $dataTransfer->fillData($data, $camp);
@@ -50,6 +51,7 @@ class CampDataTransferTest extends KernelTestCase
         $this->assertSame($expectedFeaturedPriority, $data->getPriority());
         $this->assertSame($expectedCampCategory, $data->getCampCategory());
         $this->assertTrue($data->isFeatured());
+        $this->assertTrue($data->isHidden());
     }
 
     public function testFillEntity(): void
@@ -83,6 +85,7 @@ class CampDataTransferTest extends KernelTestCase
         $data->setPriority($expectedFeaturedPriority);
         $data->setCampCategory($expectedCampCategory);
         $data->setIsFeatured(true);
+        $data->setIsHidden(true);
 
         $camp = new Camp('', '', 0, 0, '', '', '', '', 0);
         $dataTransfer->fillEntity($data, $camp);
@@ -100,6 +103,7 @@ class CampDataTransferTest extends KernelTestCase
         $this->assertSame($expectedFeaturedPriority, $camp->getPriority());
         $this->assertSame($expectedCampCategory, $camp->getCampCategory());
         $this->assertTrue($camp->isFeatured());
+        $this->assertTrue($camp->isHidden());
     }
 
     private function getCampDataTransfer(): CampDataTransfer

@@ -43,9 +43,10 @@ interface CampRepositoryInterface
      * Returns a camp with the given url name.
      *
      * @param string $urlName
+     * @param bool $returnIfHidden
      * @return Camp|null
      */
-    public function findOneByUrlName(string $urlName): ?Camp;
+    public function findOneByUrlName(string $urlName, bool $returnIfHidden = true): ?Camp;
 
     /**
      * Returns admin camp search paginator.

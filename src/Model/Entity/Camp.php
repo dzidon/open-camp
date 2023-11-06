@@ -48,6 +48,9 @@ class Camp
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isFeatured = false;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isHidden = false;
+
     #[ORM\Column(length: 160, nullable: true)]
     private ?string $descriptionShort = null;
 
@@ -200,6 +203,18 @@ class Camp
     public function setIsFeatured(bool $isFeatured): self
     {
         $this->isFeatured = $isFeatured;
+
+        return $this;
+    }
+
+    public function isHidden(): bool
+    {
+        return $this->isHidden;
+    }
+
+    public function setIsHidden(bool $isHidden): self
+    {
+        $this->isHidden = $isHidden;
 
         return $this;
     }

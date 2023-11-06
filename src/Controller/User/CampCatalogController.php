@@ -121,7 +121,7 @@ class CampCatalogController extends AbstractController
 
     private function findCampOrThrow404(string $urlName): Camp
     {
-        $camp = $this->campRepository->findOneByUrlName($urlName);
+        $camp = $this->campRepository->findOneByUrlName($urlName, false);
         if ($camp === null)
         {
             throw $this->createNotFoundException();

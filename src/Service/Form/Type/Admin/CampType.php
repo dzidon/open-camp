@@ -66,6 +66,10 @@ class CampType extends AbstractType
                 'required' => false,
                 'label'    => 'form.admin.camp.is_featured',
             ])
+            ->add('isHidden', CheckboxType::class, [
+                'required' => false,
+                'label'    => 'form.admin.camp.is_hidden',
+            ])
             ->add('campCategory', EntityType::class, [
                 'class'        => CampCategory::class,
                 'choice_label' => function (CampCategory $campCategory) {
