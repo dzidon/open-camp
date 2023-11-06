@@ -30,6 +30,9 @@ class PurchasableItem
     #[ORM\Column(type: Types::INTEGER)]
     private int $maxAmount;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isGlobal = false;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -83,6 +86,18 @@ class PurchasableItem
     public function setMaxAmount(int $maxAmount): self
     {
         $this->maxAmount = $maxAmount;
+
+        return $this;
+    }
+
+    public function isGlobal(): bool
+    {
+        return $this->isGlobal;
+    }
+
+    public function setIsGlobal(bool $isGlobal): self
+    {
+        $this->isGlobal = $isGlobal;
 
         return $this;
     }

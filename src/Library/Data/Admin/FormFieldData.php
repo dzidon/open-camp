@@ -72,6 +72,8 @@ class FormFieldData
 
     private bool $isRequired = false;
 
+    private bool $isGlobal = false;
+
     /** @var bool Choice item validation can be disabled as there is currently no way to map the errors to
      *            corresponding nested CollectionType form fields.
      */
@@ -150,6 +152,18 @@ class FormFieldData
     public function setIsRequired(?bool $isRequired): self
     {
         $this->isRequired = $isRequired;
+
+        return $this;
+    }
+
+    public function isGlobal(): bool
+    {
+        return $this->isGlobal;
+    }
+
+    public function setIsGlobal(bool $isGlobal): self
+    {
+        $this->isGlobal = $isGlobal;
 
         return $this;
     }

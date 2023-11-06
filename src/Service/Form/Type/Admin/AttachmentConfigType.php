@@ -7,6 +7,7 @@ use App\Library\Data\Admin\FileExtensionData;
 use App\Service\Form\Type\Common\AttachmentConfigRequiredType;
 use App\Service\Form\Type\Common\CollectionAddItemButtonType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -31,9 +32,9 @@ class AttachmentConfigType extends AbstractType
                 'attr' => [
                     'min' => 0.01,
                 ],
-                'html5'    => true,
-                'scale'    => 2,
-                'label'    => 'form.admin.attachment_config.max_size',
+                'html5' => true,
+                'scale' => 2,
+                'label' => 'form.admin.attachment_config.max_size',
             ])
             ->add('requiredType', AttachmentConfigRequiredType::class, [
                 'placeholder'      => 'form.common.choice.choose',
@@ -41,6 +42,10 @@ class AttachmentConfigType extends AbstractType
                     'disabled' => 'disabled'
                 ],
                 'label' => 'form.admin.attachment_config.required_type',
+            ])
+            ->add('isGlobal', CheckboxType::class, [
+                'required' => false,
+                'label'    => 'form.admin.attachment_config.is_global',
             ])
             ->add('fileExtensionsData', CollectionType::class, [
                 'entry_type'    => FileExtensionType::class,

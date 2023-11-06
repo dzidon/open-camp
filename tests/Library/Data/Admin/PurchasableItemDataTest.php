@@ -94,6 +94,18 @@ class PurchasableItemDataTest extends KernelTestCase
         $this->assertEmpty($result); // valid
     }
 
+    public function testIsGlobal(): void
+    {
+        $data = new PurchasableItemData();
+        $this->assertFalse($data->isGlobal());
+
+        $data->setIsGlobal(true);
+        $this->assertTrue($data->isGlobal());
+
+        $data->setIsGlobal(false);
+        $this->assertFalse($data->isGlobal());
+    }
+
     public function testMaxAmount(): void
     {
         $data = new PurchasableItemData();

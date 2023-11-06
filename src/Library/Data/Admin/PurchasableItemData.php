@@ -23,6 +23,8 @@ class PurchasableItemData
     #[Assert\NotBlank]
     private ?int $maxAmount = null;
 
+    private bool $isGlobal = false;
+
     public function __construct(?PurchasableItem $purchasableItem = null)
     {
         $this->purchasableItem = $purchasableItem;
@@ -65,6 +67,18 @@ class PurchasableItemData
     public function setMaxAmount(?int $maxAmount): self
     {
         $this->maxAmount = $maxAmount;
+
+        return $this;
+    }
+
+    public function isGlobal(): bool
+    {
+        return $this->isGlobal;
+    }
+
+    public function setIsGlobal(bool $isGlobal): self
+    {
+        $this->isGlobal = $isGlobal;
 
         return $this;
     }

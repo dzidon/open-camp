@@ -30,6 +30,8 @@ class AttachmentConfigData
     #[Assert\NotBlank(message: 'file_extensions_mandatory')]
     private array $fileExtensionsData = [];
 
+    private bool $isGlobal = false;
+
     public function __construct(?AttachmentConfig $attachmentConfig = null)
     {
         $this->attachmentConfig = $attachmentConfig;
@@ -103,6 +105,18 @@ class AttachmentConfigData
         }
 
         unset($this->fileExtensionsData[$key]);
+
+        return $this;
+    }
+
+    public function isGlobal(): bool
+    {
+        return $this->isGlobal;
+    }
+
+    public function setIsGlobal(bool $isGlobal): self
+    {
+        $this->isGlobal = $isGlobal;
 
         return $this;
     }

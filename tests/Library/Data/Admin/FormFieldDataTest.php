@@ -391,6 +391,18 @@ class FormFieldDataTest extends KernelTestCase
         $this->assertFalse($data->isRequired());
     }
 
+    public function testIsGlobal(): void
+    {
+        $data = new FormFieldData();
+        $this->assertFalse($data->isGlobal());
+
+        $data->setIsGlobal(true);
+        $this->assertTrue($data->isGlobal());
+
+        $data->setIsGlobal(false);
+        $this->assertFalse($data->isGlobal());
+    }
+
     public function testDisableChoiceItemsValidation(): void
     {
         $data = new FormFieldData();

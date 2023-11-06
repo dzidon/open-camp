@@ -48,6 +48,17 @@ class PurchasableItemTest extends TestCase
         $this->assertSame($newMaxAmount, $this->purchasableItem->getMaxAmount());
     }
 
+    public function testIsGlobal(): void
+    {
+        $this->assertFalse($this->purchasableItem->isGlobal());
+
+        $this->purchasableItem->setIsGlobal(true);
+        $this->assertTrue($this->purchasableItem->isGlobal());
+
+        $this->purchasableItem->setIsGlobal(false);
+        $this->assertFalse($this->purchasableItem->isGlobal());
+    }
+
     public function testCreatedAt(): void
     {
         $this->assertSame((new DateTimeImmutable('now'))->getTimestamp(), $this->purchasableItem->getCreatedAt()->getTimestamp());

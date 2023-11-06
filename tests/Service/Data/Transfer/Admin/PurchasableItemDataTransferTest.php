@@ -17,6 +17,7 @@ class PurchasableItemDataTransferTest extends KernelTestCase
         $expectedPrice = 1000.0;
         $maxAmount = 10;
         $purchasableItem = new PurchasableItem($expectedName, $expectedPrice, $maxAmount);
+        $purchasableItem->setIsGlobal(true);
 
         $data = new PurchasableItemData();
         $dataTransfer->fillData($data, $purchasableItem);
@@ -24,6 +25,7 @@ class PurchasableItemDataTransferTest extends KernelTestCase
         $this->assertSame($expectedName, $data->getName());
         $this->assertSame($expectedPrice, $data->getPrice());
         $this->assertSame($maxAmount, $data->getMaxAmount());
+        $this->assertTrue($data->isGlobal());
     }
 
     public function testFillEntity(): void
@@ -39,11 +41,13 @@ class PurchasableItemDataTransferTest extends KernelTestCase
         $data->setName($expectedName);
         $data->setPrice($expectedPrice);
         $data->setMaxAmount($maxAmount);
+        $data->setIsGlobal(true);
         $dataTransfer->fillEntity($data, $purchasableItem);
 
         $this->assertSame($expectedName, $purchasableItem->getName());
         $this->assertSame($expectedPrice, $purchasableItem->getPrice());
         $this->assertSame($maxAmount, $purchasableItem->getMaxAmount());
+        $this->assertTrue($purchasableItem->isGlobal());
     }
 
     private function getPurchasableItemDataTransfer(): PurchasableItemDataTransfer

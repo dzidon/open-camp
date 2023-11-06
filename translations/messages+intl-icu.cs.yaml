@@ -573,6 +573,7 @@ entity_attribute:
         file_extensions: 'Přípony'
         max_size: 'Maximální velikost'
         required_type: 'Povinnost'
+        is_global: 'Pro celou přihlášku'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -587,6 +588,7 @@ entity_attribute:
         price: 'Cena'
         max_amount: 'Maximální počet'
         purchasable_item_variants: 'Varianty'
+        is_global: 'Pro celou přihlášku'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -625,6 +627,7 @@ entity_attribute:
             items: 'Položky'
 
         is_required: 'Povinné'
+        is_global: 'Pro celou přihlášku'
         help: 'Pomocný text'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -884,6 +887,7 @@ form:
             add_file_extension: 'Přidat příponu'
             max_size: 'Maximální velikost (MB)'
             required_type: 'Povinnost'
+            is_global: 'Pro celou přihlášku'
             button: 'Uložit'
 
         attachment_config_search:
@@ -913,6 +917,7 @@ form:
             name: 'Název'
             price: 'Cena'
             max_amount: 'Maximální počet'
+            is_global: 'Pro celou přihlášku'
             button: 'Uložit'
 
         purchasable_item_search:
@@ -989,6 +994,7 @@ form:
             label: 'Nadpis'
             help: 'Pomocný text'
             is_required: 'Povinné'
+            is_global: 'Pro celou přihlášku'
             type: 'Typ'
             options:
                 length_min: 'Min. počet znaků'

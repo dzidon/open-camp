@@ -27,6 +27,7 @@ class FormFieldDataTransferTest extends KernelTestCase
         $formField = new FormField($expectedName, $expectedType, $expectedLabel, $expectedOptions);
         $formField->setHelp($expectedHelp);
         $formField->setIsRequired(true);
+        $formField->setIsGlobal(true);
 
         $data = new FormFieldData();
         $dataTransfer->fillData($data, $formField);
@@ -37,6 +38,7 @@ class FormFieldDataTransferTest extends KernelTestCase
         $this->assertSame($expectedOptions, $data->getOptions());
         $this->assertSame($expectedHelp, $data->getHelp());
         $this->assertTrue($data->isRequired());
+        $this->assertTrue($data->isGlobal());
     }
 
     public function testFillEntity(): void
@@ -62,6 +64,7 @@ class FormFieldDataTransferTest extends KernelTestCase
         $data->setOptions($expectedOptions);
         $data->setHelp($expectedHelp);
         $data->setIsRequired(true);
+        $data->setIsGlobal(true);
         $dataTransfer->fillEntity($data, $formField);
 
         $this->assertSame($expectedName, $data->getName());
@@ -70,6 +73,7 @@ class FormFieldDataTransferTest extends KernelTestCase
         $this->assertSame($expectedOptions, $data->getOptions());
         $this->assertSame($expectedHelp, $data->getHelp());
         $this->assertTrue($data->isRequired());
+        $this->assertTrue($data->isGlobal());
     }
 
     private function getFormFieldDataTransfer(): FormFieldDataTransfer

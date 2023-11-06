@@ -35,6 +35,22 @@
                         </div>
                     </div>
 
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.purchasable_item.is_global'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {% if purchasable_item.isGlobal %}
+                                    <span>{{ 'bool.yes'|trans }}</span>
+                                {% else %}
+                                    <span>{{ 'bool.no'|trans }}</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.purchasable_item.purchasable_item_variants'|trans }}:</strong>

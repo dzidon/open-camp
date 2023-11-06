@@ -42,6 +42,7 @@ class AttachmentConfigDataTransfer implements DataTransferInterface
         $attachmentConfigData->setName($attachmentConfig->getName());
         $attachmentConfigData->setRequiredType($attachmentConfig->getRequiredType());
         $attachmentConfigData->setMaxSize($attachmentConfig->getMaxSize());
+        $attachmentConfigData->setIsGlobal($attachmentConfig->isGlobal());
 
         foreach ($attachmentConfig->getFileExtensions() as $fileExtension)
         {
@@ -64,6 +65,7 @@ class AttachmentConfigDataTransfer implements DataTransferInterface
         $attachmentConfig->setName($attachmentConfigData->getName());
         $attachmentConfig->setRequiredType($attachmentConfigData->getRequiredType());
         $attachmentConfig->setMaxSize($attachmentConfigData->getMaxSize());
+        $attachmentConfig->setIsGlobal($attachmentConfigData->isGlobal());
 
         $this->fillAttachmentConfigFileExtensions($attachmentConfigData, $attachmentConfig);
     }

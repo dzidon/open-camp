@@ -35,6 +35,22 @@
                         </div>
                     </div>
 
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.attachment_config.is_global'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {% if attachment_config.isGlobal %}
+                                    <span>{{ 'bool.yes'|trans }}</span>
+                                {% else %}
+                                    <span>{{ 'bool.no'|trans }}</span>
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.attachment_config.file_extensions'|trans }}:</strong>

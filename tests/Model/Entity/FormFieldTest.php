@@ -121,6 +121,17 @@ class FormFieldTest extends TestCase
         $this->assertNull($this->formField->getHelp());
     }
 
+    public function testIsGlobal(): void
+    {
+        $this->assertFalse($this->formField->isGlobal());
+
+        $this->formField->setIsGlobal(true);
+        $this->assertTrue($this->formField->isGlobal());
+
+        $this->formField->setIsGlobal(false);
+        $this->assertFalse($this->formField->isGlobal());
+    }
+
     public function testCreatedAt(): void
     {
         $this->assertSame((new DateTimeImmutable('now'))->getTimestamp(), $this->formField->getCreatedAt()->getTimestamp());

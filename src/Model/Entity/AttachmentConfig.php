@@ -33,6 +33,9 @@ class AttachmentConfig
     #[ORM\Column(length: 16)]
     private string $requiredType;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isGlobal = false;
+
     #[ORM\ManyToMany(targetEntity: FileExtension::class)]
     private Collection $fileExtensions;
 
@@ -128,6 +131,18 @@ class AttachmentConfig
     public function setRequiredType(AttachmentConfigRequiredTypeEnum $requiredType): self
     {
         $this->requiredType = $requiredType->value;
+
+        return $this;
+    }
+
+    public function isGlobal(): bool
+    {
+        return $this->isGlobal;
+    }
+
+    public function setIsGlobal(bool $isGlobal): self
+    {
+        $this->isGlobal = $isGlobal;
 
         return $this;
     }

@@ -63,6 +63,11 @@ class FormFieldType extends AbstractType implements DataMapperInterface
                 'label'    => 'form.admin.form_field.is_required',
                 'priority' => 970,
             ])
+            ->add('isGlobal', CheckboxType::class, [
+                'required' => false,
+                'label'    => 'form.admin.form_field.is_global',
+                'priority' => 960,
+            ])
             ->add('type', FormFieldTypeType::class, [
                 'row_attr' => [
                     'data-fd--form-field-type-target' => 'typeRow',
@@ -76,7 +81,7 @@ class FormFieldType extends AbstractType implements DataMapperInterface
                     'disabled' => 'disabled'
                 ],
                 'label' => 'form.admin.form_field.type',
-                'priority' => 960,
+                'priority' => 950,
             ])
         ;
 
@@ -194,6 +199,7 @@ class FormFieldType extends AbstractType implements DataMapperInterface
         if (array_key_exists('label', $forms))      $forms['label']->setData($formFieldData->getLabel());
         if (array_key_exists('help', $forms))       $forms['help']->setData($formFieldData->getHelp());
         if (array_key_exists('isRequired', $forms)) $forms['isRequired']->setData($formFieldData->isRequired());
+        if (array_key_exists('isGlobal', $forms))   $forms['isGlobal']->setData($formFieldData->isGlobal());
         if (array_key_exists('type', $forms))       $forms['type']->setData($formFieldData->getType());
 
         $this->mapTextOptionDataToForms($formFieldData, $forms);
@@ -212,6 +218,7 @@ class FormFieldType extends AbstractType implements DataMapperInterface
         if (array_key_exists('label', $forms))      $formFieldData->setLabel($forms['label']->getData());
         if (array_key_exists('help', $forms))       $formFieldData->setHelp($forms['help']->getData());
         if (array_key_exists('isRequired', $forms)) $formFieldData->setIsRequired($forms['isRequired']->getData());
+        if (array_key_exists('isGlobal', $forms))   $formFieldData->setIsGlobal($forms['isGlobal']->getData());
         if (array_key_exists('type', $forms))       $formFieldData->setType($forms['type']->getData());
 
         $this->mapTextOptionFormsToData($formFieldData, $forms);
@@ -223,26 +230,26 @@ class FormFieldType extends AbstractType implements DataMapperInterface
     {
         $form
             ->add('lengthMin', IntegerType::class, [
-                'row_attr'   => [
+                'row_attr' => [
                     'data-fd--form-field-type-target' => 'optionRow',
                 ],
-                'attr'       => [
+                'attr' => [
                     'min' => 0,
                 ],
                 'required' => false,
                 'label'    => 'form.admin.form_field.options.length_min',
-                'priority' => 950,
+                'priority' => 940,
             ])
             ->add('lengthMax', IntegerType::class, [
-                'row_attr'   => [
+                'row_attr' => [
                     'data-fd--form-field-type-target' => 'optionRow',
                 ],
-                'attr'       => [
+                'attr' => [
                     'min' => 1,
                 ],
                 'required' => false,
                 'label'    => 'form.admin.form_field.options.length_max',
-                'priority' => 940,
+                'priority' => 930,
             ])
             ->add('regex', TextType::class, [
                 'row_attr'   => [
@@ -250,7 +257,7 @@ class FormFieldType extends AbstractType implements DataMapperInterface
                 ],
                 'required' => false,
                 'label'    => 'form.admin.form_field.options.regex',
-                'priority' => 930,
+                'priority' => 920,
             ])
         ;
     }
@@ -265,7 +272,7 @@ class FormFieldType extends AbstractType implements DataMapperInterface
                 'html5'    => true,
                 'required' => false,
                 'label'    => 'form.admin.form_field.options.min',
-                'priority' => 950,
+                'priority' => 940,
             ])
             ->add('max', NumberType::class, [
                 'row_attr'   => [
@@ -274,7 +281,7 @@ class FormFieldType extends AbstractType implements DataMapperInterface
                 'html5'    => true,
                 'required' => false,
                 'label'    => 'form.admin.form_field.options.max',
-                'priority' => 940,
+                'priority' => 930,
             ])
             ->add('decimal', CheckboxType::class, [
                 'row_attr'   => [
@@ -282,7 +289,7 @@ class FormFieldType extends AbstractType implements DataMapperInterface
                 ],
                 'required' => false,
                 'label'    => 'form.admin.form_field.options.decimal',
-                'priority' => 930,
+                'priority' => 920,
             ])
         ;
     }
@@ -300,7 +307,7 @@ class FormFieldType extends AbstractType implements DataMapperInterface
                 ],
                 'required' => false,
                 'label'    => 'form.admin.form_field.options.multiple',
-                'priority' => 950,
+                'priority' => 940,
             ])
             ->add('expanded', CheckboxType::class, [
                 'row_attr'   => [
@@ -308,7 +315,7 @@ class FormFieldType extends AbstractType implements DataMapperInterface
                 ],
                 'required' => false,
                 'label'    => 'form.admin.form_field.options.expanded',
-                'priority' => 940,
+                'priority' => 930,
             ])
             ->add('items', CollectionType::class, [
                 'row_attr'   => [
@@ -327,7 +334,7 @@ class FormFieldType extends AbstractType implements DataMapperInterface
                     'remove_button'     => true,
                     'enable_validation' => $enableItemsOptionValidation,
                 ],
-                'priority' => 930,
+                'priority' => 920,
             ])
             ->add('addItem', CollectionAddItemButtonType::class, [
                 'row_attr'   => [
@@ -335,7 +342,7 @@ class FormFieldType extends AbstractType implements DataMapperInterface
                 ],
                 'label'           => 'form.admin.form_field.options.add_item',
                 'collection_name' => 'items',
-                'priority'        => 920,
+                'priority'        => 910,
             ])
         ;
     }

@@ -26,6 +26,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
 
         $attachmentConfig = new AttachmentConfig($expectedName, $expectedMaxSize);
         $attachmentConfig->setRequiredType($expectedRequiredType);
+        $attachmentConfig->setIsGlobal(true);
 
         foreach ($expectedFileExtensions as $expectedFileExtension)
         {
@@ -38,6 +39,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
         $this->assertSame($expectedName, $data->getName());
         $this->assertSame($expectedRequiredType, $data->getRequiredType());
         $this->assertSame($expectedMaxSize, $data->getMaxSize());
+        $this->assertTrue($data->isGlobal());
 
         foreach ($data->getFileExtensionsData() as $key => $fileExtensionData)
         {
@@ -67,6 +69,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
         $data->setName($expectedName);
         $data->setRequiredType($expectedRequiredType);
         $data->setMaxSize($expectedMaxSize);
+        $data->setIsGlobal(true);
 
         foreach ($expectedFileExtensionsData as $expectedFileExtensionData)
         {
@@ -79,6 +82,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
         $this->assertSame($expectedRequiredType, $attachmentConfig->getRequiredType());
         $this->assertSame($expectedMaxSize, $attachmentConfig->getMaxSize());
         $this->assertCount(3, $attachmentConfig->getFileExtensions());
+        $this->assertTrue($attachmentConfig->isGlobal());
 
         $extensions = [];
         foreach ($attachmentConfig->getFileExtensions() as $fileExtension)

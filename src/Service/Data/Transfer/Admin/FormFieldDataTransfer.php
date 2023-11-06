@@ -34,6 +34,7 @@ class FormFieldDataTransfer implements DataTransferInterface
         $formFieldData->setLabel($formField->getLabel());
         $formFieldData->setHelp($formField->getHelp());
         $formFieldData->setIsRequired($formField->isRequired());
+        $formFieldData->setIsGlobal($formField->isGlobal());
     }
 
     /**
@@ -51,5 +52,6 @@ class FormFieldDataTransfer implements DataTransferInterface
         $formField->setLabel($formFieldData->getLabel());
         $formField->setHelp($formFieldData->getHelp());
         $formField->setIsRequired($formFieldData->isRequired());
+        $formField->setIsGlobal($formFieldData->isGlobal());
     }
 }

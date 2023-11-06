@@ -42,6 +42,9 @@ class FormField
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $help = null;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isGlobal = false;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -159,6 +162,18 @@ class FormField
     public function setHelp(?string $help): self
     {
         $this->help = $help;
+
+        return $this;
+    }
+
+    public function isGlobal(): bool
+    {
+        return $this->isGlobal;
+    }
+
+    public function setIsGlobal(bool $isGlobal): self
+    {
+        $this->isGlobal = $isGlobal;
 
         return $this;
     }

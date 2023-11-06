@@ -2,6 +2,7 @@
 
 namespace App\Tests\Model\Entity;
 
+use App\Library\Data\Admin\AttachmentConfigData;
 use App\Model\Entity\AttachmentConfig;
 use App\Model\Entity\FileExtension;
 use App\Model\Enum\Entity\AttachmentConfigRequiredTypeEnum;
@@ -59,6 +60,17 @@ class AttachmentConfigTest extends TestCase
 
         $this->attachmentConfig->removeFileExtension($fileExtensions);
         $this->assertEmpty($this->attachmentConfig->getFileExtensions());
+    }
+
+    public function testIsGlobal(): void
+    {
+        $this->assertFalse($this->attachmentConfig->isGlobal());
+
+        $this->attachmentConfig->setIsGlobal(true);
+        $this->assertTrue($this->attachmentConfig->isGlobal());
+
+        $this->attachmentConfig->setIsGlobal(false);
+        $this->assertFalse($this->attachmentConfig->isGlobal());
     }
 
     public function testCreatedAt(): void
