@@ -18,6 +18,7 @@ class CampTest extends TestCase
     private const TOWN = 'Test town';
     private const ZIP = '12345';
     private const COUNTRY = 'CZ';
+    private const PRIORITY = 321;
 
     private Camp $camp;
 
@@ -101,13 +102,10 @@ class CampTest extends TestCase
 
     public function testPriority(): void
     {
-        $this->assertNull($this->camp->getPriority());
+        $this->assertSame(self::PRIORITY, $this->camp->getPriority());
 
         $this->camp->setPriority(123);
         $this->assertSame(123, $this->camp->getPriority());
-
-        $this->camp->setPriority(null);
-        $this->assertNull($this->camp->getPriority());
     }
 
     public function testIsFeatured(): void
@@ -165,6 +163,6 @@ class CampTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->camp = new Camp(self::NAME, self::URL_NAME, self::AGE_MIN, self::AGE_MAX, self::STREET, self::TOWN, self::ZIP, self::COUNTRY);
+        $this->camp = new Camp(self::NAME, self::URL_NAME, self::AGE_MIN, self::AGE_MAX, self::STREET, self::TOWN, self::ZIP, self::COUNTRY, self::PRIORITY);
     }
 }

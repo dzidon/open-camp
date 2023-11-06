@@ -2,6 +2,7 @@
 
 namespace App\Service\Form\Type\Admin;
 
+use App\Library\Data\Admin\TripLocationData;
 use App\Library\Data\Admin\TripLocationPathCreationData;
 use App\Service\Form\Type\Common\CollectionAddItemButtonType;
 use Symfony\Component\Form\AbstractType;
@@ -33,6 +34,7 @@ class TripLocationPathCreationType extends AbstractType
                 'prototype_options' => [
                     'remove_button' => true,
                 ],
+                'prototype_data' => new TripLocationData(),
             ])
             ->add('addTripLocationData', CollectionAddItemButtonType::class, [
                 'label'           => 'form.admin.trip_location_path_creation.add_trip_location',

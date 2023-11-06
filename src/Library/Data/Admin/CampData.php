@@ -54,7 +54,8 @@ class CampData
     #[Assert\Length(max: 5000)]
     private ?string $descriptionLong = null;
 
-    private ?int $priority = null;
+    #[Assert\NotBlank]
+    private ?int $priority = 0;
 
     private bool $isFeatured = false;
 

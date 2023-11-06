@@ -2,7 +2,10 @@
 
 namespace App\Service\Form\Type\Admin;
 
+use App\Library\Data\Admin\CampDateAttachmentConfigData;
 use App\Library\Data\Admin\CampDateData;
+use App\Library\Data\Admin\CampDateFormFieldData;
+use App\Library\Data\Admin\CampDatePurchasableItemData;
 use App\Model\Entity\TripLocationPath;
 use App\Service\Form\Type\Common\CollectionAddItemButtonType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -96,6 +99,7 @@ class CampDateType extends AbstractType
                     'remove_button'       => true,
                     'choices_form_fields' => $options['choices_form_fields'],
                 ],
+                'prototype_data' => new CampDateFormFieldData(),
             ])
             ->add('addCampDateFormFieldData', CollectionAddItemButtonType::class, [
                 'label'           => 'form.admin.camp_date.add_form_field',
@@ -117,6 +121,7 @@ class CampDateType extends AbstractType
                     'remove_button'              => true,
                     'choices_attachment_configs' => $options['choices_attachment_configs'],
                 ],
+                'prototype_data' => new CampDateAttachmentConfigData(),
             ])
             ->add('addCampDateAttachmentConfigData', CollectionAddItemButtonType::class, [
                 'label'           => 'form.admin.camp_date.add_attachment_config',
@@ -138,6 +143,7 @@ class CampDateType extends AbstractType
                     'remove_button'             => true,
                     'choices_purchasable_items' => $options['choices_purchasable_items'],
                 ],
+                'prototype_data' => new CampDatePurchasableItemData(),
             ])
             ->add('addCampDatePurchasableItemData', CollectionAddItemButtonType::class, [
                 'label'           => 'form.admin.camp_date.add_purchasable_item',

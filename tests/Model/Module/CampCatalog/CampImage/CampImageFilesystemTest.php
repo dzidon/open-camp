@@ -43,7 +43,7 @@ class CampImageFilesystemTest extends KernelTestCase
 
         $this->filesystemMock = new FilesystemMock();
         $this->campImageFilesystem = new CampImageFilesystem($this->filesystemMock, $imageDirectory, 'no-image.jpg', 'kernel-dir');
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $this->campImage = new CampImage(100, 'png', $camp);
         $this->campImageIdString = $this->campImage
             ->getId()

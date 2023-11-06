@@ -54,8 +54,8 @@ class Camp
     #[ORM\Column(length: 5000, nullable: true)]
     private ?string $descriptionLong = null;
 
-    #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    private ?int $priority = null;
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $priority;
 
     #[ORM\ManyToOne(targetEntity: CampCategory::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
@@ -75,7 +75,8 @@ class Camp
                                 string $street,
                                 string $town,
                                 string $zip,
-                                string $country)
+                                string $country,
+                                int    $priority)
     {
         $this->id = Uuid::v4();
         $this->name = $name;
@@ -86,6 +87,7 @@ class Camp
         $this->town = $town;
         $this->zip = $zip;
         $this->country = $country;
+        $this->priority = $priority;
         $this->createdAt = new DateTimeImmutable('now');
     }
 
@@ -226,12 +228,12 @@ class Camp
         return $this;
     }
 
-    public function getPriority(): ?int
+    public function getPriority(): int
     {
         return $this->priority;
     }
 
-    public function setPriority(?int $priority): self
+    public function setPriority(int $priority): self
     {
         $this->priority = $priority;
 

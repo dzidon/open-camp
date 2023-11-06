@@ -14,7 +14,7 @@ class CampImageDataTransferTest extends KernelTestCase
     {
         $dataTransfer = $this->getCampImageDataTransfer();
 
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $expectedPriority = 150;
 
         $campImage = new CampImage($expectedPriority, 'png', $camp);
@@ -29,7 +29,7 @@ class CampImageDataTransferTest extends KernelTestCase
     {
         $dataTransfer = $this->getCampImageDataTransfer();
 
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $expectedPriority = 150;
 
         $campImage = new CampImage(0, 'png', $camp);

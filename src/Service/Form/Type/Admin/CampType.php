@@ -60,8 +60,7 @@ class CampType extends AbstractType
                 'label' => 'form.admin.camp.country',
             ])
             ->add('priority', IntegerType::class, [
-                'required' => false,
-                'label'    => 'form.admin.camp.priority',
+                'label' => 'form.admin.camp.priority',
             ])
             ->add('isFeatured', CheckboxType::class, [
                 'required' => false,

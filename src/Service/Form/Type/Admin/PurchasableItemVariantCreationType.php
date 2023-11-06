@@ -3,6 +3,7 @@
 namespace App\Service\Form\Type\Admin;
 
 use App\Library\Data\Admin\PurchasableItemVariantCreationData;
+use App\Library\Data\Admin\PurchasableItemVariantValueData;
 use App\Service\Form\Type\Common\CollectionAddItemButtonType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -33,6 +34,7 @@ class PurchasableItemVariantCreationType extends AbstractType
                 'prototype_options' => [
                     'remove_button' => true,
                 ],
+                'prototype_data' => new PurchasableItemVariantValueData(),
             ])
             ->add('addPurchasableItemVariantValueData', CollectionAddItemButtonType::class, [
                 'label'           => 'form.admin.purchasable_item_variant_creation.add_purchasable_item_variant_value',

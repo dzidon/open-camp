@@ -17,7 +17,7 @@ class CampRepositoryTest extends KernelTestCase
     {
         $campRepository = $this->getCampRepository();
 
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $campRepository->saveCamp($camp, true);
         $id = $camp->getId();
 

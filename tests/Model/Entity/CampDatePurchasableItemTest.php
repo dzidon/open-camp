@@ -68,7 +68,7 @@ class CampDatePurchasableItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $this->campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 10, $this->camp);
         $this->purchasableItem = new PurchasableItem('Item', 1000.0, 10);
         $this->campDatePurchasableItem = new CampDatePurchasableItem($this->campDate, $this->purchasableItem, 100);

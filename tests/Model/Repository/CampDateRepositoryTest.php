@@ -19,7 +19,7 @@ class CampDateRepositoryTest extends KernelTestCase
         $campDateRepository = $this->getCampDateRepository();
         $campRepository = $this->getCampRepository();
 
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $campDate = new CampDate(new DateTimeImmutable('2000-07-01'), new DateTimeImmutable('2000-07-07'), 1000, 10, $camp);
         $campRepository->saveCamp($camp, false);
         $campDateRepository->saveCampDate($campDate, true);

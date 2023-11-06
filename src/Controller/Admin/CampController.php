@@ -101,7 +101,7 @@ class CampController extends AbstractController
         {
             // camp
             $campData = $campCreationData->getCampData();
-            $camp = new Camp($campData->getName(), $campData->getUrlName(), $campData->getAgeMin(), $campData->getAgeMax(), $campData->getStreet(), $campData->getTown(), $campData->getZip(), $campData->getCountry());
+            $camp = new Camp($campData->getName(), $campData->getUrlName(), $campData->getAgeMin(), $campData->getAgeMax(), $campData->getStreet(), $campData->getTown(), $campData->getZip(), $campData->getCountry(), $campData->getPriority());
             $dataTransfer->fillEntity($campData, $camp);
 
             // images

@@ -3,6 +3,7 @@
 namespace App\Service\Form\Type\Admin;
 
 use App\Library\Data\Admin\AttachmentConfigData;
+use App\Library\Data\Admin\FileExtensionData;
 use App\Service\Form\Type\Common\AttachmentConfigRequiredType;
 use App\Service\Form\Type\Common\CollectionAddItemButtonType;
 use Symfony\Component\Form\AbstractType;
@@ -54,6 +55,7 @@ class AttachmentConfigType extends AbstractType
                 'prototype_options' => [
                     'remove_button' => true,
                 ],
+                'prototype_data' => new FileExtensionData(),
             ])
             ->add('addFileExtensionData', CollectionAddItemButtonType::class, [
                 'label'           => 'form.admin.attachment_config.add_file_extension',

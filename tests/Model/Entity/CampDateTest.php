@@ -100,7 +100,7 @@ class CampDateTest extends TestCase
     {
         $this->assertSame($this->camp, $this->campDate->getCamp());
 
-        $campNew = new Camp('Camp new', 'camp-new', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+        $campNew = new Camp('Camp new', 'camp-new', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $this->campDate->setCamp($campNew);
 
         $this->assertSame($campNew, $this->campDate->getCamp());
@@ -154,7 +154,7 @@ class CampDateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
 
         $startAt = new DateTimeImmutable(self::START_AT);
         $endAt = new DateTimeImmutable(self::END_AT);

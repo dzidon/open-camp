@@ -49,8 +49,8 @@ class UserCampCatalogResultTest extends TestCase
 
     public function testCampImage(): void
     {
-        $campUnused = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+        $campUnused = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $campImage = new CampImage(100, 'png', $camp);
         $campIdString = $camp
             ->getId()
@@ -66,8 +66,8 @@ class UserCampCatalogResultTest extends TestCase
 
     public function testCampDates(): void
     {
-        $campUnused = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS');
+        $campUnused = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $campDate1 = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000, 10, $camp);
         $campDate2 = new CampDate(new DateTimeImmutable('2000-02-02'), new DateTimeImmutable('2000-02-08'), 2000, 20, $camp);
         $campIdString = $camp
