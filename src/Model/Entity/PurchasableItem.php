@@ -24,6 +24,9 @@ class PurchasableItem
     #[ORM\Column(length: 255, unique: true)]
     private string $name;
 
+    #[ORM\Column(length: 255)]
+    private string $label;
+
     #[ORM\Column(type: Types::FLOAT)]
     private float $price;
 
@@ -40,10 +43,11 @@ class PurchasableItem
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $name, float $price, int $maxAmount)
+    public function __construct(string $name, string $label, float $price, int $maxAmount)
     {
         $this->id = Uuid::v4();
         $this->name = $name;
+        $this->label = $label;
         $this->price = $price;
         $this->maxAmount = $maxAmount;
         $this->createdAt = new DateTimeImmutable('now');
@@ -62,6 +66,18 @@ class PurchasableItem
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
 
         return $this;
     }

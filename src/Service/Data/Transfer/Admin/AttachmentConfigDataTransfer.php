@@ -40,6 +40,7 @@ class AttachmentConfigDataTransfer implements DataTransferInterface
         $attachmentConfig = $entity;
 
         $attachmentConfigData->setName($attachmentConfig->getName());
+        $attachmentConfigData->setLabel($attachmentConfig->getLabel());
         $attachmentConfigData->setRequiredType($attachmentConfig->getRequiredType());
         $attachmentConfigData->setMaxSize($attachmentConfig->getMaxSize());
         $attachmentConfigData->setIsGlobal($attachmentConfig->isGlobal());
@@ -63,6 +64,7 @@ class AttachmentConfigDataTransfer implements DataTransferInterface
         $attachmentConfig = $entity;
 
         $attachmentConfig->setName($attachmentConfigData->getName());
+        $attachmentConfig->setLabel($attachmentConfigData->getLabel());
         $attachmentConfig->setRequiredType($attachmentConfigData->getRequiredType());
         $attachmentConfig->setMaxSize($attachmentConfigData->getMaxSize());
         $attachmentConfig->setIsGlobal($attachmentConfigData->isGlobal());

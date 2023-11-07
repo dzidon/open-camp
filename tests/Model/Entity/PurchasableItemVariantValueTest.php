@@ -63,7 +63,7 @@ class PurchasableItemVariantValueTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->purchasableItem = new PurchasableItem('Item', 1000.0, 10);
+        $this->purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);
         $this->purchasableItemVariant = new PurchasableItemVariant('Variant', 500, $this->purchasableItem);
         $this->purchasableItemVariantValue = new PurchasableItemVariantValue(self::NAME, self::PRIORITY, $this->purchasableItemVariant);
     }

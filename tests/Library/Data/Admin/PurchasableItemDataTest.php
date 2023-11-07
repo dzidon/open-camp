@@ -15,7 +15,7 @@ class PurchasableItemDataTest extends KernelTestCase
         $data = new PurchasableItemData();
         $this->assertNull($data->getPurchasableItem());
 
-        $purchasableItem = new PurchasableItem('Item', 100.0, 5);
+        $purchasableItem = new PurchasableItem('Item', 'Item...', 100.0, 5);
         $data = new PurchasableItemData($purchasableItem);
         $this->assertSame($purchasableItem, $data->getPurchasableItem());
     }
@@ -54,6 +54,43 @@ class PurchasableItemDataTest extends KernelTestCase
 
         $data->setName(str_repeat('x', 256));
         $result = $validator->validateProperty($data, 'name');
+        $this->assertNotEmpty($result); // invalid
+    }
+
+    public function testLabel(): void
+    {
+        $data = new PurchasableItemData();
+        $this->assertNull($data->getLabel());
+
+        $data->setLabel('label');
+        $this->assertSame('label', $data->getLabel());
+
+        $data->setLabel(null);
+        $this->assertNull($data->getLabel());
+    }
+
+    public function testLabelValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new PurchasableItemData();
+        $result = $validator->validateProperty($data, 'label');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setLabel('');
+        $result = $validator->validateProperty($data, 'label');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setLabel(null);
+        $result = $validator->validateProperty($data, 'label');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setLabel(str_repeat('x', 255));
+        $result = $validator->validateProperty($data, 'label');
+        $this->assertEmpty($result); // valid
+
+        $data->setLabel(str_repeat('x', 256));
+        $result = $validator->validateProperty($data, 'label');
         $this->assertNotEmpty($result); // invalid
     }
 
@@ -150,6 +187,7 @@ class PurchasableItemDataTest extends KernelTestCase
         $data = new PurchasableItemData();
         $data->setPrice(100.0);
         $data->setMaxAmount(10);
+        $data->setLabel('Label');
         $data->setName('Item 1');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
@@ -163,6 +201,7 @@ class PurchasableItemDataTest extends KernelTestCase
         $data = new PurchasableItemData($item);
         $data->setPrice(100.0);
         $data->setMaxAmount(10);
+        $data->setLabel('Label');
         $data->setName('Item 2');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid

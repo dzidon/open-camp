@@ -30,6 +30,7 @@ class PurchasableItemDataTransfer implements DataTransferInterface
         $purchasableItem = $entity;
 
         $purchasableItemData->setName($purchasableItem->getName());
+        $purchasableItemData->setLabel($purchasableItem->getLabel());
         $purchasableItemData->setPrice($purchasableItem->getPrice());
         $purchasableItemData->setMaxAmount($purchasableItem->getMaxAmount());
         $purchasableItemData->setIsGlobal($purchasableItem->isGlobal());
@@ -46,6 +47,7 @@ class PurchasableItemDataTransfer implements DataTransferInterface
         $purchasableItem = $entity;
 
         $purchasableItem->setName($purchasableItemData->getName());
+        $purchasableItem->setLabel($purchasableItemData->getLabel());
         $purchasableItem->setPrice($purchasableItemData->getPrice());
         $purchasableItem->setMaxAmount($purchasableItemData->getMaxAmount());
         $purchasableItem->setIsGlobal($purchasableItemData->isGlobal());

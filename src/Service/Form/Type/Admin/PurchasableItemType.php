@@ -25,6 +25,9 @@ class PurchasableItemType extends AbstractType
                 ],
                 'label' => 'form.admin.purchasable_item.name',
             ])
+            ->add('label', TextType::class, [
+                'label' => 'form.admin.purchasable_item.label',
+            ])
             ->add('price', MoneyType::class, [
                 'attr' => [
                     'min' => 0.0,

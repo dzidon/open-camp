@@ -15,7 +15,7 @@ class PurchasableItemRepositoryTest extends KernelTestCase
     {
         $purchasableItemRepository = $this->getPurchasableItemRepository();
 
-        $purchasableItem = new PurchasableItem('Item', 1000.0, 10);
+        $purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);
         $purchasableItemRepository->savePurchasableItem($purchasableItem, true);
         $id = $purchasableItem->getId();
 

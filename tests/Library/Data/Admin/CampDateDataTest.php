@@ -308,7 +308,7 @@ class CampDateDataTest extends KernelTestCase
         $result = $validator->validateProperty($data, 'campDateAttachmentConfigsData');
         $this->assertNotEmpty($result); // invalid
 
-        $attachmentConfig = new AttachmentConfig('Field', 10.0);
+        $attachmentConfig = new AttachmentConfig('Config', 'Label', 10.0);
         $campDateAttachmentConfigData->setAttachmentConfig($attachmentConfig);
         $campDateAttachmentConfigData->setPriority(1);
         $result = $validator->validateProperty($data, 'campDateAttachmentConfigsData');
@@ -328,7 +328,7 @@ class CampDateDataTest extends KernelTestCase
         $result = $validator->validateProperty($data, 'campDatePurchasableItemsData');
         $this->assertNotEmpty($result); // invalid
 
-        $purchasableItem = new PurchasableItem('Item', 1000.0, 2);
+        $purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 2);
         $campDatePurchasableItemData->setPurchasableItem($purchasableItem);
         $campDatePurchasableItemData->setPriority(1);
         $result = $validator->validateProperty($data, 'campDatePurchasableItemsData');

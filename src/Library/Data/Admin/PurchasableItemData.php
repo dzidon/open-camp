@@ -15,6 +15,10 @@ class PurchasableItemData
     #[Assert\NotBlank]
     private ?string $name = null;
 
+    #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
+    private ?string $label = null;
+
     #[Assert\GreaterThanOrEqual(0.0)]
     #[Assert\NotBlank]
     private ?float $price = null;
@@ -43,6 +47,18 @@ class PurchasableItemData
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(?string $label): self
+    {
+        $this->label = $label;
 
         return $this;
     }

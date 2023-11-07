@@ -431,7 +431,7 @@ class TestFixtures extends Fixture
         /*
          * AttachmentConfig
          */
-        $attachmentConfig1 = new AttachmentConfig('Text file', 10.0);
+        $attachmentConfig1 = new AttachmentConfig('Text file', 'Text file...', 10.0);
         $this->setUid($attachmentConfig1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $attachmentConfig1->addFileExtension($fileExtensionTxt);
         $attachmentConfig1->addFileExtension($fileExtensionDocx);
@@ -439,7 +439,7 @@ class TestFixtures extends Fixture
         $this->setCreatedAt($attachmentConfig1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($attachmentConfig1);
 
-        $attachmentConfig2 = new AttachmentConfig('Image', 50.0);
+        $attachmentConfig2 = new AttachmentConfig('Image', 'Image...', 50.0);
         $attachmentConfig2->setRequiredType(AttachmentConfigRequiredTypeEnum::REQUIRED);
         $attachmentConfig2->addFileExtension($fileExtensionPng);
         $attachmentConfig2->addFileExtension($fileExtensionJpg);
@@ -461,13 +461,13 @@ class TestFixtures extends Fixture
         /*
          * PurchasableItem
          */
-        $purchasableItem1 = new PurchasableItem('Item 1', 1000.0, 5);
+        $purchasableItem1 = new PurchasableItem('Item 1', 'Item 1...', 1000.0, 5);
         $this->setUid($purchasableItem1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $purchasableItem1->setIsGlobal(true);
         $this->setCreatedAt($purchasableItem1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($purchasableItem1);
 
-        $purchasableItem2 = new PurchasableItem('Item 2', 2000.0, 10);
+        $purchasableItem2 = new PurchasableItem('Item 2', 'Item 2...', 2000.0, 10);
         $this->setCreatedAt($purchasableItem2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($purchasableItem2);
 

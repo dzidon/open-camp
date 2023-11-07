@@ -42,7 +42,7 @@ class CampDateAttachmentConfigTest extends TestCase
     {
         $this->assertSame($this->attachmentConfig, $this->campDateAttachmentConfig->getAttachmentConfig());
 
-        $attachmentConfigNew = new AttachmentConfig('New file', 20.0);
+        $attachmentConfigNew = new AttachmentConfig('New config', 'Label', 20.0);
         $this->campDateAttachmentConfig->setAttachmentConfig($attachmentConfigNew);
         $this->assertSame($attachmentConfigNew, $this->campDateAttachmentConfig->getAttachmentConfig());
     }
@@ -70,7 +70,7 @@ class CampDateAttachmentConfigTest extends TestCase
     {
         $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $this->campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 10, $this->camp);
-        $this->attachmentConfig = new AttachmentConfig('File', 10.0);
+        $this->attachmentConfig = new AttachmentConfig('Config', 'Label', 10.0);
         $this->campDateAttachmentConfig = new CampDateAttachmentConfig($this->campDate, $this->attachmentConfig, 100);
     }
 }

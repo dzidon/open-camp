@@ -86,7 +86,7 @@ class PurchasableItemController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $purchasableItem = new PurchasableItem($purchasableItemData->getName(), $purchasableItemData->getPrice(), $purchasableItemData->getMaxAmount());
+            $purchasableItem = new PurchasableItem($purchasableItemData->getName(), $purchasableItemData->getLabel(), $purchasableItemData->getPrice(), $purchasableItemData->getMaxAmount());
             $dataTransfer->fillEntity($purchasableItemData, $purchasableItem);
             $this->purchasableItemRepository->savePurchasableItem($purchasableItem, true);
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item.create');

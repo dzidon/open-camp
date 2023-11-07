@@ -114,7 +114,7 @@ class AttachmentConfigBreadcrumbsTest extends KernelTestCase
     {
         $container = static::getContainer();
 
-        $this->attachmentConfig = new AttachmentConfig('Config', 10.0);
+        $this->attachmentConfig = new AttachmentConfig('Config', 'Label', 10.0);
         $reflectionClass = new ReflectionClass($this->attachmentConfig);
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->attachmentConfig, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));

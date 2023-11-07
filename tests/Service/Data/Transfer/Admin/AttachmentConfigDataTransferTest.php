@@ -17,6 +17,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
         $dataTransfer = $this->getAttachmentConfigDataTransfer();
 
         $expectedName = 'Config';
+        $expectedLabel = 'Label';
         $expectedRequiredType = AttachmentConfigRequiredTypeEnum::REQUIRED;
         $expectedMaxSize = 10.0;
         $expectedFileExtensions = [
@@ -24,7 +25,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
             new FileExtension('jpg'),
         ];
 
-        $attachmentConfig = new AttachmentConfig($expectedName, $expectedMaxSize);
+        $attachmentConfig = new AttachmentConfig($expectedName, $expectedLabel, $expectedMaxSize);
         $attachmentConfig->setRequiredType($expectedRequiredType);
         $attachmentConfig->setIsGlobal(true);
 
@@ -37,6 +38,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
         $dataTransfer->fillData($data, $attachmentConfig);
 
         $this->assertSame($expectedName, $data->getName());
+        $this->assertSame($expectedLabel, $data->getLabel());
         $this->assertSame($expectedRequiredType, $data->getRequiredType());
         $this->assertSame($expectedMaxSize, $data->getMaxSize());
         $this->assertTrue($data->isGlobal());
@@ -52,6 +54,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
         $dataTransfer = $this->getAttachmentConfigDataTransfer();
 
         $expectedName = 'Config';
+        $expectedLabel = 'Label';
         $expectedRequiredType = AttachmentConfigRequiredTypeEnum::REQUIRED;
         $expectedMaxSize = 10.0;
         $expectedFileExtensionsData = [
@@ -61,12 +64,13 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
             (new FileExtensionData())->setExtension('pdf'), // add new
         ];
 
-        $attachmentConfig = new AttachmentConfig('', 0.0);
+        $attachmentConfig = new AttachmentConfig('', '', 0.0);
         $attachmentConfig->addFileExtension((new FileExtension('txt')));
         $attachmentConfig->addFileExtension((new FileExtension('jpg'))); // gets removed
 
         $data = new AttachmentConfigData();
         $data->setName($expectedName);
+        $data->setLabel($expectedLabel);
         $data->setRequiredType($expectedRequiredType);
         $data->setMaxSize($expectedMaxSize);
         $data->setIsGlobal(true);
@@ -79,6 +83,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
         $dataTransfer->fillEntity($data, $attachmentConfig);
 
         $this->assertSame($expectedName, $attachmentConfig->getName());
+        $this->assertSame($expectedLabel, $attachmentConfig->getLabel());
         $this->assertSame($expectedRequiredType, $attachmentConfig->getRequiredType());
         $this->assertSame($expectedMaxSize, $attachmentConfig->getMaxSize());
         $this->assertCount(3, $attachmentConfig->getFileExtensions());

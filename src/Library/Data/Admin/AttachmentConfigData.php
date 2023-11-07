@@ -16,6 +16,10 @@ class AttachmentConfigData
     #[Assert\NotBlank]
     private ?string $name = null;
 
+    #[Assert\Length(max: 255)]
+    #[Assert\NotBlank]
+    private ?string $label = null;
+
     #[Assert\GreaterThan(0.0)]
     #[Assert\NotBlank]
     private ?float $maxSize = null;
@@ -50,6 +54,18 @@ class AttachmentConfigData
     public function setName(?string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLabel(): ?string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(?string $label): self
+    {
+        $this->label = $label;
 
         return $this;
     }

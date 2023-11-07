@@ -10,6 +10,7 @@ use Symfony\Component\Uid\UuidV4;
 class PurchasableItemTest extends TestCase
 {
     private const NAME = 'name';
+    private const LABEL = 'label';
     private const PRICE = 1000.0;
     private const MAX_AMOUNT = 10;
 
@@ -28,6 +29,15 @@ class PurchasableItemTest extends TestCase
         $newName = 'New name';
         $this->purchasableItem->setName($newName);
         $this->assertSame($newName, $this->purchasableItem->getName());
+    }
+
+    public function testLabel(): void
+    {
+        $this->assertSame(self::LABEL, $this->purchasableItem->getLabel());
+
+        $newLabel = 'New label';
+        $this->purchasableItem->setLabel($newLabel);
+        $this->assertSame($newLabel, $this->purchasableItem->getLabel());
     }
 
     public function testPrice(): void
@@ -71,6 +81,6 @@ class PurchasableItemTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->purchasableItem = new PurchasableItem(self::NAME, self::PRICE, self::MAX_AMOUNT);
+        $this->purchasableItem = new PurchasableItem(self::NAME, self::LABEL, self::PRICE, self::MAX_AMOUNT);
     }
 }

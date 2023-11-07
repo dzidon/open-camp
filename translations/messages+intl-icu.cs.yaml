@@ -574,7 +574,8 @@ entity_attribute:
 
     attachment_config:
         id: 'ID'
-        name: 'Název souboru'
+        name: 'Název'
+        label: 'Nadpis'
         file_extensions: 'Přípony'
         max_size: 'Maximální velikost'
         required_type: 'Povinnost'
@@ -590,6 +591,7 @@ entity_attribute:
     purchasable_item:
         id: 'ID'
         name: 'Název'
+        label: 'Nadpis'
         price: 'Cena'
         max_amount: 'Maximální počet'
         purchasable_item_variants: 'Varianty'
@@ -889,7 +891,8 @@ form:
             button: 'Hledat'
 
         attachment_config:
-            name: 'Název souboru'
+            name: 'Název'
+            label: 'Nadpis'
             file_extensions: 'Přípony'
             add_file_extension: 'Přidat příponu'
             max_size: 'Maximální velikost (MB)'
@@ -923,6 +926,7 @@ form:
 
         purchasable_item:
             name: 'Název'
+            label: 'Nadpis'
             price: 'Cena'
             max_amount: 'Maximální počet'
             is_global: 'Pro celou přihlášku'

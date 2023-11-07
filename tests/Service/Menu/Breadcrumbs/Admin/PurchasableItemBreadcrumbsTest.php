@@ -114,7 +114,7 @@ class PurchasableItemBreadcrumbsTest extends KernelTestCase
     {
         $container = static::getContainer();
 
-        $this->purchasableItem = new PurchasableItem('Item', 1000.0, 10);
+        $this->purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);
         $reflectionClass = new ReflectionClass($this->purchasableItem);
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->purchasableItem, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));

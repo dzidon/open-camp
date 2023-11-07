@@ -44,7 +44,7 @@ class PurchasableItemVariantTest extends TestCase
     {
         $this->assertSame($this->purchasableItem, $this->purchasableItemVariant->getPurchasableItem());
 
-        $newPurchasableItem = new PurchasableItem('New item', 2000.0, 20);
+        $newPurchasableItem = new PurchasableItem('New item', 'Label', 2000.0, 20);
         $this->purchasableItemVariant->setPurchasableItem($newPurchasableItem);
         $this->assertSame($newPurchasableItem, $this->purchasableItemVariant->getPurchasableItem());
     }
@@ -61,7 +61,7 @@ class PurchasableItemVariantTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->purchasableItem = new PurchasableItem('Item', 1000.0, 10);
+        $this->purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);
         $this->purchasableItemVariant = new PurchasableItemVariant(self::NAME, self::PRIORITY, $this->purchasableItem);
     }
 }

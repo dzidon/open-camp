@@ -27,6 +27,9 @@ class AttachmentConfig
     #[ORM\Column(length: 255, unique: true)]
     private string $name;
 
+    #[ORM\Column(length: 255)]
+    private string $label;
+
     #[ORM\Column(type: Types::FLOAT)]
     private float $maxSize; // MB
 
@@ -46,10 +49,11 @@ class AttachmentConfig
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $name, float $maxSize)
+    public function __construct(string $name, string $label, float $maxSize)
     {
         $this->id = Uuid::v4();
         $this->name = $name;
+        $this->label = $label;
         $this->maxSize = $maxSize;
         $this->requiredType = AttachmentConfigRequiredTypeEnum::OPTIONAL->value;
         $this->fileExtensions = new ArrayCollection();
@@ -69,6 +73,18 @@ class AttachmentConfig
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label): self
+    {
+        $this->label = $label;
 
         return $this;
     }

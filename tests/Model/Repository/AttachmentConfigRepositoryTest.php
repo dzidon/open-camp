@@ -17,7 +17,7 @@ class AttachmentConfigRepositoryTest extends KernelTestCase
     {
         $attachmentConfigRepository = $this->getAttachmentConfigRepository();
 
-        $attachmentConfig = new AttachmentConfig('Config', 10.0);
+        $attachmentConfig = new AttachmentConfig('Config', 'Label', 10.0);
         $attachmentConfigRepository->saveAttachmentConfig($attachmentConfig, true);
         $id = $attachmentConfig->getId();
 

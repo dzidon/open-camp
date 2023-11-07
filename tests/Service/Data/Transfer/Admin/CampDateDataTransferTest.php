@@ -55,14 +55,14 @@ class CampDateDataTransferTest extends KernelTestCase
         $formField2 = new FormField('New field 2', FormFieldTypeEnum::NUMBER, 'New field 2:');
         new CampDateFormField($campDate, $formField2, 200);
 
-        $purchasableItem1 = new PurchasableItem('New item 1', 1000.0, 1);
+        $purchasableItem1 = new PurchasableItem('New item 1', 'Label', 1000.0, 1);
         new CampDatePurchasableItem($campDate, $purchasableItem1, 100);
-        $purchasableItem2 = new PurchasableItem('New item 2', 2000.0, 2);
+        $purchasableItem2 = new PurchasableItem('New item 2', 'Label', 2000.0, 2);
         new CampDatePurchasableItem($campDate, $purchasableItem2, 200);
 
-        $attachmentConfig1 = new AttachmentConfig('New config 1', 10.0);
+        $attachmentConfig1 = new AttachmentConfig('New config 1', 'Label', 10.0);
         new CampDateAttachmentConfig($campDate, $attachmentConfig1, 100);
-        $attachmentConfig2 = new AttachmentConfig('New config 2', 20.0);
+        $attachmentConfig2 = new AttachmentConfig('New config 2', 'Label', 20.0);
         new CampDateAttachmentConfig($campDate, $attachmentConfig2, 200);
 
         $data = new CampDateData($camp);

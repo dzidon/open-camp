@@ -28,6 +28,9 @@ class AttachmentConfigType extends AbstractType
                 ],
                 'label' => 'form.admin.attachment_config.name',
             ])
+            ->add('label', TextType::class, [
+                'label' => 'form.admin.attachment_config.label',
+            ])
             ->add('maxSize', NumberType::class, [
                 'attr' => [
                     'min' => 0.01,

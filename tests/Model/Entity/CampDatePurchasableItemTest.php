@@ -42,7 +42,7 @@ class CampDatePurchasableItemTest extends TestCase
     {
         $this->assertSame($this->purchasableItem, $this->campDatePurchasableItem->getPurchasableItem());
 
-        $purchasableItemNew = new PurchasableItem('Item new', 2000.0, 20);
+        $purchasableItemNew = new PurchasableItem('Item new', 'Label', 2000.0, 20);
         $this->campDatePurchasableItem->setPurchasableItem($purchasableItemNew);
         $this->assertSame($purchasableItemNew, $this->campDatePurchasableItem->getPurchasableItem());
     }
@@ -70,7 +70,7 @@ class CampDatePurchasableItemTest extends TestCase
     {
         $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $this->campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 10, $this->camp);
-        $this->purchasableItem = new PurchasableItem('Item', 1000.0, 10);
+        $this->purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);
         $this->campDatePurchasableItem = new CampDatePurchasableItem($this->campDate, $this->purchasableItem, 100);
     }
 }

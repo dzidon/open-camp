@@ -89,7 +89,7 @@ class PurchasableItemVariantCreationDataTest extends KernelTestCase
         $validator = $container->get(ValidatorInterface::class);
         $this->validator = $validator;
 
-        $this->purchasableItem = new PurchasableItem('Item', 100.0, 50);
+        $this->purchasableItem = new PurchasableItem('Item', 'Label', 100.0, 50);
         $this->data = new PurchasableItemVariantCreationData($this->purchasableItem);
     }
 }

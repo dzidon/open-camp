@@ -14,7 +14,7 @@ class CampDateAttachmentConfigDataTest extends KernelTestCase
         $data = new CampDateAttachmentConfigData();
         $this->assertNull($data->getAttachmentConfig());
 
-        $attachmentConfig = new AttachmentConfig('Config', 10.0);
+        $attachmentConfig = new AttachmentConfig('Config', 'Label', 10.0);
         $data->setAttachmentConfig($attachmentConfig);
         $this->assertSame($attachmentConfig, $data->getAttachmentConfig());
 
@@ -30,7 +30,7 @@ class CampDateAttachmentConfigDataTest extends KernelTestCase
         $result = $validator->validateProperty($data, 'attachmentConfig');
         $this->assertNotEmpty($result); // invalid
 
-        $attachmentConfig = new AttachmentConfig('Config', 10.0);
+        $attachmentConfig = new AttachmentConfig('Config', 'Label', 10.0);
         $data->setAttachmentConfig($attachmentConfig);
         $result = $validator->validateProperty($data, 'attachmentConfig');
         $this->assertEmpty($result); // valid

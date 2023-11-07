@@ -20,7 +20,7 @@ class CampDatePurchasableItemDataTransferTest extends KernelTestCase
         $expectedPriority = 100;
         $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 10, $camp);
-        $purchasableItem = new PurchasableItem('Item', 1000.0, 10);
+        $purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);
         $campDatePurchasableItem = new CampDatePurchasableItem($campDate, $purchasableItem, $expectedPriority);
 
         $data = new CampDatePurchasableItemData();
@@ -37,7 +37,7 @@ class CampDatePurchasableItemDataTransferTest extends KernelTestCase
         $expectedPriority = 100;
         $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 10, $camp);
-        $purchasableItem = new PurchasableItem('Item', 1000.0, 10);
+        $purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);
         $campDatePurchasableItem = new CampDatePurchasableItem($campDate, $purchasableItem, $expectedPriority);
 
         $data = new CampDatePurchasableItemData();

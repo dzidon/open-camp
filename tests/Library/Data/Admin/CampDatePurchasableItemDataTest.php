@@ -14,7 +14,7 @@ class CampDatePurchasableItemDataTest extends KernelTestCase
         $data = new CampDatePurchasableItemData();
         $this->assertNull($data->getPurchasableItem());
 
-        $purchasableItem = new PurchasableItem('Item', 1000.0, 2);
+        $purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 2);
         $data->setPurchasableItem($purchasableItem);
         $this->assertSame($purchasableItem, $data->getPurchasableItem());
 
@@ -30,7 +30,7 @@ class CampDatePurchasableItemDataTest extends KernelTestCase
         $result = $validator->validateProperty($data, 'purchasableItem');
         $this->assertNotEmpty($result); // invalid
 
-        $purchasableItem = new PurchasableItem('Item', 1000.0, 2);
+        $purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 2);
         $data->setPurchasableItem($purchasableItem);
         $result = $validator->validateProperty($data, 'purchasableItem');
         $this->assertEmpty($result); // valid

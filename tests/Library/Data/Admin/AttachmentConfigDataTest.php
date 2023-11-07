@@ -17,7 +17,7 @@ class AttachmentConfigDataTest extends KernelTestCase
         $data = new AttachmentConfigData();
         $this->assertNull($data->getAttachmentConfig());
 
-        $attachmentConfig = new AttachmentConfig('Photo', 10.0);
+        $attachmentConfig = new AttachmentConfig('Photo', 'Photo...', 10.0);
 
         $data = new AttachmentConfigData($attachmentConfig);
         $this->assertSame($attachmentConfig, $data->getAttachmentConfig());
@@ -57,6 +57,43 @@ class AttachmentConfigDataTest extends KernelTestCase
 
         $data->setName(str_repeat('x', 256));
         $result = $validator->validateProperty($data, 'name');
+        $this->assertNotEmpty($result); // invalid
+    }
+
+    public function testLabel(): void
+    {
+        $data = new AttachmentConfigData();
+        $this->assertNull($data->getLabel());
+
+        $data->setLabel('label');
+        $this->assertSame('label', $data->getLabel());
+
+        $data->setLabel(null);
+        $this->assertNull($data->getLabel());
+    }
+
+    public function testLabelValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new AttachmentConfigData();
+        $result = $validator->validateProperty($data, 'label');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setLabel('');
+        $result = $validator->validateProperty($data, 'label');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setLabel(null);
+        $result = $validator->validateProperty($data, 'label');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setLabel(str_repeat('x', 255));
+        $result = $validator->validateProperty($data, 'label');
+        $this->assertEmpty($result); // valid
+
+        $data->setLabel(str_repeat('x', 256));
+        $result = $validator->validateProperty($data, 'label');
         $this->assertNotEmpty($result); // invalid
     }
 
@@ -183,6 +220,7 @@ class AttachmentConfigDataTest extends KernelTestCase
 
         $data = new AttachmentConfigData();
         $data->setMaxSize(10.0);
+        $data->setLabel('Label');
         $data->setRequiredType(AttachmentConfigRequiredTypeEnum::REQUIRED);
         $data->addFileExtensionsDatum((new FileExtensionData())->setExtension('pdf'));
         $data->setName('Text file');
@@ -197,6 +235,7 @@ class AttachmentConfigDataTest extends KernelTestCase
         $attachmentConfig = $attachmentConfigRepository->findOneByName('Image');
         $data = new AttachmentConfigData($attachmentConfig);
         $data->setMaxSize(10.0);
+        $data->setLabel('Label');
         $data->setRequiredType(AttachmentConfigRequiredTypeEnum::REQUIRED);
         $data->addFileExtensionsDatum((new FileExtensionData())->setExtension('pdf'));
         $data->setName('Image');

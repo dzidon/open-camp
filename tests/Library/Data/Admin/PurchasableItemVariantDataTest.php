@@ -135,7 +135,7 @@ class PurchasableItemVariantDataTest extends KernelTestCase
         $repository = $container->get(PurchasableItemVariantRepositoryInterface::class);
         $this->purchasableItemVariantRepository = $repository;
 
-        $this->purchasableItem = new PurchasableItem('Item', 100.0, 50);
+        $this->purchasableItem = new PurchasableItem('Item', 'Label', 100.0, 50);
         $this->purchasableItemVariant = new PurchasableItemVariant('Variant', 100, $this->purchasableItem);
         $this->data = new PurchasableItemVariantData($this->purchasableItem, $this->purchasableItemVariant);
     }

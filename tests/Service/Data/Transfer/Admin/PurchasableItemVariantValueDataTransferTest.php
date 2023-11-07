@@ -17,7 +17,7 @@ class PurchasableItemVariantValueDataTransferTest extends KernelTestCase
 
         $expectedName = 'Name';
         $expectedPriority = 100;
-        $purchasableItem = new PurchasableItem('Item', 1000.0, 10);
+        $purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);
         $purchasableItemVariant = new PurchasableItemVariant('Variant', 100, $purchasableItem);
         $purchasableItemVariantValue = new PurchasableItemVariantValue($expectedName, $expectedPriority, $purchasableItemVariant);
 
@@ -34,7 +34,7 @@ class PurchasableItemVariantValueDataTransferTest extends KernelTestCase
 
         $expectedName = 'Name';
         $expectedPriority = 100;
-        $purchasableItem = new PurchasableItem('Item', 1000.0, 10);
+        $purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);
         $purchasableItemVariant = new PurchasableItemVariant('Variant', 100, $purchasableItem);
         $purchasableItemVariantValue = new PurchasableItemVariantValue('', 0, $purchasableItemVariant);
 

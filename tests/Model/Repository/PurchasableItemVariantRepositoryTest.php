@@ -18,7 +18,7 @@ class PurchasableItemVariantRepositoryTest extends KernelTestCase
         $purchasableItemVariantRepository = $this->getPurchasableItemVariantRepository();
         $purchasableItemRepository = $this->getPurchasableItemRepository();
 
-        $purchasableItem = new PurchasableItem('Item', 1000.0, 10);
+        $purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);
         $purchasableItemVariant = new PurchasableItemVariant('Variant', 100, $purchasableItem);
         $purchasableItemRepository->savePurchasableItem($purchasableItem, false);
         $purchasableItemVariantRepository->savePurchasableItemVariant($purchasableItemVariant, true);

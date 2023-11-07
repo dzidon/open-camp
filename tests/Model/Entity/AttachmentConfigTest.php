@@ -2,7 +2,6 @@
 
 namespace App\Tests\Model\Entity;
 
-use App\Library\Data\Admin\AttachmentConfigData;
 use App\Model\Entity\AttachmentConfig;
 use App\Model\Entity\FileExtension;
 use App\Model\Enum\Entity\AttachmentConfigRequiredTypeEnum;
@@ -13,6 +12,7 @@ use Symfony\Component\Uid\UuidV4;
 class AttachmentConfigTest extends TestCase
 {
     private const NAME = 'Name';
+    private const LABEL = 'Label';
     private const MAX_SIZE = 10.0;
 
     private AttachmentConfig $attachmentConfig;
@@ -30,6 +30,15 @@ class AttachmentConfigTest extends TestCase
         $newName = 'New Name';
         $this->attachmentConfig->setName($newName);
         $this->assertSame($newName, $this->attachmentConfig->getName());
+    }
+
+    public function testLabel(): void
+    {
+        $this->assertSame(self::LABEL, $this->attachmentConfig->getLabel());
+
+        $newLabel = 'New Label';
+        $this->attachmentConfig->setLabel($newLabel);
+        $this->assertSame($newLabel, $this->attachmentConfig->getLabel());
     }
 
     public function testMaxSize(): void
@@ -85,6 +94,6 @@ class AttachmentConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->attachmentConfig = new AttachmentConfig(self::NAME, self::MAX_SIZE);
+        $this->attachmentConfig = new AttachmentConfig(self::NAME, self::LABEL, self::MAX_SIZE);
     }
 }
