@@ -74,7 +74,8 @@ class CampCatalogController extends AbstractController
         }
 
         $page = (int) $request->query->get('page', 1);
-        $result = $this->campRepository->getUserCampCatalogResult($searchData, $campCategory, $page, 12);
+        $showHidden = $this->isGranted('camp_create') || $this->isGranted('camp_update');
+        $result = $this->campRepository->getUserCampCatalogResult($searchData, $campCategory, $showHidden, $page, 12);
         $paginator = $result->getPaginator();
         if ($paginator->isCurrentPageOutOfBounds())
         {
@@ -102,6 +103,17 @@ class CampCatalogController extends AbstractController
                            string                       $urlName): Response
     {
         $camp = $this->findCampOrThrow404($urlName);
+
+        if ($camp->isHidden())
+        {
+            if (!$this->isGranted('camp_create') && !$this->isGranted('camp_update'))
+            {
+                throw $this->createNotFoundException();
+            }
+
+            $this->addTransFlash('warning', 'camp_catalog.hidden_camp_detail_shown_for_admin');
+        }
+
         $campImages = $campImageRepository->findByCamp($camp);
         $campDates = $campDateRepository->findUpcomingByCamp($camp);
 
@@ -121,7 +133,7 @@ class CampCatalogController extends AbstractController
 
     private function findCampOrThrow404(string $urlName): Camp
     {
-        $camp = $this->campRepository->findOneByUrlName($urlName, false);
+        $camp = $this->campRepository->findOneByUrlName($urlName);
         if ($camp === null)
         {
             throw $this->createNotFoundException();

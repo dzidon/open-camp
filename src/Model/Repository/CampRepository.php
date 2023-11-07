@@ -86,7 +86,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function findOneByUrlName(string $urlName, bool $returnIfHidden = true): ?Camp
+    public function findOneByUrlName(string $urlName): ?Camp
     {
         $queryBuilder = $this->createQueryBuilder('camp')
             ->select('camp, campCategory')
@@ -94,11 +94,6 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             ->andWhere('camp.urlName = :urlName')
             ->setParameter('urlName', $urlName)
         ;
-
-        if (!$returnIfHidden)
-        {
-            $queryBuilder->andWhere('camp.isHidden = FALSE');
-        }
 
         return $queryBuilder
             ->getQuery()
@@ -192,6 +187,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
      */
     public function getUserCampCatalogResult(UserCampSearchData $data,
                                              ?CampCategory      $campCategory,
+                                             bool               $showHidden,
                                              int                $currentPage,
                                              int                $pageSize): UserCampCatalogResult
     {
@@ -204,11 +200,15 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         $queryBuilder = $this->createQueryBuilder('camp')
             ->select('DISTINCT camp')
             ->leftJoin(CampDate::class, 'campDate', 'WITH', 'camp.id = campDate.camp')
-            ->andWhere('camp.isHidden = FALSE')
             ->andWhere('camp.name LIKE :phrase')
             ->setParameter('phrase', '%' . $phrase . '%')
             ->orderBy('camp.priority', 'DESC')
         ;
+
+        if (!$showHidden)
+        {
+            $queryBuilder->andWhere('camp.isHidden = FALSE');
+        }
 
         if ($age !== null)
         {

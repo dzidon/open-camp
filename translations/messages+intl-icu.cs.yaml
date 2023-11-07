@@ -56,6 +56,7 @@ form_field_type:
     choice: 'Volba'
 
 camp_catalog:
+    hidden_camp_detail_shown_for_admin: 'Zobrazujete si skrytý tábor jako administrátor.'
     no_available_camp_dates: 'Žádné volné termíny'
     show_map: 'Ukázat na mapě'
     map: 'Mapa'
@@ -237,6 +238,9 @@ crud:
 
         user:
             update_password: 'Nastavit heslo'
+
+        camp:
+            show_in_catalog: 'Zobrazit v katalogu'
 
     action_performed:
         contact:

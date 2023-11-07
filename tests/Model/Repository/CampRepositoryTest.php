@@ -50,9 +50,6 @@ class CampRepositoryTest extends KernelTestCase
         $loadedCamp = $repository->findOneByUrlName('camp-3');
         $this->assertNotNull($loadedCamp);
         $this->assertSame('camp-3', $loadedCamp->getUrlName());
-
-        $loadedCamp = $repository->findOneByUrlName('camp-3', false);
-        $this->assertNull($loadedCamp);
     }
 
     public function testGetAdminPaginator(): void

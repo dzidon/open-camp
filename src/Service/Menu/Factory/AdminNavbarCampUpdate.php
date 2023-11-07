@@ -77,6 +77,12 @@ class AdminNavbarCampUpdate extends AbstractMenuTypeFactory
         $menu->addChild($itemCampDates);
         $itemCampDates->setActive($active);
 
+        // show in camp catalog
+        $text = $this->translator->trans('crud.action.camp.show_in_catalog');
+        $url = $this->urlGenerator->generate('user_camp_detail', ['urlName' => $camp->getUrlName()]);
+        $itemCampDates = new MenuType('user_camp_detail', 'navbar_admin_camp_update_item', $text, $url);
+        $menu->addChild($itemCampDates);
+
         return $menu;
     }
 
