@@ -89,6 +89,7 @@ class AttachmentConfigRepository extends AbstractRepository implements Attachmen
         $sortBy = $data->getSortBy();
         $requiredType = $data->getRequiredType();
         $fileExtensions = $data->getFileExtensions();
+        $isGlobal = $data->isGlobal();
 
         $queryBuilder = $this->createQueryBuilder('attachmentConfig')
             ->select('DISTINCT attachmentConfig')
@@ -102,6 +103,14 @@ class AttachmentConfigRepository extends AbstractRepository implements Attachmen
             $queryBuilder
                 ->andWhere('attachmentConfig.requiredType = :requiredType')
                 ->setParameter('requiredType', $requiredType->value)
+            ;
+        }
+
+        if ($isGlobal !== null)
+        {
+            $queryBuilder
+                ->andWhere('attachmentConfig.isGlobal = :isGlobal')
+                ->setParameter('isGlobal', $isGlobal)
             ;
         }
 

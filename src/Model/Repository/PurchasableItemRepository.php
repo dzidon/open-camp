@@ -82,13 +82,23 @@ class PurchasableItemRepository extends AbstractRepository implements Purchasabl
     {
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();
+        $isGlobal = $data->isGlobal();
 
-        $query = $this->createQueryBuilder('purchasableItem')
+        $queryBuilder = $this->createQueryBuilder('purchasableItem')
             ->andWhere('purchasableItem.name LIKE :name')
             ->setParameter('name', '%' . $phrase . '%')
             ->orderBy($sortBy->property(), $sortBy->order())
-            ->getQuery()
         ;
+
+        if ($isGlobal !== null)
+        {
+            $queryBuilder
+                ->andWhere('purchasableItem.isGlobal = :isGlobal')
+                ->setParameter('isGlobal', $isGlobal)
+            ;
+        }
+
+        $query = $queryBuilder->getQuery();
 
         return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
     }

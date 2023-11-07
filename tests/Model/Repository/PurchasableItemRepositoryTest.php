@@ -87,6 +87,40 @@ class PurchasableItemRepositoryTest extends KernelTestCase
         $this->assertSame(['Item 1'], $names);
     }
 
+    public function testGetAdminPaginatorWithGlobal(): void
+    {
+        $repository = $this->getPurchasableItemRepository();
+
+        $data = new PurchasableItemSearchData();
+        $data->setIsGlobal(true);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $names = $this->getPurchasableItemNames($paginator->getCurrentPageItems());
+        $this->assertSame(['Item 1'], $names);
+    }
+
+    public function testGetAdminPaginatorWithNotGlobal(): void
+    {
+        $repository = $this->getPurchasableItemRepository();
+
+        $data = new PurchasableItemSearchData();
+        $data->setIsGlobal(false);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $names = $this->getPurchasableItemNames($paginator->getCurrentPageItems());
+        $this->assertSame(['Item 2'], $names);
+    }
+
     public function testGetAdminPaginatorSortByCreatedAtDesc(): void
     {
         $purchasableItemRepository = $this->getPurchasableItemRepository();

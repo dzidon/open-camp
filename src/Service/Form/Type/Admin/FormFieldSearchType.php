@@ -51,6 +51,15 @@ class FormFieldSearchType extends AbstractType
                 'required' => false,
                 'label'    => 'form.admin.form_field_search.is_required',
             ])
+            ->add('isGlobal', ChoiceType::class, [
+                'placeholder' => 'form.common.choice.irrelevant',
+                'choices' => [
+                    'form.common.choice.yes' => true,
+                    'form.common.choice.no'  => false,
+                ],
+                'required' => false,
+                'label'    => 'form.admin.form_field_search.is_global',
+            ])
         ;
     }
 

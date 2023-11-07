@@ -56,4 +56,16 @@ class FormFieldSearchDataTest extends TestCase
         $data->setIsRequired(false);
         $this->assertFalse($data->isRequired());
     }
+
+    public function testIsGlobal(): void
+    {
+        $data = new FormFieldSearchData();
+        $this->assertNull($data->isGlobal());
+
+        $data->setIsGlobal(true);
+        $this->assertTrue($data->isGlobal());
+
+        $data->setIsGlobal(false);
+        $this->assertFalse($data->isGlobal());
+    }
 }

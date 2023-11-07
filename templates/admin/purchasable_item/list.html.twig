@@ -23,6 +23,10 @@
                             <div class="form-group col-md-3">
                                 {{ form_row(form_search.sortBy) }}
                             </div>
+
+                            <div class="form-group col-md-4">
+                                {{ form_row(form_search.isGlobal) }}
+                            </div>
                         </div>
 
                         <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.purchasable_item_search.button'|trans }}</button>
@@ -74,6 +78,7 @@
                                     <th>{{ 'entity_attribute.purchasable_item.name'|trans }}</th>
                                     <th>{{ 'entity_attribute.purchasable_item.price'|trans }}</th>
                                     <th>{{ 'entity_attribute.purchasable_item.max_amount'|trans }}</th>
+                                    <th>{{ 'entity_attribute.purchasable_item.is_global'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
                                 </tr>
                             </thead>
@@ -95,6 +100,14 @@
 
                                         <td class="align-middle">
                                             <span>{{ purchasable_item.maxAmount }}</span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if purchasable_item.isGlobal %}
+                                                <span>{{ 'bool.yes'|trans }}</span>
+                                            {% else %}
+                                                <span>{{ 'bool.no'|trans }}</span>
+                                            {% endif %}
                                         </td>
 
                                         <td class="align-middle cell-25">

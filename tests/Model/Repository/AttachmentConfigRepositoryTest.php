@@ -126,6 +126,40 @@ class AttachmentConfigRepositoryTest extends KernelTestCase
         $this->assertSame(['Image'], $names);
     }
 
+    public function testGetAdminPaginatorWithGlobal(): void
+    {
+        $repository = $this->getAttachmentConfigRepository();
+
+        $data = new AttachmentConfigSearchData();
+        $data->setIsGlobal(true);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $names = $this->getConfigNames($paginator->getCurrentPageItems());
+        $this->assertSame(['Text file'], $names);
+    }
+
+    public function testGetAdminPaginatorWithNotGlobal(): void
+    {
+        $repository = $this->getAttachmentConfigRepository();
+
+        $data = new AttachmentConfigSearchData();
+        $data->setIsGlobal(false);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $names = $this->getConfigNames($paginator->getCurrentPageItems());
+        $this->assertSame(['Image'], $names);
+    }
+
     public function testGetAdminPaginatorSortByCreatedAtDesc(): void
     {
         $attachmentConfigRepository = $this->getAttachmentConfigRepository();

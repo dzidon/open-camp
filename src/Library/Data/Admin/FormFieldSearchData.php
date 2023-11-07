@@ -15,6 +15,8 @@ class FormFieldSearchData
 
     private ?bool $isRequired = null;
 
+    private ?bool $isGlobal = null;
+
     public function getPhrase(): string
     {
         return $this->phrase;
@@ -64,6 +66,18 @@ class FormFieldSearchData
     public function setIsRequired(?bool $isRequired): self
     {
         $this->isRequired = $isRequired;
+
+        return $this;
+    }
+
+    public function isGlobal(): ?bool
+    {
+        return $this->isGlobal;
+    }
+
+    public function setIsGlobal(?bool $isGlobal): self
+    {
+        $this->isGlobal = $isGlobal;
 
         return $this;
     }

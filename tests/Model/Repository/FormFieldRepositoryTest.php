@@ -140,6 +140,40 @@ class FormFieldRepositoryTest extends KernelTestCase
         $this->assertSame(['Field 1'], $names);
     }
 
+    public function testGetAdminPaginatorWithGlobal(): void
+    {
+        $repository = $this->getFormFieldRepository();
+
+        $data = new FormFieldSearchData();
+        $data->setIsGlobal(true);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $names = $this->getFormFieldNames($paginator->getCurrentPageItems());
+        $this->assertSame(['Field 1'], $names);
+    }
+
+    public function testGetAdminPaginatorWithNotGlobal(): void
+    {
+        $repository = $this->getFormFieldRepository();
+
+        $data = new FormFieldSearchData();
+        $data->setIsGlobal(false);
+
+        $paginator = $repository->getAdminPaginator($data, 1, 2);
+        $this->assertSame(1, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $names = $this->getFormFieldNames($paginator->getCurrentPageItems());
+        $this->assertSame(['Field 2'], $names);
+    }
+
     public function testGetAdminPaginatorSortByCreatedAtDesc(): void
     {
         $repository = $this->getFormFieldRepository();

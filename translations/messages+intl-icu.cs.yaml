@@ -911,6 +911,7 @@ form:
 
             file_extensions: 'Přípony'
             required_type: 'Povinnost'
+            is_global: 'Pro celou přihlášku'
             button: 'Hledat'
 
         attachment_config_delete:
@@ -941,6 +942,7 @@ form:
                     max_amount_asc: 'Max. počet pro táborníka (Od nejmenšího)'
                     max_amount_desc: 'Max. počet pro táborníka (Od největšího)'
 
+            is_global: 'Pro celou přihlášku'
             button: 'Hledat'
 
         purchasable_item_delete:
@@ -1029,6 +1031,7 @@ form:
 
             type: 'Typ'
             is_required: 'Povinný'
+            is_global: 'Pro celou přihlášku'
             button: 'Hledat'
 
         form_field_delete:

@@ -24,12 +24,16 @@
                                 {{ form_row(form_search.sortBy) }}
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 {{ form_row(form_search.fileExtensions) }}
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 {{ form_row(form_search.requiredType) }}
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                {{ form_row(form_search.isGlobal) }}
                             </div>
                         </div>
 
@@ -83,6 +87,7 @@
                                     <th>{{ 'entity_attribute.attachment_config.required_type'|trans }}</th>
                                     <th>{{ 'entity_attribute.attachment_config.max_size'|trans }}</th>
                                     <th>{{ 'entity_attribute.attachment_config.file_extensions'|trans }}</th>
+                                    <th>{{ 'entity_attribute.attachment_config.is_global'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
                                 </tr>
                             </thead>
@@ -108,6 +113,14 @@
 
                                         <td class="align-middle">
                                             <span>{{ attachment_config.fileExtensionsAsString }}</span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if attachment_config.isGlobal %}
+                                                <span>{{ 'bool.yes'|trans }}</span>
+                                            {% else %}
+                                                <span>{{ 'bool.no'|trans }}</span>
+                                            {% endif %}
                                         </td>
 
                                         <td class="align-middle cell-25">

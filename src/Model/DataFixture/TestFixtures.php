@@ -435,6 +435,7 @@ class TestFixtures extends Fixture
         $this->setUid($attachmentConfig1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $attachmentConfig1->addFileExtension($fileExtensionTxt);
         $attachmentConfig1->addFileExtension($fileExtensionDocx);
+        $attachmentConfig1->setIsGlobal(true);
         $this->setCreatedAt($attachmentConfig1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($attachmentConfig1);
 
@@ -462,6 +463,7 @@ class TestFixtures extends Fixture
          */
         $purchasableItem1 = new PurchasableItem('Item 1', 1000.0, 5);
         $this->setUid($purchasableItem1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $purchasableItem1->setIsGlobal(true);
         $this->setCreatedAt($purchasableItem1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($purchasableItem1);
 
@@ -519,6 +521,7 @@ class TestFixtures extends Fixture
          */
         $formField1 = new FormField('Field 1', FormFieldTypeEnum::TEXT, 'Field 1:');
         $this->setUid($formField1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
+        $formField1->setIsGlobal(true);
         $this->setCreatedAt($formField1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($formField1);
 

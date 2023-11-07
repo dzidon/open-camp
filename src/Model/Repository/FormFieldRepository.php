@@ -84,6 +84,7 @@ class FormFieldRepository extends AbstractRepository implements FormFieldReposit
         $sortBy = $data->getSortBy();
         $type = $data->getType();
         $isRequired = $data->isRequired();
+        $isGlobal = $data->isGlobal();
 
         $queryBuilder = $this->createQueryBuilder('formField')
             ->andWhere('formField.name LIKE :name')
@@ -104,6 +105,14 @@ class FormFieldRepository extends AbstractRepository implements FormFieldReposit
             $queryBuilder
                 ->andWhere('formField.isRequired = :isRequired')
                 ->setParameter('isRequired', $isRequired)
+            ;
+        }
+
+        if ($isGlobal !== null)
+        {
+            $queryBuilder
+                ->andWhere('formField.isGlobal = :isGlobal')
+                ->setParameter('isGlobal', $isGlobal)
             ;
         }
 

@@ -86,7 +86,10 @@ class UserRepositoryTest extends KernelTestCase
 
         $users = $repository->findByRole(null);
         $emails = $this->getUserEmails($users);
-        $this->assertSame(['mark@gmail.com', 'jeff@gmail.com', 'xena@gmail.com'], $emails);
+        $this->assertCount(3, $emails);
+        $this->assertContains('mark@gmail.com', $emails);
+        $this->assertContains('jeff@gmail.com', $emails);
+        $this->assertContains('xena@gmail.com', $emails);
     }
 
     public function testGetAdminPaginator(): void

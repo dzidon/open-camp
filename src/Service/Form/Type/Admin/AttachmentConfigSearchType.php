@@ -8,6 +8,7 @@ use App\Model\Entity\FileExtension;
 use App\Service\Form\Type\Common\AttachmentConfigRequiredType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -54,6 +55,15 @@ class AttachmentConfigSearchType extends AbstractType
                 'placeholder' => 'form.common.choice.irrelevant',
                 'required'    => false,
                 'label'       => 'form.admin.attachment_config_search.required_type',
+            ])
+            ->add('isGlobal', ChoiceType::class, [
+                'placeholder' => 'form.common.choice.irrelevant',
+                'choices' => [
+                    'form.common.choice.yes' => true,
+                    'form.common.choice.no'  => false,
+                ],
+                'required' => false,
+                'label'    => 'form.admin.attachment_config_search.is_global',
             ])
         ;
     }

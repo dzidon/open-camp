@@ -31,4 +31,16 @@ class PurchasableItemSearchDataTest extends TestCase
         $data->setSortBy(PurchasableItemSortEnum::CREATED_AT_ASC);
         $this->assertSame(PurchasableItemSortEnum::CREATED_AT_ASC, $data->getSortBy());
     }
+
+    public function testIsGlobal(): void
+    {
+        $data = new PurchasableItemSearchData();
+        $this->assertNull($data->isGlobal());
+
+        $data->setIsGlobal(true);
+        $this->assertTrue($data->isGlobal());
+
+        $data->setIsGlobal(false);
+        $this->assertFalse($data->isGlobal());
+    }
 }

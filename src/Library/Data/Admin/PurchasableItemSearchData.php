@@ -10,6 +10,8 @@ class PurchasableItemSearchData
 
     private PurchasableItemSortEnum $sortBy = PurchasableItemSortEnum::CREATED_AT_DESC;
 
+    private ?bool $isGlobal = null;
+
     public function getPhrase(): string
     {
         return $this->phrase;
@@ -35,6 +37,18 @@ class PurchasableItemSearchData
         }
 
         $this->sortBy = $sortBy;
+
+        return $this;
+    }
+
+    public function isGlobal(): ?bool
+    {
+        return $this->isGlobal;
+    }
+
+    public function setIsGlobal(?bool $isGlobal): self
+    {
+        $this->isGlobal = $isGlobal;
 
         return $this;
     }

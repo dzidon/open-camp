@@ -17,6 +17,8 @@ class AttachmentConfigSearchData
     /** @var FileExtension[] */
     private array $fileExtensions = [];
 
+    private ?bool $isGlobal = null;
+
     public function getPhrase(): string
     {
         return $this->phrase;
@@ -85,6 +87,18 @@ class AttachmentConfigSearchData
         }
 
         unset($this->fileExtensions[$key]);
+
+        return $this;
+    }
+
+    public function isGlobal(): ?bool
+    {
+        return $this->isGlobal;
+    }
+
+    public function setIsGlobal(?bool $isGlobal): self
+    {
+        $this->isGlobal = $isGlobal;
 
         return $this;
     }

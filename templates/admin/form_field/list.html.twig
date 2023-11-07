@@ -24,12 +24,16 @@
                                 {{ form_row(form_search.sortBy) }}
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 {{ form_row(form_search.type) }}
                             </div>
 
-                            <div class="form-group col-md-6">
+                            <div class="form-group col-md-4">
                                 {{ form_row(form_search.isRequired) }}
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                {{ form_row(form_search.isGlobal) }}
                             </div>
                         </div>
 
@@ -80,6 +84,7 @@
                                     <th>{{ 'entity_attribute.form_field.name'|trans }}</th>
                                     <th>{{ 'entity_attribute.form_field.type'|trans }}</th>
                                     <th>{{ 'entity_attribute.form_field.is_required'|trans }}</th>
+                                    <th>{{ 'entity_attribute.form_field.is_global'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
                                 </tr>
                             </thead>
@@ -101,6 +106,14 @@
 
                                         <td class="align-middle">
                                             {% if form_field.isRequired %}
+                                                <span>{{ 'bool.yes'|trans }}</span>
+                                            {% else %}
+                                                <span>{{ 'bool.no'|trans }}</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if form_field.isGlobal %}
                                                 <span>{{ 'bool.yes'|trans }}</span>
                                             {% else %}
                                                 <span>{{ 'bool.no'|trans }}</span>

@@ -58,4 +58,16 @@ class AttachmentConfigSearchDataTest extends TestCase
         $data->removeFileExtension($fileExtension);
         $this->assertNotContains($fileExtension, $data->getFileExtensions());
     }
+
+    public function testIsGlobal(): void
+    {
+        $data = new AttachmentConfigSearchData();
+        $this->assertNull($data->isGlobal());
+
+        $data->setIsGlobal(true);
+        $this->assertTrue($data->isGlobal());
+
+        $data->setIsGlobal(false);
+        $this->assertFalse($data->isGlobal());
+    }
 }

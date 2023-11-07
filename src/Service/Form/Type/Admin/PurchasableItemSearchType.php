@@ -5,6 +5,7 @@ namespace App\Service\Form\Type\Admin;
 use App\Library\Data\Admin\PurchasableItemSearchData;
 use App\Library\Enum\Search\Data\Admin\PurchasableItemSortEnum;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -38,6 +39,15 @@ class PurchasableItemSearchType extends AbstractType
                     PurchasableItemSortEnum::MAX_AMOUNT_ASC  => 'form.admin.purchasable_item_search.sort_by.options.max_amount_asc',
                     PurchasableItemSortEnum::MAX_AMOUNT_DESC => 'form.admin.purchasable_item_search.sort_by.options.max_amount_desc',
                 },
+            ])
+            ->add('isGlobal', ChoiceType::class, [
+                'placeholder' => 'form.common.choice.irrelevant',
+                'choices' => [
+                    'form.common.choice.yes' => true,
+                    'form.common.choice.no'  => false,
+                ],
+                'required' => false,
+                'label'    => 'form.admin.purchasable_item_search.is_global',
             ])
         ;
     }
