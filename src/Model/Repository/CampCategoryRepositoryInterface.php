@@ -70,4 +70,22 @@ interface CampCategoryRepositoryInterface
      * @return CampCategory[]
      */
     public function findByUrlName(string $urlName): array;
+
+    /**
+     * Returns true if there is a camp attached to the given camp category or one of its descendents.
+     *
+     * @param CampCategory $campCategory
+     * @param bool $showHiddenCamps
+     * @return bool
+     */
+    public function campCategoryHasCamp(CampCategory $campCategory, bool $showHiddenCamps = true): bool;
+
+    /**
+     * Filters out camp categories that have no camps attached to them or their descendents.
+     *
+     * @param CampCategory[] $campCategories
+     * @param bool $showHiddenCamps
+     * @return array
+     */
+    public function filterOutCampCategoriesWithoutCamps(array $campCategories, bool $showHiddenCamps = false): array;
 }

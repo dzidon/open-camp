@@ -286,13 +286,13 @@ class CampRepositoryTest extends KernelTestCase
         $data = new CampSearchData();
         $data->setCampCategory(false);
         $paginator = $repository->getAdminPaginator($data, 1, 2);
-        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getTotalItems());
         $this->assertSame(1, $paginator->getPagesCount());
         $this->assertSame(1, $paginator->getCurrentPage());
         $this->assertSame(2, $paginator->getPageSize());
 
         $urlNames = $this->getCampUrlNames($paginator->getCurrentPageItems());
-        $this->assertSame(['camp-3', 'camp-2'], $urlNames);
+        $this->assertSame(['camp-2'], $urlNames);
     }
 
     public function testGetAdminPaginatorWithFeatured(): void

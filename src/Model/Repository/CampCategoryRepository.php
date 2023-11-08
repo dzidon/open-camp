@@ -2,6 +2,7 @@
 
 namespace App\Model\Repository;
 
+use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
 use App\Service\Search\DataStructure\TreeSearchInterface;
 use Doctrine\Persistence\ManagerRegistry;
@@ -169,5 +170,55 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
             ->getQuery()
             ->getResult()
         ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function campCategoryHasCamp(CampCategory $campCategory, bool $showHiddenCamps = true): bool
+    {
+        $subTreeCampCategories = $this->treeSearch->getDescendentsOfNode($campCategory);
+        $subTreeCampCategories[] = $campCategory;
+
+        $subTreeCampCategoryIds = array_map(function (CampCategory $campCategory) {
+            return $campCategory->getId()->toBinary();
+        }, $subTreeCampCategories);
+
+        $queryBuilder = $this->_em->createQueryBuilder()
+            ->select('count(camp.id)')
+            ->from(Camp::class, 'camp')
+            ->andWhere('camp.campCategory IN (:ids)')
+            ->setParameter('ids', $subTreeCampCategoryIds)
+        ;
+
+        if (!$showHiddenCamps)
+        {
+            $queryBuilder->andWhere('camp.isHidden = FALSE');
+        }
+
+        $count = $queryBuilder
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function filterOutCampCategoriesWithoutCamps(array $campCategories, bool $showHiddenCamps = true): array
+    {
+        $filteredCampCategories = [];
+
+        foreach ($campCategories as $campCategory)
+        {
+            if ($this->campCategoryHasCamp($campCategory, $showHiddenCamps))
+            {
+                $filteredCampCategories[] = $campCategory;
+            }
+        }
+
+        return $filteredCampCategories;
     }
 }

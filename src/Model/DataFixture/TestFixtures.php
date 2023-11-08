@@ -320,8 +320,15 @@ class TestFixtures extends Fixture
         $manager->persist($campCategory2);
 
         $campCategory3 = new CampCategory('Category 3', 'category-3');
+        $this->setUid($campCategory3, 'a08f6f48-3a52-40db-b031-5eb3a468c57a');
         $this->setCreatedAt($campCategory3, new DateTimeImmutable('2000-01-03'));
         $manager->persist($campCategory3);
+
+        $campCategory4 = new CampCategory('Category 4', 'category-4');
+        $this->setUid($campCategory4, '550e8400-e29b-41d4-a716-446655440000');
+        $this->setCreatedAt($campCategory4, new DateTimeImmutable('2000-01-04'));
+        $campCategory4->setParent($campCategory3);
+        $manager->persist($campCategory4);
 
         /*
          * Camp
@@ -341,6 +348,7 @@ class TestFixtures extends Fixture
         $camp3 = new Camp('Camp 3', 'camp-3', 14, 16, 'Street 333', 'Town 3', '55555', 'CS', 200);
         $this->setUid($camp3, 'c097941e-52c4-405a-9823-49b7b71ead6e');
         $camp3->setIsHidden(true);
+        $camp3->setCampCategory($campCategory4);
         $this->setCreatedAt($camp3, new DateTimeImmutable('2000-01-03'));
         $manager->persist($camp3);
 

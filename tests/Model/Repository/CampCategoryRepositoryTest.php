@@ -43,7 +43,7 @@ class CampCategoryRepositoryTest extends KernelTestCase
         $campCategories = $repository->findAll();
         $categoryUrlNames = $this->getCampCategoryUrlNames($campCategories);
 
-        $this->assertSame(['category-1', 'category-2', 'category-3'], $categoryUrlNames);
+        $this->assertSame(['category-1', 'category-2', 'category-3', 'category-4'], $categoryUrlNames);
     }
 
     public function testFindRoots(): void
@@ -83,7 +83,7 @@ class CampCategoryRepositoryTest extends KernelTestCase
         $possibleParents = $repository->findPossibleParents($campCategory);
         $categoryUrlNames = $this->getCampCategoryUrlNames($possibleParents);
 
-        $this->assertSame(['category-3'], $categoryUrlNames);
+        $this->assertSame(['category-3', 'category-4'], $categoryUrlNames);
     }
 
     public function testFindByUrlName(): void
@@ -94,6 +94,46 @@ class CampCategoryRepositoryTest extends KernelTestCase
         $categoryUrlNames = $this->getCampCategoryUrlNames($campCategories);
 
         $this->assertSame(['category-1'], $categoryUrlNames);
+    }
+
+    public function testCampCategoryHasCamp(): void
+    {
+        $repository = $this->getCampCategoryRepository();
+
+        $uid = new UuidV4('a08f6f48-3a52-40db-b031-5eb3a468c57a');
+        $campCategory3 = $repository->findOneById($uid);
+        $this->assertFalse($repository->campCategoryHasCamp($campCategory3, false));
+        $this->assertTrue($repository->campCategoryHasCamp($campCategory3));
+
+        $uid = new UuidV4('550e8400-e29b-41d4-a716-446655440000');
+        $campCategory4 = $repository->findOneById($uid);
+        $this->assertFalse($repository->campCategoryHasCamp($campCategory4, false));
+        $this->assertTrue($repository->campCategoryHasCamp($campCategory4));
+    }
+
+    public function testFilterOutCampCategoriesWithoutCamps(): void
+    {
+        $repository = $this->getCampCategoryRepository();
+
+        $uid = new UuidV4('a08f6f48-3a52-40db-b031-5eb3a468c57a');
+        $campCategory3 = $repository->findOneById($uid);
+        $filteredCampCategories = $repository->filterOutCampCategoriesWithoutCamps([$campCategory3], false);
+        $categoryUrlNames = $this->getCampCategoryUrlNames($filteredCampCategories);
+        $this->assertEmpty($categoryUrlNames);
+
+        $filteredCampCategories = $repository->filterOutCampCategoriesWithoutCamps([$campCategory3]);
+        $categoryUrlNames = $this->getCampCategoryUrlNames($filteredCampCategories);
+        $this->assertSame(['category-3'], $categoryUrlNames);
+
+        $uid = new UuidV4('550e8400-e29b-41d4-a716-446655440000');
+        $campCategory4 = $repository->findOneById($uid);
+        $filteredCampCategories = $repository->filterOutCampCategoriesWithoutCamps([$campCategory4], false);
+        $categoryUrlNames = $this->getCampCategoryUrlNames($filteredCampCategories);
+        $this->assertEmpty($categoryUrlNames);
+
+        $filteredCampCategories = $repository->filterOutCampCategoriesWithoutCamps([$campCategory4]);
+        $categoryUrlNames = $this->getCampCategoryUrlNames($filteredCampCategories);
+        $this->assertSame(['category-4'], $categoryUrlNames);
     }
 
     private function getCampCategoryUrlNames(array $campCategories): array

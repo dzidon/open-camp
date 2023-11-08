@@ -5,6 +5,7 @@ namespace App\Controller\User;
 use App\Controller\AbstractController;
 use App\Library\Data\User\CampSearchData;
 use App\Model\Entity\Camp;
+use App\Model\Entity\CampCategory;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampImageRepositoryInterface;
@@ -44,6 +45,7 @@ class CampCatalogController extends AbstractController
     {
         $campCategory = null;
         $pathCampCategories = [];
+        $showHiddenCamps = $this->isGranted('camp_create') || $this->isGranted('camp_update');
 
         if ($path === null || $path === '')
         {
@@ -51,16 +53,10 @@ class CampCatalogController extends AbstractController
         }
         else
         {
-            $campCategory = $this->campCategoryRepository->findOneByPath($path);
-
-            if ($campCategory === null)
-            {
-                throw $this->createNotFoundException();
-            }
-
+            $campCategory = $this->findCampCategoryOrThrow404($path, $showHiddenCamps);
             $this->routeNamer->setCurrentRouteName($campCategory->getName());
             $campCategoryChildren = $campCategory->getChildren();
-            $pathCampCategories = array_merge($campCategory->getAncestors(), [$campCategory]);
+            $pathCampCategories = array_merge($campCategory->getAncestors(), [$campCategory]); // for breadcrumbs
         }
 
         $searchData = new CampSearchData();
@@ -73,9 +69,10 @@ class CampCatalogController extends AbstractController
             $searchData = new CampSearchData();
         }
 
+        $campCategoryChildren = $this->campCategoryRepository->filterOutCampCategoriesWithoutCamps($campCategoryChildren, $showHiddenCamps);
+
         $page = (int) $request->query->get('page', 1);
-        $showHidden = $this->isGranted('camp_create') || $this->isGranted('camp_update');
-        $result = $this->campRepository->getUserCampCatalogResult($searchData, $campCategory, $showHidden, $page, 12);
+        $result = $this->campRepository->getUserCampCatalogResult($searchData, $campCategory, $showHiddenCamps, $page, 12);
         $paginator = $result->getPaginator();
         if ($paginator->isCurrentPageOutOfBounds())
         {
@@ -131,9 +128,22 @@ class CampCatalogController extends AbstractController
         ]);
     }
 
+    private function findCampCategoryOrThrow404(string $path, bool $showHiddenCamps): CampCategory
+    {
+        $campCategory = $this->campCategoryRepository->findOneByPath($path);
+
+        if ($campCategory === null || !$this->campCategoryRepository->campCategoryHasCamp($campCategory, $showHiddenCamps))
+        {
+            throw $this->createNotFoundException();
+        }
+
+        return $campCategory;
+    }
+
     private function findCampOrThrow404(string $urlName): Camp
     {
         $camp = $this->campRepository->findOneByUrlName($urlName);
+
         if ($camp === null)
         {
             throw $this->createNotFoundException();
