@@ -75,6 +75,7 @@
                         <table class="table text-nowrap">
                             <thead>
                                 <tr>
+                                    <th>{{ 'entity_attribute.purchasable_item.image'|trans }}</th>
                                     <th>{{ 'entity_attribute.purchasable_item.name'|trans }}</th>
                                     <th>{{ 'entity_attribute.purchasable_item.price'|trans }}</th>
                                     <th>{{ 'entity_attribute.purchasable_item.max_amount'|trans }}</th>
@@ -90,6 +91,25 @@
 
                                 {% for purchasable_item in paginator.currentPageItems %}
                                     <tr class="align-items-center">
+                                        <td class="align-middle cell-5">
+                                            <div class="bg-black">
+                                                {% set purchasable_item_img %}
+                                                    <img class="image-cover-16-9"
+                                                         src="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
+                                                         alt="{{ 'entity_attribute.purchasable_item.image'|trans }} - {{ purchasable_item.name }}"
+                                                    >
+                                                {% endset %}
+
+                                                {% if purchasable_item.imageExtension is null %}
+                                                    {{ purchasable_item_img }}
+                                                {% else %}
+                                                    <a href="{{ asset(purchasable_item_image_path(purchasable_item)) }}">
+                                                        {{ purchasable_item_img }}
+                                                    </a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+
                                         <td class="align-middle">
                                             <span>{{ purchasable_item.name }}</span>
                                         </td>

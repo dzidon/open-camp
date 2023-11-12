@@ -36,6 +36,9 @@ class PurchasableItem
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isGlobal = false;
 
+    #[ORM\Column(length: 8, nullable: true)]
+    private ?string $imageExtension = null;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -114,6 +117,18 @@ class PurchasableItem
     public function setIsGlobal(bool $isGlobal): self
     {
         $this->isGlobal = $isGlobal;
+
+        return $this;
+    }
+
+    public function getImageExtension(): ?string
+    {
+        return $this->imageExtension;
+    }
+
+    public function setImageExtension(?string $imageExtension): self
+    {
+        $this->imageExtension = $imageExtension;
 
         return $this;
     }

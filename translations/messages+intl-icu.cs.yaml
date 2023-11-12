@@ -596,6 +596,7 @@ entity_attribute:
         max_amount: 'Maximální počet'
         purchasable_item_variants: 'Varianty'
         is_global: 'Pro celou přihlášku'
+        image: 'Obrázek'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -930,6 +931,8 @@ form:
             price: 'Cena'
             max_amount: 'Maximální počet'
             is_global: 'Pro celou přihlášku'
+            image: 'Obrázek'
+            remove_image: 'Odstranit obrázek'
             button: 'Uložit'
 
         purchasable_item_search:

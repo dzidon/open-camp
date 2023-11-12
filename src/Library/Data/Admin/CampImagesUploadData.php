@@ -2,13 +2,13 @@
 
 namespace App\Library\Data\Admin;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CampImagesUploadData
 {
     /**
-     * @var UploadedFile[] $images
+     * @var File[] $images
      */
     #[Assert\All([
         new Assert\Image(),

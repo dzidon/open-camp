@@ -5,7 +5,9 @@ namespace App\Tests\Model\Repository;
 use App\Library\Data\Admin\PurchasableItemSearchData;
 use App\Library\Enum\Search\Data\Admin\PurchasableItemSortEnum;
 use App\Model\Entity\PurchasableItem;
+use App\Model\Module\CampCatalog\PurchasableItem\PurchasableItemImageFilesystem;
 use App\Model\Repository\PurchasableItemRepository;
+use App\Tests\Service\Filesystem\FilesystemMock;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Uid\UuidV4;
 
@@ -14,8 +16,10 @@ class PurchasableItemRepositoryTest extends KernelTestCase
     public function testSaveAndRemove(): void
     {
         $purchasableItemRepository = $this->getPurchasableItemRepository();
+        $filesystemMock = $this->getFilesystemMock();
 
         $purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);
+        $purchasableItem->setImageExtension('jpg');
         $purchasableItemRepository->savePurchasableItem($purchasableItem, true);
         $id = $purchasableItem->getId();
 
@@ -26,6 +30,9 @@ class PurchasableItemRepositoryTest extends KernelTestCase
         $purchasableItemRepository->removePurchasableItem($purchasableItem, true);
         $loadedPurchasableItem = $purchasableItemRepository->findOneById($id);
         $this->assertNull($loadedPurchasableItem);
+
+        $removalPath = 'kernel-dir/public/img/dynamic/purchasable-item/' . $purchasableItem->getId()->toRfc4122() . '.jpg';
+        $this->assertContains($removalPath, $filesystemMock->getRemovedFiles());
     }
 
     public function testFindAll(): void
@@ -270,6 +277,16 @@ class PurchasableItemRepositoryTest extends KernelTestCase
         return $names;
     }
 
+    private function getFilesystemMock(): FilesystemMock
+    {
+        $container = static::getContainer();
+
+        /** @var FilesystemMock $filesystemMock */
+        $filesystemMock = $container->get(FilesystemMock::class);
+
+        return $filesystemMock;
+    }
+
     private function getPurchasableItemRepository(): PurchasableItemRepository
     {
         $container = static::getContainer();
@@ -278,5 +295,17 @@ class PurchasableItemRepositoryTest extends KernelTestCase
         $repository = $container->get(PurchasableItemRepository::class);
 
         return $repository;
+    }
+
+    protected function setUp(): void
+    {
+        $container = static::getContainer();
+        $imageDirectory = $container->getParameter('app.purchasable_item_image_directory');
+
+        $filesystemMock = new FilesystemMock();
+        $purchasableItemImageFilesystem = new PurchasableItemImageFilesystem($filesystemMock, $imageDirectory, 'no-image.jpg', 'kernel-dir');
+
+        $container->set(FilesystemMock::class, $filesystemMock);
+        $container->set(PurchasableItemImageFilesystem::class, $purchasableItemImageFilesystem);
     }
 }

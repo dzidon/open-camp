@@ -1,9 +1,9 @@
 import { Controller } from '@hotwired/stimulus';
 
 /**
- * Controller attached to a form field that can be shown/hidden by updating a checkbox.
+ * Controller attached to an element that can be shown/hidden by updating a checkbox.
  */
-export default class FormFieldVisibilityController extends Controller
+export default class ContentVisibilityController extends Controller
 {
     static values = {
         showWhenChecked: Boolean,
@@ -12,28 +12,28 @@ export default class FormFieldVisibilityController extends Controller
     updateVisibility(isChecked)
     {
         const showWhenChecked = this.showWhenCheckedValue;
-        const formField = $(this.element);
+        const content = $(this.element);
 
         if (isChecked)
         {
             if (showWhenChecked)
             {
-                formField.show();
+                content.show();
             }
             else
             {
-                formField.hide();
+                content.hide();
             }
         }
         else
         {
             if (showWhenChecked)
             {
-                formField.hide();
+                content.hide();
             }
             else
             {
-                formField.show();
+                content.show();
             }
         }
     }

@@ -5,6 +5,7 @@ namespace App\Model\Repository;
 use App\Library\Data\Admin\PurchasableItemSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\PurchasableItem;
+use App\Model\Module\CampCatalog\PurchasableItem\PurchasableItemImageFilesystemInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -17,9 +18,13 @@ use Symfony\Component\Uid\UuidV4;
  */
 class PurchasableItemRepository extends AbstractRepository implements PurchasableItemRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    private PurchasableItemImageFilesystemInterface $purchasableItemImageFilesystem;
+
+    public function __construct(ManagerRegistry $registry, PurchasableItemImageFilesystemInterface $purchasableItemImageFilesystem)
     {
         parent::__construct($registry, PurchasableItem::class);
+
+        $this->purchasableItemImageFilesystem = $purchasableItemImageFilesystem;
     }
 
     /**
@@ -35,6 +40,7 @@ class PurchasableItemRepository extends AbstractRepository implements Purchasabl
      */
     public function removePurchasableItem(PurchasableItem $purchasableItem, bool $flush): void
     {
+        $this->purchasableItemImageFilesystem->removeImageFile($purchasableItem);
         $this->remove($purchasableItem, $flush);
     }
 

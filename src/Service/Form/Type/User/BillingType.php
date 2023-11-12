@@ -61,9 +61,9 @@ class BillingType extends AbstractType
                 ->add('isCompany', CheckboxType::class, [
                     'label'    => 'form.user.profile_billing.is_company',
                     'attr'     => [
-                        'data-controller'                    => 'cv--checkbox',
-                        'data-action'                        => 'cv--checkbox#updateVisibility',
-                        'data-cv--checkbox-cv--field-outlet' => '.company-fields-visibility',
+                        'data-controller'                      => 'cv--checkbox',
+                        'data-action'                          => 'cv--checkbox#updateVisibility',
+                        'data-cv--checkbox-cv--content-outlet' => '.company-fields-visibility',
                     ],
                     'required' => false,
                 ])
@@ -71,8 +71,8 @@ class BillingType extends AbstractType
                     'label'      => 'form.user.profile_billing.business_name',
                     'row_attr' => [
                         'class'                                  => 'company-fields-visibility',
-                        'data-controller'                        => 'cv--field',
-                        'data-cv--field-show-when-checked-value' => '1',
+                        'data-controller'                        => 'cv--content',
+                        'data-cv--content-show-when-checked-value' => '1',
                     ],
                     'required' => false,
                 ])
@@ -83,8 +83,8 @@ class BillingType extends AbstractType
                     ],
                     'row_attr' => [
                         'class'                                  => 'company-fields-visibility',
-                        'data-controller'                        => 'cv--field',
-                        'data-cv--field-show-when-checked-value' => '1',
+                        'data-controller'                        => 'cv--content',
+                        'data-cv--content-show-when-checked-value' => '1',
                     ],
                     'required' => false,
                 ])
@@ -95,8 +95,8 @@ class BillingType extends AbstractType
                     ],
                     'row_attr' => [
                         'class'                                  => 'company-fields-visibility',
-                        'data-controller'                        => 'cv--field',
-                        'data-cv--field-show-when-checked-value' => '1',
+                        'data-controller'                        => 'cv--content',
+                        'data-cv--content-show-when-checked-value' => '1',
                     ],
                     'required' => false,
                 ])

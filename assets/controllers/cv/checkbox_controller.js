@@ -1,11 +1,11 @@
 import { Controller } from '@hotwired/stimulus';
 
 /**
- * Controller attached to checkboxes that update visibility of other form fields.
+ * Controller attached to checkboxes that update visibility of other elements.
  */
 export default class CheckBoxVisibilityController extends Controller
 {
-    static outlets = [ 'cv--field' ]
+    static outlets = [ 'cv--content' ]
 
     connect()
     {
@@ -16,12 +16,12 @@ export default class CheckBoxVisibilityController extends Controller
 
     updateVisibility()
     {
-        if (!this.hasCvFieldOutlet)
+        if (!this.hasCvContentOutlet)
         {
             return;
         }
 
         const isChecked = $(this.element).prop('checked');
-        this.cvFieldOutlets.forEach(field => field.updateVisibility(isChecked));
+        this.cvContentOutlets.forEach(content => content.updateVisibility(isChecked));
     }
 }

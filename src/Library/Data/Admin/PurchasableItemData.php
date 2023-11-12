@@ -4,6 +4,7 @@ namespace App\Library\Data\Admin;
 
 use App\Library\Constraint\UniquePurchasableItem;
 use App\Model\Entity\PurchasableItem;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniquePurchasableItem]
@@ -28,6 +29,11 @@ class PurchasableItemData
     private ?int $maxAmount = null;
 
     private bool $isGlobal = false;
+
+    #[Assert\Image]
+    private ?File $image = null;
+
+    private bool $removeImage = false;
 
     public function __construct(?PurchasableItem $purchasableItem = null)
     {
@@ -95,6 +101,30 @@ class PurchasableItemData
     public function setIsGlobal(bool $isGlobal): self
     {
         $this->isGlobal = $isGlobal;
+
+        return $this;
+    }
+
+    public function getImage(): ?File
+    {
+        return $this->image;
+    }
+
+    public function setImage(?File $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function removeImage(): bool
+    {
+        return $this->removeImage;
+    }
+
+    public function setRemoveImage(bool $removeImage): self
+    {
+        $this->removeImage = $removeImage;
 
         return $this;
     }

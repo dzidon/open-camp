@@ -5,7 +5,10 @@ namespace App\Tests\Library\Data\Admin;
 use App\Library\Data\Admin\PurchasableItemData;
 use App\Model\Entity\PurchasableItem;
 use App\Model\Repository\PurchasableItemRepositoryInterface;
+use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PurchasableItemDataTest extends KernelTestCase
@@ -141,6 +144,56 @@ class PurchasableItemDataTest extends KernelTestCase
 
         $data->setIsGlobal(false);
         $this->assertFalse($data->isGlobal());
+    }
+
+    public function testImage(): void
+    {
+        $data = new PurchasableItemData();
+        $this->assertNull($data->getImage());
+
+        $newImage = new UploadedFile('image1.png', 'original1.png', 'image/png', \UPLOAD_ERR_NO_FILE, true);
+
+        $data->setImage($newImage);
+        $this->assertSame($newImage, $data->getImage());
+
+        $data->setImage(null);
+        $this->assertNull($data->getImage());
+    }
+
+    public function testImageConstraintPresence(): void
+    {
+        $data = new PurchasableItemData();
+
+        $reflectionClass = new ReflectionClass($data);
+        $property = $reflectionClass->getProperty('image');
+        $attributes = $property->getAttributes();
+
+        $hasImageConstraint = false;
+
+        foreach ($attributes as $attribute)
+        {
+            if ($attribute->getName() === Image::class)
+            {
+                $hasImageConstraint = true;
+
+                break;
+            }
+        }
+
+        $this->assertCount(1, $attributes);
+        $this->assertTrue($hasImageConstraint);
+    }
+
+    public function testRemoveImage(): void
+    {
+        $data = new PurchasableItemData();
+        $this->assertFalse($data->removeImage());
+
+        $data->setRemoveImage(true);
+        $this->assertTrue($data->removeImage());
+
+        $data->setRemoveImage(false);
+        $this->assertFalse($data->removeImage());
     }
 
     public function testMaxAmount(): void

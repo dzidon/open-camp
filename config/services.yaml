@@ -8,7 +8,9 @@ parameters:
 
     # Directories & paths
     app.camp_image_directory: 'img/dynamic/camp'
-    app.no_camp_image_path: 'img/static/camp/placeholder.jpg'
+    app.no_camp_image_path: 'img/static/placeholder.jpg'
+    app.purchasable_item_image_directory: 'img/dynamic/purchasable-item'
+    app.no_purchasable_item_image_path: 'img/static/placeholder.jpg'
 
     # Mailer
     app.email_no_reply: 'noreply@camp.com'
@@ -111,6 +113,12 @@ services:
             $kernelProjectDirectory: '%kernel.project_dir%'
             $noImagePath: '%app.no_camp_image_path%'
             $campImageDirectory: '%app.camp_image_directory%'
+
+    App\Model\Module\CampCatalog\PurchasableItem\PurchasableItemImageFilesystem:
+        arguments:
+            $kernelProjectDirectory: '%kernel.project_dir%'
+            $noImagePath: '%app.no_purchasable_item_image_path%'
+            $purchasableItemImageDirectory: '%app.purchasable_item_image_directory%'
 
     App\Service\Form\Extension\CountryTypeDefaultsExtension:
         arguments:

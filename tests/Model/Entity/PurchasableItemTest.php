@@ -69,6 +69,17 @@ class PurchasableItemTest extends TestCase
         $this->assertFalse($this->purchasableItem->isGlobal());
     }
 
+    public function testImageExtension(): void
+    {
+        $this->assertNull($this->purchasableItem->getImageExtension());
+
+        $this->purchasableItem->setImageExtension('jpg');
+        $this->assertSame('jpg', $this->purchasableItem->getImageExtension());
+
+        $this->purchasableItem->setImageExtension(null);
+        $this->assertNull($this->purchasableItem->getImageExtension());
+    }
+
     public function testCreatedAt(): void
     {
         $this->assertSame((new DateTimeImmutable('now'))->getTimestamp(), $this->purchasableItem->getCreatedAt()->getTimestamp());

@@ -48,8 +48,8 @@ class CamperType extends AbstractType
                     ],
                     'row_attr' => [
                         'class'                                  => 'national-id-visibility',
-                        'data-controller'                        => 'cv--field',
-                        'data-cv--field-show-when-checked-value' => '0',
+                        'data-controller'                        => 'cv--content',
+                        'data-cv--content-show-when-checked-value' => '0',
                     ],
                     'required' => false,
                 ])
@@ -58,7 +58,7 @@ class CamperType extends AbstractType
                     'attr'     => [
                         'data-controller'                    => 'cv--checkbox',
                         'data-action'                        => 'cv--checkbox#updateVisibility',
-                        'data-cv--checkbox-cv--field-outlet' => '.national-id-visibility',
+                        'data-cv--checkbox-cv--content-outlet' => '.national-id-visibility',
                     ],
                     'required' => false,
                 ])

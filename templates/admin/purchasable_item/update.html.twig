@@ -7,7 +7,34 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-md-8 col-xl-5">
-                            {{ form(form_purchasable_item) }}
+                            {{ form_start(form_purchasable_item) }}
+                                {{ form_row(form_purchasable_item.name) }}
+                                {{ form_row(form_purchasable_item.label) }}
+                                {{ form_row(form_purchasable_item.price) }}
+                                {{ form_row(form_purchasable_item.maxAmount) }}
+                                {{ form_row(form_purchasable_item.isGlobal) }}
+                                {{ form_row(form_purchasable_item.image) }}
+
+                                {% if purchasable_item is defined and purchasable_item.imageExtension is not null %}
+                                    <div class="row purchasable-item-image"
+                                         data-controller="cv--content"
+                                         data-cv--content-show-when-checked-value="0"
+                                    >
+                                        <div class="col-4 col-md-3 mb-3">
+                                            <div class="bg-black">
+                                                <a href="{{ asset(purchasable_item_image_path(purchasable_item)) }}">
+                                                    <img class="image-cover-16-9"
+                                                         src="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
+                                                         alt="{{ 'entity_attribute.purchasable_item.image'|trans }} - {{ purchasable_item.name }}"
+                                                    >
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+
+                                {{ form_rest(form_purchasable_item) }}
+                            {{ form_end(form_purchasable_item) }}
                         </div>
                     </div>
                 </div>
