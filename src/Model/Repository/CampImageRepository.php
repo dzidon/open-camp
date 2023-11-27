@@ -5,7 +5,7 @@ namespace App\Model\Repository;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampImage;
-use App\Model\Module\CampCatalog\CampImage\CampImageFilesystemInterface;
+use App\Model\Service\CampImage\CampImageFilesystemInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;

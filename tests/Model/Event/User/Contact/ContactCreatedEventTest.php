@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Tests\Model\Event\User\Contact;
+
+use App\Library\Data\User\ContactData;
+use App\Model\Entity\Contact;
+use App\Model\Entity\User;
+use App\Model\Enum\Entity\ContactRoleEnum;
+use App\Model\Event\User\Contact\ContactCreatedEvent;
+use PHPUnit\Framework\TestCase;
+
+class ContactCreatedEventTest extends TestCase
+{
+    private Contact $contact;
+
+    private User $user;
+
+    private ContactData $data;
+
+    private ContactCreatedEvent $event;
+
+    public function testData(): void
+    {
+        $this->assertSame($this->data, $this->event->getContactData());
+
+        $newData = new ContactData();
+        $this->event->setContactData($newData);
+        $this->assertSame($newData, $this->event->getContactData());
+    }
+
+    public function testEntity(): void
+    {
+        $this->assertSame($this->contact, $this->event->getContact());
+
+        $newContact = new Contact('Sam', 'Doe', $this->user, ContactRoleEnum::MOTHER);
+        $this->event->setContact($newContact);
+        $this->assertSame($newContact, $this->event->getContact());
+    }
+
+    protected function setUp(): void
+    {
+        $this->user = new User('bob@gmail.com');
+        $this->contact = new Contact('Bob', 'Smith', $this->user, ContactRoleEnum::MOTHER);
+        $this->data = new ContactData();
+        $this->event = new ContactCreatedEvent($this->data, $this->contact);
+    }
+}

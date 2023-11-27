@@ -6,6 +6,9 @@ use App\Controller\AbstractController;
 use App\Library\Data\Admin\RoleData;
 use App\Library\Data\Admin\RoleSearchData;
 use App\Model\Entity\Role;
+use App\Model\Event\Admin\Role\RoleCreateEvent;
+use App\Model\Event\Admin\Role\RoleDeleteEvent;
+use App\Model\Event\Admin\Role\RoleUpdateEvent;
 use App\Model\Repository\PermissionRepositoryInterface;
 use App\Model\Repository\RoleRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
@@ -15,6 +18,7 @@ use App\Service\Form\Type\Admin\RoleType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Breadcrumbs\Admin\RoleBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -74,7 +78,7 @@ class RoleController extends AbstractController
 
     #[IsGranted('role_create')]
     #[Route('/admin/role/create', name: 'admin_role_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer,
+    public function create(EventDispatcherInterface      $eventDispatcher,
                            PermissionRepositoryInterface $permissionRepository,
                            Request                       $request): Response
     {
@@ -87,9 +91,8 @@ class RoleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $role = new Role($roleData->getLabel());
-            $dataTransfer->fillEntity($roleData, $role);
-            $this->roleRepository->saveRole($role, true);
+            $event = new RoleCreateEvent($roleData);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.role.create');
 
             return $this->redirectToRoute('admin_role_list');
@@ -117,7 +120,8 @@ class RoleController extends AbstractController
 
     #[IsGranted('role_update')]
     #[Route('/admin/role/{id}/update', name: 'admin_role_update')]
-    public function update(DataTransferRegistryInterface $dataTransfer,
+    public function update(EventDispatcherInterface      $eventDispatcher,
+                           DataTransferRegistryInterface $dataTransfer,
                            PermissionRepositoryInterface $permissionRepository,
                            Request                       $request,
                            UuidV4                        $id): Response
@@ -134,8 +138,8 @@ class RoleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($roleData, $role);
-            $this->roleRepository->saveRole($role, true);
+            $event = new RoleUpdateEvent($roleData, $role);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.role.update');
 
             return $this->redirectToRoute('admin_role_list');
@@ -150,7 +154,7 @@ class RoleController extends AbstractController
 
     #[IsGranted('role_delete')]
     #[Route('/admin/role/{id}/delete', name: 'admin_role_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $role = $this->findRoleOrThrow404($id);
 
@@ -163,7 +167,8 @@ class RoleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->roleRepository->removeRole($role, true);
+            $event = new RoleDeleteEvent($role);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.role.delete');
 
             return $this->redirectToRoute('admin_role_list');

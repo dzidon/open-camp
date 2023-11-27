@@ -4,8 +4,8 @@ namespace App\Service\Twig;
 
 use App\Model\Entity\CampImage;
 use App\Model\Entity\PurchasableItem;
-use App\Model\Module\CampCatalog\CampImage\CampImageFilesystemInterface;
-use App\Model\Module\CampCatalog\PurchasableItem\PurchasableItemImageFilesystemInterface;
+use App\Model\Service\CampImage\CampImageFilesystemInterface;
+use App\Model\Service\PurchasableItem\PurchasableItemImageFilesystemInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

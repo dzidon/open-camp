@@ -88,11 +88,11 @@ auth:
     logged_in: 'Přihlášení proběhlo úspěšně!'
     logged_out: 'Odhlášení proběhlo úspěšně!'
 
-    registration_created: 'Registrace proběhla úspěšně! Pokud zadaný e-mail existuje a pokud u nás ještě není zaregistrovaný, poslali jsme na něj potvrzovací odkaz pro dokončení registrace.'
+    registration_created: 'Registrace proběhla úspěšně! Pokud zadaný e-mail {email} existuje a pokud u nás ještě není zaregistrovaný, poslali jsme na něj potvrzovací odkaz pro dokončení registrace.'
     registration_enter_password: 'Nyní prosím zadejte své nové heslo pro dokončení registrace.'
     registration_complete: 'Registrace dokončena! Nyní se můžete přihlásit ke svému účtu.'
 
-    password_change_created: 'Pokud je u nás zadaný e-mail zaregistrovaný, poslali jsme na něj odkaz pro nastavení nového hesla.'
+    password_change_created: 'Pokud je u nás zadaný e-mail {email} zaregistrovaný, poslali jsme na něj odkaz pro nastavení nového hesla.'
     password_change_instruction: 'Zadejte své nové heslo.'
     password_changed_unauthenticated: 'Heslo úspěšně nastaveno! Nyní se můžete přihlásit.'
     password_changed_authenticated: 'Heslo úspěšně nastaveno!'

@@ -75,9 +75,8 @@ services:
             - '../src/Model/Attribute/'
             - '../src/Model/Entity/'
             - '../src/Model/Enum/'
-            - '../src/Model/Module/CampCatalog/Camp/UserCampCatalogResult.php'
-            - '../src/Model/Module/Security/UserRegistration/UserRegistrationResult.php'
-            - '../src/Model/Module/Security/UserPasswordChange/UserPasswordChangeResult.php'
+            - '../src/Model/Event/'
+            - '../src/Model/Library/'
             - '../src/Kernel.php'
 
     _instanceof:
@@ -87,6 +86,15 @@ services:
         App\Service\Data\Transfer\DataTransferInterface:
             tags: [ 'app.data_transfer' ]
 
+    Symfony\Bridge\Monolog\Processor\TokenProcessor:
+        autoconfigure: false
+        tags:
+            - { name: 'monolog.processor', channel: 'model' }
+
+    App\Service\Logger\ModelLogger:
+        arguments:
+            $logger: '@monolog.logger.model'
+
     App\Service\Security\Authentication\SocialLoginRedirectResponseFactory:
         arguments:
             $scopes: '%app.social_login_scopes%'
@@ -95,26 +103,26 @@ services:
         arguments:
             $services: '%app.social_login_services%'
 
-    App\Model\Module\Security\UserRegistration\UserRegistrationFactory:
+    App\Model\Service\UserRegistration\UserRegistrationFactory:
         arguments:
             $maxActiveRegistrationsPerEmail: '%app.max_active_registrations_per_email%'
             $registrationLifespan: '%app.registration_lifespan%'
 
-    App\Model\Module\Security\UserPasswordChange\UserPasswordChangeFactory:
+    App\Model\Service\UserPasswordChange\UserPasswordChangeFactory:
         arguments:
             $maxActivePasswordChangesPerUser: '%app.max_active_password_changes_per_user%'
             $passwordChangeLifespan: '%app.password_change_lifespan%'
 
-    App\Model\Module\CampCatalog\CampImage\CampImageFactory:
+    App\Model\Service\CampImage\CampImageFactory:
         $campImageUploadDirectory: '%kernel.project_dir%/public/%app.camp_image_directory%'
 
-    App\Model\Module\CampCatalog\CampImage\CampImageFilesystem:
+    App\Model\Service\CampImage\CampImageFilesystem:
         arguments:
             $kernelProjectDirectory: '%kernel.project_dir%'
             $noImagePath: '%app.no_camp_image_path%'
             $campImageDirectory: '%app.camp_image_directory%'
 
-    App\Model\Module\CampCatalog\PurchasableItem\PurchasableItemImageFilesystem:
+    App\Model\Service\PurchasableItem\PurchasableItemImageFilesystem:
         arguments:
             $kernelProjectDirectory: '%kernel.project_dir%'
             $noImagePath: '%app.no_purchasable_item_image_path%'
@@ -132,10 +140,6 @@ services:
     App\Service\Form\Extension\MoneyTypeDefaultsExtension:
         arguments:
             $currency: '%app.currency%'
-
-    App\Service\Form\Type\Admin\UserType:
-        arguments:
-            $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
     App\Service\Form\Type\User\BillingType:
         arguments:

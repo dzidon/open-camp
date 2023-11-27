@@ -18,5 +18,5 @@ interface PasswordChangeBreadcrumbsInterface
     /**
      * Initializes breadcrumbs for the path "user_password_change_complete".
      */
-    public function buildPasswordChangeComplete(string $token): MenuTypeInterface;
+    public function buildPasswordChangeComplete(string $token, bool $isAuthenticated): MenuTypeInterface;
 }

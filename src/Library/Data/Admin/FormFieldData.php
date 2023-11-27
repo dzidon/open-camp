@@ -6,7 +6,7 @@ use App\Library\Constraint\Compound\FormFieldChoiceItemRequirements;
 use App\Library\Constraint\UniqueFormField;
 use App\Model\Entity\FormField;
 use App\Model\Enum\Entity\FormFieldTypeEnum;
-use App\Model\Module\Application\FormField\FormFieldOptionsResolver;
+use App\Model\Library\FormField\FormFieldOptionsResolver;
 use LogicException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;

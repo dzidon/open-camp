@@ -93,9 +93,6 @@ class CamperType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => CamperData::class,
-            'empty_data' => function (): CamperData {
-                return new CamperData($this->isNationalIdentifierEnabled);
-            },
         ]);
     }
 }

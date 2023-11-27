@@ -5,15 +5,15 @@ namespace App\Controller\User;
 use App\Controller\AbstractController;
 use App\Library\Data\User\PlainPasswordData;
 use App\Library\Data\User\RegistrationData;
-use App\Model\Module\Security\UserRegistration\UserRegistererInterface;
-use App\Model\Module\Security\UserRegistration\UserRegistrationFactoryInterface;
+use App\Model\Event\User\UserRegistration\UserRegistrationCompleteEvent;
+use App\Model\Event\User\UserRegistration\UserRegistrationCreateEvent;
 use App\Model\Repository\UserRegistrationRepositoryInterface;
 use App\Service\Form\Type\User\RegistrationType;
 use App\Service\Form\Type\User\RepeatedPasswordType;
-use App\Service\Mailer\UserRegistrationMailerInterface;
 use App\Service\Menu\Breadcrumbs\User\RegistrationBreadcrumbsInterface;
 use App\Service\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use App\Service\Security\Token\TokenSplitterInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,9 +33,7 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('', name: 'user_registration')]
-    public function registration(UserRegistrationMailerInterface  $mailer,
-                                 UserRegistrationFactoryInterface $registrationFactory,
-                                 Request                          $request): Response
+    public function registration(EventDispatcherInterface $eventDispatcher, Request $request): Response
     {
         $registrationData = new RegistrationData();
         $form = $this->createForm(RegistrationType::class, $registrationData);
@@ -44,10 +42,11 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $result = $registrationFactory->createUserRegistration($registrationData->getEmail(), true);
-            $userRegistration = $result->getUserRegistration();
-            $mailer->sendEmail($userRegistration->getEmail(), $result->getToken(), $userRegistration->getExpireAt(), $result->isFake());
-            $this->addTransFlash('success', 'auth.registration_created');
+            $event = new UserRegistrationCreateEvent($registrationData);
+            $eventDispatcher->dispatch($event, $event::NAME);
+            $this->addTransFlash('success', 'auth.registration_created', [
+                'email' => $registrationData->getEmail(),
+            ]);
 
             return $this->redirectToRoute('user_home');
         }
@@ -59,9 +58,9 @@ class RegistrationController extends AbstractController
     }
 
     #[Route('/complete/{token}', name: 'user_registration_complete', requirements: ['token' => '\w+'])]
-    public function registrationComplete(TokenSplitterInterface                  $tokenSplitter,
+    public function registrationComplete(EventDispatcherInterface                $eventDispatcher,
+                                         TokenSplitterInterface                  $tokenSplitter,
                                          UserRegistrationRepositoryInterface     $registrationRepository,
-                                         UserRegistererInterface                 $userRegisterer,
                                          UserRegistrationVerifierHasherInterface $hasher,
                                          Request                                 $request,
                                          string                                  $token): Response
@@ -81,7 +80,8 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $userRegisterer->completeUserRegistration($userRegistration, $passwordData->getPlainPassword(), true);
+            $event = new UserRegistrationCompleteEvent($passwordData, $userRegistration);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'auth.registration_complete');
 
             return $this->redirectToRoute('user_login');

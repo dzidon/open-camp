@@ -7,6 +7,9 @@ use App\Library\Data\User\CamperData;
 use App\Library\Data\User\CamperSearchData;
 use App\Model\Entity\Camper;
 use App\Model\Entity\User;
+use App\Model\Event\User\Camper\CamperCreateEvent;
+use App\Model\Event\User\Camper\CamperDeleteEvent;
+use App\Model\Event\User\Camper\CamperUpdateEvent;
 use App\Model\Repository\CamperRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Common\HiddenTrueType;
@@ -14,6 +17,7 @@ use App\Service\Form\Type\User\CamperSearchType;
 use App\Service\Form\Type\User\CamperType;
 use App\Service\Menu\Breadcrumbs\User\ProfileCamperBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,7 +77,7 @@ class ProfileCamperController extends AbstractController
     }
 
     #[Route('/camper/create', name: 'user_profile_camper_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer, Request $request): Response
+    public function create(EventDispatcherInterface $eventDispatcher, Request $request): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -85,9 +89,8 @@ class ProfileCamperController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $camper = new Camper($camperData->getNameFirst(), $camperData->getNameLast(), $camperData->getGender(), $camperData->getBornAt(), $user);
-            $dataTransfer->fillEntity($camperData, $camper);
-            $this->camperRepository->saveCamper($camper, true);
+            $event = new CamperCreateEvent($camperData, $user);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camper.create');
 
             return $this->redirectToRoute('user_profile_camper_list');
@@ -112,7 +115,10 @@ class ProfileCamperController extends AbstractController
     }
 
     #[Route('/camper/{id}/update', name: 'user_profile_camper_update')]
-    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
+    public function update(EventDispatcherInterface      $eventDispatcher,
+                           DataTransferRegistryInterface $dataTransfer,
+                           Request                       $request,
+                           UuidV4                        $id): Response
     {
         $camper = $this->findCamperOrThrow404($id);
         $this->denyAccessUnlessGranted('camper_update', $camper);
@@ -126,8 +132,8 @@ class ProfileCamperController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($camperData, $camper);
-            $this->camperRepository->saveCamper($camper, true);
+            $event = new CamperUpdateEvent($camperData, $camper);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camper.update');
 
             return $this->redirectToRoute('user_profile_camper_list');
@@ -140,7 +146,7 @@ class ProfileCamperController extends AbstractController
     }
 
     #[Route('/camper/{id}/delete', name: 'user_profile_camper_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $camper = $this->findCamperOrThrow404($id);
         $this->denyAccessUnlessGranted('camper_delete', $camper);
@@ -154,7 +160,8 @@ class ProfileCamperController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->camperRepository->removeCamper($camper, true);
+            $event = new CamperDeleteEvent($camper);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camper.delete');
 
             return $this->redirectToRoute('user_profile_camper_list');

@@ -7,6 +7,10 @@ use App\Library\Data\Admin\PlainPasswordData;
 use App\Library\Data\Admin\UserData;
 use App\Library\Data\Admin\UserSearchData;
 use App\Model\Entity\User;
+use App\Model\Event\Admin\User\UserCreateEvent;
+use App\Model\Event\Admin\User\UserDeleteEvent;
+use App\Model\Event\Admin\User\UserUpdateEvent;
+use App\Model\Event\Admin\User\UserUpdatePasswordEvent;
 use App\Model\Repository\RoleRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
@@ -16,12 +20,12 @@ use App\Service\Form\Type\Admin\UserType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Breadcrumbs\Admin\UserBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Uid\UuidV4;
@@ -50,8 +54,9 @@ class UserController extends AbstractController
     {
         $page = (int) $request->query->get('page', 1);
         $searchData = new UserSearchData();
-        $roleChoices = $roleRepository->findAll();
-        $form = $formFactory->createNamed('', UserSearchType::class, $searchData, ['choices_roles' => $roleChoices]);
+        $form = $formFactory->createNamed('', UserSearchType::class, $searchData, [
+            'choices_roles' => $roleRepository->findAll(),
+        ]);
         $form->handleRequest($request);
 
         $isSearchInvalid = $form->isSubmitted() && !$form->isValid();
@@ -79,22 +84,22 @@ class UserController extends AbstractController
 
     #[IsGranted('user_create')]
     #[Route('/admin/user/create', name: 'admin_user_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer,
-                           RoleRepositoryInterface       $roleRepository,
-                           Request                       $request): Response
+    public function create(EventDispatcherInterface $eventDispatcher,
+                           RoleRepositoryInterface  $roleRepository,
+                           Request                  $request): Response
     {
         $userData = new UserData($this->getParameter('app.eu_business_data'));
 
-        $roleChoices = $roleRepository->findAll();
-        $form = $this->createForm(UserType::class, $userData, ['choices_roles' => $roleChoices]);
+        $form = $this->createForm(UserType::class, $userData, [
+            'choices_roles' => $roleRepository->findAll(),
+        ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.user.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $user = new User($userData->getEmail());
-            $dataTransfer->fillEntity($userData, $user);
-            $this->userRepository->saveUser($user, true);
+            $event = new UserCreateEvent($userData);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.user.create');
 
             return $this->redirectToRoute('admin_user_list');
@@ -120,7 +125,8 @@ class UserController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("user_update") or is_granted("user_update_role")'))]
     #[Route('/admin/user/{id}/update', name: 'admin_user_update')]
-    public function update(DataTransferRegistryInterface $dataTransfer,
+    public function update(EventDispatcherInterface      $eventDispatcher,
+                           DataTransferRegistryInterface $dataTransfer,
                            RoleRepositoryInterface       $roleRepository,
                            Request                       $request,
                            UuidV4                        $id): Response
@@ -130,15 +136,16 @@ class UserController extends AbstractController
         $userData = new UserData($this->getParameter('app.eu_business_data'), $user);
         $dataTransfer->fillData($userData, $user);
 
-        $roleChoices = $roleRepository->findAll();
-        $form = $this->createForm(UserType::class, $userData, ['choices_roles' => $roleChoices]);
+        $form = $this->createForm(UserType::class, $userData, [
+            'choices_roles' => $roleRepository->findAll(),
+        ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.user.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($userData, $user);
-            $this->userRepository->saveUser($user, true);
+            $event = new UserUpdateEvent($userData, $user);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.user.update');
 
             return $this->redirectToRoute('admin_user_list');
@@ -153,7 +160,7 @@ class UserController extends AbstractController
 
     #[IsGranted('user_update')]
     #[Route('/admin/user/{id}/update/password', name: 'admin_user_update_password')]
-    public function updatePassword(UserPasswordHasherInterface $hasher, Request $request, UuidV4 $id): Response
+    public function updatePassword(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $user = $this->findUserOrThrow404($id);
 
@@ -164,20 +171,10 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $plainPassword = $data->getPlainPassword();
-            if ($plainPassword === null)
-            {
-                $user->setPassword(null);
-                $this->addTransFlash('success', 'crud.action_performed.user.reset_password');
-            }
-            else
-            {
-                $password = $hasher->hashPassword($user, $plainPassword);
-                $user->setPassword($password);
-                $this->addTransFlash('success', 'crud.action_performed.user.update_password');
-            }
-
-            $this->userRepository->saveUser($user, true);
+            $event = new UserUpdatePasswordEvent($data, $user);
+            $eventDispatcher->dispatch($event, $event::NAME);
+            $flashMessage = $user->getPassword() === null ? 'crud.action_performed.user.reset_password' : 'crud.action_performed.user.update_password';
+            $this->addTransFlash('success', $flashMessage);
 
             return $this->redirectToRoute('admin_user_update', ['id' => $user->getId()]);
         }
@@ -191,7 +188,7 @@ class UserController extends AbstractController
 
     #[IsGranted('user_delete')]
     #[Route('/admin/user/{id}/delete', name: 'admin_user_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $user = $this->findUserOrThrow404($id);
 
@@ -204,7 +201,8 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->userRepository->removeUser($user, true);
+            $event = new UserDeleteEvent($user);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.user.delete');
 
             return $this->redirectToRoute('admin_user_list');

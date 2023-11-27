@@ -5,7 +5,7 @@ namespace App\Model\Repository;
 use App\Library\Data\Admin\PurchasableItemSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\PurchasableItem;
-use App\Model\Module\CampCatalog\PurchasableItem\PurchasableItemImageFilesystemInterface;
+use App\Model\Service\PurchasableItem\PurchasableItemImageFilesystemInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;

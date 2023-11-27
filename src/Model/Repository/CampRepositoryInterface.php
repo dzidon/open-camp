@@ -7,8 +7,8 @@ use App\Library\Data\User\CampSearchData as UserCampSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
-use App\Model\Module\CampCatalog\Camp\CampLifespanCollectionInterface;
-use App\Model\Module\CampCatalog\Camp\UserCampCatalogResultInterface;
+use App\Model\Library\Camp\CampLifespanCollectionInterface;
+use App\Model\Library\Camp\UserCampCatalogResultInterface;
 use Symfony\Component\Uid\UuidV4;
 
 interface CampRepositoryInterface

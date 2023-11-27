@@ -13,7 +13,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class AuthenticationMessageSubscriber
 {
-    public TranslatorInterface $translator;
+    private TranslatorInterface $translator;
 
     public function __construct(TranslatorInterface $translator)
     {

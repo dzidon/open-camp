@@ -7,6 +7,9 @@ use App\Library\Data\User\ContactData;
 use App\Library\Data\User\ContactSearchData;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
+use App\Model\Event\User\Contact\ContactCreateEvent;
+use App\Model\Event\User\Contact\ContactDeleteEvent;
+use App\Model\Event\User\Contact\ContactUpdateEvent;
 use App\Model\Repository\ContactRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Common\HiddenTrueType;
@@ -14,6 +17,7 @@ use App\Service\Form\Type\User\ContactSearchType;
 use App\Service\Form\Type\User\ContactType;
 use App\Service\Menu\Breadcrumbs\User\ProfileContactBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,7 +77,7 @@ class ProfileContactController extends AbstractController
     }
 
     #[Route('/contact/create', name: 'user_profile_contact_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer, Request $request): Response
+    public function create(EventDispatcherInterface $eventDispatcher, Request $request): Response
     {
         /** @var User $user */
         $user = $this->getUser();
@@ -85,9 +89,8 @@ class ProfileContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $contact = new Contact($contactData->getNameFirst(), $contactData->getNameLast(), $user, $contactData->getRole(), $contactData->getRoleOther());
-            $dataTransfer->fillEntity($contactData, $contact);
-            $this->contactRepository->saveContact($contact, true);
+            $event = new ContactCreateEvent($contactData, $user);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.contact.create');
 
             return $this->redirectToRoute('user_profile_contact_list');
@@ -112,7 +115,10 @@ class ProfileContactController extends AbstractController
     }
 
     #[Route('/contact/{id}/update', name: 'user_profile_contact_update')]
-    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
+    public function update(DataTransferRegistryInterface $dataTransfer,
+                           EventDispatcherInterface      $eventDispatcher,
+                           Request                       $request,
+                           UuidV4                        $id): Response
     {
         $contact = $this->findContactOrThrow404($id);
         $this->denyAccessUnlessGranted('contact_update', $contact);
@@ -125,8 +131,8 @@ class ProfileContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($contactData, $contact);
-            $this->contactRepository->saveContact($contact, true);
+            $event = new ContactUpdateEvent($contactData, $contact);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.contact.update');
 
             return $this->redirectToRoute('user_profile_contact_list');
@@ -139,7 +145,7 @@ class ProfileContactController extends AbstractController
     }
 
     #[Route('/contact/{id}/delete', name: 'user_profile_contact_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $contact = $this->findContactOrThrow404($id);
         $this->denyAccessUnlessGranted('contact_delete', $contact);
@@ -153,7 +159,8 @@ class ProfileContactController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->contactRepository->removeContact($contact, true);
+            $event = new ContactDeleteEvent($contact);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.contact.delete');
 
             return $this->redirectToRoute('user_profile_contact_list');

@@ -18,15 +18,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class UserType extends AbstractType
 {
-    private bool $isEuBusinessDataEnabled;
-
     private Security $security;
 
-    public function __construct(Security $security, bool $isEuBusinessDataEnabled)
+    public function __construct(Security $security)
     {
         $this->security = $security;
-
-        $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -70,9 +66,6 @@ class UserType extends AbstractType
         $resolver->setDefaults([
             'data_class'    => UserData::class,
             'choices_roles' => [],
-            'empty_data' => function (): UserData {
-                return new UserData($this->isEuBusinessDataEnabled);
-            },
         ]);
 
         $resolver->setAllowedTypes('choices_roles', ['array']);

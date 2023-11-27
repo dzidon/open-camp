@@ -37,10 +37,10 @@ class PasswordChangeBreadcrumbsTest extends KernelTestCase
         $this->assertSame('/password-change', $userPasswordChangeButton->getUrl());
     }
 
-    public function testBuildPasswordChangeComplete(): void
+    public function testBuildPasswordChangeCompleteWhenNotAuthenticated(): void
     {
         $token = 'xyz';
-        $breadcrumbsMenu = $this->breadcrumbs->buildPasswordChangeComplete($token);
+        $breadcrumbsMenu = $this->breadcrumbs->buildPasswordChangeComplete($token, false);
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame([
             'user_home',
@@ -60,6 +60,31 @@ class PasswordChangeBreadcrumbsTest extends KernelTestCase
         $userPasswordChangeButton = $breadcrumbsMenu->getChild('user_password_change');
         $this->assertSame(false, $userPasswordChangeButton->isActive());
         $this->assertSame('/password-change', $userPasswordChangeButton->getUrl());
+
+        $userPasswordChangeButton = $breadcrumbsMenu->getChild('user_password_change_complete');
+        $this->assertSame(true, $userPasswordChangeButton->isActive());
+        $expectedUrl = sprintf('/password-change/complete/%s', $token);
+        $this->assertSame($expectedUrl, $userPasswordChangeButton->getUrl());
+    }
+
+    public function testBuildPasswordChangeCompleteWhenAuthenticated(): void
+    {
+        $token = 'xyz';
+        $breadcrumbsMenu = $this->breadcrumbs->buildPasswordChangeComplete($token, true);
+        $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
+        $this->assertSame([
+            'user_home',
+            'user_profile_password_change_create',
+            'user_password_change_complete'
+        ], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
+
+        $homeButton = $breadcrumbsMenu->getChild('user_home');
+        $this->assertSame(false, $homeButton->isActive());
+        $this->assertSame('/', $homeButton->getUrl());
+
+        $profilePasswordChangeCreate = $breadcrumbsMenu->getChild('user_profile_password_change_create');
+        $this->assertSame(false, $profilePasswordChangeCreate->isActive());
+        $this->assertSame('/profile/password-change-create', $profilePasswordChangeCreate->getUrl());
 
         $userPasswordChangeButton = $breadcrumbsMenu->getChild('user_password_change_complete');
         $this->assertSame(true, $userPasswordChangeButton->isActive());

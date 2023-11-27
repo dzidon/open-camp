@@ -3,6 +3,7 @@
 namespace App\Tests\Library\Data\Admin;
 
 use App\Library\Data\Admin\CampImagesUploadData;
+use App\Model\Entity\Camp;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -12,9 +13,11 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class CampImagesUploadDataTest extends TestCase
 {
+    private Camp $camp;
+
     public function testImages(): void
     {
-        $data = new CampImagesUploadData();
+        $data = new CampImagesUploadData($this->camp);
         $this->assertSame([], $data->getImages());
 
         $newImages = [
@@ -26,9 +29,15 @@ class CampImagesUploadDataTest extends TestCase
         $this->assertSame($newImages, $data->getImages());
     }
 
+    public function testCamp(): void
+    {
+        $data = new CampImagesUploadData($this->camp);
+        $this->assertSame($this->camp, $data->getCamp());
+    }
+
     public function testImagesConstraintsPresence(): void
     {
-        $data = new CampImagesUploadData();
+        $data = new CampImagesUploadData($this->camp);
 
         $reflectionClass = new ReflectionClass($data);
         $property = $reflectionClass->getProperty('images');
@@ -65,5 +74,10 @@ class CampImagesUploadDataTest extends TestCase
         }
 
         $this->assertInstanceOf(Image::class, $constraintImage);
+    }
+
+    protected function setUp(): void
+    {
+        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
     }
 }

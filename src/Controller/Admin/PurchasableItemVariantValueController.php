@@ -6,12 +6,16 @@ use App\Controller\AbstractController;
 use App\Library\Data\Admin\PurchasableItemVariantValueData;
 use App\Model\Entity\PurchasableItemVariant;
 use App\Model\Entity\PurchasableItemVariantValue;
+use App\Model\Event\Admin\PurchasableItemVariantValue\PurchasableItemVariantValueCreateEvent;
+use App\Model\Event\Admin\PurchasableItemVariantValue\PurchasableItemVariantValueDeleteEvent;
+use App\Model\Event\Admin\PurchasableItemVariantValue\PurchasableItemVariantValueUpdateEvent;
 use App\Model\Repository\PurchasableItemVariantRepositoryInterface;
 use App\Model\Repository\PurchasableItemVariantValueRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\PurchasableItemVariantValueType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Breadcrumbs\Admin\PurchasableItemVariantValueBreadcrumbsInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,9 +41,9 @@ class PurchasableItemVariantValueController extends AbstractController
     }
 
     #[Route('/admin/purchasable-item-variant/{id}/create-value', name: 'admin_purchasable_item_variant_value_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer,
-                           Request                       $request,
-                           UuidV4                        $id): Response
+    public function create(EventDispatcherInterface $eventDispatcher,
+                           Request                  $request,
+                           UuidV4                   $id): Response
     {
         $purchasableItemVariant = $this->findPurchasableItemVariantOrThrow404($id);
 
@@ -50,9 +54,8 @@ class PurchasableItemVariantValueController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $purchasableItemVariantValue = new PurchasableItemVariantValue($purchasableItemVariantValueData->getName(), $purchasableItemVariantValueData->getPriority(), $purchasableItemVariant);
-            $dataTransfer->fillEntity($purchasableItemVariantValueData, $purchasableItemVariantValue);
-            $this->purchasableItemVariantValueRepository->savePurchasableItemVariantValue($purchasableItemVariantValue, true);
+            $event = new PurchasableItemVariantValueCreateEvent($purchasableItemVariantValueData);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item_variant_value.create');
 
             return $this->redirectToRoute('admin_purchasable_item_variant_update', [
@@ -78,7 +81,10 @@ class PurchasableItemVariantValueController extends AbstractController
     }
 
     #[Route('/admin/purchasable-item-variant-value/{id}/update', name: 'admin_purchasable_item_variant_value_update')]
-    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
+    public function update(EventDispatcherInterface      $eventDispatcher,
+                           DataTransferRegistryInterface $dataTransfer,
+                           Request                       $request,
+                           UuidV4                        $id): Response
     {
         $purchasableItemVariantValue = $this->findPurchasableItemVariantValueOrThrow404($id);
         $purchasableItemVariant = $purchasableItemVariantValue->getPurchasableItemVariant();
@@ -91,8 +97,8 @@ class PurchasableItemVariantValueController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($purchasableItemVariantValueData, $purchasableItemVariantValue);
-            $this->purchasableItemVariantValueRepository->savePurchasableItemVariantValue($purchasableItemVariantValue, true);
+            $event = new PurchasableItemVariantValueUpdateEvent($purchasableItemVariantValueData, $purchasableItemVariantValue);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item_variant_value.update');
 
             return $this->redirectToRoute('admin_purchasable_item_variant_update', [
@@ -107,7 +113,7 @@ class PurchasableItemVariantValueController extends AbstractController
     }
 
     #[Route('/admin/purchasable-item-variant-value/{id}/delete', name: 'admin_purchasable_item_variant_value_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $purchasableItemVariantValue = $this->findPurchasableItemVariantValueOrThrow404($id);
         $purchasableItemVariant = $purchasableItemVariantValue->getPurchasableItemVariant();
@@ -130,7 +136,8 @@ class PurchasableItemVariantValueController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->purchasableItemVariantValueRepository->removePurchasableItemVariantValue($purchasableItemVariantValue, true);
+            $event = new PurchasableItemVariantValueDeleteEvent($purchasableItemVariantValue);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item_variant_value.delete');
 
             return $this->redirectToRoute('admin_purchasable_item_variant_update', [

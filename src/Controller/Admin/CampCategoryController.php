@@ -5,11 +5,15 @@ namespace App\Controller\Admin;
 use App\Controller\AbstractController;
 use App\Library\Data\Admin\CampCategoryData;
 use App\Model\Entity\CampCategory;
+use App\Model\Event\Admin\CampCategory\CampCategoryCreateEvent;
+use App\Model\Event\Admin\CampCategory\CampCategoryDeleteEvent;
+use App\Model\Event\Admin\CampCategory\CampCategoryUpdateEvent;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\CampCategoryType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Breadcrumbs\Admin\CampCategoryBreadcrumbsInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +50,7 @@ class CampCategoryController extends AbstractController
 
     #[IsGranted('camp_category_create')]
     #[Route('/admin/camp-category/create', name: 'admin_camp_category_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer, Request $request): Response
+    public function create(EventDispatcherInterface $eventDispatcher, Request $request): Response
     {
         $campCategoryData = new CampCategoryData();
         $parentChoices = $this->campCategoryRepository->findAll();
@@ -57,9 +61,8 @@ class CampCategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $campCategory = new CampCategory($campCategoryData->getName(), $campCategoryData->getUrlName());
-            $dataTransfer->fillEntity($campCategoryData, $campCategory);
-            $this->campCategoryRepository->saveCampCategory($campCategory, true);
+            $event = new CampCategoryCreateEvent($campCategoryData);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp_category.create');
 
             return $this->redirectToRoute('admin_camp_category_list');
@@ -85,7 +88,7 @@ class CampCategoryController extends AbstractController
 
     #[IsGranted('camp_category_update')]
     #[Route('/admin/camp-category/{id}/update', name: 'admin_camp_category_update')]
-    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
+    public function update(EventDispatcherInterface $eventDispatcher, DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
     {
         $campCategory = $this->findCampCategoryOrThrow404($id);
         $parentChoices = $this->campCategoryRepository->findPossibleParents($campCategory);
@@ -99,8 +102,8 @@ class CampCategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($campCategoryData, $campCategory);
-            $this->campCategoryRepository->saveCampCategory($campCategory, true);
+            $event = new CampCategoryUpdateEvent($campCategoryData, $campCategory);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp_category.update');
 
             return $this->redirectToRoute('admin_camp_category_list');
@@ -115,7 +118,7 @@ class CampCategoryController extends AbstractController
 
     #[IsGranted('camp_category_delete')]
     #[Route('/admin/camp-category/{id}/delete', name: 'admin_camp_category_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $campCategory = $this->findCampCategoryOrThrow404($id);
 
@@ -128,7 +131,8 @@ class CampCategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->campCategoryRepository->removeCampCategory($campCategory, true);
+            $event = new CampCategoryDeleteEvent($campCategory);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp_category.delete');
 
             return $this->redirectToRoute('admin_camp_category_list');

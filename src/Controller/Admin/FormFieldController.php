@@ -6,6 +6,9 @@ use App\Controller\AbstractController;
 use App\Library\Data\Admin\FormFieldData;
 use App\Library\Data\Admin\FormFieldSearchData;
 use App\Model\Entity\FormField;
+use App\Model\Event\Admin\FormField\FormFieldCreateEvent;
+use App\Model\Event\Admin\FormField\FormFieldDeleteEvent;
+use App\Model\Event\Admin\FormField\FormFieldUpdateEvent;
 use App\Model\Repository\FormFieldRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\FormFieldSearchType;
@@ -13,6 +16,7 @@ use App\Service\Form\Type\Admin\FormFieldType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Breadcrumbs\Admin\FormFieldBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -72,7 +76,8 @@ class FormFieldController extends AbstractController
 
     #[IsGranted('form_field_create')]
     #[Route('/admin/form-field/create', name: 'admin_form_field_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer, Request $request): Response
+    public function create(EventDispatcherInterface $eventDispatcher,
+                           Request                  $request): Response
     {
         $formFieldData = new FormFieldData(null, true);
 
@@ -84,9 +89,8 @@ class FormFieldController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $formField = new FormField($formFieldData->getName(), $formFieldData->getType(), $formFieldData->getLabel(), $formFieldData->getOptions());
-            $dataTransfer->fillEntity($formFieldData, $formField);
-            $this->formFieldRepository->saveFormField($formField, true);
+            $event = new FormFieldCreateEvent($formFieldData);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.form_field.create');
 
             return $this->redirectToRoute('admin_form_field_list');
@@ -112,7 +116,8 @@ class FormFieldController extends AbstractController
 
     #[IsGranted('form_field_update')]
     #[Route('/admin/form-field/{id}/update', name: 'admin_form_field_update')]
-    public function update(DataTransferRegistryInterface $dataTransfer,
+    public function update(EventDispatcherInterface      $eventDispatcher,
+                           DataTransferRegistryInterface $dataTransfer,
                            Request                       $request,
                            UuidV4                        $id): Response
     {
@@ -129,8 +134,8 @@ class FormFieldController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($formFieldData, $formField);
-            $this->formFieldRepository->saveFormField($formField, true);
+            $event = new FormFieldUpdateEvent($formFieldData, $formField);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.form_field.update');
 
             return $this->redirectToRoute('admin_form_field_list');
@@ -145,7 +150,7 @@ class FormFieldController extends AbstractController
 
     #[IsGranted('form_field_delete')]
     #[Route('/admin/form-field/{id}/delete', name: 'admin_form_field_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $formField = $this->findFormFieldOrThrow404($id);
 
@@ -158,7 +163,8 @@ class FormFieldController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->formFieldRepository->removeFormField($formField, true);
+            $event = new FormFieldDeleteEvent($formField);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.form_field.delete');
 
             return $this->redirectToRoute('admin_form_field_list');

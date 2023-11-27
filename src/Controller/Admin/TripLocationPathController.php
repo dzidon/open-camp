@@ -7,8 +7,10 @@ use App\Library\Data\Admin\TripLocationPathCreationData;
 use App\Library\Data\Admin\TripLocationPathData;
 use App\Library\Data\Admin\TripLocationPathSearchData;
 use App\Library\Data\Admin\TripLocationSearchData;
-use App\Model\Entity\TripLocation;
 use App\Model\Entity\TripLocationPath;
+use App\Model\Event\Admin\TripLocationPath\TripLocationPathCreateEvent;
+use App\Model\Event\Admin\TripLocationPath\TripLocationPathDeleteEvent;
+use App\Model\Event\Admin\TripLocationPath\TripLocationPathUpdateEvent;
 use App\Model\Repository\TripLocationPathRepositoryInterface;
 use App\Model\Repository\TripLocationRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
@@ -19,6 +21,7 @@ use App\Service\Form\Type\Admin\TripLocationSearchType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Breadcrumbs\Admin\TripLocationPathBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -79,9 +82,7 @@ class TripLocationPathController extends AbstractController
 
     #[IsGranted('trip_location_path_create')]
     #[Route('/admin/trip-location-path/create', name: 'admin_trip_location_path_create')]
-    public function create(DataTransferRegistryInterface   $dataTransfer,
-                           TripLocationRepositoryInterface $tripLocationRepository,
-                           Request                         $request): Response
+    public function create(EventDispatcherInterface $eventDispatcher, Request $request): Response
     {
         $pathCreationData = new TripLocationPathCreationData();
 
@@ -91,21 +92,8 @@ class TripLocationPathController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            // path
-            $tripLocationPathData = $pathCreationData->getTripLocationPathData();
-            $tripLocationPath = new TripLocationPath($tripLocationPathData->getName());
-            $dataTransfer->fillEntity($tripLocationPathData, $tripLocationPath);
-
-            // locations
-            $tripLocationsData = $pathCreationData->getTripLocationsData();
-            foreach ($tripLocationsData as $tripLocationData)
-            {
-                $tripLocation = new TripLocation($tripLocationData->getName(), $tripLocationData->getPrice(), $tripLocationData->getPriority(), $tripLocationPath);
-                $dataTransfer->fillEntity($tripLocationData, $tripLocation);
-                $tripLocationRepository->saveTripLocation($tripLocation, false);
-            }
-
-            $this->tripLocationPathRepository->saveTripLocationPath($tripLocationPath, true);
+            $event = new TripLocationPathCreateEvent($pathCreationData);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.trip_location_path.create');
 
             return $this->redirectToRoute('admin_trip_location_path_list');
@@ -119,7 +107,8 @@ class TripLocationPathController extends AbstractController
 
     #[IsGranted('trip_location_path_read')]
     #[Route('/admin/trip-location-path/{id}/read', name: 'admin_trip_location_path_read')]
-    public function read(TripLocationRepositoryInterface $tripLocationRepository, UuidV4 $id): Response
+    public function read(TripLocationRepositoryInterface $tripLocationRepository,
+                         UuidV4                          $id): Response
     {
         $tripLocationPath = $this->findTripLocationPathOrThrow404($id);
         $tripLocations = $tripLocationRepository->findByTripLocationPath($tripLocationPath);
@@ -133,7 +122,8 @@ class TripLocationPathController extends AbstractController
 
     #[IsGranted('trip_location_path_update')]
     #[Route('/admin/trip-location-path/{id}/update', name: 'admin_trip_location_path_update')]
-    public function update(TripLocationRepositoryInterface  $tripLocationRepository,
+    public function update(EventDispatcherInterface         $eventDispatcher,
+                           TripLocationRepositoryInterface  $tripLocationRepository,
                            MenuTypeFactoryRegistryInterface $menuFactory,
                            FormFactoryInterface             $formFactory,
                            DataTransferRegistryInterface    $dataTransfer,
@@ -142,7 +132,7 @@ class TripLocationPathController extends AbstractController
     {
         $tripLocationPath = $this->findTripLocationPathOrThrow404($id);
 
-        $updatePartPathResult = $this->updatePartPath($dataTransfer, $tripLocationPath, $request);
+        $updatePartPathResult = $this->updatePartPath($eventDispatcher, $dataTransfer, $tripLocationPath, $request);
         if ($updatePartPathResult instanceof RedirectResponse)
         {
             return $updatePartPathResult;
@@ -159,7 +149,8 @@ class TripLocationPathController extends AbstractController
         ]));
     }
 
-    private function updatePartPath(DataTransferRegistryInterface $dataTransfer,
+    private function updatePartPath(EventDispatcherInterface      $eventDispatcher,
+                                    DataTransferRegistryInterface $dataTransfer,
                                     TripLocationPath              $tripLocationPath,
                                     Request                       $request): array|RedirectResponse
     {
@@ -172,8 +163,8 @@ class TripLocationPathController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($tripLocationPathData, $tripLocationPath);
-            $this->tripLocationPathRepository->saveTripLocationPath($tripLocationPath, true);
+            $event = new TripLocationPathUpdateEvent($tripLocationPathData, $tripLocationPath);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.trip_location_path.update');
 
             return $this->redirectToRoute('admin_trip_location_path_list');
@@ -220,7 +211,7 @@ class TripLocationPathController extends AbstractController
 
     #[IsGranted('trip_location_path_delete')]
     #[Route('/admin/trip-location-path/{id}/delete', name: 'admin_trip_location_path_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $tripLocationPath = $this->findTripLocationPathOrThrow404($id);
 
@@ -233,7 +224,8 @@ class TripLocationPathController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->tripLocationPathRepository->removeTripLocationPath($tripLocationPath, true);
+            $event = new TripLocationPathDeleteEvent($tripLocationPath);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.trip_location_path.delete');
 
             return $this->redirectToRoute('admin_trip_location_path_list');

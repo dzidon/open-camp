@@ -28,12 +28,21 @@ class PasswordChangeBreadcrumbs extends AbstractBreadcrumbs implements PasswordC
     /**
      * @inheritDoc
      */
-    public function buildPasswordChangeComplete(string $token): MenuType
+    public function buildPasswordChangeComplete(string $token, bool $isAuthenticated): MenuType
     {
         $root = $this->createRoot();
         $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_login');
-        $this->addChildRoute($root, 'user_password_change');
+
+        if ($isAuthenticated)
+        {
+            $this->addChildRoute($root, 'user_profile_password_change_create');
+        }
+        else
+        {
+            $this->addChildRoute($root, 'user_login');
+            $this->addChildRoute($root, 'user_password_change');
+        }
+
         $this->addChildRoute($root, 'user_password_change_complete', ['token' => $token])
             ->setActive()
         ;

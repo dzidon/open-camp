@@ -108,9 +108,6 @@ class BillingType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => BillingData::class,
-            'empty_data' => function (): BillingData {
-                return new BillingData($this->isEuBusinessDataEnabled);
-            },
         ]);
     }
 }

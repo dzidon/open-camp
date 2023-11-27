@@ -20,7 +20,7 @@ class EntityMock
     {
         $this->name = $name;
         $this->label = $label;
-        $this->createdAt = new DateTimeImmutable('now');
+        $this->createdAt = new DateTimeImmutable('2000-01-01 12:00:00');
     }
 
     public function getName(): string

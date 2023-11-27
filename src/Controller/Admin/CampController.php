@@ -9,7 +9,9 @@ use App\Library\Data\Admin\CampDateSearchData;
 use App\Library\Data\Admin\CampSearchData;
 use App\Library\Enum\Search\Data\Admin\CampDateSortEnum;
 use App\Model\Entity\Camp;
-use App\Model\Module\CampCatalog\CampImage\CampImageFactoryInterface;
+use App\Model\Event\Admin\Camp\CampCreateEvent;
+use App\Model\Event\Admin\Camp\CampDeleteEvent;
+use App\Model\Event\Admin\Camp\CampUpdateEvent;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampImageRepositoryInterface;
@@ -21,6 +23,7 @@ use App\Service\Form\Type\Admin\CampType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Breadcrumbs\Admin\CampBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -85,9 +88,8 @@ class CampController extends AbstractController
 
     #[IsGranted('camp_create')]
     #[Route('/admin/camp/create', name: 'admin_camp_create')]
-    public function create(DataTransferRegistryInterface   $dataTransfer,
+    public function create(EventDispatcherInterface        $eventDispatcher,
                            CampCategoryRepositoryInterface $campCategoryRepository,
-                           CampImageFactoryInterface       $campImageFactory,
                            Request                         $request): Response
     {
         $campCategoryChoices = $campCategoryRepository->findAll();
@@ -99,19 +101,8 @@ class CampController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            // camp
-            $campData = $campCreationData->getCampData();
-            $camp = new Camp($campData->getName(), $campData->getUrlName(), $campData->getAgeMin(), $campData->getAgeMax(), $campData->getStreet(), $campData->getTown(), $campData->getZip(), $campData->getCountry(), $campData->getPriority());
-            $dataTransfer->fillEntity($campData, $camp);
-
-            // images
-            $uploadedImages = $campCreationData->getImages();
-            foreach ($uploadedImages as $uploadedImage)
-            {
-                $campImageFactory->createCampImage($uploadedImage, 0, $camp, false);
-            }
-
-            $this->campRepository->saveCamp($camp, true);
+            $event = new CampCreateEvent($campCreationData);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp.create');
 
             return $this->redirectToRoute('admin_camp_list');
@@ -144,24 +135,21 @@ class CampController extends AbstractController
         $searchData->setSortBy(CampDateSortEnum::START_AT_DESC);
         $campDatePaginator = $campDateRepository->getAdminPaginator($searchData, $camp, 1, 20);
         $campDates = $campDatePaginator->getCurrentPageItems();
-        $moreCampDates = $campDatePaginator->getTotalItems() - $campDatePaginator->getPageSize();
-        if ($moreCampDates < 0)
-        {
-            $moreCampDates = 0;
-        }
+        $moreCampDates = max($campDatePaginator->getTotalItems() - $campDatePaginator->getPageSize(), 0);
 
         return $this->render('admin/camp/read.html.twig', [
-            'camp'             => $camp,
-            'camp_images'      => $campImages,
-            'camp_dates'       => $campDates,
-            'more_camp_dates'  => $moreCampDates,
-            'breadcrumbs'      => $this->campBreadcrumbs->buildRead($camp),
+            'camp'            => $camp,
+            'camp_images'     => $campImages,
+            'camp_dates'      => $campDates,
+            'more_camp_dates' => $moreCampDates,
+            'breadcrumbs'     => $this->campBreadcrumbs->buildRead($camp),
         ]);
     }
 
     #[IsGranted('camp_update')]
     #[Route('/admin/camp/{id}/update', name: 'admin_camp_update')]
-    public function update(DataTransferRegistryInterface   $dataTransfer,
+    public function update(EventDispatcherInterface        $eventDispatcher,
+                           DataTransferRegistryInterface   $dataTransfer,
                            CampCategoryRepositoryInterface $campCategoryRepository,
                            Request                         $request,
                            UuidV4                          $id): Response
@@ -178,8 +166,8 @@ class CampController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($campData, $camp);
-            $this->campRepository->saveCamp($camp, true);
+            $event = new CampUpdateEvent($campData, $camp);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp.update');
 
             return $this->redirectToRoute('admin_camp_list');
@@ -194,7 +182,7 @@ class CampController extends AbstractController
 
     #[IsGranted('camp_delete')]
     #[Route('/admin/camp/{id}/delete', name: 'admin_camp_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $camp = $this->findCampOrThrow404($id);
 
@@ -207,7 +195,8 @@ class CampController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->campRepository->removeCamp($camp, true);
+            $event = new CampDeleteEvent($camp);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp.delete');
 
             return $this->redirectToRoute('admin_camp_list');

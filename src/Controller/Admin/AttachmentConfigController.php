@@ -6,6 +6,9 @@ use App\Controller\AbstractController;
 use App\Library\Data\Admin\AttachmentConfigData;
 use App\Library\Data\Admin\AttachmentConfigSearchData;
 use App\Model\Entity\AttachmentConfig;
+use App\Model\Event\Admin\AttachmentConfig\AttachmentConfigCreateEvent;
+use App\Model\Event\Admin\AttachmentConfig\AttachmentConfigDeleteEvent;
+use App\Model\Event\Admin\AttachmentConfig\AttachmentConfigUpdateEvent;
 use App\Model\Repository\AttachmentConfigRepositoryInterface;
 use App\Model\Repository\FileExtensionRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
@@ -14,6 +17,7 @@ use App\Service\Form\Type\Admin\AttachmentConfigType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Breadcrumbs\Admin\AttachmentConfigBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -76,7 +80,7 @@ class AttachmentConfigController extends AbstractController
 
     #[IsGranted('attachment_config_create')]
     #[Route('/admin/attachment-config/create', name: 'admin_attachment_config_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer, Request $request): Response
+    public function create(EventDispatcherInterface $eventDispatcher, Request $request): Response
     {
         $attachmentConfigData = new AttachmentConfigData();
 
@@ -86,9 +90,8 @@ class AttachmentConfigController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $attachmentConfig = new AttachmentConfig($attachmentConfigData->getName(), $attachmentConfigData->getLabel(), $attachmentConfigData->getMaxSize());
-            $dataTransfer->fillEntity($attachmentConfigData, $attachmentConfig);
-            $this->attachmentConfigRepository->saveAttachmentConfig($attachmentConfig, true);
+            $event = new AttachmentConfigCreateEvent($attachmentConfigData);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.attachment_config.create');
 
             return $this->redirectToRoute('admin_attachment_config_list');
@@ -114,7 +117,7 @@ class AttachmentConfigController extends AbstractController
 
     #[IsGranted('attachment_config_update')]
     #[Route('/admin/attachment-config/{id}/update', name: 'admin_attachment_config_update')]
-    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
+    public function update(EventDispatcherInterface $eventDispatcher, DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
     {
         $attachmentConfig = $this->findAttachmentConfigOrThrow404($id);
 
@@ -127,8 +130,8 @@ class AttachmentConfigController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($attachmentConfigData, $attachmentConfig);
-            $this->attachmentConfigRepository->saveAttachmentConfig($attachmentConfig, true);
+            $event = new AttachmentConfigUpdateEvent($attachmentConfigData, $attachmentConfig);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.attachment_config.update');
 
             return $this->redirectToRoute('admin_attachment_config_list');
@@ -143,7 +146,7 @@ class AttachmentConfigController extends AbstractController
 
     #[IsGranted('attachment_config_delete')]
     #[Route('/admin/attachment-config/{id}/delete', name: 'admin_attachment_config_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $attachmentConfig = $this->findAttachmentConfigOrThrow404($id);
 
@@ -156,7 +159,8 @@ class AttachmentConfigController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->attachmentConfigRepository->removeAttachmentConfig($attachmentConfig, true);
+            $event = new AttachmentConfigDeleteEvent($attachmentConfig);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.attachment_config.delete');
 
             return $this->redirectToRoute('admin_attachment_config_list');

@@ -5,10 +5,11 @@ namespace App\Controller\Admin;
 use App\Controller\AbstractController;
 use App\Library\Data\Admin\ProfileData;
 use App\Model\Entity\User;
-use App\Model\Repository\UserRepositoryInterface;
+use App\Model\Event\Admin\User\ProfileUpdateEvent;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\ProfileType;
 use App\Service\Menu\Breadcrumbs\Admin\ProfileBreadcrumbsInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,8 +29,8 @@ class ProfileController extends AbstractController
 
     #[IsGranted('_any_permission')]
     #[Route('', name: 'admin_profile')]
-    public function profile(DataTransferRegistryInterface $dataTransfer,
-                            UserRepositoryInterface       $userRepository,
+    public function profile(EventDispatcherInterface      $eventDispatcher,
+                            DataTransferRegistryInterface $dataTransfer,
                             Request                       $request): Response
     {
         /** @var User $admin */
@@ -43,8 +44,8 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($profileData, $admin);
-            $userRepository->saveUser($admin, true);
+            $event = new ProfileUpdateEvent($profileData, $admin);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.user.update_admin_profile');
 
             return $this->redirectToRoute('admin_profile');

@@ -7,7 +7,9 @@ use App\Library\Data\Admin\CampImageData;
 use App\Library\Data\Admin\CampImagesUploadData;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampImage;
-use App\Model\Module\CampCatalog\CampImage\CampImageFactoryInterface;
+use App\Model\Event\Admin\CampImage\CampImageDeleteEvent;
+use App\Model\Event\Admin\CampImage\CampImagesCreateEvent;
+use App\Model\Event\Admin\CampImage\CampImageUpdateEvent;
 use App\Model\Repository\CampImageRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
@@ -16,6 +18,7 @@ use App\Service\Form\Type\Admin\CampImageType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Breadcrumbs\Admin\CampImageBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -67,25 +70,21 @@ class CampImageController extends AbstractController
     }
 
     #[Route('/admin/camp/{id}/upload-images', name: 'admin_camp_image_upload')]
-    public function upload(CampImageFactoryInterface $campImageFactory, Request $request, UuidV4 $id): Response
+    public function upload(EventDispatcherInterface $eventDispatcher,
+                           Request                  $request,
+                           UuidV4                   $id): Response
     {
         $camp = $this->findCampOrThrow404($id);
 
-        $campImagesUploadData = new CampImagesUploadData();
+        $campImagesUploadData = new CampImagesUploadData($camp);
         $form = $this->createForm(CampImagesUploadType::class, $campImagesUploadData);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.camp_images_upload.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $files = $campImagesUploadData->getImages();
-
-            foreach ($files as $key => $uploadedImage)
-            {
-                $flush = $key === array_key_last($files);
-                $campImageFactory->createCampImage($uploadedImage, 0, $camp, $flush);
-            }
-
+            $event = new CampImagesCreateEvent($campImagesUploadData);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp_image.upload');
 
             return $this->redirectToRoute('admin_camp_image_list', [
@@ -101,7 +100,10 @@ class CampImageController extends AbstractController
     }
 
     #[Route('/admin/camp-image/{id}/update', name: 'admin_camp_image_update')]
-    public function update(DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
+    public function update(EventDispatcherInterface      $eventDispatcher,
+                           DataTransferRegistryInterface $dataTransfer,
+                           Request                       $request,
+                           UuidV4                        $id): Response
     {
         $campImage = $this->findCampImageOrThrow404($id);
         $camp = $campImage->getCamp();
@@ -115,8 +117,8 @@ class CampImageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($campImageData, $campImage);
-            $this->campImageRepository->saveCampImage($campImage, true);
+            $event = new CampImageUpdateEvent($campImageData, $campImage);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp_image.update');
 
             return $this->redirectToRoute('admin_camp_image_list', [
@@ -133,7 +135,7 @@ class CampImageController extends AbstractController
     }
 
     #[Route('/admin/camp-image/{id}/delete', name: 'admin_camp_image_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $campImage = $this->findCampImageOrThrow404($id);
         $camp = $campImage->getCamp();
@@ -147,7 +149,8 @@ class CampImageController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->campImageRepository->removeCampImage($campImage, true);
+            $event = new CampImageDeleteEvent($campImage);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp_image.delete');
 
             return $this->redirectToRoute('admin_camp_image_list', [

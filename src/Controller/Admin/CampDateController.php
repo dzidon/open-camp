@@ -7,6 +7,9 @@ use App\Library\Data\Admin\CampDateData;
 use App\Library\Data\Admin\CampDateSearchData;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
+use App\Model\Event\Admin\CampDate\CampDateCreateEvent;
+use App\Model\Event\Admin\CampDate\CampDateDeleteEvent;
+use App\Model\Event\Admin\CampDate\CampDateUpdateEvent;
 use App\Model\Repository\AttachmentConfigRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
@@ -19,6 +22,7 @@ use App\Service\Form\Type\Admin\CampDateType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Breadcrumbs\Admin\CampDateBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -84,7 +88,7 @@ class CampDateController extends AbstractController
     }
 
     #[Route('/admin/camp/{id}/create-date', name: 'admin_camp_date_create')]
-    public function create(DataTransferRegistryInterface       $dataTransfer,
+    public function create(EventDispatcherInterface            $eventDispatcher,
                            TripLocationPathRepositoryInterface $tripLocationPathRepository,
                            FormFieldRepositoryInterface        $formFieldRepository,
                            AttachmentConfigRepositoryInterface $attachmentConfigRepository,
@@ -106,9 +110,8 @@ class CampDateController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $campDate = new CampDate($campDateData->getStartAt(), $campDateData->getEndAt(), $campDateData->getPrice(), $campDateData->getCapacity(), $camp);
-            $dataTransfer->fillEntity($campDateData, $campDate);
-            $this->campDateRepository->saveCampDate($campDate, true);
+            $event = new CampDateCreateEvent($campDateData);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp_date.create');
 
             return $this->redirectToRoute('admin_camp_date_list', [
@@ -137,7 +140,8 @@ class CampDateController extends AbstractController
     }
 
     #[Route('/admin/camp-date/{id}/update', name: 'admin_camp_date_update')]
-    public function update(DataTransferRegistryInterface       $dataTransfer,
+    public function update(EventDispatcherInterface            $eventDispatcher,
+                           DataTransferRegistryInterface       $dataTransfer,
                            TripLocationPathRepositoryInterface $tripLocationPathRepository,
                            FormFieldRepositoryInterface        $formFieldRepository,
                            AttachmentConfigRepositoryInterface $attachmentConfigRepository,
@@ -162,8 +166,8 @@ class CampDateController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($campDateData, $campDate);
-            $this->campDateRepository->saveCampDate($campDate, true);
+            $event = new CampDateUpdateEvent($campDateData, $campDate);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp_date.update');
 
             return $this->redirectToRoute('admin_camp_date_list', [
@@ -180,7 +184,7 @@ class CampDateController extends AbstractController
     }
 
     #[Route('/admin/camp-date/{id}/delete', name: 'admin_camp_date_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $campDate = $this->findCampDateOrThrow404($id);
         $camp = $campDate->getCamp();
@@ -194,7 +198,8 @@ class CampDateController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->campDateRepository->removeCampDate($campDate, true);
+            $event = new CampDateDeleteEvent($campDate);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.camp_date.delete');
 
             return $this->redirectToRoute('admin_camp_date_list', [

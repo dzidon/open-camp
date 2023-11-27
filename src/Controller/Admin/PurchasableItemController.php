@@ -7,6 +7,9 @@ use App\Library\Data\Admin\PurchasableItemData;
 use App\Library\Data\Admin\PurchasableItemSearchData;
 use App\Library\Data\Admin\PurchasableItemVariantSearchData;
 use App\Model\Entity\PurchasableItem;
+use App\Model\Event\Admin\PurchasableItem\PurchasableItemCreateEvent;
+use App\Model\Event\Admin\PurchasableItem\PurchasableItemDeleteEvent;
+use App\Model\Event\Admin\PurchasableItem\PurchasableItemUpdateEvent;
 use App\Model\Repository\PurchasableItemRepositoryInterface;
 use App\Model\Repository\PurchasableItemVariantRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
@@ -16,6 +19,7 @@ use App\Service\Form\Type\Admin\PurchasableItemVariantSearchType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Breadcrumbs\Admin\PurchasableItemBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -76,7 +80,7 @@ class PurchasableItemController extends AbstractController
 
     #[IsGranted('purchasable_item_create')]
     #[Route('/admin/purchasable-item/create', name: 'admin_purchasable_item_create')]
-    public function create(DataTransferRegistryInterface $dataTransfer, Request $request): Response
+    public function create(EventDispatcherInterface $eventDispatcher, Request $request): Response
     {
         $purchasableItemData = new PurchasableItemData();
 
@@ -86,9 +90,8 @@ class PurchasableItemController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $purchasableItem = new PurchasableItem($purchasableItemData->getName(), $purchasableItemData->getLabel(), $purchasableItemData->getPrice(), $purchasableItemData->getMaxAmount());
-            $dataTransfer->fillEntity($purchasableItemData, $purchasableItem);
-            $this->purchasableItemRepository->savePurchasableItem($purchasableItem, true);
+            $event = new PurchasableItemCreateEvent($purchasableItemData);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item.create');
 
             return $this->redirectToRoute('admin_purchasable_item_list');
@@ -102,7 +105,8 @@ class PurchasableItemController extends AbstractController
 
     #[IsGranted('purchasable_item_read')]
     #[Route('/admin/purchasable-item/{id}/read', name: 'admin_purchasable_item_read')]
-    public function read(PurchasableItemVariantRepositoryInterface $purchasableItemVariantRepository, UuidV4 $id): Response
+    public function read(PurchasableItemVariantRepositoryInterface $purchasableItemVariantRepository,
+                         UuidV4                                    $id): Response
     {
         $purchasableItem = $this->findPurchasableItemOrThrow404($id);
         $purchasableItemVariants = $purchasableItemVariantRepository->findByPurchasableItem($purchasableItem);
@@ -116,16 +120,17 @@ class PurchasableItemController extends AbstractController
 
     #[IsGranted('purchasable_item_update')]
     #[Route('/admin/purchasable-item/{id}/update', name: 'admin_purchasable_item_update')]
-    public function update(PurchasableItemVariantRepositoryInterface $purchasableItemVariantRepository,
+    public function update(EventDispatcherInterface                  $eventDispatcher,
+                           DataTransferRegistryInterface             $dataTransfer,
+                           PurchasableItemVariantRepositoryInterface $purchasableItemVariantRepository,
                            MenuTypeFactoryRegistryInterface          $menuFactory,
                            FormFactoryInterface                      $formFactory,
-                           DataTransferRegistryInterface             $dataTransfer,
                            Request                                   $request,
                            UuidV4                                    $id): Response
     {
         $purchasableItem = $this->findPurchasableItemOrThrow404($id);
 
-        $updatePartItemResult = $this->updatePartItem($dataTransfer, $purchasableItem, $request);
+        $updatePartItemResult = $this->updatePartItem($eventDispatcher, $dataTransfer, $purchasableItem, $request);
         if ($updatePartItemResult instanceof RedirectResponse)
         {
             return $updatePartItemResult;
@@ -142,7 +147,8 @@ class PurchasableItemController extends AbstractController
         ]));
     }
 
-    private function updatePartItem(DataTransferRegistryInterface $dataTransfer,
+    private function updatePartItem(EventDispatcherInterface      $eventDispatcher,
+                                    DataTransferRegistryInterface $dataTransfer,
                                     PurchasableItem               $purchasableItem,
                                     Request                       $request): array|RedirectResponse
     {
@@ -155,8 +161,8 @@ class PurchasableItemController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $dataTransfer->fillEntity($purchasableItemData, $purchasableItem);
-            $this->purchasableItemRepository->savePurchasableItem($purchasableItem, true);
+            $event = new PurchasableItemUpdateEvent($purchasableItemData, $purchasableItem);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item.update');
 
             return $this->redirectToRoute('admin_purchasable_item_list');
@@ -203,7 +209,7 @@ class PurchasableItemController extends AbstractController
 
     #[IsGranted('purchasable_item_delete')]
     #[Route('/admin/purchasable-item/{id}/delete', name: 'admin_purchasable_item_delete')]
-    public function delete(Request $request, UuidV4 $id): Response
+    public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $purchasableItem = $this->findPurchasableItemOrThrow404($id);
 
@@ -216,7 +222,8 @@ class PurchasableItemController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $this->purchasableItemRepository->removePurchasableItem($purchasableItem, true);
+            $event = new PurchasableItemDeleteEvent($purchasableItem);
+            $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item.delete');
 
             return $this->redirectToRoute('admin_purchasable_item_list');

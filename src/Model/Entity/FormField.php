@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Enum\Entity\FormFieldTypeEnum;
-use App\Model\Module\Application\FormField\FormFieldOptionsResolver;
+use App\Model\Library\FormField\FormFieldOptionsResolver;
 use App\Model\Repository\FormFieldRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;

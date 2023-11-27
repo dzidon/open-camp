@@ -4,7 +4,6 @@ namespace App\Service\Data\Transfer\Admin;
 
 use App\Library\Data\Admin\PurchasableItemData;
 use App\Model\Entity\PurchasableItem;
-use App\Model\Module\CampCatalog\PurchasableItem\PurchasableItemImageFilesystemInterface;
 use App\Service\Data\Transfer\DataTransferInterface;
 
 /**
@@ -12,13 +11,6 @@ use App\Service\Data\Transfer\DataTransferInterface;
  */
 class PurchasableItemDataTransfer implements DataTransferInterface
 {
-    private PurchasableItemImageFilesystemInterface $purchasableItemImageFilesystem;
-
-    public function __construct(PurchasableItemImageFilesystemInterface $purchasableItemImageFilesystem)
-    {
-        $this->purchasableItemImageFilesystem = $purchasableItemImageFilesystem;
-    }
-
     /**
      * @inheritDoc
      */
@@ -59,18 +51,5 @@ class PurchasableItemDataTransfer implements DataTransferInterface
         $purchasableItem->setPrice($purchasableItemData->getPrice());
         $purchasableItem->setMaxAmount($purchasableItemData->getMaxAmount());
         $purchasableItem->setIsGlobal($purchasableItemData->isGlobal());
-
-        $image = $purchasableItemData->getImage();
-        $removeImage = $purchasableItemData->removeImage();
-
-        if ($image !== null && !$removeImage)
-        {
-            $this->purchasableItemImageFilesystem->uploadImageFile($image, $purchasableItem);
-        }
-
-        if ($removeImage)
-        {
-            $this->purchasableItemImageFilesystem->removeImageFile($purchasableItem);
-        }
     }
 }
