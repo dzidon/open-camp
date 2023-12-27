@@ -4,9 +4,9 @@ namespace App\Model\Event\User\Camper;
 
 use App\Library\Data\User\CamperData;
 use App\Model\Entity\Camper;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class CamperUpdateEvent extends Event
+class CamperUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.camper.update';
 

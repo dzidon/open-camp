@@ -9,14 +9,14 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 class AttachmentConfigUpdateSubscriber
 {
-    private AttachmentConfigRepositoryInterface $repository;
-
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(AttachmentConfigRepositoryInterface $repository,
+    private AttachmentConfigRepositoryInterface $attachmentConfigRepository;
+
+    public function __construct(AttachmentConfigRepositoryInterface $attachmentConfigRepository,
                                 DataTransferRegistryInterface       $dataTransfer)
     {
-        $this->repository = $repository;
+        $this->attachmentConfigRepository = $attachmentConfigRepository;
         $this->dataTransfer = $dataTransfer;
     }
 
@@ -29,9 +29,10 @@ class AttachmentConfigUpdateSubscriber
     }
 
     #[AsEventListener(event: AttachmentConfigUpdateEvent::NAME, priority: 100)]
-    public function onUpdateSaveEntity(AttachmentConfigUpdateEvent $event): void
+    public function onUpdateSaveEntities(AttachmentConfigUpdateEvent $event): void
     {
-        $entity = $event->getAttachmentConfig();
-        $this->repository->saveAttachmentConfig($entity, true);
+        $attachmentConfig = $event->getAttachmentConfig();
+        $flush = $event->isFlush();
+        $this->attachmentConfigRepository->saveAttachmentConfig($attachmentConfig, $flush);
     }
 }

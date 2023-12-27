@@ -19,6 +19,7 @@ class AttachmentConfigDeleteSubscriber
     public function onDeleteRemoveEntity(AttachmentConfigDeleteEvent $event): void
     {
         $entity = $event->getAttachmentConfig();
-        $this->repository->removeAttachmentConfig($entity, true);
+        $flush = $event->isFlush();
+        $this->repository->removeAttachmentConfig($entity, $flush);
     }
 }

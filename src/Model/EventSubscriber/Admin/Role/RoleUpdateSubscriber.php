@@ -13,8 +13,7 @@ class RoleUpdateSubscriber
 
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(RoleRepositoryInterface       $repository,
-                                DataTransferRegistryInterface $dataTransfer)
+    public function __construct(RoleRepositoryInterface $repository, DataTransferRegistryInterface $dataTransfer)
     {
         $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;
@@ -32,6 +31,7 @@ class RoleUpdateSubscriber
     public function onUpdateSaveEntity(RoleUpdateEvent $event): void
     {
         $entity = $event->getRole();
-        $this->repository->saveRole($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->saveRole($entity, $isFlush);
     }
 }

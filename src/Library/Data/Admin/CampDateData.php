@@ -8,6 +8,7 @@ use App\Model\Entity\CampDate;
 use App\Model\Entity\TripLocationPath;
 use App\Model\Entity\User;
 use DateTimeImmutable;
+use LogicException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[CampDateInterval]
@@ -26,7 +27,11 @@ class CampDateData
 
     #[Assert\GreaterThanOrEqual(0.0)]
     #[Assert\NotBlank]
-    private ?float $price = null;
+    private ?float $deposit = null;
+
+    #[Assert\GreaterThanOrEqual(0.0)]
+    #[Assert\NotBlank]
+    private ?float $priceWithoutDeposit = null;
 
     #[Assert\GreaterThanOrEqual(1)]
     #[Assert\NotBlank]
@@ -106,14 +111,26 @@ class CampDateData
         return $this;
     }
 
-    public function getPrice(): ?float
+    public function getDeposit(): ?float
     {
-        return $this->price;
+        return $this->deposit;
     }
 
-    public function setPrice(?float $price): self
+    public function setDeposit(?float $deposit): self
     {
-        $this->price = $price;
+        $this->deposit = $deposit;
+
+        return $this;
+    }
+
+    public function getPriceWithoutDeposit(): ?float
+    {
+        return $this->priceWithoutDeposit;
+    }
+
+    public function setPriceWithoutDeposit(?float $priceWithoutDeposit): self
+    {
+        $this->priceWithoutDeposit = $priceWithoutDeposit;
 
         return $this;
     }
@@ -226,7 +243,24 @@ class CampDateData
         return $this->campDateFormFieldsData;
     }
 
-    public function addCampDateFormFieldsDatum(CampDateFormFieldData $campDateFormFieldData): self
+    public function setCampDateFormFieldsData(array $campDateFormFieldsData): self
+    {
+        foreach ($campDateFormFieldsData as $campDateFormFieldData)
+        {
+            if (!$campDateFormFieldData instanceof CampDateFormFieldData)
+            {
+                throw new LogicException(
+                    sprintf('Array passed to %s must only contain instances of %s.', __METHOD__, CampDateFormFieldData::class)
+                );
+            }
+        }
+
+        $this->campDateFormFieldsData = $campDateFormFieldsData;
+
+        return $this;
+    }
+    
+    public function addCampDateFormFieldData(CampDateFormFieldData $campDateFormFieldData): self
     {
         if (in_array($campDateFormFieldData, $this->campDateFormFieldsData, true))
         {
@@ -238,7 +272,7 @@ class CampDateData
         return $this;
     }
 
-    public function removeCampDateFormFieldsDatum(CampDateFormFieldData $campDateFormFieldData): self
+    public function removeCampDateFormFieldData(CampDateFormFieldData $campDateFormFieldData): self
     {
         $key = array_search($campDateFormFieldData, $this->campDateFormFieldsData, true);
 
@@ -257,7 +291,24 @@ class CampDateData
         return $this->campDateAttachmentConfigsData;
     }
 
-    public function addCampDateAttachmentConfigsDatum(CampDateAttachmentConfigData $campDateAttachmentConfigData): self
+    public function setCampDateAttachmentConfigsData(array $campDateAttachmentConfigsData): self
+    {
+        foreach ($campDateAttachmentConfigsData as $campDateAttachmentConfigData)
+        {
+            if (!$campDateAttachmentConfigData instanceof CampDateAttachmentConfigData)
+            {
+                throw new LogicException(
+                    sprintf('Array passed to %s must only contain instances of %s.', __METHOD__, CampDateAttachmentConfigData::class)
+                );
+            }
+        }
+
+        $this->campDateAttachmentConfigsData = $campDateAttachmentConfigsData;
+
+        return $this;
+    }
+    
+    public function addCampDateAttachmentConfigData(CampDateAttachmentConfigData $campDateAttachmentConfigData): self
     {
         if (in_array($campDateAttachmentConfigData, $this->campDateAttachmentConfigsData, true))
         {
@@ -269,7 +320,7 @@ class CampDateData
         return $this;
     }
 
-    public function removeCampDateAttachmentConfigsDatum(CampDateAttachmentConfigData $campDateAttachmentConfigData): self
+    public function removeCampDateAttachmentConfigData(CampDateAttachmentConfigData $campDateAttachmentConfigData): self
     {
         $key = array_search($campDateAttachmentConfigData, $this->campDateAttachmentConfigsData, true);
 
@@ -288,7 +339,24 @@ class CampDateData
         return $this->campDatePurchasableItemsData;
     }
 
-    public function addCampDatePurchasableItemsDatum(CampDatePurchasableItemData $campDatePurchasableItemData): self
+    public function setCampDatePurchasableItemsData(array $campDatePurchasableItemsData): self
+    {
+        foreach ($campDatePurchasableItemsData as $campDatePurchasableItemData)
+        {
+            if (!$campDatePurchasableItemData instanceof CampDatePurchasableItemData)
+            {
+                throw new LogicException(
+                    sprintf('Array passed to %s must only contain instances of %s.', __METHOD__, CampDatePurchasableItemData::class)
+                );
+            }
+        }
+
+        $this->campDatePurchasableItemsData = $campDatePurchasableItemsData;
+
+        return $this;
+    }
+    
+    public function addCampDatePurchasableItemData(CampDatePurchasableItemData $campDatePurchasableItemData): self
     {
         if (in_array($campDatePurchasableItemData, $this->campDatePurchasableItemsData, true))
         {
@@ -300,7 +368,7 @@ class CampDateData
         return $this;
     }
 
-    public function removeCampDatePurchasableItemsDatum(CampDatePurchasableItemData $campDatePurchasableItemData): self
+    public function removeCampDatePurchasableItemData(CampDatePurchasableItemData $campDatePurchasableItemData): self
     {
         $key = array_search($campDatePurchasableItemData, $this->campDatePurchasableItemsData, true);
 

@@ -14,47 +14,7 @@
                 </a>
 
                 <div class="card-body collapse {% if is_search_invalid %} show {% endif %}" id="search-content">
-                    {{ form_start(form_search) }}
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                {{ form_row(form_search.phrase) }}
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                {{ form_row(form_search.campCategory) }}
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                {{ form_row(form_search.sortBy) }}
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                {{ form_row(form_search.from) }}
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                {{ form_row(form_search.to) }}
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                {{ form_row(form_search.age) }}
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                {{ form_row(form_search.isActive) }}
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                {{ form_row(form_search.isHidden) }}
-                            </div>
-
-                            <div class="form-group col-md-4">
-                                {{ form_row(form_search.isFeatured) }}
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.camp_search.button'|trans }}</button>
-                    {{ form_end(form_search) }}
+                    {{ form(form_search) }}
                 </div>
             </div>
         </div>

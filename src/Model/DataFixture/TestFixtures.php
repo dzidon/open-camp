@@ -355,17 +355,17 @@ class TestFixtures extends Fixture
         /*
          * CampDate
          */
-        $campDate1 = new CampDate(new DateTimeImmutable('2000-07-01'), new DateTimeImmutable('2000-07-07'), 1000, 10, $camp1);
+        $campDate1 = new CampDate(new DateTimeImmutable('2000-07-01'), new DateTimeImmutable('2000-07-07'), 1000.0, 100.0, 10, $camp1);
         $this->setUid($campDate1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $this->setCreatedAt($campDate1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($campDate1);
 
-        $campDate2 = new CampDate(new DateTimeImmutable('3000-07-08'), new DateTimeImmutable('3000-07-14'), 2000, 20, $camp1);
+        $campDate2 = new CampDate(new DateTimeImmutable('3000-07-08'), new DateTimeImmutable('3000-07-14'), 2000.0, 200.0, 20, $camp1);
         $this->setUid($campDate2, '550e8400-e29b-41d4-a716-446655440000');
         $this->setCreatedAt($campDate2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($campDate2);
 
-        $campDate3 = new CampDate(new DateTimeImmutable('4000-01-05'), new DateTimeImmutable('4000-01-10'), 3000, 30, $camp2);
+        $campDate3 = new CampDate(new DateTimeImmutable('4000-01-05'), new DateTimeImmutable('4000-01-10'), 3000.0, 300.0, 30, $camp2);
         $this->setUid($campDate3, 'c097941e-52c4-405a-9823-49b7b71ead6e');
         $this->setCreatedAt($campDate3, new DateTimeImmutable('2000-01-03'));
         $manager->persist($campDate3);

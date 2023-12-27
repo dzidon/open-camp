@@ -28,7 +28,7 @@ class SuperAdminRoleAssignSubscriber
     public function onAssignSaveUser(SuperAdminRoleAssignEvent $event): void
     {
         $user = $event->getUser();
-
-        $this->userRepository->saveUser($user, true);
+        $isFlush = $event->isFlush();
+        $this->userRepository->saveUser($user, $isFlush);
     }
 }

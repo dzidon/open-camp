@@ -57,7 +57,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $menu->addChild($itemHome);
 
         // camp catalog
-        $active = $route === 'user_camp_catalog' || $route === 'user_camp_detail';
+        $active = $route === 'user_camp_catalog' || $route === 'user_camp_detail' || $route === 'user_application_step_one_create';
 
         $text = $this->translator->trans('route.user_camp_catalog');
         $url = $this->urlGenerator->generate('user_camp_catalog');

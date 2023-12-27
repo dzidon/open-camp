@@ -42,6 +42,7 @@ class CamperSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'         => CamperSearchData::class,
+            'block_prefix'       => 'user_camper_search',
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

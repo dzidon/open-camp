@@ -3,13 +3,16 @@
 namespace App\Model\Event\User\UserRegistration;
 
 use App\Library\Data\User\RegistrationData;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
+use App\Model\Library\UserRegistration\UserRegistrationResultInterface;
 
-class UserRegistrationCreateEvent extends Event
+class UserRegistrationCreateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.user_registration.create';
 
     private RegistrationData $data;
+
+    private ?UserRegistrationResultInterface $result = null;
 
     public function __construct(RegistrationData $data)
     {
@@ -24,6 +27,18 @@ class UserRegistrationCreateEvent extends Event
     public function setRegistrationData(RegistrationData $data): self
     {
         $this->data = $data;
+
+        return $this;
+    }
+
+    public function getUserRegistrationResult(): ?UserRegistrationResultInterface
+    {
+        return $this->result;
+    }
+
+    public function setUserRegistrationResult(?UserRegistrationResultInterface $result): self
+    {
+        $this->result = $result;
 
         return $this;
     }

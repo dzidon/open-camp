@@ -31,6 +31,10 @@ class AttachmentConfigType extends AbstractType
             ->add('label', TextType::class, [
                 'label' => 'form.admin.attachment_config.label',
             ])
+            ->add('help', TextType::class, [
+                'required' => false,
+                'label'    => 'form.admin.attachment_config.help',
+            ])
             ->add('maxSize', NumberType::class, [
                 'attr' => [
                     'min' => 0.01,
@@ -55,7 +59,6 @@ class AttachmentConfigType extends AbstractType
                 'label'         => 'form.admin.attachment_config.file_extensions',
                 'allow_add'     => true,
                 'allow_delete'  => true,
-                'by_reference'  => false,
                 'entry_options' => [
                     'label'         => false,
                     'remove_button' => true,

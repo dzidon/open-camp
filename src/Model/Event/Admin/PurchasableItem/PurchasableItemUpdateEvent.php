@@ -4,9 +4,9 @@ namespace App\Model\Event\Admin\PurchasableItem;
 
 use App\Library\Data\Admin\PurchasableItemData;
 use App\Model\Entity\PurchasableItem;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class PurchasableItemUpdateEvent extends Event
+class PurchasableItemUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.purchasable_item.update';
 

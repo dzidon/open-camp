@@ -3,9 +3,9 @@
 namespace App\Model\Event\Admin\Role;
 
 use App\Model\Entity\Role;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class RoleDeleteEvent extends Event
+class RoleDeleteEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.role.delete';
 

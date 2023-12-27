@@ -32,7 +32,7 @@ class Permission
 
     #[ORM\ManyToOne(targetEntity: PermissionGroup::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private PermissionGroup $group;
+    private PermissionGroup $permissionGroup;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
@@ -47,7 +47,7 @@ class Permission
         $this->name = $name;
         $this->label = $label;
         $this->priority = $priority;
-        $this->group = $group;
+        $this->permissionGroup = $group;
         $this->createdAt = new DateTimeImmutable('now');
     }
 
@@ -94,12 +94,12 @@ class Permission
 
     public function getPermissionGroup(): PermissionGroup
     {
-        return $this->group;
+        return $this->permissionGroup;
     }
 
     public function setPermissionGroup(PermissionGroup $group): self
     {
-        $this->group = $group;
+        $this->permissionGroup = $group;
 
         return $this;
     }

@@ -4,8 +4,10 @@ namespace App\Tests\Library\Data\Admin;
 
 use App\Library\Data\Admin\CampImagesUploadData;
 use App\Model\Entity\Camp;
+use LogicException;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
+use stdClass;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\Image;
@@ -27,6 +29,15 @@ class CampImagesUploadDataTest extends TestCase
 
         $data->setImages($newImages);
         $this->assertSame($newImages, $data->getImages());
+    }
+
+    public function testInvalidImages(): void
+    {
+        $data = new CampImagesUploadData($this->camp);
+        $this->expectException(LogicException::class);
+
+        $newImages = [new stdClass()];
+        $data->setImages($newImages);
     }
 
     public function testCamp(): void

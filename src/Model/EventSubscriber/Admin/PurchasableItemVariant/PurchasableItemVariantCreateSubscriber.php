@@ -3,9 +3,9 @@
 namespace App\Model\EventSubscriber\Admin\PurchasableItemVariant;
 
 use App\Model\Entity\PurchasableItemVariant;
-use App\Model\Entity\PurchasableItemVariantValue;
-use App\Model\Event\Admin\PurchasableItemVariant\PurchasableItemVariantCreatedEvent;
 use App\Model\Event\Admin\PurchasableItemVariant\PurchasableItemVariantCreateEvent;
+use App\Model\Event\Admin\PurchasableItemVariantValue\PurchasableItemVariantValueCreateEvent;
+use App\Model\Repository\PurchasableItemVariantRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -16,31 +16,41 @@ class PurchasableItemVariantCreateSubscriber
 
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(DataTransferRegistryInterface $dataTransfer, EventDispatcherInterface $eventDispatcher)
+    private PurchasableItemVariantRepositoryInterface $repository;
+
+    public function __construct(DataTransferRegistryInterface             $dataTransfer,
+                                EventDispatcherInterface                  $eventDispatcher,
+                                PurchasableItemVariantRepositoryInterface $repository)
     {
         $this->dataTransfer = $dataTransfer;
         $this->eventDispatcher = $eventDispatcher;
+        $this->repository = $repository;
     }
 
-    #[AsEventListener(event: PurchasableItemVariantCreateEvent::NAME)]
+    #[AsEventListener(event: PurchasableItemVariantCreateEvent::NAME, priority: 200)]
     public function onCreateFillEntity(PurchasableItemVariantCreateEvent $event): void
     {
         $creationData = $event->getPurchasableItemVariantCreationData();
         $purchasableItemVariantData = $creationData->getPurchasableItemVariantData();
+        $purchasableItemVariantValuesData = $creationData->getPurchasableItemVariantValuesData();
 
         $purchasableItemVariant = new PurchasableItemVariant($purchasableItemVariantData->getName(), $purchasableItemVariantData->getPriority(), $purchasableItemVariantData->getPurchasableItem());
         $this->dataTransfer->fillEntity($purchasableItemVariantData, $purchasableItemVariant);
+        $event->setPurchasableItemVariant($purchasableItemVariant);
 
-        $purchasableItemVariantValues = [];
-        $purchasableItemVariantValuesData = $creationData->getPurchasableItemVariantValuesData();
         foreach ($purchasableItemVariantValuesData as $purchasableItemVariantValueData)
         {
-            $purchasableItemVariantValue = new PurchasableItemVariantValue($purchasableItemVariantValueData->getName(), $purchasableItemVariantValueData->getPriority(), $purchasableItemVariant);
-            $this->dataTransfer->fillEntity($purchasableItemVariantValueData, $purchasableItemVariantValue);
-            $purchasableItemVariantValues[] = $purchasableItemVariantValue;
+            $event = new PurchasableItemVariantValueCreateEvent($purchasableItemVariantValueData, $purchasableItemVariant);
+            $event->setIsFlush(false);
+            $this->eventDispatcher->dispatch($event, $event::NAME);
         }
+    }
 
-        $event = new PurchasableItemVariantCreatedEvent($creationData, $purchasableItemVariant, $purchasableItemVariantValues);
-        $this->eventDispatcher->dispatch($event, PurchasableItemVariantCreatedEvent::NAME);
+    #[AsEventListener(event: PurchasableItemVariantCreateEvent::NAME, priority: 100)]
+    public function onCreateSave(PurchasableItemVariantCreateEvent $event): void
+    {
+        $purchasableItemVariant = $event->getPurchasableItemVariant();
+        $isFlush = $event->isFlush();
+        $this->repository->savePurchasableItemVariant($purchasableItemVariant, $isFlush);
     }
 }

@@ -187,12 +187,12 @@ class AttachmentConfigDataTest extends KernelTestCase
 
         foreach ($newFileExtensionsData as $newFileExtensionData)
         {
-            $data->addFileExtensionsDatum($newFileExtensionData);
+            $data->addFileExtensionData($newFileExtensionData);
         }
 
         $this->assertSame($newFileExtensionsData, $data->getFileExtensionsData());
 
-        $data->removeFileExtensionsDatum($newFileExtensionsData[0]);
+        $data->removeFileExtensionData($newFileExtensionsData[0]);
         $this->assertNotContains($newFileExtensionsData[0], $data->getFileExtensionsData());
     }
 
@@ -205,7 +205,7 @@ class AttachmentConfigDataTest extends KernelTestCase
         $this->assertNotEmpty($result); // invalid
 
         $fileExtensionData = new FileExtensionData();
-        $data->addFileExtensionsDatum($fileExtensionData);
+        $data->addFileExtensionData($fileExtensionData);
         $result = $validator->validateProperty($data, 'fileExtensionsData');
         $this->assertNotEmpty($result); // invalid
 
@@ -222,7 +222,7 @@ class AttachmentConfigDataTest extends KernelTestCase
         $data->setMaxSize(10.0);
         $data->setLabel('Label');
         $data->setRequiredType(AttachmentConfigRequiredTypeEnum::REQUIRED);
-        $data->addFileExtensionsDatum((new FileExtensionData())->setExtension('pdf'));
+        $data->addFileExtensionData((new FileExtensionData())->setExtension('pdf'));
         $data->setName('Text file');
         $result = $validator->validate($data);
         $this->assertNotEmpty($result); // invalid
@@ -237,7 +237,7 @@ class AttachmentConfigDataTest extends KernelTestCase
         $data->setMaxSize(10.0);
         $data->setLabel('Label');
         $data->setRequiredType(AttachmentConfigRequiredTypeEnum::REQUIRED);
-        $data->addFileExtensionsDatum((new FileExtensionData())->setExtension('pdf'));
+        $data->addFileExtensionData((new FileExtensionData())->setExtension('pdf'));
         $data->setName('Image');
         $result = $validator->validate($data);
         $this->assertEmpty($result); // valid

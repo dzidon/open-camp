@@ -3,9 +3,9 @@
 namespace App\Model\Event\User\Contact;
 
 use App\Model\Entity\Contact;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class ContactDeleteEvent extends Event
+class ContactDeleteEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.contact.delete';
 

@@ -3,32 +3,37 @@
 namespace App\Model\EventSubscriber\Admin\User;
 
 use App\Model\Entity\User;
-use App\Model\Event\Admin\User\UserCreatedEvent;
 use App\Model\Event\Admin\User\UserCreateEvent;
+use App\Model\Repository\UserRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UserCreateSubscriber
 {
     private DataTransferRegistryInterface $dataTransfer;
 
-    private EventDispatcherInterface $eventDispatcher;
+    private UserRepositoryInterface $repository;
 
-    public function __construct(DataTransferRegistryInterface $dataTransfer, EventDispatcherInterface $eventDispatcher)
+    public function __construct(DataTransferRegistryInterface $dataTransfer, UserRepositoryInterface $repository)
     {
         $this->dataTransfer = $dataTransfer;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->repository = $repository;
     }
 
-    #[AsEventListener(event: UserCreateEvent::NAME)]
+    #[AsEventListener(event: UserCreateEvent::NAME, priority: 200)]
     public function onCreateFillEntity(UserCreateEvent $event): void
     {
         $data = $event->getUserData();
         $entity = new User($data->getEmail());
         $this->dataTransfer->fillEntity($data, $entity);
+        $event->setUser($entity);
+    }
 
-        $event = new UserCreatedEvent($data, $entity);
-        $this->eventDispatcher->dispatch($event, UserCreatedEvent::NAME);
+    #[AsEventListener(event: UserCreateEvent::NAME, priority: 100)]
+    public function onCreateSaveEntity(UserCreateEvent $event): void
+    {
+        $entity = $event->getUser();
+        $isFlush = $event->isFlush();
+        $this->repository->saveUser($entity, $isFlush);
     }
 }

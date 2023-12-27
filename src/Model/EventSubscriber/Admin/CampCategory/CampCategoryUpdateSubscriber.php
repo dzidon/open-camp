@@ -32,6 +32,7 @@ class CampCategoryUpdateSubscriber
     public function onUpdateSaveEntity(CampCategoryUpdateEvent $event): void
     {
         $entity = $event->getCampCategory();
-        $this->repository->saveCampCategory($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->saveCampCategory($entity, $isFlush);
     }
 }

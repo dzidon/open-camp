@@ -29,7 +29,8 @@ interface CampDateFormFieldRepositoryInterface
      * Finds all camp date form fields that have the given camp date.
      *
      * @param CampDate $campDate
+     * @param ?bool $isGlobal
      * @return CampDateFormField[]
      */
-    public function findByCampDate(CampDate $campDate): array;
+    public function findByCampDate(CampDate $campDate, ?bool $isGlobal = null): array;
 }

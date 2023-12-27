@@ -15,21 +15,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class NotBlankContactEmailValidator extends ConstraintValidator
 {
-    private bool $isEmailMandatory;
-    private bool $isPhoneNumberMandatory;
-
     private TranslatorInterface $translator;
     private PropertyAccessorInterface $propertyAccessor;
 
-    public function __construct(TranslatorInterface       $translator,
-                                PropertyAccessorInterface $propertyAccessor,
-                                bool                      $isEmailMandatory,
-                                bool                      $isPhoneNumberMandatory)
+    public function __construct(TranslatorInterface $translator, PropertyAccessorInterface $propertyAccessor)
     {
         $this->translator = $translator;
         $this->propertyAccessor = $propertyAccessor;
-        $this->isEmailMandatory = $isEmailMandatory;
-        $this->isPhoneNumberMandatory = $isPhoneNumberMandatory;
     }
 
     /**
@@ -48,6 +40,20 @@ class NotBlankContactEmailValidator extends ConstraintValidator
         }
 
         $contactData = $value;
+        $isEmailMandatory = $this->propertyAccessor->getValue($contactData, $constraint->isEmailMandatoryProperty);
+
+        if (!is_bool($isEmailMandatory))
+        {
+            throw new UnexpectedTypeException($isEmailMandatory, 'bool');
+        }
+
+        $isPhoneNumberMandatory = $this->propertyAccessor->getValue($contactData, $constraint->isPhoneNumberMandatoryProperty);
+
+        if (!is_bool($isPhoneNumberMandatory))
+        {
+            throw new UnexpectedTypeException($isPhoneNumberMandatory, 'bool');
+        }
+
         $email = $this->propertyAccessor->getValue($contactData, $constraint->emailProperty);
 
         if ($email !== null)
@@ -72,11 +78,11 @@ class NotBlankContactEmailValidator extends ConstraintValidator
 
         $message = null;
 
-        if ($this->isEmailMandatory)
+        if ($isEmailMandatory)
         {
             $message = $constraint->messageWhenMandatory;
         }
-        else if (!$this->isPhoneNumberMandatory && $phoneNumber === null)
+        else if (!$isPhoneNumberMandatory && $phoneNumber === null)
         {
             $message = $constraint->messageWhenNotMandatory;
         }

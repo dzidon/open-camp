@@ -47,6 +47,7 @@ class CampDatePurchasableItemRepository extends AbstractRepository implements Ca
             ->leftJoin('campDatePurchasableItem.purchasableItem', 'purchasableItem')
             ->andWhere('campDatePurchasableItem.campDate = :campDateId')
             ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ->orderBy('campDatePurchasableItem.priority', 'DESC')
             ->getQuery()
             ->getResult()
         ;

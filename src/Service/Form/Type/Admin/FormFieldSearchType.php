@@ -67,6 +67,7 @@ class FormFieldSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'         => FormFieldSearchData::class,
+            'block_prefix'       => 'admin_form_field_search',
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

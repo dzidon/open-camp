@@ -33,6 +33,17 @@ class PurchasableItemUpdateEventTest extends TestCase
         $this->assertSame($newEntity, $this->event->getPurchasableItem());
     }
 
+    public function testIsFlush(): void
+    {
+        $this->assertTrue($this->event->isFlush());
+
+        $this->event->setIsFlush(false);
+        $this->assertFalse($this->event->isFlush());
+
+        $this->event->setIsFlush(true);
+        $this->assertTrue($this->event->isFlush());
+    }
+
     protected function setUp(): void
     {
         $this->entity = new PurchasableItem('Item', 'Label', 1000.0, 2);

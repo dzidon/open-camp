@@ -12,7 +12,6 @@ use App\Model\Entity\CampImage;
 use App\Model\Library\Camp\CampLifespan;
 use App\Model\Library\Camp\CampLifespanCollection;
 use App\Model\Library\Camp\UserCampCatalogResult;
-use App\Model\Service\CampImage\CampImageFilesystemInterface;
 use App\Service\Search\DataStructure\TreeSearchInterface;
 use DateTimeImmutable;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
@@ -29,19 +28,12 @@ use Symfony\Component\Uid\UuidV4;
  */
 class CampRepository extends AbstractRepository implements CampRepositoryInterface
 {
-    private CampImageRepositoryInterface $campImageRepository;
-    private CampImageFilesystemInterface $campImageFilesystem;
     private TreeSearchInterface $treeSearch;
 
-    public function __construct(ManagerRegistry              $registry,
-                                CampImageRepositoryInterface $campImageRepository,
-                                CampImageFilesystemInterface $campImageFilesystem,
-                                TreeSearchInterface          $treeSearch)
+    public function __construct(ManagerRegistry $registry, TreeSearchInterface $treeSearch)
     {
         parent::__construct($registry, Camp::class);
 
-        $this->campImageRepository = $campImageRepository;
-        $this->campImageFilesystem = $campImageFilesystem;
         $this->treeSearch = $treeSearch;
     }
 
@@ -58,13 +50,6 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
      */
     public function removeCamp(Camp $camp, bool $flush): void
     {
-        $campImages = $this->campImageRepository->findByCamp($camp);
-
-        foreach ($campImages as $campImage)
-        {
-            $this->campImageFilesystem->removeFile($campImage);
-        }
-
         $this->remove($camp, $flush);
     }
 

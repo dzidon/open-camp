@@ -32,6 +32,7 @@ class PurchasableItemVariantUpdateSubscriber
     public function onUpdateSaveEntity(PurchasableItemVariantUpdateEvent $event): void
     {
         $entity = $event->getPurchasableItemVariant();
-        $this->repository->savePurchasableItemVariant($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->savePurchasableItemVariant($entity, $isFlush);
     }
 }

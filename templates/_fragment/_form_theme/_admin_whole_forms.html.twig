@@ -1,0 +1,307 @@
+{# Attachment config search #}
+{% block admin_attachment_config_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.fileExtensions) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.requiredType) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.isGlobal) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.attachment_config_search.button'|trans }}</button>
+{% endblock %}
+
+{# Camp date search #}
+{% block admin_camp_date_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            {{ form_row(form.from) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.to) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="form-group col-md-6">
+            {{ form_row(form.isHistorical) }}
+        </div>
+
+        <div class="form-group col-md-6">
+            {{ form_row(form.isActive) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.camp_search.button'|trans }}</button>
+{% endblock %}
+
+{# Camp search #}
+{% block admin_camp_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.campCategory) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.from) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.to) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.age) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.isActive) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.isHidden) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.isFeatured) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.camp_search.button'|trans }}</button>
+{% endblock %}
+
+{# Form field search #}
+{% block admin_form_field_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.type) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.isRequired) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.isGlobal) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.form_field_search.button'|trans }}</button>
+{% endblock %}
+
+{# Profile edit #}
+{% block admin_profile_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="col-md-6">
+            {{ form_row(form.nameFirst) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.nameLast) }}
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
+{% endblock %}
+
+{# Purchasable item search #}
+{% block admin_purchasable_item_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.isGlobal) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.purchasable_item_search.button'|trans }}</button>
+{% endblock %}
+
+{# Purchasable item edit #}
+{% block admin_purchasable_item_widget %}
+    {{ form_errors(form) }}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.label) }}
+    {{ form_row(form.price) }}
+    {{ form_row(form.maxAmount) }}
+    {{ form_row(form.isGlobal) }}
+    {{ form_row(form.image) }}
+
+    {% if purchasable_item is defined and purchasable_item.imageExtension is not null %}
+        <div class="row purchasable-item-image"
+             data-controller="cv--content"
+             data-cv--content-show-when-checked-value="0"
+        >
+            <div class="col-4 col-md-3 mb-3">
+                <div class="bg-black">
+                    <a href="{{ asset(purchasable_item_image_path(purchasable_item)) }}">
+                        <img class="image-cover-16-9"
+                             src="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
+                             alt="{{ 'entity_attribute.purchasable_item.image'|trans }} - {{ purchasable_item.name }}"
+                        >
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {{ form_rest(form) }}
+{% endblock %}
+
+{# Purchasable item variant search #}
+{% block admin_purchasable_item_variant_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.purchasable_item_variant_search.button'|trans }}</button>
+{% endblock %}
+
+{# Purchasable item variant value search #}
+{% block admin_purchasable_item_variant_value_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.purchasable_item_variant_value_search.button'|trans }}</button>
+{% endblock %}
+
+{# Role search #}
+{% block admin_role_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.role_search.button'|trans }}</button>
+{% endblock %}
+
+{# User search #}
+{% block admin_user_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.role) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.user_search.button'|trans }}</button>
+{% endblock %}
+
+{# Trip location path search #}
+{% block admin_trip_location_path_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.trip_location_path_search.button'|trans }}</button>
+{% endblock %}
+
+{# Trip location search #}
+{% block admin_trip_location_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.trip_location_search.button'|trans }}</button>
+{% endblock %}

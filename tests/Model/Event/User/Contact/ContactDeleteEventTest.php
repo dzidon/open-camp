@@ -25,6 +25,17 @@ class ContactDeleteEventTest extends TestCase
         $this->assertSame($newEntity, $this->event->getContact());
     }
 
+    public function testIsFlush(): void
+    {
+        $this->assertTrue($this->event->isFlush());
+
+        $this->event->setIsFlush(false);
+        $this->assertFalse($this->event->isFlush());
+
+        $this->event->setIsFlush(true);
+        $this->assertTrue($this->event->isFlush());
+    }
+
     protected function setUp(): void
     {
         $this->user = new User('bob@gmail.com');

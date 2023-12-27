@@ -81,8 +81,11 @@ class ProfileContactController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
+        $contactData = new ContactData(
+            $this->getParameter('app.contact_email_mandatory'),
+            $this->getParameter('app.contact_phone_number_mandatory')
+        );
 
-        $contactData = new ContactData();
         $form = $this->createForm(ContactType::class, $contactData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.contact.button']);
         $form->handleRequest($request);
@@ -123,7 +126,10 @@ class ProfileContactController extends AbstractController
         $contact = $this->findContactOrThrow404($id);
         $this->denyAccessUnlessGranted('contact_update', $contact);
 
-        $contactData = new ContactData();
+        $contactData = new ContactData(
+            $this->getParameter('app.contact_email_mandatory'),
+            $this->getParameter('app.contact_phone_number_mandatory')
+        );
         $dataTransfer->fillData($contactData, $contact);
         $form = $this->createForm(ContactType::class, $contactData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.contact.button']);

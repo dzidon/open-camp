@@ -6,6 +6,8 @@ use App\Library\Data\Admin\TripLocationData;
 use App\Library\Data\Admin\TripLocationPathCreationData;
 use App\Library\Data\Admin\TripLocationPathData;
 use App\Model\Entity\TripLocationPath;
+use LogicException;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -45,13 +47,21 @@ class TripLocationPathCreationDataTest extends KernelTestCase
 
         foreach ($newTripLocationsData as $newTripLocationData)
         {
-            $data->addTripLocationsDatum($newTripLocationData);
+            $data->addTripLocationData($newTripLocationData);
         }
 
         $this->assertSame($newTripLocationsData, $data->getTripLocationsData());
 
-        $data->removeTripLocationsDatum($newTripLocationsData[0]);
+        $data->removeTripLocationData($newTripLocationsData[0]);
         $this->assertNotContains($newTripLocationsData[0], $data->getTripLocationsData());
+
+        $data = new TripLocationPathCreationData();
+        $data->setTripLocationsData($newTripLocationsData);
+        $this->assertSame($newTripLocationsData, $data->getTripLocationsData());
+
+        $this->expectException(LogicException::class);
+        $newTripLocationsData = [new stdClass()];
+        $data->setTripLocationsData($newTripLocationsData);
     }
 
     public function testTripLocationsDataValidation(): void
@@ -66,7 +76,7 @@ class TripLocationPathCreationDataTest extends KernelTestCase
         $tripLocationData->setName('Location');
         $tripLocationData->setPrice(100.0);
         $tripLocationData->setPriority(0);
-        $data->addTripLocationsDatum($tripLocationData);
+        $data->addTripLocationData($tripLocationData);
 
         $result = $validator->validateProperty($data, 'tripLocationsData');
         $this->assertEmpty($result); // valid
@@ -91,8 +101,8 @@ class TripLocationPathCreationDataTest extends KernelTestCase
         $locationData2->setPriority(200);
 
         $creationData
-            ->addTripLocationsDatum($locationData1)
-            ->addTripLocationsDatum($locationData2)
+            ->addTripLocationData($locationData1)
+            ->addTripLocationData($locationData2)
         ;
 
         $result = $validator->validate($creationData);

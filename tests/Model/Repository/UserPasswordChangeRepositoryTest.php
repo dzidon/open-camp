@@ -54,6 +54,14 @@ class UserPasswordChangeRepositoryTest extends KernelTestCase
         $this->assertNotNull($registration);
     }
 
+    public function testSelectorExists(): void
+    {
+        $passwordChangeRepository = $this->getUserPasswordChangeRepository();
+
+        $this->assertFalse($passwordChangeRepository->selectorExists('bob'));
+        $this->assertTrue($passwordChangeRepository->selectorExists('dav'));
+    }
+
     public function testFindOneBySelectorActive(): void
     {
         $passwordChangeRepository = $this->getUserPasswordChangeRepository();

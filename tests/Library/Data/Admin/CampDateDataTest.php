@@ -30,7 +30,7 @@ class CampDateDataTest extends KernelTestCase
         $data = new CampDateData($this->camp);
         $this->assertNull($data->getCampDate());
 
-        $campDate = new CampDate(new DateTimeImmutable('now'), new DateTimeImmutable('now'), 100.0, 10, $this->camp);
+        $campDate = new CampDate(new DateTimeImmutable('now'), new DateTimeImmutable('now'), 100.0, 200.0, 10, $this->camp);
 
         $data = new CampDateData($this->camp, $campDate);
         $this->assertSame($campDate, $data->getCampDate());
@@ -105,36 +105,69 @@ class CampDateDataTest extends KernelTestCase
         $this->assertNotEmpty($result); // invalid
     }
 
-    public function testPrice(): void
+    public function testDeposit(): void
     {
         $data = new CampDateData($this->camp);
-        $this->assertNull($data->getPrice());
+        $this->assertNull($data->getDeposit());
 
-        $data->setPrice(100.5);
-        $this->assertSame(100.5, $data->getPrice());
+        $data->setDeposit(100.5);
+        $this->assertSame(100.5, $data->getDeposit());
 
-        $data->setPrice(null);
-        $this->assertNull($data->getPrice());
+        $data->setDeposit(null);
+        $this->assertNull($data->getDeposit());
     }
 
-    public function testPriceValidation(): void
+    public function testDepositValidation(): void
     {
         $validator = $this->getValidator();
 
         $data = new CampDateData($this->camp);
-        $result = $validator->validateProperty($data, 'price');
+        $result = $validator->validateProperty($data, 'deposit');
         $this->assertNotEmpty($result); // invalid
 
-        $data->setPrice(-1.0);
-        $result = $validator->validateProperty($data, 'price');
+        $data->setDeposit(-1.0);
+        $result = $validator->validateProperty($data, 'deposit');
         $this->assertNotEmpty($result); // invalid
 
-        $data->setPrice(0.0);
-        $result = $validator->validateProperty($data, 'price');
+        $data->setDeposit(0.0);
+        $result = $validator->validateProperty($data, 'deposit');
         $this->assertEmpty($result); // valid
 
-        $data->setPrice(1.0);
-        $result = $validator->validateProperty($data, 'price');
+        $data->setDeposit(1.0);
+        $result = $validator->validateProperty($data, 'deposit');
+        $this->assertEmpty($result); // valid
+    }
+
+    public function testPriceWithoutDeposit(): void
+    {
+        $data = new CampDateData($this->camp);
+        $this->assertNull($data->getPriceWithoutDeposit());
+
+        $data->setPriceWithoutDeposit(100.5);
+        $this->assertSame(100.5, $data->getPriceWithoutDeposit());
+
+        $data->setPriceWithoutDeposit(null);
+        $this->assertNull($data->getPriceWithoutDeposit());
+    }
+
+    public function testPriceWithoutDepositValidation(): void
+    {
+        $validator = $this->getValidator();
+
+        $data = new CampDateData($this->camp);
+        $result = $validator->validateProperty($data, 'priceWithoutDeposit');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setPriceWithoutDeposit(-1.0);
+        $result = $validator->validateProperty($data, 'priceWithoutDeposit');
+        $this->assertNotEmpty($result); // invalid
+
+        $data->setPriceWithoutDeposit(0.0);
+        $result = $validator->validateProperty($data, 'priceWithoutDeposit');
+        $this->assertEmpty($result); // valid
+
+        $data->setPriceWithoutDeposit(1.0);
+        $result = $validator->validateProperty($data, 'priceWithoutDeposit');
         $this->assertEmpty($result); // valid
     }
 
@@ -284,7 +317,7 @@ class CampDateDataTest extends KernelTestCase
         $this->assertNotEmpty($result); // invalid
 
         $campDateFormFieldData = new CampDateFormFieldData();
-        $data->addCampDateFormFieldsDatum($campDateFormFieldData);
+        $data->addCampDateFormFieldData($campDateFormFieldData);
         $result = $validator->validateProperty($data, 'campDateFormFieldsData');
         $this->assertNotEmpty($result); // invalid
 
@@ -304,7 +337,7 @@ class CampDateDataTest extends KernelTestCase
         $this->assertNotEmpty($result); // invalid
 
         $campDateAttachmentConfigData = new CampDateAttachmentConfigData();
-        $data->addCampDateAttachmentConfigsDatum($campDateAttachmentConfigData);
+        $data->addCampDateAttachmentConfigData($campDateAttachmentConfigData);
         $result = $validator->validateProperty($data, 'campDateAttachmentConfigsData');
         $this->assertNotEmpty($result); // invalid
 
@@ -324,7 +357,7 @@ class CampDateDataTest extends KernelTestCase
         $this->assertNotEmpty($result); // invalid
 
         $campDatePurchasableItemData = new CampDatePurchasableItemData();
-        $data->addCampDatePurchasableItemsDatum($campDatePurchasableItemData);
+        $data->addCampDatePurchasableItemData($campDatePurchasableItemData);
         $result = $validator->validateProperty($data, 'campDatePurchasableItemsData');
         $this->assertNotEmpty($result); // invalid
 
@@ -344,7 +377,8 @@ class CampDateDataTest extends KernelTestCase
         $camp = $campRepository->findOneById($uid);
 
         $data = new CampDateData($camp);
-        $data->setPrice(100.0);
+        $data->setDeposit(100.0);
+        $data->setPriceWithoutDeposit(100.0);
         $data->setCapacity(5);
 
         $data->setStartAt(new DateTimeImmutable('3000-01-01'));
@@ -390,7 +424,8 @@ class CampDateDataTest extends KernelTestCase
         $campDate = $campDateRepository->findOneById(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
         $data = new CampDateData($camp, $campDate);
-        $data->setPrice(100.0);
+        $data->setDeposit(100.0);
+        $data->setPriceWithoutDeposit(100.0);
         $data->setCapacity(5);
 
         $data->setStartAt(new DateTimeImmutable('2000-06-20'));

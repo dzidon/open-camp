@@ -21,7 +21,7 @@ class ContactUpdateEventTest extends TestCase
     {
         $this->assertSame($this->data, $this->event->getContactData());
 
-        $newData = new ContactData();
+        $newData = new ContactData(false, false);
         $this->event->setContactData($newData);
         $this->assertSame($newData, $this->event->getContactData());
     }
@@ -35,11 +35,22 @@ class ContactUpdateEventTest extends TestCase
         $this->assertSame($newContact, $this->event->getContact());
     }
 
+    public function testIsFlush(): void
+    {
+        $this->assertTrue($this->event->isFlush());
+
+        $this->event->setIsFlush(false);
+        $this->assertFalse($this->event->isFlush());
+
+        $this->event->setIsFlush(true);
+        $this->assertTrue($this->event->isFlush());
+    }
+
     protected function setUp(): void
     {
         $this->user = new User('bob@gmail.com');
         $this->entity = new Contact('Bob', 'Smith', $this->user, ContactRoleEnum::MOTHER);
-        $this->data = new ContactData();
+        $this->data = new ContactData(false, false);
         $this->event = new ContactUpdateEvent($this->data, $this->entity);
     }
 }

@@ -5,9 +5,10 @@ namespace App\Service\Data\Transfer\Admin;
 use App\Library\Data\Admin\AttachmentConfigData;
 use App\Library\Data\Admin\FileExtensionData;
 use App\Model\Entity\AttachmentConfig;
-use App\Model\Entity\FileExtension;
+use App\Model\Event\Admin\AttachmentConfig\AttachmentConfigFileExtensionCreateEvent;
 use App\Model\Repository\FileExtensionRepositoryInterface;
 use App\Service\Data\Transfer\DataTransferInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
  * Transfers data from {@link AttachmentConfigData} to {@link AttachmentConfig} and vice versa.
@@ -16,9 +17,13 @@ class AttachmentConfigDataTransfer implements DataTransferInterface
 {
     private FileExtensionRepositoryInterface $fileExtensionRepository;
 
-    public function __construct(FileExtensionRepositoryInterface $fileExtensionRepository)
+    private EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(FileExtensionRepositoryInterface $fileExtensionRepository,
+                                EventDispatcherInterface         $eventDispatcher)
     {
         $this->fileExtensionRepository = $fileExtensionRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -41,6 +46,7 @@ class AttachmentConfigDataTransfer implements DataTransferInterface
 
         $attachmentConfigData->setName($attachmentConfig->getName());
         $attachmentConfigData->setLabel($attachmentConfig->getLabel());
+        $attachmentConfigData->setHelp($attachmentConfig->getHelp());
         $attachmentConfigData->setRequiredType($attachmentConfig->getRequiredType());
         $attachmentConfigData->setMaxSize($attachmentConfig->getMaxSize());
         $attachmentConfigData->setIsGlobal($attachmentConfig->isGlobal());
@@ -49,7 +55,7 @@ class AttachmentConfigDataTransfer implements DataTransferInterface
         {
             $fileExtensionData = new FileExtensionData();
             $fileExtensionData->setExtension($fileExtension->getExtension());
-            $attachmentConfigData->addFileExtensionsDatum($fileExtensionData);
+            $attachmentConfigData->addFileExtensionData($fileExtensionData);
         }
     }
 
@@ -65,6 +71,7 @@ class AttachmentConfigDataTransfer implements DataTransferInterface
 
         $attachmentConfig->setName($attachmentConfigData->getName());
         $attachmentConfig->setLabel($attachmentConfigData->getLabel());
+        $attachmentConfig->setHelp($attachmentConfigData->getHelp());
         $attachmentConfig->setRequiredType($attachmentConfigData->getRequiredType());
         $attachmentConfig->setMaxSize($attachmentConfigData->getMaxSize());
         $attachmentConfig->setIsGlobal($attachmentConfigData->isGlobal());
@@ -118,9 +125,9 @@ class AttachmentConfigDataTransfer implements DataTransferInterface
         // create and add new extensions
         foreach ($dataExtensions as $extension)
         {
-            $newFileExtension = new FileExtension($extension);
-            $this->fileExtensionRepository->saveFileExtension($newFileExtension, false);
-            $attachmentConfig->addFileExtension($newFileExtension);
+            $event = new AttachmentConfigFileExtensionCreateEvent($attachmentConfig, $extension);
+            $event->setIsFlush(false);
+            $this->eventDispatcher->dispatch($event, $event::NAME);
         }
     }
 }

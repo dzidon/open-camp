@@ -4,11 +4,8 @@ namespace App\Tests\Model\Entity;
 
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
-use App\Model\Entity\CampDateFormField;
-use App\Model\Entity\FormField;
 use App\Model\Entity\TripLocationPath;
 use App\Model\Entity\User;
-use App\Model\Enum\Entity\FormFieldTypeEnum;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\UuidV4;
@@ -17,7 +14,8 @@ class CampDateTest extends TestCase
 {
     private const START_AT = '2000-01-01 12:00:00';
     private const END_AT = '2000-01-07 12:00:00';
-    private const PRICE = 1000.0;
+    private const DEPOSIT = 1000.0;
+    private const PRICE_WITHOUT_DEPOSIT = 2000.0;
     private const CAPACITY = 10;
 
     private Camp $camp;
@@ -53,12 +51,20 @@ class CampDateTest extends TestCase
         $this->assertSame($newEndAtString, $endAt->format('Y-m-d H:i:s'));
     }
 
-    public function testPrice(): void
+    public function testDeposit(): void
     {
-        $this->assertSame(self::PRICE, $this->campDate->getPrice());
+        $this->assertSame(self::DEPOSIT, $this->campDate->getDeposit());
 
-        $this->campDate->setPrice(1500.0);
-        $this->assertSame(1500.0, $this->campDate->getPrice());
+        $this->campDate->setDeposit(1500.0);
+        $this->assertSame(1500.0, $this->campDate->getDeposit());
+    }
+
+    public function testPriceWithoutDeposit(): void
+    {
+        $this->assertSame(self::PRICE_WITHOUT_DEPOSIT, $this->campDate->getPriceWithoutDeposit());
+
+        $this->campDate->setPriceWithoutDeposit(1500.0);
+        $this->assertSame(1500.0, $this->campDate->getPriceWithoutDeposit());
     }
 
     public function testCapacity(): void
@@ -158,6 +164,6 @@ class CampDateTest extends TestCase
 
         $startAt = new DateTimeImmutable(self::START_AT);
         $endAt = new DateTimeImmutable(self::END_AT);
-        $this->campDate = new CampDate($startAt, $endAt, self::PRICE, self::CAPACITY, $this->camp);
+        $this->campDate = new CampDate($startAt, $endAt, self::DEPOSIT, self::PRICE_WITHOUT_DEPOSIT, self::CAPACITY, $this->camp);
     }
 }

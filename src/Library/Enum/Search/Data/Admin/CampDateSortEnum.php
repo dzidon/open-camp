@@ -13,8 +13,10 @@ enum CampDateSortEnum: string
 
     case START_AT_ASC = 'campDate.startAt ASC';
     case START_AT_DESC = 'campDate.startAt DESC';
-    case PRICE_ASC = 'campDate.price ASC';
-    case PRICE_DESC = 'campDate.price DESC';
+    case DEPOSIT_ASC = 'campDate.deposit ASC';
+    case DEPOSIT_DESC = 'campDate.deposit DESC';
+    case PRICE_WITHOUT_DEPOSIT_ASC = 'campDate.priceWithoutDeposit ASC';
+    case PRICE_WITHOUT_DEPOSIT_DESC = 'campDate.priceWithoutDeposit DESC';
     case CAPACITY_ASC = 'campDate.capacity ASC';
     case CAPACITY_DESC = 'campDate.capacity DESC';
 }

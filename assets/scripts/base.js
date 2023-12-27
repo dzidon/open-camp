@@ -2,29 +2,12 @@
 const $ = require('jquery');
 
 import 'bootstrap';
-import bsCustomFileInput from 'bs-custom-file-input';
-
-import tinymce from 'tinymce/tinymce'
-import 'tinymce/themes/silver';
-import 'tinymce/icons/default';
 
 // start the Stimulus application
 import '../scripts/bootstrap';
 
 $(document).ready(function ()
 {
-    // file browser
-    bsCustomFileInput.init();
-
-    // tinymce
-    tinymce.init({
-        selector: 'textarea.tinymce',
-        language: document.documentElement.lang,
-        base_url: '/build/tinymce',
-        branding: false,
-        promotion: false,
-    });
-
     scrollToFirstError();
     openCollapsedContainers();
 });

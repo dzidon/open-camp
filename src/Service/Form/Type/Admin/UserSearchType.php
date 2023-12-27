@@ -73,6 +73,7 @@ class UserSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'         => UserSearchData::class,
+            'block_prefix'       => 'admin_user_search',
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

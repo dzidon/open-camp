@@ -42,6 +42,7 @@ class RoleSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'         => RoleSearchData::class,
+            'block_prefix'       => 'admin_role_search',
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

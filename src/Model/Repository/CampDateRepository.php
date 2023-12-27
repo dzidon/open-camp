@@ -48,8 +48,11 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     public function findOneById(UuidV4 $id): ?CampDate
     {
         $campDate = $this->createQueryBuilder('campDate')
-            ->select('campDate, camp, leader')
+            ->select('campDate, camp, campCategory, tripLocationPathThere, tripLocationPathBack, leader')
             ->leftJoin('campDate.camp', 'camp')
+            ->leftJoin('camp.campCategory', 'campCategory')
+            ->leftJoin('campDate.tripLocationPathThere', 'tripLocationPathThere')
+            ->leftJoin('campDate.tripLocationPathBack', 'tripLocationPathBack')
             ->leftJoin('campDate.leaders', 'leader')
             ->andWhere('campDate.id = :id')
             ->setParameter('id', $id, UuidType::NAME)
@@ -70,8 +73,11 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     public function findUpcomingByCamp(Camp $camp): array
     {
         $campDates = $this->createQueryBuilder('campDate')
-            ->select('campDate, camp, leader')
+            ->select('campDate, camp, campCategory, tripLocationPathThere, tripLocationPathBack, leader')
             ->leftJoin('campDate.camp', 'camp')
+            ->leftJoin('camp.campCategory', 'campCategory')
+            ->leftJoin('campDate.tripLocationPathThere', 'tripLocationPathThere')
+            ->leftJoin('campDate.tripLocationPathBack', 'tripLocationPathBack')
             ->leftJoin('campDate.leaders', 'leader')
             ->andWhere('campDate.camp = :campId')
             ->setParameter('campId', $camp->getId(), UuidType::NAME)
@@ -95,9 +101,11 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     public function findThoseThatCollideWithInterval(?Camp $camp, DateTimeInterface $startAt, DateTimeInterface $endAt): array
     {
         $queryBuilder = $this->createQueryBuilder('campDate')
-            ->select('campDate, camp, leader')
+            ->select('campDate, camp, leader, tripLocationPathThere, tripLocationPathBack')
             ->leftJoin('campDate.camp', 'camp')
             ->leftJoin('campDate.leaders', 'leader')
+            ->leftJoin('campDate.tripLocationPathThere', 'tripLocationPathThere')
+            ->leftJoin('campDate.tripLocationPathBack', 'tripLocationPathBack')
             ->andWhere('
                 (:startAt >= campDate.startAt AND :startAt <= campDate.endAt) OR
                 (:endAt   >= campDate.startAt AND :endAt <= campDate.endAt)   OR

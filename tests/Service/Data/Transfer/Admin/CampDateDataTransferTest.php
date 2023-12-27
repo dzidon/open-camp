@@ -31,7 +31,8 @@ class CampDateDataTransferTest extends KernelTestCase
 
         $expectedStartAt = new DateTimeImmutable('2000-01-01');
         $expectedEndAt = new DateTimeImmutable('2000-01-05');
-        $expectedPrice = 1000.0;
+        $expectedDeposit = 1000.0;
+        $expectedPriceWithoutDeposit = 2000.0;
         $expectedCapacity = 10;
         $expectedDescription = 'Instructions...';
         $expectedLeaders = [
@@ -40,7 +41,7 @@ class CampDateDataTransferTest extends KernelTestCase
         ];
 
         $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
-        $campDate = new CampDate($expectedStartAt, $expectedEndAt, $expectedPrice, $expectedCapacity, $camp);
+        $campDate = new CampDate($expectedStartAt, $expectedEndAt, $expectedDeposit, $expectedPriceWithoutDeposit, $expectedCapacity, $camp);
         $campDate->setIsClosed(true);
         $campDate->setIsOpenAboveCapacity(true);
         $campDate->setDescription($expectedDescription);
@@ -70,7 +71,8 @@ class CampDateDataTransferTest extends KernelTestCase
 
         $this->assertSame($expectedStartAt, $data->getStartAt());
         $this->assertSame($expectedEndAt, $data->getEndAt());
-        $this->assertSame($expectedPrice, $data->getPrice());
+        $this->assertSame($expectedDeposit, $data->getDeposit());
+        $this->assertSame($expectedPriceWithoutDeposit, $data->getPriceWithoutDeposit());
         $this->assertSame($expectedCapacity, $data->getCapacity());
         $this->assertTrue($data->isClosed());
         $this->assertTrue($data->isOpenAboveCapacity());
@@ -113,7 +115,8 @@ class CampDateDataTransferTest extends KernelTestCase
 
         $expectedStartAt = new DateTimeImmutable('3100-01-01');
         $expectedEndAt = new DateTimeImmutable('3100-01-05');
-        $expectedPrice = 1000.0;
+        $expectedDeposit = 1000.0;
+        $expectedPriceWithoutDeposit = 2000.0;
         $expectedCapacity = 10;
         $expectedDescription = 'Instructions...';
 
@@ -131,7 +134,8 @@ class CampDateDataTransferTest extends KernelTestCase
         $data->setIsOpenAboveCapacity(true);
         $data->setStartAt($expectedStartAt);
         $data->setEndAt($expectedEndAt);
-        $data->setPrice($expectedPrice);
+        $data->setDeposit($expectedDeposit);
+        $data->setPriceWithoutDeposit($expectedPriceWithoutDeposit);
         $data->setCapacity($expectedCapacity);
         $data->setDescription($expectedDescription);
 
@@ -154,13 +158,13 @@ class CampDateDataTransferTest extends KernelTestCase
             $campDateAttachmentConfigData = new CampDateAttachmentConfigData();
             $campDateAttachmentConfigData->setAttachmentConfig($campDateAttachmentConfig->getAttachmentConfig());
             $campDateAttachmentConfigData->setPriority(250);
-            $data->addCampDateAttachmentConfigsDatum($campDateAttachmentConfigData);
+            $data->addCampDateAttachmentConfigData($campDateAttachmentConfigData);
         }
 
         $campDateAttachmentConfigDataNew = new CampDateAttachmentConfigData();
         $campDateAttachmentConfigDataNew->setAttachmentConfig($attachmentConfig);
         $campDateAttachmentConfigDataNew->setPriority(300);
-        $data->addCampDateAttachmentConfigsDatum($campDateAttachmentConfigDataNew);
+        $data->addCampDateAttachmentConfigData($campDateAttachmentConfigDataNew);
 
         // form fields
         $campDateFormFields = $campDate->getCampDateFormFields();
@@ -176,13 +180,13 @@ class CampDateDataTransferTest extends KernelTestCase
             $campDateFormFieldData = new CampDateFormFieldData();
             $campDateFormFieldData->setFormField($campDateFormField->getFormField());
             $campDateFormFieldData->setPriority(250);
-            $data->addCampDateFormFieldsDatum($campDateFormFieldData);
+            $data->addCampDateFormFieldData($campDateFormFieldData);
         }
 
         $campDateFormFieldDataNew = new CampDateFormFieldData();
         $campDateFormFieldDataNew->setFormField($formField);
         $campDateFormFieldDataNew->setPriority(300);
-        $data->addCampDateFormFieldsDatum($campDateFormFieldDataNew);
+        $data->addCampDateFormFieldData($campDateFormFieldDataNew);
 
         // purchasable items
         $campDatePurchasableItems = $campDate->getCampDatePurchasableItems();
@@ -198,19 +202,20 @@ class CampDateDataTransferTest extends KernelTestCase
             $campDatePurchasableItemData = new CampDatePurchasableItemData();
             $campDatePurchasableItemData->setPurchasableItem($campDatePurchasableItem->getPurchasableItem());
             $campDatePurchasableItemData->setPriority(250);
-            $data->addCampDatePurchasableItemsDatum($campDatePurchasableItemData);
+            $data->addCampDatePurchasableItemData($campDatePurchasableItemData);
         }
 
         $campDatePurchasableItemDataNew = new CampDatePurchasableItemData();
         $campDatePurchasableItemDataNew->setPurchasableItem($purchasableItem);
         $campDatePurchasableItemDataNew->setPriority(300);
-        $data->addCampDatePurchasableItemsDatum($campDatePurchasableItemDataNew);
+        $data->addCampDatePurchasableItemData($campDatePurchasableItemDataNew);
 
         $dataTransfer->fillEntity($data, $campDate);
 
         $this->assertSame($expectedStartAt, $campDate->getStartAt());
         $this->assertSame($expectedEndAt, $campDate->getEndAt());
-        $this->assertSame($expectedPrice, $campDate->getPrice());
+        $this->assertSame($expectedDeposit, $campDate->getDeposit());
+        $this->assertSame($expectedPriceWithoutDeposit, $campDate->getPriceWithoutDeposit());
         $this->assertSame($expectedCapacity, $campDate->getCapacity());
         $this->assertTrue($campDate->isClosed());
         $this->assertTrue($campDate->isOpenAboveCapacity());

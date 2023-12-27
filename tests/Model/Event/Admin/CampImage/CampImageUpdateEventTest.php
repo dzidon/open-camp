@@ -36,6 +36,17 @@ class CampImageUpdateEventTest extends TestCase
         $this->assertSame($newCampImage, $this->event->getCampImage());
     }
 
+    public function testIsFlush(): void
+    {
+        $this->assertTrue($this->event->isFlush());
+
+        $this->event->setIsFlush(false);
+        $this->assertFalse($this->event->isFlush());
+
+        $this->event->setIsFlush(true);
+        $this->assertTrue($this->event->isFlush());
+    }
+
     protected function setUp(): void
     {
         $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);

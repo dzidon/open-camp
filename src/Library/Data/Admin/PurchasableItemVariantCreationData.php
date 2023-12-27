@@ -4,6 +4,7 @@ namespace App\Library\Data\Admin;
 
 use App\Library\Constraint\UniqueElementsInArray;
 use App\Model\Entity\PurchasableItem;
+use LogicException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class PurchasableItemVariantCreationData
@@ -32,7 +33,24 @@ class PurchasableItemVariantCreationData
         return $this->purchasableItemVariantValuesData;
     }
 
-    public function addPurchasableItemVariantValuesDatum(PurchasableItemVariantValueData $purchasableItemVariantValueData): self
+    public function setPurchasableItemVariantValuesData(array $purchasableItemVariantValuesData): self
+    {
+        foreach ($purchasableItemVariantValuesData as $purchasableItemVariantValueData)
+        {
+            if (!$purchasableItemVariantValueData instanceof PurchasableItemVariantValueData)
+            {
+                throw new LogicException(
+                    sprintf('Array passed to %s must only contain instances of %s.', __METHOD__, PurchasableItemVariantValueData::class)
+                );
+            }
+        }
+
+        $this->purchasableItemVariantValuesData = $purchasableItemVariantValuesData;
+
+        return $this;
+    }
+    
+    public function addPurchasableItemVariantValueData(PurchasableItemVariantValueData $purchasableItemVariantValueData): self
     {
         if (in_array($purchasableItemVariantValueData, $this->purchasableItemVariantValuesData, true))
         {
@@ -44,7 +62,7 @@ class PurchasableItemVariantCreationData
         return $this;
     }
 
-    public function removePurchasableItemVariantValuesDatum(PurchasableItemVariantValueData $purchasableItemVariantValueData): self
+    public function removePurchasableItemVariantValueData(PurchasableItemVariantValueData $purchasableItemVariantValueData): self
     {
         $key = array_search($purchasableItemVariantValueData, $this->purchasableItemVariantValuesData, true);
 

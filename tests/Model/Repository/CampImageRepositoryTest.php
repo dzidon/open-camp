@@ -6,19 +6,13 @@ use App\Model\Entity\Camp;
 use App\Model\Entity\CampImage;
 use App\Model\Repository\CampImageRepository;
 use App\Model\Repository\CampRepositoryInterface;
-use App\Tests\Service\Filesystem\FilesystemMock;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Uid\UuidV4;
 
 class CampImageRepositoryTest extends KernelTestCase
 {
     public function testSaveAndRemove(): void
     {
-        $filesystemMock = new FilesystemMock();
-        $container = static::getContainer();
-        $container->set(Filesystem::class, $filesystemMock);
-
         $campImageRepository = $this->getCampImageRepository();
         $campRepository = $this->getCampRepository();
 
@@ -35,13 +29,6 @@ class CampImageRepositoryTest extends KernelTestCase
         $campImageRepository->removeCampImage($campImage, true);
         $loadedCampImage = $campImageRepository->findOneById($id);
         $this->assertNull($loadedCampImage);
-
-        $fileName = $id->toRfc4122() . '.png';
-        $removedFilePaths = $filesystemMock->getRemovedFiles();
-        $this->assertCount(1, $removedFilePaths);
-
-        $removedFilePath = $removedFilePaths[0];
-        $this->assertStringEndsWith($fileName, $removedFilePath);
     }
 
     public function testFindOneById(): void

@@ -19,6 +19,7 @@ class CampDateDeleteSubscriber
     public function onDeleteRemoveEntity(CampDateDeleteEvent $event): void
     {
         $entity = $event->getCampDate();
-        $this->repository->removeCampDate($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->removeCampDate($entity, $isFlush);
     }
 }

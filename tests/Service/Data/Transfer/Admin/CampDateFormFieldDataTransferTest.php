@@ -20,7 +20,7 @@ class CampDateFormFieldDataTransferTest extends KernelTestCase
 
         $expectedPriority = 100;
         $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
-        $campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 10, $camp);
+        $campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 100.0, 10, $camp);
         $formField = new FormField('Field', FormFieldTypeEnum::TEXT, 'Field:');
         $campDateFormField = new CampDateFormField($campDate, $formField, $expectedPriority);
 
@@ -37,7 +37,7 @@ class CampDateFormFieldDataTransferTest extends KernelTestCase
 
         $expectedPriority = 100;
         $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
-        $campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 10, $camp);
+        $campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 100.0, 10, $camp);
         $formField = new FormField('Field', FormFieldTypeEnum::TEXT, 'Field:');
         $campDateFormField = new CampDateFormField($campDate, $formField, $expectedPriority);
 

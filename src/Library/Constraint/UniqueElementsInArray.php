@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraint;
 class UniqueElementsInArray extends Constraint
 {
     public array $fields;
-    public string $message = 'This collection should contain only unique elements.';
+    public string $message = 'unique_elements_in_array';
 
     #[HasNamedArguments]
     public function __construct(array $fields, string $message = null, array $groups = null, mixed $payload = null)

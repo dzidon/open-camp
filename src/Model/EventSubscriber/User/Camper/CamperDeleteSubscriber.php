@@ -19,6 +19,7 @@ class CamperDeleteSubscriber
     public function onDeleteRemoveEntity(CamperDeleteEvent $event): void
     {
         $entity = $event->getCamper();
-        $this->repository->removeCamper($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->removeCamper($entity, $isFlush);
     }
 }

@@ -6,6 +6,8 @@ use App\Library\Data\Admin\PurchasableItemVariantCreationData;
 use App\Library\Data\Admin\PurchasableItemVariantData;
 use App\Library\Data\Admin\PurchasableItemVariantValueData;
 use App\Model\Entity\PurchasableItem;
+use LogicException;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -45,13 +47,21 @@ class PurchasableItemVariantCreationDataTest extends KernelTestCase
 
         foreach ($newPurchasableItemVariantValuesData as $newPurchasableItemVariantValueData)
         {
-            $this->data->addPurchasableItemVariantValuesDatum($newPurchasableItemVariantValueData);
+            $this->data->addPurchasableItemVariantValueData($newPurchasableItemVariantValueData);
         }
 
         $this->assertSame($newPurchasableItemVariantValuesData, $this->data->getPurchasableItemVariantValuesData());
 
-        $this->data->removePurchasableItemVariantValuesDatum($newPurchasableItemVariantValuesData[0]);
+        $this->data->removePurchasableItemVariantValueData($newPurchasableItemVariantValuesData[0]);
         $this->assertNotContains($newPurchasableItemVariantValuesData[0], $this->data->getPurchasableItemVariantValuesData());
+
+        $this->data = new PurchasableItemVariantCreationData($this->purchasableItem);
+        $this->data->setPurchasableItemVariantValuesData($newPurchasableItemVariantValuesData);
+        $this->assertSame($newPurchasableItemVariantValuesData, $this->data->getPurchasableItemVariantValuesData());
+
+        $this->expectException(LogicException::class);
+        $newPurchasableItemVariantValuesData = [new stdClass()];
+        $this->data->setPurchasableItemVariantValuesData($newPurchasableItemVariantValuesData);
     }
 
     public function testPurchasableItemVariantValuesDataValidation(): void
@@ -60,7 +70,7 @@ class PurchasableItemVariantCreationDataTest extends KernelTestCase
         $this->assertNotEmpty($result); // invalid
 
         $valueData = new PurchasableItemVariantValueData();
-        $this->data->addPurchasableItemVariantValuesDatum($valueData);
+        $this->data->addPurchasableItemVariantValueData($valueData);
         $result = $this->validator->validateProperty($this->data, 'purchasableItemVariantValuesData');
         $this->assertNotEmpty($result); // invalid
 
@@ -72,7 +82,7 @@ class PurchasableItemVariantCreationDataTest extends KernelTestCase
         $anotherValueData = new PurchasableItemVariantValueData();
         $anotherValueData->setName('Value');
         $anotherValueData->setPriority(200);
-        $this->data->addPurchasableItemVariantValuesDatum($anotherValueData);
+        $this->data->addPurchasableItemVariantValueData($anotherValueData);
         $result = $this->validator->validateProperty($this->data, 'purchasableItemVariantValuesData');
         $this->assertNotEmpty($result); // invalid
 

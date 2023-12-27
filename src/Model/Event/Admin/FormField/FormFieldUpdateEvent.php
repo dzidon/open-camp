@@ -4,9 +4,9 @@ namespace App\Model\Event\Admin\FormField;
 
 use App\Library\Data\Admin\FormFieldData;
 use App\Model\Entity\FormField;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class FormFieldUpdateEvent extends Event
+class FormFieldUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.form_field.update';
 

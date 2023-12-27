@@ -14,23 +14,7 @@
                 </a>
 
                 <div class="card-body collapse {% if is_search_invalid %} show {% endif %}" id="search-content">
-                    {{ form_start(form_search) }}
-                        <div class="form-row">
-                            <div class="form-group col-md-9">
-                                {{ form_row(form_search.phrase) }}
-                            </div>
-
-                            <div class="form-group col-md-3">
-                                {{ form_row(form_search.sortBy) }}
-                            </div>
-
-                            <div class="form-group col-md-3">
-                                {{ form_row(form_search.role) }}
-                            </div>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.user_search.button'|trans }}</button>
-                    {{ form_end(form_search) }}
+                    {{ form(form_search) }}
                 </div>
             </div>
         </div>

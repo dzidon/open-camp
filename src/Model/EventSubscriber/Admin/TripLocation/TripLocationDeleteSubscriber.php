@@ -19,6 +19,7 @@ class TripLocationDeleteSubscriber
     public function onDeleteRemoveEntity(TripLocationDeleteEvent $event): void
     {
         $entity = $event->getTripLocation();
-        $this->repository->removeTripLocation($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->removeTripLocation($entity, $isFlush);
     }
 }

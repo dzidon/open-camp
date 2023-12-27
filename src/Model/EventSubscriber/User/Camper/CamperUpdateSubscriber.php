@@ -13,8 +13,7 @@ class CamperUpdateSubscriber
 
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(CamperRepositoryInterface $repository,
-                                DataTransferRegistryInterface       $dataTransfer)
+    public function __construct(CamperRepositoryInterface $repository, DataTransferRegistryInterface $dataTransfer)
     {
         $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;
@@ -32,6 +31,7 @@ class CamperUpdateSubscriber
     public function onUpdateSaveEntity(CamperUpdateEvent $event): void
     {
         $entity = $event->getCamper();
-        $this->repository->saveCamper($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->saveCamper($entity, $isFlush);
     }
 }

@@ -35,12 +35,14 @@ class CampDateSearchType extends AbstractType
                 'class'        => CampDateSortEnum::class,
                 'label'        => 'form.admin.camp_date_search.sort_by.label',
                 'choice_label' => fn ($choice) => match ($choice) {
-                    CampDateSortEnum::START_AT_ASC  => 'form.admin.camp_date_search.sort_by.options.start_at_asc',
-                    CampDateSortEnum::START_AT_DESC => 'form.admin.camp_date_search.sort_by.options.start_at_desc',
-                    CampDateSortEnum::PRICE_ASC     => 'form.admin.camp_date_search.sort_by.options.price_asc',
-                    CampDateSortEnum::PRICE_DESC    => 'form.admin.camp_date_search.sort_by.options.price_desc',
-                    CampDateSortEnum::CAPACITY_ASC  => 'form.admin.camp_date_search.sort_by.options.capacity_asc',
-                    CampDateSortEnum::CAPACITY_DESC => 'form.admin.camp_date_search.sort_by.options.capacity_desc',
+                    CampDateSortEnum::START_AT_ASC               => 'form.admin.camp_date_search.sort_by.options.start_at_asc',
+                    CampDateSortEnum::START_AT_DESC              => 'form.admin.camp_date_search.sort_by.options.start_at_desc',
+                    CampDateSortEnum::DEPOSIT_ASC                => 'form.admin.camp_date_search.sort_by.options.deposit_asc',
+                    CampDateSortEnum::DEPOSIT_DESC               => 'form.admin.camp_date_search.sort_by.options.deposit_desc',
+                    CampDateSortEnum::PRICE_WITHOUT_DEPOSIT_ASC  => 'form.admin.camp_date_search.sort_by.options.price_without_deposit_asc',
+                    CampDateSortEnum::PRICE_WITHOUT_DEPOSIT_DESC => 'form.admin.camp_date_search.sort_by.options.price_without_deposit_desc',
+                    CampDateSortEnum::CAPACITY_ASC               => 'form.admin.camp_date_search.sort_by.options.capacity_asc',
+                    CampDateSortEnum::CAPACITY_DESC              => 'form.admin.camp_date_search.sort_by.options.capacity_desc',
                 },
             ])
             ->add('isHistorical', ChoiceType::class, [
@@ -68,6 +70,7 @@ class CampDateSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'         => CampDateSearchData::class,
+            'block_prefix'       => 'admin_camp_date_search',
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

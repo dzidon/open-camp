@@ -41,6 +41,17 @@ class AttachmentConfigTest extends TestCase
         $this->assertSame($newLabel, $this->attachmentConfig->getLabel());
     }
 
+    public function testHelp(): void
+    {
+        $this->assertNull($this->attachmentConfig->getHelp());
+
+        $this->attachmentConfig->setHelp('text');
+        $this->assertSame('text', $this->attachmentConfig->getHelp());
+
+        $this->attachmentConfig->setHelp(null);
+        $this->assertNull($this->attachmentConfig->getHelp());
+    }
+
     public function testMaxSize(): void
     {
         $this->assertSame(self::MAX_SIZE, $this->attachmentConfig->getMaxSize());

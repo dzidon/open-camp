@@ -38,7 +38,8 @@ class ProfileType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ProfileData::class,
+            'data_class'   => ProfileData::class,
+            'block_prefix' => 'admin_profile',
         ]);
     }
 }

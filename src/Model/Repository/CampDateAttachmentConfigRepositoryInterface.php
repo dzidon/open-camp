@@ -29,7 +29,8 @@ interface CampDateAttachmentConfigRepositoryInterface
      * Finds all camp date attachment configs that have the given camp date.
      *
      * @param CampDate $campDate
+     * @param null|bool $isGlobal
      * @return CampDateAttachmentConfig[]
      */
-    public function findByCampDate(CampDate $campDate): array;
+    public function findByCampDate(CampDate $campDate, ?bool $isGlobal = null): array;
 }

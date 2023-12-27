@@ -4,9 +4,9 @@ namespace App\Model\Event\Admin\TripLocationPath;
 
 use App\Library\Data\Admin\TripLocationPathData;
 use App\Model\Entity\TripLocationPath;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class TripLocationPathUpdateEvent extends Event
+class TripLocationPathUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.trip_location_path.update';
 

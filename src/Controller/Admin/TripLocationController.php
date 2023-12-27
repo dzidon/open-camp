@@ -54,7 +54,7 @@ class TripLocationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $event = new TripLocationCreateEvent($tripLocationData);
+            $event = new TripLocationCreateEvent($tripLocationData, $tripLocationPath);
             $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.trip_location.create');
 

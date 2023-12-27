@@ -3,12 +3,15 @@
 namespace App\Service\Form\Type\User;
 
 use App\Library\Data\User\ContactData;
+use App\Service\Form\Type\Common\CollectionItemType;
 use App\Service\Form\Type\Common\ContactRoleType;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -16,41 +19,58 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ContactType extends AbstractType
 {
-    private bool $isEmailMandatory;
-    private bool $isPhoneNumberMandatory;
-
-    public function __construct(bool $isEmailMandatory, bool $isPhoneNumberMandatory)
-    {
-        $this->isEmailMandatory = $isEmailMandatory;
-        $this->isPhoneNumberMandatory = $isPhoneNumberMandatory;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $emailAndPhoneLabelAttr = !$this->isEmailMandatory && !$this->isPhoneNumberMandatory
-            ? ['class' => 'required-conditional']
-            : []
-        ;
+        /** @var ContactData $defaultData */
+        $defaultData = $options['empty_data'];
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($defaultData): void
+        {
+            /** @var ContactData $data */
+            $data = $event->getData();
+            $form = $event->getForm();
+
+            if ($data === null)
+            {
+                $data = $this->cloneDefaultContactData($defaultData);
+                $event->setData($data);
+            }
+
+            $isEmailMandatory = $data->isEmailMandatory();
+            $isPhoneNumberMandatory = $data->isPhoneNumberMandatory();
+
+            $emailAndPhoneLabelAttr = !$isEmailMandatory && !$isPhoneNumberMandatory
+                ? ['class' => 'required-conditional']
+                : []
+            ;
+
+            $form
+                ->add('email', EmailType::class, [
+                    'required'   => $isEmailMandatory,
+                    'label'      => 'form.user.contact.email',
+                    'label_attr' => $emailAndPhoneLabelAttr,
+                    'priority'   => 400,
+                ])
+                ->add('phoneNumber', PhoneNumberType::class, [
+                    'required'   => $isPhoneNumberMandatory,
+                    'label'      => 'form.user.contact.phone_number',
+                    'label_attr' => $emailAndPhoneLabelAttr,
+                    'priority'   => 300,
+                ])
+            ;
+        });
 
         $builder
             ->add('nameFirst', TextType::class, [
                 'attr' => [
                     'autofocus' => 'autofocus'
                 ],
-                'label' => 'form.user.contact.name_first',
+                'label'    => 'form.user.contact.name_first',
+                'priority' => 600,
             ])
             ->add('nameLast', TextType::class, [
-                'label' => 'form.user.contact.name_last',
-            ])
-            ->add('email', EmailType::class, [
-                'required'   => $this->isEmailMandatory,
-                'label'      => 'form.user.contact.email',
-                'label_attr' => $emailAndPhoneLabelAttr,
-            ])
-            ->add('phoneNumber', PhoneNumberType::class, [
-                'required'   => $this->isPhoneNumberMandatory,
-                'label'      => 'form.user.contact.phone_number',
-                'label_attr' => $emailAndPhoneLabelAttr,
+                'label'    => 'form.user.contact.name_last',
+                'priority' => 500,
             ])
             ->add('role', ContactRoleType::class, [
                 'placeholder'      => 'form.common.choice.choose',
@@ -61,7 +81,8 @@ class ContactType extends AbstractType
                     'data-fd--contact-target' => 'roleInput',
                     'data-action'             => 'fd--contact#onRoleInputChange',
                 ],
-                'label' => 'form.user.contact.role',
+                'label'    => 'form.user.contact.role',
+                'priority' => 200,
             ])
             ->add('roleOther', TextType::class, [
                 'required'   => false,
@@ -72,17 +93,31 @@ class ContactType extends AbstractType
                 'row_attr' => [
                     'data-fd--contact-target' => 'roleOtherRow',
                 ],
+                'priority' => 100,
             ])
         ;
+    }
+
+    public function getParent(): string
+    {
+        return CollectionItemType::class;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ContactData::class,
-            'attr'       => [
+            'data_class'   => ContactData::class,
+            'block_prefix' => 'user_contact',
+            'attr'         => [
                 'data-controller' => 'fd--contact',
             ],
         ]);
+
+        $resolver->setRequired('empty_data');
+    }
+
+    private function cloneDefaultContactData(ContactData $data): ContactData
+    {
+        return new ContactData($data->isEmailMandatory(), $data->isPhoneNumberMandatory());
     }
 }

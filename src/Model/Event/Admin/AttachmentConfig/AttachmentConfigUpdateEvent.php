@@ -4,9 +4,9 @@ namespace App\Model\Event\Admin\AttachmentConfig;
 
 use App\Library\Data\Admin\AttachmentConfigData;
 use App\Model\Entity\AttachmentConfig;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class AttachmentConfigUpdateEvent extends Event
+class AttachmentConfigUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.attachment_config.update';
 

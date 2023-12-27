@@ -31,23 +31,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-md-8 col-xl-5">
-                            {{ form_start(form_user) }}
-                                {{ form_row(form_user.email) }}
-                                {{ form_row(form_user.leaderPhoneNumber) }}
-                                {{ form_row(form_user.role) }}
-
-                                <div class="form-row">
-                                    <div class="col-md-6">
-                                        {{ form_row(form_user.billingData.nameFirst) }}
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        {{ form_row(form_user.billingData.nameLast) }}
-                                    </div>
-                                </div>
-
-                                {{ form_rest(form_user) }}
-                            {{ form_end(form_user) }}
+                            {{ form(form_user) }}
                         </div>
                     </div>
                 </div>

@@ -3,9 +3,9 @@
 namespace App\Model\Event\Admin\CampDate;
 
 use App\Model\Entity\CampDate;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class CampDateDeleteEvent extends Event
+class CampDateDeleteEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.camp_date.delete';
 

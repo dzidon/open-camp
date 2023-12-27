@@ -44,6 +44,7 @@ class PurchasableItemVariantSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'         => PurchasableItemVariantSearchData::class,
+            'block_prefix'       => 'admin_purchasable_item_variant_search',
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

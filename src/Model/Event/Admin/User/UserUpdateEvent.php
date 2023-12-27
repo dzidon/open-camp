@@ -4,9 +4,9 @@ namespace App\Model\Event\Admin\User;
 
 use App\Library\Data\Admin\UserData;
 use App\Model\Entity\User;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class UserUpdateEvent extends Event
+class UserUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.user.update';
 

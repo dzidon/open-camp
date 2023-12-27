@@ -4,9 +4,10 @@ namespace App\Model\Event\User\User;
 
 use App\Library\Data\User\BillingData;
 use App\Model\Entity\User;
+use App\Model\Event\AbstractModelEvent;
 use Symfony\Contracts\EventDispatcher\Event;
 
-class UserBillingUpdateEvent extends Event
+class UserBillingUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.user.billing_update';
 

@@ -13,8 +13,8 @@ class FormFieldUpdateSubscriber
 
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(FormFieldRepositoryInterface $repository,
-                                DataTransferRegistryInterface       $dataTransfer)
+    public function __construct(FormFieldRepositoryInterface  $repository,
+                                DataTransferRegistryInterface $dataTransfer)
     {
         $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;
@@ -32,6 +32,7 @@ class FormFieldUpdateSubscriber
     public function onUpdateSaveEntity(FormFieldUpdateEvent $event): void
     {
         $entity = $event->getFormField();
-        $this->repository->saveFormField($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->saveFormField($entity, $isFlush);
     }
 }

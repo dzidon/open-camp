@@ -37,12 +37,19 @@ class CampDateType extends AbstractType
                 'input'  => 'datetime_immutable',
                 'label'  => 'form.admin.camp_date.end_at',
             ])
-            ->add('price', MoneyType::class, [
+            ->add('deposit', MoneyType::class, [
                 'attr' => [
                     'min' => 0.0,
                 ],
                 'html5' => true,
-                'label' => 'form.admin.camp_date.price',
+                'label' => 'form.admin.camp_date.deposit',
+            ])
+            ->add('priceWithoutDeposit', MoneyType::class, [
+                'attr' => [
+                    'min' => 0.0,
+                ],
+                'html5' => true,
+                'label' => 'form.admin.camp_date.price_without_deposit',
             ])
             ->add('capacity', IntegerType::class, [
                 'attr' => [
@@ -89,7 +96,6 @@ class CampDateType extends AbstractType
                 'suppress_required_rendering' => true,
                 'allow_add'                   => true,
                 'allow_delete'                => true,
-                'by_reference'                => false,
                 'entry_options'               => [
                     'label'               => false,
                     'remove_button'       => true,
@@ -111,7 +117,6 @@ class CampDateType extends AbstractType
                 'suppress_required_rendering' => true,
                 'allow_add'                   => true,
                 'allow_delete'                => true,
-                'by_reference'                => false,
                 'entry_options'               => [
                     'label'                      => false,
                     'remove_button'              => true,
@@ -133,7 +138,6 @@ class CampDateType extends AbstractType
                 'suppress_required_rendering' => true,
                 'allow_add'                   => true,
                 'allow_delete'                => true,
-                'by_reference'                => false,
                 'entry_options'               => [
                     'label'                     => false,
                     'remove_button'             => true,

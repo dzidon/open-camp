@@ -4,9 +4,9 @@ namespace App\Model\Event\Admin\User;
 
 use App\Library\Data\Admin\PlainPasswordData;
 use App\Model\Entity\User;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class UserUpdatePasswordEvent extends Event
+class UserUpdatePasswordEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.user.update_password';
 

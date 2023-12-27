@@ -4,9 +4,9 @@ namespace App\Model\Event\User\User;
 
 use App\Library\Data\User\ProfilePasswordChangeData;
 use App\Model\Entity\User;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class UserPasswordChangeEvent extends Event
+class UserPasswordChangeEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.user.password_change';
 

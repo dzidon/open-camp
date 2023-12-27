@@ -35,6 +35,15 @@ interface UserPasswordChangeRepositoryInterface
     public function findOneBySelector(string $selector, ?bool $active = null): ?UserPasswordChange;
 
     /**
+     * Returns true if the selector already exists.
+     *
+     * @param string $selector
+     * @param bool|null $active
+     * @return bool
+     */
+    public function selectorExists(string $selector, ?bool $active = null): bool;
+
+    /**
      * Find all user password changes assigned to a user.
      *
      * @param User $user

@@ -26,7 +26,6 @@ class PurchasableItemVariantCreationType extends AbstractType
                 'label'         => 'form.admin.purchasable_item_variant_creation.purchasable_item_variant_values',
                 'allow_add'     => true,
                 'allow_delete'  => true,
-                'by_reference'  => false,
                 'entry_options' => [
                     'label'         => false,
                     'remove_button' => true,

@@ -13,6 +13,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[NotBlankContactPhoneNumber]
 class ContactData
 {
+    private bool $isEmailMandatory;
+
+    private bool $isPhoneNumberMandatory;
+
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
     private ?string $nameFirst = null;
@@ -39,6 +43,22 @@ class ContactData
         ],
     )]
     private ?string $roleOther = null;
+
+    public function __construct(bool $isEmailMandatory, bool $isPhoneNumberMandatory)
+    {
+        $this->isEmailMandatory = $isEmailMandatory;
+        $this->isPhoneNumberMandatory = $isPhoneNumberMandatory;
+    }
+
+    public function isEmailMandatory(): bool
+    {
+        return $this->isEmailMandatory;
+    }
+
+    public function isPhoneNumberMandatory(): bool
+    {
+        return $this->isPhoneNumberMandatory;
+    }
 
     public function getNameFirst(): ?string
     {

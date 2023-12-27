@@ -47,17 +47,17 @@ class CamperType extends AbstractType
                         'class' => 'required'
                     ],
                     'row_attr' => [
-                        'class'                                  => 'national-id-visibility',
-                        'data-controller'                        => 'cv--content',
+                        'class'                                    => 'national-id-visibility',
+                        'data-controller'                          => 'cv--content',
                         'data-cv--content-show-when-checked-value' => '0',
                     ],
                     'required' => false,
                 ])
                 ->add('isNationalIdentifierAbsent', CheckboxType::class, [
-                    'label'    => 'form.user.camper.is_national_identifier_absent',
-                    'attr'     => [
-                        'data-controller'                    => 'cv--checkbox',
-                        'data-action'                        => 'cv--checkbox#updateVisibility',
+                    'label' => 'form.user.camper.is_national_identifier_absent',
+                    'attr'  => [
+                        'data-controller'                      => 'cv--checkbox',
+                        'data-action'                          => 'cv--checkbox#updateVisibility',
                         'data-cv--checkbox-cv--content-outlet' => '.national-id-visibility',
                     ],
                     'required' => false,
@@ -92,7 +92,12 @@ class CamperType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => CamperData::class,
+            'data_class'   => CamperData::class,
+            'block_prefix' => 'user_camper',
+            'empty_data'   => function (): CamperData
+            {
+                return new CamperData($this->isNationalIdentifierEnabled);
+            }
         ]);
     }
 }

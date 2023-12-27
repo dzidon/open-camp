@@ -68,8 +68,8 @@ class UserCampCatalogResultTest extends TestCase
     {
         $campUnused = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
         $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
-        $campDate1 = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000, 10, $camp);
-        $campDate2 = new CampDate(new DateTimeImmutable('2000-02-02'), new DateTimeImmutable('2000-02-08'), 2000, 20, $camp);
+        $campDate1 = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000, 100.0, 10, $camp);
+        $campDate2 = new CampDate(new DateTimeImmutable('2000-02-02'), new DateTimeImmutable('2000-02-08'), 2000, 200.0, 20, $camp);
         $campIdString = $camp
             ->getId()
             ->toRfc4122()

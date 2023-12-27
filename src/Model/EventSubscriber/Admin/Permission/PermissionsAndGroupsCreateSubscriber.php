@@ -2,31 +2,62 @@
 
 namespace App\Model\EventSubscriber\Admin\Permission;
 
-use App\Model\Event\Admin\Permission\PermissionsAndGroupsCreatedEvent;
 use App\Model\Event\Admin\Permission\PermissionsAndGroupsCreateEvent;
+use App\Model\Repository\PermissionGroupRepositoryInterface;
+use App\Model\Repository\PermissionRepositoryInterface;
 use App\Model\Service\Permission\PermissionsAndGroupsFactoryInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class PermissionsAndGroupsCreateSubscriber
 {
     private PermissionsAndGroupsFactoryInterface $permissionsAndGroupsFactory;
 
-    private EventDispatcherInterface $eventDispatcher;
+    private PermissionRepositoryInterface $permissionRepository;
+
+    private PermissionGroupRepositoryInterface $permissionGroupRepository;
+
+    private EntityManagerInterface $entityManager;
 
     public function __construct(PermissionsAndGroupsFactoryInterface $permissionsAndGroupsFactory,
-                                EventDispatcherInterface             $eventDispatcher)
+                                PermissionRepositoryInterface        $permissionRepository,
+                                PermissionGroupRepositoryInterface   $permissionGroupRepository,
+                                EntityManagerInterface               $entityManager)
     {
         $this->permissionsAndGroupsFactory = $permissionsAndGroupsFactory;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->permissionRepository = $permissionRepository;
+        $this->permissionGroupRepository = $permissionGroupRepository;
+        $this->entityManager = $entityManager;
     }
 
-    #[AsEventListener(event: PermissionsAndGroupsCreateEvent::NAME)]
-    public function onCreateDispatch(): void
+    #[AsEventListener(event: PermissionsAndGroupsCreateEvent::NAME, priority: 200)]
+    public function onCreateDispatch(PermissionsAndGroupsCreateEvent $event): void
     {
         $result = $this->permissionsAndGroupsFactory->createPermissionsAndGroups();
+        $event->setPermissionsAndGroupsCreationResult($result);
+    }
 
-        $event = new PermissionsAndGroupsCreatedEvent($result);
-        $this->eventDispatcher->dispatch($event, $event::NAME);
+    #[AsEventListener(event: PermissionsAndGroupsCreateEvent::NAME, priority: 100)]
+    public function onCreateSavePermissionsAndGroups(PermissionsAndGroupsCreateEvent $event): void
+    {
+        $result = $event->getPermissionsAndGroupsCreationResult();
+        $permissions = $result->getCreatedPermissions();
+        $permissionGroups = $result->getCreatedPermissionGroups();
+        $isFlush = $event->isFlush();
+
+        foreach ($permissionGroups as $permissionGroup)
+        {
+            $this->permissionGroupRepository->savePermissionGroup($permissionGroup, false);
+        }
+
+        foreach ($permissions as $permission)
+        {
+            $this->permissionRepository->savePermission($permission, false);
+        }
+
+        if ($isFlush && (!empty($permissionGroups) || !empty($permissions)))
+        {
+            $this->entityManager->flush();
+        }
     }
 }

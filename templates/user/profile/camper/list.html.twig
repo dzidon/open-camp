@@ -3,19 +3,7 @@
 {% block profile_content %}
     <div class="row mb-5">
         <div class="col">
-            {{ form_start(form_search) }}
-                <div class="form-row">
-                    <div class="col-md-9">
-                        {{ form_row(form_search.phrase) }}
-                    </div>
-
-                    <div class="col-md-3">
-                        {{ form_row(form_search.sortBy) }}
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary">{{ 'form.user.camper_search.button'|trans }}</button>
-            {{ form_end(form_search) }}
+            {{ form(form_search) }}
         </div>
     </div>
 

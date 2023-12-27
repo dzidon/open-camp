@@ -3,9 +3,9 @@
 namespace App\Model\Event\Admin\CampImage;
 
 use App\Model\Entity\CampImage;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class CampImageDeleteEvent extends Event
+class CampImageDeleteEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.camp_image.delete';
 

@@ -4,9 +4,9 @@ namespace App\Model\Event\Admin\User;
 
 use App\Library\Data\Admin\ProfileData;
 use App\Model\Entity\User;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class ProfileUpdateEvent extends Event
+class ProfileUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.profile.update';
 

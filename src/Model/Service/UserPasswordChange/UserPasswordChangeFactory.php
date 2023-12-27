@@ -17,6 +17,7 @@ class UserPasswordChangeFactory implements UserPasswordChangeFactoryInterface
 {
     private int $maxActivePasswordChangesPerUser;
     private string $passwordChangeLifespan;
+    private array $newSelectors = [];
 
     private TokenSplitterInterface $tokenSplitter;
     private UserPasswordChangeRepositoryInterface $userPasswordChangeRepository;
@@ -66,12 +67,14 @@ class UserPasswordChangeFactory implements UserPasswordChangeFactoryInterface
         $selector = null;
         $plainVerifier = '';
 
-        while ($selector === null || $this->userPasswordChangeRepository->findOneBySelector($selector) !== null)
+        while ($selector === null || $this->userPasswordChangeRepository->selectorExists($selector) || in_array($selector, $this->newSelectors))
         {
             $tokenSplit = $this->tokenSplitter->generateTokenSplit();
             $selector = $tokenSplit->getSelector();
             $plainVerifier = $tokenSplit->getPlainVerifier();
         }
+
+        $this->newSelectors[] = $selector;
 
         // create a password change
         $expireAt = new DateTimeImmutable(sprintf('+%s', $this->passwordChangeLifespan));

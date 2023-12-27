@@ -27,11 +27,21 @@
 
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.camp_date.price'|trans }}:</strong>
+                            <strong>{{ 'entity_attribute.camp_date.deposit'|trans }}:</strong>
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            <span>{{ camp_date.price }} {{ currency }}</span>
+                            <span>{{ camp_date.deposit }} {{ currency }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.price_without_deposit'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ camp_date.priceWithoutDeposit }} {{ currency }}</span>
                         </div>
                     </div>
 
@@ -87,7 +97,7 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div class="row mb-3">
                         <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.camp_date.leaders'|trans }}:</strong>
                         </div>
@@ -104,6 +114,72 @@
                                             {% if leader.nameFirst is not null and leader.nameLast is not null %}
                                                 ({{ leader.nameFirst }} {{ leader.nameLast }})
                                             {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.form_fields'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.campDateFormFields is empty %}
+                                <em>{{ 'search.error.no_results'|trans }}</em>
+                            {% else %}
+                                {% for camp_date_form_field in camp_date.campDateFormFields %}
+                                    {% set form_field = camp_date_form_field.formField %}
+
+                                    <div>
+                                        <span>
+                                            {{ form_field.name }}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.attachment_configs'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.campDateAttachmentConfigs is empty %}
+                                <em>{{ 'search.error.no_results'|trans }}</em>
+                            {% else %}
+                                {% for camp_date_attachment_config in camp_date.campDateAttachmentConfigs %}
+                                    {% set attachment_config = camp_date_attachment_config.attachmentConfig %}
+
+                                    <div>
+                                        <span>
+                                            {{ attachment_config.name }}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.purchasable_items'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.campDatePurchasableItems is empty %}
+                                <em>{{ 'search.error.no_results'|trans }}</em>
+                            {% else %}
+                                {% for camp_date_purchasable_item in camp_date.campDatePurchasableItems %}
+                                    {% set purchasable_item = camp_date_purchasable_item.purchasableItem %}
+
+                                    <div>
+                                        <span>
+                                            {{ purchasable_item.name }}
                                         </span>
                                     </div>
                                 {% endfor %}

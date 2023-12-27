@@ -36,6 +36,9 @@ class AttachmentConfig
     #[ORM\Column(length: 16)]
     private string $requiredType;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $help = null;
+
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isGlobal = false;
 
@@ -147,6 +150,18 @@ class AttachmentConfig
     public function setRequiredType(AttachmentConfigRequiredTypeEnum $requiredType): self
     {
         $this->requiredType = $requiredType->value;
+
+        return $this;
+    }
+
+    public function getHelp(): ?string
+    {
+        return $this->help;
+    }
+
+    public function setHelp(?string $help): self
+    {
+        $this->help = $help;
 
         return $this;
     }

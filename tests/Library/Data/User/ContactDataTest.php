@@ -4,19 +4,26 @@ namespace App\Tests\Library\Data\User;
 
 use App\Library\Data\User\ContactData;
 use App\Model\Enum\Entity\ContactRoleEnum;
-use App\Service\Validator\NotBlankContactEmailValidator;
-use App\Service\Validator\NotBlankContactPhoneNumberValidator;
 use libphonenumber\PhoneNumber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContactDataTest extends KernelTestCase
 {
+    public function testEmailAndPhoneNumberMandatory(): void
+    {
+        $data = new ContactData(false, false);
+        $this->assertFalse($data->isEmailMandatory());
+        $this->assertFalse($data->isPhoneNumberMandatory());
+
+        $data = new ContactData(true, true);
+        $this->assertTrue($data->isEmailMandatory());
+        $this->assertTrue($data->isPhoneNumberMandatory());
+    }
+
     public function testNameFirst(): void
     {
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $this->assertNull($data->getNameFirst());
 
         $data->setNameFirst('text');
@@ -30,7 +37,7 @@ class ContactDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $result = $validator->validateProperty($data, 'nameFirst');
         $this->assertNotEmpty($result); // invalid
 
@@ -53,7 +60,7 @@ class ContactDataTest extends KernelTestCase
 
     public function testNameLast(): void
     {
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $this->assertNull($data->getNameLast());
 
         $data->setNameLast('text');
@@ -67,7 +74,7 @@ class ContactDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $result = $validator->validateProperty($data, 'nameLast');
         $this->assertNotEmpty($result); // invalid
 
@@ -90,7 +97,7 @@ class ContactDataTest extends KernelTestCase
 
     public function testEmail(): void
     {
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $this->assertNull($data->getEmail());
 
         $data->setEmail('text');
@@ -102,10 +109,9 @@ class ContactDataTest extends KernelTestCase
 
     public function testEmailValidation(): void
     {
-        $this->updateValidatorConfigValues(false, false);
         $validator = $this->getValidator();
 
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $data->setNameFirst('Name');
         $data->setNameLast('Surname');
         $data->setRole(ContactRoleEnum::FATHER);
@@ -140,7 +146,7 @@ class ContactDataTest extends KernelTestCase
 
     public function testPhoneNumber(): void
     {
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $this->assertNull($data->getPhoneNumber());
 
         $phoneNumber = new PhoneNumber();
@@ -158,10 +164,9 @@ class ContactDataTest extends KernelTestCase
 
     public function testPhoneNumberValidation(): void
     {
-        $this->updateValidatorConfigValues(false, false);
         $validator = $this->getValidator();
 
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $data->setNameFirst('Name');
         $data->setNameLast('Surname');
         $data->setRole(ContactRoleEnum::FATHER);
@@ -190,10 +195,9 @@ class ContactDataTest extends KernelTestCase
 
     public function testEmailAndPhoneNumberValidationIfMandatory(): void
     {
-        $this->updateValidatorConfigValues(true, true);
         $validator = $this->getValidator();
 
-        $data = new ContactData();
+        $data = new ContactData(true, true);
         $data->setNameFirst('Name');
         $data->setNameLast('Surname');
         $data->setRole(ContactRoleEnum::FATHER);
@@ -222,7 +226,7 @@ class ContactDataTest extends KernelTestCase
 
     public function testRole(): void
     {
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $this->assertNull($data->getRole());
 
         $data->setRole(ContactRoleEnum::MOTHER);
@@ -236,7 +240,7 @@ class ContactDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $result = $validator->validateProperty($data, 'role');
         $this->assertNotEmpty($result); // invalid
 
@@ -251,7 +255,7 @@ class ContactDataTest extends KernelTestCase
 
     public function testRoleOther(): void
     {
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $this->assertNull($data->getRoleOther());
 
         $data->setRoleOther('Other role');
@@ -265,7 +269,7 @@ class ContactDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $result = $validator->validateProperty($data, 'roleOther');
         $this->assertEmpty($result); // valid
 
@@ -297,22 +301,6 @@ class ContactDataTest extends KernelTestCase
         $data->setRoleOther(str_repeat('x', 256));
         $result = $validator->validateProperty($data, 'roleOther');
         $this->assertNotEmpty($result); // invalid
-    }
-
-    private function updateValidatorConfigValues(bool $isEmailMandatory, bool $isPhoneNumberMandatory): void
-    {
-        $container = static::getContainer();
-
-        /** @var TranslatorInterface $translator */
-        /** @var PropertyAccessorInterface $propertyAccessor */
-        $translator = $container->get(TranslatorInterface::class);
-        $propertyAccessor = $container->get(PropertyAccessorInterface::class);
-
-        $emailValidator = new NotBlankContactEmailValidator($translator, $propertyAccessor, $isEmailMandatory, $isPhoneNumberMandatory);
-        $container->set(NotBlankContactEmailValidator::class, $emailValidator);
-
-        $phoneNumberValidator = new NotBlankContactPhoneNumberValidator($translator, $propertyAccessor, $isEmailMandatory, $isPhoneNumberMandatory);
-        $container->set(NotBlankContactPhoneNumberValidator::class, $phoneNumberValidator);
     }
 
     private function getValidator(): ValidatorInterface

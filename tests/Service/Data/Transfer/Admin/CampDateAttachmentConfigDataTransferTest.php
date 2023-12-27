@@ -19,7 +19,7 @@ class CampDateAttachmentConfigDataTransferTest extends KernelTestCase
 
         $expectedPriority = 100;
         $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
-        $campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 10, $camp);
+        $campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 100.0, 10, $camp);
         $attachmentConfig = new AttachmentConfig('Config', 'Label', 10.0);
         $campDateAttachmentConfig = new CampDateAttachmentConfig($campDate, $attachmentConfig, $expectedPriority);
 
@@ -36,7 +36,7 @@ class CampDateAttachmentConfigDataTransferTest extends KernelTestCase
 
         $expectedPriority = 100;
         $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
-        $campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 10, $camp);
+        $campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 100.0, 10, $camp);
         $attachmentConfig = new AttachmentConfig('Config', 'Label', 10.0);
         $campDateAttachmentConfig = new CampDateAttachmentConfig($campDate, $attachmentConfig, $expectedPriority);
 

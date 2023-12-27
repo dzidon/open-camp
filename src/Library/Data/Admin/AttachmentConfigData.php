@@ -5,6 +5,7 @@ namespace App\Library\Data\Admin;
 use App\Library\Constraint\UniqueAttachmentConfig;
 use App\Model\Entity\AttachmentConfig;
 use App\Model\Enum\Entity\AttachmentConfigRequiredTypeEnum;
+use LogicException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[UniqueAttachmentConfig]
@@ -19,6 +20,9 @@ class AttachmentConfigData
     #[Assert\Length(max: 255)]
     #[Assert\NotBlank]
     private ?string $label = null;
+
+    #[Assert\Length(max: 255)]
+    private ?string $help = null;
 
     #[Assert\GreaterThan(0.0)]
     #[Assert\NotBlank]
@@ -70,6 +74,18 @@ class AttachmentConfigData
         return $this;
     }
 
+    public function getHelp(): ?string
+    {
+        return $this->help;
+    }
+
+    public function setHelp(?string $help): self
+    {
+        $this->help = $help;
+
+        return $this;
+    }
+
     public function getMaxSize(): ?float
     {
         return $this->maxSize;
@@ -99,7 +115,24 @@ class AttachmentConfigData
         return $this->fileExtensionsData;
     }
 
-    public function addFileExtensionsDatum(FileExtensionData $fileExtensionData): self
+    public function setFileExtensionsData(array $fileExtensionsData): self
+    {
+        foreach ($fileExtensionsData as $fileExtensionData)
+        {
+            if (!$fileExtensionData instanceof FileExtensionData)
+            {
+                throw new LogicException(
+                    sprintf('Array passed to %s must only contain instances of %s.', __METHOD__, FileExtensionData::class)
+                );
+            }
+        }
+
+        $this->fileExtensionsData = $fileExtensionsData;
+
+        return $this;
+    }
+    
+    public function addFileExtensionData(FileExtensionData $fileExtensionData): self
     {
         if (in_array($fileExtensionData, $this->fileExtensionsData, true))
         {
@@ -111,7 +144,7 @@ class AttachmentConfigData
         return $this;
     }
 
-    public function removeFileExtensionsDatum(FileExtensionData $fileExtensionData): self
+    public function removeFileExtensionData(FileExtensionData $fileExtensionData): self
     {
         $key = array_search($fileExtensionData, $this->fileExtensionsData, true);
 

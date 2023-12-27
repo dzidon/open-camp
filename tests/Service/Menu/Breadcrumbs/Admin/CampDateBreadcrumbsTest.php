@@ -177,7 +177,7 @@ class CampDateBreadcrumbsTest extends KernelTestCase
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->camp, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
-        $this->campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 10, $this->camp);
+        $this->campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 100.0, 200.0, 10, $this->camp);
         $reflectionClass = new ReflectionClass($this->campDate);
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->campDate, UuidV4::fromString('a37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));

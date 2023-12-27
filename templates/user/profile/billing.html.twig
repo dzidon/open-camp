@@ -3,19 +3,7 @@
 {% block profile_content %}
     <div class="row">
         <div class="col-md-8 col-lg-6 col-xl-5">
-            {{ form_start(form_billing) }}
-                <div class="form-row">
-                    <div class="col-md-6">
-                        {{ form_row(form_billing.nameFirst) }}
-                    </div>
-
-                    <div class="col-md-6">
-                        {{ form_row(form_billing.nameLast) }}
-                    </div>
-                </div>
-
-                {{ form_rest(form_billing) }}
-            {{ form_end(form_billing) }}
+            {{ form(form_billing) }}
         </div>
     </div>
 {% endblock %}

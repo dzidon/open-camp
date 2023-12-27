@@ -72,6 +72,7 @@ class AttachmentConfigSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'              => AttachmentConfigSearchData::class,
+            'block_prefix'            => 'admin_attachment_config_search',
             'csrf_protection'         => false,
             'method'                  => 'GET',
             'allow_extra_fields'      => true,

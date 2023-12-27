@@ -34,6 +34,15 @@ interface UserRegistrationRepositoryInterface
     public function findOneBySelector(string $selector, ?bool $active = null): ?UserRegistration;
 
     /**
+     * Returns true if the selector already exists.
+     *
+     * @param string $selector
+     * @param bool|null $active
+     * @return bool
+     */
+    public function selectorExists(string $selector, ?bool $active = null): bool;
+
+    /**
      * Find all registrations assigned to an email address.
      *
      * @param string $email

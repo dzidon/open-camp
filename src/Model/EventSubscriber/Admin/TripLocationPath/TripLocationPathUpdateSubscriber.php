@@ -13,8 +13,7 @@ class TripLocationPathUpdateSubscriber
 
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(TripLocationPathRepositoryInterface $repository,
-                                DataTransferRegistryInterface             $dataTransfer)
+    public function __construct(TripLocationPathRepositoryInterface $repository, DataTransferRegistryInterface $dataTransfer)
     {
         $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;
@@ -32,6 +31,7 @@ class TripLocationPathUpdateSubscriber
     public function onUpdateSaveEntity(TripLocationPathUpdateEvent $event): void
     {
         $entity = $event->getTripLocationPath();
-        $this->repository->saveTripLocationPath($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->saveTripLocationPath($entity, $isFlush);
     }
 }

@@ -3,13 +3,16 @@
 namespace App\Model\Event\Admin\TripLocationPath;
 
 use App\Library\Data\Admin\TripLocationPathCreationData;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Entity\TripLocationPath;
+use App\Model\Event\AbstractModelEvent;
 
-class TripLocationPathCreateEvent extends Event
+class TripLocationPathCreateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.trip_location_path.create';
 
     private TripLocationPathCreationData $data;
+
+    private ?TripLocationPath $entity = null;
 
     public function __construct(TripLocationPathCreationData $data)
     {
@@ -24,6 +27,18 @@ class TripLocationPathCreateEvent extends Event
     public function setTripLocationPathCreationData(TripLocationPathCreationData $data): self
     {
         $this->data = $data;
+
+        return $this;
+    }
+
+    public function getTripLocationPath(): ?TripLocationPath
+    {
+        return $this->entity;
+    }
+
+    public function setTripLocationPath(?TripLocationPath $entity): self
+    {
+        $this->entity = $entity;
 
         return $this;
     }

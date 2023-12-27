@@ -2,33 +2,75 @@
 
 namespace App\Model\EventSubscriber\User\UserRegistration;
 
-use App\Model\Event\User\UserRegistration\UserRegistrationCompletedEvent;
 use App\Model\Event\User\UserRegistration\UserRegistrationCompleteEvent;
+use App\Model\Repository\UserRegistrationRepositoryInterface;
+use App\Model\Repository\UserRepositoryInterface;
 use App\Model\Service\UserRegistration\UserRegistererInterface;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UserRegistrationCompleteSubscriber
 {
     private UserRegistererInterface $userRegisterer;
 
-    private EventDispatcherInterface $eventDispatcher;
+    private UserRegistrationRepositoryInterface $userRegistrationRepository;
 
-    public function __construct(UserRegistererInterface $userRegisterer, EventDispatcherInterface $eventDispatcher)
+    private UserRepositoryInterface $userRepository;
+
+    private EntityManagerInterface $entityManager;
+
+    public function __construct(UserRegistererInterface             $userRegisterer,
+                                UserRegistrationRepositoryInterface $userRegistrationRepository,
+                                UserRepositoryInterface             $userRepository,
+                                EntityManagerInterface              $entityManager)
     {
         $this->userRegisterer = $userRegisterer;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->userRegistrationRepository = $userRegistrationRepository;
+        $this->userRepository = $userRepository;
+        $this->entityManager = $entityManager;
     }
 
-    #[AsEventListener(event: UserRegistrationCompleteEvent::NAME)]
+    #[AsEventListener(event: UserRegistrationCompleteEvent::NAME, priority: 200)]
     public function onCompleteUpdate(UserRegistrationCompleteEvent $event): void
     {
         $userRegistration = $event->getUserRegistration();
         $plainPasswordData = $event->getPlainPasswordData();
         $plainPassword = $plainPasswordData->getPlainPassword();
         $result = $this->userRegisterer->completeUserRegistration($userRegistration, $plainPassword);
+        $event->setUserRegistrationCompletionResult($result);
+    }
 
-        $event = new UserRegistrationCompletedEvent($plainPasswordData, $userRegistration, $result);
-        $this->eventDispatcher->dispatch($event, $event::NAME);
+    #[AsEventListener(event: UserRegistrationCompleteEvent::NAME, priority: 100)]
+    public function onCompleteSaveEntities(UserRegistrationCompleteEvent $event): void
+    {
+        $result = $event->getUserRegistrationCompletionResult();
+        $user = $result->getUser();
+        $usedUserRegistration = $result->getUsedUserRegistration();
+        $disabledUserRegistrations = $result->getDisabledUserRegistrations();
+        $isFlush = $event->isFlush();
+        $canFlush = false;
+
+        if ($user !== null)
+        {
+            $this->userRepository->saveUser($user, false);
+            $canFlush = true;
+        }
+
+        if ($usedUserRegistration !== null)
+        {
+            $this->userRegistrationRepository->saveUserRegistration($usedUserRegistration, false);
+            $canFlush = true;
+        }
+
+        foreach ($disabledUserRegistrations as $disabledUserRegistration)
+        {
+            $this->userRegistrationRepository->saveUserRegistration($disabledUserRegistration, false);
+            $canFlush = true;
+        }
+
+        if ($isFlush && $canFlush)
+        {
+            $this->entityManager->flush();
+        }
     }
 }

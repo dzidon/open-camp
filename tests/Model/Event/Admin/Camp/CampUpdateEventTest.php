@@ -33,6 +33,17 @@ class CampUpdateEventTest extends TestCase
         $this->assertSame($newEntity, $this->event->getCamp());
     }
 
+    public function testIsFlush(): void
+    {
+        $this->assertTrue($this->event->isFlush());
+
+        $this->event->setIsFlush(false);
+        $this->assertFalse($this->event->isFlush());
+
+        $this->event->setIsFlush(true);
+        $this->assertTrue($this->event->isFlush());
+    }
+
     protected function setUp(): void
     {
         $this->entity = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);

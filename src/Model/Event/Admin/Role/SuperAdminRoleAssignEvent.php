@@ -4,9 +4,9 @@ namespace App\Model\Event\Admin\Role;
 
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class SuperAdminRoleAssignEvent extends Event
+class SuperAdminRoleAssignEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.role.super_admin_assign';
 

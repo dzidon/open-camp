@@ -13,8 +13,7 @@ class ProfileUpdateSubscriber
 
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(UserRepositoryInterface       $repository,
-                                DataTransferRegistryInterface $dataTransfer)
+    public function __construct(UserRepositoryInterface $repository, DataTransferRegistryInterface $dataTransfer)
     {
         $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;
@@ -32,6 +31,7 @@ class ProfileUpdateSubscriber
     public function onUpdateSaveEntity(ProfileUpdateEvent $event): void
     {
         $entity = $event->getUser();
-        $this->repository->saveUser($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->saveUser($entity, $isFlush);
     }
 }

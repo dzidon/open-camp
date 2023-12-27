@@ -2,32 +2,64 @@
 
 namespace App\Model\EventSubscriber\User\UserRegistration;
 
-use App\Model\Event\User\UserRegistration\UserRegistrationCreatedEvent;
 use App\Model\Event\User\UserRegistration\UserRegistrationCreateEvent;
+use App\Model\Repository\UserRegistrationRepositoryInterface;
 use App\Model\Service\UserRegistration\UserRegistrationFactoryInterface;
+use App\Service\Mailer\UserRegistrationMailerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class UserRegistrationCreateSubscriber
 {
     private UserRegistrationFactoryInterface $userRegistrationFactory;
 
-    private EventDispatcherInterface $eventDispatcher;
+    private UserRegistrationRepositoryInterface $userRegistrationRepository;
 
-    public function __construct(UserRegistrationFactoryInterface $userRegistrationFactory, EventDispatcherInterface $eventDispatcher)
+    private UserRegistrationMailerInterface $mailer;
+
+    public function __construct(UserRegistrationFactoryInterface    $userRegistrationFactory,
+                                UserRegistrationRepositoryInterface $userRegistrationRepository,
+                                UserRegistrationMailerInterface     $mailer)
     {
         $this->userRegistrationFactory = $userRegistrationFactory;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->userRegistrationRepository = $userRegistrationRepository;
+        $this->mailer = $mailer;
     }
 
-    #[AsEventListener(event: UserRegistrationCreateEvent::NAME)]
+    #[AsEventListener(event: UserRegistrationCreateEvent::NAME, priority: 300)]
     public function onCreateDispatchResult(UserRegistrationCreateEvent $event): void
     {
         $registrationData = $event->getRegistrationData();
         $email = $registrationData->getEmail();
         $result = $this->userRegistrationFactory->createUserRegistration($email);
+        $event->setUserRegistrationResult($result);
+    }
 
-        $event = new UserRegistrationCreatedEvent($registrationData, $result);
-        $this->eventDispatcher->dispatch($event, $event::NAME);
+    #[AsEventListener(event: UserRegistrationCreateEvent::NAME, priority: 200)]
+    public function onCreateSendEmail(UserRegistrationCreateEvent $event): void
+    {
+        $result = $event->getUserRegistrationResult();
+        $token = $result->getToken();
+        $isFake = $result->isFake();
+
+        $userRegistration = $result->getUserRegistration();
+        $email = $userRegistration->getEmail();
+        $expireAt = $userRegistration->getExpireAt();
+
+        $this->mailer->sendEmail($email, $token, $expireAt, $isFake);
+    }
+
+    #[AsEventListener(event: UserRegistrationCreateEvent::NAME, priority: 100)]
+    public function onCreateSave(UserRegistrationCreateEvent $event): void
+    {
+        $result = $event->getUserRegistrationResult();
+
+        if ($result->isFake())
+        {
+            return;
+        }
+
+        $userRegistration = $result->getUserRegistration();
+        $isFlush = $event->isFlush();
+        $this->userRegistrationRepository->saveUserRegistration($userRegistration, $isFlush);
     }
 }

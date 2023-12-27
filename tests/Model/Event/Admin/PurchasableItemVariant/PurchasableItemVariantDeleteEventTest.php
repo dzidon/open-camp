@@ -24,6 +24,17 @@ class PurchasableItemVariantDeleteEventTest extends TestCase
         $this->assertSame($newPurchasableItemVariant, $this->event->getPurchasableItemVariant());
     }
 
+    public function testIsFlush(): void
+    {
+        $this->assertTrue($this->event->isFlush());
+
+        $this->event->setIsFlush(false);
+        $this->assertFalse($this->event->isFlush());
+
+        $this->event->setIsFlush(true);
+        $this->assertTrue($this->event->isFlush());
+    }
+
     protected function setUp(): void
     {
         $this->purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);

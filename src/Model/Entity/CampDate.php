@@ -30,7 +30,10 @@ class CampDate
     private DateTimeImmutable $endAt;
 
     #[ORM\Column(type: Types::FLOAT)]
-    private float $price;
+    private float $deposit;
+
+    #[ORM\Column(type: Types::FLOAT)]
+    private float $priceWithoutDeposit;
 
     #[ORM\Column(type: Types::INTEGER)]
     private int $capacity;
@@ -75,12 +78,18 @@ class CampDate
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(DateTimeImmutable $startAt, DateTimeImmutable $endAt, float $price, int $capacity, Camp $camp)
+    public function __construct(DateTimeImmutable $startAt,
+                                DateTimeImmutable $endAt,
+                                float             $deposit,
+                                float             $priceWithoutDeposit,
+                                int               $capacity,
+                                Camp              $camp)
     {
         $this->id = Uuid::v4();
         $this->startAt = $startAt;
         $this->endAt = $endAt;
-        $this->price = $price;
+        $this->deposit = $deposit;
+        $this->priceWithoutDeposit = $priceWithoutDeposit;
         $this->capacity = $capacity;
         $this->camp = $camp;
         $this->leaders = new ArrayCollection();
@@ -119,14 +128,26 @@ class CampDate
         return $this;
     }
 
-    public function getPrice(): float
+    public function getDeposit(): float
     {
-        return $this->price;
+        return $this->deposit;
     }
 
-    public function setPrice(float $price): self
+    public function setDeposit(float $deposit): self
     {
-        $this->price = $price;
+        $this->deposit = $deposit;
+
+        return $this;
+    }
+
+    public function getPriceWithoutDeposit(): float
+    {
+        return $this->priceWithoutDeposit;
+    }
+
+    public function setPriceWithoutDeposit(float $priceWithoutDeposit): self
+    {
+        $this->priceWithoutDeposit = $priceWithoutDeposit;
 
         return $this;
     }

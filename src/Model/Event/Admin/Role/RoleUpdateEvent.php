@@ -4,9 +4,9 @@ namespace App\Model\Event\Admin\Role;
 
 use App\Library\Data\Admin\RoleData;
 use App\Model\Entity\Role;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class RoleUpdateEvent extends Event
+class RoleUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.role.update';
 

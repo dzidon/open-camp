@@ -33,6 +33,27 @@ class UserPasswordChangeFactoryTest extends KernelTestCase
         $this->assertSame($expireAt->getTimestamp(), $passwordChange->getExpireAt()->getTimestamp());
     }
 
+    public function testCreateUserPasswordChangeCollisionBeforeFlushing(): void
+    {
+        $splitterMock = $this->getTokenSplitterMock();
+        $splitterMock
+            ->addTestToken('d4v123') // d4v is the selector, 123 is the verifier
+            ->addTestToken('d4v123')
+            ->addTestToken('foo321')
+        ;
+
+        $passwordChangeFactory = $this->getUserPasswordChangeFactory();
+        $result = $passwordChangeFactory->createUserPasswordChange('david@gmail.com');
+        $this->assertFalse($result->isFake());
+        $this->assertSame('d4v123', $result->getToken());
+        $this->assertSame('123', $result->getPlainVerifier());
+
+        $result = $passwordChangeFactory->createUserPasswordChange('david@gmail.com');
+        $this->assertFalse($result->isFake());
+        $this->assertSame('foo321', $result->getToken());
+        $this->assertSame('321', $result->getPlainVerifier());
+    }
+
     public function testCreateUserPasswordChangeIfEmailIsNotRegistered(): void
     {
         $splitterMock = $this->getTokenSplitterMock();

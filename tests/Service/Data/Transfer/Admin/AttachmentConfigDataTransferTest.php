@@ -18,6 +18,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
 
         $expectedName = 'Config';
         $expectedLabel = 'Label';
+        $expectedHelp = 'Help';
         $expectedRequiredType = AttachmentConfigRequiredTypeEnum::REQUIRED;
         $expectedMaxSize = 10.0;
         $expectedFileExtensions = [
@@ -26,6 +27,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
         ];
 
         $attachmentConfig = new AttachmentConfig($expectedName, $expectedLabel, $expectedMaxSize);
+        $attachmentConfig->setHelp($expectedHelp);
         $attachmentConfig->setRequiredType($expectedRequiredType);
         $attachmentConfig->setIsGlobal(true);
 
@@ -38,6 +40,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
         $dataTransfer->fillData($data, $attachmentConfig);
 
         $this->assertSame($expectedName, $data->getName());
+        $this->assertSame($expectedHelp, $data->getHelp());
         $this->assertSame($expectedLabel, $data->getLabel());
         $this->assertSame($expectedRequiredType, $data->getRequiredType());
         $this->assertSame($expectedMaxSize, $data->getMaxSize());
@@ -55,6 +58,7 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
 
         $expectedName = 'Config';
         $expectedLabel = 'Label';
+        $expectedHelp = 'Help';
         $expectedRequiredType = AttachmentConfigRequiredTypeEnum::REQUIRED;
         $expectedMaxSize = 10.0;
         $expectedFileExtensionsData = [
@@ -71,19 +75,21 @@ class AttachmentConfigDataTransferTest extends KernelTestCase
         $data = new AttachmentConfigData();
         $data->setName($expectedName);
         $data->setLabel($expectedLabel);
+        $data->setHelp($expectedHelp);
         $data->setRequiredType($expectedRequiredType);
         $data->setMaxSize($expectedMaxSize);
         $data->setIsGlobal(true);
 
         foreach ($expectedFileExtensionsData as $expectedFileExtensionData)
         {
-            $data->addFileExtensionsDatum($expectedFileExtensionData);
+            $data->addFileExtensionData($expectedFileExtensionData);
         }
 
         $dataTransfer->fillEntity($data, $attachmentConfig);
 
         $this->assertSame($expectedName, $attachmentConfig->getName());
         $this->assertSame($expectedLabel, $attachmentConfig->getLabel());
+        $this->assertSame($expectedHelp, $attachmentConfig->getHelp());
         $this->assertSame($expectedRequiredType, $attachmentConfig->getRequiredType());
         $this->assertSame($expectedMaxSize, $attachmentConfig->getMaxSize());
         $this->assertCount(3, $attachmentConfig->getFileExtensions());

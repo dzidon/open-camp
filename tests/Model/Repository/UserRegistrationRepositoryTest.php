@@ -29,6 +29,14 @@ class UserRegistrationRepositoryTest extends KernelTestCase
         $this->assertNull($loadedRegistration);
     }
 
+    public function testSelectorExists(): void
+    {
+        $repository = $this->getUserRegistrationRepository();
+
+        $this->assertFalse($repository->selectorExists('bob'));
+        $this->assertTrue($repository->selectorExists('max'));
+    }
+
     public function testFindOneBySelector(): void
     {
         $repository = $this->getUserRegistrationRepository();

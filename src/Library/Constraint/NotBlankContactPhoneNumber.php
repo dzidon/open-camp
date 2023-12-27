@@ -16,11 +16,15 @@ class NotBlankContactPhoneNumber extends Constraint
     public string $messageWhenNotMandatory = 'email_or_phone_number_mandatory';
     public string $phoneNumberProperty = 'phoneNumber';
     public string $emailProperty = 'email';
+    public string $isEmailMandatoryProperty = 'isEmailMandatory';
+    public string $isPhoneNumberMandatoryProperty = 'isPhoneNumberMandatory';
 
     public function __construct(string $messageWhenMandatory = null,
                                 string $messageWhenNotMandatory = null,
                                 string $phoneNumberProperty = null,
                                 string $emailProperty = null,
+                                string $isEmailMandatoryProperty = null,
+                                string $isPhoneNumberMandatoryProperty = null,
                                 array  $groups = null,
                                 mixed  $payload = null)
     {
@@ -30,6 +34,8 @@ class NotBlankContactPhoneNumber extends Constraint
         $this->messageWhenNotMandatory = $messageWhenNotMandatory ?? $this->messageWhenNotMandatory;
         $this->phoneNumberProperty = $phoneNumberProperty ?? $this->phoneNumberProperty;
         $this->emailProperty = $emailProperty ?? $this->emailProperty;
+        $this->isEmailMandatoryProperty = $isEmailMandatoryProperty ?? $this->isEmailMandatoryProperty;
+        $this->isPhoneNumberMandatoryProperty = $isPhoneNumberMandatoryProperty ?? $this->isPhoneNumberMandatoryProperty;
     }
 
     /**

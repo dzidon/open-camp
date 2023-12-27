@@ -3,32 +3,38 @@
 namespace App\Model\EventSubscriber\Admin\TripLocation;
 
 use App\Model\Entity\TripLocation;
-use App\Model\Event\Admin\TripLocation\TripLocationCreatedEvent;
 use App\Model\Event\Admin\TripLocation\TripLocationCreateEvent;
+use App\Model\Repository\TripLocationRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class TripLocationCreateSubscriber
 {
     private DataTransferRegistryInterface $dataTransfer;
 
-    private EventDispatcherInterface $eventDispatcher;
+    private TripLocationRepositoryInterface $repository;
 
-    public function __construct(DataTransferRegistryInterface $dataTransfer, EventDispatcherInterface $eventDispatcher)
+    public function __construct(DataTransferRegistryInterface $dataTransfer, TripLocationRepositoryInterface $repository)
     {
         $this->dataTransfer = $dataTransfer;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->repository = $repository;
     }
 
-    #[AsEventListener(event: TripLocationCreateEvent::NAME)]
+    #[AsEventListener(event: TripLocationCreateEvent::NAME, priority: 200)]
     public function onCreateFillEntity(TripLocationCreateEvent $event): void
     {
+        $tripLocationPath = $event->getTripLocationPath();
         $data = $event->getTripLocationData();
-        $entity = new TripLocation($data->getName(), $data->getPrice(), $data->getPriority(), $data->getTripLocationPath());
+        $entity = new TripLocation($data->getName(), $data->getPrice(), $data->getPriority(), $tripLocationPath);
         $this->dataTransfer->fillEntity($data, $entity);
+        $event->setTripLocation($entity);
+    }
 
-        $event = new TripLocationCreatedEvent($data, $entity);
-        $this->eventDispatcher->dispatch($event, TripLocationCreatedEvent::NAME);
+    #[AsEventListener(event: TripLocationCreateEvent::NAME, priority: 100)]
+    public function onCreateSaveEntity(TripLocationCreateEvent $event): void
+    {
+        $entity = $event->getTripLocation();
+        $isFlush = $event->isFlush();
+        $this->repository->saveTripLocation($entity, $isFlush);
     }
 }

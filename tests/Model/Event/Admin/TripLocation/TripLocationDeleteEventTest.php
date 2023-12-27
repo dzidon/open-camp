@@ -24,6 +24,17 @@ class TripLocationDeleteEventTest extends TestCase
         $this->assertSame($newTripLocation, $this->event->getTripLocation());
     }
 
+    public function testIsFlush(): void
+    {
+        $this->assertTrue($this->event->isFlush());
+
+        $this->event->setIsFlush(false);
+        $this->assertFalse($this->event->isFlush());
+
+        $this->event->setIsFlush(true);
+        $this->assertTrue($this->event->isFlush());
+    }
+
     protected function setUp(): void
     {
         $this->tripLocationPath = new TripLocationPath('Path');

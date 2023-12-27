@@ -1,0 +1,180 @@
+{# Camp catalog search #}
+{% block user_camp_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="row">
+        <div class="col-12">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="col-12">
+            {{ form_row(form.age) }}
+        </div>
+
+        <div class="col-12">
+            {{ form_row(form.from) }}
+        </div>
+
+        <div class="col-12">
+            {{ form_row(form.to) }}
+        </div>
+
+        <div class="col-12">
+            {{ form_row(form.isOpenOnly) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary btn-block mt-2">
+        <i class="fas fa-search mr-2"></i> {{ 'form.user.camp_search.button'|trans }}
+    </button>
+{% endblock %}
+
+{# Camper profile search #}
+{% block user_camper_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">{{ 'form.user.camper_search.button'|trans }}</button>
+{% endblock %}
+
+{# Camper edit #}
+{% block user_camper_widget %}
+    {{ form_errors(form) }}
+
+    {% set rendered_form %}
+        <div class="form-row">
+            <div class="col-md-6">
+                {{ form_row(form.nameFirst) }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form_row(form.nameLast) }}
+            </div>
+        </div>
+
+        {{ form_rest(form) }}
+    {% endset %}
+
+    {% if 'collection_entry' in block_prefixes %}
+        <div {{ block('widget_container_attributes') }}>
+            {{ rendered_form }}
+        </div>
+    {% else %}
+        {{ rendered_form }}
+    {% endif %}
+{% endblock %}
+
+{# Contact profile search #}
+{% block user_contact_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">{{ 'form.user.contact_search.button'|trans }}</button>
+{% endblock %}
+
+{# Contact edit #}
+{% block user_contact_widget %}
+    {{ form_errors(form) }}
+
+    {% set rendered_form %}
+        <div class="form-row">
+            <div class="col-md-6">
+                {{ form_row(form.nameFirst) }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form_row(form.nameLast) }}
+            </div>
+        </div>
+
+        {{ form_rest(form) }}
+    {% endset %}
+
+    {% if 'collection_entry' in block_prefixes %}
+        <div {{ block('widget_container_attributes') }}>
+            {{ rendered_form }}
+        </div>
+    {% else %}
+        {{ rendered_form }}
+    {% endif %}
+{% endblock %}
+
+{# Billing info edit #}
+{% block user_billing_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="col-md-6">
+            {{ form_row(form.nameFirst) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.nameLast) }}
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
+{% endblock %}
+
+{# Application step one edit #}
+{% block user_application_step_one_widget %}
+    {{ form_errors(form) }}
+
+    {{ form_row(form.email) }}
+
+    <div class="form-row">
+        <div class="col-md-6">
+            {{ form_row(form.nameFirst) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.nameLast) }}
+        </div>
+    </div>
+
+    {{ form_row(form.street) }}
+    {{ form_row(form.town) }}
+    {{ form_row(form.zip) }}
+    {{ form_row(form.country) }}
+    {{ form_row(form.isCompany) }}
+    {{ form_row(form.businessName) }}
+    {{ form_row(form.businessCin) }}
+    {{ form_row(form.businessVatId) }}
+
+    {{ form_row(form.applicationFormFieldValuesData) }}
+    {{ form_row(form.applicationAttachmentsData) }}
+
+    <h2>
+        {{ form.contactsData.vars.label|trans }}
+    </h2>
+
+    {{ form_row(form.contactsData, {label: false}) }}
+    {{ form_row(form.addContactData) }}
+
+    <h2>
+        {{ form.applicationCampersData.vars.label|trans }}
+    </h2>
+
+    {{ form_row(form.applicationCampersData, {label: false}) }}
+    {{ form_row(form.addCamperData) }}
+
+    {{ form_rest(form) }}
+{% endblock %}

@@ -15,7 +15,7 @@
 
                 <div class="card-body {% if root_categories is not empty %} table-responsive p-0 {% endif %}">
                     {% if root_categories is empty %}
-                        <em>{{ 'search.error.no_results'|trans }}</em>
+                        {{ 'search.error.no_results'|trans }}
                     {% else %}
                         {% set granted_read = is_granted('camp_category_read') %}
                         {% set granted_update = is_granted('camp_category_update') %}

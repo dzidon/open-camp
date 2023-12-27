@@ -70,6 +70,7 @@ class CampSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'         => CampSearchData::class,
+            'block_prefix'       => 'user_camp_search',
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

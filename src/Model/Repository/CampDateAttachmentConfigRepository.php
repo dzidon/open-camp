@@ -33,15 +33,27 @@ class CampDateAttachmentConfigRepository extends AbstractRepository implements C
     /**
      * @inheritDoc
      */
-    public function findByCampDate(CampDate $campDate): array
+    public function findByCampDate(CampDate $campDate, ?bool $isGlobal = null): array
     {
-        return $this->createQueryBuilder('campDateAttachmentConfig')
+        $queryBuilder = $this->createQueryBuilder('campDateAttachmentConfig')
             ->select('campDateAttachmentConfig, campDate, attachmentConfig, fileExtension')
             ->leftJoin('campDateAttachmentConfig.campDate', 'campDate')
             ->leftJoin('campDateAttachmentConfig.attachmentConfig', 'attachmentConfig')
             ->leftJoin('attachmentConfig.fileExtensions', 'fileExtension')
             ->andWhere('campDateAttachmentConfig.campDate = :campDateId')
             ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ->orderBy('campDateAttachmentConfig.priority', 'DESC')
+        ;
+
+        if ($isGlobal !== null)
+        {
+            $queryBuilder
+                ->andWhere('attachmentConfig.isGlobal = :isGlobal')
+                ->setParameter('isGlobal', $isGlobal)
+            ;
+        }
+
+        return $queryBuilder
             ->getQuery()
             ->getResult()
         ;

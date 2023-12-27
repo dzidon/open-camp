@@ -3,19 +3,7 @@
 {% block profile_content %}
     <div class="row">
         <div class="col-md-8 col-lg-6 col-xl-5">
-            {{ form_start(form_camper) }}
-                <div class="form-row">
-                    <div class="col-md-6">
-                        {{ form_row(form_camper.nameFirst) }}
-                    </div>
-
-                    <div class="col-md-6">
-                        {{ form_row(form_camper.nameLast) }}
-                    </div>
-                </div>
-
-                {{ form_rest(form_camper) }}
-            {{ form_end(form_camper) }}
+            {{ form(form_camper) }}
         </div>
     </div>
 {% endblock %}

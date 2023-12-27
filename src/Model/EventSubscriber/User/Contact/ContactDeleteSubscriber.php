@@ -19,6 +19,7 @@ class ContactDeleteSubscriber
     public function onDeleteRemoveEntity(ContactDeleteEvent $event): void
     {
         $entity = $event->getContact();
-        $this->repository->removeContact($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->removeContact($entity, $isFlush);
     }
 }

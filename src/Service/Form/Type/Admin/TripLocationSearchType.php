@@ -46,6 +46,7 @@ class TripLocationSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'         => TripLocationSearchData::class,
+            'block_prefix'       => 'admin_trip_location_search',
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

@@ -14,7 +14,7 @@ class PurchasableItemVariantValueUpdateSubscriber
     private DataTransferRegistryInterface $dataTransfer;
 
     public function __construct(PurchasableItemVariantValueRepositoryInterface $repository,
-                                DataTransferRegistryInterface       $dataTransfer)
+                                DataTransferRegistryInterface                  $dataTransfer)
     {
         $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;
@@ -32,6 +32,7 @@ class PurchasableItemVariantValueUpdateSubscriber
     public function onUpdateSaveEntity(PurchasableItemVariantValueUpdateEvent $event): void
     {
         $entity = $event->getPurchasableItemVariantValue();
-        $this->repository->savePurchasableItemVariantValue($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->savePurchasableItemVariantValue($entity, $isFlush);
     }
 }

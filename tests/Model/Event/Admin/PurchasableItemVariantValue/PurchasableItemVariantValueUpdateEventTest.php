@@ -37,6 +37,17 @@ class PurchasableItemVariantValueUpdateEventTest extends TestCase
         $this->assertSame($newPurchasableItemVariantValue, $this->event->getPurchasableItemVariantValue());
     }
 
+    public function testIsFlush(): void
+    {
+        $this->assertTrue($this->event->isFlush());
+
+        $this->event->setIsFlush(false);
+        $this->assertFalse($this->event->isFlush());
+
+        $this->event->setIsFlush(true);
+        $this->assertTrue($this->event->isFlush());
+    }
+
     protected function setUp(): void
     {
         $purchasableItem = new PurchasableItem('Item', 'Label', 1000.0, 10);

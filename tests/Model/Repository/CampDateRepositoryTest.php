@@ -20,7 +20,7 @@ class CampDateRepositoryTest extends KernelTestCase
         $campRepository = $this->getCampRepository();
 
         $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
-        $campDate = new CampDate(new DateTimeImmutable('2000-07-01'), new DateTimeImmutable('2000-07-07'), 1000, 10, $camp);
+        $campDate = new CampDate(new DateTimeImmutable('2000-07-01'), new DateTimeImmutable('2000-07-07'), 1000, 100.0, 10, $camp);
         $campRepository->saveCamp($camp, false);
         $campDateRepository->saveCampDate($campDate, true);
         $id = $campDate->getId();
@@ -301,7 +301,7 @@ class CampDateRepositoryTest extends KernelTestCase
         $this->assertSame(['550e8400-e29b-41d4-a716-446655440000', 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'], $idStrings);
     }
 
-    public function testGetAdminPaginatorSortByPriceAsc(): void
+    public function testGetAdminPaginatorSortByDepositAsc(): void
     {
         $campDateRepository = $this->getCampDateRepository();
         $campRepository = $this->getCampRepository();
@@ -310,7 +310,7 @@ class CampDateRepositoryTest extends KernelTestCase
         $camp = $campRepository->findOneById(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
         $data = new CampDateSearchData();
-        $data->setSortBy(CampDateSortEnum::PRICE_ASC);
+        $data->setSortBy(CampDateSortEnum::DEPOSIT_ASC);
         $data->setIsHistorical(null);
         $paginator = $campDateRepository->getAdminPaginator($data, $camp, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());
@@ -322,7 +322,7 @@ class CampDateRepositoryTest extends KernelTestCase
         $this->assertSame(['e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b', '550e8400-e29b-41d4-a716-446655440000'], $idStrings);
     }
 
-    public function testGetAdminPaginatorSortByPriceDesc(): void
+    public function testGetAdminPaginatorSortByDepositDesc(): void
     {
         $campDateRepository = $this->getCampDateRepository();
         $campRepository = $this->getCampRepository();
@@ -331,7 +331,49 @@ class CampDateRepositoryTest extends KernelTestCase
         $camp = $campRepository->findOneById(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
         $data = new CampDateSearchData();
-        $data->setSortBy(CampDateSortEnum::PRICE_DESC);
+        $data->setSortBy(CampDateSortEnum::DEPOSIT_DESC);
+        $data->setIsHistorical(null);
+        $paginator = $campDateRepository->getAdminPaginator($data, $camp, 1, 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $idStrings = $this->getCampDateIdStrings($paginator->getCurrentPageItems());
+        $this->assertSame(['550e8400-e29b-41d4-a716-446655440000', 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'], $idStrings);
+    }
+
+    public function testGetAdminPaginatorSortByPriceWithoutDepositAsc(): void
+    {
+        $campDateRepository = $this->getCampDateRepository();
+        $campRepository = $this->getCampRepository();
+
+        /** @var Camp $camp */
+        $camp = $campRepository->findOneById(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
+
+        $data = new CampDateSearchData();
+        $data->setSortBy(CampDateSortEnum::PRICE_WITHOUT_DEPOSIT_ASC);
+        $data->setIsHistorical(null);
+        $paginator = $campDateRepository->getAdminPaginator($data, $camp, 1, 2);
+        $this->assertSame(2, $paginator->getTotalItems());
+        $this->assertSame(1, $paginator->getPagesCount());
+        $this->assertSame(1, $paginator->getCurrentPage());
+        $this->assertSame(2, $paginator->getPageSize());
+
+        $idStrings = $this->getCampDateIdStrings($paginator->getCurrentPageItems());
+        $this->assertSame(['e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b', '550e8400-e29b-41d4-a716-446655440000'], $idStrings);
+    }
+
+    public function testGetAdminPaginatorSortByPriceWithoutDepositDesc(): void
+    {
+        $campDateRepository = $this->getCampDateRepository();
+        $campRepository = $this->getCampRepository();
+
+        /** @var Camp $camp */
+        $camp = $campRepository->findOneById(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
+
+        $data = new CampDateSearchData();
+        $data->setSortBy(CampDateSortEnum::PRICE_WITHOUT_DEPOSIT_DESC);
         $data->setIsHistorical(null);
         $paginator = $campDateRepository->getAdminPaginator($data, $camp, 1, 2);
         $this->assertSame(2, $paginator->getTotalItems());

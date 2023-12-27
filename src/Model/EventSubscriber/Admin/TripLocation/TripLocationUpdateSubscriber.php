@@ -32,6 +32,7 @@ class TripLocationUpdateSubscriber
     public function onUpdateSaveEntity(TripLocationUpdateEvent $event): void
     {
         $entity = $event->getTripLocation();
-        $this->repository->saveTripLocation($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->saveTripLocation($entity, $isFlush);
     }
 }

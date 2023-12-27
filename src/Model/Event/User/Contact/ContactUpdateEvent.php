@@ -4,9 +4,9 @@ namespace App\Model\Event\User\Contact;
 
 use App\Library\Data\User\ContactData;
 use App\Model\Entity\Contact;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class ContactUpdateEvent extends Event
+class ContactUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.contact.update';
 

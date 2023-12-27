@@ -35,6 +35,7 @@ class UserPasswordChangeSubscriber
     public function onChangeSaveEntity(UserPasswordChangeEvent $event): void
     {
         $entity = $event->getUser();
-        $this->repository->saveUser($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->saveUser($entity, $isFlush);
     }
 }

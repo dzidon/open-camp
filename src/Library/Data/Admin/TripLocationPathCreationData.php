@@ -3,6 +3,7 @@
 namespace App\Library\Data\Admin;
 
 use App\Library\Constraint\UniqueElementsInArray;
+use LogicException;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class TripLocationPathCreationData
@@ -31,7 +32,24 @@ class TripLocationPathCreationData
         return $this->tripLocationsData;
     }
 
-    public function addTripLocationsDatum(TripLocationData $tripLocationData): self
+    public function setTripLocationsData(array $tripLocationsData): self
+    {
+        foreach ($tripLocationsData as $tripLocationData)
+        {
+            if (!$tripLocationData instanceof TripLocationData)
+            {
+                throw new LogicException(
+                    sprintf('Array passed to %s must only contain instances of %s.', __METHOD__, TripLocationData::class)
+                );
+            }
+        }
+
+        $this->tripLocationsData = $tripLocationsData;
+
+        return $this;
+    }
+
+    public function addTripLocationData(TripLocationData $tripLocationData): self
     {
         if (in_array($tripLocationData, $this->tripLocationsData, true))
         {
@@ -43,7 +61,7 @@ class TripLocationPathCreationData
         return $this;
     }
 
-    public function removeTripLocationsDatum(TripLocationData $tripLocationData): self
+    public function removeTripLocationData(TripLocationData $tripLocationData): self
     {
         $key = array_search($tripLocationData, $this->tripLocationsData, true);
 

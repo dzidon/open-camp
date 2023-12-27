@@ -42,6 +42,7 @@ class ContactSearchType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'         => ContactSearchData::class,
+            'block_prefix'       => 'user_contact_search',
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,

@@ -17,6 +17,7 @@ class UserRegistrationFactory implements UserRegistrationFactoryInterface
 {
     private int $maxActiveRegistrationsPerEmail;
     private string $registrationLifespan;
+    private array $newSelectors = [];
 
     private TokenSplitterInterface $tokenSplitter;
     private UserRegistrationRepositoryInterface $userRegistrationRepository;
@@ -63,12 +64,14 @@ class UserRegistrationFactory implements UserRegistrationFactoryInterface
         $selector = null;
         $plainVerifier = '';
 
-        while ($selector === null || $this->userRegistrationRepository->findOneBySelector($selector) !== null)
+        while ($selector === null || $this->userRegistrationRepository->selectorExists($selector) || in_array($selector, $this->newSelectors))
         {
             $tokenSplit = $this->tokenSplitter->generateTokenSplit();
             $selector = $tokenSplit->getSelector();
             $plainVerifier = $tokenSplit->getPlainVerifier();
         }
+
+        $this->newSelectors[] = $selector;
 
         // create a registration and return the result
         $expireAt = new DateTimeImmutable(sprintf('+%s', $this->registrationLifespan));

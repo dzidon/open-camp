@@ -3,9 +3,9 @@
 namespace App\Model\Event\Admin\CampCategory;
 
 use App\Model\Entity\CampCategory;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class CampCategoryDeleteEvent extends Event
+class CampCategoryDeleteEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.camp_category.delete';
 

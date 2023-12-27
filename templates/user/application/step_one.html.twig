@@ -1,0 +1,11 @@
+{% extends "user/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            {{ form(form_application_step_one) }}
+        </div>
+    </div>
+
+    {{ include('_fragment/_modal/_form_collection_removal.html.twig') }}
+{% endblock %}

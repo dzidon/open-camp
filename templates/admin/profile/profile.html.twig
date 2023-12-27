@@ -7,19 +7,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-md-8 col-xl-5">
-                            {{ form_start(form_profile) }}
-                                <div class="form-row">
-                                    <div class="col-md-6">
-                                        {{ form_row(form_profile.nameFirst) }}
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        {{ form_row(form_profile.nameLast) }}
-                                    </div>
-                                </div>
-
-                                {{ form_rest(form_profile) }}
-                            {{ form_end(form_profile) }}
+                            {{ form(form_profile) }}
                         </div>
                     </div>
                 </div>

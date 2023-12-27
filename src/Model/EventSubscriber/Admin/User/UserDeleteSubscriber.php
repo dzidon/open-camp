@@ -19,6 +19,7 @@ class UserDeleteSubscriber
     public function onDeleteRemoveEntity(UserDeleteEvent $event): void
     {
         $entity = $event->getUser();
-        $this->repository->removeUser($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->removeUser($entity, $isFlush);
     }
 }

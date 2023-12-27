@@ -32,6 +32,7 @@ class ContactUpdateSubscriber
     public function onUpdateSaveEntity(ContactUpdateEvent $event): void
     {
         $entity = $event->getContact();
-        $this->repository->saveContact($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->saveContact($entity, $isFlush);
     }
 }

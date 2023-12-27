@@ -4,6 +4,7 @@ namespace App\Service\Form\Type\Admin;
 
 use App\Library\Data\Admin\CampData;
 use App\Model\Entity\CampCategory;
+use App\Service\Form\Type\Common\TinymceTextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -84,12 +85,9 @@ class CampType extends AbstractType
                 'required' => false,
                 'label'    => 'form.admin.camp.description_short',
             ])
-            ->add('descriptionLong', TextareaType::class, [
+            ->add('descriptionLong', TinymceTextareaType::class, [
                 'required'  => false,
                 'label'     => 'form.admin.camp.description_long',
-                'attr'      => [
-                    'class' => 'tinymce'
-                ],
             ])
         ;
     }

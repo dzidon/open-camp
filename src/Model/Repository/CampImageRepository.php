@@ -5,7 +5,6 @@ namespace App\Model\Repository;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampImage;
-use App\Model\Service\CampImage\CampImageFilesystemInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -19,13 +18,9 @@ use Symfony\Component\Uid\UuidV4;
  */
 class CampImageRepository extends AbstractRepository implements CampImageRepositoryInterface
 {
-    private CampImageFilesystemInterface $campImageFilesystem;
-
-    public function __construct(ManagerRegistry $registry, CampImageFilesystemInterface $campImageFilesystem)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, CampImage::class);
-
-        $this->campImageFilesystem = $campImageFilesystem;
     }
 
     /**
@@ -41,7 +36,6 @@ class CampImageRepository extends AbstractRepository implements CampImageReposit
      */
     public function removeCampImage(CampImage $campImage, bool $flush): void
     {
-        $this->campImageFilesystem->removeFile($campImage);
         $this->remove($campImage, $flush);
     }
 

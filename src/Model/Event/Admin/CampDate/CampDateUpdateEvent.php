@@ -4,9 +4,9 @@ namespace App\Model\Event\Admin\CampDate;
 
 use App\Library\Data\Admin\CampDateData;
 use App\Model\Entity\CampDate;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class CampDateUpdateEvent extends Event
+class CampDateUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.camp_date.update';
 

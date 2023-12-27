@@ -39,14 +39,26 @@ class CampDateFormFieldRepository extends AbstractRepository implements CampDate
     /**
      * @inheritDoc
      */
-    public function findByCampDate(CampDate $campDate): array
+    public function findByCampDate(CampDate $campDate, ?bool $isGlobal = null): array
     {
-        return $this->createQueryBuilder('campDateFormField')
+        $queryBuilder = $this->createQueryBuilder('campDateFormField')
             ->select('campDateFormField, campDate, formField')
             ->leftJoin('campDateFormField.campDate', 'campDate')
             ->leftJoin('campDateFormField.formField', 'formField')
             ->andWhere('campDateFormField.campDate = :campDateId')
             ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ->orderBy('campDateFormField.priority', 'DESC')
+        ;
+
+        if ($isGlobal !== null)
+        {
+            $queryBuilder
+                ->andWhere('formField.isGlobal = :isGlobal')
+                ->setParameter('isGlobal', $isGlobal)
+            ;
+        }
+
+        return $queryBuilder
             ->getQuery()
             ->getResult()
         ;

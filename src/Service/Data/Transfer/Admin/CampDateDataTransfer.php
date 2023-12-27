@@ -7,14 +7,18 @@ use App\Library\Data\Admin\CampDateData;
 use App\Library\Data\Admin\CampDateFormFieldData;
 use App\Library\Data\Admin\CampDatePurchasableItemData;
 use App\Model\Entity\CampDate;
-use App\Model\Entity\CampDateAttachmentConfig;
-use App\Model\Entity\CampDateFormField;
-use App\Model\Entity\CampDatePurchasableItem;
-use App\Model\Repository\CampDateAttachmentConfigRepositoryInterface;
-use App\Model\Repository\CampDateFormFieldRepositoryInterface;
-use App\Model\Repository\CampDatePurchasableItemRepositoryInterface;
+use App\Model\Event\Admin\CampDateAttachmentConfig\CampDateAttachmentConfigCreateEvent;
+use App\Model\Event\Admin\CampDateAttachmentConfig\CampDateAttachmentConfigDeleteEvent;
+use App\Model\Event\Admin\CampDateAttachmentConfig\CampDateAttachmentConfigUpdateEvent;
+use App\Model\Event\Admin\CampDateFormField\CampDateFormFieldCreateEvent;
+use App\Model\Event\Admin\CampDateFormField\CampDateFormFieldDeleteEvent;
+use App\Model\Event\Admin\CampDateFormField\CampDateFormFieldUpdateEvent;
+use App\Model\Event\Admin\CampDatePurchasableItem\CampDatePurchasableItemCreateEvent;
+use App\Model\Event\Admin\CampDatePurchasableItem\CampDatePurchasableItemDeleteEvent;
+use App\Model\Event\Admin\CampDatePurchasableItem\CampDatePurchasableItemUpdateEvent;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Data\Transfer\DataTransferInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
@@ -23,22 +27,18 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 class CampDateDataTransfer implements DataTransferInterface
 {
     private PropertyAccessorInterface $propertyAccessor;
-    private CampDateFormFieldRepositoryInterface $campDateFormFieldRepository;
-    private CampDateAttachmentConfigRepositoryInterface $campDateAttachmentConfigRepository;
-    private CampDatePurchasableItemRepositoryInterface $campDatePurchasableItemRepository;
+
     private DataTransferRegistryInterface $dataTransferRegistry;
 
-    public function __construct(PropertyAccessorInterface                   $propertyAccessor,
-                                CampDateFormFieldRepositoryInterface        $campDateFormFieldRepository,
-                                CampDateAttachmentConfigRepositoryInterface $campDateAttachmentConfigRepository,
-                                CampDatePurchasableItemRepositoryInterface  $campDatePurchasableItemRepository,
-                                DataTransferRegistryInterface               $dataTransferRegistry)
+    private EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(PropertyAccessorInterface     $propertyAccessor,
+                                DataTransferRegistryInterface $dataTransferRegistry,
+                                EventDispatcherInterface      $eventDispatcher)
     {
         $this->propertyAccessor = $propertyAccessor;
-        $this->campDateFormFieldRepository = $campDateFormFieldRepository;
-        $this->campDateAttachmentConfigRepository = $campDateAttachmentConfigRepository;
-        $this->campDatePurchasableItemRepository = $campDatePurchasableItemRepository;
         $this->dataTransferRegistry = $dataTransferRegistry;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -61,7 +61,8 @@ class CampDateDataTransfer implements DataTransferInterface
 
         $campDateData->setStartAt($campDate->getStartAt());
         $campDateData->setEndAt($campDate->getEndAt());
-        $campDateData->setPrice($campDate->getPrice());
+        $campDateData->setDeposit($campDate->getDeposit());
+        $campDateData->setPriceWithoutDeposit($campDate->getPriceWithoutDeposit());
         $campDateData->setCapacity($campDate->getCapacity());
         $campDateData->setIsOpenAboveCapacity($campDate->isOpenAboveCapacity());
         $campDateData->setIsClosed($campDate->isClosed());
@@ -74,21 +75,21 @@ class CampDateDataTransfer implements DataTransferInterface
         {
             $campDateFormFieldData = new CampDateFormFieldData();
             $this->dataTransferRegistry->fillData($campDateFormFieldData, $campDateFormField);
-            $campDateData->addCampDateFormFieldsDatum($campDateFormFieldData);
+            $campDateData->addCampDateFormFieldData($campDateFormFieldData);
         }
 
         foreach ($campDate->getCampDateAttachmentConfigs() as $campDateAttachmentConfig)
         {
             $campDateAttachmentConfigData = new CampDateAttachmentConfigData();
             $this->dataTransferRegistry->fillData($campDateAttachmentConfigData, $campDateAttachmentConfig);
-            $campDateData->addCampDateAttachmentConfigsDatum($campDateAttachmentConfigData);
+            $campDateData->addCampDateAttachmentConfigData($campDateAttachmentConfigData);
         }
 
         foreach ($campDate->getCampDatePurchasableItems() as $campDatePurchasableItem)
         {
             $campDatePurchasableItemData = new CampDatePurchasableItemData();
             $this->dataTransferRegistry->fillData($campDatePurchasableItemData, $campDatePurchasableItem);
-            $campDateData->addCampDatePurchasableItemsDatum($campDatePurchasableItemData);
+            $campDateData->addCampDatePurchasableItemData($campDatePurchasableItemData);
         }
     }
 
@@ -104,7 +105,8 @@ class CampDateDataTransfer implements DataTransferInterface
 
         $campDate->setStartAt($campDateData->getStartAt());
         $campDate->setEndAt($campDateData->getEndAt());
-        $campDate->setPrice($campDateData->getPrice());
+        $campDate->setDeposit($campDateData->getDeposit());
+        $campDate->setPriceWithoutDeposit($campDateData->getPriceWithoutDeposit());
         $campDate->setCapacity($campDateData->getCapacity());
         $campDate->setIsOpenAboveCapacity($campDateData->isOpenAboveCapacity());
         $campDate->setIsClosed($campDateData->isClosed());
@@ -137,8 +139,9 @@ class CampDateDataTransfer implements DataTransferInterface
         {
             if (!array_key_exists($index, $campDateFormFieldsData))
             {
-                $this->campDateFormFieldRepository->removeCampDateFormField($campDateFormField, false);
-                $campDate->removeCampDateFormField($campDateFormField);
+                $event = new CampDateFormFieldDeleteEvent($campDateFormField);
+                $event->setIsFlush(false);
+                $this->eventDispatcher->dispatch($event, $event::NAME);
             }
         }
 
@@ -148,14 +151,15 @@ class CampDateDataTransfer implements DataTransferInterface
             if (array_key_exists($index, $campDateFormFields))
             {
                 $campDateFormField = $campDateFormFields[$index];
+                $event = new CampDateFormFieldUpdateEvent($campDateFormFieldData, $campDateFormField);
             }
             else
             {
-                $campDateFormField = new CampDateFormField($campDate, $campDateFormFieldData->getFormField(), $campDateFormFieldData->getPriority());
-                $this->campDateFormFieldRepository->saveCampDateFormField($campDateFormField, false);
+                $event = new CampDateFormFieldCreateEvent($campDateFormFieldData, $campDate);
             }
 
-            $this->dataTransferRegistry->fillEntity($campDateFormFieldData, $campDateFormField);
+            $event->setIsFlush(false);
+            $this->eventDispatcher->dispatch($event, $event::NAME);
         }
     }
 
@@ -173,8 +177,9 @@ class CampDateDataTransfer implements DataTransferInterface
         {
             if (!array_key_exists($index, $campDateAttachmentConfigsData))
             {
-                $this->campDateAttachmentConfigRepository->removeCampDateAttachmentConfig($campDateAttachmentConfig, false);
-                $campDate->removeCampDateAttachmentConfig($campDateAttachmentConfig);
+                $event = new CampDateAttachmentConfigDeleteEvent($campDateAttachmentConfig);
+                $event->setIsFlush(false);
+                $this->eventDispatcher->dispatch($event, $event::NAME);
             }
         }
 
@@ -184,14 +189,15 @@ class CampDateDataTransfer implements DataTransferInterface
             if (array_key_exists($index, $campDateAttachmentConfigs))
             {
                 $campDateAttachmentConfig = $campDateAttachmentConfigs[$index];
+                $event = new CampDateAttachmentConfigUpdateEvent($campDateAttachmentConfigData, $campDateAttachmentConfig);
             }
             else
             {
-                $campDateAttachmentConfig = new CampDateAttachmentConfig($campDate, $campDateAttachmentConfigData->getAttachmentConfig(), $campDateAttachmentConfigData->getPriority());
-                $this->campDateAttachmentConfigRepository->saveCampDateAttachmentConfig($campDateAttachmentConfig, false);
+                $event = new CampDateAttachmentConfigCreateEvent($campDateAttachmentConfigData, $campDate);
             }
 
-            $this->dataTransferRegistry->fillEntity($campDateAttachmentConfigData, $campDateAttachmentConfig);
+            $event->setIsFlush(false);
+            $this->eventDispatcher->dispatch($event, $event::NAME);
         }
     }
 
@@ -209,8 +215,9 @@ class CampDateDataTransfer implements DataTransferInterface
         {
             if (!array_key_exists($index, $campDatePurchasableItemsData))
             {
-                $this->campDatePurchasableItemRepository->removeCampDatePurchasableItem($campDatePurchasableItem, false);
-                $campDate->removeCampDatePurchasableItem($campDatePurchasableItem);
+                $event = new CampDatePurchasableItemDeleteEvent($campDatePurchasableItem);
+                $event->setIsFlush(false);
+                $this->eventDispatcher->dispatch($event, $event::NAME);
             }
         }
 
@@ -220,14 +227,15 @@ class CampDateDataTransfer implements DataTransferInterface
             if (array_key_exists($index, $campDatePurchasableItems))
             {
                 $campDatePurchasableItem = $campDatePurchasableItems[$index];
+                $event = new CampDatePurchasableItemUpdateEvent($campDatePurchasableItemData, $campDatePurchasableItem);
             }
             else
             {
-                $campDatePurchasableItem = new CampDatePurchasableItem($campDate, $campDatePurchasableItemData->getPurchasableItem(), $campDatePurchasableItemData->getPriority());
-                $this->campDatePurchasableItemRepository->saveCampDatePurchasableItem($campDatePurchasableItem, false);
+                $event = new CampDatePurchasableItemCreateEvent($campDatePurchasableItemData, $campDate);
             }
 
-            $this->dataTransferRegistry->fillEntity($campDatePurchasableItemData, $campDatePurchasableItem);
+            $event->setIsFlush(false);
+            $this->eventDispatcher->dispatch($event, $event::NAME);
         }
     }
 }

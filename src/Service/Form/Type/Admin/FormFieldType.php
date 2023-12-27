@@ -116,7 +116,6 @@ class FormFieldType extends AbstractType implements DataMapperInterface
         $builder->addEventListener(FormEvents::PRE_SUBMIT,
             function (FormEvent $event) use ($formModifier): void
             {
-                /** @var FormFieldData $data */
                 $data = $event->getData();
                 $typeValue = $data['type'];
                 $type = FormFieldTypeEnum::tryFrom($typeValue);

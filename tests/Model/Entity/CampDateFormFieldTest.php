@@ -31,7 +31,7 @@ class CampDateFormFieldTest extends TestCase
         $this->assertSame($this->campDate, $this->campDateFormField->getCampDate());
         $this->assertContains($this->campDateFormField, $this->campDate->getCampDateFormFields());
 
-        $campDateNew = new CampDate(new DateTimeImmutable('2000-01-02'), new DateTimeImmutable('2000-01-08'), 2000.0, 20, $this->camp);
+        $campDateNew = new CampDate(new DateTimeImmutable('2000-01-02'), new DateTimeImmutable('2000-01-08'), 2000.0, 200.0, 20, $this->camp);
         $this->campDateFormField->setCampDate($campDateNew);
 
         $this->assertSame($campDateNew, $this->campDateFormField->getCampDate());
@@ -70,7 +70,7 @@ class CampDateFormFieldTest extends TestCase
     protected function setUp(): void
     {
         $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
-        $this->campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 10, $this->camp);
+        $this->campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 100.0, 10, $this->camp);
         $this->formField = new FormField('Field', FormFieldTypeEnum::TEXT, 'Field:');
         $this->campDateFormField = new CampDateFormField($this->campDate, $this->formField, 100);
     }

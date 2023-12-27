@@ -4,15 +4,18 @@ namespace App\Model\Event\User\UserRegistration;
 
 use App\Library\Data\User\PlainPasswordData;
 use App\Model\Entity\UserRegistration;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
+use App\Model\Library\UserRegistration\UserRegistrationCompletionResultInterface;
 
-class UserRegistrationCompleteEvent extends Event
+class UserRegistrationCompleteEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.user_registration.complete';
 
     private PlainPasswordData $data;
 
     private UserRegistration $entity;
+
+    private ?UserRegistrationCompletionResultInterface $result = null;
 
     public function __construct(PlainPasswordData $data, UserRegistration $entity)
     {
@@ -40,6 +43,18 @@ class UserRegistrationCompleteEvent extends Event
     public function setUserRegistration(UserRegistration $entity): self
     {
         $this->entity = $entity;
+
+        return $this;
+    }
+
+    public function getUserRegistrationCompletionResult(): ?UserRegistrationCompletionResultInterface
+    {
+        return $this->result;
+    }
+
+    public function setUserRegistrationCompletionResult(?UserRegistrationCompletionResultInterface $result): self
+    {
+        $this->result = $result;
 
         return $this;
     }

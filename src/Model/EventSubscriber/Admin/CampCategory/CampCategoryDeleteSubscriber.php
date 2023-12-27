@@ -19,6 +19,7 @@ class CampCategoryDeleteSubscriber
     public function onDeleteRemoveEntity(CampCategoryDeleteEvent $event): void
     {
         $entity = $event->getCampCategory();
-        $this->repository->removeCampCategory($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->removeCampCategory($entity, $isFlush);
     }
 }

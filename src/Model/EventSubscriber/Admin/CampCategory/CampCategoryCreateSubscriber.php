@@ -3,32 +3,37 @@
 namespace App\Model\EventSubscriber\Admin\CampCategory;
 
 use App\Model\Entity\CampCategory;
-use App\Model\Event\Admin\CampCategory\CampCategoryCreatedEvent;
 use App\Model\Event\Admin\CampCategory\CampCategoryCreateEvent;
+use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CampCategoryCreateSubscriber
 {
     private DataTransferRegistryInterface $dataTransfer;
 
-    private EventDispatcherInterface $eventDispatcher;
+    private CampCategoryRepositoryInterface $repository;
 
-    public function __construct(DataTransferRegistryInterface $dataTransfer, EventDispatcherInterface $eventDispatcher)
+    public function __construct(DataTransferRegistryInterface $dataTransfer, CampCategoryRepositoryInterface $repository)
     {
         $this->dataTransfer = $dataTransfer;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->repository = $repository;
     }
 
-    #[AsEventListener(event: CampCategoryCreateEvent::NAME)]
+    #[AsEventListener(event: CampCategoryCreateEvent::NAME, priority: 200)]
     public function onCreateFillEntity(CampCategoryCreateEvent $event): void
     {
         $data = $event->getCampCategoryData();
         $entity = new CampCategory($data->getName(), $data->getUrlName());
         $this->dataTransfer->fillEntity($data, $entity);
+        $event->setCampCategory($entity);
+    }
 
-        $event = new CampCategoryCreatedEvent($data, $entity);
-        $this->eventDispatcher->dispatch($event, CampCategoryCreatedEvent::NAME);
+    #[AsEventListener(event: CampCategoryCreateEvent::NAME, priority: 100)]
+    public function onCreateSaveEntity(CampCategoryCreateEvent $event): void
+    {
+        $entity = $event->getCampCategory();
+        $isFlush = $event->isFlush();
+        $this->repository->saveCampCategory($entity, $isFlush);
     }
 }

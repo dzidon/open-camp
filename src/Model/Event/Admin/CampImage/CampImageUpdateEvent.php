@@ -4,9 +4,9 @@ namespace App\Model\Event\Admin\CampImage;
 
 use App\Library\Data\Admin\CampImageData;
 use App\Model\Entity\CampImage;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class CampImageUpdateEvent extends Event
+class CampImageUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.camp_image.update';
 

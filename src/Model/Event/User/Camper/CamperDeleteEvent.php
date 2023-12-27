@@ -3,9 +3,9 @@
 namespace App\Model\Event\User\Camper;
 
 use App\Model\Entity\Camper;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class CamperDeleteEvent extends Event
+class CamperDeleteEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.camper.delete';
 

@@ -19,6 +19,7 @@ class PurchasableItemVariantDeleteSubscriber
     public function onDeleteRemoveEntity(PurchasableItemVariantDeleteEvent $event): void
     {
         $entity = $event->getPurchasableItemVariant();
-        $this->repository->removePurchasableItemVariant($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->removePurchasableItemVariant($entity, $isFlush);
     }
 }

@@ -3,9 +3,9 @@
 namespace App\Model\Event\Admin\TripLocation;
 
 use App\Model\Entity\TripLocation;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class TripLocationDeleteEvent extends Event
+class TripLocationDeleteEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.trip_location.delete';
 

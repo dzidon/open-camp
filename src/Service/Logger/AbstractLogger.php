@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 abstract class AbstractLogger implements PsrLoggerInterface
 {
     private PsrLoggerInterface $logger;
+
     private SerializerInterface $serializer;
 
     public function __construct(PsrLoggerInterface $logger, SerializerInterface $serializer)
@@ -97,7 +98,7 @@ abstract class AbstractLogger implements PsrLoggerInterface
             {
                 $item = $this->serializer->serialize($item, 'json', [
                     AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function () {
-                        return null;
+                        return 'serializer_stopped';
                     },
                 ]);
             }

@@ -19,6 +19,7 @@ class RoleDeleteSubscriber
     public function onDeleteRemoveEntity(RoleDeleteEvent $event): void
     {
         $entity = $event->getRole();
-        $this->repository->removeRole($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->removeRole($entity, $isFlush);
     }
 }

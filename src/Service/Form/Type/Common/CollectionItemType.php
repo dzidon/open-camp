@@ -32,7 +32,7 @@ class CollectionItemType extends AbstractType
                     'data-fc--rem-prep-target' => 'button',
                     'data-action'              => 'fc--rem-prep#prepareItemForRemoval',
                 ],
-                'label'    => 'form.common.collection.remove',
+                'label'    => $options['remove_button_label'],
                 'priority' => $options['remove_button_priority'],
             ])
         ;
@@ -43,12 +43,14 @@ class CollectionItemType extends AbstractType
         $resolver->setDefaults([
             'remove_button'          => false,
             'remove_button_priority' => -100,
-            'row_attr' => [
+            'remove_button_label'    => 'form.common.collection.remove',
+            'row_attr'               => [
                 'data-fc--wrap-target' => 'item',
             ],
         ]);
 
         $resolver->setAllowedTypes('remove_button', 'bool');
         $resolver->setAllowedTypes('remove_button_priority', 'int');
+        $resolver->setAllowedTypes('remove_button_label', 'string');
     }
 }

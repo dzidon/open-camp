@@ -3,16 +3,19 @@
 namespace App\Model\Event\User\Contact;
 
 use App\Library\Data\User\ContactData;
+use App\Model\Entity\Contact;
 use App\Model\Entity\User;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class ContactCreateEvent extends Event
+class ContactCreateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.contact.create';
 
     private ContactData $data;
 
     private User $user;
+
+    private ?Contact $contact = null;
 
     public function __construct(ContactData $data, User $user)
     {
@@ -40,6 +43,18 @@ class ContactCreateEvent extends Event
     public function setUser(User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getContact(): ?Contact
+    {
+        return $this->contact;
+    }
+
+    public function setContact(?Contact $contact): self
+    {
+        $this->contact = $contact;
 
         return $this;
     }

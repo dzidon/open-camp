@@ -32,6 +32,7 @@ class PurchasableItemUpdateSubscriber
     public function onUpdateSaveEntity(PurchasableItemUpdateEvent $event): void
     {
         $entity = $event->getPurchasableItem();
-        $this->repository->savePurchasableItem($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->savePurchasableItem($entity, $isFlush);
     }
 }

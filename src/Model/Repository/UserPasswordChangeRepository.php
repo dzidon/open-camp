@@ -63,6 +63,29 @@ class UserPasswordChangeRepository extends AbstractRepository implements UserPas
     /**
      * @inheritDoc
      */
+    public function selectorExists(string $selector, ?bool $active = null): bool
+    {
+        $queryBuilder = $this->createQueryBuilder('userPasswordChange');
+
+        if ($active !== null)
+        {
+            $this->addActiveCondition($queryBuilder, $active);
+        }
+
+        $count = $queryBuilder
+            ->select('count(userPasswordChange.id)')
+            ->andWhere('userPasswordChange.selector = :selector')
+            ->setParameter('selector', $selector)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findByUser(User $user, ?bool $active = null): array
     {
         $queryBuilder = $this->createQueryBuilder('userPasswordChange');

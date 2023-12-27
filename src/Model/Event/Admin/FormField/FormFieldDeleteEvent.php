@@ -3,9 +3,9 @@
 namespace App\Model\Event\Admin\FormField;
 
 use App\Model\Entity\FormField;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class FormFieldDeleteEvent extends Event
+class FormFieldDeleteEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.form_field.delete';
 

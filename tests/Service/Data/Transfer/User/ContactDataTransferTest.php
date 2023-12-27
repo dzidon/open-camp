@@ -30,7 +30,7 @@ class ContactDataTransferTest extends KernelTestCase
         $contact->setEmail($expectedEmail);
         $contact->setPhoneNumber($expectedPhoneNumber);
 
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $dataTransfer->fillData($data, $contact);
 
         $this->assertSame($expectedNameFirst, $data->getNameFirst());
@@ -60,7 +60,7 @@ class ContactDataTransferTest extends KernelTestCase
         $user = new User('bob@gmail.com');
         $contact = new Contact('', '', $user, ContactRoleEnum::TUTOR, '');
 
-        $data = new ContactData();
+        $data = new ContactData(false, false);
         $data->setNameFirst($expectedNameFirst);
         $data->setNameLast($expectedNameLast);
         $data->setEmail($expectedEmail);

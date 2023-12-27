@@ -3,6 +3,7 @@
 namespace App\Library\Data\Admin;
 
 use App\Model\Entity\Camp;
+use LogicException;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -36,6 +37,16 @@ class CampImagesUploadData
 
     public function setImages(array $images): self
     {
+        foreach ($images as $image)
+        {
+            if (!$image instanceof File)
+            {
+                throw new LogicException(
+                    sprintf('Array passed to %s must only contain instances of %s.', __METHOD__, File::class)
+                );
+            }
+        }
+
         $this->images = $images;
 
         return $this;

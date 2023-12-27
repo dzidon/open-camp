@@ -3,32 +3,37 @@
 namespace App\Model\EventSubscriber\Admin\CampDate;
 
 use App\Model\Entity\CampDate;
-use App\Model\Event\Admin\CampDate\CampDateCreatedEvent;
 use App\Model\Event\Admin\CampDate\CampDateCreateEvent;
+use App\Model\Repository\CampDateRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class CampDateCreateSubscriber
 {
+    private CampDateRepositoryInterface $repository;
+
     private DataTransferRegistryInterface $dataTransfer;
 
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(DataTransferRegistryInterface $dataTransfer, EventDispatcherInterface $eventDispatcher)
+    public function __construct(CampDateRepositoryInterface $repository, DataTransferRegistryInterface $dataTransfer)
     {
+        $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
-    #[AsEventListener(event: CampDateCreateEvent::NAME)]
+    #[AsEventListener(event: CampDateCreateEvent::NAME, priority: 200)]
     public function onCreateFillEntity(CampDateCreateEvent $event): void
     {
         $data = $event->getCampDateData();
-        $entity = new CampDate($data->getStartAt(), $data->getEndAt(), $data->getPrice(), $data->getCapacity(), $data->getCamp());
+        $entity = new CampDate($data->getStartAt(), $data->getEndAt(), $data->getDeposit(), $data->getPriceWithoutDeposit(), $data->getCapacity(), $data->getCamp());
         $this->dataTransfer->fillEntity($data, $entity);
+        $event->setCampDate($entity);
+    }
 
-        $event = new CampDateCreatedEvent($data, $entity);
-        $this->eventDispatcher->dispatch($event, CampDateCreatedEvent::NAME);
+    #[AsEventListener(event: CampDateCreateEvent::NAME, priority: 100)]
+    public function onCreateSaveEntity(CampDateCreateEvent $event): void
+    {
+        $campDate = $event->getCampDate();
+        $isFlush = $event->isFlush();
+        $this->repository->saveCampDate($campDate, $isFlush);
     }
 }

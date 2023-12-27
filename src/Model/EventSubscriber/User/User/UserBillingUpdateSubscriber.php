@@ -31,6 +31,7 @@ class UserBillingUpdateSubscriber
     public function onUpdateSaveEntity(UserBillingUpdateEvent $event): void
     {
         $entity = $event->getUser();
-        $this->repository->saveUser($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->saveUser($entity, $isFlush);
     }
 }

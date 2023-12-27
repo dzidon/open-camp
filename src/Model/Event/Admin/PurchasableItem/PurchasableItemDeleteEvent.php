@@ -3,9 +3,9 @@
 namespace App\Model\Event\Admin\PurchasableItem;
 
 use App\Model\Entity\PurchasableItem;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class PurchasableItemDeleteEvent extends Event
+class PurchasableItemDeleteEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.purchasable_item.delete';
 

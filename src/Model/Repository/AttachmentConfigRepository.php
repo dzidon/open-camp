@@ -45,6 +45,8 @@ class AttachmentConfigRepository extends AbstractRepository implements Attachmen
     public function findAll(): array
     {
         return $this->createQueryBuilder('attachmentConfig')
+            ->select('attachmentConfig, fileExtension')
+            ->leftJoin('attachmentConfig.fileExtensions', 'fileExtension')
             ->getQuery()
             ->getResult()
         ;

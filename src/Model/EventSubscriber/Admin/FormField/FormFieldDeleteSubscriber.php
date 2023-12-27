@@ -19,6 +19,7 @@ class FormFieldDeleteSubscriber
     public function onDeleteRemoveEntity(FormFieldDeleteEvent $event): void
     {
         $entity = $event->getFormField();
-        $this->repository->removeFormField($entity, true);
+        $isFlush = $event->isFlush();
+        $this->repository->removeFormField($entity, $isFlush);
     }
 }

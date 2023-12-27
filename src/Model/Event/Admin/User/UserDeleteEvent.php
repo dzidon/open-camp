@@ -3,9 +3,9 @@
 namespace App\Model\Event\Admin\User;
 
 use App\Model\Entity\User;
-use Symfony\Contracts\EventDispatcher\Event;
+use App\Model\Event\AbstractModelEvent;
 
-class UserDeleteEvent extends Event
+class UserDeleteEvent extends AbstractModelEvent
 {
     public const NAME = 'model.admin.user.delete';
 

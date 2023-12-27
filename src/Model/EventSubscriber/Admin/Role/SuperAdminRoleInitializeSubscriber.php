@@ -2,31 +2,36 @@
 
 namespace App\Model\EventSubscriber\Admin\Role;
 
-use App\Model\Event\Admin\Role\SuperAdminRoleInitializedEvent;
 use App\Model\Event\Admin\Role\SuperAdminRoleInitializeEvent;
+use App\Model\Repository\RoleRepositoryInterface;
 use App\Model\Service\Role\SuperAdminRoleInitializerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class SuperAdminRoleInitializeSubscriber
 {
     private SuperAdminRoleInitializerInterface $superAdminRoleInitializer;
 
-    private EventDispatcherInterface $eventDispatcher;
+    private RoleRepositoryInterface $repository;
 
     public function __construct(SuperAdminRoleInitializerInterface $superAdminRoleInitializer,
-                                EventDispatcherInterface           $eventDispatcher)
+                                RoleRepositoryInterface            $repository)
     {
         $this->superAdminRoleInitializer = $superAdminRoleInitializer;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->repository = $repository;
     }
 
-    #[AsEventListener(event: SuperAdminRoleInitializeEvent::NAME)]
-    public function onInitializeDispatch(): void
+    #[AsEventListener(event: SuperAdminRoleInitializeEvent::NAME, priority: 200)]
+    public function onInitializeDispatch(SuperAdminRoleInitializeEvent $event): void
     {
         $role = $this->superAdminRoleInitializer->initializeSuperAdminRole();
+        $event->setRole($role);
+    }
 
-        $event = new SuperAdminRoleInitializedEvent($role);
-        $this->eventDispatcher->dispatch($event, $event::NAME);
+    #[AsEventListener(event: SuperAdminRoleInitializeEvent::NAME, priority: 100)]
+    public function onInitializedSaveRole(SuperAdminRoleInitializeEvent $event): void
+    {
+        $role = $event->getRole();
+        $isFlush = $event->isFlush();
+        $this->repository->saveRole($role, $isFlush);
     }
 }

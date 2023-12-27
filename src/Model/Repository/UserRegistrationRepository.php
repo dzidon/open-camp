@@ -5,7 +5,6 @@ namespace App\Model\Repository;
 use App\Model\Entity\UserRegistration;
 use App\Model\Enum\Entity\UserRegistrationStateEnum;
 use DateTimeImmutable;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -55,6 +54,28 @@ class UserRegistrationRepository extends AbstractRepository implements UserRegis
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function selectorExists(string $selector, ?bool $active = null): bool
+    {
+        $queryBuilder = $this->createQueryBuilder('userRegistration');
+        if ($active !== null)
+        {
+            $this->addActiveCondition($queryBuilder, $active);
+        }
+
+        $count = $queryBuilder
+            ->select('count(userRegistration.id)')
+            ->andWhere('userRegistration.selector = :selector')
+            ->setParameter('selector', $selector)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
     }
 
     /**

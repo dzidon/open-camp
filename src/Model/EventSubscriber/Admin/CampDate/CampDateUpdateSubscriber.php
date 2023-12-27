@@ -13,11 +13,10 @@ class CampDateUpdateSubscriber
 
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(CampDateRepositoryInterface   $repository,
-                                DataTransferRegistryInterface $dataTransfer)
+    public function __construct(DataTransferRegistryInterface $dataTransfer, CampDateRepositoryInterface $repository)
     {
-        $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;
+        $this->repository = $repository;
     }
 
     #[AsEventListener(event: CampDateUpdateEvent::NAME, priority: 200)]
@@ -31,7 +30,8 @@ class CampDateUpdateSubscriber
     #[AsEventListener(event: CampDateUpdateEvent::NAME, priority: 100)]
     public function onUpdateSaveEntity(CampDateUpdateEvent $event): void
     {
-        $entity = $event->getCampDate();
-        $this->repository->saveCampDate($entity, true);
+        $campDate = $event->getCampDate();
+        $isFlush = $event->isFlush();
+        $this->repository->saveCampDate($campDate, $isFlush);
     }
 }

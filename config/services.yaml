@@ -11,6 +11,7 @@ parameters:
     app.no_camp_image_path: 'img/static/placeholder.jpg'
     app.purchasable_item_image_directory: 'img/dynamic/purchasable-item'
     app.no_purchasable_item_image_path: 'img/static/placeholder.jpg'
+    app.application_attachment_directory: 'img/dynamic/application-attachment'
 
     # Mailer
     app.email_no_reply: 'noreply@camp.com'
@@ -54,6 +55,8 @@ parameters:
     app.sale_camper_siblings: true
     app.contact_email_mandatory: false
     app.contact_phone_number_mandatory: true
+    app.application_simple_id_length: 6
+    app.application_simple_id_characters: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
     # Validation
     app.national_identifier_regex: '#^(\d\d)(\d\d)(\d\d)( |/)?(\d\d\d)(\d?)$#'
@@ -114,7 +117,8 @@ services:
             $passwordChangeLifespan: '%app.password_change_lifespan%'
 
     App\Model\Service\CampImage\CampImageFactory:
-        $campImageUploadDirectory: '%kernel.project_dir%/public/%app.camp_image_directory%'
+        arguments:
+            $campImageUploadDirectory: '%kernel.project_dir%/public/%app.camp_image_directory%'
 
     App\Model\Service\CampImage\CampImageFilesystem:
         arguments:
@@ -127,6 +131,32 @@ services:
             $kernelProjectDirectory: '%kernel.project_dir%'
             $noImagePath: '%app.no_purchasable_item_image_path%'
             $purchasableItemImageDirectory: '%app.purchasable_item_image_directory%'
+
+    App\Model\Service\ApplicationCamper\ApplicationCamperDataFactory:
+        arguments:
+            $isNationalIdentifierEnabled: '%app.national_identifier%'
+            $currency: '%app.currency%'
+
+    App\Model\Service\Application\ApplicationStepOneDataFactory:
+        arguments:
+            $isEuBusinessDataEnabled: '%app.eu_business_data%'
+            $isNationalIdentifierEnabled: '%app.national_identifier%'
+            $currency: '%app.currency%'
+
+    App\Model\Service\Application\ApplicationFactory:
+        arguments:
+            $simpleIdCharacters: '%app.application_simple_id_characters%'
+            $simpleIdLength: '%app.application_simple_id_length%'
+
+    App\Model\Service\ApplicationAttachment\ApplicationAttachmentFilesystem:
+        arguments:
+            $applicationAttachmentDirectory: '%app.application_attachment_directory%'
+            $kernelProjectDirectory: '%kernel.project_dir%'
+
+    App\Model\Service\Contact\ContactDataFactory:
+        arguments:
+            $isEmailMandatory: '%app.contact_email_mandatory%'
+            $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
 
     App\Service\Form\Extension\CountryTypeDefaultsExtension:
         arguments:
@@ -149,10 +179,9 @@ services:
         arguments:
             $isNationalIdentifierEnabled: '%app.national_identifier%'
 
-    App\Service\Form\Type\User\ContactType:
+    App\Service\Form\Type\User\ApplicationStepOneType:
         arguments:
-            $isEmailMandatory: '%app.contact_email_mandatory%'
-            $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
+            $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
     App\Service\Menu\Renderer\MenuTypeRenderer:
         arguments:
@@ -206,13 +235,3 @@ services:
     App\Service\Validator\EuVatIdValidator:
         arguments:
             $euVatIdRegex: '%app.eu_vat_id_regex%'
-
-    App\Service\Validator\NotBlankContactEmailValidator:
-        arguments:
-            $isEmailMandatory: '%app.contact_email_mandatory%'
-            $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
-
-    App\Service\Validator\NotBlankContactPhoneNumberValidator:
-        arguments:
-            $isEmailMandatory: '%app.contact_email_mandatory%'
-            $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'

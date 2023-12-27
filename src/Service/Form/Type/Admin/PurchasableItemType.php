@@ -91,7 +91,8 @@ class PurchasableItemType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => PurchasableItemData::class,
+            'data_class'   => PurchasableItemData::class,
+            'block_prefix' => 'admin_purchasable_item',
         ]);
     }
 }

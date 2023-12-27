@@ -33,6 +33,17 @@ class AttachmentConfigUpdateEventTest extends TestCase
         $this->assertSame($newEntity, $this->event->getAttachmentConfig());
     }
 
+    public function testIsFlush(): void
+    {
+        $this->assertTrue($this->event->isFlush());
+
+        $this->event->setIsFlush(false);
+        $this->assertFalse($this->event->isFlush());
+
+        $this->event->setIsFlush(true);
+        $this->assertTrue($this->event->isFlush());
+    }
+
     protected function setUp(): void
     {
         $this->entity = new AttachmentConfig('Config', 'Config:', 10.0);

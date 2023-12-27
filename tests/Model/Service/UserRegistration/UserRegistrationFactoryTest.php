@@ -33,6 +33,27 @@ class UserRegistrationFactoryTest extends KernelTestCase
         $this->assertSame($expireAt->getTimestamp(), $userRegistration->getExpireAt()->getTimestamp());
     }
 
+    public function testCreateUserRegistrationCollisionBeforeFlushing(): void
+    {
+        $splitterMock = $this->getTokenSplitterMock();
+        $splitterMock
+            ->addTestToken('bob123')
+            ->addTestToken('bob123')
+            ->addTestToken('foo321')
+        ;
+
+        $registrationFactory = $this->getUserRegistrationFactory();
+        $result = $registrationFactory->createUserRegistration('bob@gmail.com');
+        $this->assertFalse($result->isFake());
+        $this->assertSame('bob123', $result->getToken());
+        $this->assertSame('123', $result->getPlainVerifier());
+
+        $result = $registrationFactory->createUserRegistration('bob@gmail.com');
+        $this->assertFalse($result->isFake());
+        $this->assertSame('foo321', $result->getToken());
+        $this->assertSame('321', $result->getPlainVerifier());
+    }
+
     public function testCreateUserRegistrationIfOneExists(): void
     {
         $registrationFactory = $this->getUserRegistrationFactory();
