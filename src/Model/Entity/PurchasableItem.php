@@ -39,6 +39,9 @@ class PurchasableItem
     #[ORM\Column(length: 8, nullable: true)]
     private ?string $imageExtension = null;
 
+    #[ORM\Column(length: 2000, nullable: true)]
+    private ?string $description = null;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -129,6 +132,18 @@ class PurchasableItem
     public function setImageExtension(?string $imageExtension): self
     {
         $this->imageExtension = $imageExtension;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

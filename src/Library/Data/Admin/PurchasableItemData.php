@@ -30,6 +30,9 @@ class PurchasableItemData
 
     private bool $isGlobal = false;
 
+    #[Assert\Length(max: 2000)]
+    private ?string $description = null;
+
     #[Assert\Image]
     private ?File $image = null;
 
@@ -101,6 +104,18 @@ class PurchasableItemData
     public function setIsGlobal(bool $isGlobal): self
     {
         $this->isGlobal = $isGlobal;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
 
         return $this;
     }

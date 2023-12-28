@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -58,6 +59,10 @@ class PurchasableItemType extends AbstractType
             ->add('isGlobal', CheckboxType::class, [
                 'required' => false,
                 'label'    => 'form.admin.purchasable_item.is_global',
+            ])
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'label'    => 'form.admin.purchasable_item.description',
             ])
             ->add('image', FileType::class, [
                 'required' => false,
