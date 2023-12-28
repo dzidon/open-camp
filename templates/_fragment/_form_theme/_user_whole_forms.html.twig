@@ -138,6 +138,10 @@
 {% block user_application_step_one_widget %}
     {{ form_errors(form) }}
 
+    <h3 class="mb-3">
+        {{ 'application.buyer_details'|trans }}
+    </h3>
+
     {{ form_row(form.email) }}
 
     <div class="form-row">
@@ -162,19 +166,33 @@
     {{ form_row(form.applicationFormFieldValuesData) }}
     {{ form_row(form.applicationAttachmentsData) }}
 
-    <h2>
+    <h3 class="mb-3">
         {{ form.contactsData.vars.label|trans }}
-    </h2>
+    </h3>
 
     {{ form_row(form.contactsData, {label: false}) }}
     {{ form_row(form.addContactData) }}
 
-    <h2>
+    <h3 class="mb-3">
         {{ form.applicationCampersData.vars.label|trans }}
-    </h2>
+    </h3>
 
     {{ form_row(form.applicationCampersData, {label: false}) }}
     {{ form_row(form.addCamperData) }}
+
+    <hr>
+
+    <div class="row mt-4">
+        <div class="col-6">
+            <a class="btn btn-secondary" href="{{ application_back_url }}" role="button">
+                {{ 'back'|trans }}
+            </a>
+        </div>
+
+        <div class="col-6 text-right">
+            {{ form_row(form.submit) }}
+        </div>
+    </div>
 
     {{ form_rest(form) }}
 {% endblock %}

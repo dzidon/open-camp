@@ -91,7 +91,10 @@ class ApplicationController extends AbstractController
             'camp_date_description'           => $campDate->getDescription(),
             'tax'                             => $this->getParameter('app.tax'),
             'form_application_step_one'       => $form->createView(),
-            'breadcrumbs'                     => $this->breadcrumbs->buildForStepOneCreate($campDate)
+            'breadcrumbs'                     => $this->breadcrumbs->buildForStepOneCreate($campDate),
+            'application_back_url'            => $this->generateUrl('user_camp_detail', [
+                'urlName' => $camp->getUrlName(),
+            ]),
         ]);
     }
 
@@ -118,7 +121,7 @@ class ApplicationController extends AbstractController
             'application_camper_default_data'  => $applicationCamperData,
             'contact_default_data'             => $contactData,
         ]);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_one.button']);
+        $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_one.button',]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
@@ -133,6 +136,10 @@ class ApplicationController extends AbstractController
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
+        $campDate = $application->getCampDate();
+        $camp = $campDate?->getCamp();
+        $backRoute = $camp === null ? 'user_camp_catalog' : 'user_camp_detail';
+        $backUrlParameters = $camp === null ? [] : ['urlName' => $camp->getUrlName()];
 
         return $this->render('user/application/step_one.html.twig', [
             'camp_name'                       => $application->getCampName(),
@@ -145,7 +152,8 @@ class ApplicationController extends AbstractController
             'camp_date_description'           => $application->getCampDate()?->getDescription(),
             'tax'                             => $application->getTax(),
             'form_application_step_one'       => $form->createView(),
-            'breadcrumbs'                     => $this->breadcrumbs->buildForStepOneUpdate($application)
+            'breadcrumbs'                     => $this->breadcrumbs->buildForStepOneUpdate($application),
+            'application_back_url'            => $this->generateUrl($backRoute, $backUrlParameters),
         ]);
     }
 
