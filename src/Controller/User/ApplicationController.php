@@ -10,12 +10,14 @@ use App\Model\Entity\User;
 use App\Model\Event\User\Application\ApplicationStepOneCreateEvent;
 use App\Model\Event\User\Application\ApplicationStepOneUpdateEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
+use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Service\Application\ApplicationStepOneDataFactoryInterface;
 use App\Model\Service\ApplicationCamper\ApplicationCamperDataFactoryInterface;
 use App\Model\Service\Contact\ContactDataFactoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\User\ApplicationStepOneType;
+use App\Service\Menu\Breadcrumbs\User\ApplicationBreadcrumbsInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,11 +29,18 @@ class ApplicationController extends AbstractController
 {
     private CampDateRepositoryInterface $campDateRepository;
     private ApplicationRepositoryInterface $applicationRepository;
+    private CampCategoryRepositoryInterface $campCategoryRepository;
+    private ApplicationBreadcrumbsInterface $breadcrumbs;
 
-    public function __construct(CampDateRepositoryInterface $campDateRepository, ApplicationRepositoryInterface $applicationRepository)
+    public function __construct(CampDateRepositoryInterface     $campDateRepository,
+                                ApplicationRepositoryInterface  $applicationRepository,
+                                CampCategoryRepositoryInterface $campCategoryRepository,
+                                ApplicationBreadcrumbsInterface $breadcrumbs)
     {
         $this->campDateRepository = $campDateRepository;
         $this->applicationRepository = $applicationRepository;
+        $this->campCategoryRepository = $campCategoryRepository;
+        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/application-create/{campDateId}', name: 'user_application_step_one_create')]
@@ -63,23 +72,26 @@ class ApplicationController extends AbstractController
             $application = $event->getApplication();
 
             return $this->redirectToRoute('user_application_step_one_update', [
-                'applicationId' => $application->getId()
+                'applicationId' => $application->getId(),
             ]);
         }
 
+        // load all camp categories so that the camp category path does not trigger additional queries
+        $this->campCategoryRepository->findAll();
         $camp = $campDate->getCamp();
 
         return $this->render('user/application/step_one.html.twig', [
-            'camp_name'                                   => $camp->getName(),
-            'camp_date_start_at'                          => $campDate->getStartAt(),
-            'camp_date_end_at'                            => $campDate->getEndAt(),
-            'camp_date_deposit'                           => $campDate->getDeposit(),
-            'camp_date_price_without_deposit'             => $campDate->getPriceWithoutDeposit(),
-            'camp_date_full_price'                        => $campDate->getFullPrice(),
-            'camp_date_leader_names'                      => $campDate->getLeaderNames(),
-            'camp_date_description'                       => $campDate->getDescription(),
-            'tax'                                         => $this->getParameter('app.tax'),
-            'form_application_step_one'                   => $form->createView(),
+            'camp_name'                       => $camp->getName(),
+            'camp_date_start_at'              => $campDate->getStartAt(),
+            'camp_date_end_at'                => $campDate->getEndAt(),
+            'camp_date_deposit'               => $campDate->getDeposit(),
+            'camp_date_price_without_deposit' => $campDate->getPriceWithoutDeposit(),
+            'camp_date_full_price'            => $campDate->getFullPrice(),
+            'camp_date_leader_names'          => $campDate->getLeaderNames(),
+            'camp_date_description'           => $campDate->getDescription(),
+            'tax'                             => $this->getParameter('app.tax'),
+            'form_application_step_one'       => $form->createView(),
+            'breadcrumbs'                     => $this->breadcrumbs->buildForStepOneCreate($campDate)
         ]);
     }
 
@@ -119,17 +131,21 @@ class ApplicationController extends AbstractController
             ]);
         }
 
+        // load all camp categories so that the camp category path does not trigger additional queries
+        $this->campCategoryRepository->findAll();
+
         return $this->render('user/application/step_one.html.twig', [
-            'camp_name'                                   => $application->getCampName(),
-            'camp_date_start_at'                          => $application->getCampDateStartAt(),
-            'camp_date_end_at'                            => $application->getCampDateEndAt(),
-            'camp_date_deposit'                           => $application->getDeposit(),
-            'camp_date_price_without_deposit'             => $application->getPriceWithoutDeposit(),
-            'camp_date_full_price'                        => $application->getFullPrice(),
-            'camp_date_leader_names'                      => $application->getCampDate()?->getLeaderNames(),
-            'camp_date_description'                       => $application->getCampDate()?->getDescription(),
-            'tax'                                         => $application->getTax(),
-            'form_application_step_one'                   => $form->createView(),
+            'camp_name'                       => $application->getCampName(),
+            'camp_date_start_at'              => $application->getCampDateStartAt(),
+            'camp_date_end_at'                => $application->getCampDateEndAt(),
+            'camp_date_deposit'               => $application->getDeposit(),
+            'camp_date_price_without_deposit' => $application->getPriceWithoutDeposit(),
+            'camp_date_full_price'            => $application->getFullPrice(),
+            'camp_date_leader_names'          => $application->getCampDate()?->getLeaderNames(),
+            'camp_date_description'           => $application->getCampDate()?->getDescription(),
+            'tax'                             => $application->getTax(),
+            'form_application_step_one'       => $form->createView(),
+            'breadcrumbs'                     => $this->breadcrumbs->buildForStepOneUpdate($application)
         ]);
     }
 
