@@ -67,8 +67,19 @@ class ApplicationController extends AbstractController
             ]);
         }
 
+        $camp = $campDate->getCamp();
+
         return $this->render('user/application/step_one.html.twig', [
-            'form_application_step_one' => $form->createView(),
+            'camp_name'                                   => $camp->getName(),
+            'camp_date_start_at'                          => $campDate->getStartAt(),
+            'camp_date_end_at'                            => $campDate->getEndAt(),
+            'camp_date_deposit'                           => $campDate->getDeposit(),
+            'camp_date_price_without_deposit'             => $campDate->getPriceWithoutDeposit(),
+            'camp_date_full_price'                        => $campDate->getFullPrice(),
+            'camp_date_leader_names'                      => $campDate->getLeaderNames(),
+            'camp_date_description'                       => $campDate->getDescription(),
+            'tax'                                         => $this->getParameter('app.tax'),
+            'form_application_step_one'                   => $form->createView(),
         ]);
     }
 
@@ -86,7 +97,8 @@ class ApplicationController extends AbstractController
         $applicationStepOneData = new ApplicationStepOneData(
             $application->isEuBusinessDataEnabled(),
             $application->isNationalIdentifierEnabled(),
-            $application->getCurrency()
+            $application->getCurrency(),
+            $application->getTax()
         );
         $dataTransfer->fillData($applicationStepOneData, $application);
 
@@ -108,7 +120,16 @@ class ApplicationController extends AbstractController
         }
 
         return $this->render('user/application/step_one.html.twig', [
-            'form_application_step_one' => $form->createView(),
+            'camp_name'                                   => $application->getCampName(),
+            'camp_date_start_at'                          => $application->getCampDateStartAt(),
+            'camp_date_end_at'                            => $application->getCampDateEndAt(),
+            'camp_date_deposit'                           => $application->getDeposit(),
+            'camp_date_price_without_deposit'             => $application->getPriceWithoutDeposit(),
+            'camp_date_full_price'                        => $application->getFullPrice(),
+            'camp_date_leader_names'                      => $application->getCampDate()?->getLeaderNames(),
+            'camp_date_description'                       => $application->getCampDate()?->getDescription(),
+            'tax'                                         => $application->getTax(),
+            'form_application_step_one'                   => $form->createView(),
         ]);
     }
 

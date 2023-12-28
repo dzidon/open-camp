@@ -1,6 +1,120 @@
 {% extends "user/base.html.twig" %}
 
 {% block main %}
+    <div class="row mb-3 mt-4">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            <div class="row mb-3">
+                <div class="col-12 col-sm-6">
+                    <strong>{{ 'entity.camp.singular'|trans }}:</strong>
+                </div>
+
+                <div class="col-12 col-sm-6">
+                    <span>{{ camp_name }}</span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12 col-sm-6">
+                    <strong>{{ 'entity_attribute.camp_date.start_at'|trans }}:</strong>
+                </div>
+
+                <div class="col-12 col-sm-6">
+                    {{ camp_date_start_at|date(date_time_format) }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12 col-sm-6">
+                    <strong>{{ 'entity_attribute.camp_date.end_at'|trans }}:</strong>
+                </div>
+
+                <div class="col-12 col-sm-6">
+                    {{ camp_date_end_at|date(date_time_format) }}
+                </div>
+            </div>
+
+            {% if camp_date_deposit > 0.0 %}
+                <div class="row mb-3">
+                    <div class="col-12 col-sm-6">
+                        <strong>{{ 'camp_catalog.deposit_per_camper'|trans }}:</strong>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        {{ camp_date_deposit }} {{ currency }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-12 col-sm-6">
+                        <strong>{{ 'camp_catalog.price_without_deposit_per_camper'|trans }}:</strong>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        {{ camp_date_price_without_deposit }} {{ currency }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-12 col-sm-6">
+                        <strong>{{ 'camp_catalog.total_price_per_camper'|trans }}:</strong>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        {{ camp_date_full_price }} {{ currency }}
+                    </div>
+                </div>
+            {% else %}
+                <div class="row mb-3">
+                    <div class="col-12 col-sm-6">
+                        <strong>{{ 'camp_catalog.price_per_camper'|trans }}:</strong>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        {{ camp_date_price_without_deposit }} {{ currency }}
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="row mb-3">
+                <div class="col-12 col-sm-6">
+                    <strong>
+                        {% if tax <= 0 %}
+                            {{ 'we_are_not_tax_payers'|trans }}
+                        {% else %}
+                            {{ 'prices_include_tax'|trans({tax: tax}) }}
+                        {% endif %}
+                    </strong>
+                </div>
+            </div>
+
+            {% if not camp_date_leader_names is empty %}
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <strong>{{ 'entity_attribute.camp_date.leaders'|trans }}:</strong>
+                    </div>
+
+                    <div class="col-12">
+                        {% for leader_name in camp_date_leader_names %}
+                            <div>{{ leader_name }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if not camp_date_description is null %}
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <strong>{{ 'entity_attribute.camp_date.description'|trans }}:</strong>
+                    </div>
+
+                    <div class="col-12">
+                        {{ camp_date_description }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-8 col-lg-6 col-xl-5">
             {{ form(form_application_step_one) }}

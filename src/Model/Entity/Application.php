@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\Serializer\Annotation\Ignore;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 use Doctrine\ORM\Mapping as ORM;
@@ -75,6 +74,9 @@ class Application
     #[ORM\Column(length: 3)]
     private string $currency;
 
+    #[ORM\Column(type: Types::FLOAT)]
+    private float $tax;
+
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isEuBusinessDataEnabled;
 
@@ -129,6 +131,7 @@ class Application
                                 string   $zip,
                                 string   $country,
                                 string   $currency,
+                                float    $tax,
                                 bool     $isEuBusinessDataEnabled,
                                 bool     $isNationalIdentifierEnabled,
                                 bool     $isEmailMandatory,
@@ -147,6 +150,7 @@ class Application
         $this->country = $country;
         $this->user = $user;
         $this->currency = $currency;
+        $this->tax = $tax;
         $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
         $this->isEmailMandatory = $isEmailMandatory;
@@ -331,6 +335,11 @@ class Application
         return $this->currency;
     }
 
+    public function getTax(): float
+    {
+        return $this->tax;
+    }
+
     public function isNationalIdentifierEnabled(): string
     {
         return $this->isNationalIdentifierEnabled;
@@ -351,14 +360,34 @@ class Application
         return $this->isPhoneNumberMandatory;
     }
 
+    public function getFullPrice(): float
+    {
+        return $this->deposit + $this->priceWithoutDeposit;
+    }
+
+    public function getFullPriceWithoutTax(): float
+    {
+        return $this->getDepositWithoutTax() + $this->getPriceWithoutDepositWithoutTax();
+    }
+
     public function getDeposit(): float
     {
         return $this->deposit;
     }
 
+    public function getDepositWithoutTax(): float
+    {
+        return round($this->deposit / $this->getTaxDenominator());
+    }
+
     public function getPriceWithoutDeposit(): float
     {
         return $this->priceWithoutDeposit;
+    }
+
+    public function getPriceWithoutDepositWithoutTax(): float
+    {
+        return round($this->priceWithoutDeposit / $this->getTaxDenominator());
     }
 
     public function getCampDateStartAt(): ?DateTimeImmutable
@@ -549,5 +578,10 @@ class Application
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    private function getTaxDenominator(): float
+    {
+        return 1.0 + ($this->tax / 100);
     }
 }

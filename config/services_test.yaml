@@ -1,5 +1,6 @@
 parameters:
     app.menu_theme: '_fragment/_menu_theme/_test.html.twig'
+    app.tax: 21 # percent
 
     # Directories
     app.camp_image_directory: 'img/dynamic/camp'

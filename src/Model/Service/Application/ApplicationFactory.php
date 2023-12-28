@@ -19,8 +19,6 @@ class ApplicationFactory implements ApplicationFactoryInterface
 
     private int $simpleIdLength;
 
-
-
     private array $newSimpleIds = [];
 
     public function __construct(ApplicationRepositoryInterface $applicationRepository,
@@ -48,6 +46,7 @@ class ApplicationFactory implements ApplicationFactoryInterface
         $isEuBusinessDataEnabled = $data->isEuBusinessDataEnabled();
         $isNationalIdentifierEnabled = $data->isNationalIdentifierEnabled();
         $currency = $data->getCurrency();
+        $tax = $data->getTax();
         $contactsData = $data->getContactsData();
         $isEmailMandatory = false;
         $isPhoneNumberMandatory = false;
@@ -77,6 +76,7 @@ class ApplicationFactory implements ApplicationFactoryInterface
             $zip,
             $country,
             $currency,
+            $tax,
             $isEuBusinessDataEnabled,
             $isNationalIdentifierEnabled,
             $isEmailMandatory,

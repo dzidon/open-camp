@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.menu_theme: '_fragment/_menu_theme/_main.html.twig'
+    app.tax: 21 # percent
 
     # Directories & paths
     app.camp_image_directory: 'img/dynamic/camp'
@@ -142,6 +143,7 @@ services:
             $isEuBusinessDataEnabled: '%app.eu_business_data%'
             $isNationalIdentifierEnabled: '%app.national_identifier%'
             $currency: '%app.currency%'
+            $tax: '%app.tax%'
 
     App\Model\Service\Application\ApplicationFactory:
         arguments:
@@ -170,6 +172,18 @@ services:
     App\Service\Form\Extension\MoneyTypeDefaultsExtension:
         arguments:
             $currency: '%app.currency%'
+
+    App\Service\Form\Type\Admin\CampDateType:
+        arguments:
+            $tax: '%app.tax%'
+
+    App\Service\Form\Type\Admin\TripLocationType:
+        arguments:
+            $tax: '%app.tax%'
+
+    App\Service\Form\Type\Admin\PurchasableItemType:
+        arguments:
+            $tax: '%app.tax%'
 
     App\Service\Form\Type\User\BillingType:
         arguments:

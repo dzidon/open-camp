@@ -17,6 +17,8 @@ class ApplicationStepOneData
 
     private string $currency;
 
+    private float $tax;
+
     #[Assert\Length(max: 180)]
     #[Assert\Email]
     #[Assert\NotBlank]
@@ -96,11 +98,13 @@ class ApplicationStepOneData
 
     public function __construct(bool   $isEuBusinessDataEnabled,
                                 bool   $isNationalIdentifierEnabled,
-                                string $currency)
+                                string $currency,
+                                float  $tax)
     {
         $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
         $this->currency = $currency;
+        $this->tax = $tax;
     }
 
     public function isEuBusinessDataEnabled(): bool
@@ -116,6 +120,11 @@ class ApplicationStepOneData
     public function getCurrency(): string
     {
         return $this->currency;
+    }
+
+    public function getTax(): string
+    {
+        return $this->tax;
     }
 
     public function getEmail(): ?string

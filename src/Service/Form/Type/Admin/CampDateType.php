@@ -24,6 +24,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class CampDateType extends AbstractType
 {
+    private string $tax;
+
+    public function __construct(string $tax)
+    {
+        $this->tax = $tax;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -41,8 +48,12 @@ class CampDateType extends AbstractType
                 'attr' => [
                     'min' => 0.0,
                 ],
-                'html5' => true,
-                'label' => 'form.admin.camp_date.deposit',
+                'html5'                       => true,
+                'label'                       => 'form.admin.camp_date.deposit',
+                'help'                        => $this->tax > 0.0 ? 'price_includes_tax' : null,
+                'help_translation_parameters' => [
+                    'tax' => $this->tax,
+                ],
             ])
             ->add('priceWithoutDeposit', MoneyType::class, [
                 'attr' => [
@@ -50,6 +61,10 @@ class CampDateType extends AbstractType
                 ],
                 'html5' => true,
                 'label' => 'form.admin.camp_date.price_without_deposit',
+                'help'                        => $this->tax > 0.0 ? 'price_includes_tax' : null,
+                'help_translation_parameters' => [
+                    'tax' => $this->tax,
+                ],
             ])
             ->add('capacity', IntegerType::class, [
                 'attr' => [

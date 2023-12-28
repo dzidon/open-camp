@@ -128,6 +128,11 @@ class CampDate
         return $this;
     }
 
+    public function getFullPrice(): float
+    {
+        return $this->deposit + $this->priceWithoutDeposit;
+    }
+
     public function getDeposit(): float
     {
         return $this->deposit;
@@ -210,6 +215,24 @@ class CampDate
         $this->camp = $camp;
 
         return $this;
+    }
+
+    public function getLeaderNames(): array
+    {
+        $names = [];
+
+        /** @var User $leader */
+        foreach ($this->leaders as $leader)
+        {
+            if ($leader->getNameFirst() === null || $leader->getNameLast() === null)
+            {
+                continue;
+            }
+
+            $names[] = $leader->getNameFirst() . ' ' . $leader->getNameLast();
+        }
+
+        return $names;
     }
 
     /**

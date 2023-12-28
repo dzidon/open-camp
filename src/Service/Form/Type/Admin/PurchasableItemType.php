@@ -19,6 +19,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class PurchasableItemType extends AbstractType
 {
+    private string $tax;
+
+    public function __construct(string $tax)
+    {
+        $this->tax = $tax;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -35,8 +42,12 @@ class PurchasableItemType extends AbstractType
                 'attr' => [
                     'min' => 0.0,
                 ],
-                'html5' => true,
-                'label' => 'form.admin.purchasable_item.price',
+                'html5'                       => true,
+                'label'                       => 'form.admin.purchasable_item.price',
+                'help'                        => $this->tax > 0.0 ? 'price_includes_tax' : null,
+                'help_translation_parameters' => [
+                    'tax' => $this->tax,
+                ],
             ])
             ->add('maxAmount', IntegerType::class, [
                 'attr' => [

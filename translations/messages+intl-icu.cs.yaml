@@ -8,6 +8,10 @@ api:
 
 loading: 'Načítání'
 
+we_are_not_tax_payers: 'Nejsme plátci DPH.'
+price_includes_tax: 'Zahrnuje {tax}% DPH.'
+prices_include_tax: 'Ceny zahrnují {tax}% DPH.'
+
 bool:
     yes: 'Ano'
     no: 'Ne'
@@ -68,7 +72,12 @@ camp_catalog:
     no_available_camp_dates: 'Žádné volné termíny'
     show_map: 'Ukázat na mapě'
     map: 'Mapa'
+    without_tax: 'bez DPH'
     price: 'Cena'
+    deposit_per_camper: 'Záloha za táborníka'
+    price_without_deposit_per_camper: 'Doplatek za táborníka'
+    total_price_per_camper: 'Celková cena za táborníka'
+    price_per_camper: 'Cena za táborníka'
     camp_availability:
         label: 'Dostupnost'
         available: 'Volná místa'

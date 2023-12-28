@@ -16,6 +16,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class TripLocationType extends AbstractType
 {
+    private string $tax;
+
+    public function __construct(string $tax)
+    {
+        $this->tax = $tax;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -29,8 +36,12 @@ class TripLocationType extends AbstractType
                 'attr' => [
                     'min' => 0.0,
                 ],
-                'html5' => true,
-                'label' => 'form.admin.trip_location.price',
+                'html5'                       => true,
+                'label'                       => 'form.admin.trip_location.price',
+                'help'                        => $this->tax > 0.0 ? 'price_includes_tax' : null,
+                'help_translation_parameters' => [
+                    'tax' => $this->tax,
+                ],
             ])
             ->add('priority', IntegerType::class, [
                 'label' => 'form.admin.trip_location.priority',

@@ -20,13 +20,17 @@ class ApplicationStepOneDataFactory implements ApplicationStepOneDataFactoryInte
 
     private string $currency;
 
+    private float $tax;
+
     public function __construct(bool   $isEuBusinessDataEnabled,
                                 bool   $isNationalIdentifierEnabled,
-                                string $currency)
+                                string $currency,
+                                float  $tax)
     {
         $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
         $this->currency = $currency;
+        $this->tax = $tax;
     }
 
     /**
@@ -36,7 +40,12 @@ class ApplicationStepOneDataFactory implements ApplicationStepOneDataFactoryInte
                                                  ?ApplicationCamperData $defaultApplicationCamperData = null,
                                                  ?ContactData           $defaultContactData = null): ApplicationStepOneData
     {
-        $applicationData = new ApplicationStepOneData($this->isEuBusinessDataEnabled, $this->isNationalIdentifierEnabled, $this->currency);
+        $applicationData = new ApplicationStepOneData(
+            $this->isEuBusinessDataEnabled,
+            $this->isNationalIdentifierEnabled,
+            $this->currency,
+            $this->tax
+        );
 
         if ($defaultContactData !== null)
         {
