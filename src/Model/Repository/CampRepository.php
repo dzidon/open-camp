@@ -176,6 +176,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
                                              int                $currentPage,
                                              int                $pageSize): UserCampCatalogResult
     {
+        $sortBy = $data->getSortBy();
         $phrase = $data->getPhrase();
         $age = $data->getAge();
         $from = $data->getFrom();
@@ -183,11 +184,14 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         $isOpenOnly = $data->isOpenOnly();
 
         $queryBuilder = $this->createQueryBuilder('camp')
-            ->select('DISTINCT camp')
+            ->select('camp, MIN(campDate.deposit + campDate.priceWithoutDeposit) AS HIDDEN lowestFullPrice')
             ->leftJoin(CampDate::class, 'campDate', 'WITH', 'camp.id = campDate.camp')
             ->andWhere('camp.name LIKE :phrase')
             ->setParameter('phrase', '%' . $phrase . '%')
-            ->orderBy('camp.priority', 'DESC')
+            ->andWhere('campDate.startAt > :now')
+            ->setParameter('now', new DateTimeImmutable('now'))
+            ->groupBy('camp.id')
+            ->orderBy($sortBy->property(), $sortBy->order())
         ;
 
         if (!$showHidden)
@@ -227,11 +231,6 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         if ($isOpenOnly)
         {
             // todo: only search camps with open dates
-
-            $queryBuilder
-                ->andWhere('campDate.startAt > :now')
-                ->setParameter('now', new DateTimeImmutable('now'))
-            ;
         }
 
         if ($campCategory !== null)

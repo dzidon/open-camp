@@ -2,10 +2,13 @@
 
 namespace App\Library\Data\User;
 
+use App\Library\Enum\Search\Data\User\CampSortEnum;
 use DateTimeImmutable;
 
 class CampSearchData
 {
+    private CampSortEnum $sortBy = CampSortEnum::PRIORITY_DESC;
+
     private string $phrase = '';
 
     private ?int $age = null;
@@ -15,6 +18,23 @@ class CampSearchData
     private ?DateTimeImmutable $to = null;
 
     private bool $isOpenOnly = false;
+
+    public function getSortBy(): CampSortEnum
+    {
+        return $this->sortBy;
+    }
+
+    public function setSortBy(?CampSortEnum $sortBy): self
+    {
+        if ($sortBy === null)
+        {
+            $sortBy = CampSortEnum::PRIORITY_DESC;
+        }
+
+        $this->sortBy = $sortBy;
+
+        return $this;
+    }
 
     public function getPhrase(): string
     {

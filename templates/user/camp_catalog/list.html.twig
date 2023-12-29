@@ -64,6 +64,7 @@
                     {% for camp in catalog_result.paginator.currentPageItems %}
                         {% set camp_image = catalog_result.getCampImage(camp) %}
                         {% set camp_dates = catalog_result.getCampDates(camp) %}
+                        {% set camp_lowest_full_price = catalog_result.getCampLowestFullPrice(camp) %}
 
                         <div class="col-12 col-sm-6 col-lg-4 mb-4 d-flex">
                             <div class="card flex-fill">
@@ -84,6 +85,15 @@
                                     </h5>
 
                                     <p class="card-text">
+                                        {% if camp_lowest_full_price is not null %}
+                                            {{ 'camp_catalog.from'|trans }}
+                                            <strong class="text-primary">
+                                                {{ camp_lowest_full_price }} {{ currency }}
+                                            </strong>
+
+                                            <br>
+                                        {% endif %}
+
                                         {{ 'entity_attribute.camp.age'|trans }}:
 
                                         {% if camp.ageMin is same as(camp.ageMax) %}

@@ -4,6 +4,10 @@
 
     <div class="row">
         <div class="col-12">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="col-12">
             {{ form_row(form.phrase) }}
         </div>
 
@@ -183,13 +187,15 @@
     <hr>
 
     <div class="row mt-4">
-        <div class="col-6">
-            <a class="btn btn-secondary" href="{{ application_back_url }}" role="button">
-                {{ 'back'|trans }}
-            </a>
-        </div>
+        {% if application_back_url is defined %}
+            <div class="col-6">
+                <a class="btn btn-secondary" href="{{ application_back_url }}" role="button">
+                    {{ 'back'|trans }}
+                </a>
+            </div>
+        {% endif %}
 
-        <div class="col-6 text-right">
+        <div class="{% if application_back_url is defined %} col-6 {% else %} col-12 {% endif %} text-right">
             {{ form_row(form.submit) }}
         </div>
     </div>

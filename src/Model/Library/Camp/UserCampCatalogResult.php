@@ -19,6 +19,8 @@ class UserCampCatalogResult implements UserCampCatalogResultInterface
 
     private array $campDates = [];
 
+    private array $campLowestFullPrices = [];
+
     public function __construct(PaginatorInterface $paginator, array $campImages, array $campDates)
     {
         // paginator
@@ -70,6 +72,19 @@ class UserCampCatalogResult implements UserCampCatalogResultInterface
             ;
 
             $this->campDates[$campIdString][] = $campDate;
+
+            // lowest price
+            $price = $campDate->getFullPrice();
+
+            if (array_key_exists($campIdString, $this->campLowestFullPrices) && $price < $this->campLowestFullPrices[$campIdString])
+            {
+                $this->campLowestFullPrices[$campIdString] = $price;
+            }
+
+            if (!array_key_exists($campIdString, $this->campLowestFullPrices))
+            {
+                $this->campLowestFullPrices[$campIdString] = $price;
+            }
         }
     }
 
@@ -79,6 +94,29 @@ class UserCampCatalogResult implements UserCampCatalogResultInterface
     public function getPaginator(): PaginatorInterface
     {
         return $this->paginator;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCampLowestFullPrice(string|Camp $camp): ?float
+    {
+        $campIdString = $camp;
+
+        if (!is_string($campIdString))
+        {
+            $campIdString = $camp
+                ->getId()
+                ->toRfc4122()
+            ;
+        }
+
+        if (!array_key_exists($campIdString, $this->campLowestFullPrices))
+        {
+            return null;
+        }
+
+        return $this->campLowestFullPrices[$campIdString];
     }
 
     /**

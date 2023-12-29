@@ -3,9 +3,11 @@
 namespace App\Service\Form\Type\User;
 
 use App\Library\Data\User\CampSearchData;
+use App\Library\Enum\Search\Data\User\CampSortEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,6 +21,15 @@ class CampSearchType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('sortBy', EnumType::class, [
+                'class'        => CampSortEnum::class,
+                'label'        => 'form.user.camp_search.sort_by.label',
+                'choice_label' => fn ($choice) => match ($choice) {
+                    CampSortEnum::PRIORITY_DESC          => 'form.user.camp_search.sort_by.options.priority_desc',
+                    CampSortEnum::LOWEST_FULL_PRICE_ASC  => 'form.user.camp_search.sort_by.options.lowest_full_price_asc',
+                    CampSortEnum::LOWEST_FULL_PRICE_DESC => 'form.user.camp_search.sort_by.options.lowest_full_price_desc',
+                },
+            ])
             ->add('phrase', TextType::class, [
                 'attr' => [
                     'autofocus' => 'autofocus'

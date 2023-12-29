@@ -78,6 +78,7 @@ camp_catalog:
     show_map: 'Ukázat na mapě'
     map: 'Mapa'
     without_tax: 'bez DPH'
+    from: 'Od'
     price: 'Cena'
     deposit_per_camper: 'Záloha za táborníka'
     price_without_deposit_per_camper: 'Doplatek za táborníka'
@@ -1135,6 +1136,13 @@ form:
             button: 'Přihlásit se'
 
         camp_search:
+            sort_by:
+                label: 'Řazení'
+                options:
+                    priority_desc: 'Od doporučených'
+                    lowest_full_price_asc: 'Od nejlevnějších'
+                    lowest_full_price_desc: 'Od nejdražších'
+
             phrase: 'Hledat podle názvu'
             age: 'Věk'
             from: 'Odjezd od'

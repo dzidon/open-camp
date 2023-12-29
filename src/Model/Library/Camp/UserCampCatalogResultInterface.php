@@ -19,6 +19,14 @@ interface UserCampCatalogResultInterface
     public function getPaginator(): PaginatorInterface;
 
     /**
+     * Returns the lowest full price of the given camp.
+     *
+     * @param string|Camp $camp
+     * @return float|null
+     */
+    public function getCampLowestFullPrice(string|Camp $camp): ?float;
+
+    /**
      * Returns the main image of the given camp.
      *
      * @param string|Camp $camp
