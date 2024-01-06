@@ -57,17 +57,6 @@ class PurchasableItemVariantValueRepositoryTest extends KernelTestCase
         $this->assertSame(['Value 1'], $names);
     }
 
-    public function testFindByPurchasableItemVariant(): void
-    {
-        $purchasableItemVariantValueRepository = $this->getPurchasableItemVariantValueRepository();
-        $purchasableItemVariantRepository = $this->getPurchasableItemVariantRepository();
-        $purchasableItemVariant = $purchasableItemVariantRepository->findOneById(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
-
-        $purchasableItemVariantValues = $purchasableItemVariantValueRepository->findByPurchasableItemVariant($purchasableItemVariant);
-        $names = $this->getPurchasableItemVariantNames($purchasableItemVariantValues);
-        $this->assertSame(['Value 1', 'Value 2'], $names);
-    }
-
     public function testCanRemoveTripLocation(): void
     {
         $repository = $this->getPurchasableItemVariantValueRepository();

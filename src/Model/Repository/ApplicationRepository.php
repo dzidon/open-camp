@@ -4,6 +4,7 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
+use App\Model\Entity\ApplicationPurchasableItem;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\UuidV4;
@@ -58,6 +59,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationCampers($application);
         $this->loadApplicationAttachments($application);
         $this->loadApplicationFormFieldValues($application);
+        $this->loadApplicationPurchasableItems($application);
 
         return $application;
     }
@@ -84,6 +86,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationCampers($application);
         $this->loadApplicationAttachments($application);
         $this->loadApplicationFormFieldValues($application);
+        $this->loadApplicationPurchasableItems($application);
 
         return $application;
     }
@@ -260,6 +263,60 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
             ->getResult()
         ;
     }
+
+    private function loadApplicationPurchasableItems(null|array|Application $applications): void
+    {
+        if (empty($applications))
+        {
+            return;
+        }
+
+        $applicationIds = $this->getApplicationIds($applications);
+
+        /** @var Application[] $applications */
+        $applications = $this->createQueryBuilder('application')
+            ->select('application, applicationPurchasableItem, purchasableItem')
+            ->leftJoin('application.applicationPurchasableItems', 'applicationPurchasableItem')
+            ->leftJoin('applicationPurchasableItem.purchasableItem', 'purchasableItem')
+            ->andWhere('application.id IN (:ids)')
+            ->setParameter('ids', $applicationIds)
+            ->orderBy('applicationPurchasableItem.priority', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $applicationPurchasableItems = [];
+
+        foreach ($applications as $application)
+        {
+            foreach ($application->getApplicationPurchasableItems() as $applicationPurchasableItem)
+            {
+                $applicationPurchasableItems[] = $applicationPurchasableItem;
+            }
+        }
+
+        $this->loadApplicationPurchasableItemInstances($applicationPurchasableItems);
+    }
+
+    private function loadApplicationPurchasableItemInstances(null|array|ApplicationPurchasableItem $applicationPurchasableItems): void
+    {
+        if (empty($applicationPurchasableItems))
+        {
+            return;
+        }
+
+        $applicationPurchasableItemIds = $this->getApplicationPurchasableItemIds($applicationPurchasableItems);
+
+        $this->_em->createQueryBuilder()
+            ->select('applicationPurchasableItem, applicationPurchasableItemInstance')
+            ->from(ApplicationPurchasableItem::class, 'applicationPurchasableItem')
+            ->leftJoin('applicationPurchasableItem.applicationPurchasableItemInstances', 'applicationPurchasableItemInstance')
+            ->andWhere('applicationPurchasableItem.id IN (:ids)')
+            ->setParameter('ids', $applicationPurchasableItemIds)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     
     private function getApplicationIds(array|Application $applications): array
     {
@@ -283,5 +340,17 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         return array_map(function (ApplicationCamper $applicationCamper) {
             return $applicationCamper->getId()->toBinary();
         }, $applicationCampers);
+    }
+
+    private function getApplicationPurchasableItemIds(array|ApplicationPurchasableItem $applicationPurchasableItems): array
+    {
+        if ($applicationPurchasableItems instanceof ApplicationPurchasableItem)
+        {
+            $applicationPurchasableItems = [$applicationPurchasableItems];
+        }
+
+        return array_map(function (ApplicationPurchasableItem $applicationPurchasableItem) {
+            return $applicationPurchasableItem->getId()->toBinary();
+        }, $applicationPurchasableItems);
     }
 }

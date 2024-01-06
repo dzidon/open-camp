@@ -5,6 +5,8 @@ namespace App\Model\Entity;
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\PurchasableItemRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -42,6 +44,9 @@ class PurchasableItem
     #[ORM\Column(length: 2000, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\OneToMany(mappedBy: 'purchasableItem', targetEntity: PurchasableItemVariant::class)]
+    private Collection $purchasableItemVariants;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -56,6 +61,7 @@ class PurchasableItem
         $this->label = $label;
         $this->price = $price;
         $this->maxAmount = $maxAmount;
+        $this->purchasableItemVariants = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable('now');
     }
 
@@ -144,6 +150,42 @@ class PurchasableItem
     public function setDescription(?string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return PurchasableItemVariant[]
+     */
+    public function getPurchasableItemVariants(): array
+    {
+        return $this->purchasableItemVariants->toArray();
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param PurchasableItemVariant $purchasableItemVariant
+     * @return $this
+     */
+    public function addPurchasableItemVariant(PurchasableItemVariant $purchasableItemVariant): self
+    {
+        if (!$this->purchasableItemVariants->contains($purchasableItemVariant))
+        {
+            $this->purchasableItemVariants->add($purchasableItemVariant);
+            $purchasableItemVariant->setPurchasableItem($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param PurchasableItemVariant $purchasableItemVariant
+     * @return $this
+     */
+    public function removePurchasableItemVariant(PurchasableItemVariant $purchasableItemVariant): self
+    {
+        $this->purchasableItemVariants->removeElement($purchasableItemVariant);
 
         return $this;
     }

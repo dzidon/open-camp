@@ -3,19 +3,23 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
+use App\Library\Data\User\ApplicationStepTwoUpdateData;
 use App\Library\Data\User\ApplicationStepOneData;
 use App\Model\Entity\Application;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
 use App\Model\Event\User\Application\ApplicationStepOneCreateEvent;
 use App\Model\Event\User\Application\ApplicationStepOneUpdateEvent;
+use App\Model\Event\User\Application\ApplicationStepTwoUpdateEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Service\Application\ApplicationStepOneDataFactoryInterface;
 use App\Model\Service\ApplicationCamper\ApplicationCamperDataFactoryInterface;
+use App\Model\Service\ApplicationPurchasableItemInstance\ApplicationPurchasableItemInstanceDataFactoryInterface;
 use App\Model\Service\Contact\ContactDataFactoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\User\ApplicationStepTwoType;
 use App\Service\Form\Type\User\ApplicationStepOneType;
 use App\Service\Menu\Breadcrumbs\User\ApplicationBreadcrumbsInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -71,7 +75,7 @@ class ApplicationController extends AbstractController
             $eventDispatcher->dispatch($event, $event::NAME);
             $application = $event->getApplication();
 
-            return $this->redirectToRoute('user_application_step_one_update', [
+            return $this->redirectToRoute('user_application_step_two', [
                 'applicationId' => $application->getId(),
             ]);
         }
@@ -98,7 +102,7 @@ class ApplicationController extends AbstractController
         ]);
     }
 
-    #[Route('/application/{applicationId}', name: 'user_application_step_one_update')]
+    #[Route('/application/{applicationId}/step-one', name: 'user_application_step_one_update')]
     public function stepOneUpdate(ApplicationCamperDataFactoryInterface  $applicationCamperDataFactory,
                                   ContactDataFactoryInterface            $contactDataFactory,
                                   EventDispatcherInterface               $eventDispatcher,
@@ -129,7 +133,7 @@ class ApplicationController extends AbstractController
             $event = new ApplicationStepOneUpdateEvent($applicationStepOneData, $application);
             $eventDispatcher->dispatch($event, $event::NAME);
 
-            return $this->redirectToRoute('user_application_step_one_update', [
+            return $this->redirectToRoute('user_application_step_two', [
                 'applicationId' => $application->getId()
             ]);
         }
@@ -148,12 +152,49 @@ class ApplicationController extends AbstractController
             'camp_date_deposit'               => $application->getDeposit(),
             'camp_date_price_without_deposit' => $application->getPriceWithoutDeposit(),
             'camp_date_full_price'            => $application->getFullPrice(),
-            'camp_date_leader_names'          => $application->getCampDate()?->getLeaderNames(),
-            'camp_date_description'           => $application->getCampDate()?->getDescription(),
+            'camp_date_leader_names'          => $campDate?->getLeaderNames(),
+            'camp_date_description'           => $campDate?->getDescription(),
             'tax'                             => $application->getTax(),
             'form_application_step_one'       => $form->createView(),
             'breadcrumbs'                     => $this->breadcrumbs->buildForStepOneUpdate($application),
             'application_back_url'            => $this->generateUrl($backRoute, $backUrlParameters),
+        ]);
+    }
+
+    #[Route('/application/{applicationId}/step-two', name: 'user_application_step_two')]
+    public function stepTwo(ApplicationPurchasableItemInstanceDataFactoryInterface $applicationPurchasableItemInstanceDataFactory,
+                            DataTransferRegistryInterface                          $dataTransfer,
+                            EventDispatcherInterface                               $eventDispatcher,
+                            Request                                                $request,
+                            UuidV4                                                 $applicationId): Response
+    {
+        $application = $this->findApplicationOrThrow404($applicationId);
+        $applicationPurchasableItemsData = new ApplicationStepTwoUpdateData();
+        $dataTransfer->fillData($applicationPurchasableItemsData, $application);
+
+        $form = $this->createForm(ApplicationStepTwoType::class, $applicationPurchasableItemsData, [
+            'instance_defaults_data' => $applicationPurchasableItemInstanceDataFactory->createDataFromApplication($application),
+        ]);
+        $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_two.button',]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $event = new ApplicationStepTwoUpdateEvent($applicationPurchasableItemsData, $application);
+            $eventDispatcher->dispatch($event, $event::NAME);
+
+            return $this->redirectToRoute('user_application_step_two', [
+                'applicationId' => $application->getId()
+            ]);
+        }
+
+        return $this->render('user/application/step_two.html.twig', [
+            'form_application_step_two'     => $form->createView(),
+            'application_purchasable_items' => $application->getApplicationPurchasableItems(),
+            'breadcrumbs'                   => $this->breadcrumbs->buildForStepTwo($application),
+            'application_back_url'          => $this->generateUrl('user_application_step_one_update', [
+                'applicationId' => $application->getId()->toRfc4122(),
+            ]),
         ]);
     }
 

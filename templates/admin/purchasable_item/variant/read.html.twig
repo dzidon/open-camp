@@ -41,12 +41,12 @@
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            {% if purchasable_item_variant_values is empty %}
+                            {% if purchasable_item_variant.purchasableItemVariantValues is empty %}
                                 <div>
                                     <em>{{ 'search.error.no_results'|trans }}</em>
                                 </div>
                             {% else %}
-                                {% for purchasable_item_variant_value in purchasable_item_variant_values %}
+                                {% for purchasable_item_variant_value in purchasable_item_variant.purchasableItemVariantValues %}
                                     <div>
                                         <span>{{ purchasable_item_variant_value.name }}</span>
                                     </div>

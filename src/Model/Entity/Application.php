@@ -115,6 +115,9 @@ class Application
     #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationAttachment::class)]
     private Collection $applicationAttachments;
 
+    #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationPurchasableItem::class)]
+    private Collection $applicationPurchasableItems;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -159,6 +162,7 @@ class Application
         $this->applicationCampers = new ArrayCollection();
         $this->applicationFormFieldValues = new ArrayCollection();
         $this->applicationAttachments = new ArrayCollection();
+        $this->applicationPurchasableItems = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable('now');
 
         $this->campDate = $campDate;
@@ -566,6 +570,46 @@ class Application
     public function removeApplicationAttachment(ApplicationAttachment $applicationAttachment): self
     {
         $this->applicationAttachments->removeElement($applicationAttachment);
+
+        return $this;
+    }
+
+    /**
+     * @return ApplicationPurchasableItem[]
+     */
+    public function getApplicationPurchasableItems(): array
+    {
+        return $this->applicationPurchasableItems->toArray();
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param ApplicationPurchasableItem $applicationPurchasableItem
+     * @return $this
+     */
+    public function addApplicationPurchasableItem(ApplicationPurchasableItem $applicationPurchasableItem): self
+    {
+        if ($applicationPurchasableItem->getApplication() !== $this)
+        {
+            return $this;
+        }
+
+        if (!$this->applicationPurchasableItems->contains($applicationPurchasableItem))
+        {
+            $this->applicationPurchasableItems->add($applicationPurchasableItem);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param ApplicationPurchasableItem $applicationPurchasableItem
+     * @return $this
+     */
+    public function removeApplicationPurchasableItem(ApplicationPurchasableItem $applicationPurchasableItem): self
+    {
+        $this->applicationPurchasableItems->removeElement($applicationPurchasableItem);
 
         return $this;
     }

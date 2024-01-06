@@ -78,16 +78,13 @@ class PurchasableItemVariantController extends AbstractController
     }
 
     #[Route('/admin/purchasable-item-variant/{id}/read', name: 'admin_purchasable_item_variant_read')]
-    public function read(PurchasableItemVariantValueRepositoryInterface $purchasableItemVariantValueRepository,
-                         UuidV4                                         $id): Response
+    public function read(UuidV4 $id): Response
     {
         $purchasableItemVariant = $this->findPurchasableItemVariantOrThrow404($id);
-        $purchasableItemVariantValues = $purchasableItemVariantValueRepository->findByPurchasableItemVariant($purchasableItemVariant);
 
         return $this->render('admin/purchasable_item/variant/read.html.twig', [
-            'purchasable_item_variant'        => $purchasableItemVariant,
-            'purchasable_item_variant_values' => $purchasableItemVariantValues,
-            'breadcrumbs'                     => $this->breadcrumbs->buildRead($purchasableItemVariant),
+            'purchasable_item_variant' => $purchasableItemVariant,
+            'breadcrumbs'              => $this->breadcrumbs->buildRead($purchasableItemVariant),
         ]);
     }
 

@@ -75,23 +75,6 @@ class PurchasableItemVariantValueRepository extends AbstractRepository implement
     /**
      * @inheritDoc
      */
-    public function findByPurchasableItemVariant(PurchasableItemVariant $purchasableItemVariant): array
-    {
-        return $this->createQueryBuilder('purchasableItemVariantValue')
-            ->select('purchasableItemVariantValue, purchasableItemVariant, purchasableItem')
-            ->leftJoin('purchasableItemVariantValue.purchasableItemVariant', 'purchasableItemVariant')
-            ->leftJoin('purchasableItemVariant.purchasableItem', 'purchasableItem')
-            ->andWhere('purchasableItemVariantValue.purchasableItemVariant = :id')
-            ->setParameter('id', $purchasableItemVariant->getId(), UuidType::NAME)
-            ->orderBy('purchasableItemVariantValue.priority', 'DESC')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function canRemovePurchasableItemVariantValue(PurchasableItemVariantValue $purchasableItemVariantValue): bool
     {
         $purchasableItemVariant = $purchasableItemVariantValue->getPurchasableItemVariant();

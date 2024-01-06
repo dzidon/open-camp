@@ -39,7 +39,10 @@ class FormFieldChoiceItemType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefault('enable_validation', false);
+        $resolver->setDefaults([
+            'enable_validation' => false,
+        ]);
+
         $resolver->setAllowedTypes('enable_validation', ['bool']);
     }
 

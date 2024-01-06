@@ -184,6 +184,134 @@
     {{ form_row(form.applicationCampersData, {label: false}) }}
     {{ form_row(form.addCamperData) }}
 
+    {{ block('user_application_bottom') }}
+
+    {{ form_rest(form) }}
+{% endblock %}
+
+{# Application step two edit #}
+{% block user_application_step_two_widget %}
+    {{ form_errors(form) }}
+
+    {% if form.applicationPurchasableItemsData.children is not empty and application_purchasable_items is defined %}
+        <h3 class="mb-3">
+            {{ 'entity.purchasable_item.plural'|trans }}
+        </h3>
+
+        {% for index, application_purchasable_item_form in form.applicationPurchasableItemsData.children %}
+            <div class="mb-4">
+                {% if application_purchasable_items[index] is defined %}
+                    {% set application_purchasable_item = application_purchasable_items[index] %}
+                    {% set purchasable_item = application_purchasable_item.purchasableItem %}
+                    {% set application = application_purchasable_item.application %}
+                    {% set label = application_purchasable_item_form.children.applicationPurchasableItemInstancesData.vars.label %}
+                    {% set image_extension = purchasable_item is null ? null : purchasable_item.imageExtension %}
+
+                    <div class="row {% if image_extension is null %} mb-1 {% else %} mb-3 {% endif %}">
+                        <div class="col-12">
+                            <div>
+                                {% if application_purchasable_item.description is null %}
+                                    <h5>{{ label }}</h5>
+                                {% else %}
+                                    <h5>
+                                        {{ label }}
+
+                                        <a href="#purchasable-item-description-{{ index }}"
+                                           data-toggle="modal"
+                                           data-target="#purchasable-item-description-{{ index }}"
+                                        >
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                    </h5>
+
+                                    <div class="modal fade"
+                                         id="purchasable-item-description-{{ index }}"
+                                         tabindex="-1"
+                                         aria-labelledby="purchasable-item-description-{{ index }}"
+                                         aria-hidden="true"
+                                    >
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">
+                                                        {{ 'entity_attribute.purchasable_item.description'|trans }}
+                                                    </h5>
+
+                                                    <button type="button"
+                                                            class="close"
+                                                            data-dismiss="modal"
+                                                            aria-label="{{ 'modal.button_close'|trans }}"
+                                                    >
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+
+                                                <div class="modal-body">
+                                                    <p>{{ application_purchasable_item.description }}</p>
+                                                </div>
+
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                        {{ 'modal.button_close'|trans }}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <span>
+                                    {{ 'entity_attribute.application_purchasable_item.price'|trans }}:
+                                    {{ application_purchasable_item.price }} {{ application.currency }}
+                                </span>
+                            </div>
+
+                            {% if application_purchasable_item.calculatedMaxAmount > 1 %}
+                                <div>
+                                    <span>
+                                        {{ 'entity_attribute.application_purchasable_item.max_amount'|trans }}:
+                                        {{ application_purchasable_item.calculatedMaxAmount }}
+                                    </span>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {% if image_extension is not null %}
+                            <div class="col-12">
+                                <div class="row mt-2">
+                                    <div class="col-6 col-md-4">
+                                        <a href="{{ asset(purchasable_item_image_path(purchasable_item)) }}" target="_blank">
+                                            <img class="image-cover-16-9"
+                                                 src="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
+                                                 alt="{{ 'entity_attribute.purchasable_item.image'|trans }} - {{ purchasable_item.name }}"
+                                            >
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {{ form_row(application_purchasable_item_form.children.applicationPurchasableItemInstancesData, {label: false}) }}
+
+                {% if application_purchasable_item_form.children.addApplicationPurchasableItemInstanceData is defined %}
+                    {{ form_row(application_purchasable_item_form.children.addApplicationPurchasableItemInstanceData) }}
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        {{ form_row(form.applicationPurchasableItemsData) }}
+    {% endif %}
+
+    {{ block('user_application_bottom') }}
+
+    {{ form_rest(form) }}
+{% endblock %}
+
+{% block user_application_bottom %}
     <hr>
 
     <div class="row mt-4">
@@ -199,6 +327,4 @@
             {{ form_row(form.submit) }}
         </div>
     </div>
-
-    {{ form_rest(form) }}
 {% endblock %}

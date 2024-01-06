@@ -7,6 +7,8 @@ use App\Library\Search\Paginator\DqlPaginator;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\PurchasableItem;
+use App\Model\Entity\PurchasableItemVariant;
 use DateTimeInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -240,7 +242,8 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
 
         $campDateIds = $this->getCampDateIds($campDates);
 
-        $this->createQueryBuilder('campDate')
+        /** @var CampDate[] $campDates */
+        $campDates = $this->createQueryBuilder('campDate')
             ->select('campDate, campDatePurchasableItem, purchasableItem')
             ->leftJoin('campDate.campDatePurchasableItems', 'campDatePurchasableItem')
             ->leftJoin('campDatePurchasableItem.purchasableItem', 'purchasableItem')
@@ -250,6 +253,97 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ->getQuery()
             ->getResult()
         ;
+
+        $purchasableItems = [];
+
+        foreach ($campDates as $campDate)
+        {
+            foreach ($campDate->getCampDatePurchasableItems() as $campDatePurchasableItem)
+            {
+                $purchasableItems[] = $campDatePurchasableItem->getPurchasableItem();
+            }
+        }
+
+        $this->loadPurchasableItemVariants($purchasableItems);
+    }
+
+    private function loadPurchasableItemVariants(null|array|PurchasableItem $purchasableItems): void
+    {
+        if (empty($purchasableItems))
+        {
+            return;
+        }
+
+        $purchasableItemIds = $this->getPurchasableItemIds($purchasableItems);
+
+        /** @var PurchasableItem[] $purchasableItems */
+        $purchasableItems = $this->_em->createQueryBuilder()
+            ->select('purchasableItem, purchasableItemVariant')
+            ->from(PurchasableItem::class, 'purchasableItem')
+            ->leftJoin('purchasableItem.purchasableItemVariants', 'purchasableItemVariant')
+            ->andWhere('purchasableItem.id IN (:ids)')
+            ->setParameter('ids', $purchasableItemIds)
+            ->orderBy('purchasableItemVariant.priority', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $purchasableItemVariants = [];
+
+        foreach ($purchasableItems as $purchasableItem)
+        {
+            foreach ($purchasableItem->getPurchasableItemVariants() as $purchasableItemVariant)
+            {
+                $purchasableItemVariants[] = $purchasableItemVariant;
+            }
+        }
+
+        $this->loadPurchasableItemVariantValues($purchasableItemVariants);
+    }
+
+    private function loadPurchasableItemVariantValues(null|array|PurchasableItemVariant $purchasableItemVariants): void
+    {
+        if (empty($purchasableItemVariants))
+        {
+            return;
+        }
+
+        $purchasableItemVariantIds = $this->getPurchasableItemVariantIds($purchasableItemVariants);
+
+        $this->_em->createQueryBuilder()
+            ->select('purchasableItemVariant, purchasableItemVariantValue')
+            ->from(PurchasableItemVariant::class, 'purchasableItemVariant')
+            ->leftJoin('purchasableItemVariant.purchasableItemVariantValues', 'purchasableItemVariantValue')
+            ->andWhere('purchasableItemVariant.id IN (:ids)')
+            ->setParameter('ids', $purchasableItemVariantIds)
+            ->orderBy('purchasableItemVariantValue.priority', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    private function getPurchasableItemVariantIds(array|PurchasableItemVariant $purchasableItemVariants): array
+    {
+        if ($purchasableItemVariants instanceof PurchasableItemVariant)
+        {
+            $purchasableItemVariants = [$purchasableItemVariants];
+        }
+
+        return array_map(function (PurchasableItemVariant $purchasableItemVariant) {
+            return $purchasableItemVariant->getId()->toBinary();
+        }, $purchasableItemVariants);
+    }
+
+    private function getPurchasableItemIds(array|PurchasableItem $purchasableItems): array
+    {
+        if ($purchasableItems instanceof PurchasableItem)
+        {
+            $purchasableItems = [$purchasableItems];
+        }
+
+        return array_map(function (PurchasableItem $purchasableItem) {
+            return $purchasableItem->getId()->toBinary();
+        }, $purchasableItems);
     }
 
     private function getCampDateIds(array|CampDate $campDates): array

@@ -172,7 +172,7 @@ permission_group:
     camp: 'Tábory'
     trip_location_path: 'Trasy'
     attachment_config: 'Konfigurace přílohy'
-    purchasable_item: 'Doplňkové platby'
+    purchasable_item: 'Volitelné platby'
     form_field: 'Formulářová pole'
 
 permission:
@@ -207,10 +207,10 @@ permission:
     attachment_config_update: 'Editace konfigurace přílohy'
     attachment_config_delete: 'Odstranění konfigurace přílohy'
 
-    purchasable_item_read: 'Zobrazení doplňkové platby'
-    purchasable_item_create: 'Tvorba doplňkové platby'
-    purchasable_item_update: 'Editace doplňkové platby'
-    purchasable_item_delete: 'Odstranění doplňkové platby'
+    purchasable_item_read: 'Zobrazení volitelné platby'
+    purchasable_item_create: 'Tvorba volitelné platby'
+    purchasable_item_update: 'Editace volitelné platby'
+    purchasable_item_delete: 'Odstranění volitelné platby'
 
     form_field_read: 'Zobrazení formulářového pole'
     form_field_create: 'Tvorba formulářového pole'
@@ -235,7 +235,7 @@ crud:
         trip_location_path_delete: 'Opravdu si přejete odstranit trasu "{name}"?'
         trip_location_delete: 'Opravdu si přejete odstranit lokaci "{name}"?'
         attachment_config_delete: 'Opravdu si přejete odstranit konfiguraci přílohy "{name}"?'
-        purchasable_item_delete: 'Opravdu si přejete odstranit doplňkovou platbu "{name}"?'
+        purchasable_item_delete: 'Opravdu si přejete odstranit volitelnou platbu "{name}"?'
         purchasable_item_variant_delete: 'Opravdu si přejete odstranit variantu "{name}"?'
         purchasable_item_variant_value_delete: 'Opravdu si přejete odstranit hodnotu "{name}"?'
         form_field_delete: 'Opravdu si přejete odstranit formulářové pole "{name}"?'
@@ -320,19 +320,19 @@ crud:
             delete: 'Konfigurace přílohy odstraněna!'
 
         purchasable_item:
-            create: 'Doplňková platba vytvořena!'
-            update: 'Doplňková platba uložena!'
-            delete: 'Doplňková platba odstraněna!'
+            create: 'Volitelná platba vytvořena!'
+            update: 'Volitelná platba uložena!'
+            delete: 'Volitelná platba odstraněna!'
 
         purchasable_item_variant:
-            create: 'Varianta doplňkové platby vytvořena!'
-            update: 'Varianta doplňkové platby uložena!'
-            delete: 'Varianta doplňkové platby odstraněna!'
+            create: 'Varianta volitelné platby vytvořena!'
+            update: 'Varianta volitelné platby uložena!'
+            delete: 'Varianta volitelné platby odstraněna!'
 
         purchasable_item_variant_value:
-            create: 'Hodnota varianty doplňkové platby vytvořena!'
-            update: 'Hodnota varianty doplňkové platby uložena!'
-            delete: 'Hodnota varianty doplňkové platby odstraněna!'
+            create: 'Hodnota varianty volitelné platby vytvořena!'
+            update: 'Hodnota varianty volitelné platby uložena!'
+            delete: 'Hodnota varianty volitelné platby odstraněna!'
 
         form_field:
             create: 'Formulářové pole vytvořeno!'
@@ -405,16 +405,16 @@ entity:
         plural: 'Přípony'
 
     purchasable_item:
-        singular: 'Doplňková platba'
-        plural: 'Doplňkové platby'
+        singular: 'Volitelná platba'
+        plural: 'Volitelné platby'
 
     purchasable_item_variant:
-        singular: 'Varianta doplňkové platby'
-        plural: 'Varianty doplňkové platby'
+        singular: 'Varianta volitelné platby'
+        plural: 'Varianty volitelné platby'
 
     purchasable_item_variant_value:
-        singular: 'Hodnota varianty doplňkové platby'
-        plural: 'Hodnoty varianty doplňkové platby'
+        singular: 'Hodnota varianty volitelné platby'
+        plural: 'Hodnoty varianty volitelné platby'
 
     form_field:
         singular: 'Formulářové pole'
@@ -428,6 +428,132 @@ entity_attribute:
     common:
         set: 'Nastaveno'
         unset: 'Nenastaveno'
+
+    application:
+        id: 'ID'
+        simple_id: 'Kód'
+        email: 'E-mail'
+        name_first: 'Jméno'
+        name_last: 'Příjmení'
+        street: 'Ulice a číslo popisné'
+        town: 'Obec'
+        zip: 'PSČ'
+        country: 'Země'
+        business_name: 'Obchodní název'
+        business_cin: 'IČO'
+        business_vat_id: 'DIČ'
+        is_draft: 'Draft'
+        is_accepted: 'Přijata'
+        camp_name: 'Tábor'
+        deposit: 'Záloha'
+        price_without_deposit: 'Doplatek'
+        full_price: 'Cena'
+        currency: 'Měna'
+        tax: 'DPH'
+        is_eu_business_data_enabled: 'Obchodní údaje (EU)'
+        is_national_identifier_enabled: 'Rodné číslo'
+        is_email_mandatory: 'Povinný e-mail'
+        is_phone_number_mandatory: 'Povinné telefonní číslo'
+        camp_date_start_at: 'Začátek termínu'
+        camp_date_end_at: 'Konec termínu'
+        campDate: 'Termín'
+        user: 'Uživatel'
+        application_contacts: 'Kontakty'
+        application_campers: 'Táborníci'
+        application_form_field_values: 'Formulářová pole'
+        application_attachments: 'Přílohy'
+        application_purchasable_items: 'Volitelné platby'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    application_attachment:
+        id: 'ID'
+        label: 'Nadpis'
+        help: 'Pomocný text'
+        max_size: 'Maximální velikost'
+        required_type: 'Povinnost'
+        extensions: 'Přípony'
+        extension: 'Přípona'
+        priority: 'Priorita'
+        application: 'Přihláška'
+        application_camper: 'Táborník'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    application_camper:
+        id: 'ID'
+        name_first: 'Jméno'
+        name_last: 'Příjmení'
+        gender: 'Pohlaví'
+        born_at: 'Datum narození'
+        national_identifier: 'Rodné číslo'
+        dietary_restrictions: 'Dietní omezení'
+        health_restrictions: 'Další zdravotní omezení'
+        medication: 'Léky'
+        application: 'Přihláška'
+        application_trip_location_paths: 'Trasy'
+        application_form_field_values: 'Formulářová pole'
+        application_attachments: 'Přílohy'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    application_contact:
+        id: 'ID'
+        name_first: 'Jméno'
+        name_last: 'Příjmení'
+        email: 'E-mail'
+        phone_number: 'Telefonní číslo'
+        role: 'Role'
+        role_other: 'Upřesnění role'
+        application: 'Přihláška'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    application_form_field_value:
+        id: 'ID'
+        type: 'Typ'
+        label: 'Název'
+        options: 'Nastavení'
+        is_required: 'Povinný'
+        help: 'Pomocný text'
+        priority: 'Priorita'
+        value: 'Hodnota'
+        application: 'Přihláška'
+        application_camper: 'Táborník'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    application_purchasable_item:
+        id: 'ID'
+        label: 'Název'
+        price: 'Cena'
+        max_amount: 'Maximální množství'
+        description: 'Popis'
+        valid_variant_values: 'Validní hodnoty variant'
+        priority: 'Priorita'
+        is_global: 'Pro celou přihlášku'
+        purchasable_item: 'Volitelná platba'
+        application: 'Přihláška'
+        application_purchasable_item_instances: 'Instance'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    application_purchasable_item_instance:
+        id: 'ID'
+        chosen_variant_values: 'Zvolené hodnoty variant'
+        amount: 'Množství'
+        application_purchasable_item: 'Volitelná platba'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    application_trip_location_path:
+        id: 'ID'
+        is_there: 'Směr'
+        locations: 'Lokace'
+        location: 'Lokace'
+        application_camper: 'Táborník'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
     contact:
         id: 'ID'
@@ -572,7 +698,7 @@ entity_attribute:
         trip_location_path_back: 'Cesta pro vyzvedávání (zpět)'
         form_fields: 'Formulářová pole'
         attachment_configs: 'Konfigurace příloh'
-        purchasable_items: 'Doplňkové platby'
+        purchasable_items: 'Volitelné platby'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -626,7 +752,7 @@ entity_attribute:
         id: 'ID'
         name: 'Název'
         priority: 'Priorita'
-        purchasable_item: 'Doplňková platba'
+        purchasable_item: 'Volitelná platba'
         purchasable_item_variant_values: 'Hodnoty'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -635,7 +761,7 @@ entity_attribute:
         id: 'ID'
         name: 'Název'
         priority: 'Priorita'
-        purchasable_item_variant: 'Varianta doplňkové platby'
+        purchasable_item_variant: 'Varianta volitelné platby'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -822,8 +948,8 @@ form:
             add_form_field: 'Přidat formulářové pole'
             attachment_configs: 'Přílohy'
             add_attachment_config: 'Přidat přílohu'
-            purchasable_items: 'Doplňkové platby'
-            add_purchasable_item: 'Přidat doplňkovou platbu'
+            purchasable_items: 'Volitelné platby'
+            add_purchasable_item: 'Přidat volitelnou platbu'
             trip_location_path_there: 'Cesta pro vyzvedávání (tam)'
             trip_location_path_back: 'Cesta pro vyzvedávání (zpět)'
             button: 'Uložit'
@@ -864,7 +990,7 @@ form:
             priority: 'Priorita'
 
         camp_date_purchasable_item:
-            purchasable_item: 'Doplňková platba'
+            purchasable_item: 'Volitelná platba'
             priority: 'Priorita'
 
         trip_location_path_creation:
@@ -1105,6 +1231,17 @@ form:
             trip_location_path_there: 'Kde nasednu na cestě na tábor'
             trip_location_path_back: 'Kde vysednu na cestě domů'
 
+        application_step_two:
+            button: 'Pokračovat'
+
+        application_purchasable_item_instance:
+            amount: 'Množství'
+            buy: 'Přikoupit'
+            remove_button: 'Odebrat variantu'
+
+        application_purchasable_item:
+            add_instance: 'Přidat variantu'
+
         registration:
             email: 'E-mail'
             captcha: 'Captcha'
@@ -1279,11 +1416,11 @@ route:
     admin_attachment_config_update: 'Editace konfigurace přílohy'
     admin_attachment_config_delete: 'Odstranění konfigurace přílohy'
 
-    admin_purchasable_item_list: 'Doplňkové platby'
-    admin_purchasable_item_create: 'Nová doplňková platba'
-    admin_purchasable_item_read: 'Zobrazení doplňkové platby'
-    admin_purchasable_item_update: 'Editace doplňkové platby'
-    admin_purchasable_item_delete: 'Odstranění doplňkové platby'
+    admin_purchasable_item_list: 'Volitelné platby'
+    admin_purchasable_item_create: 'Nová volitelná platba'
+    admin_purchasable_item_read: 'Zobrazení volitelné platby'
+    admin_purchasable_item_update: 'Editace volitelné platby'
+    admin_purchasable_item_delete: 'Odstranění volitelné platby'
 
     admin_purchasable_item_variant_create: 'Nová varianta'
     admin_purchasable_item_variant_read: 'Zobrazení varianty'
@@ -1329,3 +1466,4 @@ route:
 
     user_application_step_one_create: 'Přihláška (Údaje)'
     user_application_step_one_update: 'Přihláška (Údaje)'
+    user_application_step_two: 'Přihláška (Finance)'

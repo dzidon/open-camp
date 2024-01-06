@@ -27,7 +27,7 @@ class PurchasableItemVariantValue
     #[ORM\Column(type: Types::INTEGER)]
     private int $priority;
 
-    #[ORM\ManyToOne(targetEntity: PurchasableItemVariant::class)]
+    #[ORM\ManyToOne(targetEntity: PurchasableItemVariant::class, inversedBy: 'purchasableItemVariantValues')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private PurchasableItemVariant $purchasableItemVariant;
 
@@ -45,6 +45,7 @@ class PurchasableItemVariantValue
         $this->priority = $priority;
         $this->purchasableItemVariant = $purchasableItemVariant;
         $this->createdAt = new DateTimeImmutable('now');
+        $this->setPurchasableItemVariant($purchasableItemVariant);
     }
 
     public function getId(): UuidV4
@@ -83,7 +84,18 @@ class PurchasableItemVariantValue
 
     public function setPurchasableItemVariant(PurchasableItemVariant $purchasableItemVariant): self
     {
+        if (isset($this->purchasableItemVariant))
+        {
+            if ($this->purchasableItemVariant === $purchasableItemVariant)
+            {
+                return $this;
+            }
+
+            $this->purchasableItemVariant->removePurchasableItemVariantValue($this);
+        }
+
         $this->purchasableItemVariant = $purchasableItemVariant;
+        $this->purchasableItemVariant->addPurchasableItemVariantValue($this);
 
         return $this;
     }

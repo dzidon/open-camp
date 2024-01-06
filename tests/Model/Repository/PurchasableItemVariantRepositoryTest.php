@@ -52,17 +52,6 @@ class PurchasableItemVariantRepositoryTest extends KernelTestCase
         $this->assertSame(['Variant 1'], $names);
     }
 
-    public function testFindByPurchasableItem(): void
-    {
-        $purchasableItemVariantRepository = $this->getPurchasableItemVariantRepository();
-        $purchasableItemRepository = $this->getPurchasableItemRepository();
-        $purchasableItem = $purchasableItemRepository->findOneById(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
-
-        $purchasableItemVariants = $purchasableItemVariantRepository->findByPurchasableItem($purchasableItem);
-        $names = $this->getPurchasableItemVariantNames($purchasableItemVariants);
-        $this->assertSame(['Variant 1', 'Variant 2'], $names);
-    }
-
     public function testGetAdminPaginator(): void
     {
         $purchasableItemVariantRepository = $this->getPurchasableItemVariantRepository();

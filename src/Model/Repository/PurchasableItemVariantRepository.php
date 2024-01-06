@@ -46,10 +46,12 @@ class PurchasableItemVariantRepository extends AbstractRepository implements Pur
     public function findOneById(UuidV4 $id): ?PurchasableItemVariant
     {
         return $this->createQueryBuilder('purchasableItemVariant')
-            ->select('purchasableItemVariant, purchasableItem')
+            ->select('purchasableItemVariant, purchasableItem, purchasableItemVariantValue')
             ->leftJoin('purchasableItemVariant.purchasableItem', 'purchasableItem')
+            ->leftJoin('purchasableItemVariant.purchasableItemVariantValues', 'purchasableItemVariantValue')
             ->andWhere('purchasableItemVariant.id = :id')
             ->setParameter('id', $id, UuidType::NAME)
+            ->orderBy('purchasableItemVariantValue.priority', 'DESC')
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -61,26 +63,12 @@ class PurchasableItemVariantRepository extends AbstractRepository implements Pur
     public function findByName(string $name): array
     {
         return $this->createQueryBuilder('purchasableItemVariant')
-            ->select('purchasableItemVariant, purchasableItem')
+            ->select('purchasableItemVariant, purchasableItem, purchasableItemVariantValue')
             ->leftJoin('purchasableItemVariant.purchasableItem', 'purchasableItem')
+            ->leftJoin('purchasableItemVariant.purchasableItemVariantValues', 'purchasableItemVariantValue')
             ->andWhere('purchasableItemVariant.name = :name')
             ->setParameter('name', $name)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function findByPurchasableItem(PurchasableItem $purchasableItem): array
-    {
-        return $this->createQueryBuilder('purchasableItemVariant')
-            ->select('purchasableItemVariant, purchasableItem')
-            ->leftJoin('purchasableItemVariant.purchasableItem', 'purchasableItem')
-            ->andWhere('purchasableItemVariant.purchasableItem = :id')
-            ->setParameter('id', $purchasableItem->getId(), UuidType::NAME)
-            ->orderBy('purchasableItemVariant.priority', 'DESC')
+            ->orderBy('purchasableItemVariantValue.priority', 'DESC')
             ->getQuery()
             ->getResult()
         ;

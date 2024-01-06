@@ -5,6 +5,8 @@ namespace App\Model\Entity;
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\PurchasableItemVariantRepository;
 use DateTimeImmutable;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -27,9 +29,12 @@ class PurchasableItemVariant
     #[ORM\Column(type: Types::INTEGER)]
     private int $priority;
 
-    #[ORM\ManyToOne(targetEntity: PurchasableItem::class)]
+    #[ORM\ManyToOne(targetEntity: PurchasableItem::class, inversedBy: 'purchasableItemVariants')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private PurchasableItem $purchasableItem;
+
+    #[ORM\OneToMany(mappedBy: 'purchasableItemVariant', targetEntity: PurchasableItemVariantValue::class)]
+    private Collection $purchasableItemVariantValues;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
@@ -43,8 +48,9 @@ class PurchasableItemVariant
         $this->id = Uuid::v4();
         $this->name = $name;
         $this->priority = $priority;
-        $this->purchasableItem = $purchasableItem;
+        $this->purchasableItemVariantValues = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable('now');
+        $this->setPurchasableItem($purchasableItem);
     }
 
     public function getId(): UuidV4
@@ -83,11 +89,58 @@ class PurchasableItemVariant
 
     public function setPurchasableItem(PurchasableItem $purchasableItem): self
     {
+        if (isset($this->purchasableItem))
+        {
+            if ($this->purchasableItem === $purchasableItem)
+            {
+                return $this;
+            }
+
+            $this->purchasableItem->removePurchasableItemVariant($this);
+        }
+
         $this->purchasableItem = $purchasableItem;
+        $this->purchasableItem->addPurchasableItemVariant($this);
 
         return $this;
     }
 
+    /**
+     * @return PurchasableItemVariantValue[]
+     */
+    public function getPurchasableItemVariantValues(): array
+    {
+        return $this->purchasableItemVariantValues->toArray();
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param PurchasableItemVariantValue $purchasableItemVariantValue
+     * @return $this
+     */
+    public function addPurchasableItemVariantValue(PurchasableItemVariantValue $purchasableItemVariantValue): self
+    {
+        if (!$this->purchasableItemVariantValues->contains($purchasableItemVariantValue))
+        {
+            $this->purchasableItemVariantValues->add($purchasableItemVariantValue);
+            $purchasableItemVariantValue->setPurchasableItemVariant($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param PurchasableItemVariantValue $purchasableItemVariantValue
+     * @return $this
+     */
+    public function removePurchasableItemVariantValue(PurchasableItemVariantValue $purchasableItemVariantValue): self
+    {
+        $this->purchasableItemVariantValues->removeElement($purchasableItemVariantValue);
+
+        return $this;
+    }
+    
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;

@@ -45,14 +45,6 @@ interface PurchasableItemVariantValueRepositoryInterface
     public function findByName(string $name): array;
 
     /**
-     * Finds purchasable item variant values by purchasable item variant.
-     *
-     * @param PurchasableItemVariant $purchasableItemVariant
-     * @return PurchasableItemVariantValue[]
-     */
-    public function findByPurchasableItemVariant(PurchasableItemVariant $purchasableItemVariant): array;
-
-    /**
      * Returns true if the given purchasable item variant value can be removed.
      *
      * @param PurchasableItemVariantValue $purchasableItemVariantValue

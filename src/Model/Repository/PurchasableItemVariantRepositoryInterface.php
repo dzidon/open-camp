@@ -45,14 +45,6 @@ interface PurchasableItemVariantRepositoryInterface
     public function findByName(string $name): array;
 
     /**
-     * Finds purchasable item variants by purchasable item.
-     *
-     * @param PurchasableItem $purchasableItem
-     * @return PurchasableItemVariant[]
-     */
-    public function findByPurchasableItem(PurchasableItem $purchasableItem): array;
-
-    /**
      * Returns admin purchasable item variant search paginator.
      *
      * @param PurchasableItemVariantSearchData $data

@@ -46,6 +46,7 @@ class CollectionItemType extends AbstractType
             'remove_button_label'    => 'form.common.collection.remove',
             'row_attr'               => [
                 'data-fc--wrap-target' => 'item',
+                'class'                => 'm-0',
             ],
         ]);
 

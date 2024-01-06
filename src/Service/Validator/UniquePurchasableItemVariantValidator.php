@@ -5,7 +5,6 @@ namespace App\Service\Validator;
 use App\Library\Constraint\UniquePurchasableItemVariant;
 use App\Model\Entity\PurchasableItem;
 use App\Model\Entity\PurchasableItemVariant;
-use App\Model\Repository\PurchasableItemVariantRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -18,15 +17,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class UniquePurchasableItemVariantValidator extends ConstraintValidator
 {
     private PropertyAccessorInterface $propertyAccessor;
-    private PurchasableItemVariantRepositoryInterface $purchasableItemVariantRepository;
     private TranslatorInterface $translator;
 
-    public function __construct(PropertyAccessorInterface       $propertyAccessor,
-                                PurchasableItemVariantRepositoryInterface $purchasableItemVariantRepository,
-                                TranslatorInterface             $translator)
+    public function __construct(PropertyAccessorInterface $propertyAccessor, TranslatorInterface $translator)
     {
         $this->propertyAccessor = $propertyAccessor;
-        $this->purchasableItemVariantRepository = $purchasableItemVariantRepository;
         $this->translator = $translator;
     }
 
@@ -73,7 +68,7 @@ class UniquePurchasableItemVariantValidator extends ConstraintValidator
         }
 
         $id = $purchasableItemVariant?->getId();
-        $existingPurchasableItemVariants = $this->purchasableItemVariantRepository->findByPurchasableItem($purchasableItem);
+        $existingPurchasableItemVariants = $purchasableItem->getPurchasableItemVariants();
 
         foreach ($existingPurchasableItemVariants as $existingPurchasableItemVariant)
         {
