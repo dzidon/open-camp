@@ -6,8 +6,15 @@ use App\Library\Data\User\ApplicationPurchasableItemInstanceData;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationPurchasableItem;
 
+/**
+ * Creates application purchasable item instance data.
+ */
 interface ApplicationPurchasableItemInstanceDataFactoryInterface
 {
+    /**
+     * @param ApplicationPurchasableItem $applicationPurchasableItem
+     * @return ApplicationPurchasableItemInstanceData
+     */
     public function createDataFromApplicationPurchasableItem(ApplicationPurchasableItem $applicationPurchasableItem): ApplicationPurchasableItemInstanceData;
 
     /**

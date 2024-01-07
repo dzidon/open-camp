@@ -4,6 +4,7 @@ namespace App\Model\Repository;
 
 use App\Library\Data\Admin\CampSearchData as AdminCampSearchData;
 use App\Library\Data\User\CampSearchData as UserCampSearchData;
+use App\Library\Enum\Search\Data\User\CampSortEnum;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
@@ -183,16 +184,29 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         $to = $data->getTo();
         $isOpenOnly = $data->isOpenOnly();
 
+        /*
+         * Fetch camps based on search
+         */
         $queryBuilder = $this->createQueryBuilder('camp')
-            ->select('camp, MIN(campDate.deposit + campDate.priceWithoutDeposit) AS HIDDEN lowestFullPrice')
-            ->leftJoin(CampDate::class, 'campDate', 'WITH', 'camp.id = campDate.camp')
+            ->select('camp, MIN(campDate.deposit + campDate.priceWithoutDeposit) AS HIDDEN lowestFullPrice, MIN(campDate.startAt) AS HIDDEN lowestStartAt')
+            ->leftJoin(CampDate::class, 'campDate', 'WITH', 'camp.id = campDate.camp AND campDate.startAt > :now')
+            ->setParameter('now', new DateTimeImmutable('now'))
             ->andWhere('camp.name LIKE :phrase')
             ->setParameter('phrase', '%' . $phrase . '%')
-            ->andWhere('campDate.startAt > :now')
-            ->setParameter('now', new DateTimeImmutable('now'))
             ->groupBy('camp.id')
-            ->orderBy($sortBy->property(), $sortBy->order())
         ;
+
+        if ($sortBy === CampSortEnum::LOWEST_FULL_PRICE_ASC)
+        {
+            $queryBuilder->addOrderBy('CASE WHEN MIN(campDate.deposit + campDate.priceWithoutDeposit) IS NULL THEN 1 ELSE 0 END', 'ASC');
+        }
+
+        if ($sortBy === CampSortEnum::LOWEST_START_AT_ASC)
+        {
+            $queryBuilder->addOrderBy('CASE WHEN MIN(campDate.startAt) IS NULL THEN 1 ELSE 0 END', 'ASC');
+        }
+
+        $queryBuilder->addOrderBy($sortBy->property(), $sortBy->order());
 
         if (!$showHidden)
         {
@@ -231,6 +245,11 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         if ($isOpenOnly)
         {
             // todo: only search camps with open dates
+
+            $queryBuilder
+                ->andWhere('campDate.startAt > :now')
+                ->setParameter('now', new DateTimeImmutable('now'))
+            ;
         }
 
         if ($campCategory !== null)
@@ -266,7 +285,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             ->leftJoin('campDate.camp', 'camp')
             ->andWhere('campDate.camp IN (:campIds)')
             ->setParameter('campIds', $campIds)
-            // todo: only search open dates
+            // todo: only search open dates if $isOpenOnly = true
             ->andWhere('campDate.startAt > :now')
             ->setParameter('now', new DateTimeImmutable('now'))
             ->orderBy('campDate.startAt', 'ASC')

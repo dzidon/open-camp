@@ -7,8 +7,14 @@ use App\Library\Data\User\ApplicationPurchasableItemVariantData;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationPurchasableItem;
 
+/**
+ * @inheritDoc
+ */
 class ApplicationPurchasableItemInstanceDataFactory implements ApplicationPurchasableItemInstanceDataFactoryInterface
 {
+    /**
+     * @inheritDoc
+     */
     public function createDataFromApplicationPurchasableItem(ApplicationPurchasableItem $applicationPurchasableItem): ApplicationPurchasableItemInstanceData
     {
         $applicationPurchasableItemInstanceData = new ApplicationPurchasableItemInstanceData($applicationPurchasableItem->getCalculatedMaxAmount());

@@ -74,7 +74,7 @@ application:
 
 camp_catalog:
     hidden_camp_detail_shown_for_admin: 'Zobrazujete si skrytý tábor jako administrátor.'
-    no_available_camp_dates: 'Žádné volné termíny'
+    no_upcoming_camp_dates: 'Žádné nadcházející termíny'
     show_map: 'Ukázat na mapě'
     map: 'Mapa'
     without_tax: 'bez DPH'
@@ -1278,7 +1278,7 @@ form:
                 options:
                     priority_desc: 'Od doporučených'
                     lowest_full_price_asc: 'Od nejlevnějších'
-                    lowest_full_price_desc: 'Od nejdražších'
+                    lowest_start_at_asc: 'Od nadcházejících'
 
             phrase: 'Hledat podle názvu'
             age: 'Věk'

@@ -25,9 +25,9 @@ class CampSearchType extends AbstractType
                 'class'        => CampSortEnum::class,
                 'label'        => 'form.user.camp_search.sort_by.label',
                 'choice_label' => fn ($choice) => match ($choice) {
-                    CampSortEnum::PRIORITY_DESC          => 'form.user.camp_search.sort_by.options.priority_desc',
-                    CampSortEnum::LOWEST_FULL_PRICE_ASC  => 'form.user.camp_search.sort_by.options.lowest_full_price_asc',
-                    CampSortEnum::LOWEST_FULL_PRICE_DESC => 'form.user.camp_search.sort_by.options.lowest_full_price_desc',
+                    CampSortEnum::PRIORITY_DESC         => 'form.user.camp_search.sort_by.options.priority_desc',
+                    CampSortEnum::LOWEST_FULL_PRICE_ASC => 'form.user.camp_search.sort_by.options.lowest_full_price_asc',
+                    CampSortEnum::LOWEST_START_AT_ASC   => 'form.user.camp_search.sort_by.options.lowest_start_at_asc',
                 },
             ])
             ->add('phrase', TextType::class, [
@@ -49,30 +49,16 @@ class CampSearchType extends AbstractType
                 'widget'   => 'single_text',
                 'input'    => 'datetime_immutable',
                 'label'    => 'form.user.camp_search.from',
-                'attr'     => [
-                    'data-fd--camp-catalog-search-target' => 'fromInput',
-                    'data-action'                         => 'change->fd--camp-catalog-search#onCheckboxChange',
-                ],
             ])
             ->add('to', DateType::class, [
                 'required' => false,
                 'widget'   => 'single_text',
                 'input'    => 'datetime_immutable',
                 'label'    => 'form.user.camp_search.to',
-                'attr'     => [
-                    'data-fd--camp-catalog-search-target' => 'toInput',
-                    'data-action'                         => 'change->fd--camp-catalog-search#onCheckboxChange',
-                ],
             ])
             ->add('isOpenOnly', CheckboxType::class, [
                 'required' => false,
                 'label'    => 'form.user.camp_search.is_open_only',
-                'row_attr' => [
-                    'data-fd--camp-catalog-search-target' => 'isOpenOnlyRow',
-                ],
-                'attr' => [
-                    'data-action' => 'change->fd--camp-catalog-search#onCheckboxChange click->fd--camp-catalog-search#onCheckboxClick',
-                ],
             ])
         ;
     }
@@ -85,9 +71,6 @@ class CampSearchType extends AbstractType
             'csrf_protection'    => false,
             'method'             => 'GET',
             'allow_extra_fields' => true,
-            'attr'               => [
-                'data-controller' => 'fd--camp-catalog-search',
-            ],
         ]);
     }
 }

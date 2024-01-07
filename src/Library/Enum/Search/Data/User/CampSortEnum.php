@@ -13,5 +13,5 @@ enum CampSortEnum: string
 
     case PRIORITY_DESC = 'camp.priority DESC';
     case LOWEST_FULL_PRICE_ASC = 'lowestFullPrice ASC';
-    case LOWEST_FULL_PRICE_DESC = 'lowestFullPrice DESC';
+    case LOWEST_START_AT_ASC = 'lowestStartAt ASC';
 }

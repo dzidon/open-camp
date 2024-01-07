@@ -6,6 +6,9 @@ use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationPurchasableItem;
 use App\Model\Entity\CampDatePurchasableItem;
 
+/**
+ * @inheritDoc
+ */
 class ApplicationPurchasableItemFactory implements ApplicationPurchasableItemFactoryInterface
 {
     /**
