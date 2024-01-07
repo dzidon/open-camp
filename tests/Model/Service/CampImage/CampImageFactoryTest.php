@@ -26,7 +26,7 @@ class CampImageFactoryTest extends KernelTestCase
         $this->assertSame($camp, $campImage->getCamp());
 
         $this->assertSame($idString . '.png', $fileMock->getMovedName());
-        $this->assertStringEndsWith('img/dynamic/camp', $fileMock->getMovedDirectory());
+        $this->assertStringEndsWith('files/dynamic/camp', $fileMock->getMovedDirectory());
     }
 
     protected function setUp(): void

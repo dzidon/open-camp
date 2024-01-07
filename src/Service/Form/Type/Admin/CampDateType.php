@@ -55,12 +55,21 @@ class CampDateType extends AbstractType
                     'tax' => $this->tax,
                 ],
             ])
+            ->add('depositUntil', DateTimeType::class, [
+                'widget'     => 'single_text',
+                'input'      => 'datetime_immutable',
+                'label'      => 'form.admin.camp_date.deposit_until',
+                'required'   => false,
+                'label_attr' => [
+                    'class' => 'required-conditional',
+                ],
+            ])
             ->add('priceWithoutDeposit', MoneyType::class, [
                 'attr' => [
                     'min' => 0.0,
                 ],
-                'html5' => true,
-                'label' => 'form.admin.camp_date.price_without_deposit',
+                'html5'                       => true,
+                'label'                       => 'form.admin.camp_date.price_without_deposit',
                 'help'                        => $this->tax > 0.0 ? 'price_includes_tax' : null,
                 'help_translation_parameters' => [
                     'tax' => $this->tax,

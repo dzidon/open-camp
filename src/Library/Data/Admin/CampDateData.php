@@ -29,6 +29,14 @@ class CampDateData
     #[Assert\NotBlank]
     private ?float $deposit = null;
 
+    #[Assert\When(
+        expression: 'this.getDeposit() !== null && this.getDeposit() > 0.0',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
+    private ?DateTimeImmutable $depositUntil = null;
+
     #[Assert\GreaterThanOrEqual(0.0)]
     #[Assert\NotBlank]
     private ?float $priceWithoutDeposit = null;
@@ -121,6 +129,18 @@ class CampDateData
     public function setDeposit(?float $deposit): self
     {
         $this->deposit = $deposit;
+
+        return $this;
+    }
+
+    public function getDepositUntil(): ?DateTimeImmutable
+    {
+        return $this->depositUntil;
+    }
+
+    public function setDepositUntil(?DateTimeImmutable $depositUntil): self
+    {
+        $this->depositUntil = $depositUntil;
 
         return $this;
     }

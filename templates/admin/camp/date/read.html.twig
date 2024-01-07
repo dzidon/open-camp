@@ -47,6 +47,20 @@
 
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.deposit_until'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.depositUntil is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp_date.depositUntil|date(date_time_format) }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.camp_date.capacity'|trans }}:</strong>
                         </div>
 

@@ -20,8 +20,8 @@ class PurchasableItemImageFilesystemTest extends KernelTestCase
     {
         $this->purchasableItemImageFilesystem->uploadImageFile($this->newImage, $this->purchasableItem);
 
-        $this->assertContains('kernel-dir/public/img/dynamic/purchasable-item/' . $this->purchasableItemIdString . '.png', $this->filesystemMock->getRemovedFiles());
-        $this->assertSame('img/dynamic/purchasable-item', $this->newImage->getMovedDirectory());
+        $this->assertContains('kernel-dir/public/files/dynamic/purchasable-item/' . $this->purchasableItemIdString . '.png', $this->filesystemMock->getRemovedFiles());
+        $this->assertSame('files/dynamic/purchasable-item', $this->newImage->getMovedDirectory());
         $this->assertSame($this->purchasableItemIdString . '.jpg', $this->newImage->getMovedName());
     }
 
@@ -31,7 +31,7 @@ class PurchasableItemImageFilesystemTest extends KernelTestCase
         $this->purchasableItemImageFilesystem->uploadImageFile($this->newImage, $this->purchasableItem);
 
         $this->assertEmpty($this->filesystemMock->getRemovedFiles());
-        $this->assertSame('img/dynamic/purchasable-item', $this->newImage->getMovedDirectory());
+        $this->assertSame('files/dynamic/purchasable-item', $this->newImage->getMovedDirectory());
         $this->assertSame($this->purchasableItemIdString . '.jpg', $this->newImage->getMovedName());
     }
 
@@ -39,7 +39,7 @@ class PurchasableItemImageFilesystemTest extends KernelTestCase
     {
         $path = $this->purchasableItemImageFilesystem->getImageFilePath($this->purchasableItem);
 
-        $this->assertSame('img/dynamic/purchasable-item/' . $this->purchasableItemIdString . '.png', $path);
+        $this->assertSame('files/dynamic/purchasable-item/' . $this->purchasableItemIdString . '.png', $path);
     }
 
     public function testGetImageFilePathIfNull(): void
@@ -54,7 +54,7 @@ class PurchasableItemImageFilesystemTest extends KernelTestCase
     {
         $this->purchasableItemImageFilesystem->removeImageFile($this->purchasableItem);
 
-        $this->assertContains('kernel-dir/public/img/dynamic/purchasable-item/' . $this->purchasableItemIdString . '.png', $this->filesystemMock->getRemovedFiles());
+        $this->assertContains('kernel-dir/public/files/dynamic/purchasable-item/' . $this->purchasableItemIdString . '.png', $this->filesystemMock->getRemovedFiles());
     }
 
     public function testRemoveFileIfNull(): void

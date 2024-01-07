@@ -19,7 +19,7 @@
                 </div>
 
                 <div class="col-12 col-sm-6">
-                    {{ camp_date_start_at|date(date_time_format) }}
+                    <span>{{ camp_date_start_at|date(date_time_format) }}</span>
                 </div>
             </div>
 
@@ -29,7 +29,7 @@
                 </div>
 
                 <div class="col-12 col-sm-6">
-                    {{ camp_date_end_at|date(date_time_format) }}
+                    <span>{{ camp_date_end_at|date(date_time_format) }}</span>
                 </div>
             </div>
 
@@ -40,7 +40,21 @@
                     </div>
 
                     <div class="col-12 col-sm-6">
-                        {{ camp_date_deposit }} {{ currency }}
+                        <span>{{ camp_date_deposit }} {{ currency }}</span>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-12 col-sm-6">
+                        <strong>{{ 'entity_attribute.camp_date.deposit_until'|trans }}:</strong>
+                    </div>
+
+                    <div class="col-12 col-sm-6">
+                        {% if camp_date_deposit_until is null %}
+                            <span>?</span>
+                        {% else %}
+                            <span>{{ camp_date_deposit_until|date(date_time_format) }}</span>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -50,7 +64,7 @@
                     </div>
 
                     <div class="col-12 col-sm-6">
-                        {{ camp_date_price_without_deposit }} {{ currency }}
+                        <span>{{ camp_date_price_without_deposit }} {{ currency }}</span>
                     </div>
                 </div>
 
@@ -60,7 +74,7 @@
                     </div>
 
                     <div class="col-12 col-sm-6">
-                        {{ camp_date_full_price }} {{ currency }}
+                        <span>{{ camp_date_full_price }} {{ currency }}</span>
                     </div>
                 </div>
             {% else %}
@@ -70,7 +84,7 @@
                     </div>
 
                     <div class="col-12 col-sm-6">
-                        {{ camp_date_price_without_deposit }} {{ currency }}
+                        <span>{{ camp_date_price_without_deposit }} {{ currency }}</span>
                     </div>
                 </div>
             {% endif %}
@@ -95,7 +109,9 @@
 
                     <div class="col-12">
                         {% for leader_name in camp_date_leader_names %}
-                            <div>{{ leader_name }}</div>
+                            <div>
+                                <span>{{ leader_name }}</span>
+                            </div>
                         {% endfor %}
                     </div>
                 </div>
@@ -108,7 +124,7 @@
                     </div>
 
                     <div class="col-12">
-                        {{ camp_date_description }}
+                        <span>{{ camp_date_description }}</span>
                     </div>
                 </div>
             {% endif %}

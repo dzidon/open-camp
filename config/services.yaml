@@ -8,18 +8,18 @@ parameters:
     app.tax: 21 # percent
 
     # Directories & paths
-    app.camp_image_directory: 'img/dynamic/camp'
-    app.no_camp_image_path: 'img/static/placeholder.jpg'
-    app.purchasable_item_image_directory: 'img/dynamic/purchasable-item'
-    app.no_purchasable_item_image_path: 'img/static/placeholder.jpg'
-    app.application_attachment_directory: 'img/dynamic/application-attachment'
+    app.camp_image_directory: 'files/dynamic/camp'
+    app.no_camp_image_path: 'files/static/placeholder.jpg'
+    app.purchasable_item_image_directory: 'files/dynamic/purchasable-item'
+    app.no_purchasable_item_image_path: 'files/static/placeholder.jpg'
+    app.application_attachment_directory: 'files/dynamic/application-attachment'
 
     # Mailer
     app.email_no_reply: 'noreply@camp.com'
 
     # Internationalization
     app.date_format: 'd.m.Y'
-    app.date_time_format: 'd.m.Y H:i:s'
+    app.date_time_format: 'd.m.Y H:i'
     app.currency: 'CZK'
     app.locales: 'cs' # Enabled locales (languages) divided by "|"
     app.locale_names:

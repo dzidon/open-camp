@@ -19,7 +19,7 @@ class CampImageFilesystemTest extends KernelTestCase
     {
         $path = $this->campImageFilesystem->getFilePath($this->campImage);
 
-        $this->assertSame('img/dynamic/camp/' . $this->campImageIdString . '.png', $path);
+        $this->assertSame('files/dynamic/camp/' . $this->campImageIdString . '.png', $path);
     }
 
     public function testGetFilePathWithNullCampImage(): void
@@ -33,7 +33,7 @@ class CampImageFilesystemTest extends KernelTestCase
     {
         $this->campImageFilesystem->removeFile($this->campImage);
 
-        $this->assertContains('kernel-dir/public/img/dynamic/camp/' . $this->campImageIdString . '.png', $this->filesystemMock->getRemovedFiles());
+        $this->assertContains('kernel-dir/public/files/dynamic/camp/' . $this->campImageIdString . '.png', $this->filesystemMock->getRemovedFiles());
     }
 
     protected function setUp(): void

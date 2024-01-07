@@ -379,6 +379,7 @@ class CampDateDataTest extends KernelTestCase
         $data = new CampDateData($camp);
         $data->setDeposit(100.0);
         $data->setPriceWithoutDeposit(100.0);
+        $data->setDepositUntil(new DateTimeImmutable('3000-01-01'));
         $data->setCapacity(5);
 
         $data->setStartAt(new DateTimeImmutable('3000-01-01'));
@@ -426,6 +427,7 @@ class CampDateDataTest extends KernelTestCase
         $data = new CampDateData($camp, $campDate);
         $data->setDeposit(100.0);
         $data->setPriceWithoutDeposit(100.0);
+        $data->setDepositUntil(new DateTimeImmutable('3000-01-01'));
         $data->setCapacity(5);
 
         $data->setStartAt(new DateTimeImmutable('2000-06-20'));

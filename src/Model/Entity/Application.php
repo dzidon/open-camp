@@ -71,6 +71,9 @@ class Application
     #[ORM\Column(type: Types::FLOAT)]
     private float $priceWithoutDeposit;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $depositUntil;
+
     #[ORM\Column(length: 3)]
     private string $currency;
 
@@ -173,6 +176,7 @@ class Application
 
         $this->deposit = $this->campDate->getDeposit();
         $this->priceWithoutDeposit = $this->campDate->getPriceWithoutDeposit();
+        $this->depositUntil = $this->campDate->getDepositUntil();
     }
 
     public function getId(): UuidV4
@@ -392,6 +396,11 @@ class Application
     public function getPriceWithoutDepositWithoutTax(): float
     {
         return round($this->priceWithoutDeposit / $this->getTaxDenominator());
+    }
+
+    public function getDepositUntil(): ?DateTimeImmutable
+    {
+        return $this->depositUntil;
     }
 
     public function getCampDateStartAt(): ?DateTimeImmutable

@@ -29,6 +29,9 @@ class CampDate
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $endAt;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $depositUntil = null;
+
     #[ORM\Column(type: Types::FLOAT)]
     private float $deposit;
 
@@ -127,6 +130,18 @@ class CampDate
     public function setEndAt(DateTimeImmutable $endAt): self
     {
         $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    public function getDepositUntil(): ?DateTimeImmutable
+    {
+        return $this->depositUntil;
+    }
+
+    public function setDepositUntil(?DateTimeImmutable $depositUntil): self
+    {
+        $this->depositUntil = $depositUntil;
 
         return $this;
     }

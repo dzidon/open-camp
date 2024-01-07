@@ -22,14 +22,14 @@ class ImageExtensionTest extends KernelTestCase
         $campImage = $this->campImageRepository->findOneById($id);
         $path = $this->extension->getCampImagePath($campImage);
 
-        $this->assertSame('img/dynamic/camp/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b.jpg?t=0', $path);
+        $this->assertSame('files/dynamic/camp/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b.jpg?t=0', $path);
     }
 
     public function testNullCampImagePath(): void
     {
         $path = $this->extension->getCampImagePath(null);
 
-        $this->assertSame('img/static/camp/placeholder.jpg?t=0', $path);
+        $this->assertSame('files/static/camp/placeholder.jpg?t=0', $path);
     }
 
     public function testPurchasableItemImagePath(): void
@@ -38,7 +38,7 @@ class ImageExtensionTest extends KernelTestCase
         $purchasableItem = $this->purchasableItemRepository->findOneById($id);
         $path = $this->extension->getPurchasableItemImagePath($purchasableItem);
 
-        $this->assertSame('img/dynamic/purchasable-item/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b.jpg?t=0', $path);
+        $this->assertSame('files/dynamic/purchasable-item/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b.jpg?t=0', $path);
     }
 
     protected function setUp(): void
