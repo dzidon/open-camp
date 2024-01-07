@@ -44,7 +44,7 @@
             {% if camp_images|length >= 2 %}
                 <div class="row mt-3">
                     {% for key, camp_image in camp_images %}
-                        <div class="col-3">
+                        <div class="col-4 col-md-3">
                             <a href="#camp-images-carousel" data-slide-to="{{ key }}">
                                 <img class="image-cover-16-9"
                                      src="{{ asset(camp_image_path(camp_image)) }}"
@@ -121,9 +121,15 @@
                                     </td>
 
                                     <td>
-                                        <span class="badge badge-success">
-                                            {{ 'camp_catalog.camp_availability.available'|trans }}
-                                        </span>
+                                        {% if camp_date.isHidden %}
+                                            <span class="badge badge-warning">
+                                                {{ 'camp_catalog.hidden_camp_date'|trans }}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge badge-success">
+                                                {{ 'camp_catalog.camp_availability.available'|trans }}
+                                            </span>
+                                        {% endif %}
                                     </td>
 
                                     <td>
@@ -155,9 +161,15 @@
                                                     Cena: {{ camp_date.deposit + camp_date.priceWithoutDeposit }} {{ currency }}
                                                 </span>
 
-                                                <span class="badge badge-success">
-                                                    {{ 'camp_catalog.camp_availability.available'|trans }}
-                                                </span>
+                                                {% if camp_date.isHidden %}
+                                                    <span class="badge badge-warning">
+                                                        {{ 'camp_catalog.hidden_camp_date'|trans }}
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge badge-success">
+                                                        {{ 'camp_catalog.camp_availability.available'|trans }}
+                                                    </span>
+                                                {% endif %}
                                             </p>
 
                                             <a href="#" class="card-link stretched-link">Přihláška</a>

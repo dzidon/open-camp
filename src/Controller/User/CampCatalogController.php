@@ -45,7 +45,7 @@ class CampCatalogController extends AbstractController
     {
         $campCategory = null;
         $pathCampCategories = [];
-        $showHiddenCamps = $this->isGranted('camp_create') || $this->isGranted('camp_update');
+        $showHiddenCamps = $this->userCanViewHiddenCamps();
 
         if ($path === null || $path === '')
         {
@@ -100,10 +100,11 @@ class CampCatalogController extends AbstractController
                            string                       $urlName): Response
     {
         $camp = $this->findCampOrThrow404($urlName);
+        $showHiddenCamps = $this->userCanViewHiddenCamps();
 
         if ($camp->isHidden())
         {
-            if (!$this->isGranted('camp_create') && !$this->isGranted('camp_update'))
+            if (!$showHiddenCamps)
             {
                 throw $this->createNotFoundException();
             }
@@ -112,7 +113,7 @@ class CampCatalogController extends AbstractController
         }
 
         $campImages = $campImageRepository->findByCamp($camp);
-        $campDates = $campDateRepository->findUpcomingByCamp($camp);
+        $campDates = $campDateRepository->findUpcomingByCamp($camp, $showHiddenCamps);
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
@@ -126,6 +127,11 @@ class CampCatalogController extends AbstractController
             'camp_dates'  => $campDates,
             'breadcrumbs' => $this->breadcrumbs->buildDetail($camp),
         ]);
+    }
+
+    private function userCanViewHiddenCamps(): bool
+    {
+        return $this->isGranted('camp_create') || $this->isGranted('camp_update');
     }
 
     private function findCampCategoryOrThrow404(string $path, bool $showHiddenCamps): CampCategory

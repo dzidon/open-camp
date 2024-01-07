@@ -80,6 +80,10 @@ class CampDateType extends AbstractType
                 'required' => false,
                 'label'    => 'form.admin.camp_date.is_closed',
             ])
+            ->add('isHidden', CheckboxType::class, [
+                'required' => false,
+                'label'    => 'form.admin.camp_date.is_hidden',
+            ])
             ->add('description', TextareaType::class, [
                 'required' => false,
                 'label'    => 'form.admin.camp_date.description',

@@ -66,6 +66,7 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDateData->setCapacity($campDate->getCapacity());
         $campDateData->setIsOpenAboveCapacity($campDate->isOpenAboveCapacity());
         $campDateData->setIsClosed($campDate->isClosed());
+        $campDateData->setIsHidden($campDate->isHidden());
         $campDateData->setDescription($campDate->getDescription());
         $campDateData->setTripLocationPathThere($campDate->getTripLocationPathThere());
         $campDateData->setTripLocationPathBack($campDate->getTripLocationPathBack());
@@ -110,6 +111,7 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDate->setCapacity($campDateData->getCapacity());
         $campDate->setIsOpenAboveCapacity($campDateData->isOpenAboveCapacity());
         $campDate->setIsClosed($campDateData->isClosed());
+        $campDate->setIsHidden($campDateData->isHidden());
         $campDate->setDescription($campDateData->getDescription());
         $campDate->setTripLocationPathThere($campDateData->getTripLocationPathThere());
         $campDate->setTripLocationPathBack($campDateData->getTripLocationPathBack());

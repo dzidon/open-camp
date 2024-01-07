@@ -73,6 +73,8 @@ application:
     buyer_details: 'Údaje o objednávajícím'
 
 camp_catalog:
+    hidden_camp: 'Skrytý'
+    hidden_camp_date: 'Skrytý'
     hidden_camp_detail_shown_for_admin: 'Zobrazujete si skrytý tábor jako administrátor.'
     no_upcoming_camp_dates: 'Žádné nadcházející termíny'
     show_map: 'Ukázat na mapě'
@@ -691,6 +693,7 @@ entity_attribute:
         capacity: 'Kapacita'
         is_open_above_capacity: 'Přijímá přihlášky nad kapacitou'
         is_closed: 'Přihlášování zablokováno'
+        is_hidden: 'Skrytý'
         description: 'Informace k termínu'
         camp: 'Tábor'
         leaders: 'Vedoucí'
@@ -942,6 +945,7 @@ form:
             capacity: 'Kapacita'
             is_open_above_capacity: 'Přijímat přihlášky nad kapacitou'
             is_closed: 'Zablokovat přihlášení'
+            is_hidden: 'Skrytý'
             description: 'Informace k termínu'
             leaders: 'Vedoucí'
             form_fields: 'Formulářová pole'
@@ -970,6 +974,7 @@ form:
                     capacity_desc: 'Kapacita (od největší)'
 
             is_active: 'Přijímá přihlášky'
+            is_hidden: 'Skrytý'
             is_historical:
                 label: 'Typ termínu'
                 choices:

@@ -59,6 +59,7 @@
                                     <th>{{ 'entity_attribute.camp_date.deposit'|trans }}</th>
                                     <th>{{ 'entity_attribute.camp_date.price_without_deposit'|trans }}</th>
                                     <th>{{ 'entity_attribute.camp_date.capacity'|trans }}</th>
+                                    <th>{{ 'entity_attribute.camp_date.is_hidden'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
                                 </tr>
                             </thead>
@@ -84,6 +85,14 @@
 
                                         <td class="align-middle">
                                             <span>{{ camp_date.capacity }}</span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if camp_date.isHidden %}
+                                                <span>{{ 'bool.yes'|trans }}</span>
+                                            {% else %}
+                                                <span>{{ 'bool.no'|trans }}</span>
+                                            {% endif %}
                                         </td>
 
                                         <td class="align-middle cell-25">

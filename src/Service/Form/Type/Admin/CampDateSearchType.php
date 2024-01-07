@@ -54,6 +54,15 @@ class CampDateSearchType extends AbstractType
                 ],
                 'label' => 'form.admin.camp_date_search.is_historical.label',
             ])
+            ->add('isHidden', ChoiceType::class, [
+                'placeholder' => 'form.common.choice.irrelevant',
+                'choices' => [
+                    'form.common.choice.yes' => true,
+                    'form.common.choice.no'  => false,
+                ],
+                'required' => false,
+                'label'    => 'form.admin.camp_date_search.is_hidden',
+            ])
             ->add('isActive', ChoiceType::class, [
                 'placeholder' => 'form.common.choice.irrelevant',
                 'choices' => [

@@ -72,9 +72,9 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     /**
      * @inheritDoc
      */
-    public function findUpcomingByCamp(Camp $camp): array
+    public function findUpcomingByCamp(Camp $camp, bool $showHidden = true): array
     {
-        $campDates = $this->createQueryBuilder('campDate')
+        $queryBuilder = $this->createQueryBuilder('campDate')
             ->select('campDate, camp, campCategory, tripLocationPathThere, tripLocationPathBack, leader')
             ->leftJoin('campDate.camp', 'camp')
             ->leftJoin('camp.campCategory', 'campCategory')
@@ -86,6 +86,14 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ->andWhere('campDate.startAt > :now')
             ->setParameter('now', new DateTimeImmutable('now'))
             ->orderBy('campDate.startAt', 'ASC')
+        ;
+
+        if (!$showHidden)
+        {
+            $queryBuilder->andWhere('campDate.isHidden = FALSE');
+        }
+
+        $campDates = $queryBuilder
             ->getQuery()
             ->getResult()
         ;
@@ -146,6 +154,7 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
         $to = $data->getTo();
         $sortBy = $data->getSortBy();
         $isHistorical = $data->isHistorical();
+        $isHidden = $data->isHidden();
         $isActive = $data->isActive();
 
         $queryBuilder = $this->createQueryBuilder('campDate')
@@ -167,6 +176,14 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             $queryBuilder
                 ->andWhere('campDate.endAt <= :to')
                 ->setParameter('to', $to->format('Y-m-d 23:59:59'))
+            ;
+        }
+
+        if ($isHidden !== null)
+        {
+            $queryBuilder
+                ->andWhere('campDate.isHidden = :isHidden')
+                ->setParameter('isHidden', $isHidden)
             ;
         }
 

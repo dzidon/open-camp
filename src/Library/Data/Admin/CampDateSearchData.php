@@ -15,6 +15,8 @@ class CampDateSearchData
 
     private ?bool $isHistorical = false;
 
+    private ?bool $isHidden = null;
+
     private ?bool $isActive = null;
 
     public function getFrom(): ?DateTimeImmutable
@@ -66,6 +68,18 @@ class CampDateSearchData
     public function setIsHistorical(?bool $isHistorical): self
     {
         $this->isHistorical = $isHistorical;
+
+        return $this;
+    }
+
+    public function isHidden(): ?bool
+    {
+        return $this->isHidden;
+    }
+
+    public function setIsHidden(?bool $isHidden): self
+    {
+        $this->isHidden = $isHidden;
 
         return $this;
     }

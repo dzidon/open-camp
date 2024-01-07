@@ -44,6 +44,9 @@ class CampDate
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isClosed = false;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isHidden = false;
+
     #[ORM\Column(length: 2000, nullable: true)]
     private ?string $description = null;
 
@@ -189,6 +192,18 @@ class CampDate
     public function setIsClosed(bool $isClosed): self
     {
         $this->isClosed = $isClosed;
+
+        return $this;
+    }
+
+    public function isHidden(): bool
+    {
+        return $this->isHidden;
+    }
+
+    public function setIsHidden(bool $isHidden): self
+    {
+        $this->isHidden = $isHidden;
 
         return $this;
     }

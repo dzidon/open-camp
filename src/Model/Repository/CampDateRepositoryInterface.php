@@ -42,9 +42,10 @@ interface CampDateRepositoryInterface
      * Finds all upcoming camp dates for the given camp.
      *
      * @param Camp $camp
-     * @return CampDate[]
+     * @param bool $showHidden
+     * @return array
      */
-    public function findUpcomingByCamp(Camp $camp): array;
+    public function findUpcomingByCamp(Camp $camp, bool $showHidden = true): array;
 
     /**
      * Finds dates of the given camp that collide with the given datetime interval.

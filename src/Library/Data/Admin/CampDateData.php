@@ -41,6 +41,8 @@ class CampDateData
 
     private bool $isClosed = false;
 
+    private bool $isHidden = false;
+
     #[Assert\Length(max: 2000)]
     private ?string $description = null;
 
@@ -167,6 +169,18 @@ class CampDateData
     public function setIsClosed(bool $isClosed): self
     {
         $this->isClosed = $isClosed;
+
+        return $this;
+    }
+
+    public function isHidden(): bool
+    {
+        return $this->isHidden;
+    }
+
+    public function setIsHidden(bool $isHidden): self
+    {
+        $this->isHidden = $isHidden;
 
         return $this;
     }

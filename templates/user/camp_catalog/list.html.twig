@@ -76,8 +76,8 @@
                                 <div class="card-body">
                                     <h5 class="card-title">
                                         {% if camp.isHidden %}
-                                            <span class="badge badge-danger">
-                                                Skrytý
+                                            <span class="badge badge-warning">
+                                                {{ 'camp_catalog.hidden_camp'|trans }}
                                             </span>
                                         {% endif %}
 

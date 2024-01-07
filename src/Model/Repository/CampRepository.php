@@ -211,6 +211,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         if (!$showHidden)
         {
             $queryBuilder->andWhere('camp.isHidden = FALSE');
+            $queryBuilder->andWhere('campDate.isHidden = FALSE');
         }
 
         if ($age !== null)
@@ -279,7 +280,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             return $camp->getId()->toBinary();
         }, $camps);
 
-        $campDates = $this->_em->createQueryBuilder()
+        $queryBuilder = $this->_em->createQueryBuilder()
             ->select('campDate, camp')
             ->from(CampDate::class, 'campDate')
             ->leftJoin('campDate.camp', 'camp')
@@ -289,6 +290,14 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             ->andWhere('campDate.startAt > :now')
             ->setParameter('now', new DateTimeImmutable('now'))
             ->orderBy('campDate.startAt', 'ASC')
+        ;
+
+        if (!$showHidden)
+        {
+            $queryBuilder->andWhere('campDate.isHidden = FALSE');
+        }
+
+        $campDates = $queryBuilder
             ->getQuery()
             ->getResult()
         ;
