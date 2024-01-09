@@ -44,9 +44,10 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
     public function findOneById(UuidV4 $id): ?Application
     {
         $application = $this->createQueryBuilder('application')
-            ->select('application, campDate, user, camp, leader')
+            ->select('application, campDate, user, paymentMethod, camp, leader')
             ->leftJoin('application.campDate', 'campDate')
             ->leftJoin('application.user', 'user')
+            ->leftJoin('application.paymentMethod', 'paymentMethod')
             ->leftJoin('campDate.camp', 'camp')
             ->leftJoin('campDate.leaders', 'leader')
             ->andWhere('application.id = :id')
@@ -71,9 +72,10 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
     {
         /** @var Application|null $application */
         $application = $this->createQueryBuilder('application')
-            ->select('application, campDate, user, camp, leader')
+            ->select('application, campDate, user, paymentMethod, camp, leader')
             ->leftJoin('application.campDate', 'campDate')
             ->leftJoin('application.user', 'user')
+            ->leftJoin('application.paymentMethod', 'paymentMethod')
             ->leftJoin('campDate.camp', 'camp')
             ->leftJoin('campDate.leaders', 'leader')
             ->andWhere('application.simpleId = :simpleId')

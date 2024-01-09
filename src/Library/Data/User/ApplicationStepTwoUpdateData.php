@@ -2,13 +2,29 @@
 
 namespace App\Library\Data\User;
 
+use App\Model\Entity\PaymentMethod;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ApplicationStepTwoUpdateData
 {
+    #[Assert\NotBlank]
+    private ?PaymentMethod $paymentMethod = null;
+
     /** @var ApplicationPurchasableItemData[] */
     #[Assert\Valid]
     private array $applicationPurchasableItemsData = [];
+
+    public function getPaymentMethod(): ?PaymentMethod
+    {
+        return $this->paymentMethod;
+    }
+
+    public function setPaymentMethod(?PaymentMethod $paymentMethod): self
+    {
+        $this->paymentMethod = $paymentMethod;
+
+        return $this;
+    }
 
     public function getApplicationPurchasableItemsData(): array
     {

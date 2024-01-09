@@ -38,16 +38,18 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
      */
     public function fillData(object $data, object $entity): void
     {
-        /** @var ApplicationStepTwoUpdateData $applicationPurchasableItemsData */
+        /** @var ApplicationStepTwoUpdateData $applicationStepTwoUpdateData */
         /** @var Application $application */
-        $applicationPurchasableItemsData = $data;
+        $applicationStepTwoUpdateData = $data;
         $application = $entity;
+
+        $applicationStepTwoUpdateData->setPaymentMethod($application->getPaymentMethod());
 
         foreach ($application->getApplicationPurchasableItems() as $applicationPurchasableItem)
         {
             $applicationPurchasableItemData = new ApplicationPurchasableItemData($applicationPurchasableItem);
             $this->dataTransfer->fillData($applicationPurchasableItemData, $applicationPurchasableItem);
-            $applicationPurchasableItemsData->addApplicationPurchasableItemsDatum($applicationPurchasableItemData);
+            $applicationStepTwoUpdateData->addApplicationPurchasableItemsDatum($applicationPurchasableItemData);
         }
     }
 
@@ -56,14 +58,15 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
      */
     public function fillEntity(object $data, object $entity): void
     {
-        /** @var ApplicationStepTwoUpdateData $applicationPurchasableItemsData */
+        /** @var ApplicationStepTwoUpdateData $applicationStepTwoUpdateData */
         /** @var Application $application */
-        $applicationPurchasableItemsData = $data;
+        $applicationStepTwoUpdateData = $data;
         $application = $entity;
 
+        $application->setPaymentMethod($applicationStepTwoUpdateData->getPaymentMethod());
         $applicationPurchasableItems = $application->getApplicationPurchasableItems();
 
-        foreach ($applicationPurchasableItemsData->getApplicationPurchasableItemsData() as $index => $applicationPurchasableItemData)
+        foreach ($applicationStepTwoUpdateData->getApplicationPurchasableItemsData() as $index => $applicationPurchasableItemData)
         {
             if (!array_key_exists($index, $applicationPurchasableItems))
             {

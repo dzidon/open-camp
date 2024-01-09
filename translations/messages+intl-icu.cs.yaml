@@ -40,6 +40,11 @@ image_carousel:
     previous: 'Předchozí'
     no_image: 'Obrázek není k dispozici'
 
+payment_method:
+    card: 'Karta'
+    transfer: 'Převod'
+    invoice: 'Faktura'
+
 contact_role:
     mother: 'Matka'
     father: 'Otec'
@@ -422,14 +427,53 @@ entity:
         singular: 'Formulářové pole'
         plural: 'Formulářová pole'
 
+    payment_method:
+        singular: 'Platební metoda'
+        plural: 'Platební metody'
+
     application:
         singular: 'Přihláška'
         plural: 'Přihlášky'
+
+    application_attachment:
+        singular: 'Příloha'
+        plural: 'Přílohy'
+
+    application_camper:
+        singular: 'Táborník'
+        plural: 'Táborníci'
+
+    application_contact:
+        singular: 'Kontakt'
+        plural: 'Kontakty'
+
+    application_form_field_value:
+        singular: 'Hodnota formulářového pole'
+        plural: 'Hodnoty formulářových polí'
+
+    application_purchasable_item:
+        singular: 'Volitelná položka'
+        plural: 'Volitelné položky'
+
+    application_purchasable_item_instance:
+        singular: 'Instance volitelné položky'
+        plural: 'Instance volitelné položky'
+
+    application_trip_location_path:
+        singular: 'Trasa'
+        plural: 'Trasy'
 
 entity_attribute:
     common:
         set: 'Nastaveno'
         unset: 'Nenastaveno'
+
+    payment_method:
+        id: 'ID'
+        identifier: 'Identifikátor'
+        is_online: 'On-line'
+        priority: 'Priorita'
+        created_at: 'Datum vytvoření'
 
     application:
         id: 'ID'
@@ -1239,6 +1283,8 @@ form:
             trip_location_path_back: 'Kde vysednu na cestě domů'
 
         application_step_two:
+            payment_method: 'Platební metoda'
+            purchasable_items: 'Volitelné položky'
             button: 'Pokračovat'
 
         application_purchasable_item_instance:

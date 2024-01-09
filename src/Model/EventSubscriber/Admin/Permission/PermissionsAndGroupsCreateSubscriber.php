@@ -31,7 +31,7 @@ class PermissionsAndGroupsCreateSubscriber
     }
 
     #[AsEventListener(event: PermissionsAndGroupsCreateEvent::NAME, priority: 200)]
-    public function onCreateDispatch(PermissionsAndGroupsCreateEvent $event): void
+    public function onCreateInstantiate(PermissionsAndGroupsCreateEvent $event): void
     {
         $result = $this->permissionsAndGroupsFactory->createPermissionsAndGroups();
         $event->setPermissionsAndGroupsCreationResult($result);

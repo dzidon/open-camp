@@ -193,9 +193,11 @@
 {% block user_application_step_two_widget %}
     {{ form_errors(form) }}
 
+    {{ form_row(form.paymentMethod) }}
+
     {% if form.applicationPurchasableItemsData.children is not empty and application_purchasable_items is defined %}
         <h3 class="mb-3">
-            {{ 'entity.purchasable_item.plural'|trans }}
+            {{ form.applicationPurchasableItemsData.vars.label|trans }}
         </h3>
 
         {% for index, application_purchasable_item_form in form.applicationPurchasableItemsData.children %}

@@ -106,6 +106,10 @@ class Application
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?User $user;
 
+    #[ORM\ManyToOne(targetEntity: PaymentMethod::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?PaymentMethod $paymentMethod = null;
+
     #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationContact::class)]
     private Collection $applicationContacts;
 
@@ -421,6 +425,18 @@ class Application
     public function getUser(): ?User
     {
         return $this->user;
+    }
+
+    public function getPaymentMethod(): ?PaymentMethod
+    {
+        return $this->paymentMethod;
+    }
+
+    public function setPaymentMethod(?PaymentMethod $paymentMethod): self
+    {
+        $this->paymentMethod = $paymentMethod;
+
+        return $this;
     }
 
     /**

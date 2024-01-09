@@ -14,6 +14,7 @@ use App\Model\Event\User\Application\ApplicationStepTwoUpdateEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
+use App\Model\Repository\PaymentMethodRepositoryInterface;
 use App\Model\Service\Application\ApplicationStepOneDataFactoryInterface;
 use App\Model\Service\ApplicationCamper\ApplicationCamperDataFactoryInterface;
 use App\Model\Service\ApplicationPurchasableItemInstance\ApplicationPurchasableItemInstanceDataFactoryInterface;
@@ -165,6 +166,7 @@ class ApplicationController extends AbstractController
 
     #[Route('/application/{applicationId}/step-two', name: 'user_application_step_two')]
     public function stepTwo(ApplicationPurchasableItemInstanceDataFactoryInterface $applicationPurchasableItemInstanceDataFactory,
+                            PaymentMethodRepositoryInterface                       $paymentMethodRepository,
                             DataTransferRegistryInterface                          $dataTransfer,
                             EventDispatcherInterface                               $eventDispatcher,
                             Request                                                $request,
@@ -175,9 +177,10 @@ class ApplicationController extends AbstractController
         $dataTransfer->fillData($applicationPurchasableItemsData, $application);
 
         $form = $this->createForm(ApplicationStepTwoType::class, $applicationPurchasableItemsData, [
-            'instance_defaults_data' => $applicationPurchasableItemInstanceDataFactory->createDataFromApplication($application),
+            'instance_defaults_data'  => $applicationPurchasableItemInstanceDataFactory->createDataFromApplication($application),
+            'choices_payment_methods' => $paymentMethodRepository->findAll(),
         ]);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_two.button',]);
+        $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_two.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
@@ -189,6 +192,9 @@ class ApplicationController extends AbstractController
                 'applicationId' => $application->getId()
             ]);
         }
+
+        // load all camp categories so that the camp category path does not trigger additional queries
+        $this->campCategoryRepository->findAll();
 
         return $this->render('user/application/step_two.html.twig', [
             'form_application_step_two'     => $form->createView(),
