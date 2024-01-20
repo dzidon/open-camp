@@ -46,7 +46,7 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Groups
          */
-        $this->assertCount(8, $groupsSerialized);
+        $this->assertCount(9, $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'user',
@@ -96,10 +96,16 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
             'label'    => 'permission_group.form_field',
         ], $groupsSerialized);
 
+        $this->assertContains([
+            'name'     => 'discount_config',
+            'priority' => 900,
+            'label'    => 'permission_group.discount_config',
+        ], $groupsSerialized);
+
         /*
          * Permissions
          */
-        $this->assertCount(33, $permissionsSerialized);
+        $this->assertCount(37, $permissionsSerialized);
 
         // user
         $this->assertContains([
@@ -338,6 +344,35 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
             'priority'         => 400,
             'label'            => 'permission.form_field_delete',
             'permission_group' => 'form_field',
+        ], $permissionsSerialized);
+
+        // discount config
+        $this->assertContains([
+            'name'             => 'discount_config_create',
+            'priority'         => 100,
+            'label'            => 'permission.discount_config_create',
+            'permission_group' => 'discount_config',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'discount_config_read',
+            'priority'         => 200,
+            'label'            => 'permission.discount_config_read',
+            'permission_group' => 'discount_config',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'discount_config_update',
+            'priority'         => 300,
+            'label'            => 'permission.discount_config_update',
+            'permission_group' => 'discount_config',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'discount_config_delete',
+            'priority'         => 400,
+            'label'            => 'permission.discount_config_delete',
+            'permission_group' => 'discount_config',
         ], $permissionsSerialized);
 
         /*

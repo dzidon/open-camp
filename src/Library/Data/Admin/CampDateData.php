@@ -5,6 +5,7 @@ namespace App\Library\Data\Admin;
 use App\Library\Constraint\CampDateInterval;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\DiscountConfig;
 use App\Model\Entity\TripLocationPath;
 use App\Model\Entity\User;
 use DateTimeImmutable;
@@ -58,6 +59,8 @@ class CampDateData
      * @var User[]
      */
     private array $leaders = [];
+
+    private ?DiscountConfig $discountConfig = null;
 
     private ?TripLocationPath $tripLocationPathThere = null;
 
@@ -244,6 +247,18 @@ class CampDateData
         }
 
         unset($this->leaders[$key]);
+
+        return $this;
+    }
+
+    public function getDiscountConfig(): ?DiscountConfig
+    {
+        return $this->discountConfig;
+    }
+
+    public function setDiscountConfig(?DiscountConfig $discountConfig): self
+    {
+        $this->discountConfig = $discountConfig;
 
         return $this;
     }

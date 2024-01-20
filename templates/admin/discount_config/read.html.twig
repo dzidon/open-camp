@@ -1,0 +1,100 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.discount_config.name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ discount_config.name }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.discount_config.recurring_campers_config.name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if discount_config.recurringCampersConfig is empty %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                {% for options in discount_config.recurringCampersConfig %}
+                                    <div>
+                                        <span>
+                                            {% if options.from is not null %}
+                                                {{ 'entity_attribute.discount_config.recurring_campers_config.options.from'|trans }}: {{ options.from }},
+                                            {% endif %}
+
+                                            {% if options.to is not null %}
+                                                {{ 'entity_attribute.discount_config.recurring_campers_config.options.to'|trans }}: {{ options.to }},
+                                            {% endif %}
+
+                                            {{ 'entity_attribute.discount_config.recurring_campers_config.options.discount'|trans }}: {{ options.discount }}
+
+                                            {{ currency_symbol_for_code(currency) }}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.discount_config.siblings_config.name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if discount_config.siblingsConfig is empty %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                {% for options in discount_config.siblingsConfig %}
+                                    <div>
+                                        <span>
+                                            {% if options.from is not null %}
+                                                {{ 'entity_attribute.discount_config.siblings_config.options.from'|trans }}: {{ options.from }},
+                                            {% endif %}
+
+                                            {% if options.to is not null %}
+                                                {{ 'entity_attribute.discount_config.siblings_config.options.to'|trans }}: {{ options.to }},
+                                            {% endif %}
+
+                                            {{ 'entity_attribute.discount_config.siblings_config.options.discount'|trans }}: {{ options.discount }}
+
+                                            {{ currency_symbol_for_code(currency) }}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% set granted_update = is_granted('discount_config_update') %}
+                {% set granted_delete = is_granted('discount_config_delete') %}
+
+                {% if granted_update or granted_delete %}
+                    <div class="card-footer">
+                        {% if granted_update %}
+                            <a href="{{ path('admin_discount_config_update', {id: discount_config.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if granted_delete %}
+                            <a href="{{ path('admin_discount_config_delete', {id: discount_config.id.toRfc4122}) }}" class="btn btn-danger">
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

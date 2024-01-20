@@ -50,7 +50,7 @@ class CampDateUpdateEventTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $this->camp = new Camp('Camp', 'camp', 5, 10, 321);
         $this->campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000, 100.0, 10, $this->camp);
         $this->data = new CampDateData($this->camp);
         $this->event = new CampDateUpdateEvent($this->data, $this->campDate);

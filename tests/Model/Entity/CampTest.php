@@ -14,10 +14,6 @@ class CampTest extends TestCase
     private const URL_NAME = 'url-name';
     private const AGE_MIN = 1;
     private const AGE_MAX = 2;
-    private const STREET = 'Street 123';
-    private const TOWN = 'Test town';
-    private const ZIP = '12345';
-    private const COUNTRY = 'CZ';
     private const PRIORITY = 321;
 
     private Camp $camp;
@@ -66,38 +62,50 @@ class CampTest extends TestCase
 
     public function testStreet(): void
     {
-        $this->assertSame(self::STREET, $this->camp->getStreet());
+        $this->assertNull($this->camp->getStreet());
 
         $newStreet = 'New street 123';
         $this->camp->setStreet($newStreet);
         $this->assertSame($newStreet, $this->camp->getStreet());
+
+        $this->camp->setStreet(null);
+        $this->assertNull($this->camp->getStreet());
     }
 
     public function testTown(): void
     {
-        $this->assertSame(self::TOWN, $this->camp->getTown());
+        $this->assertNull($this->camp->getTown());
 
         $newTown = 'New town';
         $this->camp->setTown($newTown);
         $this->assertSame($newTown, $this->camp->getTown());
+
+        $this->camp->setTown(null);
+        $this->assertNull($this->camp->getTown());
     }
 
     public function testZip(): void
     {
-        $this->assertSame(self::ZIP, $this->camp->getZip());
+        $this->assertNull($this->camp->getZip());
 
         $newZip = '54321';
         $this->camp->setZip($newZip);
         $this->assertSame($newZip, $this->camp->getZip());
+
+        $this->camp->setZip(null);
+        $this->assertNull($this->camp->getZip());
     }
 
     public function testCountry(): void
     {
-        $this->assertSame(self::COUNTRY, $this->camp->getCountry());
+        $this->assertNull($this->camp->getCountry());
 
         $newCountry = 'SK';
         $this->camp->setCountry($newCountry);
         $this->assertSame($newCountry, $this->camp->getCountry());
+
+        $this->camp->setCountry(null);
+        $this->assertNull($this->camp->getCountry());
     }
 
     public function testPriority(): void
@@ -171,6 +179,6 @@ class CampTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->camp = new Camp(self::NAME, self::URL_NAME, self::AGE_MIN, self::AGE_MAX, self::STREET, self::TOWN, self::ZIP, self::COUNTRY, self::PRIORITY);
+        $this->camp = new Camp(self::NAME, self::URL_NAME, self::AGE_MIN, self::AGE_MAX, self::PRIORITY);
     }
 }

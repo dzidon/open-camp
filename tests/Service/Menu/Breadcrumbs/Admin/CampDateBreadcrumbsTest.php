@@ -172,7 +172,7 @@ class CampDateBreadcrumbsTest extends KernelTestCase
     {
         $container = static::getContainer();
 
-        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $this->camp = new Camp('Camp', 'camp', 5, 10, 321);
         $reflectionClass = new ReflectionClass($this->camp);
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->camp, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));

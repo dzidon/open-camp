@@ -32,20 +32,42 @@ class CampData
     #[Assert\NotBlank]
     private ?int $ageMax = null;
 
+    private bool $isAddressPresent = false;
+
     #[StreetRequirements]
-    #[Assert\NotBlank]
+    #[Assert\When(
+        expression: 'this.isAddressPresent()',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
     private ?string $street = null;
 
     #[Assert\Length(max: 255)]
-    #[Assert\NotBlank]
+    #[Assert\When(
+        expression: 'this.isAddressPresent()',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
     private ?string $town = null;
 
     #[ZipCodeRequirements]
-    #[Assert\NotBlank]
+    #[Assert\When(
+        expression: 'this.isAddressPresent()',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
     private ?string $zip = null;
 
     #[Assert\Country]
-    #[Assert\NotBlank]
+    #[Assert\When(
+        expression: 'this.isAddressPresent()',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
     private ?string $country = null;
 
     #[Assert\Length(max: 160)]
@@ -117,6 +139,18 @@ class CampData
     public function setAgeMax(?int $ageMax): self
     {
         $this->ageMax = $ageMax;
+
+        return $this;
+    }
+
+    public function isAddressPresent(): bool
+    {
+        return $this->isAddressPresent;
+    }
+
+    public function setIsAddressPresent(bool $isAddressPresent): self
+    {
+        $this->isAddressPresent = $isAddressPresent;
 
         return $this;
     }

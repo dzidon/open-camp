@@ -26,7 +26,7 @@ class CampCreateEventTest extends TestCase
     {
         $this->assertNull($this->event->getCamp());
 
-        $newEntity = new Camp('Camp new', 'camp-new', 6, 11, 'Street 123', 'Town', '12345', 'CS', 123);
+        $newEntity = new Camp('Camp new', 'camp-new', 6, 11, 123);
         $this->event->setCamp($newEntity);
         $this->assertSame($newEntity, $this->event->getCamp());
     }

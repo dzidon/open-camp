@@ -75,6 +75,11 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
             $this->security->isGranted('attachment_config_update') || $this->security->isGranted('attachment_config_delete')
         ;
 
+        $isGrantedDiscountConfig =
+            $this->security->isGranted('discount_config_create') || $this->security->isGranted('discount_config_read') ||
+            $this->security->isGranted('discount_config_update') || $this->security->isGranted('discount_config_delete')
+        ;
+
         $isGrantedTripLocationPath =
             $this->security->isGranted('trip_location_path_create') || $this->security->isGranted('trip_location_path_read') ||
             $this->security->isGranted('trip_location_path_update') || $this->security->isGranted('trip_location_path_delete')
@@ -85,7 +90,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
             $this->security->isGranted('purchasable_item_update') || $this->security->isGranted('purchasable_item_delete')
         ;
 
-        if ($isGrantedFormField || $isGrantedAttachmentConfig || $isGrantedTripLocationPath || $isGrantedPurchasableItem)
+        if ($isGrantedFormField || $isGrantedAttachmentConfig || $isGrantedTripLocationPath || $isGrantedPurchasableItem || $isGrantedDiscountConfig)
         {
             $text = $this->translator->trans('route.admin_application_list');
             $itemApplicationsParent = new MenuIconType('parent_applications', 'navbar_admin_vertical_item', $text, '#', 'fas fa-sticky-note');
@@ -154,6 +159,20 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                 $itemPurchasableItems = new MenuIconType('admin_purchasable_item_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
                 $itemApplicationsParent->addChild($itemPurchasableItems);
                 $itemPurchasableItems->setActive($active, $active);
+            }
+            
+            if ($isGrantedDiscountConfig)
+            {
+                $active =
+                    $route === 'admin_discount_config_list'   || $route === 'admin_discount_config_create' || $route === 'admin_discount_config_read' ||
+                    $route === 'admin_discount_config_update' || $route === 'admin_discount_config_delete'
+                ;
+
+                $text = $this->translator->trans('route.admin_discount_config_list');
+                $url = $this->urlGenerator->generate('admin_discount_config_list');
+                $itemDiscountConfigs = new MenuIconType('admin_discount_config_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
+                $itemApplicationsParent->addChild($itemDiscountConfigs);
+                $itemDiscountConfigs->setActive($active, $active);
             }
         }
 

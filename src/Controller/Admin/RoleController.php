@@ -129,7 +129,7 @@ class RoleController extends AbstractController
         $role = $this->findRoleOrThrow404($id);
         $permissionChoices = $permissionRepository->findAll();
 
-        $roleData = new RoleData();
+        $roleData = new RoleData($role);
         $dataTransfer->fillData($roleData, $role);
 
         $form = $this->createForm(RoleType::class, $roleData, ['choices_permissions' => $permissionChoices]);

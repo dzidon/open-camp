@@ -28,7 +28,7 @@ class CampUpdateEventTest extends TestCase
     {
         $this->assertSame($this->entity, $this->event->getCamp());
 
-        $newEntity = new Camp('Camp new', 'camp-new', 6, 11, 'Street 123', 'Town', '12345', 'CS', 123);
+        $newEntity = new Camp('Camp new', 'camp-new', 6, 11, 123);
         $this->event->setCamp($newEntity);
         $this->assertSame($newEntity, $this->event->getCamp());
     }
@@ -46,7 +46,7 @@ class CampUpdateEventTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->entity = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $this->entity = new Camp('Camp', 'camp', 5, 10, 321);
         $this->data = new CampData();
         $this->event = new CampUpdateEvent($this->data, $this->entity);
     }

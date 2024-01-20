@@ -4,6 +4,7 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\ApplicationCamper;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
 
 /**
  * @method ApplicationCamper|null find($id, $lockMode = null, $lockVersion = null)
@@ -32,5 +33,47 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
     public function removeApplicationCamper(ApplicationCamper $applicationCamper, bool $flush): void
     {
         $this->remove($applicationCamper, $flush);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getNumberOfOtherCompleteAcceptedApplications(ApplicationCamper $applicationCamper): int
+    {
+        $application = $applicationCamper->getApplication();
+        $applicationId = $application->getId();
+        $user = $application->getUser();
+
+        if ($user === null)
+        {
+            return 0;
+        }
+
+        $userId = $user->getId();
+        $nameFirst = $applicationCamper->getNameFirst();
+        $nameLast = $applicationCamper->getNameLast();
+        $bornAt = $applicationCamper->getBornAt();
+        $gender = $applicationCamper->getGender();
+
+        return $this->createQueryBuilder('applicationCamper')
+            ->select('count(DISTINCT applicationCamper.id)')
+            ->leftJoin('applicationCamper.application', 'application')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('application.isAccepted = TRUE')
+            ->andWhere('application.id != :applicationId')
+            ->setParameter('applicationId', $applicationId, UuidType::NAME)
+            ->andWhere('application.user = :userId')
+            ->setParameter('userId', $userId, UuidType::NAME)
+            ->andWhere('applicationCamper.nameFirst = :nameFirst')
+            ->setParameter('nameFirst', $nameFirst)
+            ->andWhere('applicationCamper.nameLast = :nameLast')
+            ->setParameter('nameLast', $nameLast)
+            ->andWhere('applicationCamper.bornAt = :bornAt')
+            ->setParameter('bornAt', $bornAt)
+            ->andWhere('applicationCamper.gender = :gender')
+            ->setParameter('gender', $gender->value)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 }

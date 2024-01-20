@@ -47,62 +47,6 @@
 
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.camp.street'|trans }}:</strong>
-                        </div>
-
-                        <div class="col-12 col-sm-9">
-                            {% if camp.street is null %}
-                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
-                            {% else %}
-                                <span>{{ camp.street }}</span>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.camp.town'|trans }}:</strong>
-                        </div>
-
-                        <div class="col-12 col-sm-9">
-                            {% if camp.town is null %}
-                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
-                            {% else %}
-                                <span>{{ camp.town }}</span>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.camp.zip'|trans }}:</strong>
-                        </div>
-
-                        <div class="col-12 col-sm-9">
-                            {% if camp.zip is null %}
-                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
-                            {% else %}
-                                <span>{{ camp.zip }}</span>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.camp.country'|trans }}:</strong>
-                        </div>
-
-                        <div class="col-12 col-sm-9">
-                            {% if camp.country is null %}
-                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
-                            {% else %}
-                                <span>{{ country_name_for_code(camp.country) }}</span>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.camp.priority'|trans }}:</strong>
                         </div>
 
@@ -155,6 +99,62 @@
                                 <em>{{ 'search.item_no_reference.female'|trans }}</em>
                             {% else %}
                                 <span>{{ camp.campCategory.path }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp.street'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp.street is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp.street }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp.town'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp.town is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp.town }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp.zip'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp.zip is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp.zip }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp.country'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp.country is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ country_name_for_code(camp.country) }}</span>
                             {% endif %}
                         </div>
                     </div>

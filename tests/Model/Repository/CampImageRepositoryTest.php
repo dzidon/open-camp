@@ -16,7 +16,7 @@ class CampImageRepositoryTest extends KernelTestCase
         $campImageRepository = $this->getCampImageRepository();
         $campRepository = $this->getCampRepository();
 
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $camp = new Camp('Camp', 'camp', 5, 10, 321);
         $campImage = new CampImage(100, 'png', $camp);
         $campRepository->saveCamp($camp, false);
         $campImageRepository->saveCampImage($campImage, true);

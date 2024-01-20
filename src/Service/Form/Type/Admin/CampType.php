@@ -44,22 +44,6 @@ class CampType extends AbstractType
                 ],
                 'label' => 'form.admin.camp.age_max',
             ])
-            ->add('street', TextType::class, [
-                'label' => 'form.admin.camp.street',
-            ])
-            ->add('town', TextType::class, [
-                'label' => 'form.admin.camp.town',
-            ])
-            ->add('zip', TextType::class, [
-                'label' => 'form.admin.camp.zip',
-            ])
-            ->add('country', CountryType::class, [
-                'placeholder'  => 'form.common.choice.choose',
-                'placeholder_attr' => [
-                    'disabled' => 'disabled'
-                ],
-                'label' => 'form.admin.camp.country',
-            ])
             ->add('priority', IntegerType::class, [
                 'label' => 'form.admin.camp.priority',
             ])
@@ -88,6 +72,67 @@ class CampType extends AbstractType
             ->add('descriptionLong', TinymceTextareaType::class, [
                 'required'  => false,
                 'label'     => 'form.admin.camp.description_long',
+            ])
+            ->add('isAddressPresent', CheckboxType::class, [
+                'required' => false,
+                'label'    => 'form.admin.camp.is_address_present',
+                'attr'     => [
+                    'data-controller'                      => 'cv--checkbox',
+                    'data-action'                          => 'cv--checkbox#updateVisibility',
+                    'data-cv--checkbox-cv--content-outlet' => '.address-field-visibility',
+                ],
+            ])
+            ->add('street', TextType::class, [
+                'label'      => 'form.admin.camp.street',
+                'required'   => false,
+                'label_attr' => [
+                    'class' => 'required'
+                ],
+                'row_attr' => [
+                    'class'                                    => 'address-field-visibility',
+                    'data-controller'                          => 'cv--content',
+                    'data-cv--content-show-when-checked-value' => '1',
+                ],
+            ])
+            ->add('town', TextType::class, [
+                'label'      => 'form.admin.camp.town',
+                'required'   => false,
+                'label_attr' => [
+                    'class' => 'required'
+                ],
+                'row_attr' => [
+                    'class'                                    => 'address-field-visibility',
+                    'data-controller'                          => 'cv--content',
+                    'data-cv--content-show-when-checked-value' => '1',
+                ],
+            ])
+            ->add('zip', TextType::class, [
+                'label'      => 'form.admin.camp.zip',
+                'required'   => false,
+                'label_attr' => [
+                    'class' => 'required'
+                ],
+                'row_attr' => [
+                    'class'                                    => 'address-field-visibility',
+                    'data-controller'                          => 'cv--content',
+                    'data-cv--content-show-when-checked-value' => '1',
+                ],
+            ])
+            ->add('country', CountryType::class, [
+                'placeholder' => 'form.common.choice.choose',
+                'required'    => false,
+                'label_attr'  => [
+                    'class' => 'required'
+                ],
+                'row_attr' => [
+                    'class'                                    => 'address-field-visibility',
+                    'data-controller'                          => 'cv--content',
+                    'data-cv--content-show-when-checked-value' => '1',
+                ],
+                'placeholder_attr' => [
+                    'disabled' => 'disabled'
+                ],
+                'label' => 'form.admin.camp.country',
             ])
         ;
     }

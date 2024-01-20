@@ -14,7 +14,7 @@ class CampImageFactoryTest extends KernelTestCase
     public function testCreateCampImage(): void
     {
         $fileMock = new FileMock('png');
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $camp = new Camp('Camp', 'camp', 5, 10, 321);
         $campImage = $this->campImageFactory->createCampImage($fileMock, 100, $camp);
         $idString = $campImage
             ->getId()

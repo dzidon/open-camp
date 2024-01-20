@@ -3,6 +3,7 @@
 namespace App\Service\Form\Type\User;
 
 use App\Library\Data\User\CamperData;
+use App\Service\Form\Type\Common\GenderChildishType;
 use App\Service\Form\Type\Common\GenderType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -71,7 +72,7 @@ class CamperType extends AbstractType
                 'input'  => 'datetime_immutable',
                 'label'  => 'form.user.camper.born_at',
             ])
-            ->add('gender', GenderType::class, [
+            ->add('gender', GenderChildishType::class, [
                 'label' => 'form.user.camper.gender',
             ])
             ->add('dietaryRestrictions', TextareaType::class, [

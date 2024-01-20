@@ -27,13 +27,16 @@ class CampDataTransferTest extends KernelTestCase
         $expectedFeaturedPriority = 123;
         $expectedCampCategory = new CampCategory('Parent', 'parent');
 
-        $camp = new Camp($expectedName, $expectedUrlName, $expectedAgeMin, $expectedAgeMax, $expectedStreet, $expectedTown, $expectedZip, $expectedCountry, $expectedFeaturedPriority);
+        $camp = new Camp($expectedName, $expectedUrlName, $expectedAgeMin, $expectedAgeMax, $expectedFeaturedPriority);
         $camp->setDescriptionShort($expectedDescriptionShort);
         $camp->setDescriptionLong($expectedDescriptionLong);
-        $camp->setPriority($expectedFeaturedPriority);
         $camp->setCampCategory($expectedCampCategory);
         $camp->setIsFeatured(true);
         $camp->setIsHidden(true);
+        $camp->setStreet($expectedStreet);
+        $camp->setTown($expectedTown);
+        $camp->setZip($expectedZip);
+        $camp->setCountry($expectedCountry);
 
         $data = new CampData();
         $dataTransfer->fillData($data, $camp);
@@ -86,8 +89,9 @@ class CampDataTransferTest extends KernelTestCase
         $data->setCampCategory($expectedCampCategory);
         $data->setIsFeatured(true);
         $data->setIsHidden(true);
+        $data->setIsAddressPresent(true);
 
-        $camp = new Camp('', '', 0, 0, '', '', '', '', 0);
+        $camp = new Camp('', '', 0, 0, 0);
         $dataTransfer->fillEntity($data, $camp);
 
         $this->assertSame($expectedName, $camp->getName());

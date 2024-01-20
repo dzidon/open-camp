@@ -79,15 +79,17 @@
                 </div>
             {% endif %}
 
-            <div class="mb-3">
-                <div>{{ camp.street }}</div>
-                <div>{{ camp.zip }} {{ camp.town }}</div>
-                <div>{{ country_name_for_code(camp.country) }}</div>
+            {% if camp.isAddressPresent %}
+                <div class="mb-3">
+                    <div>{{ camp.street }}</div>
+                    <div>{{ camp.zip }} {{ camp.town }}</div>
+                    <div>{{ country_name_for_code(camp.country) }}</div>
 
-                <div>
-                    <a href="#map" data-toggle="modal" data-target="#map">{{ 'camp_catalog.show_map'|trans }}</a>
+                    <div>
+                        <a href="#map" data-toggle="modal" data-target="#map">{{ 'camp_catalog.show_map'|trans }}</a>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
             {% if camp_dates is empty %}
                 <div class="alert alert-danger" role="alert">
@@ -109,14 +111,14 @@
                             {% for camp_date in camp_dates %}
                                 <tr class="position-relative">
                                     <td>
-                                        <span class="badge badge-primary">
+                                        <span>
                                             {{ camp_date.startAt|date(date_format) }} - {{ camp_date.endAt|date(date_format) }}
                                         </span>
                                     </td>
 
                                     <td>
-                                        <span class="badge badge-primary">
-                                            {{ camp_date.fullPrice }} {{ currency }}
+                                        <span>
+                                            {{ camp_date.fullPrice }} {{ currency_symbol_for_code(currency) }}
                                         </span>
                                     </td>
 
@@ -133,7 +135,7 @@
                                     </td>
 
                                     <td>
-                                        <a href="#" class="stretched-link">
+                                        <a href="{{ path('user_application_step_one_create', {campDateId: camp_date.id.toRfc4122}) }}" class="stretched-link">
                                             {{ 'entity.application.singular'|trans }}
                                         </a>
                                     </td>
@@ -158,7 +160,7 @@
 
                                             <p class="card-text">
                                                 <span class="badge badge-primary">
-                                                    Cena: {{ camp_date.deposit + camp_date.priceWithoutDeposit }} {{ currency }}
+                                                    Cena: {{ camp_date.deposit + camp_date.priceWithoutDeposit }} {{ currency_symbol_for_code(currency) }}
                                                 </span>
 
                                                 {% if camp_date.isHidden %}
@@ -194,32 +196,35 @@
         </div>
     {% endif %}
 
-    <div class="modal fade" id="map" tabindex="-1" aria-labelledby="map" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-xl h-75">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="mapLabel">
-                        {{ 'camp_catalog.map'|trans }}
-                    </h5>
+    {% if camp.isAddressPresent %}
+        <div class="modal fade" id="map" tabindex="-1" aria-labelledby="map" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-xl h-75">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="mapLabel">
+                            {{ 'camp_catalog.map'|trans }}
+                        </h5>
 
-                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'modal.button_close'|trans }}">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'modal.button_close'|trans }}">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
 
-                <div class="modal-body">
-                    {% set address = camp.street ~ ', ' ~ camp.zip ~ ' ' ~ camp.town ~ ', ' ~ country_name_for_code(camp.country) %}
+                    <div class="modal-body">
+                        {% set address = camp.street ~ ', ' ~ camp.zip ~ ' ' ~ camp.town ~ ', ' ~ country_name_for_code(camp.country) %}
 
-                    <iframe src="https://maps.google.com/maps?output=embed&q={{ address }}"
-                            class="w-100 border-0"
-                            height="98%"
-                            allowfullscreen=""
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"
-                    >
-                    </iframe>
+                        <iframe src="https://maps.google.com/maps?output=embed&q={{ address }}"
+                                class="w-100 border-0"
+                                height="98%"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                        >
+                        </iframe>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    {% endif %}
+
 {% endblock %}

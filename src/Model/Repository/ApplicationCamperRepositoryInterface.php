@@ -23,4 +23,12 @@ interface ApplicationCamperRepositoryInterface
      * @return void
      */
     public function removeApplicationCamper(ApplicationCamper $applicationCamper, bool $flush): void;
+
+    /**
+     * Returns the number of other complete (isDraft = false) and accepted applications that contain the given camper.
+     *
+     * @param ApplicationCamper $applicationCamper
+     * @return int
+     */
+    public function getNumberOfOtherCompleteAcceptedApplications(ApplicationCamper $applicationCamper): int;
 }

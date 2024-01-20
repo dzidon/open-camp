@@ -16,7 +16,7 @@ class CampDataTest extends KernelTestCase
         $data = new CampData();
         $this->assertNull($data->getCamp());
 
-        $camp = new Camp('Photo', 'camp', 1, 5, 'Street', 'Town', 12345, 'CS', 321);
+        $camp = new Camp('Photo', 'camp', 1, 5, 321);
 
         $data = new CampData($camp);
         $this->assertSame($camp, $data->getCamp());
@@ -189,6 +189,14 @@ class CampDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new CampData();
+        $data->setIsAddressPresent(false);
+
+        $result = $validator->validateProperty($data, 'street');
+        $this->assertEmpty($result); // valid
+
+        $data = new CampData();
+        $data->setIsAddressPresent(true);
+
         $result = $validator->validateProperty($data, 'street');
         $this->assertNotEmpty($result); // invalid
 
@@ -254,6 +262,14 @@ class CampDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new CampData();
+        $data->setIsAddressPresent(false);
+
+        $result = $validator->validateProperty($data, 'town');
+        $this->assertEmpty($result); // valid
+
+        $data = new CampData();
+        $data->setIsAddressPresent(true);
+
         $result = $validator->validateProperty($data, 'town');
         $this->assertNotEmpty($result); // invalid
 
@@ -283,6 +299,14 @@ class CampDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new CampData();
+        $data->setIsAddressPresent(false);
+
+        $result = $validator->validateProperty($data, 'country');
+        $this->assertEmpty($result); // valid
+
+        $data = new CampData();
+        $data->setIsAddressPresent(true);
+
         $result = $validator->validateProperty($data, 'country');
         $this->assertNotEmpty($result); // invalid
 
@@ -312,6 +336,14 @@ class CampDataTest extends KernelTestCase
         $validator = $this->getValidator();
 
         $data = new CampData();
+        $data->setIsAddressPresent(false);
+
+        $result = $validator->validateProperty($data, 'zip');
+        $this->assertEmpty($result); // valid
+
+        $data = new CampData();
+        $data->setIsAddressPresent(true);
+
         $result = $validator->validateProperty($data, 'zip');
         $this->assertNotEmpty($result); // invalid
 

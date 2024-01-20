@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            <span>{{ camp_date.deposit }} {{ currency }}</span>
+                            <span>{{ camp_date.deposit }} {{ currency_symbol_for_code(currency) }}</span>
                         </div>
                     </div>
 
@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            <span>{{ camp_date.priceWithoutDeposit }} {{ currency }}</span>
+                            <span>{{ camp_date.priceWithoutDeposit }} {{ currency_symbol_for_code(currency) }}</span>
                         </div>
                     </div>
 
@@ -145,6 +145,48 @@
                                         </span>
                                     </div>
                                 {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.trip_location_path_there'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.tripLocationPathThere is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp_date.tripLocationPathThere.name }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.trip_location_path_back'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.tripLocationPathBack is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp_date.tripLocationPathBack.name }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.discount_config'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.discountConfig is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ camp_date.discountConfig.name }}</span>
                             {% endif %}
                         </div>
                     </div>

@@ -33,17 +33,17 @@ class Camp
     #[ORM\Column(type: Types::INTEGER)]
     private int $ageMax;
 
-    #[ORM\Column(length: 255)]
-    private string $street;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $street = null;
 
-    #[ORM\Column(length: 255)]
-    private string $town;
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $town = null;
 
-    #[ORM\Column(length: 11)]
-    private string $zip;
+    #[ORM\Column(length: 11, nullable: true)]
+    private ?string $zip = null;
 
-    #[ORM\Column(length: 2)]
-    private string $country;
+    #[ORM\Column(length: 2, nullable: true)]
+    private ?string $country = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isFeatured = false;
@@ -75,10 +75,6 @@ class Camp
                                 string $urlName,
                                 int    $ageMin,
                                 int    $ageMax,
-                                string $street,
-                                string $town,
-                                string $zip,
-                                string $country,
                                 int    $priority)
     {
         $this->id = Uuid::v4();
@@ -86,10 +82,6 @@ class Camp
         $this->urlName = $urlName;
         $this->ageMin = $ageMin;
         $this->ageMax = $ageMax;
-        $this->street = $street;
-        $this->town = $town;
-        $this->zip = $zip;
-        $this->country = $country;
         $this->priority = $priority;
         $this->createdAt = new DateTimeImmutable('now');
     }
@@ -147,48 +139,58 @@ class Camp
         return $this;
     }
 
-    public function getStreet(): string
+    public function isAddressPresent(): bool
+    {
+        return
+            $this->street  !== null &&
+            $this->town    !== null &&
+            $this->zip     !== null &&
+            $this->country !== null
+        ;
+    }
+
+    public function getStreet(): ?string
     {
         return $this->street;
     }
 
-    public function setStreet(string $street): self
+    public function setStreet(?string $street): self
     {
         $this->street = $street;
 
         return $this;
     }
 
-    public function getTown(): string
+    public function getTown(): ?string
     {
         return $this->town;
     }
 
-    public function setTown(string $town): self
+    public function setTown(?string $town): self
     {
         $this->town = $town;
 
         return $this;
     }
 
-    public function getZip(): string
+    public function getZip(): ?string
     {
         return $this->zip;
     }
 
-    public function setZip(string $zip): self
+    public function setZip(?string $zip): self
     {
         $this->zip = $zip;
 
         return $this;
     }
 
-    public function getCountry(): string
+    public function getCountry(): ?string
     {
         return $this->country;
     }
 
-    public function setCountry(string $country): self
+    public function setCountry(?string $country): self
     {
         $this->country = $country;
 

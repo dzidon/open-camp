@@ -18,7 +18,10 @@ class PaymentMethod
     private UuidV4 $id;
 
     #[ORM\Column(length: 255, unique: true)]
-    private string $identifier;
+    private string $name;
+
+    #[ORM\Column(length: 255)]
+    private string $label;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isOnline;
@@ -29,10 +32,11 @@ class PaymentMethod
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
-    public function __construct(string $identifier, bool $isOnline, int $priority)
+    public function __construct(string $name, string $label, bool $isOnline, int $priority)
     {
         $this->id = Uuid::v4();
-        $this->identifier = $identifier;
+        $this->name = $name;
+        $this->label = $label;
         $this->isOnline = $isOnline;
         $this->priority = $priority;
         $this->createdAt = new DateTimeImmutable('now');
@@ -43,9 +47,14 @@ class PaymentMethod
         return $this->id;
     }
 
-    public function getIdentifier(): string
+    public function getName(): string
     {
-        return $this->identifier;
+        return $this->name;
+    }
+
+    public function getLabel(): string
+    {
+        return $this->label;
     }
 
     public function isOnline(): bool

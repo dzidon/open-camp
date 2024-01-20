@@ -6,6 +6,7 @@ use App\Library\Data\Admin\CampDateAttachmentConfigData;
 use App\Library\Data\Admin\CampDateData;
 use App\Library\Data\Admin\CampDateFormFieldData;
 use App\Library\Data\Admin\CampDatePurchasableItemData;
+use App\Model\Entity\DiscountConfig;
 use App\Model\Entity\TripLocationPath;
 use App\Service\Form\Type\Common\CollectionAddItemButtonType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -102,6 +103,14 @@ class CampDateType extends AbstractType
                 'multiple' => true,
                 'label'    => 'form.admin.camp_date.leaders',
             ])
+            ->add('discountConfig', EntityType::class, [
+                'class'        => DiscountConfig::class,
+                'choice_label' => 'name',
+                'choices'      => $options['choices_discount_configs'],
+                'placeholder'  => 'form.common.choice.none.female',
+                'required'     => false,
+                'label'        => 'form.admin.camp_date.discount_config',
+            ])
             ->add('tripLocationPathThere', EntityType::class, [
                 'class'        => TripLocationPath::class,
                 'choice_label' => 'name',
@@ -188,12 +197,14 @@ class CampDateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'                  => CampDateData::class,
+            'choices_discount_configs'    => [],
             'choices_trip_location_paths' => [],
             'choices_form_fields'         => [],
             'choices_attachment_configs'  => [],
             'choices_purchasable_items'   => [],
         ]);
 
+        $resolver->setAllowedTypes('choices_discount_configs', ['array']);
         $resolver->setAllowedTypes('choices_trip_location_paths', ['array']);
         $resolver->setAllowedTypes('choices_form_fields', ['array']);
         $resolver->setAllowedTypes('choices_attachment_configs', ['array']);

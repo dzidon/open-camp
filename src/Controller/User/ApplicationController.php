@@ -173,7 +173,12 @@ class ApplicationController extends AbstractController
                             UuidV4                                                 $applicationId): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
-        $applicationPurchasableItemsData = new ApplicationStepTwoUpdateData();
+        $numberOfApplicationCampers = count($application->getApplicationCampers());
+        $applicationPurchasableItemsData = new ApplicationStepTwoUpdateData(
+            $application->getDiscountSiblingsConfig(),
+            $application->getCurrency(),
+            $numberOfApplicationCampers
+        );
         $dataTransfer->fillData($applicationPurchasableItemsData, $application);
 
         $form = $this->createForm(ApplicationStepTwoType::class, $applicationPurchasableItemsData, [

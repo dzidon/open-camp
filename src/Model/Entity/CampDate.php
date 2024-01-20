@@ -60,6 +60,10 @@ class CampDate
     #[ORM\ManyToMany(targetEntity: User::class)]
     private Collection $leaders;
 
+    #[ORM\ManyToOne(targetEntity: DiscountConfig::class)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?DiscountConfig $discountConfig = null;
+
     #[ORM\ManyToOne(targetEntity: TripLocationPath::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?TripLocationPath $tripLocationPathThere = null;
@@ -286,6 +290,18 @@ class CampDate
     public function removeLeader(User $user): self
     {
         $this->leaders->removeElement($user);
+
+        return $this;
+    }
+
+    public function getDiscountConfig(): ?DiscountConfig
+    {
+        return $this->discountConfig;
+    }
+
+    public function setDiscountConfig(?DiscountConfig $discountConfig): self
+    {
+        $this->discountConfig = $discountConfig;
 
         return $this;
     }

@@ -48,6 +48,9 @@ class ApplicationCamper
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $medication = null;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $tripsInThePast = 0;
+
     #[ORM\ManyToOne(targetEntity: Application::class, inversedBy: 'applicationCampers')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Application $application;
@@ -184,6 +187,18 @@ class ApplicationCamper
     public function setMedication(?string $medication): self
     {
         $this->medication = $medication;
+
+        return $this;
+    }
+
+    public function getTripsInThePast(): int
+    {
+        return $this->tripsInThePast;
+    }
+
+    public function setTripsInThePast(int $tripsInThePast): self
+    {
+        $this->tripsInThePast = $tripsInThePast;
 
         return $this;
     }

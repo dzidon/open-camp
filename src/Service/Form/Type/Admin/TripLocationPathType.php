@@ -21,6 +21,7 @@ class TripLocationPathType extends AbstractType
                     'autofocus' => 'autofocus'
                 ],
                 'label' => 'form.admin.trip_location_path.name',
+                'help'  => 'form.admin.help.value_visible_for_admins_only',
             ])
         ;
     }

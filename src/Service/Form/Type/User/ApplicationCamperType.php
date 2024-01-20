@@ -14,6 +14,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\Intl\Currencies;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -100,13 +101,15 @@ class ApplicationCamperType extends AbstractType
                 $event->setData($applicationCamperData);
             }
 
+            $currency = $applicationCamperData->getCurrency();
+            $currencyLocalised = Currencies::getSymbol($currency);
+
             // trip there
 
             $tripLocationsThere = $applicationCamperData->getTripLocationsThere();
 
             if (!empty($tripLocationsThere))
             {
-                $currency = $applicationCamperData->getCurrency();
                 $choices = [];
 
                 foreach ($tripLocationsThere as $tripLocationThere)
@@ -117,7 +120,7 @@ class ApplicationCamperType extends AbstractType
 
                     if ($price > 0.0)
                     {
-                        $priceString = sprintf('%s %s', $price, $currency);
+                        $priceString = sprintf('%s %s', $price, $currencyLocalised);
                     }
 
                     $label = sprintf('%s (%s)', $name, $priceString);
@@ -141,7 +144,6 @@ class ApplicationCamperType extends AbstractType
 
             if (!empty($tripLocationsBack))
             {
-                $currency = $applicationCamperData->getCurrency();
                 $choices = [];
 
                 foreach ($tripLocationsBack as $tripLocationBack)
@@ -152,7 +154,7 @@ class ApplicationCamperType extends AbstractType
 
                     if ($price > 0.0)
                     {
-                        $priceString = sprintf('%s %s', $price, $currency);
+                        $priceString = sprintf('%s %s', $price, $currencyLocalised);
                     }
 
                     $label = sprintf('%s (%s)', $name, $priceString);

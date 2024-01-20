@@ -333,19 +333,19 @@ class TestFixtures extends Fixture
         /*
          * Camp
          */
-        $camp1 = new Camp('Camp 1', 'camp-1', 6, 12, 'Street 123', 'Town 1', '12345', 'CS', 0);
+        $camp1 = new Camp('Camp 1', 'camp-1', 6, 12, 0);
         $this->setUid($camp1, 'e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b');
         $camp1->setCampCategory($campCategory1);
         $this->setCreatedAt($camp1, new DateTimeImmutable('2000-01-01'));
         $manager->persist($camp1);
 
-        $camp2 = new Camp('Camp 2', 'camp-2', 13, 18, 'Street 321', 'Town 2', '54321', 'SK', 100);
+        $camp2 = new Camp('Camp 2', 'camp-2', 13, 18, 100);
         $this->setUid($camp2, 'a08f6f48-3a52-40db-b031-5eb3a468c57a');
         $camp2->setIsFeatured(true);
         $this->setCreatedAt($camp2, new DateTimeImmutable('2000-01-02'));
         $manager->persist($camp2);
 
-        $camp3 = new Camp('Camp 3', 'camp-3', 14, 16, 'Street 333', 'Town 3', '55555', 'CS', 200);
+        $camp3 = new Camp('Camp 3', 'camp-3', 14, 16, 200);
         $this->setUid($camp3, 'c097941e-52c4-405a-9823-49b7b71ead6e');
         $camp3->setIsHidden(true);
         $camp3->setCampCategory($campCategory4);

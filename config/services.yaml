@@ -173,6 +173,14 @@ services:
         arguments:
             $currency: '%app.currency%'
 
+    App\Service\Form\Type\Admin\DiscountRecurringCamperConfigType:
+        arguments:
+            $tax: '%app.tax%'
+
+    App\Service\Form\Type\Admin\DiscountSiblingConfigType:
+        arguments:
+            $tax: '%app.tax%'
+
     App\Service\Form\Type\Admin\CampDateType:
         arguments:
             $tax: '%app.tax%'

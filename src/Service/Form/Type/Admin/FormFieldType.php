@@ -47,10 +47,12 @@ class FormFieldType extends AbstractType implements DataMapperInterface
                     'autofocus' => 'autofocus'
                 ],
                 'label'    => 'form.admin.form_field.name',
+                'help'     => 'form.admin.help.value_visible_for_admins_only',
                 'priority' => 1000,
             ])
             ->add('label', TextType::class, [
                 'label'    => 'form.admin.form_field.label',
+                'help'     => 'form.admin.help.value_visible_for_all_users',
                 'priority' => 990,
             ])
             ->add('help', TextType::class, [

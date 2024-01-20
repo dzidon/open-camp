@@ -35,7 +35,7 @@ class CampCreateSubscriber
         $uploadedImages = $campCreationData->getImages();
         $campData = $campCreationData->getCampData();
 
-        $camp = new Camp($campData->getName(), $campData->getUrlName(), $campData->getAgeMin(), $campData->getAgeMax(), $campData->getStreet(), $campData->getTown(), $campData->getZip(), $campData->getCountry(), $campData->getPriority());
+        $camp = new Camp($campData->getName(), $campData->getUrlName(), $campData->getAgeMin(), $campData->getAgeMax(), $campData->getPriority());
         $this->dataTransfer->fillEntity($campData, $camp);
         $event->setCamp($camp);
 

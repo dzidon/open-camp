@@ -32,7 +32,7 @@
                                             {{ trip_location.name }}
 
                                             {% if trip_location.price > 0.0  %}
-                                                ({{ trip_location.price }} {{ currency }})
+                                                ({{ trip_location.price }} {{ currency_symbol_for_code(currency) }})
                                             {% else %}
                                                 ({{ 'price.free'|trans }})
                                             {% endif %}

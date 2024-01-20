@@ -27,7 +27,7 @@ class PaymentMethodsFactory implements PaymentMethodsFactoryInterface
 
         foreach ($this->paymentMethodRepository->findAll() as $existingPaymentMethod)
         {
-            $existingPaymentMethods[$existingPaymentMethod->getIdentifier()] = $existingPaymentMethod;
+            $existingPaymentMethods[$existingPaymentMethod->getName()] = $existingPaymentMethod;
         }
 
         // create new
@@ -50,9 +50,9 @@ class PaymentMethodsFactory implements PaymentMethodsFactoryInterface
      */
     private function instantiatePaymentMethods(): array
     {
-        $paymentMethods['card'] = new PaymentMethod('card', true, 300);
-        $paymentMethods['transfer'] = new PaymentMethod('transfer', true, 200);
-        $paymentMethods['invoice'] = new PaymentMethod('invoice', false, 100);
+        $paymentMethods['card'] = new PaymentMethod('card', 'payment_method.card', true, 300);
+        $paymentMethods['transfer'] = new PaymentMethod('transfer', 'payment_method.transfer', true, 200);
+        $paymentMethods['invoice'] = new PaymentMethod('invoice', 'payment_method.invoice', false, 100);
 
         return $paymentMethods;
     }

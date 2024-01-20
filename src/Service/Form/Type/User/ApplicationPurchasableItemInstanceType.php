@@ -110,12 +110,10 @@ class ApplicationPurchasableItemInstanceType extends AbstractType
             }
             else
             {
-                $attr = ['min' => 0];
-
-                if (empty($data->getApplicationPurchasableItemVariantsData()))
-                {
-                    $attr['max'] = $data->getMaxCalculatedAmount();
-                }
+                $attr = [
+                    'min' => 0,
+                    'max' => $data->getMaxCalculatedAmount(),
+                ];
 
                 $form
                     ->add('amount', IntegerType::class, [

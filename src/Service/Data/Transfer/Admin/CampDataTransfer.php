@@ -33,16 +33,22 @@ class CampDataTransfer implements DataTransferInterface
         $campData->setUrlName($camp->getUrlName());
         $campData->setAgeMin($camp->getAgeMin());
         $campData->setAgeMax($camp->getAgeMax());
-        $campData->setStreet($camp->getStreet());
-        $campData->setTown($camp->getTown());
-        $campData->setZip($camp->getZip());
-        $campData->setCountry($camp->getCountry());
         $campData->setDescriptionShort($camp->getDescriptionShort());
         $campData->setDescriptionLong($camp->getDescriptionLong());
         $campData->setPriority($camp->getPriority());
         $campData->setIsFeatured($camp->isFeatured());
         $campData->setIsHidden($camp->isHidden());
         $campData->setCampCategory($camp->getCampCategory());
+
+        $campData->setStreet($camp->getStreet());
+        $campData->setTown($camp->getTown());
+        $campData->setZip($camp->getZip());
+        $campData->setCountry($camp->getCountry());
+
+        if ($campData->getStreet() !== null || $campData->getTown() !== null || $campData->getZip() !== null || $campData->getCountry() !== null)
+        {
+            $campData->setIsAddressPresent(true);
+        }
     }
 
     /**
@@ -69,5 +75,20 @@ class CampDataTransfer implements DataTransferInterface
         $camp->setIsFeatured($campData->isFeatured());
         $camp->setIsHidden($campData->isHidden());
         $camp->setCampCategory($campData->getCampCategory());
+
+        if ($campData->isAddressPresent())
+        {
+            $camp->setStreet($campData->getStreet());
+            $camp->setTown($campData->getTown());
+            $camp->setZip($campData->getZip());
+            $camp->setCountry($campData->getCountry());
+        }
+        else
+        {
+            $camp->setStreet(null);
+            $camp->setTown(null);
+            $camp->setZip(null);
+            $camp->setCountry(null);
+        }
     }
 }

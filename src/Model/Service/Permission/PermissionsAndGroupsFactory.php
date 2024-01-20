@@ -89,6 +89,7 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
         $groups['attachment_config'] = new PermissionGroup('attachment_config', 'permission_group.attachment_config', 600);
         $groups['purchasable_item'] = new PermissionGroup('purchasable_item', 'permission_group.purchasable_item', 700);
         $groups['form_field'] = new PermissionGroup('form_field', 'permission_group.form_field', 800);
+        $groups['discount_config'] = new PermissionGroup('discount_config', 'permission_group.discount_config', 900);
 
         return $groups;
     }
@@ -141,6 +142,11 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
         $permissions['form_field_read'] = new Permission('form_field_read', 'permission.form_field_read', 200, $groups['form_field']);
         $permissions['form_field_update'] = new Permission('form_field_update', 'permission.form_field_update', 300, $groups['form_field']);
         $permissions['form_field_delete'] = new Permission('form_field_delete', 'permission.form_field_delete', 400, $groups['form_field']);
+
+        $permissions['discount_config_create'] = new Permission('discount_config_create', 'permission.discount_config_create', 100, $groups['discount_config']);
+        $permissions['discount_config_read'] = new Permission('discount_config_read', 'permission.discount_config_read', 200, $groups['discount_config']);
+        $permissions['discount_config_update'] = new Permission('discount_config_update', 'permission.discount_config_update', 300, $groups['discount_config']);
+        $permissions['discount_config_delete'] = new Permission('discount_config_delete', 'permission.discount_config_delete', 400, $groups['discount_config']);
 
         return $permissions;
     }

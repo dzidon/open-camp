@@ -38,7 +38,7 @@ class CampDateDataTest extends KernelTestCase
 
     public function testCamp(): void
     {
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $camp = new Camp('Camp', 'camp', 5, 10, 321);
         $data = new CampDateData($camp);
         $this->assertSame($camp, $data->getCamp());
     }
@@ -438,7 +438,7 @@ class CampDateDataTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $this->camp = new Camp('Camp', 'camp', 5, 10, 321);
     }
 
     private function getCampRepository(): CampRepositoryInterface

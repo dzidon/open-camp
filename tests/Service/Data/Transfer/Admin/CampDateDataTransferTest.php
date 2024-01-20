@@ -40,7 +40,7 @@ class CampDateDataTransferTest extends KernelTestCase
             new User('bob2@gmail.com'),
         ];
 
-        $camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $camp = new Camp('Camp', 'camp', 5, 10, 321);
         $campDate = new CampDate($expectedStartAt, $expectedEndAt, $expectedDeposit, $expectedPriceWithoutDeposit, $expectedCapacity, $camp);
         $campDate->setIsClosed(true);
         $campDate->setIsOpenAboveCapacity(true);

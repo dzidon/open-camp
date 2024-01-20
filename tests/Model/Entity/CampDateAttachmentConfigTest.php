@@ -68,7 +68,7 @@ class CampDateAttachmentConfigTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $this->camp = new Camp('Camp', 'camp', 5, 10, 321);
         $this->campDate = new CampDate(new DateTimeImmutable('2000-01-01'), new DateTimeImmutable('2000-01-07'), 1000.0, 100.0, 10, $this->camp);
         $this->attachmentConfig = new AttachmentConfig('Config', 'Label', 10.0);
         $this->campDateAttachmentConfig = new CampDateAttachmentConfig($this->campDate, $this->attachmentConfig, 100);

@@ -22,6 +22,10 @@ gender:
     m: 'Muž'
     f: 'Žena'
 
+gender_childish:
+    m: 'Kluk'
+    f: 'Holka'
+
 price:
     free: 'Zdarma'
 
@@ -41,9 +45,9 @@ image_carousel:
     no_image: 'Obrázek není k dispozici'
 
 payment_method:
-    card: 'Karta'
-    transfer: 'Převod'
-    invoice: 'Faktura'
+    card: 'Platební karta'
+    transfer: 'Převod na bankovní účet'
+    invoice: 'Na fakturu'
 
 contact_role:
     mother: 'Matka'
@@ -76,6 +80,27 @@ module:
 
 application:
     buyer_details: 'Údaje o objednávajícím'
+    discounts: 'Slevy'
+    few_more_optional_fields: 'Poslední volitelné údaje'
+    discount:
+        siblings_single_number: '{number, plural,
+              =1    {Uplatnit slevu pro # sourozence}
+              =2    {Uplatnit slevu pro # sourozence}
+              =3    {Uplatnit slevu pro # sourozence}
+              =4    {Uplatnit slevu pro # sourozence}
+              other {Uplatnit slevu pro # sourozenců}
+            }'
+
+        siblings_interval: '{number_to, plural,
+              =1    {Uplatnit slevu pro {number_from}-# sourozence}
+              =2    {Uplatnit slevu pro {number_from}-# sourozence}
+              =3    {Uplatnit slevu pro {number_from}-# sourozence}
+              =4    {Uplatnit slevu pro {number_from}-# sourozence}
+              other {Uplatnit slevu pro {number_from}-# sourozenců}
+            }'
+
+        siblings_interval_to_null: 'Uplatnit slevu pro {number_from} a více sourozenců'
+        siblings_interval_from_null: 'Uplatnit slevu pro {number_to} a méně sourozenců'
 
 camp_catalog:
     hidden_camp: 'Skrytý'
@@ -181,6 +206,7 @@ permission_group:
     attachment_config: 'Konfigurace přílohy'
     purchasable_item: 'Volitelné platby'
     form_field: 'Formulářová pole'
+    discount_config: 'Konfigurace slev'
 
 permission:
     user_read: 'Zobrazení uživatele'
@@ -223,6 +249,11 @@ permission:
     form_field_create: 'Tvorba formulářového pole'
     form_field_update: 'Editace formulářového pole'
     form_field_delete: 'Odstranění formulářového pole'
+    
+    discount_config_read: 'Zobrazení konfigurace slev'
+    discount_config_create: 'Tvorba konfigurace slev'
+    discount_config_update: 'Editace konfigurace slev'
+    discount_config_delete: 'Odstranění konfigurace slev'
 
 crud:
     instruction:
@@ -246,6 +277,7 @@ crud:
         purchasable_item_variant_delete: 'Opravdu si přejete odstranit variantu "{name}"?'
         purchasable_item_variant_value_delete: 'Opravdu si přejete odstranit hodnotu "{name}"?'
         form_field_delete: 'Opravdu si přejete odstranit formulářové pole "{name}"?'
+        discount_config_delete: 'Opravdu si přejete odstranit konfiguraci slev "{name}"?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
@@ -346,6 +378,11 @@ crud:
             update: 'Formulářové pole uloženo!'
             delete: 'Formulářové pole odstraněno!'
 
+        discount_config:
+            create: 'Konfigurace slev vytvořena!'
+            update: 'Konfigurace slev uložena!'
+            delete: 'Konfigurace slev odstraněna!'
+
 entity:
     contact:
         singular: 'Kontakt'
@@ -426,6 +463,10 @@ entity:
     form_field:
         singular: 'Formulářové pole'
         plural: 'Formulářová pole'
+
+    discount_config:
+        singular: 'Konfigurace slev'
+        plural: 'Konfigurace slev'
 
     payment_method:
         singular: 'Platební metoda'
@@ -742,6 +783,7 @@ entity_attribute:
         description: 'Informace k termínu'
         camp: 'Tábor'
         leaders: 'Vedoucí'
+        discount_config: 'Konfigurace slev'
         trip_location_path_there: 'Cesta pro vyzvedávání (tam)'
         trip_location_path_back: 'Cesta pro vyzvedávání (zpět)'
         form_fields: 'Formulářová pole'
@@ -782,6 +824,26 @@ entity_attribute:
         id: 'ID'
         extension: 'Přípona'
         created_at: 'Datum vytvoření'
+
+    discount_config:
+        id: 'ID'
+        name: 'Název'
+        recurring_campers_config:
+            name: 'Vracející se táborníci'
+            options:
+                from: 'Min. počet opakovaných návštěv'
+                to: 'Max. počet opakovaných návštěv'
+                discount: 'Sleva'
+
+        siblings_config:
+            name: 'Sourozenci'
+            options:
+                from: 'Min. počet sourozenců'
+                to: 'Max. počet sourozenců'
+                discount: 'Sleva'
+
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
     purchasable_item:
         id: 'ID'
@@ -856,6 +918,43 @@ form:
             browse: 'Procházet'
 
     admin:
+        help:
+            value_visible_for_admins_only: 'Tento údaj vidí pouze administrátoři.'
+            value_visible_for_all_users: 'Tento údaj vidí všichni uživatelé.'
+
+        discount_config_delete:
+            button: 'Odstranit'
+
+        discount_config:
+            name: 'Název'
+            discount_recurring_camper_configs: 'Slevy pro vracející se táborníky'
+            add_discount_recurring_camper_config: 'Přidat slevu pro vracejícího táborníka'
+            discount_sibling_configs: 'Slevy pro sourozence'
+            add_discount_sibling_config: 'Přidat slevu pro sourozence'
+            button: 'Uložit'
+
+        discount_config_search:
+            phrase: 'Hledat podle názvu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovější'
+                    created_at_asc: 'Od nejstarší'
+                    name_asc: 'Název (A-Z)'
+                    name_desc: 'Název (Z-A)'
+
+            button: 'Hledat'
+
+        discount_recurring_camper_config:
+            from: 'Min. počet opakovaných návštěv'
+            to: 'Max. počet opakovaných návštěv'
+            discount: 'Sleva'
+
+        discount_sibling_config:
+            from: 'Min. počet sourozenců'
+            to: 'Max. počet sourozenců'
+            discount: 'Sleva'
+
         profile:
             name_first: 'Jméno'
             name_last: 'Příjmení'
@@ -928,6 +1027,7 @@ form:
             url_name: 'Název v odkazu'
             age_min: 'Min. věk'
             age_max: 'Max. věk'
+            is_address_present: 'Zadat adresu tábora'
             street: 'Ulice a číslo popisné'
             town: 'Obec'
             zip: 'PSČ'
@@ -994,6 +1094,7 @@ form:
             is_hidden: 'Skrytý'
             description: 'Informace k termínu'
             leaders: 'Vedoucí'
+            discount_config: 'Konfigurace slev'
             form_fields: 'Formulářová pole'
             add_form_field: 'Přidat formulářové pole'
             attachment_configs: 'Přílohy'
@@ -1285,6 +1386,12 @@ form:
         application_step_two:
             payment_method: 'Platební metoda'
             purchasable_items: 'Volitelné položky'
+            note: 'Poznámka'
+            customer_channel: 'Kde jste se o nás dozvěděli?'
+            discount_siblings:
+                label: 'Sleva pro sourozence'
+                null_option: 'Neuplatňuji slevu pro sourozence'
+
             button: 'Pokračovat'
 
         application_purchasable_item_instance:
@@ -1490,6 +1597,12 @@ route:
     admin_form_field_read: 'Zobrazení formulářového pole'
     admin_form_field_update: 'Editace formulářového pole'
     admin_form_field_delete: 'Odstranění formulářového pole'
+    
+    admin_discount_config_list: 'Konfigurace slev'
+    admin_discount_config_create: 'Nová konfigurace slev'
+    admin_discount_config_read: 'Zobrazení konfigurace slev'
+    admin_discount_config_update: 'Editace konfigurace slev'
+    admin_discount_config_delete: 'Odstranění konfigurace slev'
 
     admin_application_list: 'Přihlášky'
 

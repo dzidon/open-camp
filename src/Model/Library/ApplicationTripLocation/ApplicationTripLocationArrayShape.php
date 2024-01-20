@@ -37,6 +37,6 @@ class ApplicationTripLocationArrayShape implements ApplicationTripLocationArrayS
 
     private function createInvalidLocationInCollectionException(): LogicException
     {
-        return new LogicException('Trip location array representation must have the following shape: ["price" => "float", "name" => "string"].');
+        return new LogicException('Trip location array representation must have the following shape: ["price" => (float), "name" => (string)].');
     }
 }

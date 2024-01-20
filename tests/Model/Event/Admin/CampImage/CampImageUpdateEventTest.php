@@ -49,7 +49,7 @@ class CampImageUpdateEventTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $this->camp = new Camp('Camp', 'camp', 5, 10, 321);
         $this->campImage = new CampImage(100, 'png', $this->camp);
         $this->data = new CampImageData();
         $this->event = new CampImageUpdateEvent($this->data, $this->campImage);

@@ -3,11 +3,13 @@
 namespace App\Model\Entity;
 
 use App\Model\Attribute\UpdatedAtProperty;
+use App\Model\Library\DiscountConfig\DiscountConfigArrayShape;
 use App\Model\Repository\ApplicationRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
+use LogicException;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
@@ -56,6 +58,12 @@ class Application
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $businessVatId = null;
 
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $note = null;
+
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $customerChannel = null;
+
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isDraft = true;
 
@@ -79,6 +87,18 @@ class Application
 
     #[ORM\Column(type: Types::FLOAT)]
     private float $tax;
+
+    #[ORM\Column(type: Types::JSON)]
+    private array $discountRecurringCampersConfig;
+
+    #[ORM\Column(type: Types::JSON)]
+    private array $discountSiblingsConfig;
+
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $discountSiblingsIntervalFrom = null;
+
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $discountSiblingsIntervalTo = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isEuBusinessDataEnabled;
@@ -142,6 +162,8 @@ class Application
                                 string   $country,
                                 string   $currency,
                                 float    $tax,
+                                array    $discountRecurringCampersConfig,
+                                array    $discountSiblingsConfig,
                                 bool     $isEuBusinessDataEnabled,
                                 bool     $isNationalIdentifierEnabled,
                                 bool     $isEmailMandatory,
@@ -161,6 +183,8 @@ class Application
         $this->user = $user;
         $this->currency = $currency;
         $this->tax = $tax;
+        $this->discountRecurringCampersConfig = $discountRecurringCampersConfig;
+        $this->discountSiblingsConfig = $discountSiblingsConfig;
         $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
         $this->isEmailMandatory = $isEmailMandatory;
@@ -181,6 +205,10 @@ class Application
         $this->deposit = $this->campDate->getDeposit();
         $this->priceWithoutDeposit = $this->campDate->getPriceWithoutDeposit();
         $this->depositUntil = $this->campDate->getDepositUntil();
+
+        $discountConfigArrayShape = new DiscountConfigArrayShape();
+        $discountConfigArrayShape->assertRecurringCampersConfig($this->discountRecurringCampersConfig);
+        $discountConfigArrayShape->assertSiblingsConfig($this->discountSiblingsConfig);
     }
 
     public function getId(): UuidV4
@@ -313,6 +341,30 @@ class Application
         return $this;
     }
 
+    public function getNote(): ?string
+    {
+        return $this->note;
+    }
+
+    public function setNote(?string $note): self
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    public function getCustomerChannel(): ?string
+    {
+        return $this->customerChannel;
+    }
+
+    public function setCustomerChannel(?string $customerChannel): self
+    {
+        $this->customerChannel = $customerChannel;
+
+        return $this;
+    }
+
     public function isDraft(): bool
     {
         return $this->isDraft;
@@ -350,6 +402,52 @@ class Application
     public function getTax(): float
     {
         return $this->tax;
+    }
+
+    public function getDiscountRecurringCampersConfig(): array
+    {
+        return $this->discountRecurringCampersConfig;
+    }
+
+    public function getDiscountSiblingsConfig(): array
+    {
+        return $this->discountSiblingsConfig;
+    }
+    
+    public function getDiscountSiblingsIntervalFrom(): ?int
+    {
+        return $this->discountSiblingsIntervalFrom;
+    }
+
+    public function getDiscountSiblingsIntervalTo(): ?int
+    {
+        return $this->discountSiblingsIntervalTo;
+    }
+
+    public function setDiscountSiblingsInterval(?int $discountSiblingsIntervalFrom, ?int $discountSiblingsIntervalTo): self
+    {
+        $this->assertDiscountIntervalExistsInConfig($discountSiblingsIntervalFrom, $discountSiblingsIntervalTo);
+
+        if (!$this->isSiblingDiscountIntervalEligibleForNumberOfCampers($discountSiblingsIntervalFrom, $discountSiblingsIntervalTo))
+        {
+            return $this;
+        }
+
+        $this->discountSiblingsIntervalFrom = $discountSiblingsIntervalFrom;
+        $this->discountSiblingsIntervalTo = $discountSiblingsIntervalTo;
+
+        return $this;
+    }
+
+    public function resetSiblingsDiscountIfIntervalNotEligibleForNumberOfCampers(): void
+    {
+        if ($this->isSiblingDiscountIntervalEligibleForNumberOfCampers($this->discountSiblingsIntervalFrom, $this->discountSiblingsIntervalTo))
+        {
+            return;
+        }
+
+        $this->discountSiblingsIntervalFrom = null;
+        $this->discountSiblingsIntervalTo = null;
     }
 
     public function isNationalIdentifierEnabled(): string
@@ -652,5 +750,47 @@ class Application
     private function getTaxDenominator(): float
     {
         return 1.0 + ($this->tax / 100);
+    }
+
+    private function assertDiscountIntervalExistsInConfig(?int $discountSiblingsIntervalFrom, ?int $discountSiblingsIntervalTo): void
+    {
+        if ($discountSiblingsIntervalFrom === null && $discountSiblingsIntervalTo === null)
+        {
+            return;
+        }
+
+        $foundInConfig = false;
+
+        foreach ($this->discountSiblingsConfig as $options)
+        {
+            $configFrom = $options['from'];
+            $configTo = $options['to'];
+
+            if ($discountSiblingsIntervalFrom === $configFrom && $discountSiblingsIntervalTo === $configTo)
+            {
+                $foundInConfig = true;
+
+                break;
+            }
+        }
+
+        if (!$foundInConfig)
+        {
+            throw new LogicException(sprintf(
+                'You tried to set the siblings discount interval to [%s, %s] in "%s", but this interval is not in the config.', $discountSiblingsIntervalFrom, $discountSiblingsIntervalTo, self::class
+            ));
+        }
+    }
+
+    private function isSiblingDiscountIntervalEligibleForNumberOfCampers(?int $discountSiblingsIntervalFrom, ?int $discountSiblingsIntervalTo): bool
+    {
+        $numberOfApplicationCampers = count($this->getApplicationCampers());
+
+        if ($discountSiblingsIntervalTo !== null && $numberOfApplicationCampers > $discountSiblingsIntervalTo)
+        {
+            return true;
+        }
+
+        return $discountSiblingsIntervalFrom === null || $numberOfApplicationCampers >= $discountSiblingsIntervalFrom;
     }
 }

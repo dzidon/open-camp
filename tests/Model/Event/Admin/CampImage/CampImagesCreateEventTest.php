@@ -58,7 +58,7 @@ class CampImagesCreateEventTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->camp = new Camp('Camp', 'camp', 5, 10, 'Street 123', 'Town', '12345', 'CS', 321);
+        $this->camp = new Camp('Camp', 'camp', 5, 10, 321);
         $this->data = new CampImagesUploadData($this->camp);
         $this->event = new CampImagesCreateEvent($this->data);
     }

@@ -69,6 +69,7 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDateData->setIsClosed($campDate->isClosed());
         $campDateData->setIsHidden($campDate->isHidden());
         $campDateData->setDescription($campDate->getDescription());
+        $campDateData->setDiscountConfig($campDate->getDiscountConfig());
         $campDateData->setTripLocationPathThere($campDate->getTripLocationPathThere());
         $campDateData->setTripLocationPathBack($campDate->getTripLocationPathBack());
         $this->propertyAccessor->setValue($campDateData, 'leaders', $campDate->getLeaders());
@@ -115,6 +116,7 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDate->setIsClosed($campDateData->isClosed());
         $campDate->setIsHidden($campDateData->isHidden());
         $campDate->setDescription($campDateData->getDescription());
+        $campDate->setDiscountConfig($campDateData->getDiscountConfig());
         $campDate->setTripLocationPathThere($campDateData->getTripLocationPathThere());
         $campDate->setTripLocationPathBack($campDateData->getTripLocationPathBack());
         $this->propertyAccessor->setValue($campDate, 'leaders', $campDateData->getLeaders());

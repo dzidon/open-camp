@@ -27,9 +27,11 @@ class AttachmentConfigType extends AbstractType
                     'autofocus' => 'autofocus'
                 ],
                 'label' => 'form.admin.attachment_config.name',
+                'help'  => 'form.admin.help.value_visible_for_admins_only',
             ])
             ->add('label', TextType::class, [
                 'label' => 'form.admin.attachment_config.label',
+                'help'  => 'form.admin.help.value_visible_for_all_users',
             ])
             ->add('help', TextType::class, [
                 'required' => false,

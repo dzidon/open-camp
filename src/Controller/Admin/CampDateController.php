@@ -13,6 +13,7 @@ use App\Model\Event\Admin\CampDate\CampDateUpdateEvent;
 use App\Model\Repository\AttachmentConfigRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
+use App\Model\Repository\DiscountConfigRepositoryInterface;
 use App\Model\Repository\FormFieldRepositoryInterface;
 use App\Model\Repository\PurchasableItemRepositoryInterface;
 use App\Model\Repository\TripLocationPathRepositoryInterface;
@@ -89,6 +90,7 @@ class CampDateController extends AbstractController
 
     #[Route('/admin/camp/{id}/create-date', name: 'admin_camp_date_create')]
     public function create(EventDispatcherInterface            $eventDispatcher,
+                           DiscountConfigRepositoryInterface   $discountConfigRepository,
                            TripLocationPathRepositoryInterface $tripLocationPathRepository,
                            FormFieldRepositoryInterface        $formFieldRepository,
                            AttachmentConfigRepositoryInterface $attachmentConfigRepository,
@@ -100,6 +102,7 @@ class CampDateController extends AbstractController
 
         $campDateData = new CampDateData($camp);
         $form = $this->createForm(CampDateType::class, $campDateData, [
+            'choices_discount_configs'    => $discountConfigRepository->findAll(),
             'choices_trip_location_paths' => $tripLocationPathRepository->findAll(),
             'choices_form_fields'         => $formFieldRepository->findAll(),
             'choices_attachment_configs'  => $attachmentConfigRepository->findAll(),
@@ -142,6 +145,7 @@ class CampDateController extends AbstractController
     #[Route('/admin/camp-date/{id}/update', name: 'admin_camp_date_update')]
     public function update(EventDispatcherInterface            $eventDispatcher,
                            DataTransferRegistryInterface       $dataTransfer,
+                           DiscountConfigRepositoryInterface   $discountConfigRepository,
                            TripLocationPathRepositoryInterface $tripLocationPathRepository,
                            FormFieldRepositoryInterface        $formFieldRepository,
                            AttachmentConfigRepositoryInterface $attachmentConfigRepository,
@@ -156,6 +160,7 @@ class CampDateController extends AbstractController
         $dataTransfer->fillData($campDateData, $campDate);
 
         $form = $this->createForm(CampDateType::class, $campDateData, [
+            'choices_discount_configs'    => $discountConfigRepository->findAll(),
             'choices_trip_location_paths' => $tripLocationPathRepository->findAll(),
             'choices_form_fields'         => $formFieldRepository->findAll(),
             'choices_attachment_configs'  => $attachmentConfigRepository->findAll(),

@@ -44,6 +44,23 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
         $application = $entity;
 
         $applicationStepTwoUpdateData->setPaymentMethod($application->getPaymentMethod());
+        $applicationStepTwoUpdateData->setNote($application->getNote());
+        $applicationStepTwoUpdateData->setCustomerChannel($application->getCustomerChannel());
+
+        $discountSiblingsIntervalFrom = $application->getDiscountSiblingsIntervalFrom();
+        $discountSiblingsIntervalTo = $application->getDiscountSiblingsIntervalTo();
+
+        if ($discountSiblingsIntervalFrom === null && $discountSiblingsIntervalTo === null)
+        {
+            $applicationStepTwoUpdateData->setDiscountSiblingsInterval(false);
+        }
+        else
+        {
+            $applicationStepTwoUpdateData->setDiscountSiblingsInterval([
+                'from' => $discountSiblingsIntervalFrom,
+                'to'   => $discountSiblingsIntervalTo,
+            ]);
+        }
 
         foreach ($application->getApplicationPurchasableItems() as $applicationPurchasableItem)
         {
@@ -64,6 +81,22 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
         $application = $entity;
 
         $application->setPaymentMethod($applicationStepTwoUpdateData->getPaymentMethod());
+        $application->setNote($applicationStepTwoUpdateData->getNote());
+        $application->setCustomerChannel($applicationStepTwoUpdateData->getCustomerChannel());
+
+        $discountSiblingsInterval = $applicationStepTwoUpdateData->getDiscountSiblingsInterval();
+
+        if ($discountSiblingsInterval === false)
+        {
+            $application->setDiscountSiblingsInterval(null, null);
+        }
+        else
+        {
+            $discountSiblingsIntervalFrom = $discountSiblingsInterval[array_key_first($discountSiblingsInterval)];
+            $discountSiblingsIntervalTo = $discountSiblingsInterval[array_key_last($discountSiblingsInterval)];
+            $application->setDiscountSiblingsInterval($discountSiblingsIntervalFrom, $discountSiblingsIntervalTo);
+        }
+
         $applicationPurchasableItems = $application->getApplicationPurchasableItems();
 
         foreach ($applicationStepTwoUpdateData->getApplicationPurchasableItemsData() as $index => $applicationPurchasableItemData)

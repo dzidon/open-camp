@@ -47,6 +47,7 @@ class ApplicationFactory implements ApplicationFactoryInterface
         $isNationalIdentifierEnabled = $data->isNationalIdentifierEnabled();
         $currency = $data->getCurrency();
         $tax = $data->getTax();
+        $discountConfig = $campDate->getDiscountConfig();
         $contactsData = $data->getContactsData();
         $isEmailMandatory = false;
         $isPhoneNumberMandatory = false;
@@ -66,6 +67,15 @@ class ApplicationFactory implements ApplicationFactoryInterface
             $isPhoneNumberMandatory = $referenceContactData->isPhoneNumberMandatory();
         }
 
+        $discountRecurringCampersConfig = [];
+        $discountSiblingsConfig = [];
+
+        if ($discountConfig !== null)
+        {
+            $discountRecurringCampersConfig = $discountConfig->getRecurringCampersConfig();
+            $discountSiblingsConfig = $discountConfig->getSiblingsConfig();
+        }
+
         return new Application(
             $simpleId,
             $email,
@@ -77,6 +87,8 @@ class ApplicationFactory implements ApplicationFactoryInterface
             $country,
             $currency,
             $tax,
+            $discountRecurringCampersConfig,
+            $discountSiblingsConfig,
             $isEuBusinessDataEnabled,
             $isNationalIdentifierEnabled,
             $isEmailMandatory,

@@ -35,9 +35,11 @@ class PurchasableItemType extends AbstractType
                     'autofocus' => 'autofocus'
                 ],
                 'label' => 'form.admin.purchasable_item.name',
+                'help'  => 'form.admin.help.value_visible_for_admins_only',
             ])
             ->add('label', TextType::class, [
                 'label' => 'form.admin.purchasable_item.label',
+                'help'  => 'form.admin.help.value_visible_for_all_users',
             ])
             ->add('price', MoneyType::class, [
                 'attr' => [

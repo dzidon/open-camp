@@ -195,118 +195,132 @@
 
     {{ form_row(form.paymentMethod) }}
 
-    {% if form.applicationPurchasableItemsData.children is not empty and application_purchasable_items is defined %}
+    {% if form.discountSiblingsInterval is defined %}
+        {{ form_row(form.discountSiblingsInterval) }}
+    {% endif %}
+
+    {% if form.applicationPurchasableItemsData is defined %}
         <h3 class="mb-3">
             {{ form.applicationPurchasableItemsData.vars.label|trans }}
         </h3>
 
-        {% for index, application_purchasable_item_form in form.applicationPurchasableItemsData.children %}
-            <div class="mb-4">
-                {% if application_purchasable_items[index] is defined %}
-                    {% set application_purchasable_item = application_purchasable_items[index] %}
-                    {% set purchasable_item = application_purchasable_item.purchasableItem %}
-                    {% set application = application_purchasable_item.application %}
-                    {% set label = application_purchasable_item_form.children.applicationPurchasableItemInstancesData.vars.label %}
-                    {% set image_extension = purchasable_item is null ? null : purchasable_item.imageExtension %}
+        {% if application_purchasable_items is defined %}
+            {% for index, application_purchasable_item_form in form.applicationPurchasableItemsData.children %}
+                <div class="mb-4">
+                    {% if application_purchasable_items[index] is defined %}
+                        {% set application_purchasable_item = application_purchasable_items[index] %}
+                        {% set purchasable_item = application_purchasable_item.purchasableItem %}
+                        {% set application = application_purchasable_item.application %}
+                        {% set label = application_purchasable_item_form.children.applicationPurchasableItemInstancesData.vars.label %}
+                        {% set image_extension = purchasable_item is null ? null : purchasable_item.imageExtension %}
 
-                    <div class="row {% if image_extension is null %} mb-1 {% else %} mb-3 {% endif %}">
-                        <div class="col-12">
-                            <div>
-                                {% if application_purchasable_item.description is null %}
-                                    <h5>{{ label }}</h5>
-                                {% else %}
-                                    <h5>
-                                        {{ label }}
+                        <div class="row {% if image_extension is null %} mb-1 {% else %} mb-3 {% endif %}">
+                            <div class="col-12">
+                                <div>
+                                    {% if application_purchasable_item.description is null %}
+                                        <h5>{{ label }}</h5>
+                                    {% else %}
+                                        <h5>
+                                            {{ label }}
 
-                                        <a href="#purchasable-item-description-{{ index }}"
-                                           data-toggle="modal"
-                                           data-target="#purchasable-item-description-{{ index }}"
+                                            <a href="#purchasable-item-description-{{ index }}"
+                                               data-toggle="modal"
+                                               data-target="#purchasable-item-description-{{ index }}"
+                                            >
+                                                <i class="fas fa-info-circle"></i>
+                                            </a>
+                                        </h5>
+
+                                        <div class="modal fade"
+                                             id="purchasable-item-description-{{ index }}"
+                                             tabindex="-1"
+                                             aria-labelledby="purchasable-item-description-{{ index }}"
+                                             aria-hidden="true"
                                         >
-                                            <i class="fas fa-info-circle"></i>
-                                        </a>
-                                    </h5>
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">
+                                                            {{ 'entity_attribute.purchasable_item.description'|trans }}
+                                                        </h5>
 
-                                    <div class="modal fade"
-                                         id="purchasable-item-description-{{ index }}"
-                                         tabindex="-1"
-                                         aria-labelledby="purchasable-item-description-{{ index }}"
-                                         aria-hidden="true"
-                                    >
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title">
-                                                        {{ 'entity_attribute.purchasable_item.description'|trans }}
-                                                    </h5>
+                                                        <button type="button"
+                                                                class="close"
+                                                                data-dismiss="modal"
+                                                                aria-label="{{ 'modal.button_close'|trans }}"
+                                                        >
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
 
-                                                    <button type="button"
-                                                            class="close"
-                                                            data-dismiss="modal"
-                                                            aria-label="{{ 'modal.button_close'|trans }}"
-                                                    >
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
+                                                    <div class="modal-body">
+                                                        <p>{{ application_purchasable_item.description|nl2br }}</p>
+                                                    </div>
 
-                                                <div class="modal-body">
-                                                    <p>{{ application_purchasable_item.description|nl2br }}</p>
-                                                </div>
-
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                        {{ 'modal.button_close'|trans }}
-                                                    </button>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                                            {{ 'modal.button_close'|trans }}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    {% endif %}
+                                </div>
+
+                                <div>
+                                    <span>
+                                        {{ 'entity_attribute.application_purchasable_item.price'|trans }}:
+                                        {{ application_purchasable_item.price }} {{ currency_symbol_for_code(application.currency) }}
+                                    </span>
+                                </div>
+
+                                {% if application_purchasable_item.calculatedMaxAmount > 1 %}
+                                    <div>
+                                        <span>
+                                            {{ 'entity_attribute.application_purchasable_item.max_amount'|trans }}:
+                                            {{ application_purchasable_item.calculatedMaxAmount }}
+                                        </span>
                                     </div>
                                 {% endif %}
                             </div>
 
-                            <div>
-                                <span>
-                                    {{ 'entity_attribute.application_purchasable_item.price'|trans }}:
-                                    {{ application_purchasable_item.price }} {{ application.currency }}
-                                </span>
-                            </div>
-
-                            {% if application_purchasable_item.calculatedMaxAmount > 1 %}
-                                <div>
-                                    <span>
-                                        {{ 'entity_attribute.application_purchasable_item.max_amount'|trans }}:
-                                        {{ application_purchasable_item.calculatedMaxAmount }}
-                                    </span>
+                            {% if image_extension is not null %}
+                                <div class="col-12">
+                                    <div class="row mt-2">
+                                        <div class="col-6 col-md-4">
+                                            <a href="{{ asset(purchasable_item_image_path(purchasable_item)) }}" target="_blank">
+                                                <img class="image-cover-16-9"
+                                                     src="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
+                                                     alt="{{ 'entity_attribute.purchasable_item.image'|trans }} - {{ purchasable_item.name }}"
+                                                >
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             {% endif %}
                         </div>
+                    {% endif %}
 
-                        {% if image_extension is not null %}
-                            <div class="col-12">
-                                <div class="row mt-2">
-                                    <div class="col-6 col-md-4">
-                                        <a href="{{ asset(purchasable_item_image_path(purchasable_item)) }}" target="_blank">
-                                            <img class="image-cover-16-9"
-                                                 src="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
-                                                 alt="{{ 'entity_attribute.purchasable_item.image'|trans }} - {{ purchasable_item.name }}"
-                                            >
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-                {% endif %}
+                    {{ form_row(application_purchasable_item_form.children.applicationPurchasableItemInstancesData, {label: false}) }}
 
-                {{ form_row(application_purchasable_item_form.children.applicationPurchasableItemInstancesData, {label: false}) }}
-
-                {% if application_purchasable_item_form.children.addApplicationPurchasableItemInstanceData is defined %}
-                    {{ form_row(application_purchasable_item_form.children.addApplicationPurchasableItemInstanceData) }}
-                {% endif %}
-            </div>
-        {% endfor %}
-    {% else %}
-        {{ form_row(form.applicationPurchasableItemsData) }}
+                    {% if application_purchasable_item_form.children.addApplicationPurchasableItemInstanceData is defined %}
+                        {{ form_row(application_purchasable_item_form.children.addApplicationPurchasableItemInstanceData) }}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            {{ form_row(form.applicationPurchasableItemsData) }}
+        {% endif %}
     {% endif %}
+
+    <h3 class="mb-3">
+        {{ 'application.few_more_optional_fields'|trans }}
+    </h3>
+
+    {{ form_row(form.customerChannel) }}
+
+    {{ form_row(form.note) }}
 
     {{ block('user_application_bottom') }}
 
@@ -314,8 +328,6 @@
 {% endblock %}
 
 {% block user_application_bottom %}
-    <hr>
-
     <div class="row mt-4">
         {% if application_back_url is defined %}
             <div class="col-6">
