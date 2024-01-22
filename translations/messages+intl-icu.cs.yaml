@@ -102,6 +102,16 @@ application:
         siblings_interval_to_null: 'Uplatnit slevu pro {number_from} a více sourozenců'
         siblings_interval_from_null: 'Uplatnit slevu pro {number_to} a méně sourozenců'
 
+    summary:
+        discount_recurring_camper: 'Sleva pro vracejícího se táborníka'
+        discount_siblings: 'Sleva pro sourozence'
+        this_is_where_i_get_on: 'zde nasednu'
+        this_is_where_i_get_off: 'zde vysednu'
+        camper_total_price: 'Celkem za táborníka'
+        purchasable_item_total_price: 'Celkem za položky'
+        total_price: 'Celkem'
+        total_price_without_tax: 'Celkem bez DPH'
+
 camp_catalog:
     hidden_camp: 'Skrytý'
     hidden_camp_date: 'Skrytý'
@@ -1380,8 +1390,8 @@ form:
 
         application_camper:
             remove_button: 'Odebrat táborníka'
-            trip_location_path_there: 'Kde nasednu na cestě na tábor'
-            trip_location_path_back: 'Kde vysednu na cestě domů'
+            trip_location_path_there: 'Kde nasednu'
+            trip_location_path_back: 'Kde vysednu'
 
         application_step_two:
             payment_method: 'Platební metoda'
@@ -1633,3 +1643,4 @@ route:
     user_application_step_one_create: 'Přihláška (Údaje)'
     user_application_step_one_update: 'Přihláška (Údaje)'
     user_application_step_two: 'Přihláška (Finance)'
+    user_application_step_three: 'Přihláška (Souhrn)'

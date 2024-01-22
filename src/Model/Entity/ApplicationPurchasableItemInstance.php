@@ -61,6 +61,23 @@ class ApplicationPurchasableItemInstance
         return $this->applicationPurchasableItem;
     }
 
+    public function getChosenVariantValuesAsString(): string
+    {
+        if (empty($this->chosenVariantValues))
+        {
+            return '';
+        }
+
+        $stringParts = [];
+
+        foreach ($this->chosenVariantValues as $variant => $value)
+        {
+            $stringParts[] = "$variant: $value";
+        }
+
+        return implode(', ', $stringParts);
+    }
+
     public function getChosenVariantValues(): array
     {
         return $this->chosenVariantValues;
@@ -94,6 +111,23 @@ class ApplicationPurchasableItemInstance
         $this->amount = $amount;
 
         return $this;
+    }
+
+    public function getPrice(): float
+    {
+        $pricePerInstance = $this->applicationPurchasableItem->getPrice();
+
+        return $pricePerInstance * $this->amount;
+    }
+
+    public function getPriceWithoutTax(): float
+    {
+        $taxDenominator = $this->applicationPurchasableItem
+            ->getApplication()
+            ->getTaxDenominator()
+        ;
+
+        return $this->getPrice() / $taxDenominator;
     }
 
     public function getCreatedAt(): DateTimeImmutable

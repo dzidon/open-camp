@@ -271,7 +271,7 @@
                                 <div>
                                     <span>
                                         {{ 'entity_attribute.application_purchasable_item.price'|trans }}:
-                                        {{ application_purchasable_item.price }} {{ currency_symbol_for_code(application.currency) }}
+                                        {{ application_purchasable_item.price|format_currency(application.currency) }}
                                     </span>
                                 </div>
 

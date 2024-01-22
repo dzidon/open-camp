@@ -95,6 +95,11 @@ class ApplicationCamper
         return $this->id;
     }
 
+    public function getNameFull(): string
+    {
+        return $this->nameFirst . ' ' . $this->nameLast;
+    }
+
     public function getNameFirst(): string
     {
         return $this->nameFirst;
@@ -352,6 +357,75 @@ class ApplicationCamper
         $this->applicationAttachments->removeElement($applicationAttachment);
 
         return $this;
+    }
+
+    public function getDiscountRecurringCamper(): float
+    {
+        foreach ($this->application->getDiscountRecurringCampersConfig() as $options)
+        {
+            $from = $options['from'];
+            $to = $options['to'];
+            $discount = $options['discount'];
+
+            if (($from === null || $this->tripsInThePast >= $from) &&
+                ($to   === null || $this->tripsInThePast <= $to))
+            {
+                return $discount;
+            }
+        }
+
+        return 0.0;
+    }
+
+    public function getDiscountSiblings(): float
+    {
+        $siblingsIntervalFrom = $this->application->getDiscountSiblingsIntervalFrom();
+        $siblingsIntervalTo = $this->application->getDiscountSiblingsIntervalTo();
+
+        if ($siblingsIntervalFrom === null && $siblingsIntervalTo === null)
+        {
+            return 0.0;
+        }
+
+        foreach ($this->application->getDiscountSiblingsConfig() as $options)
+        {
+            $from = $options['from'];
+            $to = $options['to'];
+            $discount = $options['discount'];
+
+            if ($from === $siblingsIntervalFrom && $to === $siblingsIntervalTo)
+            {
+                return $discount;
+            }
+        }
+
+        return 0.0;
+    }
+
+    public function getPrice(): float
+    {
+        $price = $this->application->getPricePerCamper();
+
+        foreach ($this->applicationTripLocationPaths as $applicationTripLocationPath)
+        {
+            $locationPrice = $applicationTripLocationPath->getPrice();
+            $price += $locationPrice;
+        }
+
+        $price -= $this->getDiscountRecurringCamper();
+        $price -= $this->getDiscountSiblings();
+
+        if ($price < 0.0)
+        {
+            $price = 0.0;
+        }
+
+        return $price;
+    }
+
+    public function getPriceWithoutTax(): float
+    {
+        return $this->getPrice() / $this->application->getTaxDenominator();
     }
 
     public function getCreatedAt(): DateTimeImmutable

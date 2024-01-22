@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            <span>{{ purchasable_item.price }} {{ currency_symbol_for_code(currency) }}</span>
+                            <span>{{ purchasable_item.price|format_currency(currency) }}</span>
                         </div>
                     </div>
 

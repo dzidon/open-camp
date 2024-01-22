@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            <span>{{ camp_date.deposit }} {{ currency_symbol_for_code(currency) }}</span>
+                            <span>{{ camp_date.deposit|format_currency(currency) }}</span>
                         </div>
                     </div>
 
@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            <span>{{ camp_date.priceWithoutDeposit }} {{ currency_symbol_for_code(currency) }}</span>
+                            <span>{{ camp_date.priceWithoutDeposit|format_currency(currency) }}</span>
                         </div>
                     </div>
 

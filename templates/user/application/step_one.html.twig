@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="col-12 col-sm-6">
-                        <span>{{ camp_date_deposit }} {{ currency_symbol_for_code(currency) }}</span>
+                        <span>{{ camp_date_deposit|format_currency(currency) }}</span>
                     </div>
                 </div>
 
@@ -64,7 +64,7 @@
                     </div>
 
                     <div class="col-12 col-sm-6">
-                        <span>{{ camp_date_price_without_deposit }} {{ currency_symbol_for_code(currency) }}</span>
+                        <span>{{ camp_date_price_without_deposit|format_currency(currency) }}</span>
                     </div>
                 </div>
 
@@ -74,7 +74,7 @@
                     </div>
 
                     <div class="col-12 col-sm-6">
-                        <span>{{ camp_date_full_price }} {{ currency_symbol_for_code(currency) }}</span>
+                        <span>{{ camp_date_full_price|format_currency(currency) }}</span>
                     </div>
                 </div>
             {% else %}
@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="col-12 col-sm-6">
-                        <span>{{ camp_date_price_without_deposit }} {{ currency_symbol_for_code(currency) }}</span>
+                        <span>{{ camp_date_price_without_deposit|format_currency(currency) }}</span>
                     </div>
                 </div>
             {% endif %}

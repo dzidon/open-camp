@@ -94,7 +94,7 @@
                                             </td>
 
                                             <td class="align-middle">
-                                                <span>{{ trip_location.price }} {{ currency_symbol_for_code(currency) }}</span>
+                                                <span>{{ trip_location.price|format_currency(currency) }}</span>
                                             </td>
 
                                             <td class="align-middle">

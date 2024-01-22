@@ -35,9 +35,7 @@
                                                 {{ 'entity_attribute.discount_config.recurring_campers_config.options.to'|trans }}: {{ options.to }},
                                             {% endif %}
 
-                                            {{ 'entity_attribute.discount_config.recurring_campers_config.options.discount'|trans }}: {{ options.discount }}
-
-                                            {{ currency_symbol_for_code(currency) }}
+                                            {{ 'entity_attribute.discount_config.recurring_campers_config.options.discount'|trans }}: {{ options.discount|format_currency(currency) }}
                                         </span>
                                     </div>
                                 {% endfor %}
@@ -65,9 +63,7 @@
                                                 {{ 'entity_attribute.discount_config.siblings_config.options.to'|trans }}: {{ options.to }},
                                             {% endif %}
 
-                                            {{ 'entity_attribute.discount_config.siblings_config.options.discount'|trans }}: {{ options.discount }}
-
-                                            {{ currency_symbol_for_code(currency) }}
+                                            {{ 'entity_attribute.discount_config.siblings_config.options.discount'|trans }}: {{ options.discount|format_currency(currency) }}
                                         </span>
                                     </div>
                                 {% endfor %}

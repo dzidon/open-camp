@@ -21,7 +21,7 @@
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            <span>{{ trip_location.price }} {{ currency_symbol_for_code(currency) }}</span>
+                            <span>{{ trip_location.price|format_currency(currency) }}</span>
                         </div>
                     </div>
 

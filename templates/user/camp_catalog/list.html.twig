@@ -88,7 +88,7 @@
                                         {% if camp_lowest_full_price is not null %}
                                             {{ 'camp_catalog.from'|trans }}
                                             <strong class="text-primary">
-                                                {{ camp_lowest_full_price }} {{ currency_symbol_for_code(currency) }}
+                                                {{ camp_lowest_full_price|format_currency(currency) }}
                                             </strong>
 
                                             <br>

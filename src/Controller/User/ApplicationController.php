@@ -154,10 +154,11 @@ class ApplicationController extends AbstractController
             'camp_date_deposit'               => $application->getDeposit(),
             'camp_date_deposit_until'         => $application->getDepositUntil(),
             'camp_date_price_without_deposit' => $application->getPriceWithoutDeposit(),
-            'camp_date_full_price'            => $application->getFullPrice(),
+            'camp_date_full_price'            => $application->getPricePerCamper(),
             'camp_date_leader_names'          => $campDate?->getLeaderNames(),
             'camp_date_description'           => $campDate?->getDescription(),
             'tax'                             => $application->getTax(),
+            'currency'                        => $application->getCurrency(),
             'form_application_step_one'       => $form->createView(),
             'breadcrumbs'                     => $this->breadcrumbs->buildForStepOneUpdate($application),
             'application_back_url'            => $this->generateUrl($backRoute, $backUrlParameters),
@@ -193,7 +194,7 @@ class ApplicationController extends AbstractController
             $event = new ApplicationStepTwoUpdateEvent($applicationPurchasableItemsData, $application);
             $eventDispatcher->dispatch($event, $event::NAME);
 
-            return $this->redirectToRoute('user_application_step_two', [
+            return $this->redirectToRoute('user_application_step_three', [
                 'applicationId' => $application->getId()
             ]);
         }
@@ -208,6 +209,20 @@ class ApplicationController extends AbstractController
             'application_back_url'          => $this->generateUrl('user_application_step_one_update', [
                 'applicationId' => $application->getId()->toRfc4122(),
             ]),
+        ]);
+    }
+
+    #[Route('/application/{applicationId}/step-three', name: 'user_application_step_three')]
+    public function stepThree(UuidV4 $applicationId): Response
+    {
+        $application = $this->findApplicationOrThrow404($applicationId);
+
+        // load all camp categories so that the camp category path does not trigger additional queries
+        $this->campCategoryRepository->findAll();
+
+        return $this->render('user/application/step_three.html.twig', [
+            'application' => $application,
+            'breadcrumbs' => $this->breadcrumbs->buildForStepThree($application),
         ]);
     }
 

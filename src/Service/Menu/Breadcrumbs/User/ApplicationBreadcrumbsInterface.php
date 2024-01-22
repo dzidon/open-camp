@@ -35,4 +35,12 @@ interface ApplicationBreadcrumbsInterface
      * @return MenuTypeInterface
      */
     public function buildForStepTwo(Application $application): MenuTypeInterface;
+
+    /**
+     * Creates breadcrumbs for the path "user_application_step_three".
+     *
+     * @param Application $application
+     * @return MenuTypeInterface
+     */
+    public function buildForStepThree(Application $application): MenuTypeInterface;
 }

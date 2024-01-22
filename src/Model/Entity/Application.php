@@ -73,6 +73,9 @@ class Application
     #[ORM\Column(length: 255)]
     private string $campName;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $paymentMethodLabel = null;
+
     #[ORM\Column(type: Types::FLOAT)]
     private float $deposit;
 
@@ -130,18 +133,23 @@ class Application
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?PaymentMethod $paymentMethod = null;
 
+    /** @var Collection<ApplicationContact> */
     #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationContact::class)]
     private Collection $applicationContacts;
 
+    /** @var Collection<ApplicationCamper> */
     #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationCamper::class)]
     private Collection $applicationCampers;
 
+    /** @var Collection<ApplicationFormFieldValue> */
     #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationFormFieldValue::class)]
     private Collection $applicationFormFieldValues;
 
+    /** @var Collection<ApplicationAttachment> */
     #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationAttachment::class)]
     private Collection $applicationAttachments;
 
+    /** @var Collection<ApplicationPurchasableItem> */
     #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationPurchasableItem::class)]
     private Collection $applicationPurchasableItems;
 
@@ -472,10 +480,32 @@ class Application
 
     public function getFullPrice(): float
     {
-        return $this->deposit + $this->priceWithoutDeposit;
+        $fullPrice = 0.0;
+
+        foreach ($this->applicationCampers as $applicationCamper)
+        {
+            $fullPrice += $applicationCamper->getPrice();
+        }
+
+        foreach ($this->applicationPurchasableItems as $applicationPurchasableItem)
+        {
+            $fullPrice += $applicationPurchasableItem->getFullPrice();
+        }
+
+        return $fullPrice;
     }
 
     public function getFullPriceWithoutTax(): float
+    {
+        return $this->getFullPrice() / $this->getTaxDenominator();
+    }
+
+    public function getPricePerCamper(): float
+    {
+        return $this->deposit + $this->priceWithoutDeposit;
+    }
+
+    public function getPricePerCamperWithoutTax(): float
     {
         return $this->getDepositWithoutTax() + $this->getPriceWithoutDepositWithoutTax();
     }
@@ -487,7 +517,7 @@ class Application
 
     public function getDepositWithoutTax(): float
     {
-        return round($this->deposit / $this->getTaxDenominator());
+        return $this->deposit / $this->getTaxDenominator();
     }
 
     public function getPriceWithoutDeposit(): float
@@ -497,7 +527,7 @@ class Application
 
     public function getPriceWithoutDepositWithoutTax(): float
     {
-        return round($this->priceWithoutDeposit / $this->getTaxDenominator());
+        return $this->priceWithoutDeposit / $this->getTaxDenominator();
     }
 
     public function getDepositUntil(): ?DateTimeImmutable
@@ -525,6 +555,11 @@ class Application
         return $this->user;
     }
 
+    public function getPaymentMethodLabel(): ?string
+    {
+        return $this->paymentMethodLabel;
+    }
+
     public function getPaymentMethod(): ?PaymentMethod
     {
         return $this->paymentMethod;
@@ -533,6 +568,7 @@ class Application
     public function setPaymentMethod(?PaymentMethod $paymentMethod): self
     {
         $this->paymentMethod = $paymentMethod;
+        $this->paymentMethodLabel = $this->paymentMethod?->getLabel();
 
         return $this;
     }
@@ -737,6 +773,18 @@ class Application
         return $this;
     }
 
+    public function getPurchasableItemInstancesTotalAmount(): int
+    {
+        $totalAmount = 0.0;
+
+        foreach ($this->applicationPurchasableItems as $applicationPurchasableItem)
+        {
+            $totalAmount += $applicationPurchasableItem->getInstancesTotalAmount();
+        }
+
+        return $totalAmount;
+    }
+
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
@@ -747,7 +795,7 @@ class Application
         return $this->updatedAt;
     }
 
-    private function getTaxDenominator(): float
+    public function getTaxDenominator(): float
     {
         return 1.0 + ($this->tax / 100);
     }

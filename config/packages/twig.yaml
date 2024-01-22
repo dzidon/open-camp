@@ -7,6 +7,7 @@ twig:
         - '_fragment/_form_theme/_user_whole_forms.html.twig'
 
     globals:
+        tax: '%app.tax%'
         currency: '%app.currency%'
         phone_number_format: '%app.phone_number_format%'
         date_format: '%app.date_format%'

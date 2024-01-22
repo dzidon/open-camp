@@ -118,7 +118,7 @@
 
                                     <td>
                                         <span>
-                                            {{ camp_date.fullPrice }} {{ currency_symbol_for_code(currency) }}
+                                            {{ camp_date.fullPrice|format_currency(currency) }}
                                         </span>
                                     </td>
 
@@ -160,7 +160,8 @@
 
                                             <p class="card-text">
                                                 <span class="badge badge-primary">
-                                                    Cena: {{ camp_date.deposit + camp_date.priceWithoutDeposit }} {{ currency_symbol_for_code(currency) }}
+                                                    {{ 'camp_catalog.price'|trans }}:
+                                                    {{ (camp_date.fullPrice)|format_currency(currency) }}
                                                 </span>
 
                                                 {% if camp_date.isHidden %}
