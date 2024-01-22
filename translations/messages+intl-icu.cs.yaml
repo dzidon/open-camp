@@ -1640,7 +1640,7 @@ route:
     user_profile_password_change: 'Změna hesla'
     user_profile_password_change_create: 'Nastavení hesla'
 
-    user_application_step_one_create: 'Přihláška (Údaje)'
-    user_application_step_one_update: 'Přihláška (Údaje)'
-    user_application_step_two: 'Přihláška (Finance)'
-    user_application_step_three: 'Přihláška (Souhrn)'
+    user_application_step_one_create: 'Údaje'
+    user_application_step_one_update: 'Údaje'
+    user_application_step_two: 'Finance'
+    user_application_step_three: 'Souhrn'

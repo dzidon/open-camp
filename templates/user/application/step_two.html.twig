@@ -1,11 +1,11 @@
-{% extends "user/base.html.twig" %}
+{% extends "user/application/base.html.twig" %}
 
-{% block main %}
+{% block application_main %}
     <div class="row">
         <div class="col-md-8 col-lg-6 col-xl-5">
             {{ form(form_application_step_two, {
                 application_back_url:          application_back_url,
-                application_purchasable_items: application_purchasable_items
+                application_purchasable_items: application.applicationPurchasableItems
                })
             }}
         </div>

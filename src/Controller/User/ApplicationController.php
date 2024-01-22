@@ -23,28 +23,36 @@ use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\User\ApplicationStepTwoType;
 use App\Service\Form\Type\User\ApplicationStepOneType;
 use App\Service\Menu\Breadcrumbs\User\ApplicationBreadcrumbsInterface;
+use App\Service\Routing\RouteNamerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\UuidV4;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ApplicationController extends AbstractController
 {
     private CampDateRepositoryInterface $campDateRepository;
     private ApplicationRepositoryInterface $applicationRepository;
     private CampCategoryRepositoryInterface $campCategoryRepository;
+    private RouteNamerInterface $routeNamer;
+    private TranslatorInterface $translator;
     private ApplicationBreadcrumbsInterface $breadcrumbs;
 
     public function __construct(CampDateRepositoryInterface     $campDateRepository,
                                 ApplicationRepositoryInterface  $applicationRepository,
                                 CampCategoryRepositoryInterface $campCategoryRepository,
+                                RouteNamerInterface             $routeNamer,
+                                TranslatorInterface             $translator,
                                 ApplicationBreadcrumbsInterface $breadcrumbs)
     {
         $this->campDateRepository = $campDateRepository;
         $this->applicationRepository = $applicationRepository;
         $this->campCategoryRepository = $campCategoryRepository;
+        $this->routeNamer = $routeNamer;
+        $this->translator = $translator;
         $this->breadcrumbs = $breadcrumbs;
     }
 
@@ -84,8 +92,10 @@ class ApplicationController extends AbstractController
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
         $camp = $campDate->getCamp();
+        $this->setRouteName();
 
         return $this->render('user/application/step_one.html.twig', [
+            'camp_date'                       => $campDate,
             'camp_name'                       => $camp->getName(),
             'camp_date_start_at'              => $campDate->getStartAt(),
             'camp_date_end_at'                => $campDate->getEndAt(),
@@ -146,8 +156,10 @@ class ApplicationController extends AbstractController
         $camp = $campDate?->getCamp();
         $backRoute = $camp === null ? 'user_camp_catalog' : 'user_camp_detail';
         $backUrlParameters = $camp === null ? [] : ['urlName' => $camp->getUrlName()];
+        $this->setRouteName();
 
         return $this->render('user/application/step_one.html.twig', [
+            'application'                     => $application,
             'camp_name'                       => $application->getCampName(),
             'camp_date_start_at'              => $application->getCampDateStartAt(),
             'camp_date_end_at'                => $application->getCampDateEndAt(),
@@ -201,10 +213,11 @@ class ApplicationController extends AbstractController
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
+        $this->setRouteName();
 
         return $this->render('user/application/step_two.html.twig', [
             'form_application_step_two'     => $form->createView(),
-            'application_purchasable_items' => $application->getApplicationPurchasableItems(),
+            'application'                   => $application,
             'breadcrumbs'                   => $this->breadcrumbs->buildForStepTwo($application),
             'application_back_url'          => $this->generateUrl('user_application_step_one_update', [
                 'applicationId' => $application->getId()->toRfc4122(),
@@ -219,6 +232,7 @@ class ApplicationController extends AbstractController
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
+        $this->setRouteName();
 
         return $this->render('user/application/step_three.html.twig', [
             'application' => $application,
@@ -248,5 +262,11 @@ class ApplicationController extends AbstractController
         }
 
         return $application;
+    }
+
+    private function setRouteName(): void
+    {
+        $routeName = $this->translator->trans('entity.application.singular');
+        $this->routeNamer->setCurrentRouteName($routeName);
     }
 }

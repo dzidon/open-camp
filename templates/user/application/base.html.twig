@@ -1,0 +1,27 @@
+{% extends "user/base.html.twig" %}
+
+{% block h1 %} {% endblock %}
+
+{% block flash %} {% endblock %}
+
+{% block main %}
+    <div class="row mb-4">
+        <div class="col-12">
+            {% set source = application is defined ? application : camp_date %}
+            {% set application_menu = build_menu('application', {source: source}) %}
+            {{ menu(application_menu) }}
+        </div>
+    </div>
+
+    {% block application_flash %}
+        {{ include('_fragment/_flash/_user.html.twig', {app: app}) }}
+    {% endblock %}
+
+    {% block application_h1 %}
+        {% if is_route_name_set() %}
+            <h1 class="mb-3">{{ route_name() }}</h1>
+        {% endif %}
+    {% endblock %}
+
+    {% block application_main %}{% endblock %}
+{% endblock %}

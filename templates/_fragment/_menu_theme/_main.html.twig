@@ -1,3 +1,30 @@
+{# Application navigation #}
+{% block application %}
+    {% set application_menu_links %}
+        {% for menu_child in menu_type.children %}
+            {% with {'menu_type': menu_child} %}
+                {{ block(menu_child.templateBlock, menu_theme) }}
+            {% endwith %}
+        {% endfor %}
+    {% endset %}
+
+    <div class="list-group list-group-horizontal d-none d-md-flex">
+        {{ application_menu_links }}
+    </div>
+
+    <div class="list-group list-group d-md-none">
+        {{ application_menu_links }}
+    </div>
+{% endblock %}
+
+{% block application_item %}
+    {% set application_item_disabled = menu_type.url == '#' %}
+
+    <a {% if not application_item_disabled %} href="{{ menu_type.url }}" {% endif %} class="list-group-item w-100 {% if menu_type.active %} active {% endif %} {% if application_item_disabled %} disabled {% endif %}">
+        {{ menu_type.text }}
+    </a>
+{% endblock %}
+
 {# User navigation #}
 {% block navbar_user %}
     <ul class="navbar-nav ml-auto">

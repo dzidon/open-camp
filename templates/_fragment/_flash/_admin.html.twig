@@ -1,0 +1,30 @@
+{% if app.session.flashbag.peekAll|length > 0 %}
+    <div class="row">
+        {% for type, messages in app.session.flashbag.all() %}
+            {% for message in messages %}
+                <div class="col-md-12">
+                    <div class="card {% if type == 'success' %} card-success {% elseif type == 'failure' %} card-danger {% elseif type == 'warning' %} card-warning {% elseif type == 'info' %} card-primary {% endif %}">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                {% if type == 'success' %} {{ 'flash_message.success'|trans }}
+                                {% elseif type == 'failure' %} {{ 'flash_message.failure'|trans }}
+                                {% elseif type == 'warning' %} {{ 'flash_message.warning'|trans }}
+                                {% elseif type == 'info' %} {{ 'flash_message.info'|trans }}
+                                {% endif %}
+                            </h3>
+
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="card-body">
+                            {{ message }}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endif %}

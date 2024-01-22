@@ -1,0 +1,13 @@
+{% if app.session.flashbag.peekAll|length > 0 %}
+    <div class="row mb-2">
+        <div class="col">
+            {% for type, messages in app.session.flashbag.all() %}
+                {% for message in messages %}
+                    <div class="alert pt-3 {% if type == 'success' %} alert-success {% elseif type == 'failure' %} alert-danger {% elseif type == 'warning' %} alert-warning {% elseif type == 'info' %} alert-primary {% endif %}" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
