@@ -58,6 +58,19 @@ class ContactRepository extends AbstractRepository implements ContactRepositoryI
     /**
      * @inheritDoc
      */
+    public function findByUser(User $user): array
+    {
+        return $this->createQueryBuilder('contact')
+            ->andWhere('contact.user = :userId')
+            ->setParameter('userId', $user->getId(), UuidType::NAME)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getUserPaginator(ContactSearchData $data, User $user, int $currentPage, int $pageSize): DqlPaginator
     {
         $phrase = $data->getPhrase();

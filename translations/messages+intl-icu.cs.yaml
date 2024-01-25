@@ -1478,6 +1478,12 @@ form:
             button: 'Poslat email'
 
         contact:
+            modal:
+                title: 'Načíst kontakt'
+                text: 'Vyberte kontakt, který si přejete načíst z profilu.'
+                button: 'Načíst'
+
+            load_from_profile: 'Načíst kontakt z profilu'
             name_first: 'Jméno'
             name_last: 'Příjmení'
             email: 'E-mail'
@@ -1502,6 +1508,12 @@ form:
             button: 'Hledat'
 
         camper:
+            modal:
+                title: 'Načíst táborníka'
+                text: 'Vyberte táborníka, kterého si přejete načíst z profilu.'
+                button: 'Načíst'
+
+            load_from_profile: 'Načíst táborníka z profilu'
             name_first: 'Jméno'
             name_last: 'Příjmení'
             gender: 'Pohlaví'

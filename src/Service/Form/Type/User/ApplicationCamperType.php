@@ -5,6 +5,7 @@ namespace App\Service\Form\Type\User;
 use App\Library\Data\User\ApplicationAttachmentData;
 use App\Library\Data\User\ApplicationCamperData;
 use App\Library\Data\User\ApplicationFormFieldValueData;
+use App\Model\Entity\Camper;
 use App\Service\Form\Type\Common\CollectionItemType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -28,6 +29,34 @@ class ApplicationCamperType extends AbstractType
     public function __construct(TranslatorInterface $translator)
     {
         $this->translator = $translator;
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['enable_camper_loading'] = $options['enable_camper_loading'];
+
+        /** @var Camper[] $loadableCampers */
+        $loadableCampers = $options['loadable_campers'];
+        $view->vars['loadable_campers'] = [];
+
+        foreach ($loadableCampers as $loadableCamper)
+        {
+            $bornAtString = $loadableCamper
+                ->getBornAt()
+                ->format('Y-m-d')
+            ;
+
+            $view->vars['loadable_campers'][] = [
+                'nameFirst'           => $loadableCamper->getNameFirst(),
+                'nameLast'            => $loadableCamper->getNameLast(),
+                'nationalIdentifier'  => $loadableCamper->getNationalIdentifier(),
+                'bornAt'              => $bornAtString,
+                'gender'              => $loadableCamper->getGender(),
+                'dietaryRestrictions' => $loadableCamper->getDietaryRestrictions(),
+                'healthRestrictions'  => $loadableCamper->getHealthRestrictions(),
+                'medication'          => $loadableCamper->getMedication(),
+            ];
+        }
     }
 
     public function finishView(FormView $view, FormInterface $form, array $options): void
@@ -182,8 +211,14 @@ class ApplicationCamperType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ApplicationCamperData::class,
+            'data_class'             => ApplicationCamperData::class,
+            'block_prefix'           => 'user_application_camper',
+            'enable_camper_loading'  => false,
+            'loadable_campers'       => [],
         ]);
+
+        $resolver->setAllowedTypes('enable_camper_loading', 'bool');
+        $resolver->setAllowedTypes('loadable_campers', Camper::class . '[]');
 
         $resolver->setRequired('empty_data');
     }

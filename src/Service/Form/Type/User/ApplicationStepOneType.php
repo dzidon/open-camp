@@ -5,6 +5,8 @@ namespace App\Service\Form\Type\User;
 use App\Library\Data\User\ApplicationCamperData;
 use App\Library\Data\User\ApplicationStepOneData;
 use App\Library\Data\User\ContactData;
+use App\Model\Entity\Camper;
+use App\Model\Entity\Contact;
 use App\Service\Form\Type\Common\CollectionAddItemButtonType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -35,10 +37,18 @@ class ApplicationStepOneType extends AbstractType
         /** @var ContactData $defaultContactData */
         $defaultContactData = $options['contact_default_data'];
 
+        /** @var Contact[] $loadableContacts */
+        $loadableContacts = $options['loadable_contacts'];
+
+        /** @var Camper[] $loadableCampers */
+        $loadableCampers = $options['loadable_campers'];
+
         $builder
             ->add('email', EmailType::class, [
                 'attr' => [
-                    'autofocus' => 'autofocus'
+                    'autofocus'                         => 'autofocus',
+                    'data-app--contact-autofill-target' => 'email',
+                    'data-action'                       => 'app--contact-autofill#fillFirstContact'
                 ],
                 'label'    => 'form.user.application_step_one.email.label',
                 'help'     => 'form.user.application_step_one.email.help',
@@ -46,10 +56,18 @@ class ApplicationStepOneType extends AbstractType
             ])
             ->add('nameFirst', TextType::class, [
                 'label'    => 'form.user.application_step_one.name_first',
+                'attr'     => [
+                    'data-app--contact-autofill-target' => 'nameFirst',
+                    'data-action'                       => 'app--contact-autofill#fillFirstContact'
+                ],
                 'priority' => 4900,
             ])
             ->add('nameLast', TextType::class, [
                 'label'    => 'form.user.application_step_one.name_last',
+                'attr'     => [
+                    'data-app--contact-autofill-target' => 'nameLast',
+                    'data-action'                       => 'app--contact-autofill#fillFirstContact'
+                ],
                 'priority' => 4800,
             ])
             ->add('street', TextType::class, [
@@ -144,19 +162,26 @@ class ApplicationStepOneType extends AbstractType
                 'priority' => 3800,
             ])
             ->add('contactsData', CollectionType::class, [
-                'entry_type'    => ContactType::class,
-                'label'         => 'form.user.application_step_one.contacts',
-                'allow_add'     => true,
-                'allow_delete'  => true,
+                'entry_type'   => ContactType::class,
+                'label'        => 'form.user.application_step_one.contacts',
+                'allow_add'    => true,
+                'allow_delete' => true,
+                'attr'         => [
+                    'data-app--contact-autofill-target' => 'contacts',
+                ],
                 'entry_options' => [
-                    'label'               => false,
-                    'remove_button_label' => 'form.user.application_contact.remove_button',
-                    'remove_button'       => true,
-                    'empty_data'          => $defaultContactData,
+                    'label'                  => false,
+                    'remove_button_label'    => 'form.user.application_contact.remove_button',
+                    'remove_button'          => true,
+                    'enable_contact_loading' => true,
+                    'empty_data'             => $defaultContactData,
+                    'loadable_contacts'      => $loadableContacts,
                 ],
                 'prototype_options' => [
-                    'remove_button_label' => 'form.user.application_contact.remove_button',
-                    'remove_button'       => true,
+                    'remove_button_label'    => 'form.user.application_contact.remove_button',
+                    'remove_button'          => true,
+                    'enable_contact_loading' => true,
+                    'loadable_contacts'      => $loadableContacts,
                 ],
                 'prototype_data' => $defaultContactData,
                 'priority'       => 3700,
@@ -172,14 +197,18 @@ class ApplicationStepOneType extends AbstractType
                 'allow_add'     => true,
                 'allow_delete'  => true,
                 'entry_options' => [
-                    'label'               => false,
-                    'remove_button_label' => 'form.user.application_camper.remove_button',
-                    'remove_button'       => true,
-                    'empty_data'          => $defaultApplicationCamperData,
+                    'label'                 => false,
+                    'remove_button_label'   => 'form.user.application_camper.remove_button',
+                    'remove_button'         => true,
+                    'enable_camper_loading' => true,
+                    'empty_data'            => $defaultApplicationCamperData,
+                    'loadable_campers'      => $loadableCampers,
                 ],
                 'prototype_options' => [
-                    'remove_button_label' => 'form.user.application_camper.remove_button',
-                    'remove_button'       => true,
+                    'remove_button_label'   => 'form.user.application_camper.remove_button',
+                    'remove_button'         => true,
+                    'enable_camper_loading' => true,
+                    'loadable_campers'      => $loadableCampers,
                 ],
                 'prototype_data' => $defaultApplicationCamperData,
                 'priority'       => 3500,
@@ -195,9 +224,17 @@ class ApplicationStepOneType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'   => ApplicationStepOneData::class,
-            'block_prefix' => 'user_application_step_one',
+            'data_class'        => ApplicationStepOneData::class,
+            'block_prefix'      => 'user_application_step_one',
+            'loadable_contacts' => [],
+            'loadable_campers'  => [],
+            'attr'              => [
+                'data-controller' => 'app--contact-autofill',
+            ],
         ]);
+
+        $resolver->setAllowedTypes('loadable_contacts', Contact::class . '[]');
+        $resolver->setAllowedTypes('loadable_campers', Camper::class . '[]');
 
         $resolver->setDefined('application_camper_default_data');
         $resolver->setAllowedTypes('application_camper_default_data', ApplicationCamperData::class);

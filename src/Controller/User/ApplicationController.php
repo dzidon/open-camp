@@ -14,6 +14,8 @@ use App\Model\Event\User\Application\ApplicationStepTwoUpdateEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
+use App\Model\Repository\CamperRepositoryInterface;
+use App\Model\Repository\ContactRepositoryInterface;
 use App\Model\Repository\PaymentMethodRepositoryInterface;
 use App\Model\Service\Application\ApplicationStepOneDataFactoryInterface;
 use App\Model\Service\ApplicationCamper\ApplicationCamperDataFactoryInterface;
@@ -30,7 +32,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\UuidV4;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ApplicationController extends AbstractController
 {
@@ -38,32 +39,33 @@ class ApplicationController extends AbstractController
     private ApplicationRepositoryInterface $applicationRepository;
     private CampCategoryRepositoryInterface $campCategoryRepository;
     private RouteNamerInterface $routeNamer;
-    private TranslatorInterface $translator;
     private ApplicationBreadcrumbsInterface $breadcrumbs;
 
     public function __construct(CampDateRepositoryInterface     $campDateRepository,
                                 ApplicationRepositoryInterface  $applicationRepository,
                                 CampCategoryRepositoryInterface $campCategoryRepository,
                                 RouteNamerInterface             $routeNamer,
-                                TranslatorInterface             $translator,
                                 ApplicationBreadcrumbsInterface $breadcrumbs)
     {
         $this->campDateRepository = $campDateRepository;
         $this->applicationRepository = $applicationRepository;
         $this->campCategoryRepository = $campCategoryRepository;
         $this->routeNamer = $routeNamer;
-        $this->translator = $translator;
         $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/application-create/{campDateId}', name: 'user_application_step_one_create')]
-    public function stepOneCreate(ApplicationStepOneDataFactoryInterface $applicationStepOneDataFactory,
+    public function stepOneCreate(ContactRepositoryInterface             $contactRepository,
+                                  CamperRepositoryInterface              $camperRepository,
+                                  ApplicationStepOneDataFactoryInterface $applicationStepOneDataFactory,
                                   ApplicationCamperDataFactoryInterface  $applicationCamperDataFactory,
                                   ContactDataFactoryInterface            $contactDataFactory,
                                   EventDispatcherInterface               $eventDispatcher,
                                   Request                                $request,
                                   UuidV4                                 $campDateId): Response
     {
+        /** @var User|null $user */
+        $user = $this->getUser();
         $campDate = $this->findCampDateOrThrow404($campDateId);
         $contactData = $contactDataFactory->createContactData();
         $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromCampDate($campDate);
@@ -72,6 +74,8 @@ class ApplicationController extends AbstractController
         $form = $this->createForm(ApplicationStepOneType::class, $applicationStepOneData, [
             'application_camper_default_data'  => $applicationCamperData,
             'contact_default_data'             => $contactData,
+            'loadable_contacts'                => $user === null ? [] : $contactRepository->findByUser($user),
+            'loadable_campers'                 => $user === null ? [] : $camperRepository->findByUser($user),
         ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_one.button']);
         $form->handleRequest($request);
@@ -115,13 +119,17 @@ class ApplicationController extends AbstractController
     }
 
     #[Route('/application/{applicationId}/step-one', name: 'user_application_step_one_update')]
-    public function stepOneUpdate(ApplicationCamperDataFactoryInterface  $applicationCamperDataFactory,
-                                  ContactDataFactoryInterface            $contactDataFactory,
-                                  EventDispatcherInterface               $eventDispatcher,
-                                  DataTransferRegistryInterface          $dataTransfer,
-                                  Request                                $request,
-                                  UuidV4                                 $applicationId): Response
+    public function stepOneUpdate(ContactRepositoryInterface            $contactRepository,
+                                  CamperRepositoryInterface             $camperRepository,
+                                  ApplicationCamperDataFactoryInterface $applicationCamperDataFactory,
+                                  ContactDataFactoryInterface           $contactDataFactory,
+                                  EventDispatcherInterface              $eventDispatcher,
+                                  DataTransferRegistryInterface         $dataTransfer,
+                                  Request                               $request,
+                                  UuidV4                                $applicationId): Response
     {
+        /** @var User|null $user */
+        $user = $this->getUser();
         $application = $this->findApplicationOrThrow404($applicationId);
         $contactData = $contactDataFactory->createContactDataFromApplication($application);
         $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromApplication($application);
@@ -136,6 +144,8 @@ class ApplicationController extends AbstractController
         $form = $this->createForm(ApplicationStepOneType::class, $applicationStepOneData, [
             'application_camper_default_data'  => $applicationCamperData,
             'contact_default_data'             => $contactData,
+            'loadable_contacts'                => $user === null ? [] : $contactRepository->findByUser($user),
+            'loadable_campers'                 => $user === null ? [] : $camperRepository->findByUser($user),
         ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_one.button',]);
         $form->handleRequest($request);
@@ -266,7 +276,7 @@ class ApplicationController extends AbstractController
 
     private function setRouteName(): void
     {
-        $routeName = $this->translator->trans('entity.application.singular');
+        $routeName = $this->trans('entity.application.singular');
         $this->routeNamer->setCurrentRouteName($routeName);
     }
 }

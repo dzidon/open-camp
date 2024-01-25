@@ -8,12 +8,16 @@ use App\Library\Data\User\ApplicationStepOneData;
 use App\Library\Data\User\ApplicationFormFieldValueData;
 use App\Library\Data\User\ContactData;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\User;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @inheritDoc
  */
 class ApplicationStepOneDataFactory implements ApplicationStepOneDataFactoryInterface
 {
+    private Security $security;
+
     private bool $isEuBusinessDataEnabled;
 
     private bool $isNationalIdentifierEnabled;
@@ -22,11 +26,13 @@ class ApplicationStepOneDataFactory implements ApplicationStepOneDataFactoryInte
 
     private float $tax;
 
-    public function __construct(bool   $isEuBusinessDataEnabled,
-                                bool   $isNationalIdentifierEnabled,
-                                string $currency,
-                                float  $tax)
+    public function __construct(Security $security,
+                                bool     $isEuBusinessDataEnabled,
+                                bool     $isNationalIdentifierEnabled,
+                                string   $currency,
+                                float    $tax)
     {
+        $this->security = $security;
         $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
         $this->currency = $currency;
@@ -109,6 +115,29 @@ class ApplicationStepOneDataFactory implements ApplicationStepOneDataFactoryInte
             );
 
             $applicationData->addApplicationFormFieldValuesDatum($applicationFormFieldValueData);
+        }
+
+        /** @var User|null $user */
+        $user = $this->security->getUser();
+
+        if ($user !== null)
+        {
+            $applicationData->setEmail($user->getEmail());
+            $applicationData->setNameFirst($user->getNameFirst());
+            $applicationData->setNameLast($user->getNameLast());
+            $applicationData->setStreet($user->getStreet());
+            $applicationData->setTown($user->getTown());
+            $applicationData->setZip($user->getZip());
+            $applicationData->setCountry($user->getCountry());
+
+            $applicationData->setBusinessName($user->getBusinessName());
+            $applicationData->setBusinessCin($user->getBusinessCin());
+            $applicationData->setBusinessVatId($user->getBusinessVatId());
+
+            if ($applicationData->getBusinessName() !== null || $applicationData->getBusinessCin() !== null || $applicationData->getBusinessVatId() !== null)
+            {
+                $applicationData->setIsCompany(true);
+            }
         }
 
         return $applicationData;

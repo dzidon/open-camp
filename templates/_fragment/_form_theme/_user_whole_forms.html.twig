@@ -50,20 +50,99 @@
     <button type="submit" class="btn btn-primary">{{ 'form.user.camper_search.button'|trans }}</button>
 {% endblock %}
 
-{# Camper edit #}
-{% block user_camper_widget %}
+{# Application camper edit #}
+{% block user_application_camper_widget %}
     {{ form_errors(form) }}
 
     {% set rendered_form %}
-        <div class="form-row">
-            <div class="col-md-6">
-                {{ form_row(form.nameFirst) }}
+        {% if enable_camper_loading and loadable_campers is not empty and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <div class="row mb-2">
+                <div class="col-12">
+                    <a href="javascript:void(0);" data-toggle="modal" data-target="#camper-load-modal-{{ name }}">
+                        <i class="fas fa-user-circle"></i>
+
+                        {{ 'form.user.camper.load_from_profile'|trans }}
+                    </a>
+                </div>
             </div>
 
-            <div class="col-md-6">
-                {{ form_row(form.nameLast) }}
+            <div id="camper-load-modal-{{ name }}"
+                 class="modal fade" tabindex="-1"
+                 {{ stimulus_controller('mod--camper-load', {
+                     nameFirstId: form.camperData.nameFirst.vars.id,
+                     nameLastId: form.camperData.nameLast.vars.id,
+                     nationalIdentifierId: form.camperData.nationalIdentifier.vars.id,
+                     isNationalIdentifierAbsentId: form.camperData.isNationalIdentifierAbsent.vars.id,
+                     bornAtId: form.camperData.bornAt.vars.id,
+                     genderId: form.camperData.gender.vars.id,
+                     dietaryRestrictionsId: form.camperData.dietaryRestrictions.vars.id,
+                     healthRestrictionsId: form.camperData.healthRestrictions.vars.id,
+                     medicationId: form.camperData.medication.vars.id,
+                 }) }}
+            >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ 'form.user.camper.modal.title'|trans }}</h5>
+
+                            <button type="button"
+                                    class="close"
+                                    data-dismiss="modal"
+                                    aria-label="{{ 'modal.button_close'|trans }}"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <p>{{ 'form.user.camper.modal.text'|trans }}</p>
+
+                            <div class="form-group">
+                                <label for="camper-load-select-{{ name }}" class="required">
+                                    {{ 'entity.camper.singular'|trans }}
+                                </label>
+
+                                <select class="form-control"
+                                        id="camper-load-select-{{ name }}"
+                                        {{ stimulus_target('mod--camper-load', 'select') }}
+                                        {{ stimulus_action('mod--camper-load', 'updateSubmitButtonAvailability') }}
+                                >
+                                    <option value="" disabled="disabled" selected="selected">
+                                        {{ 'form.common.choice.choose'|trans }}
+                                    </option>
+
+                                    {% for loadable_camper in loadable_campers %}
+                                        <option data-camper-json="{{ loadable_camper|json_encode }}">
+                                            {{ loadable_camper.nameFirst }}
+                                            {{ loadable_camper.nameLast }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    data-dismiss="modal"
+                                    {{ stimulus_target('mod--camper-load', 'buttonClose') }}
+                                    {{ stimulus_action('mod--camper-load', 'resetSelect') }}
+                            >
+                                {{ 'modal.button_close'|trans }}
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    {{ stimulus_target('mod--camper-load', 'buttonLoad') }}
+                                    {{ stimulus_action('mod--camper-load', 'fillCamperForm') }}
+                            >
+                                {{ 'form.user.camper.modal.button'|trans }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+        {% endif %}
 
         {{ form_rest(form) }}
     {% endset %}
@@ -75,6 +154,23 @@
     {% else %}
         {{ rendered_form }}
     {% endif %}
+{% endblock %}
+
+{# Camper edit #}
+{% block user_camper_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="col-md-6">
+            {{ form_row(form.nameFirst) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.nameLast) }}
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
 {% endblock %}
 
 {# Contact profile search #}
@@ -99,6 +195,92 @@
     {{ form_errors(form) }}
 
     {% set rendered_form %}
+        {% if enable_contact_loading and loadable_contacts is not empty and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <div class="row mb-2">
+                <div class="col-12">
+                    <a href="javascript:void(0);" data-toggle="modal" data-target="#contact-load-modal-{{ name }}">
+                        <i class="fas fa-user-circle"></i>
+
+                        {{ 'form.user.contact.load_from_profile'|trans }}
+                    </a>
+                </div>
+            </div>
+
+            <div id="contact-load-modal-{{ name }}"
+                 class="modal fade" tabindex="-1"
+                 {{ stimulus_controller('mod--contact-load', {
+                     nameFirstId: form.nameFirst.vars.id,
+                     nameLastId: form.nameLast.vars.id,
+                     emailId: form.email.vars.id,
+                     phoneNumberId: form.phoneNumber.vars.id,
+                     roleId: form.role.vars.id,
+                     roleOtherId: form.roleOther.vars.id,
+                 }) }}
+            >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{{ 'form.user.contact.modal.title'|trans }}</h5>
+
+                            <button type="button"
+                                    class="close"
+                                    data-dismiss="modal"
+                                    aria-label="{{ 'modal.button_close'|trans }}"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <p>{{ 'form.user.contact.modal.text'|trans }}</p>
+
+                            <div class="form-group">
+                                <label for="contact-load-select-{{ name }}" class="required">
+                                    {{ 'entity.contact.singular'|trans }}
+                                </label>
+
+                                <select class="form-control"
+                                        id="contact-load-select-{{ name }}"
+                                        {{ stimulus_target('mod--contact-load', 'select') }}
+                                        {{ stimulus_action('mod--contact-load', 'updateSubmitButtonAvailability') }}
+                                >
+                                    <option value="" disabled="disabled" selected="selected">
+                                        {{ 'form.common.choice.choose'|trans }}
+                                    </option>
+
+                                    {% for loadable_contact in loadable_contacts %}
+                                        <option data-contact-json="{{ loadable_contact|json_encode }}">
+                                            {{ loadable_contact.nameFirst }}
+                                            {{ loadable_contact.nameLast }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button"
+                                    class="btn btn-secondary"
+                                    data-dismiss="modal"
+                                    {{ stimulus_target('mod--contact-load', 'buttonClose') }}
+                                    {{ stimulus_action('mod--contact-load', 'resetSelect') }}
+                            >
+                                {{ 'modal.button_close'|trans }}
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    {{ stimulus_target('mod--contact-load', 'buttonLoad') }}
+                                    {{ stimulus_action('mod--contact-load', 'fillContactForm') }}
+                            >
+                                {{ 'form.user.contact.modal.button'|trans }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
         <div class="form-row">
             <div class="col-md-6">
                 {{ form_row(form.nameFirst) }}

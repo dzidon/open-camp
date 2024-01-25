@@ -197,6 +197,10 @@ services:
         arguments:
             $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
+    App\Service\Form\Type\User\ContactType:
+        arguments:
+            $phoneNumberFormat: '%app.phone_number_format%'
+
     App\Service\Form\Type\User\CamperType:
         arguments:
             $isNationalIdentifierEnabled: '%app.national_identifier%'

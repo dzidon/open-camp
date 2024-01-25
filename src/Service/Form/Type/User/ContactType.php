@@ -3,8 +3,10 @@
 namespace App\Service\Form\Type\User;
 
 use App\Library\Data\User\ContactData;
+use App\Model\Entity\Contact;
 use App\Service\Form\Type\Common\CollectionItemType;
 use App\Service\Form\Type\Common\ContactRoleType;
+use libphonenumber\PhoneNumberUtil;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -12,6 +14,8 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -19,6 +23,40 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ContactType extends AbstractType
 {
+    private PhoneNumberUtil $phoneNumberUtil;
+
+    private string $phoneNumberFormat;
+
+    public function __construct(string $phoneNumberFormat)
+    {
+        $this->phoneNumberUtil = PhoneNumberUtil::getInstance();
+        $this->phoneNumberFormat = $phoneNumberFormat;
+    }
+
+    public function buildView(FormView $view, FormInterface $form, array $options): void
+    {
+        $view->vars['enable_contact_loading'] = $options['enable_contact_loading'];
+
+        /** @var Contact[] $loadableContacts */
+        $loadableContacts = $options['loadable_contacts'];
+        $view->vars['loadable_contacts'] = [];
+
+        foreach ($loadableContacts as $loadableContact)
+        {
+            $phoneNumber = $loadableContact->getPhoneNumber();
+            $phoneNumberString = $this->phoneNumberUtil->format($phoneNumber, $this->phoneNumberFormat);
+
+            $view->vars['loadable_contacts'][] = [
+                'nameFirst'   => $loadableContact->getNameFirst(),
+                'nameLast'    => $loadableContact->getNameLast(),
+                'email'       => $loadableContact->getEmail(),
+                'phoneNumber' => $phoneNumberString,
+                'role'        => $loadableContact->getRole()->value,
+                'roleOther'   => $loadableContact->getRoleOther(),
+            ];
+        }
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var ContactData $defaultData */
@@ -106,12 +144,17 @@ class ContactType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'   => ContactData::class,
-            'block_prefix' => 'user_contact',
-            'attr'         => [
+            'data_class'             => ContactData::class,
+            'block_prefix'           => 'user_contact',
+            'enable_contact_loading' => false,
+            'loadable_contacts'      => [],
+            'attr'                   => [
                 'data-controller' => 'fd--contact',
             ],
         ]);
+
+        $resolver->setAllowedTypes('enable_contact_loading', 'bool');
+        $resolver->setAllowedTypes('loadable_contacts', Contact::class . '[]');
 
         $resolver->setRequired('empty_data');
     }
