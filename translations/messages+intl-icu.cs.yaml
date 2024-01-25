@@ -300,6 +300,7 @@ crud:
             update: 'Upravit'
             delete: 'Odstranit'
             upload: 'Nahrát'
+            duplicate: 'Duplikovat'
 
         user:
             update_password: 'Nastavit heslo'

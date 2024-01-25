@@ -46,7 +46,9 @@
                         {% endif %}
                     </h3>
 
-                    <a href="{{ path('admin_camp_date_create', {id: camp.id.toRfc4122}) }}" class="btn btn-success ml-3">{{ 'crud.action.common.create'|trans }}</a>
+                    <a href="{{ path('admin_camp_date_create', {id: camp.id.toRfc4122}) }}" class="btn btn-success ml-3">
+                        {{ 'crud.action.common.create'|trans }}
+                    </a>
                 </div>
 
                 {% if paginator.totalItems > 0 %}
@@ -96,9 +98,23 @@
                                         </td>
 
                                         <td class="align-middle cell-25">
-                                            <a href="{{ path('admin_camp_date_read', {id: camp_date.id.toRfc4122}) }}" class="btn btn-secondary">{{ 'crud.action.common.read'|trans }}</a>
-                                            <a href="{{ path('admin_camp_date_update', {id: camp_date.id.toRfc4122}) }}" class="btn btn-primary">{{ 'crud.action.common.update'|trans }}</a>
-                                            <a href="{{ path('admin_camp_date_delete', {id: camp_date.id.toRfc4122}) }}" class="btn btn-danger">{{ 'crud.action.common.delete'|trans }}</a>
+                                            <a href="{{ path('admin_camp_date_read', {id: camp_date.id.toRfc4122}) }}" class="btn btn-secondary">
+                                                {{ 'crud.action.common.read'|trans }}
+                                            </a>
+
+                                            <a href="{{ path('admin_camp_date_update', {id: camp_date.id.toRfc4122}) }}" class="btn btn-primary">
+                                                {{ 'crud.action.common.update'|trans }}
+                                            </a>
+
+                                            <a href="{{ path('admin_camp_date_create', {id: camp.id.toRfc4122, duplicateCampDateId: camp_date.id.toRfc4122}) }}"
+                                               class="btn btn-primary"
+                                            >
+                                                {{ 'crud.action.common.duplicate'|trans }}
+                                            </a>
+
+                                            <a href="{{ path('admin_camp_date_delete', {id: camp_date.id.toRfc4122}) }}" class="btn btn-danger">
+                                                {{ 'crud.action.common.delete'|trans }}
+                                            </a>
                                         </td>
                                     </tr>
                                 {% endfor %}

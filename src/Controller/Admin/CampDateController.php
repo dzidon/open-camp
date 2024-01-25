@@ -88,19 +88,27 @@ class CampDateController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/camp/{id}/create-date', name: 'admin_camp_date_create')]
+    #[Route('/admin/camp/{id}/create-date/{duplicateCampDateId}', name: 'admin_camp_date_create')]
     public function create(EventDispatcherInterface            $eventDispatcher,
+                           DataTransferRegistryInterface       $dataTransfer,
                            DiscountConfigRepositoryInterface   $discountConfigRepository,
                            TripLocationPathRepositoryInterface $tripLocationPathRepository,
                            FormFieldRepositoryInterface        $formFieldRepository,
                            AttachmentConfigRepositoryInterface $attachmentConfigRepository,
                            PurchasableItemRepositoryInterface  $purchasableItemRepository,
                            Request                             $request,
-                           UuidV4                              $id): Response
+                           UuidV4                              $id,
+                           ?UuidV4                             $duplicateCampDateId = null): Response
     {
         $camp = $this->findCampOrThrow404($id);
-
+        $duplicateCampDate = $duplicateCampDateId === null ? null : $this->findCampDateOrThrow404($duplicateCampDateId);
         $campDateData = new CampDateData($camp);
+
+        if ($duplicateCampDate !== null)
+        {
+            $dataTransfer->fillData($campDateData, $duplicateCampDate);
+        }
+
         $form = $this->createForm(CampDateType::class, $campDateData, [
             'choices_discount_configs'    => $discountConfigRepository->findAll(),
             'choices_trip_location_paths' => $tripLocationPathRepository->findAll(),
