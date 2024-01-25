@@ -25,6 +25,7 @@ export default class ModalContactLoadController extends Controller
 
         this.modal.on('hidden.bs.modal', () => {
             this.resetSelect();
+            this.updateSubmitButtonAvailability();
         });
 
         this.updateSubmitButtonAvailability();
@@ -101,7 +102,6 @@ export default class ModalContactLoadController extends Controller
     resetSelect()
     {
         this.select.val('');
-        this.updateSubmitButtonAvailability();
     }
 
     dispatchChangeEvent(id)

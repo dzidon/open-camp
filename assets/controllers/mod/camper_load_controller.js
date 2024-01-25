@@ -28,6 +28,7 @@ export default class ModalCamperLoadController extends Controller
 
         this.modal.on('hidden.bs.modal', () => {
             this.resetSelect();
+            this.updateSubmitButtonAvailability();
         });
 
         this.updateSubmitButtonAvailability();
@@ -124,7 +125,6 @@ export default class ModalCamperLoadController extends Controller
     resetSelect()
     {
         this.select.val('');
-        this.updateSubmitButtonAvailability();
     }
 
     dispatchInputEvent(id)
