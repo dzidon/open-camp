@@ -24,6 +24,11 @@ export default class ModalCamperLoadController extends Controller
         this.select = $(this.selectTarget);
         this.buttonClose = $(this.buttonCloseTarget);
         this.buttonLoad = $(this.buttonLoadTarget);
+        this.modal = $('#' + this.element.id);
+
+        this.modal.on('hidden.bs.modal', () => {
+            this.resetSelect();
+        });
 
         this.updateSubmitButtonAvailability();
     }
@@ -113,8 +118,7 @@ export default class ModalCamperLoadController extends Controller
             medicationInput.val(camperInfo.medication);
         }
 
-        $('#' + this.element.id).modal('hide');
-        this.resetSelect();
+        this.modal.modal('hide');
     }
 
     resetSelect()
