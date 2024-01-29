@@ -35,7 +35,7 @@ class ProfileController extends AbstractController
     {
         /** @var User $admin */
         $admin = $this->getUser();
-        $profileData = new ProfileData();
+        $profileData = new ProfileData($admin);
         $dataTransfer->fillData($profileData, $admin);
 
         $form = $this->createForm(ProfileType::class, $profileData);

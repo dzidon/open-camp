@@ -101,16 +101,16 @@
                 </div>
             </div>
 
-            {% if not camp_date_leader_names is empty %}
+            {% if not camp_date_guide_names is empty %}
                 <div class="row mb-3">
                     <div class="col-12">
-                        <strong>{{ 'entity_attribute.camp_date.leaders'|trans }}:</strong>
+                        <strong>{{ 'entity_attribute.camp_date.users'|trans }}:</strong>
                     </div>
 
                     <div class="col-12">
-                        {% for leader_name in camp_date_leader_names %}
+                        {% for guide_name in camp_date_guide_names %}
                             <div>
-                                <span>{{ leader_name }}</span>
+                                <span>{{ guide_name }}</span>
                             </div>
                         {% endfor %}
                     </div>

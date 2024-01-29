@@ -53,7 +53,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $text = $this->translator->trans('route.user_home');
         $url = $this->urlGenerator->generate('user_home');
         $itemHome = new MenuType('user_home', 'navbar_user_item', $text, $url);
-        $itemHome->setActive($route === 'user_home');
+        $itemHome->setActive($route === 'user_home' || $route === 'user_guide_detail');
         $menu->addChild($itemHome);
 
         // camp catalog

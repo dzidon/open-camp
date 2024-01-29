@@ -2,7 +2,7 @@
 
 namespace App\Library\Constraint;
 
-use App\Service\Validator\UniqueUserValidator;
+use App\Service\Validator\UniqueUserEmailValidator;
 use Attribute;
 use Symfony\Component\Validator\Constraint;
 
@@ -10,9 +10,9 @@ use Symfony\Component\Validator\Constraint;
  * Validates that the entered e-mail is not yet registered.
  */
 #[Attribute]
-class UniqueUser extends Constraint
+class UniqueUserEmail extends Constraint
 {
-    public string $message = 'unique_user';
+    public string $message = 'unique_user_email';
     public string $userProperty = 'user';
     public string $emailProperty = 'email';
 
@@ -34,7 +34,7 @@ class UniqueUser extends Constraint
      */
     public function validatedBy(): string
     {
-        return UniqueUserValidator::class;
+        return UniqueUserEmailValidator::class;
     }
 
     /**

@@ -50,14 +50,16 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     public function findOneById(UuidV4 $id): ?CampDate
     {
         $campDate = $this->createQueryBuilder('campDate')
-            ->select('campDate, camp, campCategory, tripLocationPathThere, tripLocationPathBack, leader')
+            ->select('campDate, camp, campCategory, tripLocationPathThere, tripLocationPathBack, campDateUser, user')
             ->leftJoin('campDate.camp', 'camp')
             ->leftJoin('camp.campCategory', 'campCategory')
             ->leftJoin('campDate.tripLocationPathThere', 'tripLocationPathThere')
             ->leftJoin('campDate.tripLocationPathBack', 'tripLocationPathBack')
-            ->leftJoin('campDate.leaders', 'leader')
+            ->leftJoin('campDate.campDateUsers', 'campDateUser')
+            ->leftJoin('campDateUser.user', 'user')
             ->andWhere('campDate.id = :id')
             ->setParameter('id', $id, UuidType::NAME)
+            ->addOrderBy('campDateUser.priority', 'DESC')
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -75,17 +77,19 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     public function findUpcomingByCamp(Camp $camp, bool $showHidden = true): array
     {
         $queryBuilder = $this->createQueryBuilder('campDate')
-            ->select('campDate, camp, campCategory, tripLocationPathThere, tripLocationPathBack, leader')
+            ->select('campDate, camp, campCategory, tripLocationPathThere, tripLocationPathBack, campDateUser, user')
             ->leftJoin('campDate.camp', 'camp')
             ->leftJoin('camp.campCategory', 'campCategory')
             ->leftJoin('campDate.tripLocationPathThere', 'tripLocationPathThere')
             ->leftJoin('campDate.tripLocationPathBack', 'tripLocationPathBack')
-            ->leftJoin('campDate.leaders', 'leader')
+            ->leftJoin('campDate.campDateUsers', 'campDateUser')
+            ->leftJoin('campDateUser.user', 'user')
             ->andWhere('campDate.camp = :campId')
             ->setParameter('campId', $camp->getId(), UuidType::NAME)
             ->andWhere('campDate.startAt > :now')
             ->setParameter('now', new DateTimeImmutable('now'))
-            ->orderBy('campDate.startAt', 'ASC')
+            ->addOrderBy('campDate.startAt', 'ASC')
+            ->addOrderBy('campDateUser.priority', 'DESC')
         ;
 
         if (!$showHidden)
@@ -111,11 +115,12 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     public function findThoseThatCollideWithInterval(?Camp $camp, DateTimeInterface $startAt, DateTimeInterface $endAt): array
     {
         $queryBuilder = $this->createQueryBuilder('campDate')
-            ->select('campDate, camp, leader, tripLocationPathThere, tripLocationPathBack')
+            ->select('campDate, camp, tripLocationPathThere, tripLocationPathBack, campDateUser, user')
             ->leftJoin('campDate.camp', 'camp')
-            ->leftJoin('campDate.leaders', 'leader')
             ->leftJoin('campDate.tripLocationPathThere', 'tripLocationPathThere')
             ->leftJoin('campDate.tripLocationPathBack', 'tripLocationPathBack')
+            ->leftJoin('campDate.campDateUsers', 'campDateUser')
+            ->leftJoin('campDateUser.user', 'user')
             ->andWhere('
                 (:startAt >= campDate.startAt AND :startAt <= campDate.endAt) OR
                 (:endAt   >= campDate.startAt AND :endAt <= campDate.endAt)   OR
@@ -123,6 +128,8 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ')
             ->setParameter('startAt', $startAt)
             ->setParameter('endAt', $endAt)
+            ->addOrderBy('campDate.startAt', 'ASC')
+            ->addOrderBy('campDateUser.priority', 'DESC')
         ;
 
         if ($camp !== null)

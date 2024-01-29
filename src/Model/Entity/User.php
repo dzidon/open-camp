@@ -7,7 +7,6 @@ use App\Model\Repository\UserRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use libphonenumber\PhoneNumber;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -61,8 +60,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 32, nullable: true)]
     private ?string $businessVatId = null;
 
-    #[ORM\Column(type: 'phone_number', nullable: true)]
-    private ?PhoneNumber $leaderPhoneNumber = null;
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $bornAt = null;
+
+    #[ORM\Column(length: 2000, nullable: true)]
+    private ?string $bio = null;
+
+    #[ORM\Column(length: 8, nullable: true)]
+    private ?string $imageExtension = null;
+
+    #[ORM\Column(length: 255, unique: true, nullable: true)]
+    private ?string $urlName = null;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $guidePriority = 0;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $lastActiveAt = null;
@@ -187,6 +198,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getNameFull(): ?string
+    {
+        if ($this->nameFirst !== null && $this->nameLast !== null)
+        {
+            return $this->nameFirst . ' ' . $this->nameLast;
+        }
+
+        return null;
+    }
+
     public function getNameFirst(): ?string
     {
         return $this->nameFirst;
@@ -295,26 +316,75 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getLeaderPhoneNumber(): ?PhoneNumber
+    public function getAge(): ?int
     {
-        return $this->leaderPhoneNumber === null ? null : clone $this->leaderPhoneNumber;
+        if ($this->bornAt === null)
+        {
+            return null;
+        }
+
+        $now = new DateTimeImmutable('now');
+        $interval = $now->diff($this->bornAt);
+
+        return $interval->y;
     }
 
-    public function setLeaderPhoneNumber(?PhoneNumber $leaderPhoneNumber): self
+    public function getBornAt(): ?DateTimeImmutable
     {
-        if ($leaderPhoneNumber === null)
-        {
-            $this->leaderPhoneNumber = $leaderPhoneNumber;
+        return $this->bornAt;
+    }
 
-            return $this;
-        }
+    public function setBornAt(?DateTimeImmutable $bornAt): self
+    {
+        $this->bornAt = $bornAt;
 
-        if ($this->leaderPhoneNumber !== null && $this->leaderPhoneNumber->equals($leaderPhoneNumber))
-        {
-            return $this;
-        }
+        return $this;
+    }
 
-        $this->leaderPhoneNumber = clone $leaderPhoneNumber;
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): self
+    {
+        $this->bio = $bio;
+
+        return $this;
+    }
+
+    public function getImageExtension(): ?string
+    {
+        return $this->imageExtension;
+    }
+
+    public function setImageExtension(?string $imageExtension): self
+    {
+        $this->imageExtension = $imageExtension;
+
+        return $this;
+    }
+
+    public function getUrlName(): ?string
+    {
+        return $this->urlName;
+    }
+
+    public function setUrlName(?string $urlName): self
+    {
+        $this->urlName = $urlName;
+
+        return $this;
+    }
+
+    public function getGuidePriority(): int
+    {
+        return $this->guidePriority;
+    }
+
+    public function setGuidePriority(int $guidePriority): self
+    {
+        $this->guidePriority = $guidePriority;
 
         return $this;
     }

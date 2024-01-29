@@ -59,6 +59,7 @@
                                 <tr>
                                     <th>{{ 'entity_attribute.user.email'|trans }}</th>
                                     <th>{{ 'entity_attribute.user.name_first'|trans }} & {{ 'entity_attribute.user.name_last'|trans }}</th>
+                                    <th>{{ 'entity_attribute.user.url_name'|trans }}</th>
                                     <th>{{ 'entity_attribute.user.role'|trans }}</th>
                                     <th>{{ 'entity_attribute.user.last_active_at'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
@@ -79,6 +80,14 @@
                                         <td class="align-middle">
                                             {% if user.nameFirst is not null and user.nameLast is not null %}
                                                 <span>{{ user.nameFirst }} {{ user.nameLast }}</span>
+                                            {% else %}
+                                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if user.urlName %}
+                                                <span>{{ user.urlName }}</span>
                                             {% else %}
                                                 <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                                             {% endif %}

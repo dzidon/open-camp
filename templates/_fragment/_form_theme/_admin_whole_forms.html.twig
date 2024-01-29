@@ -1,3 +1,75 @@
+{# User profile edit #}
+{% block admin_profile_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="col-md-6">
+            {{ form_row(form.nameFirst) }}
+        </div>
+
+        <div class="col-md-6">
+            {{ form_row(form.nameLast) }}
+        </div>
+    </div>
+
+    {{ form_row(form.bornAt) }}
+    {{ form_row(form.bio) }}
+    {{ form_row(form.image) }}
+
+    {% if user is defined and user.imageExtension is not null %}
+        <div class="row user-image"
+             data-controller="cv--content"
+             data-cv--content-show-when-checked-value="0"
+        >
+            <div class="col-4 col-md-3 mb-3">
+                <div class="bg-black">
+                    <a href="{{ asset(user_image_path(user)) }}">
+                        <img class="image-cover-1-1"
+                             src="{{ asset(user_image_path(user)) }}"
+                             alt="{{ 'entity_attribute.user.image'|trans }}"
+                        >
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {{ form_rest(form) }}
+{% endblock %}
+
+{# User profile edit #}
+{% block admin_user_widget %}
+    {{ form_errors(form) }}
+
+    {{ form_row(form.email) }}
+    {{ form_row(form.billingData) }}
+    {{ form_row(form.urlName) }}
+    {{ form_row(form.guidePriority) }}
+    {{ form_row(form.bornAt) }}
+    {{ form_row(form.bio) }}
+    {{ form_row(form.image) }}
+
+    {% if user is defined and user.imageExtension is not null %}
+        <div class="row user-image"
+             data-controller="cv--content"
+             data-cv--content-show-when-checked-value="0"
+        >
+            <div class="col-4 col-md-3 mb-3">
+                <div class="bg-black">
+                    <a href="{{ asset(user_image_path(user)) }}">
+                        <img class="image-cover-1-1"
+                             src="{{ asset(user_image_path(user)) }}"
+                             alt="{{ 'entity_attribute.user.image'|trans }}"
+                        >
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {{ form_rest(form) }}
+{% endblock %}
+
 {# Attachment config search #}
 {% block admin_attachment_config_search_widget %}
     {{ form_errors(form) }}
@@ -149,23 +221,6 @@
     </div>
 
     <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.form_field_search.button'|trans }}</button>
-{% endblock %}
-
-{# Profile edit #}
-{% block admin_profile_widget %}
-    {{ form_errors(form) }}
-
-    <div class="form-row">
-        <div class="col-md-6">
-            {{ form_row(form.nameFirst) }}
-        </div>
-
-        <div class="col-md-6">
-            {{ form_row(form.nameLast) }}
-        </div>
-    </div>
-
-    {{ form_rest(form) }}
 {% endblock %}
 
 {# Purchasable item search #}

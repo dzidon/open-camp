@@ -1,0 +1,50 @@
+{% extends "user/base.html.twig" %}
+
+{% block h1 %}{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12 col-md-4 col-lg-4 mb-3">
+            <div class="bg-black">
+                {% set guide_img %}
+                    <img class="image-cover-1-1"
+                         src="{{ asset(user_image_path(guide)) }}"
+                         alt="{{ 'entity_attribute.user.image'|trans }}"
+                    >
+                {% endset %}
+
+                {% if guide.imageExtension is null %}
+                    {{ guide_img }}
+                {% else %}
+                    <a href="{{ asset(user_image_path(guide)) }}">
+                        {{ guide_img }}
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-12 col-md-8 col-lg-8 pl-md-5">
+            <h1>
+                {% if is_route_name_set() %}
+                    <h1 class="mb-3">{{ route_name() }}</h1>
+                {% endif %}
+            </h1>
+
+            {% if guide.age is not null %}
+                <div class="mb-3">
+                    {{ 'entity_attribute.user.age'|trans }}:
+
+                    {{ guide.age }}
+                </div>
+            {% endif %}
+
+            <div class="mb-3">
+                {% if guide.bio is not null %}
+                    {{ guide.bio|nl2br }}
+                {% else %}
+                    <em>{{ 'guide.bio_undisclosed'|trans }}</em>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

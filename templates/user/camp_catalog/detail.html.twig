@@ -3,6 +3,8 @@
 {% block h1 %}{% endblock %}
 
 {% block main %}
+    {% set camp_images_length = camp_images|length %}
+
     <div class="row">
         <div class="col-12 col-lg-6 mb-3" {{ stimulus_controller('img--carousel') }}>
             <div id="camp-images-carousel" class="carousel slide" data-ride="carousel" data-interval="false" {{ stimulus_target('img--carousel', 'carousel') }}>
@@ -28,7 +30,7 @@
                     {% endif %}
                 </div>
 
-                {% if camp_images|length >= 2 %}
+                {% if camp_images_length >= 2 %}
                     <button class="carousel-control-prev" type="button" data-target="#camp-images-carousel" data-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="sr-only">{{ 'image_carousel.previous'|trans }}</span>
@@ -41,7 +43,7 @@
                 {% endif %}
             </div>
 
-            {% if camp_images|length >= 2 %}
+            {% if camp_images_length >= 2 %}
                 <div class="row mt-3">
                     {% for key, camp_image in camp_images %}
                         <div class="col-4 col-md-3">
@@ -227,5 +229,4 @@
             </div>
         </div>
     {% endif %}
-
 {% endblock %}

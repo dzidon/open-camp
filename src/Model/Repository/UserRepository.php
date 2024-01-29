@@ -98,6 +98,36 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     /**
      * @inheritDoc
      */
+    public function findOneByUrlName(string $urlName): ?User
+    {
+        return $this->createQueryBuilder('user')
+            ->select('user, userRole, userRolePermission, userRolePermissionGroup')
+            ->leftJoin('user.role', 'userRole')
+            ->leftJoin('userRole.permissions', 'userRolePermission')
+            ->leftJoin('userRolePermission.permissionGroup', 'userRolePermissionGroup')
+            ->andWhere('user.urlName = :urlName')
+            ->setParameter('urlName', $urlName)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findThoseWithNotNullUrlNames(): array
+    {
+        return $this->createQueryBuilder('user')
+            ->andWhere('user.urlName IS NOT NULL')
+            ->addOrderBy('user.guidePriority', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findByRole(?Role $role): array
     {
         $queryBuilder = $this->createQueryBuilder('user');
@@ -134,6 +164,8 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
             ->leftJoin('user.role', 'userRole')
             ->orWhere('user.email LIKE :email')
             ->setParameter('email', '%' . $phrase . '%')
+            ->orWhere('user.urlName LIKE :urlName')
+            ->setParameter('urlName', '%' . $phrase . '%')
             ->orWhere('CONCAT(user.nameFirst, \' \', user.nameLast) LIKE :fullName')
             ->setParameter('fullName', '%' . $phrase . '%')
             ->orderBy($sortBy->property(), $sortBy->order())

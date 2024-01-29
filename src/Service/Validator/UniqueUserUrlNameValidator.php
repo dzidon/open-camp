@@ -2,7 +2,7 @@
 
 namespace App\Service\Validator;
 
-use App\Library\Constraint\UniqueUser;
+use App\Library\Constraint\UniqueUserUrlName;
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -12,9 +12,9 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Validates that the entered e-mail is not yet registered.
+ * Validates that the entered url name is not yet assigned to a user.
  */
-class UniqueUserValidator extends ConstraintValidator
+class UniqueUserUrlNameValidator extends ConstraintValidator
 {
     private PropertyAccessorInterface $propertyAccessor;
     private UserRepositoryInterface $userRepository;
@@ -34,9 +34,9 @@ class UniqueUserValidator extends ConstraintValidator
      */
     public function validate($value, Constraint $constraint): void
     {
-        if (!$constraint instanceof UniqueUser)
+        if (!$constraint instanceof UniqueUserUrlName)
         {
-            throw new UnexpectedTypeException($constraint, UniqueUser::class);
+            throw new UnexpectedTypeException($constraint, UniqueUserUrlName::class);
         }
 
         if (!is_object($value))
@@ -45,11 +45,11 @@ class UniqueUserValidator extends ConstraintValidator
         }
 
         $userData = $value;
-        $email = $this->propertyAccessor->getValue($userData, $constraint->emailProperty);
+        $urlName = $this->propertyAccessor->getValue($userData, $constraint->urlNameProperty);
 
-        if ($email !== null && !is_string($email))
+        if ($urlName !== null && !is_string($urlName))
         {
-            throw new UnexpectedTypeException($email, 'string');
+            throw new UnexpectedTypeException($urlName, 'string');
         }
 
         $user = $this->propertyAccessor->getValue($userData, $constraint->userProperty);
@@ -59,12 +59,12 @@ class UniqueUserValidator extends ConstraintValidator
             throw new UnexpectedTypeException($user, User::class);
         }
 
-        if ($email === null || $email === '')
+        if ($urlName === null || $urlName === '')
         {
             return;
         }
 
-        $existingUser = $this->userRepository->findOneByEmail($email);
+        $existingUser = $this->userRepository->findOneByUrlName($urlName);
 
         if ($existingUser === null)
         {
@@ -80,7 +80,7 @@ class UniqueUserValidator extends ConstraintValidator
 
             $this->context
                 ->buildViolation($message)
-                ->atPath($constraint->emailProperty)
+                ->atPath($constraint->urlNameProperty)
                 ->addViolation()
             ;
         }

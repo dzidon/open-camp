@@ -25,7 +25,8 @@ class ProfileDataTransfer implements DataTransferInterface
 
         $profileData->setNameFirst($user->getNameFirst());
         $profileData->setNameLast($user->getNameLast());
-        $profileData->setLeaderPhoneNumber($user->getLeaderPhoneNumber());
+        $profileData->setBornAt($user->getBornAt());
+        $profileData->setBio($user->getBio());
     }
 
     public function fillEntity(object $data, object $entity): void
@@ -37,6 +38,7 @@ class ProfileDataTransfer implements DataTransferInterface
 
         $user->setNameFirst($profileData->getNameFirst());
         $user->setNameLast($profileData->getNameLast());
-        $user->setLeaderPhoneNumber($profileData->getLeaderPhoneNumber());
+        $user->setBornAt($profileData->getBornAt());
+        $user->setBio($profileData->getBio());
     }
 }

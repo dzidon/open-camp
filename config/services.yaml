@@ -13,6 +13,8 @@ parameters:
     app.purchasable_item_image_directory: 'files/dynamic/purchasable-item'
     app.no_purchasable_item_image_path: 'files/static/placeholder.jpg'
     app.application_attachment_directory: 'files/dynamic/application-attachment'
+    app.user_image_directory: 'files/dynamic/user'
+    app.no_user_image_path: 'files/static/user_placeholder.png'
 
     # Mailer
     app.email_no_reply: 'noreply@camp.com'
@@ -132,6 +134,12 @@ services:
             $kernelProjectDirectory: '%kernel.project_dir%'
             $noImagePath: '%app.no_purchasable_item_image_path%'
             $purchasableItemImageDirectory: '%app.purchasable_item_image_directory%'
+
+    App\Model\Service\User\UserImageFilesystem:
+        arguments:
+            $kernelProjectDirectory: '%kernel.project_dir%'
+            $noImagePath: '%app.no_user_image_path%'
+            $userImageDirectory: '%app.user_image_directory%'
 
     App\Model\Service\ApplicationCamper\ApplicationCamperDataFactory:
         arguments:

@@ -6,7 +6,11 @@ use App\Library\Data\Admin\CampDateAttachmentConfigData;
 use App\Library\Data\Admin\CampDateData;
 use App\Library\Data\Admin\CampDateFormFieldData;
 use App\Library\Data\Admin\CampDatePurchasableItemData;
+use App\Library\Data\Admin\CampDateUserData;
+use App\Model\Entity\AttachmentConfig;
 use App\Model\Entity\DiscountConfig;
+use App\Model\Entity\FormField;
+use App\Model\Entity\PurchasableItem;
 use App\Model\Entity\TripLocationPath;
 use App\Service\Form\Type\Common\CollectionAddItemButtonType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -98,11 +102,6 @@ class CampDateType extends AbstractType
                 'required' => false,
                 'label'    => 'form.admin.camp_date.description',
             ])
-            ->add('leaders', UserAutocompleteType::class, [
-                'required' => false,
-                'multiple' => true,
-                'label'    => 'form.admin.camp_date.leaders',
-            ])
             ->add('discountConfig', EntityType::class, [
                 'class'        => DiscountConfig::class,
                 'choice_label' => 'name',
@@ -126,6 +125,25 @@ class CampDateType extends AbstractType
                 'placeholder'  => 'form.common.choice.none.female',
                 'required'     => false,
                 'label'        => 'form.admin.camp_date.trip_location_path_back',
+            ])
+            ->add('campDateUsersData', CollectionType::class, [
+                'entry_type'                  => CampDateUserType::class,
+                'label'                       => 'form.admin.camp_date.users',
+                'suppress_required_rendering' => true,
+                'allow_add'                   => true,
+                'allow_delete'                => true,
+                'entry_options'               => [
+                    'label'         => false,
+                    'remove_button' => true,
+                ],
+                'prototype_options' => [
+                    'remove_button' => true,
+                ],
+                'prototype_data' => new CampDateUserData(),
+            ])
+            ->add('addCampDateUserData', CollectionAddItemButtonType::class, [
+                'label'           => 'form.admin.camp_date.add_user',
+                'collection_name' => 'campDateUsersData',
             ])
             ->add('campDateFormFieldsData', CollectionType::class, [
                 'entry_type'                  => CampDateFormFieldType::class,
@@ -204,10 +222,10 @@ class CampDateType extends AbstractType
             'choices_purchasable_items'   => [],
         ]);
 
-        $resolver->setAllowedTypes('choices_discount_configs', ['array']);
-        $resolver->setAllowedTypes('choices_trip_location_paths', ['array']);
-        $resolver->setAllowedTypes('choices_form_fields', ['array']);
-        $resolver->setAllowedTypes('choices_attachment_configs', ['array']);
-        $resolver->setAllowedTypes('choices_purchasable_items', ['array']);
+        $resolver->setAllowedTypes('choices_discount_configs', DiscountConfig::class . '[]');
+        $resolver->setAllowedTypes('choices_trip_location_paths', TripLocationPath::class . '[]');
+        $resolver->setAllowedTypes('choices_form_fields', FormField::class . '[]');
+        $resolver->setAllowedTypes('choices_attachment_configs', AttachmentConfig::class . '[]');
+        $resolver->setAllowedTypes('choices_purchasable_items', PurchasableItem::class . '[]');
     }
 }

@@ -2,15 +2,18 @@
 
 namespace App\Library\Data\Admin;
 
-use App\Library\Constraint\UniqueUser;
+use App\Library\Constraint\Compound\SlugRequirements;
+use App\Library\Constraint\UniqueUserEmail;
+use App\Library\Constraint\UniqueUserUrlName;
 use App\Library\Data\User\BillingData;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
-use libphonenumber\PhoneNumber;
-use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
+use DateTimeImmutable;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[UniqueUser]
+#[UniqueUserUrlName]
+#[UniqueUserEmail]
 class UserData
 {
     private ?User $user;
@@ -22,11 +25,26 @@ class UserData
 
     private ?Role $role = null;
 
-    #[AssertPhoneNumber]
-    private ?PhoneNumber $leaderPhoneNumber = null;
-
     #[Assert\Valid]
     private BillingData $billingData;
+
+    #[Assert\Length(max: 255)]
+    #[SlugRequirements]
+    private ?string $urlName = null;
+
+    #[Assert\NotBlank]
+    private ?int $guidePriority = 0;
+
+    #[Assert\LessThan('today', message: 'date_in_past')]
+    private ?DateTimeImmutable $bornAt = null;
+
+    #[Assert\Length(max: 2000)]
+    private ?string $bio = null;
+
+    #[Assert\Image]
+    private ?File $image = null;
+
+    private bool $removeImage = false;
 
     public function __construct(bool $isEuBusinessDataEnabled, ?User $user = null)
     {
@@ -63,30 +81,80 @@ class UserData
         return $this;
     }
 
-    public function getLeaderPhoneNumber(): ?PhoneNumber
+    public function getBillingData(): BillingData
     {
-        if ($this->leaderPhoneNumber !== null)
-        {
-            return clone $this->leaderPhoneNumber;
-        }
-
-        return $this->leaderPhoneNumber;
+        return $this->billingData;
     }
 
-    public function setLeaderPhoneNumber(?PhoneNumber $leaderPhoneNumber): self
+    public function getUrlName(): ?string
     {
-        if ($leaderPhoneNumber !== null)
-        {
-            $leaderPhoneNumber = clone $leaderPhoneNumber;
-        }
+        return $this->urlName;
+    }
 
-        $this->leaderPhoneNumber = $leaderPhoneNumber;
+    public function setUrlName(?string $urlName): self
+    {
+        $this->urlName = $urlName;
 
         return $this;
     }
 
-    public function getBillingData(): BillingData
+    public function getGuidePriority(): ?int
     {
-        return $this->billingData;
+        return $this->guidePriority;
+    }
+
+    public function setGuidePriority(?int $guidePriority): self
+    {
+        $this->guidePriority = $guidePriority;
+
+        return $this;
+    }
+
+    public function getBornAt(): ?DateTimeImmutable
+    {
+        return $this->bornAt;
+    }
+
+    public function setBornAt(?DateTimeImmutable $bornAt): self
+    {
+        $this->bornAt = $bornAt;
+
+        return $this;
+    }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): self
+    {
+        $this->bio = $bio;
+
+        return $this;
+    }
+
+    public function getImage(): ?File
+    {
+        return $this->image;
+    }
+
+    public function setImage(?File $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function removeImage(): bool
+    {
+        return $this->removeImage;
+    }
+
+    public function setRemoveImage(bool $removeImage): self
+    {
+        $this->removeImage = $removeImage;
+
+        return $this;
     }
 }

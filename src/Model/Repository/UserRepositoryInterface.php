@@ -53,6 +53,21 @@ interface UserRepositoryInterface
     public function isEmailRegistered(string $email): bool;
 
     /**
+     * Finds a user by their url name.
+     *
+     * @param string $urlName
+     * @return User|null
+     */
+    public function findOneByUrlName(string $urlName): ?User;
+
+    /**
+     * Finds all users whose url names are not null.
+     *
+     * @return User[]
+     */
+    public function findThoseWithNotNullUrlNames(): array;
+
+    /**
      * Finds all users that have the given role.
      *
      * @param null|Role $role

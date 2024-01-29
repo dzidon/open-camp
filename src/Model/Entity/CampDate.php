@@ -57,9 +57,6 @@ class CampDate
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Camp $camp;
 
-    #[ORM\ManyToMany(targetEntity: User::class)]
-    private Collection $leaders;
-
     #[ORM\ManyToOne(targetEntity: DiscountConfig::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?DiscountConfig $discountConfig = null;
@@ -80,6 +77,9 @@ class CampDate
 
     #[ORM\OneToMany(mappedBy: 'campDate', targetEntity: CampDatePurchasableItem::class)]
     private Collection $campDatePurchasableItems;
+
+    #[ORM\OneToMany(mappedBy: 'campDate', targetEntity: CampDateUser::class)]
+    private Collection $campDateUsers;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
@@ -102,10 +102,10 @@ class CampDate
         $this->priceWithoutDeposit = $priceWithoutDeposit;
         $this->capacity = $capacity;
         $this->camp = $camp;
-        $this->leaders = new ArrayCollection();
         $this->campDateFormFields = new ArrayCollection();
         $this->campDateAttachmentConfigs = new ArrayCollection();
         $this->campDatePurchasableItems = new ArrayCollection();
+        $this->campDateUsers = new ArrayCollection(); 
         $this->createdAt = new DateTimeImmutable('now');
     }
 
@@ -251,47 +251,30 @@ class CampDate
         return $this;
     }
 
-    public function getLeaderNames(): array
+    /**
+     * @return string[]
+     */
+    public function getUserNames(): array
     {
         $names = [];
 
-        /** @var User $leader */
-        foreach ($this->leaders as $leader)
+        /** @var CampDateUser $campDateUser */
+        foreach ($this->campDateUsers as $campDateUser)
         {
-            if ($leader->getNameFirst() === null || $leader->getNameLast() === null)
+            $nameFull = $campDateUser
+                ->getUser()
+                ->getNameFull()
+            ;
+
+            if ($nameFull === null)
             {
                 continue;
             }
 
-            $names[] = $leader->getNameFirst() . ' ' . $leader->getNameLast();
+            $names[] = $nameFull;
         }
 
         return $names;
-    }
-
-    /**
-     * @return User[]
-     */
-    public function getLeaders(): array
-    {
-        return $this->leaders->toArray();
-    }
-
-    public function addLeader(User $user): self
-    {
-        if (!$this->leaders->contains($user))
-        {
-            $this->leaders->add($user);
-        }
-
-        return $this;
-    }
-
-    public function removeLeader(User $user): self
-    {
-        $this->leaders->removeElement($user);
-
-        return $this;
     }
 
     public function getDiscountConfig(): ?DiscountConfig
@@ -438,6 +421,42 @@ class CampDate
         return $this;
     }
 
+    /**
+     * @return CampDateUser[]
+     */
+    public function getCampDateUsers(): array
+    {
+        return $this->campDateUsers->toArray();
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param CampDateUser $campDateUser
+     * @return $this
+     */
+    public function addCampDateUser(CampDateUser $campDateUser): self
+    {
+        if (!$this->campDateUsers->contains($campDateUser))
+        {
+            $this->campDateUsers->add($campDateUser);
+            $campDateUser->setCampDate($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param CampDateUser $campDateUser
+     * @return $this
+     */
+    public function removeCampDateUser(CampDateUser $campDateUser): self
+    {
+        $this->campDateUsers->removeElement($campDateUser);
+
+        return $this;
+    }
+    
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;

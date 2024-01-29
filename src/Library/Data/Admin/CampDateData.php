@@ -3,11 +3,11 @@
 namespace App\Library\Data\Admin;
 
 use App\Library\Constraint\CampDateInterval;
+use App\Library\Constraint\CampDateUserUnique;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\DiscountConfig;
 use App\Model\Entity\TripLocationPath;
-use App\Model\Entity\User;
 use DateTimeImmutable;
 use LogicException;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -55,11 +55,6 @@ class CampDateData
     #[Assert\Length(max: 2000)]
     private ?string $description = null;
 
-    /**
-     * @var User[]
-     */
-    private array $leaders = [];
-
     private ?DiscountConfig $discountConfig = null;
 
     private ?TripLocationPath $tripLocationPathThere = null;
@@ -83,6 +78,13 @@ class CampDateData
      */
     #[Assert\Valid]
     private array $campDatePurchasableItemsData = [];
+
+    /**
+     * @var CampDateUserData[]
+     */
+    #[Assert\Valid]
+    #[CampDateUserUnique]
+    private array $campDateUsersData = [];
 
     public function __construct(Camp $camp, ?CampDate $campDate = null)
     {
@@ -216,37 +218,6 @@ class CampDateData
     public function setDescription(?string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getLeaders(): array
-    {
-        return $this->leaders;
-    }
-
-    public function addLeader(User $leader): self
-    {
-        if (in_array($leader, $this->leaders))
-        {
-            return $this;
-        }
-
-        $this->leaders[] = $leader;
-
-        return $this;
-    }
-
-    public function removeLeader(User $leader): self
-    {
-        $key = array_search($leader, $this->leaders, true);
-
-        if ($key === false)
-        {
-            return $this;
-        }
-
-        unset($this->leaders[$key]);
 
         return $this;
     }
@@ -427,6 +398,54 @@ class CampDateData
         }
 
         unset($this->campDatePurchasableItemsData[$key]);
+
+        return $this;
+    }
+
+    public function getCampDateUsersData(): array
+    {
+        return $this->campDateUsersData;
+    }
+
+    public function setCampDateUsersData(array $campDateUsersData): self
+    {
+        foreach ($campDateUsersData as $campDateUserData)
+        {
+            if (!$campDateUserData instanceof CampDateUserData)
+            {
+                throw new LogicException(
+                    sprintf('Array passed to %s must only contain instances of %s.', __METHOD__, CampDateUserData::class)
+                );
+            }
+        }
+
+        $this->campDateUsersData = $campDateUsersData;
+
+        return $this;
+    }
+
+    public function addCampDateUserData(CampDateUserData $campDateUserData): self
+    {
+        if (in_array($campDateUserData, $this->campDateUsersData, true))
+        {
+            return $this;
+        }
+
+        $this->campDateUsersData[] = $campDateUserData;
+
+        return $this;
+    }
+
+    public function removeCampDateUserData(CampDateUserData $campDateUserData): self
+    {
+        $key = array_search($campDateUserData, $this->campDateUsersData, true);
+
+        if ($key === false)
+        {
+            return $this;
+        }
+
+        unset($this->campDateUsersData[$key]);
 
         return $this;
     }

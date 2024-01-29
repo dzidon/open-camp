@@ -7,7 +7,6 @@ use App\Library\Data\User\BillingData;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepositoryInterface;
-use libphonenumber\PhoneNumber;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -110,51 +109,6 @@ class UserDataTest extends KernelTestCase
 
         $data->setRole(null);
         $this->assertSame(null, $data->getRole());
-    }
-
-    public function testPhoneNumber(): void
-    {
-        $data = new UserData(true);
-        $this->assertNull($data->getLeaderPhoneNumber());
-
-        $phoneNumber = new PhoneNumber();
-        $phoneNumber->setCountryCode(420);
-        $phoneNumber->setNationalNumber('724888999');
-
-        $data->setLeaderPhoneNumber($phoneNumber);
-        $this->assertNotSame($phoneNumber, $data->getLeaderPhoneNumber());
-        $this->assertSame(420, $data->getLeaderPhoneNumber()->getCountryCode());
-        $this->assertSame('724888999', $data->getLeaderPhoneNumber()->getNationalNumber());
-
-        $data->setLeaderPhoneNumber(null);
-        $this->assertNull($data->getLeaderPhoneNumber());
-    }
-
-    public function testPhoneNumberValidation(): void
-    {
-        $validator = $this->getValidator();
-
-        $data = new UserData(true);
-        $result = $validator->validateProperty($data, 'leaderPhoneNumber');
-        $this->assertEmpty($result); // valid
-
-        $data->setLeaderPhoneNumber(null);
-        $result = $validator->validateProperty($data, 'leaderPhoneNumber');
-        $this->assertEmpty($result); // valid
-
-        $phoneNumber = new PhoneNumber();
-        $phoneNumber->setCountryCode(420);
-        $phoneNumber->setNationalNumber('123');
-        $data->setLeaderPhoneNumber($phoneNumber);
-        $result = $validator->validateProperty($data, 'leaderPhoneNumber');
-        $this->assertNotEmpty($result); // invalid
-
-        $phoneNumber = new PhoneNumber();
-        $phoneNumber->setCountryCode(420);
-        $phoneNumber->setNationalNumber('607888999');
-        $data->setLeaderPhoneNumber($phoneNumber);
-        $result = $validator->validateProperty($data, 'leaderPhoneNumber');
-        $this->assertEmpty($result); // valid
     }
 
     public function testBillingData(): void

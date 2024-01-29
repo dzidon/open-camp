@@ -41,8 +41,11 @@ class UserDataTransfer implements DataTransferInterface
         $user = $entity;
 
         $userData->setEmail($user->getEmail());
-        $userData->setLeaderPhoneNumber($user->getLeaderPhoneNumber());
         $userData->setRole($user->getRole());
+        $userData->setUrlName($user->getUrlName());
+        $userData->setGuidePriority($user->getGuidePriority());
+        $userData->setBornAt($user->getBornAt());
+        $userData->setBio($user->getBio());
 
         $billingData = $userData->getBillingData();
         $this->transferRegistry->fillData($billingData, $user);
@@ -61,7 +64,10 @@ class UserDataTransfer implements DataTransferInterface
         if ($this->security->isGranted('user_update'))
         {
             $user->setEmail($userData->getEmail());
-            $user->setLeaderPhoneNumber($userData->getLeaderPhoneNumber());
+            $user->setUrlName($userData->getUrlName());
+            $user->setGuidePriority($userData->getGuidePriority());
+            $user->setBornAt($userData->getBornAt());
+            $user->setBio($userData->getBio());
 
             $billingData = $userData->getBillingData();
             $this->transferRegistry->fillEntity($billingData, $user);

@@ -47,6 +47,6 @@ class CampDatePurchasableItemType extends AbstractType
             'choices_purchasable_items' => [],
         ]);
 
-        $resolver->setAllowedTypes('choices_purchasable_items', ['array']);
+        $resolver->setAllowedTypes('choices_purchasable_items', PurchasableItem::class . '[]');
     }
 }

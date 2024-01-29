@@ -14,10 +14,8 @@ use App\Model\Entity\CampDateFormField;
 use App\Model\Entity\CampDatePurchasableItem;
 use App\Model\Entity\FormField;
 use App\Model\Entity\PurchasableItem;
-use App\Model\Entity\User;
 use App\Model\Enum\Entity\FormFieldTypeEnum;
 use App\Model\Repository\CampDateRepositoryInterface;
-use App\Model\Repository\UserRepositoryInterface;
 use App\Service\Data\Transfer\Admin\CampDateDataTransfer;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -35,21 +33,12 @@ class CampDateDataTransferTest extends KernelTestCase
         $expectedPriceWithoutDeposit = 2000.0;
         $expectedCapacity = 10;
         $expectedDescription = 'Instructions...';
-        $expectedLeaders = [
-            new User('bob1@gmail.com'),
-            new User('bob2@gmail.com'),
-        ];
 
         $camp = new Camp('Camp', 'camp', 5, 10, 321);
         $campDate = new CampDate($expectedStartAt, $expectedEndAt, $expectedDeposit, $expectedPriceWithoutDeposit, $expectedCapacity, $camp);
         $campDate->setIsClosed(true);
         $campDate->setIsOpenAboveCapacity(true);
         $campDate->setDescription($expectedDescription);
-
-        foreach ($expectedLeaders as $expectedLeader)
-        {
-            $campDate->addLeader($expectedLeader);
-        }
 
         $formField1 = new FormField('New field 1', FormFieldTypeEnum::TEXT, 'New field 1:');
         new CampDateFormField($campDate, $formField1, 100);
@@ -77,7 +66,6 @@ class CampDateDataTransferTest extends KernelTestCase
         $this->assertTrue($data->isClosed());
         $this->assertTrue($data->isOpenAboveCapacity());
         $this->assertSame($expectedDescription, $data->getDescription());
-        $this->assertSame($expectedLeaders, $data->getLeaders());
 
         $campDateFormFieldsData = $data->getCampDateFormFieldsData();
         $this->assertCount(2, $campDateFormFieldsData);
@@ -111,7 +99,6 @@ class CampDateDataTransferTest extends KernelTestCase
     {
         $dataTransfer = $this->getCampDateDataTransfer();
         $campDateRepository = $this->getCampDateRepository();
-        $userRepository = $this->getUserRepository();
 
         $expectedStartAt = new DateTimeImmutable('3100-01-01');
         $expectedEndAt = new DateTimeImmutable('3100-01-05');
@@ -119,12 +106,6 @@ class CampDateDataTransferTest extends KernelTestCase
         $expectedPriceWithoutDeposit = 2000.0;
         $expectedCapacity = 10;
         $expectedDescription = 'Instructions...';
-
-        $user1 = new User('bob1@gmail.com');
-        $userRepository->saveUser($user1, false);
-        $user2 = new User('bob2@gmail.com');
-        $userRepository->saveUser($user2, false);
-        $expectedLeaders = [$user1, $user2];
 
         $campDate = $campDateRepository->findOneById(new UuidV4('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
         $camp = $campDate->getCamp();
@@ -138,11 +119,6 @@ class CampDateDataTransferTest extends KernelTestCase
         $data->setPriceWithoutDeposit($expectedPriceWithoutDeposit);
         $data->setCapacity($expectedCapacity);
         $data->setDescription($expectedDescription);
-
-        foreach ($expectedLeaders as $expectedLeader)
-        {
-            $data->addLeader($expectedLeader);
-        }
 
         // attachment configs
         $campDateAttachmentConfigs = $campDate->getCampDateAttachmentConfigs();
@@ -220,7 +196,6 @@ class CampDateDataTransferTest extends KernelTestCase
         $this->assertTrue($campDate->isClosed());
         $this->assertTrue($campDate->isOpenAboveCapacity());
         $this->assertSame($expectedDescription, $campDate->getDescription());
-        $this->assertSame($expectedLeaders, $campDate->getLeaders());
 
         $campDateRepository->saveCampDate($campDate, true);
         $campDate = $campDateRepository->findOneById(new UuidV4('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
@@ -278,16 +253,6 @@ class CampDateDataTransferTest extends KernelTestCase
         }
 
         return $priorities;
-    }
-
-    private function getUserRepository(): UserRepositoryInterface
-    {
-        $container = static::getContainer();
-
-        /** @var UserRepositoryInterface $repository */
-        $repository = $container->get(UserRepositoryInterface::class);
-
-        return $repository;
     }
 
     private function getCampDateRepository(): CampDateRepositoryInterface

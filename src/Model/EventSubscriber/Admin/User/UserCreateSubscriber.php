@@ -20,7 +20,7 @@ class UserCreateSubscriber
         $this->repository = $repository;
     }
 
-    #[AsEventListener(event: UserCreateEvent::NAME, priority: 200)]
+    #[AsEventListener(event: UserCreateEvent::NAME, priority: 300)]
     public function onCreateFillEntity(UserCreateEvent $event): void
     {
         $data = $event->getUserData();

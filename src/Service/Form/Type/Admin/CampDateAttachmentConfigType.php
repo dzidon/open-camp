@@ -47,6 +47,6 @@ class CampDateAttachmentConfigType extends AbstractType
             'choices_attachment_configs' => [],
         ]);
 
-        $resolver->setAllowedTypes('choices_attachment_configs', ['array']);
+        $resolver->setAllowedTypes('choices_attachment_configs', AttachmentConfig::class . '[]');
     }
 }

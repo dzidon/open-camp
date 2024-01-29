@@ -2,12 +2,15 @@
 
 namespace App\Library\Data\Admin;
 
-use libphonenumber\PhoneNumber;
+use App\Model\Entity\User;
+use DateTimeImmutable;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
-use Misd\PhoneNumberBundle\Validator\Constraints\PhoneNumber as AssertPhoneNumber;
 
 class ProfileData
 {
+    private ?User $user;
+
     #[Assert\Length(max: 255)]
     #[Assert\When(
         expression: 'this.getNameLast() !== null',
@@ -26,8 +29,26 @@ class ProfileData
     )]
     private ?string $nameLast = null;
 
-    #[AssertPhoneNumber]
-    private ?PhoneNumber $leaderPhoneNumber = null;
+    #[Assert\LessThan('today', message: 'date_in_past')]
+    private ?DateTimeImmutable $bornAt = null;
+
+    #[Assert\Length(max: 2000)]
+    private ?string $bio = null;
+
+    #[Assert\Image]
+    private ?File $image = null;
+
+    private bool $removeImage = false;
+
+    public function __construct(?User $user = null)
+    {
+        $this->user = $user;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
 
     public function getNameFirst(): ?string
     {
@@ -53,24 +74,50 @@ class ProfileData
         return $this;
     }
 
-    public function getLeaderPhoneNumber(): ?PhoneNumber
+    public function getBornAt(): ?DateTimeImmutable
     {
-        if ($this->leaderPhoneNumber !== null)
-        {
-            return clone $this->leaderPhoneNumber;
-        }
-
-        return $this->leaderPhoneNumber;
+        return $this->bornAt;
     }
 
-    public function setLeaderPhoneNumber(?PhoneNumber $leaderPhoneNumber): self
+    public function setBornAt(?DateTimeImmutable $bornAt): self
     {
-        if ($leaderPhoneNumber !== null)
-        {
-            $leaderPhoneNumber = clone $leaderPhoneNumber;
-        }
+        $this->bornAt = $bornAt;
 
-        $this->leaderPhoneNumber = $leaderPhoneNumber;
+        return $this;
+    }
+
+    public function getBio(): ?string
+    {
+        return $this->bio;
+    }
+
+    public function setBio(?string $bio): self
+    {
+        $this->bio = $bio;
+
+        return $this;
+    }
+
+    public function getImage(): ?File
+    {
+        return $this->image;
+    }
+
+    public function setImage(?File $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function removeImage(): bool
+    {
+        return $this->removeImage;
+    }
+
+    public function setRemoveImage(bool $removeImage): self
+    {
+        $this->removeImage = $removeImage;
 
         return $this;
     }

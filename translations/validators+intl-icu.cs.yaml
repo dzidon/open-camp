@@ -19,7 +19,8 @@ application_purchasable_item_amount: 'Maximální množství položky "{item_nam
 discount_sibling_interval_not_in_config: 'Musíte vybrat platnou slevu.'
 
 unique_elements_in_array: 'Tato kolekce by měla obsahovat unikátní prvky.'
-unique_user: 'Už existuje uživatel s tímto e-mailem.'
+unique_user_email: 'Už existuje uživatel s tímto e-mailem.'
+unique_user_url_name: 'Už existuje vedoucí s tímto názvem v odkazu.'
 unique_role: 'Už existuje role s tímto názvem.'
 unique_camp_category: 'Zvolená nadřazená kategorie už má kategorii s tímto názvem v odkazu.'
 unique_camp: 'Už existuje tábor s tímto názvem v odkazu.'
@@ -32,5 +33,6 @@ unique_purchasable_item_variant: 'V rámci volitelné platby už existuje varian
 unique_purchasable_item_variant_value: 'V rámci editované varianty už existuje hodnota s tímto názvem.'
 unique_purchasable_item_variant_values: 'V rámci editované varianty se nesmí opakovat hodnoty se stejnými názvy.'
 unique_form_field: 'Už existuje formulářové pole s tímto názvem.'
+camp_date_user_unique: 'Vedoucího "{user}" můžete přiřadit pouze jednou.'
 camp_date_interval: 'Tábor už má v tomto intervalu jiný termín.'
 discount_config_integer_intervals: 'Tento interval se překrývá s jiným.'

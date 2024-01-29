@@ -78,6 +78,10 @@ module:
     profile: 'Profil'
     admin: 'Admin'
 
+guide:
+    unnamed: 'Nepojmenovaný vedoucí'
+    bio_undisclosed: 'Tento vedoucí nemá žádný popis.'
+
 application:
     buyer_details: 'Údaje o objednávajícím'
     discounts: 'Slevy'
@@ -716,7 +720,13 @@ entity_attribute:
         business_name: 'Obchodní název'
         business_cin: 'IČO'
         business_vat_id: 'DIČ'
-        leader_phone_number: 'Telefonní číslo na vedoucího'
+        url_name: 'Název vedoucího v odkazu'
+        born_at: 'Datum narození'
+        bio: 'O mně'
+        age: 'Věk'
+        guide_priority: 'Priorita v seznamu vedoucích'
+        image: 'Obrázek'
+        remove_image: 'Odstranit obrázek'
         last_active_at: 'Datum posledního přihlášení'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -793,7 +803,7 @@ entity_attribute:
         is_hidden: 'Skrytý'
         description: 'Informace k termínu'
         camp: 'Tábor'
-        leaders: 'Vedoucí'
+        users: 'Vedoucí'
         discount_config: 'Konfigurace slev'
         trip_location_path_there: 'Cesta pro vyzvedávání (tam)'
         trip_location_path_back: 'Cesta pro vyzvedávání (zpět)'
@@ -969,7 +979,10 @@ form:
         profile:
             name_first: 'Jméno'
             name_last: 'Příjmení'
-            leader_phone_number: 'Telefonní číslo na vedoucího'
+            born_at: 'Datum narození'
+            bio: 'O mně'
+            image: 'Obrázek'
+            remove_image: 'Odstranit obrázek'
             button: 'Uložit'
 
         role_search:
@@ -995,11 +1008,16 @@ form:
         user:
             email: 'E-mail'
             role: 'Role'
-            leader_phone_number: 'Telefonní číslo na vedoucího'
+            url_name: 'Název vedoucího v odkazu'
+            born_at: 'Datum narození'
+            bio: 'O mně'
+            guide_priority: 'Priorita v seznamu vedoucích'
+            image: 'Obrázek'
+            remove_image: 'Odstranit obrázek'
             button: 'Uložit'
 
         user_search:
-            phrase: 'Hledat podle e-mailu nebo celého jména'
+            phrase: 'Hledat podle e-mailu, celého jména nebo názvu vedoucího v odkazu'
             sort_by:
                 label: 'Řazení'
                 options:
@@ -1104,7 +1122,7 @@ form:
             is_closed: 'Zablokovat přihlášení'
             is_hidden: 'Skrytý'
             description: 'Informace k termínu'
-            leaders: 'Vedoucí'
+            guides: 'Vedoucí'
             discount_config: 'Konfigurace slev'
             form_fields: 'Formulářová pole'
             add_form_field: 'Přidat formulářové pole'
@@ -1112,6 +1130,8 @@ form:
             add_attachment_config: 'Přidat přílohu'
             purchasable_items: 'Volitelné platby'
             add_purchasable_item: 'Přidat volitelnou platbu'
+            users: 'Vedoucí'
+            add_user: 'Přidat vedoucího'
             trip_location_path_there: 'Cesta pro vyzvedávání (tam)'
             trip_location_path_back: 'Cesta pro vyzvedávání (zpět)'
             button: 'Uložit'
@@ -1151,6 +1171,13 @@ form:
         camp_date_attachment_config:
             attachment_config: 'Příloha'
             priority: 'Priorita'
+
+        camp_date_user:
+            user: 'Uživatel'
+            priority: 'Priorita v seznamu vedoucích'
+            can_update_applications_state: 'Může schvalovat a zamítat přihlášky'
+            can_update_applications: 'Může editovat přihlášky'
+            can_update_application_payments: 'Může editovat platby u přihlášek'
 
         camp_date_purchasable_item:
             purchasable_item: 'Volitelná platba'
@@ -1294,7 +1321,7 @@ form:
         purchasable_item_variant_creation:
             purchasable_item_variant_values: 'Hodnoty'
             add_purchasable_item_variant_value: 'Přidat hodnotu'
-            button: 'Hledat'
+            button: 'Uložit'
 
         purchasable_item_variant_delete:
             button: 'Odstranit'
@@ -1638,6 +1665,7 @@ route:
     user_password_change_complete: 'Nové heslo'
     user_camp_catalog: 'Katalog táborů'
     user_camp_detail: 'Tábor'
+    user_guide_detail: 'Vedoucí'
 
     user_profile_billing: 'Fakturační údaje'
     user_profile_contact_list: 'Kontakty'

@@ -30,7 +30,7 @@ class DiscountRecurringCamperConfigData
     )]
     private ?int $to = null;
 
-    #[Assert\GreaterThanOrEqual(0.0)]
+    #[Assert\GreaterThan(0.0)]
     #[Assert\NotBlank]
     private ?float $discount = null;
 

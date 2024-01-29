@@ -7,7 +7,11 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-12 col-md-8 col-xl-5">
-                            {{ form(form_profile) }}
+                            {% if admin is defined %}
+                                {{ form(form_profile, {user: admin}) }}
+                            {% else %}
+                                {{ form(form_profile) }}
+                            {% endif %}
                         </div>
                     </div>
                 </div>

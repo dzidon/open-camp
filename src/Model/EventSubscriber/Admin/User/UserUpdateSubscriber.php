@@ -20,7 +20,7 @@ class UserUpdateSubscriber
         $this->dataTransfer = $dataTransfer;
     }
 
-    #[AsEventListener(event: UserUpdateEvent::NAME, priority: 200)]
+    #[AsEventListener(event: UserUpdateEvent::NAME, priority: 300)]
     public function onUpdateFillEntity(UserUpdateEvent $event): void
     {
         $data = $event->getUserData();

@@ -3,10 +3,15 @@
 namespace App\Service\Form\Type\Admin;
 
 use App\Library\Data\Admin\ProfileData;
-use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -28,11 +33,54 @@ class ProfileType extends AbstractType
                 'required' => false,
                 'label'    => 'form.admin.profile.name_last',
             ])
-            ->add('leaderPhoneNumber', PhoneNumberType::class, [
+            ->add('bornAt', DateType::class, [
                 'required' => false,
-                'label'    => 'form.admin.profile.leader_phone_number',
+                'widget'   => 'single_text',
+                'input'    => 'datetime_immutable',
+                'label'    => 'form.admin.profile.born_at',
+            ])
+            ->add('bio', TextareaType::class, [
+                'required' => false,
+                'label'    => 'form.admin.profile.bio',
+            ])
+            ->add('image', FileType::class, [
+                'required' => false,
+                'multiple' => false,
+                'label'    => 'form.admin.profile.image',
+                'row_attr' => [
+                    'class'                                    => 'user-image',
+                    'data-controller'                          => 'cv--content',
+                    'data-cv--content-show-when-checked-value' => '0',
+                ],
             ])
         ;
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA,
+            function (FormEvent $event): void
+            {
+                /** @var ProfileData $data */
+                $data = $event->getData();
+                $user = $data->getUser();
+                $form = $event->getForm();
+
+                if ($user === null || $user->getImageExtension() === null)
+                {
+                    return;
+                }
+
+                $form
+                    ->add('removeImage', CheckboxType::class, [
+                        'required' => false,
+                        'label'    => 'form.admin.profile.remove_image',
+                        'attr'     => [
+                            'data-controller'                      => 'cv--checkbox',
+                            'data-action'                          => 'cv--checkbox#updateVisibility',
+                            'data-cv--checkbox-cv--content-outlet' => '.user-image',
+                        ],
+                    ])
+                ;
+            }
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

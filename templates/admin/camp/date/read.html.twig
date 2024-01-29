@@ -127,30 +127,6 @@
 
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.camp_date.leaders'|trans }}:</strong>
-                        </div>
-
-                        <div class="col-12 col-sm-9">
-                            {% if camp_date.leaders is empty %}
-                                <em>{{ 'search.error.no_results'|trans }}</em>
-                            {% else %}
-                                {% for leader in camp_date.leaders %}
-                                    <div>
-                                        <span>
-                                            {{ leader.email }}
-
-                                            {% if leader.nameFirst is not null and leader.nameLast is not null %}
-                                                ({{ leader.nameFirst }} {{ leader.nameLast }})
-                                            {% endif %}
-                                        </span>
-                                    </div>
-                                {% endfor %}
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.camp_date.trip_location_path_there'|trans }}:</strong>
                         </div>
 
@@ -187,6 +163,32 @@
                                 <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                             {% else %}
                                 <span>{{ camp_date.discountConfig.name }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.users'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.campDateUsers is empty %}
+                                <em>{{ 'search.error.no_results'|trans }}</em>
+                            {% else %}
+                                {% for camp_date_user in camp_date.campDateUsers %}
+                                    {% set user = camp_date_user.user %}
+
+                                    <div>
+                                        <span>
+                                            {{ user.email }}
+
+                                            {% if user.nameFull is not null %}
+                                                ({{ user.nameFull }})
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% endfor %}
                             {% endif %}
                         </div>
                     </div>

@@ -5,6 +5,21 @@
         <div class="col-12">
             <div class="card card-outline card-primary">
                 <div class="card-body">
+                    {% if user.imageExtension is not null %}
+                        <div class="row mb-3">
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 mb-3">
+                                <div class="bg-black">
+                                    <a href="{{ asset(user_image_path(user)) }}">
+                                        <img class="image-cover-1-1"
+                                             src="{{ asset(user_image_path(user)) }}"
+                                             alt="{{ 'entity.user.singular'|trans }}"
+                                        >
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.user.email'|trans }}:</strong>
@@ -25,20 +40,6 @@
                                 <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                             {% else %}
                                 <em>{{ 'entity_attribute.common.set'|trans }}</em>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.user.leader_phone_number'|trans }}:</strong>
-                        </div>
-
-                        <div class="col-12 col-sm-9">
-                            {% if user.leaderPhoneNumber is null %}
-                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
-                            {% else %}
-                                <span>{{ user.leaderPhoneNumber|phone_number_format(phone_number_format) }}</span>
                             {% endif %}
                         </div>
                     </div>
@@ -165,6 +166,58 @@
                                 <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                             {% else %}
                                 <span>{{ user.businessVatId }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.user.url_name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if user.urlName is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.urlName }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.user.guide_priority'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ user.guidePriority }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.user.born_at'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if user.bornAt is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.bornAt|date(date_format) }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.user.bio'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if user.bio is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ user.bio|nl2br }}</span>
                             {% endif %}
                         </div>
                     </div>

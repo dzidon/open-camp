@@ -33,12 +33,11 @@ class UserAutocompleteType extends AbstractType
             },
             'choice_label' => function (User $user) {
                 $label = $user->getEmail();
-                $nameFirst = $user->getNameFirst();
-                $nameLast = $user->getNameLast();
+                $nameFull = $user->getNameFull();
 
-                if ($nameFirst !== null && $nameLast !== null)
+                if ($nameFull !== null)
                 {
-                    $label .= sprintf(' (%s %s)', $nameFirst, $nameLast);
+                    $label .= sprintf(' (%s)', $nameFull);
                 }
 
                 return $label;

@@ -5,7 +5,6 @@ namespace App\Tests\Model\Entity;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\TripLocationPath;
-use App\Model\Entity\User;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\UuidV4;
@@ -110,18 +109,6 @@ class CampDateTest extends TestCase
         $this->campDate->setCamp($campNew);
 
         $this->assertSame($campNew, $this->campDate->getCamp());
-    }
-
-    public function testLeaders(): void
-    {
-        $this->assertEmpty($this->campDate->getLeaders());
-
-        $user = new User('bob@gmail.com');
-        $this->campDate->addLeader($user);
-        $this->assertContains($user, $this->campDate->getLeaders());
-
-        $this->campDate->removeLeader($user);
-        $this->assertEmpty($this->campDate->getLeaders());
     }
 
     public function testTripLocationPathThere(): void

@@ -19,7 +19,7 @@ class ProfileUpdateSubscriber
         $this->dataTransfer = $dataTransfer;
     }
 
-    #[AsEventListener(event: ProfileUpdateEvent::NAME, priority: 200)]
+    #[AsEventListener(event: ProfileUpdateEvent::NAME, priority: 300)]
     public function onUpdateFillEntity(ProfileUpdateEvent $event): void
     {
         $data = $event->getProfileData();

@@ -47,6 +47,6 @@ class CampDateFormFieldType extends AbstractType
             'choices_form_fields' => [],
         ]);
 
-        $resolver->setAllowedTypes('choices_form_fields', ['array']);
+        $resolver->setAllowedTypes('choices_form_fields', FormField::class . '[]');
     }
 }

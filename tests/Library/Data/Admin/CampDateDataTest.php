@@ -12,7 +12,6 @@ use App\Model\Entity\CampDate;
 use App\Model\Entity\FormField;
 use App\Model\Entity\PurchasableItem;
 use App\Model\Entity\TripLocationPath;
-use App\Model\Entity\User;
 use App\Model\Enum\Entity\FormFieldTypeEnum;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
@@ -259,27 +258,6 @@ class CampDateDataTest extends KernelTestCase
         $data->setDescription(str_repeat('x', 2001));
         $result = $validator->validateProperty($data, 'description');
         $this->assertNotEmpty($result); // invalid
-    }
-
-    public function testLeaders(): void
-    {
-        $data = new CampDateData($this->camp);
-        $this->assertSame([], $data->getLeaders());
-
-        $newLeaders = [
-            new User('bob1@test.com'),
-            new User('bob2@test.com'),
-        ];
-
-        foreach ($newLeaders as $newLeader)
-        {
-            $data->addLeader($newLeader);
-        }
-
-        $this->assertSame($newLeaders, $data->getLeaders());
-
-        $data->removeLeader($newLeaders[0]);
-        $this->assertNotContains($newLeaders[0], $data->getLeaders());
     }
 
     public function testTripLocationPathThere(): void
