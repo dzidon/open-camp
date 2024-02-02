@@ -402,30 +402,57 @@ class ApplicationCamper
         return 0.0;
     }
 
-    public function getPrice(): float
+    public function getTotalDiscount(): float
     {
-        $price = $this->application->getPricePerCamper();
+        return $this->getDiscountRecurringCamper() + $this->getDiscountSiblings();
+    }
+
+    public function getPriceWithoutDeposit(bool $allowValueBelowZero = false): float
+    {
+        $priceWithoutDeposit = $this->application->getPriceWithoutDeposit();
 
         foreach ($this->applicationTripLocationPaths as $applicationTripLocationPath)
         {
             $locationPrice = $applicationTripLocationPath->getPrice();
-            $price += $locationPrice;
+            $priceWithoutDeposit += $locationPrice;
         }
 
-        $price -= $this->getDiscountRecurringCamper();
-        $price -= $this->getDiscountSiblings();
+        $priceWithoutDeposit -= $this->getTotalDiscount();
 
-        if ($price < 0.0)
+        if (!$allowValueBelowZero && $priceWithoutDeposit < 0.0)
         {
-            $price = 0.0;
+            $priceWithoutDeposit = 0.0;
         }
 
-        return $price;
+        return $priceWithoutDeposit;
+    }
+
+    public function getDeposit(): float
+    {
+        $deposit = $this->application->getDeposit();
+        $priceWithoutDeposit = $this->getPriceWithoutDeposit(true);
+
+        if ($priceWithoutDeposit < 0.0)
+        {
+            $deposit += $priceWithoutDeposit;
+        }
+
+        if ($deposit < 0.0)
+        {
+            $deposit = 0.0;
+        }
+
+        return $deposit;
+    }
+
+    public function getFullPrice(): float
+    {
+        return $this->getDeposit() + $this->getPriceWithoutDeposit();
     }
 
     public function getPriceWithoutTax(): float
     {
-        return $this->getPrice() / $this->application->getTaxDenominator();
+        return $this->getFullPrice() / $this->application->getTaxDenominator();
     }
 
     public function getCreatedAt(): DateTimeImmutable

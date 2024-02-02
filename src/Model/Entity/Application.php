@@ -484,7 +484,7 @@ class Application
 
         foreach ($this->applicationCampers as $applicationCamper)
         {
-            $fullPrice += $applicationCamper->getPrice();
+            $fullPrice += $applicationCamper->getFullPrice();
         }
 
         foreach ($this->applicationPurchasableItems as $applicationPurchasableItem)
