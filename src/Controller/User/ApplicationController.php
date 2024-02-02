@@ -67,6 +67,8 @@ class ApplicationController extends AbstractController
         /** @var User|null $user */
         $user = $this->getUser();
         $campDate = $this->findCampDateOrThrow404($campDateId);
+        $this->assertCampDateAvailability($campDate);
+
         $contactData = $contactDataFactory->createContactData();
         $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromCampDate($campDate);
         $applicationStepOneData = $applicationStepOneDataFactory->createApplicationStepOneData($campDate, $applicationCamperData, $contactData);
@@ -131,21 +133,25 @@ class ApplicationController extends AbstractController
         /** @var User|null $user */
         $user = $this->getUser();
         $application = $this->findApplicationOrThrow404($applicationId);
+        $campDate = $application->getCampDate();
+        $this->assertCampDateAvailability($campDate);
+
         $contactData = $contactDataFactory->createContactDataFromApplication($application);
         $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromApplication($application);
         $applicationStepOneData = new ApplicationStepOneData(
             $application->isEuBusinessDataEnabled(),
             $application->isNationalIdentifierEnabled(),
             $application->getCurrency(),
-            $application->getTax()
+            $application->getTax(),
+            $application->getCampDate()
         );
         $dataTransfer->fillData($applicationStepOneData, $application);
 
         $form = $this->createForm(ApplicationStepOneType::class, $applicationStepOneData, [
-            'application_camper_default_data'  => $applicationCamperData,
-            'contact_default_data'             => $contactData,
-            'loadable_contacts'                => $user === null ? [] : $contactRepository->findByUser($user),
-            'loadable_campers'                 => $user === null ? [] : $camperRepository->findByUser($user),
+            'application_camper_default_data' => $applicationCamperData,
+            'contact_default_data'            => $contactData,
+            'loadable_contacts'               => $user === null ? [] : $contactRepository->findByUser($user),
+            'loadable_campers'                => $user === null ? [] : $camperRepository->findByUser($user),
         ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_one.button',]);
         $form->handleRequest($request);
@@ -162,7 +168,6 @@ class ApplicationController extends AbstractController
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
-        $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
         $backRoute = $camp === null ? 'user_camp_catalog' : 'user_camp_detail';
         $backUrlParameters = $camp === null ? [] : ['urlName' => $camp->getUrlName()];
@@ -196,6 +201,9 @@ class ApplicationController extends AbstractController
                             UuidV4                                                 $applicationId): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
+        $campDate = $application->getCampDate();
+        $this->assertCampDateAvailability($campDate);
+
         $numberOfApplicationCampers = count($application->getApplicationCampers());
         $applicationPurchasableItemsData = new ApplicationStepTwoUpdateData(
             $application->getDiscountSiblingsConfig(),
@@ -239,6 +247,8 @@ class ApplicationController extends AbstractController
     public function stepThree(UuidV4 $applicationId): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
+        $campDate = $application->getCampDate();
+        $this->assertCampDateAvailability($campDate);
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
@@ -248,6 +258,33 @@ class ApplicationController extends AbstractController
             'application' => $application,
             'breadcrumbs' => $this->breadcrumbs->buildForStepThree($application),
         ]);
+    }
+
+    private function assertCampDateAvailability(?CampDate $campDate): void
+    {
+        if ($campDate === null)
+        {
+            $this->createNotFoundException();
+        }
+
+        $isOpen = $this->campDateRepository->isCampDateOpenForApplications($campDate);
+
+        if (!$isOpen)
+        {
+            throw $this->createNotFoundException();
+        }
+
+        if ($campDate->isHidden())
+        {
+            if ($this->isGranted('camp_create') || $this->isGranted('camp_update'))
+            {
+                $this->addTransFlash('warning', 'camp_catalog.hidden_camp_date_shown_for_admin');
+            }
+            else
+            {
+                throw $this->createNotFoundException();
+            }
+        }
     }
 
     private function findCampDateOrThrow404(UuidV4 $id): CampDate

@@ -3,6 +3,7 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\ApplicationCamper;
+use App\Model\Entity\CampDate;
 
 interface ApplicationCamperRepositoryInterface
 {
@@ -23,6 +24,14 @@ interface ApplicationCamperRepositoryInterface
      * @return void
      */
     public function removeApplicationCamper(ApplicationCamper $applicationCamper, bool $flush): void;
+
+    /**
+     * Finds application campers who occupy slots in the given camp date.
+     *
+     * @param CampDate $campDate
+     * @return ApplicationCamper[]
+     */
+    public function findThoseThatOccupySlotsInCampDate(CampDate $campDate): array;
 
     /**
      * Returns the number of other complete (isDraft = false) and accepted applications that contain the given camper.

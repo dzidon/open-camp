@@ -21,9 +21,18 @@ class UserCampCatalogResult implements UserCampCatalogResultInterface
 
     private array $campLowestFullPrices = [];
 
-    public function __construct(PaginatorInterface $paginator, array $campImages, array $campDates)
+    private array $openCampDates = [];
+
+    /**
+     * @param PaginatorInterface $paginator
+     * @param CampImage[] $campImages
+     * @param CampDate[] $campDates
+     * @param CampDate[] $openCampDates
+     */
+    public function __construct(PaginatorInterface $paginator, array $campImages, array $campDates, array $openCampDates = [])
     {
         // paginator
+        
         foreach ($paginator->getCurrentPageItems() as $camp)
         {
             if (!$camp instanceof Camp)
@@ -37,6 +46,7 @@ class UserCampCatalogResult implements UserCampCatalogResultInterface
         $this->paginator = $paginator;
 
         // images
+
         foreach ($campImages as $campImage)
         {
             if (!$campImage instanceof CampImage)
@@ -56,6 +66,7 @@ class UserCampCatalogResult implements UserCampCatalogResultInterface
         }
 
         // dates
+
         foreach ($campDates as $campDate)
         {
             if (!$campDate instanceof CampDate)
@@ -74,6 +85,7 @@ class UserCampCatalogResult implements UserCampCatalogResultInterface
             $this->campDates[$campIdString][] = $campDate;
 
             // lowest price
+
             $price = $campDate->getFullPrice();
 
             if (array_key_exists($campIdString, $this->campLowestFullPrices) && $price < $this->campLowestFullPrices[$campIdString])
@@ -85,6 +97,37 @@ class UserCampCatalogResult implements UserCampCatalogResultInterface
             {
                 $this->campLowestFullPrices[$campIdString] = $price;
             }
+        }
+
+        // open dates
+
+        foreach ($openCampDates as $openCampDate)
+        {
+            $found = false;
+
+            foreach ($this->campDates as $campDates)
+            {
+                if (in_array($openCampDate, $campDates))
+                {
+                    $found = true;
+
+                    break;
+                }
+            }
+
+            if (!$found)
+            {
+                throw new LogicException(
+                    sprintf('Open camp dates passed to "%s" must be present in $campDates.', $this::class)
+                );
+            }
+
+            $openCampDateIdString = $openCampDate
+                ->getId()
+                ->toRfc4122()
+            ;
+
+            $this->openCampDates[$openCampDateIdString] = $openCampDate;
         }
     }
 
@@ -163,5 +206,23 @@ class UserCampCatalogResult implements UserCampCatalogResultInterface
         }
 
         return $this->campDates[$campIdString];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isCampDateOpen(string|CampDate $campDate): bool
+    {
+        $campDateIdString = $campDate;
+
+        if (!is_string($campDateIdString))
+        {
+            $campDateIdString = $campDate
+                ->getId()
+                ->toRfc4122()
+            ;
+        }
+
+        return array_key_exists($campDateIdString, $this->openCampDates);
     }
 }

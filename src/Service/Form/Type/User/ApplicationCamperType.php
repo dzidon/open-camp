@@ -7,6 +7,7 @@ use App\Library\Data\User\ApplicationCamperData;
 use App\Library\Data\User\ApplicationFormFieldValueData;
 use App\Model\Entity\Camper;
 use App\Service\Form\Type\Common\CollectionItemType;
+use NumberFormatter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -15,7 +16,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\Intl\Currencies;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -26,13 +27,18 @@ class ApplicationCamperType extends AbstractType
 {
     private TranslatorInterface $translator;
 
-    public function __construct(TranslatorInterface $translator)
+    private RequestStack $requestStack;
+
+    public function __construct(TranslatorInterface $translator, RequestStack $requestStack)
     {
         $this->translator = $translator;
+        $this->requestStack = $requestStack;
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
+        // loadable campers
+
         $view->vars['enable_camper_loading'] = $options['enable_camper_loading'];
 
         /** @var Camper[] $loadableCampers */
@@ -117,8 +123,9 @@ class ApplicationCamperType extends AbstractType
 
         /** @var ApplicationCamperData $defaultData */
         $defaultData = $options['empty_data'];
+        $request = $this->requestStack->getCurrentRequest();
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($defaultData): void
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($defaultData, $request): void
         {
             /** @var null|ApplicationCamperData $applicationCamperData */
             $applicationCamperData = $event->getData();
@@ -130,8 +137,8 @@ class ApplicationCamperType extends AbstractType
                 $event->setData($applicationCamperData);
             }
 
+            $fmt = numfmt_create($request->getLocale(), NumberFormatter::CURRENCY);
             $currency = $applicationCamperData->getCurrency();
-            $currencyLocalised = Currencies::getSymbol($currency);
 
             // trip there
 
@@ -149,7 +156,7 @@ class ApplicationCamperType extends AbstractType
 
                     if ($price > 0.0)
                     {
-                        $priceString = sprintf('%s %s', $price, $currencyLocalised);
+                        $priceString = numfmt_format_currency($fmt, $price, $currency);
                     }
 
                     $label = sprintf('%s (%s)', $name, $priceString);
@@ -183,7 +190,7 @@ class ApplicationCamperType extends AbstractType
 
                     if ($price > 0.0)
                     {
-                        $priceString = sprintf('%s %s', $price, $currencyLocalised);
+                        $priceString = numfmt_format_currency($fmt, $price, $currency);
                     }
 
                     $label = sprintf('%s (%s)', $name, $priceString);
@@ -230,8 +237,15 @@ class ApplicationCamperType extends AbstractType
         $currency = $data->getCurrency();
         $tripLocationsThere = $data->getTripLocationsThere();
         $tripLocationsBack = $data->getTripLocationsBack();
+        $applicationCamperId = $data->getApplicationCamperId();
 
-        $newData = new ApplicationCamperData($isNationalIdentifierEnabled, $currency, $tripLocationsThere, $tripLocationsBack);
+        $newData = new ApplicationCamperData(
+            $isNationalIdentifierEnabled,
+            $currency,
+            $tripLocationsThere,
+            $tripLocationsBack,
+            $applicationCamperId
+        );
 
         foreach ($data->getApplicationAttachmentsData() as $applicationAttachmentData)
         {

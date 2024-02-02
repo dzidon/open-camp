@@ -6,18 +6,14 @@ use App\Library\Constraint\DiscountSiblingIntervalInConfig;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class DiscountSiblingIntervalInConfigValidator extends ConstraintValidator
 {
-    private TranslatorInterface $translator;
-
     private PropertyAccessorInterface $propertyAccessor;
 
-    public function __construct(TranslatorInterface $translator, PropertyAccessorInterface $propertyAccessor)
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
     {
-        $this->translator = $translator;
         $this->propertyAccessor = $propertyAccessor;
     }
 
@@ -72,10 +68,8 @@ class DiscountSiblingIntervalInConfigValidator extends ConstraintValidator
 
         if (!$foundInConfig)
         {
-            $message = $this->translator->trans($constraint->message, [], 'validators');
-
             $this->context
-                ->buildViolation($message)
+                ->buildViolation($constraint->message)
                 ->atPath($constraint->discountSiblingsIntervalProperty)
                 ->addViolation()
             ;

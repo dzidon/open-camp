@@ -33,7 +33,7 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
      * @inheritDoc
      */
     public function createApplicationCamperDataFromCampDate(CampDate $campDate): ApplicationCamperData
-    {
+    {;
         $tripLocationPathThere = $campDate->getTripLocationPathThere();
         $tripLocationPathBack = $campDate->getTripLocationPathBack();
         $tripLocationPathThereArray = [];
@@ -71,7 +71,13 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
 
         // camper
 
-        $applicationCamperData = new ApplicationCamperData($this->isNationalIdentifierEnabled, $this->currency, $tripLocationPathThereArray, $tripLocationPathBackArray);
+        $applicationCamperData = new ApplicationCamperData(
+            $this->isNationalIdentifierEnabled,
+            $this->currency,
+            $tripLocationPathThereArray,
+            $tripLocationPathBackArray,
+        );
+
         $campDateAttachmentConfigs = $campDate->getCampDateAttachmentConfigs();
         $campDateFormFields = $campDate->getCampDateFormFields();
 
@@ -163,7 +169,12 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
             $tripLocationBack = $applicationTripLocationPathBack->getLocations();
         }
 
-        $newData = new ApplicationCamperData($isNationalIdentifierEnabled, $currency, $tripLocationThere, $tripLocationBack);
+        $newData = new ApplicationCamperData(
+            $isNationalIdentifierEnabled,
+            $currency,
+            $tripLocationThere,
+            $tripLocationBack,
+        );
 
         foreach ($referenceApplicationCamper->getApplicationAttachments() as $applicationAttachment)
         {

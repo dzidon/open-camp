@@ -6,7 +6,6 @@ use App\Library\Constraint\DiscountConfigIntegerIntervals;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 /**
@@ -14,13 +13,10 @@ use Symfony\Component\Validator\Exception\UnexpectedTypeException;
  */
 class DiscountConfigIntegerIntervalsValidator extends ConstraintValidator
 {
-    private TranslatorInterface $translator;
-
     private PropertyAccessorInterface $propertyAccessor;
 
-    public function __construct(TranslatorInterface $translator, PropertyAccessorInterface $propertyAccessor)
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
     {
-        $this->translator = $translator;
         $this->propertyAccessor = $propertyAccessor;
     }
 
@@ -66,16 +62,14 @@ class DiscountConfigIntegerIntervalsValidator extends ConstraintValidator
                 if (($from === null || $otherTo   === null || $from <= $otherTo) &&
                     ($to   === null || $otherFrom === null || $to   >= $otherFrom))
                 {
-                    $message = $this->translator->trans($constraint->message, [], 'validators');
-
                     $this->context
-                        ->buildViolation($message)
+                        ->buildViolation($constraint->message)
                         ->atPath("[$index].$constraint->fromProperty")
                         ->addViolation()
                     ;
 
                     $this->context
-                        ->buildViolation($message)
+                        ->buildViolation($constraint->message)
                         ->atPath("[$index].$constraint->toProperty")
                         ->addViolation()
                     ;

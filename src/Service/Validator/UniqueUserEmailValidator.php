@@ -9,7 +9,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates that the entered e-mail is not yet registered.
@@ -18,15 +17,12 @@ class UniqueUserEmailValidator extends ConstraintValidator
 {
     private PropertyAccessorInterface $propertyAccessor;
     private UserRepositoryInterface $userRepository;
-    private TranslatorInterface $translator;
 
     public function __construct(PropertyAccessorInterface $propertyAccessor,
-                                UserRepositoryInterface   $userRepository,
-                                TranslatorInterface       $translator)
+                                UserRepositoryInterface   $userRepository)
     {
         $this->propertyAccessor = $propertyAccessor;
         $this->userRepository = $userRepository;
-        $this->translator = $translator;
     }
 
     /**
@@ -76,10 +72,8 @@ class UniqueUserEmailValidator extends ConstraintValidator
 
         if ($id === null || $id->toRfc4122() !== $existingId->toRfc4122())
         {
-            $message = $this->translator->trans($constraint->message, [], 'validators');
-
             $this->context
-                ->buildViolation($message)
+                ->buildViolation($constraint->message)
                 ->atPath($constraint->emailProperty)
                 ->addViolation()
             ;

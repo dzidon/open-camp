@@ -15,11 +15,8 @@ class NationalIdentifierValidator extends ConstraintValidator
 {
     private ?string $nationalIdentifierRegex;
 
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator, ?string $nationalIdentifierRegex)
+    public function __construct(?string $nationalIdentifierRegex)
     {
-        $this->translator = $translator;
         $this->nationalIdentifierRegex = $nationalIdentifierRegex;
     }
 
@@ -52,10 +49,8 @@ class NationalIdentifierValidator extends ConstraintValidator
 
         if (!preg_match($this->nationalIdentifierRegex, $nationalIdentifier))
         {
-            $message = $this->translator->trans($constraint->message, [], 'validators');
-
             $this->context
-                ->buildViolation($message)
+                ->buildViolation($constraint->message)
                 ->addViolation()
             ;
         }

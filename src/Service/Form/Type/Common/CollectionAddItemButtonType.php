@@ -21,7 +21,9 @@ class CollectionAddItemButtonType extends AbstractType
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        if ($form->getParent() === null)
+        $parent = $form->getParent();
+
+        if ($parent === null)
         {
             return;
         }
@@ -30,7 +32,7 @@ class CollectionAddItemButtonType extends AbstractType
             'data-controller'                    => 'fc--add',
             'data-action'                        => 'fc--add#addItem',
             'data-fc--add-collection-name-value' => $options['collection_name'],
-            'data-fc--add-form-name-value'       => $form->getParent()->getName(),
+            'data-fc--add-form-name-value'       => $parent->getName(),
         ], $view->vars['attr']);
     }
 

@@ -93,7 +93,7 @@
                 </div>
             {% endif %}
 
-            {% if camp_dates is empty %}
+            {% if camp_dates_result.campDates is empty %}
                 <div class="alert alert-danger" role="alert">
                     {{ 'camp_catalog.no_upcoming_camp_dates'|trans }}
                 </div>
@@ -110,7 +110,7 @@
                         </thead>
 
                         <tbody>
-                            {% for camp_date in camp_dates %}
+                            {% for camp_date in camp_dates_result.campDates %}
                                 <tr class="position-relative">
                                     <td>
                                         <span>
@@ -129,17 +129,25 @@
                                             <span class="badge badge-warning">
                                                 {{ 'camp_catalog.hidden_camp_date'|trans }}
                                             </span>
-                                        {% else %}
+                                        {% elseif camp_dates_result.isCampDateOpen(camp_date) %}
                                             <span class="badge badge-success">
                                                 {{ 'camp_catalog.camp_availability.available'|trans }}
+                                            </span>
+                                        {% else %}
+                                            <span class="badge badge-danger">
+                                                {{ 'camp_catalog.camp_availability.unavailable'|trans }}
                                             </span>
                                         {% endif %}
                                     </td>
 
                                     <td>
-                                        <a href="{{ path('user_application_step_one_create', {campDateId: camp_date.id.toRfc4122}) }}" class="stretched-link">
-                                            {{ 'entity.application.singular'|trans }}
-                                        </a>
+                                        {% if camp_dates_result.isCampDateOpen(camp_date) %}
+                                            <a href="{{ path('user_application_step_one_create', {campDateId: camp_date.id.toRfc4122}) }}" class="stretched-link">
+                                                {{ 'entity.application.singular'|trans }}
+                                            </a>
+                                        {% else %}
+                                            -
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -151,7 +159,7 @@
                     <div class="col-12">
                         <h3>{{ 'entity.camp_date.plural'|trans }}</h3>
 
-                        {% for camp_date in camp_dates %}
+                        {% for camp_date in camp_dates_result.campDates %}
                             <div class="row mt-3">
                                 <div class="col-12">
                                     <div class="card">
@@ -170,14 +178,22 @@
                                                     <span class="badge badge-warning">
                                                         {{ 'camp_catalog.hidden_camp_date'|trans }}
                                                     </span>
-                                                {% else %}
+                                                {% elseif camp_dates_result.isCampDateOpen(camp_date) %}
                                                     <span class="badge badge-success">
                                                         {{ 'camp_catalog.camp_availability.available'|trans }}
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge badge-danger">
+                                                        {{ 'camp_catalog.camp_availability.unavailable'|trans }}
                                                     </span>
                                                 {% endif %}
                                             </p>
 
-                                            <a href="#" class="card-link stretched-link">Přihláška</a>
+                                            {% if camp_dates_result.isCampDateOpen(camp_date) %}
+                                                <a href="{{ path('user_application_step_one_create', {campDateId: camp_date.id.toRfc4122}) }}" class="card-link stretched-link">
+                                                    Přihláška
+                                                </a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>

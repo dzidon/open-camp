@@ -2,15 +2,20 @@
 
 namespace App\Library\Data\User;
 
+use App\Library\Constraint\ApplicationCampersCount;
 use App\Library\Constraint\Compound\StreetRequirements;
 use App\Library\Constraint\Compound\ZipCodeRequirements;
 use App\Library\Constraint\EuCin;
 use App\Library\Constraint\EuVatId;
+use App\Model\Entity\CampDate;
 use LogicException;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[ApplicationCampersCount]
 class ApplicationStepOneData
 {
+    private ?CampDate $campDate;
+
     private bool $isEuBusinessDataEnabled;
 
     private bool $isNationalIdentifierEnabled;
@@ -96,15 +101,22 @@ class ApplicationStepOneData
     #[Assert\Valid]
     private array $applicationFormFieldValuesData = [];
 
-    public function __construct(bool   $isEuBusinessDataEnabled,
-                                bool   $isNationalIdentifierEnabled,
-                                string $currency,
-                                float  $tax)
+    public function __construct(bool      $isEuBusinessDataEnabled,
+                                bool      $isNationalIdentifierEnabled,
+                                string    $currency,
+                                float     $tax,
+                                ?CampDate $campDate = null)
     {
         $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
         $this->currency = $currency;
         $this->tax = $tax;
+        $this->campDate = $campDate;
+    }
+
+    public function getCampDate(): ?CampDate
+    {
+        return $this->campDate;
     }
 
     public function isEuBusinessDataEnabled(): bool

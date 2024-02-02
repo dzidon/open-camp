@@ -8,7 +8,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates that the entered user is assigned to the given camp date only once.
@@ -16,12 +15,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class CampDateUserUniqueValidator extends ConstraintValidator
 {
     private PropertyAccessorInterface $propertyAccessor;
-    private TranslatorInterface $translator;
 
-    public function __construct(PropertyAccessorInterface $propertyAccessor, TranslatorInterface $translator)
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
     {
         $this->propertyAccessor = $propertyAccessor;
-        $this->translator = $translator;
     }
 
     public function validate(mixed $value, Constraint $constraint)
@@ -69,12 +66,10 @@ class CampDateUserUniqueValidator extends ConstraintValidator
                     $userLabel .= sprintf(' (%s)', $nameFull);
                 }
 
-                $message = $this->translator->trans($constraint->message, [
-                    'user' => $userLabel,
-                ], 'validators');
-
                 $this->context
-                    ->buildViolation($message)
+                    ->buildViolation($constraint->message, [
+                        'user' => $userLabel,
+                    ])
                     ->addViolation()
                 ;
 

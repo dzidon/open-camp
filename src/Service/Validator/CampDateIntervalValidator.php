@@ -11,7 +11,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates that the entered datetime interval is empty. Validation is performed against the database.
@@ -20,15 +19,12 @@ class CampDateIntervalValidator extends ConstraintValidator
 {
     private PropertyAccessorInterface $propertyAccessor;
     private CampDateRepositoryInterface $campDateRepository;
-    private TranslatorInterface $translator;
 
     public function __construct(PropertyAccessorInterface   $propertyAccessor,
-                                CampDateRepositoryInterface $campDateRepository,
-                                TranslatorInterface         $translator)
+                                CampDateRepositoryInterface $campDateRepository)
     {
         $this->propertyAccessor = $propertyAccessor;
         $this->campDateRepository = $campDateRepository;
-        $this->translator = $translator;
     }
 
     public function validate(mixed $value, Constraint $constraint): void
@@ -84,16 +80,14 @@ class CampDateIntervalValidator extends ConstraintValidator
         {
             if ($id === null || $id->toRfc4122() !== $collidingDate->getId()->toRfc4122())
             {
-                $message = $this->translator->trans($constraint->message, [], 'validators');
-
                 $this->context
-                    ->buildViolation($message)
+                    ->buildViolation($constraint->message)
                     ->atPath($constraint->startAtProperty)
                     ->addViolation()
                 ;
 
                 $this->context
-                    ->buildViolation($message)
+                    ->buildViolation($constraint->message)
                     ->atPath($constraint->endAtProperty)
                     ->addViolation()
                 ;

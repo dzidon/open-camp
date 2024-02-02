@@ -6,7 +6,7 @@ use App\Library\Data\Admin\CampDateSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
-use DateTimeImmutable;
+use App\Model\Library\Camp\UserUpcomingCampDatesResultInterface;
 use DateTimeInterface;
 use Symfony\Component\Uid\UuidV4;
 
@@ -43,9 +43,9 @@ interface CampDateRepositoryInterface
      *
      * @param Camp $camp
      * @param bool $showHidden
-     * @return array
+     * @return UserUpcomingCampDatesResultInterface
      */
-    public function findUpcomingByCamp(Camp $camp, bool $showHidden = true): array;
+    public function findUpcomingByCamp(Camp $camp, bool $showHidden = true): UserUpcomingCampDatesResultInterface;
 
     /**
      * Finds dates of the given camp that collide with the given datetime interval.
@@ -56,6 +56,14 @@ interface CampDateRepositoryInterface
      * @return CampDate[]
      */
     public function findThoseThatCollideWithInterval(?Camp $camp, DateTimeInterface $startAt, DateTimeInterface $endAt): array;
+
+    /**
+     * Returns true if at least one camper is allowed to apply to the given camp date.
+     *
+     * @param CampDate $campDate
+     * @return bool
+     */
+    public function isCampDateOpenForApplications(CampDate $campDate): bool;
 
     /**
      * Returns admin camp search paginator.

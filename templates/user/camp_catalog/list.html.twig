@@ -111,8 +111,18 @@
                                         </div>
                                     {% else %}
                                         {% for camp_date in camp_dates %}
+                                            {% set badge_color %}
+                                                {% if camp_date.hidden %}
+                                                    badge-warning
+                                                {% elseif catalog_result.isCampDateOpen(camp_date) %}
+                                                    badge-success
+                                                {% else %}
+                                                    badge-danger
+                                                {% endif %}
+                                            {% endset %}
+
                                             <div>
-                                                <span class="badge badge-success">
+                                                <span class="badge {{ badge_color }}">
                                                     {{ camp_date.startAt|date(date_format) }} - {{ camp_date.endAt|date(date_format) }}
                                                 </span>
                                             </div>

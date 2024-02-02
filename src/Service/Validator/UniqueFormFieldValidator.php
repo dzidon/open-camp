@@ -6,11 +6,9 @@ use App\Library\Constraint\UniqueFormField;
 use App\Model\Entity\FormField;
 use App\Model\Repository\FormFieldRepositoryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates that the entered name is not yet assigned to form field.
@@ -19,15 +17,12 @@ class UniqueFormFieldValidator extends ConstraintValidator
 {
     private PropertyAccessorInterface $propertyAccessor;
     private FormFieldRepositoryInterface $formFieldRepository;
-    private TranslatorInterface $translator;
 
     public function __construct(PropertyAccessorInterface    $propertyAccessor,
-                                FormFieldRepositoryInterface $formFieldRepository,
-                                TranslatorInterface          $translator)
+                                FormFieldRepositoryInterface $formFieldRepository)
     {
         $this->propertyAccessor = $propertyAccessor;
         $this->formFieldRepository = $formFieldRepository;
-        $this->translator = $translator;
     }
 
     /**
@@ -77,10 +72,8 @@ class UniqueFormFieldValidator extends ConstraintValidator
 
         if ($id === null || $id->toRfc4122() !== $existingId->toRfc4122())
         {
-            $message = $this->translator->trans($constraint->message, [], 'validators');
-
             $this->context
-                ->buildViolation($message)
+                ->buildViolation($constraint->message)
                 ->atPath($constraint->nameProperty)
                 ->addViolation()
             ;

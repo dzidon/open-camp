@@ -43,7 +43,7 @@
                                 {{ camper.nameFirst }} {{ camper.nameLast }}
                             </h5>
 
-                            <div>{{ 'entity_attribute.camper.gender'|trans }}: {{ ('gender.' ~ camper.gender.value)|trans }}</div>
+                            <div>{{ 'entity_attribute.camper.gender'|trans }}: {{ ('gender_childish.' ~ camper.gender.value)|trans }}</div>
 
                             {% if national_identifier_enabled and camper.nationalIdentifier is not null %}
                                 <div>{{ 'entity_attribute.camper.national_identifier'|trans }}: {{ camper.nationalIdentifier }}</div>

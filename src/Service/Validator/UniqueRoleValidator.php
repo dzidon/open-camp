@@ -9,7 +9,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates that the entered label is not yet assigned to any role.
@@ -18,15 +17,12 @@ class UniqueRoleValidator extends ConstraintValidator
 {
     private PropertyAccessorInterface $propertyAccessor;
     private RoleRepositoryInterface $roleRepository;
-    private TranslatorInterface $translator;
 
     public function __construct(PropertyAccessorInterface $propertyAccessor,
-                                RoleRepositoryInterface   $roleRepository,
-                                TranslatorInterface       $translator)
+                                RoleRepositoryInterface   $roleRepository)
     {
         $this->propertyAccessor = $propertyAccessor;
         $this->roleRepository = $roleRepository;
-        $this->translator = $translator;
     }
 
     /**
@@ -76,10 +72,8 @@ class UniqueRoleValidator extends ConstraintValidator
 
         if ($id === null || $id->toRfc4122() !== $existingId->toRfc4122())
         {
-            $message = $this->translator->trans($constraint->message, [], 'validators');
-
             $this->context
-                ->buildViolation($message)
+                ->buildViolation($constraint->message)
                 ->atPath($constraint->labelProperty)
                 ->addViolation()
             ;

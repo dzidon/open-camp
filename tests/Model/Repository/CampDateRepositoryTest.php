@@ -50,7 +50,8 @@ class CampDateRepositoryTest extends KernelTestCase
         $campRepository = $this->getCampRepository();
         $camp = $campRepository->findOneById(UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
-        $campDates = $campDateRepository->findUpcomingByCamp($camp);
+        $result = $campDateRepository->findUpcomingByCamp($camp);
+        $campDates = $result->getCampDates();
         $this->assertSame(['550e8400-e29b-41d4-a716-446655440000'], $this->getCampDateIdStrings($campDates));
     }
 

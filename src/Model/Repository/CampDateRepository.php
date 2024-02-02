@@ -4,12 +4,15 @@ namespace App\Model\Repository;
 
 use App\Library\Data\Admin\CampDateSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
-use App\Library\Search\Paginator\PaginatorInterface;
+use App\Model\Entity\Application;
+use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\PurchasableItem;
 use App\Model\Entity\PurchasableItemVariant;
+use App\Model\Library\Camp\UserUpcomingCampDatesResult;
 use DateTimeInterface;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use DateTimeImmutable;
@@ -74,8 +77,10 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     /**
      * @inheritDoc
      */
-    public function findUpcomingByCamp(Camp $camp, bool $showHidden = true): array
+    public function findUpcomingByCamp(Camp $camp, bool $showHidden = true): UserUpcomingCampDatesResult
     {
+        // camp dates
+
         $queryBuilder = $this->createQueryBuilder('campDate')
             ->select('campDate, camp, campCategory, tripLocationPathThere, tripLocationPathBack, campDateUser, user')
             ->leftJoin('campDate.camp', 'camp')
@@ -106,7 +111,65 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
         $this->loadCampDateAttachmentConfigs($campDates);
         $this->loadCampDatePurchasableItems($campDates);
 
-        return $campDates;
+        // determining which camp dates are open
+
+        $campDateIds = $this->getCampDateIds($campDates);
+
+        $queryBuilder = $this->createQueryBuilder('campDate')
+            ->leftJoin(Application::class, 'application', 'WITH', '
+                campDate.id = application.campDate AND
+                application.isDraft = FALSE AND
+                (application.isAccepted IS NULL OR application.isAccepted = TRUE)
+            ')
+            ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', '
+                application.id = applicationCamper.application
+            ')
+            ->andWhere('campDate.id IN (:campDateIds)')
+            ->setParameter('campDateIds', $campDateIds)
+            ->andWhere('campDate.isClosed = FALSE')
+            ->andHaving('(campDate.isOpenAboveCapacity = TRUE OR COUNT(applicationCamper.id) < campDate.capacity)')
+            ->addGroupBy('campDate.id, campDate.isOpenAboveCapacity, campDate.capacity')
+            ->orderBy('campDate.startAt', 'ASC')
+        ;
+
+        if (!$showHidden)
+        {
+            $queryBuilder->andWhere('campDate.isHidden = FALSE');
+        }
+
+        $openCampDates = $queryBuilder
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return new UserUpcomingCampDatesResult($campDates, $openCampDates);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isCampDateOpenForApplications(CampDate $campDate): bool
+    {
+        $result = (int) $this->createQueryBuilder('campDate')
+            ->select('COUNT(campDate.id)')
+            ->leftJoin(Application::class, 'application', 'WITH', '
+                campDate.id = application.campDate AND
+                application.isDraft = FALSE AND
+                (application.isAccepted IS NULL OR application.isAccepted = TRUE)
+            ')
+            ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', '
+                application.id = applicationCamper.application
+            ')
+            ->andWhere('campDate.id = :campDateId')
+            ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ->andWhere('campDate.isClosed = FALSE')
+            ->andHaving('(campDate.isOpenAboveCapacity = TRUE OR COUNT(applicationCamper.id) < campDate.capacity)')
+            ->addGroupBy('campDate.id, campDate.isOpenAboveCapacity, campDate.capacity')
+            ->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
+        ;
+
+        return $result > 0;
     }
 
     /**
@@ -155,14 +218,14 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     /**
      * @inheritDoc
      */
-    public function getAdminPaginator(CampDateSearchData $data, Camp $camp, int $currentPage, int $pageSize): PaginatorInterface
+    public function getAdminPaginator(CampDateSearchData $data, Camp $camp, int $currentPage, int $pageSize): DqlPaginator
     {
         $from = $data->getFrom();
         $to = $data->getTo();
         $sortBy = $data->getSortBy();
         $isHistorical = $data->isHistorical();
         $isHidden = $data->isHidden();
-        $isActive = $data->isActive();
+        $isOpenOnly = $data->isOpenOnly();
 
         $queryBuilder = $this->createQueryBuilder('campDate')
             ->andWhere('campDate.camp = :id')
@@ -206,6 +269,42 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             $queryBuilder
                 ->andWhere('campDate.endAt >= :now')
                 ->setParameter('now', new DateTimeImmutable('now'))
+            ;
+        }
+
+        if ($isOpenOnly === true)
+        {
+            $queryBuilder
+                ->leftJoin(Application::class, 'application', 'WITH', '
+                    campDate.id = application.campDate AND 
+                    application.isDraft = FALSE AND
+                    (application.isAccepted IS NULL OR application.isAccepted = TRUE)
+                ')
+                ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', 'application.id = applicationCamper.application')
+                ->andWhere('campDate.isClosed = FALSE')
+                ->andWhere('campDate.startAt > :now')
+                ->setParameter('now', new DateTimeImmutable('now'))
+                ->andHaving('(campDate.isOpenAboveCapacity = TRUE OR COUNT(applicationCamper.id) < campDate.capacity)')
+                ->addGroupBy('campDate.id, campDate.isOpenAboveCapacity, campDate.capacity')
+            ;
+        }
+        else if ($isOpenOnly === false)
+        {
+            $queryBuilder
+                ->leftJoin(Application::class, 'application', 'WITH', '
+                    campDate.id = application.campDate AND 
+                    application.isDraft = FALSE AND
+                    (application.isAccepted IS NULL OR application.isAccepted = TRUE)
+                ')
+                ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', 'application.id = applicationCamper.application')
+                ->orHaving('
+                    campDate.isClosed = TRUE OR 
+                    campDate.startAt <= :now OR
+                    COUNT(campDate.id) = 0 OR
+                    (campDate.isOpenAboveCapacity = FALSE AND COUNT(applicationCamper.id) >= campDate.capacity)
+                ')
+                ->setParameter('now', new DateTimeImmutable('now'))
+                ->addGroupBy('campDate.id, campDate.isClosed, campDate.startAt, campDate.isOpenAboveCapacity, campDate.capacity')
             ;
         }
 

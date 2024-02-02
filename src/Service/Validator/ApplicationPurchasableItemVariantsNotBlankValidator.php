@@ -7,17 +7,13 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ApplicationPurchasableItemVariantsNotBlankValidator extends ConstraintValidator
 {
-    private TranslatorInterface $translator;
-
     private PropertyAccessorInterface $propertyAccessor;
 
-    public function __construct(TranslatorInterface $translator, PropertyAccessorInterface $propertyAccessor)
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
     {
-        $this->translator = $translator;
         $this->propertyAccessor = $propertyAccessor;
     }
 
@@ -49,19 +45,29 @@ class ApplicationPurchasableItemVariantsNotBlankValidator extends ConstraintVali
             return;
         }
 
-        $applicationPurchasableItemVariantsData = $this->propertyAccessor->getValue($applicationPurchasableItemInstanceData, $constraint->applicationPurchasableItemVariantsDataProperty);
+        $applicationPurchasableItemVariantsData = $this->propertyAccessor->getValue(
+            $applicationPurchasableItemInstanceData,
+            $constraint->applicationPurchasableItemVariantsDataProperty
+        );
 
         foreach ($applicationPurchasableItemVariantsData as $index => $applicationPurchasableItemVariantData)
         {
-            $value = $this->propertyAccessor->getValue($applicationPurchasableItemVariantData, $constraint->applicationPurchasableItemVariantDataValueProperty);
+            $value = $this->propertyAccessor->getValue(
+                $applicationPurchasableItemVariantData,
+                $constraint->applicationPurchasableItemVariantDataValueProperty
+            );
 
             if ($value === null || $value === '')
             {
-                $message = $this->translator->trans($constraint->message, [], 'validators');
-                $path = sprintf('%s[%s].%s', $constraint->applicationPurchasableItemVariantsDataProperty, $index, $constraint->applicationPurchasableItemVariantDataValueProperty);
+                $path = sprintf(
+                    '%s[%s].%s',
+                    $constraint->applicationPurchasableItemVariantsDataProperty,
+                    $index,
+                    $constraint->applicationPurchasableItemVariantDataValueProperty
+                );
 
                 $this->context
-                    ->buildViolation($message)
+                    ->buildViolation($constraint->message)
                     ->atPath($path)
                     ->addViolation()
                 ;

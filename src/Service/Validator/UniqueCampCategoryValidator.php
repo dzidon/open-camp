@@ -9,7 +9,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates that the entered url name is not yet assigned to the parent.
@@ -18,15 +17,12 @@ class UniqueCampCategoryValidator extends ConstraintValidator
 {
     private PropertyAccessorInterface $propertyAccessor;
     private CampCategoryRepositoryInterface $campCategoryRepository;
-    private TranslatorInterface $translator;
 
     public function __construct(PropertyAccessorInterface       $propertyAccessor,
-                                CampCategoryRepositoryInterface $campCategoryRepository,
-                                TranslatorInterface             $translator)
+                                CampCategoryRepositoryInterface $campCategoryRepository)
     {
         $this->propertyAccessor = $propertyAccessor;
         $this->campCategoryRepository = $campCategoryRepository;
-        $this->translator = $translator;
     }
 
     /**
@@ -87,10 +83,8 @@ class UniqueCampCategoryValidator extends ConstraintValidator
 
             if ($parent === $existingParent && ($id === null || $id->toRfc4122() !== $existingId->toRfc4122()))
             {
-                $message = $this->translator->trans($constraint->message, [], 'validators');
-
                 $this->context
-                    ->buildViolation($message)
+                    ->buildViolation($constraint->message)
                     ->atPath($constraint->urlNameProperty)
                     ->addViolation()
                 ;

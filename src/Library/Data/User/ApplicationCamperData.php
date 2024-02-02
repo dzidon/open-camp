@@ -3,10 +3,13 @@
 namespace App\Library\Data\User;
 
 use App\Model\Library\ApplicationTripLocation\ApplicationTripLocationArrayShape;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ApplicationCamperData
 {
+    private ?UuidV4 $applicationCamperId;
+
     private array $tripLocationsThere;
 
     private array $tripLocationsBack;
@@ -54,7 +57,11 @@ class ApplicationCamperData
     #[Assert\Valid]
     private array $applicationFormFieldValuesData = [];
 
-    public function __construct(bool $isNationalIdentifierEnabled, string $currency, array $tripLocationsThere, array $tripLocationsBack)
+    public function __construct(bool    $isNationalIdentifierEnabled,
+                                string  $currency,
+                                array   $tripLocationsThere,
+                                array   $tripLocationsBack,
+                                ?UuidV4 $applicationCamperId = null)
     {
         $tripLocationArrayShape = new ApplicationTripLocationArrayShape();
 
@@ -72,6 +79,12 @@ class ApplicationCamperData
         $this->currency = $currency;
         $this->tripLocationsThere = $tripLocationsThere;
         $this->tripLocationsBack = $tripLocationsBack;
+        $this->applicationCamperId = $applicationCamperId;
+    }
+
+    public function getApplicationCamperId(): ?UuidV4
+    {
+        return $this->applicationCamperId;
     }
 
     public function getTripLocationsThere(): array

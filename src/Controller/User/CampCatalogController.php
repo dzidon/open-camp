@@ -113,7 +113,7 @@ class CampCatalogController extends AbstractController
         }
 
         $campImages = $campImageRepository->findByCamp($camp);
-        $campDates = $campDateRepository->findUpcomingByCamp($camp, $showHiddenCamps);
+        $campDatesResult = $campDateRepository->findUpcomingByCamp($camp, $showHiddenCamps);
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
@@ -122,10 +122,10 @@ class CampCatalogController extends AbstractController
         $this->routeNamer->setCurrentRouteName($campName);
 
         return $this->render('user/camp_catalog/detail.html.twig', [
-            'camp'        => $camp,
-            'camp_images' => $campImages,
-            'camp_dates'  => $campDates,
-            'breadcrumbs' => $this->breadcrumbs->buildDetail($camp),
+            'camp'              => $camp,
+            'camp_images'       => $campImages,
+            'camp_dates_result' => $campDatesResult,
+            'breadcrumbs'       => $this->breadcrumbs->buildDetail($camp),
         ]);
     }
 

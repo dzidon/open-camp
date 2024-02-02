@@ -5,6 +5,7 @@ namespace App\Service\Form\Type\User;
 use App\Library\Data\User\ApplicationPurchasableItemInstanceData;
 use App\Library\Data\User\ApplicationStepTwoUpdateData;
 use App\Model\Entity\PaymentMethod;
+use NumberFormatter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\DataMapperInterface;
@@ -16,7 +17,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Intl\Currencies;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Traversable;
@@ -25,9 +26,12 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
 {
     private TranslatorInterface $translator;
 
-    public function __construct(TranslatorInterface $translator)
+    private RequestStack $requestStack;
+
+    public function __construct(TranslatorInterface $translator, RequestStack $requestStack)
     {
         $this->translator = $translator;
+        $this->requestStack = $requestStack;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -212,8 +216,9 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
             $nullOptionLabel => json_encode(false),
         ];
 
+        $request = $this->requestStack->getCurrentRequest();
+        $fmt = numfmt_create($request->getLocale(), NumberFormatter::CURRENCY);
         $currency = $data->getCurrency();
-        $currencyLocalised = Currencies::getSymbol($currency);
         $numberOfApplicationCampers = $data->getNumberOfApplicationCampers();
 
         foreach ($siblingsConfig as $options)
@@ -253,7 +258,10 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
                 ]);
             }
 
-            $label = sprintf('%s (%s %s)', $message, $numberOfApplicationCampers * $discount, $currencyLocalised);
+            $totalSiblingsDiscount = $numberOfApplicationCampers * $discount;
+            $discountString = numfmt_format_currency($fmt, $totalSiblingsDiscount, $currency);
+
+            $label = sprintf('%s (%s)', $message, $discountString);
             $value = json_encode(['from' => $from, 'to' => $to]);
             $choices[$label] = $value;
         }

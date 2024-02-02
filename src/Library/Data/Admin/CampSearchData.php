@@ -20,7 +20,7 @@ class CampSearchData
 
     private false|null|CampCategory $campCategory = null;
 
-    private ?bool $isActive = null;
+    private ?bool $isOpenOnly = null;
 
     private ?bool $isFeatured = null;
 
@@ -103,14 +103,14 @@ class CampSearchData
         return $this;
     }
 
-    public function isActive(): ?bool
+    public function isOpenOnly(): ?bool
     {
-        return $this->isActive;
+        return $this->isOpenOnly;
     }
 
-    public function setIsActive(?bool $isActive): self
+    public function setIsOpenOnly(?bool $isOpenOnly): self
     {
-        $this->isActive = $isActive;
+        $this->isOpenOnly = $isOpenOnly;
 
         return $this;
     }

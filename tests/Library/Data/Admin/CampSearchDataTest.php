@@ -91,16 +91,16 @@ class CampSearchDataTest extends TestCase
     public function testActive(): void
     {
         $data = new CampSearchData();
-        $this->assertNull($data->isActive());
+        $this->assertNull($data->isOpenOnly());
 
-        $data->setIsActive(true);
-        $this->assertTrue($data->isActive());
+        $data->setIsOpenOnly(true);
+        $this->assertTrue($data->isOpenOnly());
 
-        $data->setIsActive(false);
-        $this->assertFalse($data->isActive());
+        $data->setIsOpenOnly(false);
+        $this->assertFalse($data->isOpenOnly());
 
-        $data->setIsActive(null);
-        $this->assertNull($data->isActive());
+        $data->setIsOpenOnly(null);
+        $this->assertNull($data->isOpenOnly());
     }
 
     public function testFeatured(): void

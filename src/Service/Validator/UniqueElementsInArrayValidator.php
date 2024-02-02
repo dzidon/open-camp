@@ -8,7 +8,6 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\ValidatorException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates that an array contains unique objects or sub-arrays.
@@ -16,12 +15,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class UniqueElementsInArrayValidator extends ConstraintValidator
 {
     private PropertyAccessorInterface $propertyAccessor;
-    private TranslatorInterface $translator;
 
-    public function __construct(PropertyAccessorInterface $propertyAccessor, TranslatorInterface $translator)
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
     {
         $this->propertyAccessor = $propertyAccessor;
-        $this->translator = $translator;
     }
 
     /**
@@ -63,10 +60,8 @@ class UniqueElementsInArrayValidator extends ConstraintValidator
 
             if (in_array($normalizedElement, $normalizedElements))
             {
-                $message = $this->translator->trans($constraint->message, [], 'validators');
-
                 $this->context
-                    ->buildViolation($message)
+                    ->buildViolation($constraint->message)
                     ->addViolation()
                 ;
 

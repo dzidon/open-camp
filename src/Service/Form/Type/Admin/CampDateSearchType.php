@@ -63,14 +63,14 @@ class CampDateSearchType extends AbstractType
                 'required' => false,
                 'label'    => 'form.admin.camp_date_search.is_hidden',
             ])
-            ->add('isActive', ChoiceType::class, [
+            ->add('isOpenOnly', ChoiceType::class, [
                 'placeholder' => 'form.common.choice.irrelevant',
                 'choices' => [
                     'form.common.choice.yes' => true,
                     'form.common.choice.no'  => false,
                 ],
                 'required' => false,
-                'label'    => 'form.admin.camp_date_search.is_active',
+                'label'    => 'form.admin.camp_date_search.is_open_only',
             ])
         ;
     }

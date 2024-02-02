@@ -9,7 +9,6 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates that the entered name is not yet assigned to any trip location path.
@@ -18,15 +17,12 @@ class UniqueTripLocationPathValidator extends ConstraintValidator
 {
     private PropertyAccessorInterface $propertyAccessor;
     private TripLocationPathRepositoryInterface $tripLocationPathRepository;
-    private TranslatorInterface $translator;
 
     public function __construct(PropertyAccessorInterface           $propertyAccessor,
-                                TripLocationPathRepositoryInterface $tripLocationPathRepository,
-                                TranslatorInterface                 $translator)
+                                TripLocationPathRepositoryInterface $tripLocationPathRepository)
     {
         $this->propertyAccessor = $propertyAccessor;
         $this->tripLocationPathRepository = $tripLocationPathRepository;
-        $this->translator = $translator;
     }
 
     /**
@@ -76,10 +72,8 @@ class UniqueTripLocationPathValidator extends ConstraintValidator
 
         if ($id === null || $id->toRfc4122() !== $existingId->toRfc4122())
         {
-            $message = $this->translator->trans($constraint->message, [], 'validators');
-
             $this->context
-                ->buildViolation($message)
+                ->buildViolation($constraint->message)
                 ->atPath($constraint->nameProperty)
                 ->addViolation()
             ;

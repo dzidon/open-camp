@@ -8,19 +8,16 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates that the entered contact e-mail is not empty.
  */
 class NotBlankContactEmailValidator extends ConstraintValidator
 {
-    private TranslatorInterface $translator;
     private PropertyAccessorInterface $propertyAccessor;
 
-    public function __construct(TranslatorInterface $translator, PropertyAccessorInterface $propertyAccessor)
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
     {
-        $this->translator = $translator;
         $this->propertyAccessor = $propertyAccessor;
     }
 
@@ -89,8 +86,6 @@ class NotBlankContactEmailValidator extends ConstraintValidator
 
         if ($message !== null)
         {
-            $message = $this->translator->trans($message, [], 'validators');
-
             $this->context->buildViolation($message)
                 ->atPath($constraint->emailProperty)
                 ->addViolation()

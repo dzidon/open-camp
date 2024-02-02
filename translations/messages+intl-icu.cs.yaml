@@ -120,6 +120,7 @@ camp_catalog:
     hidden_camp: 'Skrytý'
     hidden_camp_date: 'Skrytý'
     hidden_camp_detail_shown_for_admin: 'Zobrazujete si skrytý tábor jako administrátor.'
+    hidden_camp_date_shown_for_admin: 'Zobrazujete si skrytý termín jako administrátor.'
     no_upcoming_camp_dates: 'Žádné nadcházející termíny'
     show_map: 'Ukázat na mapě'
     map: 'Mapa'
@@ -132,8 +133,8 @@ camp_catalog:
     price_per_camper: 'Cena za táborníka'
     camp_availability:
         label: 'Dostupnost'
-        available: 'Volná místa'
-        not_available: 'Žádná volná místa'
+        available: 'Volno'
+        unavailable: 'Obsazeno'
 
 auth:
     no_account_yet: 'Ještě u nás nemáte účet?'
@@ -1092,7 +1093,7 @@ form:
             from: 'Odjezd od'
             to: 'Návrat do'
             camp_category: 'Kategorie tábora'
-            is_active: 'Přijímá přihlášky'
+            is_open_only: 'Přijímá přihlášky'
             is_featured: 'Doporučený'
             is_hidden: 'Skrytý'
             button: 'Hledat'
@@ -1151,7 +1152,7 @@ form:
                     capacity_asc: 'Kapacita (od nejmenší)'
                     capacity_desc: 'Kapacita (od největší)'
 
-            is_active: 'Přijímá přihlášky'
+            is_open_only: 'Přijímá přihlášky'
             is_hidden: 'Skrytý'
             is_historical:
                 label: 'Typ termínu'
@@ -1508,10 +1509,10 @@ form:
         contact:
             modal:
                 title: 'Načíst kontakt'
-                text: 'Vyberte kontakt, který si přejete načíst z profilu.'
+                text: 'Vyberte kontakt, který si přejete načíst ze svého profilu.'
                 button: 'Načíst'
 
-            load_from_profile: 'Načíst kontakt z profilu'
+            load_from_profile: 'Načíst kontakt z mého profilu'
             name_first: 'Jméno'
             name_last: 'Příjmení'
             email: 'E-mail'
@@ -1538,10 +1539,10 @@ form:
         camper:
             modal:
                 title: 'Načíst táborníka'
-                text: 'Vyberte táborníka, kterého si přejete načíst z profilu.'
+                text: 'Vyberte táborníka, kterého si přejete načíst ze svého profilu.'
                 button: 'Načíst'
 
-            load_from_profile: 'Načíst táborníka z profilu'
+            load_from_profile: 'Načíst táborníka z mého profilu'
             name_first: 'Jméno'
             name_last: 'Příjmení'
             gender: 'Pohlaví'

@@ -50,7 +50,8 @@ class ApplicationStepOneDataFactory implements ApplicationStepOneDataFactoryInte
             $this->isEuBusinessDataEnabled,
             $this->isNationalIdentifierEnabled,
             $this->currency,
-            $this->tax
+            $this->tax,
+            $campDate
         );
 
         if ($defaultContactData !== null)

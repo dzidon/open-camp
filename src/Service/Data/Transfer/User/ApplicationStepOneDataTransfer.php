@@ -134,7 +134,8 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
                 $application->isNationalIdentifierEnabled(),
                 $application->getCurrency(),
                 $tripLocationPathThereArray,
-                $tripLocationPathBackArray
+                $tripLocationPathBackArray,
+                $applicationCamper->getId()
             );
 
             $this->dataTransferRegistry->fillData($applicationCamperData, $applicationCamper);

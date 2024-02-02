@@ -6,7 +6,6 @@ use App\Library\Constraint\EuVatId;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates EU VAT IDs.
@@ -15,11 +14,8 @@ class EuVatIdValidator extends ConstraintValidator
 {
     private ?string $euVatIdRegex;
 
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator, ?string $euVatIdRegex)
+    public function __construct(?string $euVatIdRegex)
     {
-        $this->translator = $translator;
         $this->euVatIdRegex = $euVatIdRegex;
     }
 
@@ -52,10 +48,8 @@ class EuVatIdValidator extends ConstraintValidator
 
         if (!preg_match($this->euVatIdRegex, $vatId))
         {
-            $message = $this->translator->trans($constraint->message, [], 'validators');
-
             $this->context
-                ->buildViolation($message)
+                ->buildViolation($constraint->message)
                 ->addViolation()
             ;
         }

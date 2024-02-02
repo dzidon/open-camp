@@ -6,7 +6,6 @@ use App\Library\Constraint\EuCin;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates EU CIN numbers.
@@ -15,11 +14,8 @@ class EuCinValidator extends ConstraintValidator
 {
     private ?string $euCinRegex;
 
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator, ?string $euCinRegex)
+    public function __construct(?string $euCinRegex)
     {
-        $this->translator = $translator;
         $this->euCinRegex = $euCinRegex;
     }
 
@@ -52,10 +48,8 @@ class EuCinValidator extends ConstraintValidator
 
         if (!preg_match($this->euCinRegex, $cin))
         {
-            $message = $this->translator->trans($constraint->message, [], 'validators');
-
             $this->context
-                ->buildViolation($message)
+                ->buildViolation($constraint->message)
                 ->addViolation()
             ;
         }

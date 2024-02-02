@@ -87,14 +87,14 @@ class CampSearchType extends AbstractType
                 'label'                     => 'form.admin.camp_search.camp_category',
                 'choice_translation_domain' => false,
             ])
-            ->add('isActive', ChoiceType::class, [
+            ->add('isOpenOnly', ChoiceType::class, [
                 'placeholder' => 'form.common.choice.irrelevant',
                 'choices'     => [
                     'form.common.choice.yes' => true,
                     'form.common.choice.no'  => false,
                 ],
                 'required' => false,
-                'label'    => 'form.admin.camp_search.is_active',
+                'label'    => 'form.admin.camp_search.is_open_only',
             ])
             ->add('isFeatured', ChoiceType::class, [
                 'placeholder' => 'form.common.choice.irrelevant',

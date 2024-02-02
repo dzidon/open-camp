@@ -4,6 +4,7 @@ namespace App\Model\Library\Camp;
 
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camp;
+use App\Model\Entity\CampDate;
 use App\Model\Entity\CampImage;
 
 /**
@@ -41,4 +42,12 @@ interface UserCampCatalogResultInterface
      * @return array
      */
     public function getCampDates(string|Camp $camp): array;
+
+    /**
+     * Returns true if the given camp date accepts applications.
+     *
+     * @param string|CampDate $campDate
+     * @return bool
+     */
+    public function isCampDateOpen(string|CampDate $campDate): bool;
 }

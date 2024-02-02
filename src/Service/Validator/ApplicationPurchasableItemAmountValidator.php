@@ -9,17 +9,13 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ApplicationPurchasableItemAmountValidator extends ConstraintValidator
 {
-    private TranslatorInterface $translator;
-
     private PropertyAccessorInterface $propertyAccessor;
 
-    public function __construct(TranslatorInterface $translator, PropertyAccessorInterface $propertyAccessor)
+    public function __construct(PropertyAccessorInterface $propertyAccessor)
     {
-        $this->translator = $translator;
         $this->propertyAccessor = $propertyAccessor;
     }
 
@@ -84,14 +80,12 @@ class ApplicationPurchasableItemAmountValidator extends ConstraintValidator
 
         if ($totalAmount > $calculatedMaxAmount)
         {
-            $message = $this->translator->trans($constraint->message, [
-                'item_name'      => $applicationPurchasableItem->getLabel(),
-                'current_amount' => $totalAmount,
-                'max_amount'     => $calculatedMaxAmount,
-            ], 'validators');
-
             $this->context
-                ->buildViolation($message)
+                ->buildViolation($constraint->message, [
+                    'item_name'      => $applicationPurchasableItem->getLabel(),
+                    'current_amount' => $totalAmount,
+                    'max_amount'     => $calculatedMaxAmount,
+                ])
                 ->atPath($constraint->applicationPurchasableItemInstancesDataProperty)
                 ->addViolation()
             ;
