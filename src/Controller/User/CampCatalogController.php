@@ -10,6 +10,7 @@ use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampImageRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
+use App\Model\Repository\UserRepositoryInterface;
 use App\Service\Form\Type\User\CampSearchType;
 use App\Service\Menu\Breadcrumbs\User\CampCatalogBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
@@ -97,6 +98,7 @@ class CampCatalogController extends AbstractController
     #[Route('/camp/{urlName}', name: 'user_camp_detail', requirements: ['urlName' => '([a-zA-Z0-9-])+'])]
     public function detail(CampDateRepositoryInterface  $campDateRepository,
                            CampImageRepositoryInterface $campImageRepository,
+                           UserRepositoryInterface      $userRepository,
                            string                       $urlName): Response
     {
         $camp = $this->findCampOrThrow404($urlName);
@@ -112,8 +114,10 @@ class CampCatalogController extends AbstractController
             $this->addTransFlash('warning', 'camp_catalog.hidden_camp_detail_shown_for_admin');
         }
 
-        $campImages = $campImageRepository->findByCamp($camp);
         $campDatesResult = $campDateRepository->findUpcomingByCamp($camp, $showHiddenCamps);
+        $campDates = $campDatesResult->getCampDates();
+        $guides = $userRepository->findByCampDates($campDates);
+        $campImages = $campImageRepository->findByCamp($camp);
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
@@ -123,6 +127,7 @@ class CampCatalogController extends AbstractController
 
         return $this->render('user/camp_catalog/detail.html.twig', [
             'camp'              => $camp,
+            'guides'            => $guides,
             'camp_images'       => $campImages,
             'camp_dates_result' => $campDatesResult,
             'breadcrumbs'       => $this->breadcrumbs->buildDetail($camp),

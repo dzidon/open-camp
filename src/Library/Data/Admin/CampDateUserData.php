@@ -16,9 +16,6 @@ class CampDateUserData
 
     private bool $canUpdateApplicationPayments = false;
 
-    #[Assert\NotBlank]
-    private ?int $priority = 0;
-
     public function getUser(): ?User
     {
         return $this->user;
@@ -63,18 +60,6 @@ class CampDateUserData
     public function setCanUpdateApplicationPayments(bool $canUpdateApplicationPayments): self
     {
         $this->canUpdateApplicationPayments = $canUpdateApplicationPayments;
-
-        return $this;
-    }
-
-    public function getPriority(): ?int
-    {
-        return $this->priority;
-    }
-
-    public function setPriority(?int $priority): self
-    {
-        $this->priority = $priority;
 
         return $this;
     }

@@ -6,7 +6,7 @@
     {% set camp_images_length = camp_images|length %}
 
     <div class="row">
-        <div class="col-12 col-lg-6 mb-3" {{ stimulus_controller('img--carousel') }}>
+        <div class="col-12 col-lg-5 col-xl-6 mb-3" {{ stimulus_controller('img--carousel') }}>
             <div id="camp-images-carousel" class="carousel slide" data-ride="carousel" data-interval="false" {{ stimulus_target('img--carousel', 'carousel') }}>
                 <div class="carousel-inner">
                     {% if camp_images is empty %}
@@ -60,7 +60,7 @@
             {% endif %}
         </div>
 
-        <div class="col-12 col-lg-6 pl-lg-5">
+        <div class="col-12 col-lg-7 col-xl-6 pl-lg-5">
             {% if is_route_name_set() %}
                 <h1 class="mb-3">{{ route_name() }}</h1>
             {% endif %}
@@ -211,6 +211,55 @@
                 <h3>{{ 'entity_attribute.camp.description_long'|trans }}</h3>
 
                 <p>{{ camp.descriptionLong|raw }}</p>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if guides is not empty %}
+        <div class="row mt-3">
+            <div class="col-12">
+                <h3 class="mb-4">
+                    {{ 'camp_catalog.guides'|trans }}
+                </h3>
+
+                <div class="row">
+                    {% for guide in guides %}
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex">
+                            <div class="card flex-fill">
+                                <img class="card-img-top image-cover-1-1"
+                                     src="{{ asset(user_image_path(guide)) }}"
+                                     alt="{{ 'camp_catalog.guide_image'|trans }}"
+                                >
+
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        {% if guide.nameFull is null %}
+                                            {{ 'guide.unnamed'|trans }}
+                                        {% else %}
+                                            {{ guide.nameFull }}
+                                        {% endif %}
+                                    </h5>
+
+                                    {% if guide.age is not null %}
+                                        <div>
+                                            {{ 'entity_attribute.user.age'|trans }}:
+
+                                            {{ guide.age }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="card-footer clearfix">
+                                    <a class="stretched-link card-link"
+                                       href="{{ path('user_guide_detail', {urlName: guide.urlName}) }}"
+                                    >
+                                        {{ 'crud.action.common.read'|trans }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     {% endif %}

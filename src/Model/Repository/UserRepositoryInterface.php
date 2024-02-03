@@ -4,6 +4,7 @@ namespace App\Model\Repository;
 
 use App\Library\Data\Admin\UserSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
+use App\Model\Entity\CampDate;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use Symfony\Component\Uid\UuidV4;
@@ -74,6 +75,14 @@ interface UserRepositoryInterface
      * @return User[]
      */
     public function findByRole(?Role $role): array;
+
+    /**
+     * Finds all users that are assigned as guides to the given camp dates.
+     *
+     * @param CampDate[] $campDates
+     * @return User[]
+     */
+    public function findByCampDates(array $campDates): array;
 
     /**
      * Returns admin user search paginator.

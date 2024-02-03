@@ -47,7 +47,7 @@ class CampDateUserRepository extends AbstractRepository implements CampDateUserR
             ->leftJoin('campDateUser.user', 'user')
             ->andWhere('campDateUser.campDate = :campDateId')
             ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
-            ->orderBy('campDateUser.priority', 'DESC')
+            ->addOrderBy('user.guidePriority', 'DESC')
             ->getQuery()
             ->getResult()
         ;

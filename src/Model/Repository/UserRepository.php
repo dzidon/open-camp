@@ -4,6 +4,8 @@ namespace App\Model\Repository;
 
 use App\Library\Data\Admin\UserSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
+use App\Model\Entity\CampDate;
+use App\Model\Entity\CampDateUser;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
@@ -145,6 +147,27 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
         }
 
         return $queryBuilder
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findByCampDates(array $campDates): array
+    {
+        $campDateIds = array_map(function (CampDate $campDate) {
+            return $campDate->getId()->toBinary();
+        }, $campDates);
+
+        return $this->_em->createQueryBuilder()
+            ->select('DISTINCT user')
+            ->from(User::class, 'user')
+            ->leftJoin(CampDateUser::class, 'campDateUser', 'WITH', 'campDateUser.user = user.id')
+            ->andWhere('campDateUser.campDate IN (:campDateIds)')
+            ->setParameter('campDateIds', $campDateIds)
+            ->addOrderBy('user.guidePriority', 'DESC')
             ->getQuery()
             ->getResult()
         ;

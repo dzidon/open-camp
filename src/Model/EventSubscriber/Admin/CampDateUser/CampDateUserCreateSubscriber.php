@@ -25,7 +25,7 @@ class CampDateUserCreateSubscriber
     {
         $campDate = $event->getCampDate();
         $data = $event->getCampDateUserData();
-        $entity = new CampDateUser($campDate, $data->getUser(), $data->getPriority());
+        $entity = new CampDateUser($campDate, $data->getUser());
         $this->dataTransfer->fillEntity($data, $entity);
         $event->setCampDateUser($entity);
     }

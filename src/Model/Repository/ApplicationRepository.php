@@ -53,6 +53,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
             ->leftJoin('campDateUser.user', 'guideUser')
             ->andWhere('application.id = :id')
             ->setParameter('id', $id, UuidType::NAME)
+            ->addOrderBy('user.guidePriority', 'DESC')
             ->getQuery()
             ->getOneOrNullResult()
         ;

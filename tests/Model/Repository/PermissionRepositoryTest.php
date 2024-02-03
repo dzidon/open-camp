@@ -45,7 +45,7 @@ class PermissionRepositoryTest extends KernelTestCase
             $names[] = $group->getName();
         }
 
-        $this->assertSame(['permission1', 'permission2', 'permission3', 'permission4'], $names);
+        $this->assertSame(['permission4', 'permission3', 'permission2', 'permission1'], $names);
     }
 
     private function getPermissionRepository(): PermissionRepository

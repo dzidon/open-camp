@@ -6,7 +6,6 @@ use App\Library\Data\Admin\CampDateUserData;
 use App\Service\Form\Type\Common\CollectionItemType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,9 +19,6 @@ class CampDateUserType extends AbstractType
         $builder
             ->add('user', UserAutocompleteType::class, [
                 'label' => 'form.admin.camp_date_user.user',
-            ])
-            ->add('priority', IntegerType::class, [
-                'label' => 'form.admin.camp_date_user.priority',
             ])
             ->add('canUpdateApplicationsState', CheckboxType::class, [
                 'required' => false,

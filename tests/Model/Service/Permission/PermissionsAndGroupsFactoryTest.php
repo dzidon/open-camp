@@ -50,25 +50,25 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
 
         $this->assertContains([
             'name'     => 'user',
-            'priority' => 100,
+            'priority' => 900,
             'label'    => 'permission_group.user',
         ], $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'role',
-            'priority' => 200,
+            'priority' => 800,
             'label'    => 'permission_group.role',
         ], $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'camp_category',
-            'priority' => 300,
+            'priority' => 700,
             'label'    => 'permission_group.camp_category',
         ], $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'camp',
-            'priority' => 400,
+            'priority' => 600,
             'label'    => 'permission_group.camp',
         ], $groupsSerialized);
 
@@ -80,25 +80,25 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
 
         $this->assertContains([
             'name'     => 'attachment_config',
-            'priority' => 600,
+            'priority' => 400,
             'label'    => 'permission_group.attachment_config',
         ], $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'purchasable_item',
-            'priority' => 700,
+            'priority' => 300,
             'label'    => 'permission_group.purchasable_item',
         ], $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'form_field',
-            'priority' => 800,
+            'priority' => 200,
             'label'    => 'permission_group.form_field',
         ], $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'discount_config',
-            'priority' => 900,
+            'priority' => 100,
             'label'    => 'permission_group.discount_config',
         ], $groupsSerialized);
 
@@ -110,14 +110,14 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         // user
         $this->assertContains([
             'name'             => 'user_create',
-            'priority'         => 100,
+            'priority'         => 500,
             'label'            => 'permission.user_create',
             'permission_group' => 'user',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'user_read',
-            'priority'         => 200,
+            'priority'         => 400,
             'label'            => 'permission.user_read',
             'permission_group' => 'user',
         ], $permissionsSerialized);
@@ -131,14 +131,14 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
 
         $this->assertContains([
             'name'             => 'user_update_role',
-            'priority'         => 400,
+            'priority'         => 200,
             'label'            => 'permission.user_update_role',
             'permission_group' => 'user',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'user_delete',
-            'priority'         => 500,
+            'priority'         => 100,
             'label'            => 'permission.user_delete',
             'permission_group' => 'user',
         ], $permissionsSerialized);
@@ -146,28 +146,28 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         // role
         $this->assertContains([
             'name'             => 'role_create',
-            'priority'         => 100,
+            'priority'         => 400,
             'label'            => 'permission.role_create',
             'permission_group' => 'role',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'role_read',
-            'priority'         => 200,
+            'priority'         => 300,
             'label'            => 'permission.role_read',
             'permission_group' => 'role',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'role_update',
-            'priority'         => 300,
+            'priority'         => 200,
             'label'            => 'permission.role_update',
             'permission_group' => 'role',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'role_delete',
-            'priority'         => 400,
+            'priority'         => 100,
             'label'            => 'permission.role_delete',
             'permission_group' => 'role',
         ], $permissionsSerialized);
@@ -175,28 +175,28 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         // camp category
         $this->assertContains([
             'name'             => 'camp_category_create',
-            'priority'         => 100,
+            'priority'         => 400,
             'label'            => 'permission.camp_category_create',
             'permission_group' => 'camp_category',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'camp_category_read',
-            'priority'         => 200,
+            'priority'         => 300,
             'label'            => 'permission.camp_category_read',
             'permission_group' => 'camp_category',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'camp_category_update',
-            'priority'         => 300,
+            'priority'         => 200,
             'label'            => 'permission.camp_category_update',
             'permission_group' => 'camp_category',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'camp_category_delete',
-            'priority'         => 400,
+            'priority'         => 100,
             'label'            => 'permission.camp_category_delete',
             'permission_group' => 'camp_category',
         ], $permissionsSerialized);
@@ -204,28 +204,28 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         // camp
         $this->assertContains([
             'name'             => 'camp_create',
-            'priority'         => 100,
+            'priority'         => 400,
             'label'            => 'permission.camp_create',
             'permission_group' => 'camp',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'camp_read',
-            'priority'         => 200,
+            'priority'         => 300,
             'label'            => 'permission.camp_read',
             'permission_group' => 'camp',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'camp_update',
-            'priority'         => 300,
+            'priority'         => 200,
             'label'            => 'permission.camp_update',
             'permission_group' => 'camp',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'camp_delete',
-            'priority'         => 400,
+            'priority'         => 100,
             'label'            => 'permission.camp_delete',
             'permission_group' => 'camp',
         ], $permissionsSerialized);
@@ -233,28 +233,28 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         // trip location path
         $this->assertContains([
             'name'             => 'trip_location_path_create',
-            'priority'         => 100,
+            'priority'         => 400,
             'label'            => 'permission.trip_location_path_create',
             'permission_group' => 'trip_location_path',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'trip_location_path_read',
-            'priority'         => 200,
+            'priority'         => 300,
             'label'            => 'permission.trip_location_path_read',
             'permission_group' => 'trip_location_path',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'trip_location_path_update',
-            'priority'         => 300,
+            'priority'         => 200,
             'label'            => 'permission.trip_location_path_update',
             'permission_group' => 'trip_location_path',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'trip_location_path_delete',
-            'priority'         => 400,
+            'priority'         => 100,
             'label'            => 'permission.trip_location_path_delete',
             'permission_group' => 'trip_location_path',
         ], $permissionsSerialized);
@@ -262,28 +262,28 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         // attachment config
         $this->assertContains([
             'name'             => 'attachment_config_create',
-            'priority'         => 100,
+            'priority'         => 400,
             'label'            => 'permission.attachment_config_create',
             'permission_group' => 'attachment_config',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'attachment_config_read',
-            'priority'         => 200,
+            'priority'         => 300,
             'label'            => 'permission.attachment_config_read',
             'permission_group' => 'attachment_config',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'attachment_config_update',
-            'priority'         => 300,
+            'priority'         => 200,
             'label'            => 'permission.attachment_config_update',
             'permission_group' => 'attachment_config',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'attachment_config_delete',
-            'priority'         => 400,
+            'priority'         => 100,
             'label'            => 'permission.attachment_config_delete',
             'permission_group' => 'attachment_config',
         ], $permissionsSerialized);
@@ -291,28 +291,28 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         // purchasable item
         $this->assertContains([
             'name'             => 'purchasable_item_create',
-            'priority'         => 100,
+            'priority'         => 400,
             'label'            => 'permission.purchasable_item_create',
             'permission_group' => 'purchasable_item',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'purchasable_item_read',
-            'priority'         => 200,
+            'priority'         => 300,
             'label'            => 'permission.purchasable_item_read',
             'permission_group' => 'purchasable_item',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'purchasable_item_update',
-            'priority'         => 300,
+            'priority'         => 200,
             'label'            => 'permission.purchasable_item_update',
             'permission_group' => 'purchasable_item',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'purchasable_item_delete',
-            'priority'         => 400,
+            'priority'         => 100,
             'label'            => 'permission.purchasable_item_delete',
             'permission_group' => 'purchasable_item',
         ], $permissionsSerialized);
@@ -320,28 +320,28 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         // form field
         $this->assertContains([
             'name'             => 'form_field_create',
-            'priority'         => 100,
+            'priority'         => 400,
             'label'            => 'permission.form_field_create',
             'permission_group' => 'form_field',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'form_field_read',
-            'priority'         => 200,
+            'priority'         => 300,
             'label'            => 'permission.form_field_read',
             'permission_group' => 'form_field',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'form_field_update',
-            'priority'         => 300,
+            'priority'         => 200,
             'label'            => 'permission.form_field_update',
             'permission_group' => 'form_field',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'form_field_delete',
-            'priority'         => 400,
+            'priority'         => 100,
             'label'            => 'permission.form_field_delete',
             'permission_group' => 'form_field',
         ], $permissionsSerialized);
@@ -349,28 +349,28 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         // discount config
         $this->assertContains([
             'name'             => 'discount_config_create',
-            'priority'         => 100,
+            'priority'         => 400,
             'label'            => 'permission.discount_config_create',
             'permission_group' => 'discount_config',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'discount_config_read',
-            'priority'         => 200,
+            'priority'         => 300,
             'label'            => 'permission.discount_config_read',
             'permission_group' => 'discount_config',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'discount_config_update',
-            'priority'         => 300,
+            'priority'         => 200,
             'label'            => 'permission.discount_config_update',
             'permission_group' => 'discount_config',
         ], $permissionsSerialized);
 
         $this->assertContains([
             'name'             => 'discount_config_delete',
-            'priority'         => 400,
+            'priority'         => 100,
             'label'            => 'permission.discount_config_delete',
             'permission_group' => 'discount_config',
         ], $permissionsSerialized);

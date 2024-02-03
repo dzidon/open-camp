@@ -41,8 +41,8 @@ class PermissionRepository extends AbstractRepository implements PermissionRepos
         return $this->createQueryBuilder('permission')
             ->select('permission, permissionGroup')
             ->leftJoin('permission.permissionGroup', 'permissionGroup')
-            ->addOrderBy('permissionGroup.priority', 'ASC')
-            ->addOrderBy('permission.priority', 'ASC')
+            ->addOrderBy('permissionGroup.priority', 'DESC')
+            ->addOrderBy('permission.priority', 'DESC')
             ->getQuery()
             ->getResult()
         ;

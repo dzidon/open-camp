@@ -47,8 +47,8 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
             ->select('role, rolePermission, rolePermissionGroup')
             ->leftJoin('role.permissions', 'rolePermission')
             ->leftJoin('rolePermission.permissionGroup', 'rolePermissionGroup')
-            ->addOrderBy('rolePermissionGroup.priority', 'ASC')
-            ->addOrderBy('rolePermission.priority', 'ASC')
+            ->addOrderBy('rolePermissionGroup.priority', 'DESC')
+            ->addOrderBy('rolePermission.priority', 'DESC')
             ->getQuery()
             ->getResult()
         ;
@@ -65,8 +65,8 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
             ->leftJoin('rolePermission.permissionGroup', 'rolePermissionGroup')
             ->andWhere('role.id = :id')
             ->setParameter('id', $id, UuidType::NAME)
-            ->addOrderBy('rolePermissionGroup.priority', 'ASC')
-            ->addOrderBy('rolePermission.priority', 'ASC')
+            ->addOrderBy('rolePermissionGroup.priority', 'DESC')
+            ->addOrderBy('rolePermission.priority', 'DESC')
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -83,8 +83,8 @@ class RoleRepository extends AbstractRepository implements RoleRepositoryInterfa
             ->leftJoin('rolePermission.permissionGroup', 'rolePermissionGroup')
             ->andWhere('role.label = :label')
             ->setParameter('label', $label)
-            ->addOrderBy('rolePermissionGroup.priority', 'ASC')
-            ->addOrderBy('rolePermission.priority', 'ASC')
+            ->addOrderBy('rolePermissionGroup.priority', 'DESC')
+            ->addOrderBy('rolePermission.priority', 'DESC')
             ->getQuery()
             ->getOneOrNullResult()
         ;

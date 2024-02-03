@@ -1,26 +1,26 @@
 <?php
 
-namespace App\Service\Form\Type\Common;
+namespace App\Service\Form\Extension;
 
-use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
 /**
- * Tinymce WYSIWYG editor text area.
+ * Sets the default number of rows for a text area.
  */
-class TinymceTextareaType extends AbstractType
+class TextareaTypeRowsExtension extends AbstractTypeExtension
 {
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['attr'] = array_merge([
-            'data-controller' => 'f--tinymce',
+            'rows' => 5,
         ], $view->vars['attr']);
     }
 
-    public function getParent(): string
+    public static function getExtendedTypes(): iterable
     {
-        return TextareaType::class;
+        return [TextareaType::class];
     }
 }

@@ -62,7 +62,7 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ->leftJoin('campDateUser.user', 'user')
             ->andWhere('campDate.id = :id')
             ->setParameter('id', $id, UuidType::NAME)
-            ->addOrderBy('campDateUser.priority', 'DESC')
+            ->addOrderBy('user.guidePriority', 'DESC')
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -94,7 +94,7 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ->andWhere('campDate.startAt > :now')
             ->setParameter('now', new DateTimeImmutable('now'))
             ->addOrderBy('campDate.startAt', 'ASC')
-            ->addOrderBy('campDateUser.priority', 'DESC')
+            ->addOrderBy('user.guidePriority', 'DESC')
         ;
 
         if (!$showHidden)
@@ -192,7 +192,7 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ->setParameter('startAt', $startAt)
             ->setParameter('endAt', $endAt)
             ->addOrderBy('campDate.startAt', 'ASC')
-            ->addOrderBy('campDateUser.priority', 'DESC')
+            ->addOrderBy('user.guidePriority', 'DESC')
         ;
 
         if ($camp !== null)

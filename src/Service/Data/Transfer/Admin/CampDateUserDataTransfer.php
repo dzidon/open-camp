@@ -33,7 +33,6 @@ class CampDateUserDataTransfer implements DataTransferInterface
         $campDateUserData->setCanUpdateApplicationPayments($campDateUser->canUpdateApplicationPayments());
         $campDateUserData->setCanUpdateApplications($campDateUser->canUpdateApplications());
         $campDateUserData->setCanUpdateApplicationsState($campDateUser->canUpdateApplicationsState());
-        $campDateUserData->setPriority($campDateUser->getPriority());
     }
 
     /**
@@ -50,6 +49,5 @@ class CampDateUserDataTransfer implements DataTransferInterface
         $campDateUser->setCanUpdateApplicationPayments($campDateUserData->canUpdateApplicationPayments());
         $campDateUser->setCanUpdateApplications($campDateUserData->canUpdateApplications());
         $campDateUser->setCanUpdateApplicationsState($campDateUserData->canUpdateApplicationsState());
-        $campDateUser->setPriority($campDateUserData->getPriority());
     }
 }

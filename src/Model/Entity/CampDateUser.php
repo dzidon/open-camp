@@ -38,9 +38,6 @@ class CampDateUser
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $canUpdateApplicationPayments = false;
 
-    #[ORM\Column(type: Types::INTEGER)]
-    private int $priority;
-
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -48,11 +45,10 @@ class CampDateUser
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(CampDate $campDate, User $user, int $priority)
+    public function __construct(CampDate $campDate, User $user)
     {
         $this->id = Uuid::v4();
         $this->user = $user;
-        $this->priority = $priority;
         $this->createdAt = new DateTimeImmutable('now');
         $this->setCampDate($campDate);
     }
@@ -129,18 +125,6 @@ class CampDateUser
     public function setCanUpdateApplicationPayments(bool $canUpdateApplicationPayments): self
     {
         $this->canUpdateApplicationPayments = $canUpdateApplicationPayments;
-
-        return $this;
-    }
-
-    public function getPriority(): int
-    {
-        return $this->priority;
-    }
-
-    public function setPriority(int $priority): self
-    {
-        $this->priority = $priority;
 
         return $this;
     }
