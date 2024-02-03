@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as SymfonyAbstractController;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -17,6 +18,39 @@ abstract class AbstractController extends SymfonyAbstractController
         $services['translator'] = '?'.TranslatorInterface::class;
 
         return $services;
+    }
+
+    /**
+     * Creates an exception that can be thrown to redirect to the given url.
+     *
+     * @param string $url
+     * @param int $status
+     * @return HttpException
+     */
+    public function createRedirectException(string $url, int $status = 302): HttpException
+    {
+        $redirectResponse = $this->redirect($url, $status);
+        $statusCode = $redirectResponse->getStatusCode();
+        $headers = $redirectResponse->headers->all();
+
+        return new HttpException($statusCode, '', null, $headers);
+    }
+
+    /**
+     * Creates an exception that can be thrown to redirect to the given route.
+     *
+     * @param string $route
+     * @param array $parameters
+     * @param int $status
+     * @return HttpException
+     */
+    public function createRedirectToRouteException(string $route, array $parameters = [], int $status = 302): HttpException
+    {
+        $redirectResponse = $this->redirectToRoute($route, $parameters, $status);
+        $url = $redirectResponse->getTargetUrl();
+        $status = $redirectResponse->getStatusCode();
+
+        return $this->createRedirectException($url, $status);
     }
 
     /**

@@ -133,6 +133,7 @@ camp_catalog:
     price_per_camper: 'Cena za táborníka'
     guides: 'Vedoucí'
     guide_image: 'Obrázek vedoucího'
+    camp_date_no_longer_available: 'Je nám líto, ale tento termín tábora už není dostupný.'
     camp_availability:
         label: 'Stav'
         available: 'Volno'

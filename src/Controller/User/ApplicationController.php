@@ -264,14 +264,19 @@ class ApplicationController extends AbstractController
     {
         if ($campDate === null)
         {
-            $this->createNotFoundException();
+            throw $this->createNotFoundException();
         }
 
         $isOpen = $this->campDateRepository->isCampDateOpenForApplications($campDate);
 
         if (!$isOpen)
         {
-            throw $this->createNotFoundException();
+            $camp = $campDate->getCamp();
+            $this->addTransFlash('failure', 'camp_catalog.camp_date_no_longer_available');
+
+            throw $this->createRedirectToRouteException('user_camp_detail', [
+                'urlName' => $camp->getUrlName(),
+            ]);
         }
 
         if ($campDate->isHidden())
