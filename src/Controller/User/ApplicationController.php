@@ -6,8 +6,10 @@ use App\Controller\AbstractController;
 use App\Library\Data\User\ApplicationStepTwoUpdateData;
 use App\Library\Data\User\ApplicationStepOneData;
 use App\Model\Entity\Application;
+use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
+use App\Model\Event\User\Application\ApplicationDraftStoreInHttpStorageEvent;
 use App\Model\Event\User\Application\ApplicationStepOneCreateEvent;
 use App\Model\Event\User\Application\ApplicationStepOneUpdateEvent;
 use App\Model\Event\User\Application\ApplicationStepTwoUpdateEvent;
@@ -30,11 +32,14 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\UuidV4;
 
 class ApplicationController extends AbstractController
 {
+    private const CAMP_DATE_UNAVAILABLE_MESSAGE = 'camp_catalog.camp_date_no_longer_available';
+
     private CampDateRepositoryInterface $campDateRepository;
     private ApplicationRepositoryInterface $applicationRepository;
     private CampCategoryRepositoryInterface $campCategoryRepository;
@@ -90,9 +95,14 @@ class ApplicationController extends AbstractController
             $eventDispatcher->dispatch($event, $event::NAME);
             $application = $event->getApplication();
 
-            return $this->redirectToRoute('user_application_step_two', [
+            $response = $this->redirectToRoute('user_application_step_two', [
                 'applicationId' => $application->getId(),
             ]);
+
+            $event = new ApplicationDraftStoreInHttpStorageEvent($application, $response);
+            $eventDispatcher->dispatch($event, $event::NAME);
+
+            return $response;
         }
 
         // load all camp categories so that the camp category path does not trigger additional queries
@@ -134,7 +144,7 @@ class ApplicationController extends AbstractController
         $user = $this->getUser();
         $application = $this->findApplicationOrThrow404($applicationId);
         $campDate = $application->getCampDate();
-        $this->assertCampDateAvailability($campDate);
+        $this->assertApplicationDraftAvailability($application);
 
         $contactData = $contactDataFactory->createContactDataFromApplication($application);
         $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromApplication($application);
@@ -201,8 +211,7 @@ class ApplicationController extends AbstractController
                             UuidV4                                                 $applicationId): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
-        $campDate = $application->getCampDate();
-        $this->assertCampDateAvailability($campDate);
+        $this->assertApplicationDraftAvailability($application);
 
         $numberOfApplicationCampers = count($application->getApplicationCampers());
         $applicationPurchasableItemsData = new ApplicationStepTwoUpdateData(
@@ -247,8 +256,7 @@ class ApplicationController extends AbstractController
     public function stepThree(UuidV4 $applicationId): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
-        $campDate = $application->getCampDate();
-        $this->assertCampDateAvailability($campDate);
+        $this->assertApplicationDraftAvailability($application);
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
@@ -260,23 +268,16 @@ class ApplicationController extends AbstractController
         ]);
     }
 
-    private function assertCampDateAvailability(?CampDate $campDate): void
+    private function assertCampDateAvailability(CampDate $campDate): void
     {
-        if ($campDate === null)
-        {
-            throw $this->createNotFoundException();
-        }
-
+        $camp = $campDate->getCamp();
+        $redirectException = $this->createCampDetailRedirectException($camp);
         $isOpen = $this->campDateRepository->isCampDateOpenForApplications($campDate);
 
         if (!$isOpen)
         {
-            $camp = $campDate->getCamp();
-            $this->addTransFlash('failure', 'camp_catalog.camp_date_no_longer_available');
-
-            throw $this->createRedirectToRouteException('user_camp_detail', [
-                'urlName' => $camp->getUrlName(),
-            ]);
+            $this->addTransFlash('failure', self::CAMP_DATE_UNAVAILABLE_MESSAGE);
+            throw $redirectException;
         }
 
         if ($campDate->isHidden())
@@ -287,9 +288,52 @@ class ApplicationController extends AbstractController
             }
             else
             {
-                throw $this->createNotFoundException();
+                $this->addTransFlash('failure', self::CAMP_DATE_UNAVAILABLE_MESSAGE);
+                throw $redirectException;
             }
         }
+    }
+
+    private function assertApplicationDraftAvailability(Application $application): void
+    {
+        $campDate = $application->getCampDate();
+
+        if ($campDate === null)
+        {
+            $this->addTransFlash('failure', self::CAMP_DATE_UNAVAILABLE_MESSAGE);
+            throw $this->createRedirectToRouteException('user_camp_catalog');
+        }
+
+        $camp = $campDate->getCamp();
+        $redirectException = $this->createCampDetailRedirectException($camp);
+        $editableDraftsResult = $this->applicationRepository->getApplicationsEditableDraftsResult([$application]);
+        $isOpen = $editableDraftsResult->isApplicationEditableDraft($application);
+
+        if (!$isOpen)
+        {
+            $this->addTransFlash('failure', self::CAMP_DATE_UNAVAILABLE_MESSAGE);
+            throw $redirectException;
+        }
+
+        if ($campDate->isHidden())
+        {
+            if ($this->isGranted('camp_create') || $this->isGranted('camp_update'))
+            {
+                $this->addTransFlash('warning', 'camp_catalog.hidden_camp_date_shown_for_admin');
+            }
+            else
+            {
+                $this->addTransFlash('failure', self::CAMP_DATE_UNAVAILABLE_MESSAGE);
+                throw $redirectException;
+            }
+        }
+    }
+
+    private function createCampDetailRedirectException(Camp $camp): HttpException
+    {
+        return $this->createRedirectToRouteException('user_camp_detail', [
+            'urlName' => $camp->getUrlName(),
+        ]);
     }
 
     private function findCampDateOrThrow404(UuidV4 $id): CampDate

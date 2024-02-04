@@ -190,19 +190,21 @@
 
     <div class="row mb-4">
         <div class="col-md-8 col-lg-6 col-xl-5">
-            <div class="row d-flex align-items-end mb-3">
-                <div class="col-6">
-                    <span>
-                        {{ 'entity.payment_method.singular'|trans }}
-                    </span>
-                </div>
+            {% if application.paymentMethod is not null %}
+                <div class="row d-flex align-items-end mb-3">
+                    <div class="col-6">
+                        <span>
+                            {{ 'entity.payment_method.singular'|trans }}
+                        </span>
+                    </div>
 
-                <div class="col-6 text-right">
-                    <span>
-                        {{ application.paymentMethod.label|trans }}
-                    </span>
+                    <div class="col-6 text-right">
+                        <span>
+                            {{ application.paymentMethod.label|trans }}
+                        </span>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
             {% if tax > 0.0 %}
                 <div class="row d-flex align-items-end mb-3">

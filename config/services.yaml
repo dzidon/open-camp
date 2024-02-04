@@ -52,6 +52,8 @@ parameters:
 
     # Cookies
     app.cookie_lifespan_locale: '1 year'
+    app.cookie_lifespan_application_draft: '1 year'
+    app.cookie_prefix_application_draft: 'application_draft_'
 
     # Applications
     app.sale_camper_recurring: true
@@ -140,6 +142,11 @@ services:
             $kernelProjectDirectory: '%kernel.project_dir%'
             $noImagePath: '%app.no_user_image_path%'
             $userImageDirectory: '%app.user_image_directory%'
+
+    App\Model\Service\Application\ApplicationDraftCookieStorage:
+        arguments:
+            $cookieKeyPrefix: '%app.cookie_prefix_application_draft%'
+            $cookieLifespan: '%app.cookie_lifespan_application_draft%'
 
     App\Model\Service\ApplicationCamper\ApplicationCamperDataFactory:
         arguments:

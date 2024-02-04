@@ -3,6 +3,7 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\Application;
+use App\Model\Library\Application\ApplicationsEditableDraftsResultInterface;
 use Symfony\Component\Uid\UuidV4;
 
 interface ApplicationRepositoryInterface
@@ -48,4 +49,12 @@ interface ApplicationRepositoryInterface
      * @return bool
      */
     public function simpleIdExists(string $simpleId): bool;
+
+    /**
+     * Returns information about what applications are editable drafts.
+     *
+     * @param Application[]|UuidV4[] $applications
+     * @return ApplicationsEditableDraftsResultInterface
+     */
+    public function getApplicationsEditableDraftsResult(array $applications): ApplicationsEditableDraftsResultInterface;
 }

@@ -6,11 +6,13 @@ use App\Controller\AbstractController;
 use App\Library\Data\User\CampSearchData;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
+use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampImageRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
+use App\Model\Service\Application\ApplicationDraftHttpStorageInterface;
 use App\Service\Form\Type\User\CampSearchType;
 use App\Service\Menu\Breadcrumbs\User\CampCatalogBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
@@ -96,10 +98,12 @@ class CampCatalogController extends AbstractController
     }
 
     #[Route('/camp/{urlName}', name: 'user_camp_detail', requirements: ['urlName' => '([a-zA-Z0-9-])+'])]
-    public function detail(CampDateRepositoryInterface  $campDateRepository,
-                           CampImageRepositoryInterface $campImageRepository,
-                           UserRepositoryInterface      $userRepository,
-                           string                       $urlName): Response
+    public function detail(CampDateRepositoryInterface          $campDateRepository,
+                           CampImageRepositoryInterface         $campImageRepository,
+                           UserRepositoryInterface              $userRepository,
+                           ApplicationRepositoryInterface       $applicationRepository,
+                           ApplicationDraftHttpStorageInterface $applicationDraftHttpStorage,
+                           string                               $urlName): Response
     {
         $camp = $this->findCampOrThrow404($urlName);
         $showHiddenCamps = $this->userCanViewHiddenCamps();
@@ -118,6 +122,8 @@ class CampCatalogController extends AbstractController
         $campDates = $campDatesResult->getCampDates();
         $guides = $userRepository->findByCampDates($campDates);
         $campImages = $campImageRepository->findByCamp($camp);
+        $storedApplicationDraftIds = $applicationDraftHttpStorage->getApplicationDraftIds();
+        $applicationsEditableDraftsResult = $applicationRepository->getApplicationsEditableDraftsResult($storedApplicationDraftIds);
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
@@ -126,11 +132,12 @@ class CampCatalogController extends AbstractController
         $this->routeNamer->setCurrentRouteName($campName);
 
         return $this->render('user/camp_catalog/detail.html.twig', [
-            'camp'              => $camp,
-            'guides'            => $guides,
-            'camp_images'       => $campImages,
-            'camp_dates_result' => $campDatesResult,
-            'breadcrumbs'       => $this->breadcrumbs->buildDetail($camp),
+            'camp'                                => $camp,
+            'guides'                              => $guides,
+            'camp_images'                         => $campImages,
+            'camp_dates_result'                   => $campDatesResult,
+            'applications_editable_drafts_result' => $applicationsEditableDraftsResult,
+            'breadcrumbs'                         => $this->breadcrumbs->buildDetail($camp),
         ]);
     }
 

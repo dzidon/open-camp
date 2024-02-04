@@ -163,6 +163,8 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ->andWhere('campDate.id = :campDateId')
             ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
             ->andWhere('campDate.isClosed = FALSE')
+            ->andWhere('campDate.startAt > :now')
+            ->setParameter('now', new DateTimeImmutable('now'))
             ->andHaving('(campDate.isOpenAboveCapacity = TRUE OR COUNT(applicationCamper.id) < campDate.capacity)')
             ->addGroupBy('campDate.id, campDate.isOpenAboveCapacity, campDate.capacity')
             ->getQuery()

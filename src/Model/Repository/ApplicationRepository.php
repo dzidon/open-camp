@@ -5,6 +5,8 @@ namespace App\Model\Repository;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\ApplicationPurchasableItem;
+use App\Model\Library\Application\ApplicationsEditableDraftsResult;
+use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\UuidV4;
@@ -109,6 +111,63 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         ;
 
         return $count > 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getApplicationsEditableDraftsResult(array $applications): ApplicationsEditableDraftsResult
+    {
+        $applicationIds = [];
+        $applicationBinaryIds = [];
+
+        foreach ($applications as $application)
+        {
+            $applicationId = $application;
+
+            if ($application instanceof Application)
+            {
+                $applicationId = $application->getId();
+            }
+
+            $applicationIds[] = $applicationId;
+            $applicationBinaryIds[] = $applicationId->toBinary();
+        }
+
+        $result = $this->createQueryBuilder('application')
+            ->select('application.id')
+            ->leftJoin('application.campDate', 'campDate')
+            ->leftJoin(Application::class, 'otherApplication', 'WITH', '
+                campDate.id = otherApplication.campDate AND 
+                otherApplication.isDraft = FALSE AND
+                (otherApplication.isAccepted IS NULL OR otherApplication.isAccepted = TRUE)
+            ')
+            ->leftJoin(ApplicationCamper::class, 'otherApplicationCamper', 'WITH', '
+                application.id = otherApplicationCamper.application
+            ')
+            ->andWhere('application.campDate IS NOT NULL')
+            ->andWhere('application.isDraft = TRUE')
+            ->andWhere('application.id IN (:applicationIds)')
+            ->setParameter('applicationIds', $applicationBinaryIds)
+            ->andWhere('campDate.isClosed = FALSE')
+            ->andWhere('campDate.startAt > :now')
+            ->setParameter('now', new DateTimeImmutable('now'))
+            ->andHaving('(campDate.isOpenAboveCapacity = TRUE OR COUNT(otherApplicationCamper.id) < campDate.capacity)')
+            ->addGroupBy('application.id, campDate.isOpenAboveCapacity, campDate.capacity')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        $activeApplicationIds = array_column($result, 'id');
+        $isApplicationEditableDraft = [];
+
+        foreach ($applicationIds as $applicationId)
+        {
+            $applicationIdString = $applicationId->toRfc4122();
+            $isApplicationEditableDraft[$applicationIdString] = in_array($applicationId, $activeApplicationIds);
+        }
+
+        return new ApplicationsEditableDraftsResult($isApplicationEditableDraft);
     }
 
     private function loadApplicationContacts(null|array|Application $applications): void

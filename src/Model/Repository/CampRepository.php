@@ -228,7 +228,8 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         $queryBuilder = $this->createQueryBuilder('camp')
             ->select('camp, MIN(campDate.deposit + campDate.priceWithoutDeposit) AS HIDDEN lowestFullPrice, MIN(campDate.startAt) AS HIDDEN lowestStartAt')
             ->leftJoin(CampDate::class, 'campDate', 'WITH', '
-                camp.id = campDate.camp AND campDate.startAt > :now AND 
+                camp.id = campDate.camp AND
+                campDate.startAt > :now AND 
                 campDate.isHidden IN (:hiddenValues)'
             )
             ->setParameter('now', new DateTimeImmutable('now'))
@@ -296,8 +297,6 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
                 ')
                 ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', 'application.id = applicationCamper.application')
                 ->andWhere('campDate.isClosed = FALSE')
-                ->andWhere('campDate.startAt > :now')
-                ->setParameter('now', new DateTimeImmutable('now'))
                 ->andHaving('(campDate.isOpenAboveCapacity = TRUE OR COUNT(applicationCamper.id) < campDate.capacity)')
                 ->addGroupBy('campDate.id, campDate.isOpenAboveCapacity, campDate.capacity')
             ;
@@ -330,23 +329,15 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             return $camp->getId()->toBinary();
         }, $camps);
 
+        // all upcoming camp dates for displayed camps, open or not
         $queryBuilder = $this->_em->createQueryBuilder()
-            ->select('campDate, camp, COUNT(applicationCamper.id) AS numberOfApplicationCampers')
+            ->select('campDate, camp')
             ->from(CampDate::class, 'campDate')
             ->leftJoin('campDate.camp', 'camp')
-            ->leftJoin(Application::class, 'application', 'WITH', '
-                campDate.id = application.campDate AND
-                application.isDraft = FALSE AND
-                (application.isAccepted IS NULL OR application.isAccepted = TRUE)
-            ')
-            ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', '
-                application.id = applicationCamper.application
-            ')
             ->andWhere('campDate.camp IN (:campIds)')
             ->setParameter('campIds', $campIds)
             ->andWhere('campDate.startAt > :now')
             ->setParameter('now', new DateTimeImmutable('now'))
-            ->addGroupBy('campDate.id')
             ->orderBy('campDate.startAt', 'ASC')
         ;
 
@@ -355,27 +346,36 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             $queryBuilder->andWhere('campDate.isHidden = FALSE');
         }
 
-        $campDatesData = $queryBuilder
+        $campDates = $queryBuilder
             ->getQuery()
             ->getResult()
         ;
 
-        $campDates = [];
-        $openCampDates = [];
+        $campDateIds = array_map(function (CampDate $campDate) {
+            return $campDate->getId()->toBinary();
+        }, $campDates);
 
-        foreach ($campDatesData as $campDateData)
-        {
-            /** @var CampDate $campDate */
-            $campDate = $campDateData[0];
-            $campDates[] = $campDate;
-
-            $numberOfApplicationCampers = $campDateData['numberOfApplicationCampers'];
-
-            if ($campDate->isOpen($numberOfApplicationCampers, $showHidden))
-            {
-                $openCampDates[] = $campDate;
-            }
-        }
+        // open camp dates
+        $openCampDates = $this->_em->createQueryBuilder()
+            ->select('campDate')
+            ->from(CampDate::class, 'campDate')
+            ->leftJoin(Application::class, 'application', 'WITH', '
+                campDate.id = application.campDate AND
+                application.isDraft = FALSE AND
+                (application.isAccepted IS NULL OR application.isAccepted = TRUE)
+            ')
+            ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', '
+                application.id = applicationCamper.application
+            ')
+            ->andWhere('campDate.id IN (:campDateIds)')
+            ->setParameter('campDateIds', $campDateIds)
+            ->andWhere('campDate.isClosed = FALSE')
+            ->andHaving('(campDate.isOpenAboveCapacity = TRUE OR COUNT(applicationCamper.id) < campDate.capacity)')
+            ->addGroupBy('campDate.id, campDate.isOpenAboveCapacity, campDate.capacity')
+            ->orderBy('campDate.startAt', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
 
         /*
          * Fetch images for camps
