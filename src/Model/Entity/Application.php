@@ -127,7 +127,7 @@ class Application
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-    private ?User $user;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(targetEntity: PaymentMethod::class)]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
@@ -176,8 +176,7 @@ class Application
                                 bool     $isNationalIdentifierEnabled,
                                 bool     $isEmailMandatory,
                                 bool     $isPhoneNumberMandatory,
-                                CampDate $campDate,
-                                ?User    $user)
+                                CampDate $campDate)
     {
         $this->id = Uuid::v4();
         $this->simpleId = $simpleId;
@@ -188,7 +187,6 @@ class Application
         $this->town = $town;
         $this->zip = $zip;
         $this->country = $country;
-        $this->user = $user;
         $this->currency = $currency;
         $this->tax = $tax;
         $this->discountRecurringCampersConfig = $discountRecurringCampersConfig;
@@ -373,6 +371,16 @@ class Application
         return $this;
     }
 
+    public function canBeCompleted(): bool
+    {
+        return
+            $this->isDraft                         &&
+            count($this->applicationContacts) >= 1 &&
+            count($this->applicationCampers)  >= 1 &&
+            $this->paymentMethod !== null
+        ;
+    }
+
     public function isDraft(): bool
     {
         return $this->isDraft;
@@ -553,6 +561,13 @@ class Application
     public function getUser(): ?User
     {
         return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 
     public function getPaymentMethodLabel(): ?string

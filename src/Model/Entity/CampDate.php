@@ -191,28 +191,6 @@ class CampDate
         return $this;
     }
 
-    public function isOpen(int $numberOfApplicationCampers, bool $showHidden): bool
-    {
-        if ($this->isClosed)
-        {
-            return false;
-        }
-
-        if (!$showHidden && $this->isHidden)
-        {
-            return false;
-        }
-
-        $now = new DateTimeImmutable('now');
-
-        if ($this->startAt <= $now)
-        {
-            return false;
-        }
-
-        return $this->isOpenAboveCapacity || $numberOfApplicationCampers < $this->capacity;
-    }
-
     public function isOpenAboveCapacity(): bool
     {
         return $this->isOpenAboveCapacity;

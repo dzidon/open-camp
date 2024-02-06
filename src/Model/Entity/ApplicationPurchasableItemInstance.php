@@ -13,7 +13,7 @@ use Symfony\Component\Uid\UuidV4;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Purchasable item variant instance of an application.
+ * Purchasable item variant instance.
  */
 #[ORM\Entity(repositoryClass: ApplicationPurchasableItemInstanceRepository::class)]
 class ApplicationPurchasableItemInstance

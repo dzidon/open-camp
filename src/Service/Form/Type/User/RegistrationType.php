@@ -3,7 +3,8 @@
 namespace App\Service\Form\Type\User;
 
 use App\Library\Data\User\RegistrationData;
-use App\Service\Form\Type\Common\CheckboxWithUrlType;
+use App\Service\Form\Type\Common\PrivacyType;
+use App\Service\Form\Type\Common\TermsOfUseType;
 use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -24,23 +25,9 @@ class RegistrationType extends AbstractType
                 ],
                 'label' => 'form.user.registration.email',
             ])
-            ->add('captcha', EWZRecaptchaType::class, [
-                'label' => 'form.user.registration.captcha',
-            ])
-            ->add('privacy', CheckboxWithUrlType::class, [
-                'checkbox_link_attr' => [
-                    'target' => '_blank',
-                ],
-                'label' => 'form.user.registration.privacy',
-                'checkbox_link_label' => 'form.user.registration.privacy_link',
-            ])
-            ->add('terms', CheckboxWithUrlType::class, [
-                'checkbox_link_attr' => [
-                    'target' => '_blank',
-                ],
-                'label' => 'form.user.registration.terms',
-                'checkbox_link_label' => 'form.user.registration.terms_link',
-            ])
+            ->add('captcha', EWZRecaptchaType::class)
+            ->add('privacy', PrivacyType::class)
+            ->add('terms', TermsOfUseType::class)
         ;
     }
 

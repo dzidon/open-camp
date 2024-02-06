@@ -83,9 +83,12 @@ guide:
     bio_undisclosed: 'Tento vedoucí nemá žádný popis.'
 
 application:
+    apply: 'Přihláška'
     buyer_details: 'Údaje o objednávajícím'
     discounts: 'Slevy'
     few_more_optional_fields: 'Poslední volitelné údaje'
+    cannot_be_completed: 'Je nám líto, ale vaše přihláška ještě nemá všechny náležitosti. Ujistěte se, že zadávate alespoň 1 kontakt, 1 táborníka a že máte zvolenou platební metodu.'
+    no_longer_editable: 'Je nám líto, ale tuto přihlášku už není možné upravovat.'
     discount:
         siblings_single_number: '{number, plural,
               =1    {Uplatnit slevu pro # sourozence}
@@ -942,6 +945,17 @@ form:
         file:
             browse: 'Procházet'
 
+        captcha:
+            label: 'Potvrďte, že nejste robot'
+
+        terms:
+            label: 'Souhlasím s podmínkami používání'
+            link_label: 'Přečíst'
+
+        privacy:
+            label: 'Souhlasím se zásadami ochrany soukromí'
+            link_label: 'Přečíst'
+
     admin:
         help:
             value_visible_for_admins_only: 'Tento údaj vidí pouze administrátoři.'
@@ -1412,6 +1426,20 @@ form:
             add_camper: 'Přidat dalšího táborníka'
             button: 'Pokračovat'
 
+        application_step_two:
+            payment_method: 'Platební metoda'
+            purchasable_items: 'Volitelné položky'
+            note: 'Poznámka'
+            customer_channel: 'Kde jste se o nás dozvěděli?'
+            discount_siblings:
+                label: 'Sleva pro sourozence'
+                null_option: 'Neuplatňuji slevu pro sourozence'
+
+            button: 'Pokračovat'
+
+        application_step_three:
+            button: 'Dokončit'
+
         application_attachment:
             is_required_later: 'Tento soubor můžete nahrát buď teď nebo až po vytvoření přihlášky.'
             allowed_formats: 'Povolené formáty'
@@ -1424,17 +1452,6 @@ form:
             trip_location_path_there: 'Kde nasednu'
             trip_location_path_back: 'Kde vysednu'
 
-        application_step_two:
-            payment_method: 'Platební metoda'
-            purchasable_items: 'Volitelné položky'
-            note: 'Poznámka'
-            customer_channel: 'Kde jste se o nás dozvěděli?'
-            discount_siblings:
-                label: 'Sleva pro sourozence'
-                null_option: 'Neuplatňuji slevu pro sourozence'
-
-            button: 'Pokračovat'
-
         application_purchasable_item_instance:
             amount: 'Množství'
             buy: 'Přikoupit'
@@ -1445,11 +1462,6 @@ form:
 
         registration:
             email: 'E-mail'
-            captcha: 'Captcha'
-            privacy: 'Souhlasím se zásadami ochrany soukromí'
-            privacy_link: 'Číst'
-            terms: 'Souhlasím s podmínkami používání'
-            terms_link: 'Číst'
             button: 'Zaregistrovat se'
 
         registration_password:
@@ -1457,7 +1469,6 @@ form:
 
         password_change:
             email: 'E-mail'
-            captcha: 'Captcha'
             button: 'Poslat'
 
         password_change_complete:

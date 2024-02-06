@@ -3,15 +3,18 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
+use App\Library\Data\User\ApplicationStepThreeUpdateData;
 use App\Library\Data\User\ApplicationStepTwoUpdateData;
 use App\Library\Data\User\ApplicationStepOneData;
 use App\Model\Entity\Application;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
+use App\Model\Event\User\Application\ApplicationDraftRemoveFromHttpStorageEvent;
 use App\Model\Event\User\Application\ApplicationDraftStoreInHttpStorageEvent;
 use App\Model\Event\User\Application\ApplicationStepOneCreateEvent;
 use App\Model\Event\User\Application\ApplicationStepOneUpdateEvent;
+use App\Model\Event\User\Application\ApplicationStepThreeUpdateEvent;
 use App\Model\Event\User\Application\ApplicationStepTwoUpdateEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Repository\CampCategoryRepositoryInterface;
@@ -24,6 +27,7 @@ use App\Model\Service\ApplicationCamper\ApplicationCamperDataFactoryInterface;
 use App\Model\Service\ApplicationPurchasableItemInstance\ApplicationPurchasableItemInstanceDataFactoryInterface;
 use App\Model\Service\Contact\ContactDataFactoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\User\ApplicationStepThreeType;
 use App\Service\Form\Type\User\ApplicationStepTwoType;
 use App\Service\Form\Type\User\ApplicationStepOneType;
 use App\Service\Menu\Breadcrumbs\User\ApplicationBreadcrumbsInterface;
@@ -38,24 +42,25 @@ use Symfony\Component\Uid\UuidV4;
 
 class ApplicationController extends AbstractController
 {
-    private const CAMP_DATE_UNAVAILABLE_MESSAGE = 'camp_catalog.camp_date_no_longer_available';
-
     private CampDateRepositoryInterface $campDateRepository;
     private ApplicationRepositoryInterface $applicationRepository;
     private CampCategoryRepositoryInterface $campCategoryRepository;
     private RouteNamerInterface $routeNamer;
+    private EventDispatcherInterface $eventDispatcher;
     private ApplicationBreadcrumbsInterface $breadcrumbs;
 
     public function __construct(CampDateRepositoryInterface     $campDateRepository,
                                 ApplicationRepositoryInterface  $applicationRepository,
                                 CampCategoryRepositoryInterface $campCategoryRepository,
                                 RouteNamerInterface             $routeNamer,
+                                EventDispatcherInterface        $eventDispatcher,
                                 ApplicationBreadcrumbsInterface $breadcrumbs)
     {
         $this->campDateRepository = $campDateRepository;
         $this->applicationRepository = $applicationRepository;
         $this->campCategoryRepository = $campCategoryRepository;
         $this->routeNamer = $routeNamer;
+        $this->eventDispatcher = $eventDispatcher;
         $this->breadcrumbs = $breadcrumbs;
     }
 
@@ -65,7 +70,6 @@ class ApplicationController extends AbstractController
                                   ApplicationStepOneDataFactoryInterface $applicationStepOneDataFactory,
                                   ApplicationCamperDataFactoryInterface  $applicationCamperDataFactory,
                                   ContactDataFactoryInterface            $contactDataFactory,
-                                  EventDispatcherInterface               $eventDispatcher,
                                   Request                                $request,
                                   UuidV4                                 $campDateId): Response
     {
@@ -92,7 +96,7 @@ class ApplicationController extends AbstractController
             /** @var null|User $user */
             $user = $this->getUser();
             $event = new ApplicationStepOneCreateEvent($applicationStepOneData, $campDate, $user);
-            $eventDispatcher->dispatch($event, $event::NAME);
+            $this->eventDispatcher->dispatch($event, $event::NAME);
             $application = $event->getApplication();
 
             $response = $this->redirectToRoute('user_application_step_two', [
@@ -100,7 +104,7 @@ class ApplicationController extends AbstractController
             ]);
 
             $event = new ApplicationDraftStoreInHttpStorageEvent($application, $response);
-            $eventDispatcher->dispatch($event, $event::NAME);
+            $this->eventDispatcher->dispatch($event, $event::NAME);
 
             return $response;
         }
@@ -135,7 +139,6 @@ class ApplicationController extends AbstractController
                                   CamperRepositoryInterface             $camperRepository,
                                   ApplicationCamperDataFactoryInterface $applicationCamperDataFactory,
                                   ContactDataFactoryInterface           $contactDataFactory,
-                                  EventDispatcherInterface              $eventDispatcher,
                                   DataTransferRegistryInterface         $dataTransfer,
                                   Request                               $request,
                                   UuidV4                                $applicationId): Response
@@ -169,10 +172,10 @@ class ApplicationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $event = new ApplicationStepOneUpdateEvent($applicationStepOneData, $application);
-            $eventDispatcher->dispatch($event, $event::NAME);
+            $this->eventDispatcher->dispatch($event, $event::NAME);
 
             return $this->redirectToRoute('user_application_step_two', [
-                'applicationId' => $application->getId()
+                'applicationId' => $application->getId(),
             ]);
         }
 
@@ -206,12 +209,12 @@ class ApplicationController extends AbstractController
     public function stepTwo(ApplicationPurchasableItemInstanceDataFactoryInterface $applicationPurchasableItemInstanceDataFactory,
                             PaymentMethodRepositoryInterface                       $paymentMethodRepository,
                             DataTransferRegistryInterface                          $dataTransfer,
-                            EventDispatcherInterface                               $eventDispatcher,
                             Request                                                $request,
                             UuidV4                                                 $applicationId): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
         $this->assertApplicationDraftAvailability($application);
+        $applicationId = $application->getId();
 
         $numberOfApplicationCampers = count($application->getApplicationCampers());
         $applicationPurchasableItemsData = new ApplicationStepTwoUpdateData(
@@ -231,10 +234,10 @@ class ApplicationController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
         {
             $event = new ApplicationStepTwoUpdateEvent($applicationPurchasableItemsData, $application);
-            $eventDispatcher->dispatch($event, $event::NAME);
+            $this->eventDispatcher->dispatch($event, $event::NAME);
 
             return $this->redirectToRoute('user_application_step_three', [
-                'applicationId' => $application->getId()
+                'applicationId' => $applicationId,
             ]);
         }
 
@@ -243,29 +246,72 @@ class ApplicationController extends AbstractController
         $this->setRouteName();
 
         return $this->render('user/application/step_two.html.twig', [
-            'form_application_step_two'     => $form->createView(),
-            'application'                   => $application,
-            'breadcrumbs'                   => $this->breadcrumbs->buildForStepTwo($application),
-            'application_back_url'          => $this->generateUrl('user_application_step_one_update', [
-                'applicationId' => $application->getId()->toRfc4122(),
+            'form_application_step_two' => $form->createView(),
+            'application'               => $application,
+            'breadcrumbs'               => $this->breadcrumbs->buildForStepTwo($application),
+            'application_back_url'      => $this->generateUrl('user_application_step_one_update', [
+                'applicationId' => $applicationId->toRfc4122(),
             ]),
         ]);
     }
 
     #[Route('/application/{applicationId}/step-three', name: 'user_application_step_three')]
-    public function stepThree(UuidV4 $applicationId): Response
+    public function stepThree(UuidV4 $applicationId, Request $request): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
         $this->assertApplicationDraftAvailability($application);
+        $applicationId = $application->getId();
+
+        $applicationStepThreeUpdateData = new ApplicationStepThreeUpdateData($this->getUser());
+        $form = $this->createForm(ApplicationStepThreeType::class, $applicationStepThreeUpdateData);
+        $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_three.button']);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            if ($application->canBeCompleted())
+            {
+                $response = $this->redirectToRoute('user_application_view_completed', [
+                    'applicationId' => $applicationId,
+                ]);
+
+                $event = new ApplicationStepThreeUpdateEvent($applicationStepThreeUpdateData, $application);
+                $this->eventDispatcher->dispatch($event, $event::NAME);
+
+                $event = new ApplicationDraftRemoveFromHttpStorageEvent($application, $response);
+                $this->eventDispatcher->dispatch($event, $event::NAME);
+
+                return $response;
+            }
+            else
+            {
+                $this->addTransFlash('failure', 'application.cannot_be_completed');
+            }
+        }
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
         $this->setRouteName();
 
-        return $this->render('user/application/step_three.html.twig', [
-            'application' => $application,
-            'breadcrumbs' => $this->breadcrumbs->buildForStepThree($application),
+        $applicationBackUrl = $this->generateUrl('user_application_step_two', [
+            'applicationId' => $applicationId->toRfc4122(),
         ]);
+
+        return $this->render('user/application/step_three.html.twig', [
+            'application'                 => $application,
+            'form_application_step_three' => $form->createView(),
+            'application_back_url'        => $applicationBackUrl,
+            'breadcrumbs'                 => $this->breadcrumbs->buildForStepThree($application),
+        ]);
+    }
+
+    #[Route('/application/{applicationId}/view-completed', name: 'user_application_view_completed')]
+    public function viewCompleted(UuidV4 $applicationId): Response
+    {
+        $application = $this->findApplicationOrThrow404($applicationId);
+        $this->assertApplicationCompletedAvailability($application);
+
+        return new Response("aaa");
     }
 
     private function assertCampDateAvailability(CampDate $campDate): void
@@ -276,7 +322,7 @@ class ApplicationController extends AbstractController
 
         if (!$isOpen)
         {
-            $this->addTransFlash('failure', self::CAMP_DATE_UNAVAILABLE_MESSAGE);
+            $this->addTransFlash('failure', 'camp_catalog.camp_date_no_longer_available');
             throw $redirectException;
         }
 
@@ -288,7 +334,7 @@ class ApplicationController extends AbstractController
             }
             else
             {
-                $this->addTransFlash('failure', self::CAMP_DATE_UNAVAILABLE_MESSAGE);
+                $this->addTransFlash('failure', 'camp_catalog.camp_date_no_longer_available');
                 throw $redirectException;
             }
         }
@@ -300,7 +346,7 @@ class ApplicationController extends AbstractController
 
         if ($campDate === null)
         {
-            $this->addTransFlash('failure', self::CAMP_DATE_UNAVAILABLE_MESSAGE);
+            $this->addTransFlash('failure', 'application.no_longer_editable');
             throw $this->createRedirectToRouteException('user_camp_catalog');
         }
 
@@ -311,7 +357,7 @@ class ApplicationController extends AbstractController
 
         if (!$isOpen)
         {
-            $this->addTransFlash('failure', self::CAMP_DATE_UNAVAILABLE_MESSAGE);
+            $this->addTransFlash('failure', 'application.no_longer_editable');
             throw $redirectException;
         }
 
@@ -323,9 +369,17 @@ class ApplicationController extends AbstractController
             }
             else
             {
-                $this->addTransFlash('failure', self::CAMP_DATE_UNAVAILABLE_MESSAGE);
+                $this->addTransFlash('failure', 'application.no_longer_editable');
                 throw $redirectException;
             }
+        }
+    }
+
+    private function assertApplicationCompletedAvailability(Application $application): void
+    {
+        if ($application->isDraft())
+        {
+            throw $this->createNotFoundException();
         }
     }
 

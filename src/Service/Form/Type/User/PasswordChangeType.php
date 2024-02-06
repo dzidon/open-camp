@@ -23,9 +23,7 @@ class PasswordChangeType extends AbstractType
                 ],
                 'label' => 'form.user.password_change.email',
             ])
-            ->add('captcha', EWZRecaptchaType::class, [
-                'label' => 'form.user.password_change.captcha',
-            ])
+            ->add('captcha', EWZRecaptchaType::class)
         ;
     }
 

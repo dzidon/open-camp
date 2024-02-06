@@ -507,6 +507,22 @@
     {{ form_rest(form) }}
 {% endblock %}
 
+{# Application step three edit #}
+{% block user_application_step_three_widget %}
+    {{ form_errors(form) }}
+
+    {% if form.captcha is defined %}
+        {{ form_row(form.captcha) }}
+    {% endif %}
+
+    {{ form_row(form.privacy) }}
+    {{ form_row(form.terms) }}
+
+    {{ block('user_application_bottom') }}
+
+    {{ form_rest(form) }}
+{% endblock %}
+
 {% block user_application_bottom %}
     <div class="row mt-4">
         {% if application_back_url is defined %}

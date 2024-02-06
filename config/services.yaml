@@ -55,6 +55,9 @@ parameters:
     app.cookie_lifespan_application_draft: '1 year'
     app.cookie_prefix_application_draft: 'application_draft_'
 
+    # Session
+    app.last_completed_application_id_session_key: 'last_completed_application_id'
+
     # Applications
     app.sale_camper_recurring: true
     app.sale_camper_siblings: true
@@ -142,6 +145,10 @@ services:
             $kernelProjectDirectory: '%kernel.project_dir%'
             $noImagePath: '%app.no_user_image_path%'
             $userImageDirectory: '%app.user_image_directory%'
+
+    App\Model\Service\Application\ApplicationCompleter:
+        arguments:
+            $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
 
     App\Model\Service\Application\ApplicationDraftCookieStorage:
         arguments:

@@ -23,7 +23,7 @@ class ApplicationStepTwoUpdateSubscriber
     #[AsEventListener(event: ApplicationStepTwoUpdateEvent::NAME, priority: 200)]
     public function onUpdateFillEntity(ApplicationStepTwoUpdateEvent $event): void
     {
-        $data = $event->getApplicationPurchasableItemsData();
+        $data = $event->getApplicationStepTwoUpdateData();
         $entity = $event->getApplication();
         $this->dataTransfer->fillEntity($data, $entity);
     }

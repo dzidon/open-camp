@@ -142,21 +142,10 @@
 
                                     <td>
                                         {% if camp_dates_result.isCampDateOpen(camp_date) %}
-                                            {% set application_url = path('user_application_step_one_create', {
-                                                campDateId: camp_date.id.toRfc4122
-                                            }) %}
-
-                                            {% set application_id = get_application_draft_id(camp_date) %}
-
-                                            {% if application_id is not null and applications_editable_drafts_result.isApplicationEditableDraft(application_id) %}
-                                                {% set application_url = path('user_application_step_one_update', {
-                                                    applicationId: application_id.toRfc4122
-                                                }) %}
-                                            {% endif %}
-
-                                            <a href="{{ application_url }}" class="stretched-link">
-                                                {{ 'entity.application.singular'|trans }}
-                                            </a>
+                                            {{ include('_fragment/_application/_apply_link.html.twig', {
+                                                camp_date: camp_date,
+                                                applications_editable_drafts_result: applications_editable_drafts_result,
+                                            }) }}
                                         {% else %}
                                             -
                                         {% endif %}
@@ -202,21 +191,10 @@
                                             </p>
 
                                             {% if camp_dates_result.isCampDateOpen(camp_date) %}
-                                                {% set application_url = path('user_application_step_one_create', {
-                                                    campDateId: camp_date.id.toRfc4122
-                                                }) %}
-
-                                                {% set application_id = get_application_draft_id(camp_date) %}
-
-                                                {% if application_id is not null and applications_editable_drafts_result.isApplicationEditableDraft(application_id) %}
-                                                    {% set application_url = path('user_application_step_one_update', {
-                                                        applicationId: application_id.toRfc4122
-                                                    }) %}
-                                                {% endif %}
-
-                                                <a href="{{ application_url }}" class="card-link stretched-link">
-                                                    Přihláška
-                                                </a>
+                                                {{ include('_fragment/_application/_apply_link.html.twig', {
+                                                    camp_date: camp_date,
+                                                    applications_editable_drafts_result: applications_editable_drafts_result,
+                                                }) }}
                                             {% endif %}
                                         </div>
                                     </div>

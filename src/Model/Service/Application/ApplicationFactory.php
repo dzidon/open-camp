@@ -7,6 +7,7 @@ use App\Model\Entity\Application;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
 use App\Model\Repository\ApplicationRepositoryInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @inheritDoc
@@ -15,6 +16,8 @@ class ApplicationFactory implements ApplicationFactoryInterface
 {
     private ApplicationRepositoryInterface $applicationRepository;
 
+    private Security $security;
+
     private string $simpleIdCharacters;
 
     private int $simpleIdLength;
@@ -22,10 +25,12 @@ class ApplicationFactory implements ApplicationFactoryInterface
     private array $newSimpleIds = [];
 
     public function __construct(ApplicationRepositoryInterface $applicationRepository,
+                                Security                       $security,
                                 string                         $simpleIdCharacters,
                                 int                            $simpleIdLength)
     {
         $this->applicationRepository = $applicationRepository;
+        $this->security = $security;
         $this->simpleIdCharacters = $simpleIdCharacters;
         $this->simpleIdLength = $simpleIdLength;
     }
@@ -76,7 +81,7 @@ class ApplicationFactory implements ApplicationFactoryInterface
             $discountSiblingsConfig = $discountConfig->getSiblingsConfig();
         }
 
-        return new Application(
+        $application = new Application(
             $simpleId,
             $email,
             $nameFirst,
@@ -94,8 +99,13 @@ class ApplicationFactory implements ApplicationFactoryInterface
             $isEmailMandatory,
             $isPhoneNumberMandatory,
             $campDate,
-            $user
         );
+
+        /** @var null|User $user */
+        $user = $this->security->getUser();
+        $application->setUser($user);
+
+        return $application;
     }
 
     private function generateRandomSimpleId(): string

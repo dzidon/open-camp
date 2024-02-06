@@ -188,7 +188,7 @@
         </div>
     </div>
 
-    <div class="row mb-4">
+    <div class="row mb-5">
         <div class="col-md-8 col-lg-6 col-xl-5">
             {% if application.paymentMethod is not null %}
                 <div class="row d-flex align-items-end mb-3">
@@ -240,19 +240,10 @@
 
     <div class="row">
         <div class="col-md-8 col-lg-6 col-xl-5">
-            <div class="row">
-                <div class="col-6">
-                    <a class="btn btn-secondary" href="{{ path('user_application_step_two', {applicationId: application.id.toRfc4122}) }}" role="button">
-                        {{ 'back'|trans }}
-                    </a>
-                </div>
-
-                <div class="col-6 text-right">
-                    <a class="btn btn-primary" href="" role="button">
-                        ...
-                    </a>
-                </div>
-            </div>
+            {{ form(form_application_step_three, {
+                application_back_url: application_back_url,
+               })
+            }}
         </div>
     </div>
 {% endblock %}
