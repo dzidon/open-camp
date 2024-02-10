@@ -16,9 +16,9 @@ class ProfileContactBreadcrumbs extends AbstractBreadcrumbs implements ProfileCo
      */
     public function buildList(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_contact_list')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_contact_list')
             ->setActive()
         ;
 
@@ -30,10 +30,10 @@ class ProfileContactBreadcrumbs extends AbstractBreadcrumbs implements ProfileCo
      */
     public function buildCreate(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_contact_list');
-        $this->addChildRoute($root, 'user_profile_contact_create')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_contact_list');
+        $this->addRoute($root, 'user_profile_contact_create')
             ->setActive()
         ;
 
@@ -47,10 +47,10 @@ class ProfileContactBreadcrumbs extends AbstractBreadcrumbs implements ProfileCo
     {
         $contactId = $contact->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_contact_list');
-        $this->addChildRoute($root, 'user_profile_contact_read', ['id' => $contactId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_contact_list');
+        $this->addRoute($root, 'user_profile_contact_read', ['id' => $contactId->toRfc4122()])
             ->setActive()
         ;
 
@@ -64,10 +64,10 @@ class ProfileContactBreadcrumbs extends AbstractBreadcrumbs implements ProfileCo
     {
         $contactId = $contact->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_contact_list');
-        $this->addChildRoute($root, 'user_profile_contact_update', ['id' => $contactId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_contact_list');
+        $this->addRoute($root, 'user_profile_contact_update', ['id' => $contactId->toRfc4122()])
             ->setActive()
         ;
 
@@ -81,10 +81,10 @@ class ProfileContactBreadcrumbs extends AbstractBreadcrumbs implements ProfileCo
     {
         $contactId = $contact->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_contact_list');
-        $this->addChildRoute($root, 'user_profile_contact_delete', ['id' => $contactId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_contact_list');
+        $this->addRoute($root, 'user_profile_contact_delete', ['id' => $contactId->toRfc4122()])
             ->setActive()
         ;
 

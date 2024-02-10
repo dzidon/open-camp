@@ -16,9 +16,9 @@ class GuideBreadcrumbs extends AbstractBreadcrumbs implements GuideBreadcrumbsIn
      */
     public function buildDetail(User $guide): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $guideRoot = $this->addChildRoute($root, 'user_guide_detail', ['urlName' => $guide->getUrlName()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $guideRoot = $this->addRoute($root, 'user_guide_detail', ['urlName' => $guide->getUrlName()])
             ->setActive()
         ;
 

@@ -1,0 +1,19 @@
+{% extends "user/base.html.twig" %}
+
+{% block main %}
+    <div class="row mb-3">
+        <div class="col-12">
+            <a href="{{ path('user_application_import_skip') }}">
+                <i class="fas fa-times"></i>
+
+                {{ 'application.to_user_import.skip'|trans }}
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            {{ form(form_import) }}
+        </div>
+    </div>
+{% endblock %}

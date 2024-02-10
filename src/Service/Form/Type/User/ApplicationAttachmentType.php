@@ -46,7 +46,8 @@ class ApplicationAttachmentType extends AbstractType
 
             if ($isAlreadyUploaded)
             {
-                $helpTextParts[] = '<strong class="text-success">&check; Soubor už je nahraný.</strong>';
+                $alreadyUploadedMessage = $this->translator->trans('form.user.application_attachment.already_uploaded');
+                $helpTextParts[] = "<strong class=\"text-success\">&check; $alreadyUploadedMessage</strong>";
             }
 
             if ($helpText !== null && $helpText !== '')

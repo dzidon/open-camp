@@ -102,17 +102,20 @@ services:
         tags:
             - { name: 'monolog.processor', channel: 'model' }
 
-    App\Service\Logger\ModelLogger:
+    App\Model\Service\Application\ApplicationToUserImporter:
         arguments:
-            $logger: '@monolog.logger.model'
+            $isEuBusinessDataEnabled: '%app.eu_business_data%'
+            $isEmailMandatory: '%app.contact_email_mandatory%'
+            $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
+            $isNationalIdentifierEnabled: '%app.national_identifier%'
 
-    App\Service\Security\Authentication\SocialLoginRedirectResponseFactory:
+    App\Model\EventSubscriber\User\Application\ApplicationStepThreeUpdateSubscriber:
         arguments:
-            $scopes: '%app.social_login_scopes%'
+            $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
 
-    App\Service\Security\Authentication\SocialAuthenticator:
+    App\Model\EventSubscriber\User\Application\ApplicationToUserImportSubscriber:
         arguments:
-            $services: '%app.social_login_services%'
+            $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
 
     App\Model\Service\UserRegistration\UserRegistrationFactory:
         arguments:
@@ -146,10 +149,6 @@ services:
             $noImagePath: '%app.no_user_image_path%'
             $userImageDirectory: '%app.user_image_directory%'
 
-    App\Model\Service\Application\ApplicationCompleter:
-        arguments:
-            $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
-
     App\Model\Service\Application\ApplicationDraftCookieStorage:
         arguments:
             $cookieKeyPrefix: '%app.cookie_prefix_application_draft%'
@@ -181,6 +180,22 @@ services:
         arguments:
             $isEmailMandatory: '%app.contact_email_mandatory%'
             $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
+
+    App\Model\Repository\ApplicationRepository:
+        arguments:
+            $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
+
+    App\Service\Logger\ModelLogger:
+        arguments:
+            $logger: '@monolog.logger.model'
+
+    App\Service\Security\Authentication\SocialLoginRedirectResponseFactory:
+        arguments:
+            $scopes: '%app.social_login_scopes%'
+
+    App\Service\Security\Authentication\SocialAuthenticator:
+        arguments:
+            $services: '%app.social_login_services%'
 
     App\Service\Form\Extension\CountryTypeDefaultsExtension:
         arguments:
@@ -214,6 +229,10 @@ services:
     App\Service\Form\Type\Admin\PurchasableItemType:
         arguments:
             $tax: '%app.tax%'
+
+    App\Service\Form\Type\User\ApplicationImportToUserCamperType:
+        arguments:
+            $dateFormat: '%app.date_format%'
 
     App\Service\Form\Type\User\BillingType:
         arguments:

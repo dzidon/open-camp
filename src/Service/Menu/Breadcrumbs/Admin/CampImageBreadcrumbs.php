@@ -20,11 +20,11 @@ class CampImageBreadcrumbs extends AbstractBreadcrumbs implements CampImageBread
     {
         $campId = $camp->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_camp_list');
-        $this->addChildRoute($root, 'admin_camp_update', ['id' => $campId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_camp_image_list', ['id' => $campId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_camp_list');
+        $this->addRoute($root, 'admin_camp_update', ['id' => $campId->toRfc4122()]);
+        $this->addRoute($root, 'admin_camp_image_list', ['id' => $campId->toRfc4122()])
             ->setActive()
         ;
 
@@ -38,12 +38,12 @@ class CampImageBreadcrumbs extends AbstractBreadcrumbs implements CampImageBread
     {
         $campId = $camp->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_camp_list');
-        $this->addChildRoute($root, 'admin_camp_update', ['id' => $campId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_camp_image_list', ['id' => $campId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_camp_image_upload', ['id' => $campId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_camp_list');
+        $this->addRoute($root, 'admin_camp_update', ['id' => $campId->toRfc4122()]);
+        $this->addRoute($root, 'admin_camp_image_list', ['id' => $campId->toRfc4122()]);
+        $this->addRoute($root, 'admin_camp_image_upload', ['id' => $campId->toRfc4122()])
             ->setActive()
         ;
 
@@ -59,12 +59,12 @@ class CampImageBreadcrumbs extends AbstractBreadcrumbs implements CampImageBread
         $campId = $camp->getId();
         $campImageId = $campImage->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_camp_list');
-        $this->addChildRoute($root, 'admin_camp_update', ['id' => $campId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_camp_image_list', ['id' => $campId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_camp_image_update', ['id' => $campImageId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_camp_list');
+        $this->addRoute($root, 'admin_camp_update', ['id' => $campId->toRfc4122()]);
+        $this->addRoute($root, 'admin_camp_image_list', ['id' => $campId->toRfc4122()]);
+        $this->addRoute($root, 'admin_camp_image_update', ['id' => $campImageId->toRfc4122()])
             ->setActive()
         ;
 
@@ -80,12 +80,12 @@ class CampImageBreadcrumbs extends AbstractBreadcrumbs implements CampImageBread
         $campId = $camp->getId();
         $campImageId = $campImage->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_camp_list');
-        $this->addChildRoute($root, 'admin_camp_update', ['id' => $campId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_camp_image_list', ['id' => $campId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_camp_image_delete', ['id' => $campImageId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_camp_list');
+        $this->addRoute($root, 'admin_camp_update', ['id' => $campId->toRfc4122()]);
+        $this->addRoute($root, 'admin_camp_image_list', ['id' => $campId->toRfc4122()]);
+        $this->addRoute($root, 'admin_camp_image_delete', ['id' => $campImageId->toRfc4122()])
             ->setActive()
         ;
 

@@ -15,9 +15,9 @@ class ProfileBreadcrumbs extends AbstractBreadcrumbs implements ProfileBreadcrum
      */
     public function buildProfile(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_profile')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_profile')
             ->setActive()
         ;
 

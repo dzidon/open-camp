@@ -3,10 +3,9 @@
 namespace App\Model\Event\User\Application;
 
 use App\Model\Entity\Application;
-use App\Model\Event\AbstractModelEvent;
 use Symfony\Component\HttpFoundation\Response;
 
-class ApplicationDraftRemoveFromHttpStorageEvent extends AbstractModelEvent
+class ApplicationDraftRemoveFromHttpStorageEvent
 {
     public const NAME = 'model.user.application.draft_remove_from_http_storage';
 

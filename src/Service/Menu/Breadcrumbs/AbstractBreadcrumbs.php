@@ -31,7 +31,7 @@ abstract class AbstractBreadcrumbs
      * @param string $block
      * @return MenuType
      */
-    protected function createRoot(string $block = 'breadcrumbs'): MenuType
+    protected function createBreadcrumbs(string $block = 'breadcrumbs'): MenuType
     {
         return new MenuType('breadcrumbs', $block);
     }
@@ -46,11 +46,11 @@ abstract class AbstractBreadcrumbs
      * @param string $block
      * @return MenuType
      */
-    protected function addChildRoute(MenuType $root,
-                                     string   $route,
-                                     array    $urlParameters = [],
-                                     ?string  $identifier = null,
-                                     string   $block = 'breadcrumb'): MenuType
+    protected function addRoute(MenuType $root,
+                                string   $route,
+                                array    $urlParameters = [],
+                                ?string  $identifier = null,
+                                string   $block = 'breadcrumb'): MenuType
     {
         if ($identifier === null)
         {

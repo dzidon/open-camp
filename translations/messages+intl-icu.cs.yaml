@@ -89,6 +89,7 @@ application:
     few_more_optional_fields: 'Poslední volitelné údaje'
     cannot_be_completed: 'Je nám líto, ale vaše přihláška ještě nemá všechny náležitosti. Ujistěte se, že zadávate alespoň 1 kontakt, 1 táborníka a že máte zvolenou platební metodu.'
     no_longer_editable: 'Je nám líto, ale tuto přihlášku už není možné upravovat.'
+    completed: 'Přihláška úspěšně vytvořena!'
     discount:
         siblings_single_number: '{number, plural,
               =1    {Uplatnit slevu pro # sourozence}
@@ -118,6 +119,10 @@ application:
         purchasable_item_total_price: 'Celkem za položky'
         total_price: 'Celkem'
         total_price_without_tax: 'Celkem bez DPH'
+
+    to_user_import:
+        billing_data: 'Fakturační údaje'
+        skip: 'Tuto přihlášku si nechci uložit na svůj profil'
 
 camp_catalog:
     hidden_camp: 'Skrytý'
@@ -342,6 +347,8 @@ crud:
             update_password: 'Heslo nastaveno!'
             update_admin_profile: 'Administrátorský profil uložen!'
             reset_password: 'Heslo odstraněno!'
+            import_application: 'Přihláška uložena!'
+            import_application_skip: 'Ukládání přihlášky přeskočeno!'
             delete: 'Uživatel odstraněn!'
 
         camp_category:
@@ -542,6 +549,7 @@ entity_attribute:
         id: 'ID'
         simple_id: 'Kód'
         email: 'E-mail'
+        name_full: 'Celé jméno'
         name_first: 'Jméno'
         name_last: 'Příjmení'
         street: 'Ulice a číslo popisné'
@@ -591,6 +599,7 @@ entity_attribute:
 
     application_camper:
         id: 'ID'
+        name_full: 'Celé jméno'
         name_first: 'Jméno'
         name_last: 'Příjmení'
         gender: 'Pohlaví'
@@ -608,6 +617,7 @@ entity_attribute:
 
     application_contact:
         id: 'ID'
+        name_full: 'Celé jméno'
         name_first: 'Jméno'
         name_last: 'Příjmení'
         email: 'E-mail'
@@ -666,6 +676,7 @@ entity_attribute:
 
     contact:
         id: 'ID'
+        name_full: 'Celé jméno'
         name_first: 'Jméno'
         name_last: 'Příjmení'
         email: 'E-mail'
@@ -678,6 +689,7 @@ entity_attribute:
 
     camper:
         id: 'ID'
+        name_full: 'Celé jméno'
         name_first: 'Jméno'
         name_last: 'Příjmení'
         gender: 'Pohlaví'
@@ -718,6 +730,7 @@ entity_attribute:
         email: 'E-mail'
         password: 'Heslo'
         role: 'Role'
+        name_full: 'Celé jméno'
         name_first: 'Jméno'
         name_last: 'Příjmení'
         street: 'Ulice a číslo popisné'
@@ -995,6 +1008,7 @@ form:
             discount: 'Sleva'
 
         profile:
+            name_full: 'Celé jméno'
             name_first: 'Jméno'
             name_last: 'Příjmení'
             born_at: 'Datum narození'
@@ -1410,6 +1424,7 @@ form:
                 label: 'E-mail'
                 help: 'Na tento e-mail vám pošleme informace o přihlášce.'
 
+            name_full: 'Celé jméno'
             name_first: 'Jméno'
             name_last: 'Příjmení'
             street: 'Ulice a číslo popisné'
@@ -1441,6 +1456,7 @@ form:
             button: 'Dokončit'
 
         application_attachment:
+            already_uploaded: 'Soubor už je nahraný.'
             is_required_later: 'Tento soubor můžete nahrát buď teď nebo až po vytvoření přihlášky.'
             allowed_formats: 'Povolené formáty'
 
@@ -1459,6 +1475,25 @@ form:
 
         application_purchasable_item:
             add_instance: 'Přidat variantu'
+
+        application_import_to_user:
+            skip_billing_data: 'Neukládat fakturační údaje'
+            contacts: 'Kontakty'
+            campers: 'Táborníci'
+            button: 'Uložit'
+
+        application_import_to_user_contact:
+            action: 'Akce'
+            do_nothing: 'Neukládat tento kontakt'
+            create_new: 'Uložit jako nový kontakt na můj profil'
+            update_existing: 'Aktualizovat kontakt {contact}'
+
+        application_import_to_user_camper:
+            action: 'Akce'
+            born_at: 'nar.'
+            do_nothing: 'Neukládat tohoto táborníka'
+            create_new: 'Uložit jako nového táborníka na můj profil'
+            update_existing: 'Aktualizovat táborníka {camper}'
 
         registration:
             email: 'E-mail'
@@ -1500,6 +1535,7 @@ form:
             button: 'Hledat'
 
         profile_billing:
+            name_full: 'Celé jméno'
             name_first: 'Jméno'
             name_last: 'Příjmení'
             street: 'Ulice a číslo popisné'
@@ -1526,6 +1562,7 @@ form:
                 button: 'Načíst'
 
             load_from_profile: 'Načíst kontakt z mého profilu'
+            name_full: 'Celé jméno'
             name_first: 'Jméno'
             name_last: 'Příjmení'
             email: 'E-mail'
@@ -1556,6 +1593,7 @@ form:
                 button: 'Načíst'
 
             load_from_profile: 'Načíst táborníka z mého profilu'
+            name_full: 'Celé jméno'
             name_first: 'Jméno'
             name_last: 'Příjmení'
             gender: 'Pohlaví'
@@ -1680,6 +1718,7 @@ route:
     user_camp_catalog: 'Katalog táborů'
     user_camp_detail: 'Tábor'
     user_guide_detail: 'Vedoucí'
+    user_application_import: 'Uložení údajů z přihlášky'
 
     user_profile_billing: 'Fakturační údaje'
     user_profile_contact_list: 'Kontakty'
@@ -1699,3 +1738,4 @@ route:
     user_application_step_one_update: 'Údaje'
     user_application_step_two: 'Finance'
     user_application_step_three: 'Souhrn'
+    user_application_view_completed: 'Přihláška'

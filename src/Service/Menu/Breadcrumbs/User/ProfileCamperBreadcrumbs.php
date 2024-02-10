@@ -16,9 +16,9 @@ class ProfileCamperBreadcrumbs extends AbstractBreadcrumbs implements ProfileCam
      */
     public function buildList(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_camper_list')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_camper_list')
             ->setActive()
         ;
 
@@ -30,10 +30,10 @@ class ProfileCamperBreadcrumbs extends AbstractBreadcrumbs implements ProfileCam
      */
     public function buildCreate(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_camper_list');
-        $this->addChildRoute($root, 'user_profile_camper_create')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_camper_list');
+        $this->addRoute($root, 'user_profile_camper_create')
             ->setActive()
         ;
 
@@ -47,10 +47,10 @@ class ProfileCamperBreadcrumbs extends AbstractBreadcrumbs implements ProfileCam
     {
         $camperId = $camper->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_camper_list');
-        $this->addChildRoute($root, 'user_profile_camper_read', ['id' => $camperId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_camper_list');
+        $this->addRoute($root, 'user_profile_camper_read', ['id' => $camperId->toRfc4122()])
             ->setActive()
         ;
 
@@ -64,10 +64,10 @@ class ProfileCamperBreadcrumbs extends AbstractBreadcrumbs implements ProfileCam
     {
         $camperId = $camper->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_camper_list');
-        $this->addChildRoute($root, 'user_profile_camper_update', ['id' => $camperId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_camper_list');
+        $this->addRoute($root, 'user_profile_camper_update', ['id' => $camperId->toRfc4122()])
             ->setActive()
         ;
 
@@ -81,10 +81,10 @@ class ProfileCamperBreadcrumbs extends AbstractBreadcrumbs implements ProfileCam
     {
         $camperId = $camper->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_camper_list');
-        $this->addChildRoute($root, 'user_profile_camper_delete', ['id' => $camperId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_camper_list');
+        $this->addRoute($root, 'user_profile_camper_delete', ['id' => $camperId->toRfc4122()])
             ->setActive()
         ;
 

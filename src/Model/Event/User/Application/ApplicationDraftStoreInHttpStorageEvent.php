@@ -3,10 +3,9 @@
 namespace App\Model\Event\User\Application;
 
 use App\Model\Entity\Application;
-use App\Model\Event\AbstractModelEvent;
 use Symfony\Component\HttpFoundation\Response;
 
-class ApplicationDraftStoreInHttpStorageEvent extends AbstractModelEvent
+class ApplicationDraftStoreInHttpStorageEvent
 {
     public const NAME = 'model.user.application.draft_store_in_http_storage';
 

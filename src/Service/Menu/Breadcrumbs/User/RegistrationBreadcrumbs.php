@@ -15,9 +15,9 @@ class RegistrationBreadcrumbs extends AbstractBreadcrumbs implements Registratio
      */
     public function buildRegistration(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_registration')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_registration')
             ->setActive()
         ;
 
@@ -29,10 +29,10 @@ class RegistrationBreadcrumbs extends AbstractBreadcrumbs implements Registratio
      */
     public function buildRegistrationComplete(string $token): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_registration');
-        $this->addChildRoute($root, 'user_registration_complete', ['token' => $token])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_registration');
+        $this->addRoute($root, 'user_registration_complete', ['token' => $token])
             ->setActive()
         ;
 

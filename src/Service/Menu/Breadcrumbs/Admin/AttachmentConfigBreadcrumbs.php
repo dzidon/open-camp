@@ -16,9 +16,9 @@ class AttachmentConfigBreadcrumbs extends AbstractBreadcrumbs implements Attachm
      */
     public function buildList(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_attachment_config_list')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_attachment_config_list')
             ->setActive()
         ;
 
@@ -30,10 +30,10 @@ class AttachmentConfigBreadcrumbs extends AbstractBreadcrumbs implements Attachm
      */
     public function buildCreate(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_attachment_config_list');
-        $this->addChildRoute($root, 'admin_attachment_config_create')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_attachment_config_list');
+        $this->addRoute($root, 'admin_attachment_config_create')
             ->setActive()
         ;
 
@@ -47,10 +47,10 @@ class AttachmentConfigBreadcrumbs extends AbstractBreadcrumbs implements Attachm
     {
         $attachmentConfigId = $attachmentConfig->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_attachment_config_list');
-        $this->addChildRoute($root, 'admin_attachment_config_read', ['id' => $attachmentConfigId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_attachment_config_list');
+        $this->addRoute($root, 'admin_attachment_config_read', ['id' => $attachmentConfigId->toRfc4122()])
             ->setActive()
         ;
 
@@ -64,10 +64,10 @@ class AttachmentConfigBreadcrumbs extends AbstractBreadcrumbs implements Attachm
     {
         $attachmentConfigId = $attachmentConfig->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_attachment_config_list');
-        $this->addChildRoute($root, 'admin_attachment_config_update', ['id' => $attachmentConfigId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_attachment_config_list');
+        $this->addRoute($root, 'admin_attachment_config_update', ['id' => $attachmentConfigId->toRfc4122()])
             ->setActive()
         ;
 
@@ -81,10 +81,10 @@ class AttachmentConfigBreadcrumbs extends AbstractBreadcrumbs implements Attachm
     {
         $attachmentConfigId = $attachmentConfig->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_attachment_config_list');
-        $this->addChildRoute($root, 'admin_attachment_config_delete', ['id' => $attachmentConfigId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_attachment_config_list');
+        $this->addRoute($root, 'admin_attachment_config_delete', ['id' => $attachmentConfigId->toRfc4122()])
             ->setActive()
         ;
 

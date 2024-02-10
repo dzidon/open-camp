@@ -16,9 +16,9 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
      */
     public function buildList(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_user_list')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_user_list')
             ->setActive()
         ;
 
@@ -30,10 +30,10 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
      */
     public function buildCreate(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_user_list');
-        $this->addChildRoute($root, 'admin_user_create')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_user_list');
+        $this->addRoute($root, 'admin_user_create')
             ->setActive()
         ;
 
@@ -47,10 +47,10 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     {
         $userId = $user->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_user_list');
-        $this->addChildRoute($root, 'admin_user_read', ['id' => $userId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_user_list');
+        $this->addRoute($root, 'admin_user_read', ['id' => $userId->toRfc4122()])
             ->setActive()
         ;
 
@@ -64,10 +64,10 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     {
         $userId = $user->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_user_list');
-        $this->addChildRoute($root, 'admin_user_update', ['id' => $userId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_user_list');
+        $this->addRoute($root, 'admin_user_update', ['id' => $userId->toRfc4122()])
             ->setActive()
         ;
 
@@ -81,11 +81,11 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     {
         $userId = $user->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_user_list');
-        $this->addChildRoute($root, 'admin_user_update', ['id' => $userId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_user_update_password', ['id' => $userId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_user_list');
+        $this->addRoute($root, 'admin_user_update', ['id' => $userId->toRfc4122()]);
+        $this->addRoute($root, 'admin_user_update_password', ['id' => $userId->toRfc4122()])
             ->setActive()
         ;
 
@@ -99,10 +99,10 @@ class UserBreadcrumbs extends AbstractBreadcrumbs implements UserBreadcrumbsInte
     {
         $userId = $user->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_user_list');
-        $this->addChildRoute($root, 'admin_user_delete', ['id' => $userId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_user_list');
+        $this->addRoute($root, 'admin_user_delete', ['id' => $userId->toRfc4122()])
             ->setActive()
         ;
 

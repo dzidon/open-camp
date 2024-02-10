@@ -281,6 +281,8 @@ class ApplicationController extends AbstractController
                 $event = new ApplicationDraftRemoveFromHttpStorageEvent($application, $response);
                 $this->eventDispatcher->dispatch($event, $event::NAME);
 
+                $this->addTransFlash('success', 'application.completed');
+
                 return $response;
             }
             else

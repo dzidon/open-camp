@@ -9,6 +9,8 @@ use App\Model\Library\Application\ApplicationsEditableDraftsResult;
 use DateTimeImmutable;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Uid\UuidV4;
 
 /**
@@ -19,9 +21,18 @@ use Symfony\Component\Uid\UuidV4;
  */
 class ApplicationRepository extends AbstractRepository implements ApplicationRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    private RequestStack $requestStack;
+
+    private string $lastCompletedApplicationIdSessionKey;
+
+    public function __construct(ManagerRegistry $registry,
+                                RequestStack    $requestStack,
+                                string          $lastCompletedApplicationIdSessionKey)
     {
         parent::__construct($registry, Application::class);
+
+        $this->requestStack = $requestStack;
+        $this->lastCompletedApplicationIdSessionKey = $lastCompletedApplicationIdSessionKey;
     }
 
     /**
@@ -67,6 +78,24 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationPurchasableItems($application);
 
         return $application;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findLastCompletedFromSession(): ?Application
+    {
+        $session = $this->getSession();
+        $applicationIdString = $session->get($this->lastCompletedApplicationIdSessionKey);
+
+        if ($applicationIdString === null || !UuidV4::isValid($applicationIdString))
+        {
+            return null;
+        }
+
+        $applicationId = UuidV4::fromString($applicationIdString);
+
+        return $this->findOneById($applicationId);
     }
 
     /**
@@ -415,5 +444,12 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         return array_map(function (ApplicationPurchasableItem $applicationPurchasableItem) {
             return $applicationPurchasableItem->getId()->toBinary();
         }, $applicationPurchasableItems);
+    }
+
+    private function getSession(): SessionInterface
+    {
+        $currentRequest = $this->requestStack->getCurrentRequest();
+
+        return $currentRequest->getSession();
     }
 }

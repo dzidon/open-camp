@@ -73,6 +73,11 @@ class Camper
         return $this->id;
     }
 
+    public function getNameFull(): string
+    {
+        return $this->nameFirst . ' ' . $this->nameLast;
+    }
+
     public function getNameFirst(): string
     {
         return $this->nameFirst;

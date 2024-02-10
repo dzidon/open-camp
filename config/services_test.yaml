@@ -7,6 +7,9 @@ parameters:
     app.no_camp_image_path: 'files/static/camp/placeholder.jpg'
     app.purchasable_item_image_directory: 'files/dynamic/purchasable-item'
     app.no_purchasable_item_image_path: 'files/static/placeholder.jpg'
+    app.application_attachment_directory: 'files/dynamic/application-attachment'
+    app.user_image_directory: 'files/dynamic/user'
+    app.no_user_image_path: 'files/static/user_placeholder.png'
 
     # Mailer
     app.email_no_reply: 'noreply@camp.com'
@@ -43,12 +46,19 @@ parameters:
 
     # Cookies
     app.cookie_lifespan_locale: '1 year'
+    app.cookie_lifespan_application_draft: '1 year'
+    app.cookie_prefix_application_draft: 'application_draft_'
+
+    # Session
+    app.last_completed_application_id_session_key: 'last_completed_application_id'
 
     # Applications
     app.sale_camper_recurring: true
     app.sale_camper_siblings: true
     app.contact_email_mandatory: false
     app.contact_phone_number_mandatory: false
+    app.application_simple_id_length: 6
+    app.application_simple_id_characters: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 
     # Validation
     app.national_identifier_regex: '#^\s*(\d\d)(\d\d)(\d\d)[ /]*(\d\d\d)(\d?)\s*$#'

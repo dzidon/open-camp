@@ -18,9 +18,9 @@ class CampCatalogBreadcrumbs extends AbstractBreadcrumbs implements CampCatalogB
      */
     public function buildList(array $campCategories): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $catalogChild = $this->addChildRoute($root, 'user_camp_catalog');
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $catalogChild = $this->addRoute($root, 'user_camp_catalog');
 
         if (empty($campCategories))
         {
@@ -38,7 +38,7 @@ class CampCatalogBreadcrumbs extends AbstractBreadcrumbs implements CampCatalogB
 
             $path = $campCategory->getPath();
             $text = $campCategory->getName();
-            $this->addChildRoute($root, 'user_camp_catalog', ['path' => $path], 'user_camp_catalog_' . $key)
+            $this->addRoute($root, 'user_camp_catalog', ['path' => $path], 'user_camp_catalog_' . $key)
                 ->setText($text)
                 ->setActive($key === array_key_last($campCategories))
             ;
@@ -52,9 +52,9 @@ class CampCatalogBreadcrumbs extends AbstractBreadcrumbs implements CampCatalogB
      */
     public function buildDetail(Camp $camp): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_camp_catalog');
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_camp_catalog');
 
         $campCategory = $camp->getCampCategory();
         $campCategories = [];
@@ -70,13 +70,13 @@ class CampCatalogBreadcrumbs extends AbstractBreadcrumbs implements CampCatalogB
             $path = $campCategory->getPath();
             $text = $campCategory->getName();
 
-            $this->addChildRoute($root, 'user_camp_catalog', ['path' => $path], 'user_camp_catalog_' . $key)
+            $this->addRoute($root, 'user_camp_catalog', ['path' => $path], 'user_camp_catalog_' . $key)
                 ->setText($text)
             ;
         }
 
         $text = $camp->getName();
-        $this->addChildRoute($root, 'user_camp_detail', ['urlName' => $camp->getUrlName()])
+        $this->addRoute($root, 'user_camp_detail', ['urlName' => $camp->getUrlName()])
             ->setText($text)
             ->setActive()
         ;

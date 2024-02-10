@@ -4,7 +4,6 @@ namespace App\Service\Form\Type\User;
 
 use App\Library\Data\User\CamperData;
 use App\Service\Form\Type\Common\GenderChildishType;
-use App\Service\Form\Type\Common\GenderType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;

@@ -15,9 +15,9 @@ class LoginBreadcrumbs extends AbstractBreadcrumbs implements LoginBreadcrumbsIn
      */
     public function buildLogin(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_login')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_login')
             ->setActive()
         ;
 

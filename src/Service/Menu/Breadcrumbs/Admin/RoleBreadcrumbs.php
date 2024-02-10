@@ -16,9 +16,9 @@ class RoleBreadcrumbs extends AbstractBreadcrumbs implements RoleBreadcrumbsInte
      */
     public function buildList(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_role_list')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_role_list')
             ->setActive()
         ;
 
@@ -30,10 +30,10 @@ class RoleBreadcrumbs extends AbstractBreadcrumbs implements RoleBreadcrumbsInte
      */
     public function buildCreate(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_role_list');
-        $this->addChildRoute($root, 'admin_role_create')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_role_list');
+        $this->addRoute($root, 'admin_role_create')
             ->setActive()
         ;
 
@@ -47,10 +47,10 @@ class RoleBreadcrumbs extends AbstractBreadcrumbs implements RoleBreadcrumbsInte
     {
         $roleId = $role->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_role_list');
-        $this->addChildRoute($root, 'admin_role_read', ['id' => $roleId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_role_list');
+        $this->addRoute($root, 'admin_role_read', ['id' => $roleId->toRfc4122()])
             ->setActive()
         ;
 
@@ -64,10 +64,10 @@ class RoleBreadcrumbs extends AbstractBreadcrumbs implements RoleBreadcrumbsInte
     {
         $roleId = $role->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_role_list');
-        $this->addChildRoute($root, 'admin_role_update', ['id' => $roleId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_role_list');
+        $this->addRoute($root, 'admin_role_update', ['id' => $roleId->toRfc4122()])
             ->setActive()
         ;
 
@@ -81,10 +81,10 @@ class RoleBreadcrumbs extends AbstractBreadcrumbs implements RoleBreadcrumbsInte
     {
         $roleId = $role->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_role_list');
-        $this->addChildRoute($root, 'admin_role_delete', ['id' => $roleId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_role_list');
+        $this->addRoute($root, 'admin_role_delete', ['id' => $roleId->toRfc4122()])
             ->setActive()
         ;
 

@@ -19,11 +19,11 @@ class PurchasableItemVariantBreadcrumbs extends AbstractBreadcrumbs implements P
     {
         $purchasableItemId = $purchasableItem->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_purchasable_item_list');
-        $this->addChildRoute($root, 'admin_purchasable_item_update', ['id' => $purchasableItemId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_purchasable_item_variant_create', ['id' => $purchasableItemId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_purchasable_item_list');
+        $this->addRoute($root, 'admin_purchasable_item_update', ['id' => $purchasableItemId->toRfc4122()]);
+        $this->addRoute($root, 'admin_purchasable_item_variant_create', ['id' => $purchasableItemId->toRfc4122()])
             ->setActive()
         ;
 
@@ -39,11 +39,11 @@ class PurchasableItemVariantBreadcrumbs extends AbstractBreadcrumbs implements P
         $purchasableItemId = $purchasableItem->getId();
         $purchasableItemVariantId = $purchasableItemVariant->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_purchasable_item_list');
-        $this->addChildRoute($root, 'admin_purchasable_item_update', ['id' => $purchasableItemId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_purchasable_item_variant_read', ['id' => $purchasableItemVariantId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_purchasable_item_list');
+        $this->addRoute($root, 'admin_purchasable_item_update', ['id' => $purchasableItemId->toRfc4122()]);
+        $this->addRoute($root, 'admin_purchasable_item_variant_read', ['id' => $purchasableItemVariantId->toRfc4122()])
             ->setActive()
         ;
 
@@ -59,11 +59,11 @@ class PurchasableItemVariantBreadcrumbs extends AbstractBreadcrumbs implements P
         $purchasableItemId = $purchasableItem->getId();
         $purchasableItemVariantId = $purchasableItemVariant->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_purchasable_item_list');
-        $this->addChildRoute($root, 'admin_purchasable_item_update', ['id' => $purchasableItemId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_purchasable_item_variant_update', ['id' => $purchasableItemVariantId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_purchasable_item_list');
+        $this->addRoute($root, 'admin_purchasable_item_update', ['id' => $purchasableItemId->toRfc4122()]);
+        $this->addRoute($root, 'admin_purchasable_item_variant_update', ['id' => $purchasableItemVariantId->toRfc4122()])
             ->setActive()
         ;
 
@@ -79,11 +79,11 @@ class PurchasableItemVariantBreadcrumbs extends AbstractBreadcrumbs implements P
         $purchasableItemId = $purchasableItem->getId();
         $purchasableItemVariantId = $purchasableItemVariant->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_purchasable_item_list');
-        $this->addChildRoute($root, 'admin_purchasable_item_update', ['id' => $purchasableItemId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_purchasable_item_variant_delete', ['id' => $purchasableItemVariantId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_purchasable_item_list');
+        $this->addRoute($root, 'admin_purchasable_item_update', ['id' => $purchasableItemId->toRfc4122()]);
+        $this->addRoute($root, 'admin_purchasable_item_variant_delete', ['id' => $purchasableItemVariantId->toRfc4122()])
             ->setActive()
         ;
 

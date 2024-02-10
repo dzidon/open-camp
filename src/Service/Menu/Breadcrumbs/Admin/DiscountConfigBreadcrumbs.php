@@ -16,9 +16,9 @@ class DiscountConfigBreadcrumbs extends AbstractBreadcrumbs implements DiscountC
      */
     public function buildList(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_discount_config_list')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_discount_config_list')
             ->setActive()
         ;
 
@@ -30,10 +30,10 @@ class DiscountConfigBreadcrumbs extends AbstractBreadcrumbs implements DiscountC
      */
     public function buildCreate(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_discount_config_list');
-        $this->addChildRoute($root, 'admin_discount_config_create')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_discount_config_list');
+        $this->addRoute($root, 'admin_discount_config_create')
             ->setActive()
         ;
 
@@ -47,10 +47,10 @@ class DiscountConfigBreadcrumbs extends AbstractBreadcrumbs implements DiscountC
     {
         $discountConfigId = $discountConfig->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_discount_config_list');
-        $this->addChildRoute($root, 'admin_discount_config_read', ['id' => $discountConfigId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_discount_config_list');
+        $this->addRoute($root, 'admin_discount_config_read', ['id' => $discountConfigId->toRfc4122()])
             ->setActive()
         ;
 
@@ -64,10 +64,10 @@ class DiscountConfigBreadcrumbs extends AbstractBreadcrumbs implements DiscountC
     {
         $discountConfigId = $discountConfig->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_discount_config_list');
-        $this->addChildRoute($root, 'admin_discount_config_update', ['id' => $discountConfigId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_discount_config_list');
+        $this->addRoute($root, 'admin_discount_config_update', ['id' => $discountConfigId->toRfc4122()])
             ->setActive()
         ;
 
@@ -81,10 +81,10 @@ class DiscountConfigBreadcrumbs extends AbstractBreadcrumbs implements DiscountC
     {
         $discountConfigId = $discountConfig->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_discount_config_list');
-        $this->addChildRoute($root, 'admin_discount_config_delete', ['id' => $discountConfigId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_discount_config_list');
+        $this->addRoute($root, 'admin_discount_config_delete', ['id' => $discountConfigId->toRfc4122()])
             ->setActive()
         ;
 

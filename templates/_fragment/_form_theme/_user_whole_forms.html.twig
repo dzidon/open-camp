@@ -318,6 +318,371 @@
     {{ form_rest(form) }}
 {% endblock %}
 
+{# Application to user import #}
+{% block user_application_import_widget %}
+    {{ form_errors(form) }}
+
+    {% set data = form.vars.data.application %}
+
+    {% if form.skipBillingData is defined %}
+        <h3 class="mb-3">
+            {{ 'application.to_user_import.billing_data'|trans }}
+        </h3>
+
+        <div class="row">
+            <div class="col-12 d-flex">
+                <div class="card mb-3 flex-fill">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ 'entity_attribute.application.name_full'|trans }}:
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ data.nameFull }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ 'entity_attribute.application.street'|trans }}:
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ data.street }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ 'entity_attribute.application.town'|trans }}:
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ data.town }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ 'entity_attribute.application.zip'|trans }}:
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ data.zip }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ 'entity_attribute.application.country'|trans }}:
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ country_name_for_code(data.country) }}
+                                </span>
+                            </div>
+                        </div>
+
+                        {% if data.businessName is not null and data.businessCin is not null and data.businessVatId is not null %}
+                            <div class="row mt-3">
+                                <div class="col-12 col-sm-6">
+                                    <span>
+                                        {{ 'entity_attribute.application.business_name'|trans }}:
+                                    </span>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <span>
+                                        {{ data.businessName }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-sm-6">
+                                    <span>
+                                        {{ 'entity_attribute.application.business_cin'|trans }}:
+                                    </span>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <span>
+                                        {{ data.businessCin }}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 col-sm-6">
+                                    <span>
+                                        {{ 'entity_attribute.application.business_vat_id'|trans }}:
+                                    </span>
+                                </div>
+
+                                <div class="col-12 col-sm-6">
+                                    <span>
+                                        {{ data.businessVatId }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        <div class="mt-4">
+                            {{ form_row(form.skipBillingData) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if form.applicationImportToUserContactsData is defined %}
+        {% set application_contact_forms = form.applicationImportToUserContactsData.children %}
+
+        {% if application_contact_forms is not empty %}
+            <h3 class="mb-3">
+                {{ form.applicationImportToUserContactsData.vars.label|trans }}
+            </h3>
+
+            {% for application_import_contact_form in application_contact_forms %}
+                {{ form_row(application_import_contact_form) }}
+            {% endfor %}
+        {% endif %}
+
+        {% do form.applicationImportToUserContactsData.setRendered %}
+    {% endif %}
+
+    {% if form.applicationImportToUserCampersData is defined %}
+        {% set application_camper_forms = form.applicationImportToUserCampersData.children %}
+
+        {% if application_camper_forms is not empty %}
+            <h3 class="mb-3">
+                {{ form.applicationImportToUserCampersData.vars.label|trans }}
+            </h3>
+
+            {% for application_import_camper_form in application_camper_forms %}
+                {{ form_row(application_import_camper_form) }}
+            {% endfor %}
+        {% endif %}
+
+        {% do form.applicationImportToUserCampersData.setRendered %}
+    {% endif %}
+
+    {{ form_rest(form) }}
+{% endblock %}
+
+{# Application to user import (contact) #}
+{% block user_application_import_contact_widget %}
+    {{ form_errors(form) }}
+
+    {% set contact = form.vars.data.applicationContact %}
+
+    <div class="row">
+        <div class="col-12 d-flex">
+            <div class="card mb-4 flex-fill">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ contact.nameFull }}
+                    </h5>
+
+                    {% if contact.email is not null %}
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ 'entity_attribute.application_contact.email'|trans }}:
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ contact.email }}
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if contact.phoneNumber is not null %}
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ 'entity_attribute.application_contact.phone_number'|trans }}:
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ contact.phoneNumber|phone_number_format(phone_number_format) }}
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <span>
+                                {{ 'entity_attribute.application_contact.role'|trans }}:
+                            </span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <span>
+                                {% if contact.role.value == 'other' %}
+                                    {{ contact.roleOther }}
+                                {% else %}
+                                    {{ ('contact_role.' ~ contact.role.value)|trans }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        {{ form_row(form.importToContact) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
+{% endblock %}
+
+{# Application to user import (camper) #}
+{% block user_application_import_camper_widget %}
+    {{ form_errors(form) }}
+
+    {% set camper = form.vars.data.applicationCamper %}
+
+    <div class="row">
+        <div class="col-12 d-flex">
+            <div class="card mb-4 flex-fill">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ camper.nameFull }}
+                    </h5>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <span>
+                                {{ 'entity_attribute.camper.gender'|trans }}:
+                            </span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <span>
+                                {{ ('gender_childish.' ~ camper.gender.value)|trans }}
+                            </span>
+                        </div>
+                    </div>
+
+                    {% if national_identifier_enabled and camper.nationalIdentifier is not null %}
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ 'entity_attribute.camper.national_identifier'|trans }}:
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ camper.nationalIdentifier }}
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-12 col-sm-6">
+                            <span>
+                                {{ 'entity_attribute.camper.born_at'|trans }}:
+                            </span>
+                        </div>
+
+                        <div class="col-12 col-sm-6">
+                            <span>
+                                {{ camper.bornAt|date(date_format) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    {% if camper.dietaryRestrictions is not null %}
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ 'entity_attribute.camper.dietary_restrictions'|trans }}:
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ camper.dietaryRestrictions|nl2br }}
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if camper.healthRestrictions is not null %}
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ 'entity_attribute.camper.health_restrictions'|trans }}:
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ camper.healthRestrictions|nl2br }}
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if camper.medication is not null %}
+                        <div class="row">
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ 'entity_attribute.camper.medication'|trans }}:
+                                </span>
+                            </div>
+
+                            <div class="col-12 col-sm-6">
+                                <span>
+                                    {{ camper.medication|nl2br }}
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="mt-4">
+                        {{ form_row(form.importToCamper) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ form_rest(form) }}
+{% endblock %}
+
 {# Application step one edit #}
 {% block user_application_step_one_widget %}
     {{ form_errors(form) }}

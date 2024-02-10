@@ -15,9 +15,9 @@ class ProfileBreadcrumbs extends AbstractBreadcrumbs implements ProfileBreadcrum
      */
     public function buildBilling(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_billing')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_billing')
             ->setActive()
         ;
 
@@ -29,9 +29,9 @@ class ProfileBreadcrumbs extends AbstractBreadcrumbs implements ProfileBreadcrum
      */
     public function buildPasswordChange(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_password_change')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_password_change')
             ->setActive()
         ;
 
@@ -43,9 +43,9 @@ class ProfileBreadcrumbs extends AbstractBreadcrumbs implements ProfileBreadcrum
      */
     public function buildPasswordChangeCreate(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_profile_password_change_create')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_profile_password_change_create')
             ->setActive()
         ;
 

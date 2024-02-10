@@ -73,6 +73,9 @@ class Application
     #[ORM\Column(length: 255)]
     private string $campName;
 
+    #[ORM\Column(length: 2000, nullable: true)]
+    private ?string $campDateDescription;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $paymentMethodLabel = null;
 
@@ -176,7 +179,8 @@ class Application
                                 bool     $isNationalIdentifierEnabled,
                                 bool     $isEmailMandatory,
                                 bool     $isPhoneNumberMandatory,
-                                CampDate $campDate)
+                                CampDate $campDate,
+                                ?string  $campDateDescription = null)
     {
         $this->id = Uuid::v4();
         $this->simpleId = $simpleId;
@@ -195,6 +199,7 @@ class Application
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
         $this->isEmailMandatory = $isEmailMandatory;
         $this->isPhoneNumberMandatory = $isPhoneNumberMandatory;
+        $this->campDateDescription = $campDateDescription;
         $this->applicationContacts = new ArrayCollection();
         $this->applicationCampers = new ArrayCollection();
         $this->applicationFormFieldValues = new ArrayCollection();
@@ -237,6 +242,11 @@ class Application
         $this->email = $email;
 
         return $this;
+    }
+
+    public function getNameFull(): string
+    {
+        return $this->nameFirst . ' ' . $this->nameLast;
     }
 
     public function getNameFirst(): string
@@ -408,6 +418,11 @@ class Application
     public function getCampName(): string
     {
         return $this->campName;
+    }
+
+    public function getCampDateDescription(): ?string
+    {
+        return $this->campDateDescription;
     }
 
     public function getCurrency(): string

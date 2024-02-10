@@ -35,6 +35,13 @@ interface ApplicationRepositoryInterface
     public function findOneById(UuidV4 $id): ?Application;
 
     /**
+     * Returns the last completed application from session.
+     *
+     * @return Application|null
+     */
+    public function findLastCompletedFromSession(): ?Application;
+
+    /**
      * Finds one application by simple id.
      *
      * @param string $simpleId

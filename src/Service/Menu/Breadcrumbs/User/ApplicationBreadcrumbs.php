@@ -18,14 +18,14 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
      */
     public function buildForStepOneCreate(CampDate $campDate): MenuType
     {
-        $root = $this->createRoot();
+        $root = $this->createBreadcrumbs();
         $camp = $campDate->getCamp();
 
         $this->addCommonLinks($root, $camp);
 
         $campDateIdString = $campDate->getId()->toRfc4122();
         $text = $this->translator->trans('entity.application.singular');
-        $this->addChildRoute($root, 'user_application_step_one_create', ['campDateId' => $campDateIdString])
+        $this->addRoute($root, 'user_application_step_one_create', ['campDateId' => $campDateIdString])
             ->setText($text)
             ->setActive()
         ;
@@ -38,7 +38,7 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
      */
     public function buildForStepOneUpdate(Application $application): MenuType
     {
-        $root = $this->createRoot();
+        $root = $this->createBreadcrumbs();
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
 
@@ -46,7 +46,7 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
 
         $applicationIdString = $application->getId()->toRfc4122();
         $text = $this->translator->trans('entity.application.singular');
-        $this->addChildRoute($root, 'user_application_step_one_update', ['applicationId' => $applicationIdString])
+        $this->addRoute($root, 'user_application_step_one_update', ['applicationId' => $applicationIdString])
             ->setText($text)
             ->setActive()
         ;
@@ -59,7 +59,7 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
      */
     public function buildForStepTwo(Application $application): MenuType
     {
-        $root = $this->createRoot();
+        $root = $this->createBreadcrumbs();
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
 
@@ -67,7 +67,7 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
 
         $applicationIdString = $application->getId()->toRfc4122();
         $text = $this->translator->trans('entity.application.singular');
-        $this->addChildRoute($root, 'user_application_step_two', ['applicationId' => $applicationIdString])
+        $this->addRoute($root, 'user_application_step_two', ['applicationId' => $applicationIdString])
             ->setText($text)
             ->setActive()
         ;
@@ -80,7 +80,7 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
      */
     public function buildForStepThree(Application $application): MenuType
     {
-        $root = $this->createRoot();
+        $root = $this->createBreadcrumbs();
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
 
@@ -88,7 +88,7 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
 
         $applicationIdString = $application->getId()->toRfc4122();
         $text = $this->translator->trans('entity.application.singular');
-        $this->addChildRoute($root, 'user_application_step_three', ['applicationId' => $applicationIdString])
+        $this->addRoute($root, 'user_application_step_three', ['applicationId' => $applicationIdString])
             ->setText($text)
             ->setActive()
         ;
@@ -98,8 +98,8 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
 
     private function addCommonLinks(MenuType $root, ?Camp $camp): void
     {
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_camp_catalog');
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_camp_catalog');
 
         if ($camp === null)
         {
@@ -120,13 +120,13 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
             $path = $campCategory->getPath();
             $text = $campCategory->getName();
 
-            $this->addChildRoute($root, 'user_camp_catalog', ['path' => $path], 'user_camp_catalog_' . $key)
+            $this->addRoute($root, 'user_camp_catalog', ['path' => $path], 'user_camp_catalog_' . $key)
                 ->setText($text)
             ;
         }
 
         $text = $camp->getName();
-        $this->addChildRoute($root, 'user_camp_detail', ['urlName' => $camp->getUrlName()])
+        $this->addRoute($root, 'user_camp_detail', ['urlName' => $camp->getUrlName()])
             ->setText($text)
         ;
     }

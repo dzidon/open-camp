@@ -19,11 +19,11 @@ class TripLocationBreadcrumbs extends AbstractBreadcrumbs implements TripLocatio
     {
         $tripLocationPathId = $tripLocationPath->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_trip_location_path_list');
-        $this->addChildRoute($root, 'admin_trip_location_path_update', ['id' => $tripLocationPathId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_trip_location_create', ['id' => $tripLocationPathId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_trip_location_path_list');
+        $this->addRoute($root, 'admin_trip_location_path_update', ['id' => $tripLocationPathId->toRfc4122()]);
+        $this->addRoute($root, 'admin_trip_location_create', ['id' => $tripLocationPathId->toRfc4122()])
             ->setActive()
         ;
 
@@ -39,11 +39,11 @@ class TripLocationBreadcrumbs extends AbstractBreadcrumbs implements TripLocatio
         $tripLocationPathId = $tripLocationPath->getId();
         $tripLocationId = $tripLocation->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_trip_location_path_list');
-        $this->addChildRoute($root, 'admin_trip_location_path_update', ['id' => $tripLocationPathId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_trip_location_read', ['id' => $tripLocationId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_trip_location_path_list');
+        $this->addRoute($root, 'admin_trip_location_path_update', ['id' => $tripLocationPathId->toRfc4122()]);
+        $this->addRoute($root, 'admin_trip_location_read', ['id' => $tripLocationId->toRfc4122()])
             ->setActive()
         ;
 
@@ -59,11 +59,11 @@ class TripLocationBreadcrumbs extends AbstractBreadcrumbs implements TripLocatio
         $tripLocationPathId = $tripLocationPath->getId();
         $tripLocationId = $tripLocation->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_trip_location_path_list');
-        $this->addChildRoute($root, 'admin_trip_location_path_update', ['id' => $tripLocationPathId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_trip_location_update', ['id' => $tripLocationId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_trip_location_path_list');
+        $this->addRoute($root, 'admin_trip_location_path_update', ['id' => $tripLocationPathId->toRfc4122()]);
+        $this->addRoute($root, 'admin_trip_location_update', ['id' => $tripLocationId->toRfc4122()])
             ->setActive()
         ;
 
@@ -79,11 +79,11 @@ class TripLocationBreadcrumbs extends AbstractBreadcrumbs implements TripLocatio
         $tripLocationPathId = $tripLocationPath->getId();
         $tripLocationId = $tripLocation->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_trip_location_path_list');
-        $this->addChildRoute($root, 'admin_trip_location_path_update', ['id' => $tripLocationPathId->toRfc4122()]);
-        $this->addChildRoute($root, 'admin_trip_location_delete', ['id' => $tripLocationId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_trip_location_path_list');
+        $this->addRoute($root, 'admin_trip_location_path_update', ['id' => $tripLocationPathId->toRfc4122()]);
+        $this->addRoute($root, 'admin_trip_location_delete', ['id' => $tripLocationId->toRfc4122()])
             ->setActive()
         ;
 

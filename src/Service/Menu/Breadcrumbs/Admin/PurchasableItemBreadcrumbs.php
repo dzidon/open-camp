@@ -16,9 +16,9 @@ class PurchasableItemBreadcrumbs extends AbstractBreadcrumbs implements Purchasa
      */
     public function buildList(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_purchasable_item_list')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_purchasable_item_list')
             ->setActive()
         ;
 
@@ -30,10 +30,10 @@ class PurchasableItemBreadcrumbs extends AbstractBreadcrumbs implements Purchasa
      */
     public function buildCreate(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_purchasable_item_list');
-        $this->addChildRoute($root, 'admin_purchasable_item_create')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_purchasable_item_list');
+        $this->addRoute($root, 'admin_purchasable_item_create')
             ->setActive()
         ;
 
@@ -47,10 +47,10 @@ class PurchasableItemBreadcrumbs extends AbstractBreadcrumbs implements Purchasa
     {
         $purchasableItemId = $purchasableItem->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_purchasable_item_list');
-        $this->addChildRoute($root, 'admin_purchasable_item_read', ['id' => $purchasableItemId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_purchasable_item_list');
+        $this->addRoute($root, 'admin_purchasable_item_read', ['id' => $purchasableItemId->toRfc4122()])
             ->setActive()
         ;
 
@@ -64,10 +64,10 @@ class PurchasableItemBreadcrumbs extends AbstractBreadcrumbs implements Purchasa
     {
         $purchasableItemId = $purchasableItem->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_purchasable_item_list');
-        $this->addChildRoute($root, 'admin_purchasable_item_update', ['id' => $purchasableItemId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_purchasable_item_list');
+        $this->addRoute($root, 'admin_purchasable_item_update', ['id' => $purchasableItemId->toRfc4122()])
             ->setActive()
         ;
 
@@ -81,10 +81,10 @@ class PurchasableItemBreadcrumbs extends AbstractBreadcrumbs implements Purchasa
     {
         $purchasableItemId = $purchasableItem->getId();
 
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'admin_home');
-        $this->addChildRoute($root, 'admin_purchasable_item_list');
-        $this->addChildRoute($root, 'admin_purchasable_item_delete', ['id' => $purchasableItemId->toRfc4122()])
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'admin_home');
+        $this->addRoute($root, 'admin_purchasable_item_list');
+        $this->addRoute($root, 'admin_purchasable_item_delete', ['id' => $purchasableItemId->toRfc4122()])
             ->setActive()
         ;
 

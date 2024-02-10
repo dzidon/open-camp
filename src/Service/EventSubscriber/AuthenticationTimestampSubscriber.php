@@ -20,7 +20,7 @@ class AuthenticationTimestampSubscriber
         $this->userRepository = $userRepository;
     }
 
-    #[AsEventListener(event: LoginSuccessEvent::class)]
+    #[AsEventListener(event: LoginSuccessEvent::class, priority: 200)]
     public function onLogin(LoginSuccessEvent $event): void
     {
         $token = $event->getAuthenticatedToken();

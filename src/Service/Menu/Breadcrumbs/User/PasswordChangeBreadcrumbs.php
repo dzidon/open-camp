@@ -15,10 +15,10 @@ class PasswordChangeBreadcrumbs extends AbstractBreadcrumbs implements PasswordC
      */
     public function buildPasswordChange(): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
-        $this->addChildRoute($root, 'user_login');
-        $this->addChildRoute($root, 'user_password_change')
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_login');
+        $this->addRoute($root, 'user_password_change')
             ->setActive()
         ;
 
@@ -30,20 +30,20 @@ class PasswordChangeBreadcrumbs extends AbstractBreadcrumbs implements PasswordC
      */
     public function buildPasswordChangeComplete(string $token, bool $isAuthenticated): MenuType
     {
-        $root = $this->createRoot();
-        $this->addChildRoute($root, 'user_home');
+        $root = $this->createBreadcrumbs();
+        $this->addRoute($root, 'user_home');
 
         if ($isAuthenticated)
         {
-            $this->addChildRoute($root, 'user_profile_password_change_create');
+            $this->addRoute($root, 'user_profile_password_change_create');
         }
         else
         {
-            $this->addChildRoute($root, 'user_login');
-            $this->addChildRoute($root, 'user_password_change');
+            $this->addRoute($root, 'user_login');
+            $this->addRoute($root, 'user_password_change');
         }
 
-        $this->addChildRoute($root, 'user_password_change_complete', ['token' => $token])
+        $this->addRoute($root, 'user_password_change_complete', ['token' => $token])
             ->setActive()
         ;
 

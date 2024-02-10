@@ -20,7 +20,7 @@ class AuthenticationMessageSubscriber
         $this->translator = $translator;
     }
 
-    #[AsEventListener(event: LoginSuccessEvent::class)]
+    #[AsEventListener(event: LoginSuccessEvent::class, priority: 300)]
     public function onLogin(LoginSuccessEvent $event): void
     {
         $token = $event->getAuthenticatedToken();
