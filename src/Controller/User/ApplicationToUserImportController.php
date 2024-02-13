@@ -65,7 +65,7 @@ class ApplicationToUserImportController extends AbstractController
             $this->eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.user.import_application');
 
-            return $this->redirectToRoute('user_application_view_completed', [
+            return $this->redirectToRoute('user_application_completed', [
                 'applicationId' => $application->getId(),
             ]);
         }
@@ -92,7 +92,7 @@ class ApplicationToUserImportController extends AbstractController
         $this->eventDispatcher->dispatch($event, $event::NAME);
         $this->addTransFlash('success', 'crud.action_performed.user.import_application_skip');
 
-        return $this->redirectToRoute('user_application_view_completed', [
+        return $this->redirectToRoute('user_application_completed', [
             'applicationId' => $application->getId(),
         ]);
     }

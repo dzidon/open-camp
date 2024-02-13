@@ -101,22 +101,6 @@
                 </div>
             </div>
 
-            {% if not camp_date_guide_names is empty %}
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <strong>{{ 'entity_attribute.camp_date.users'|trans }}:</strong>
-                    </div>
-
-                    <div class="col-12">
-                        {% for guide_name in camp_date_guide_names %}
-                            <div>
-                                <span>{{ guide_name }}</span>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endif %}
-
             {% if not camp_date_description is null %}
                 <div class="row mb-3">
                     <div class="col-12">

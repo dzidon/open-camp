@@ -155,19 +155,27 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function findByCampDates(array $campDates): array
+    public function findByCampDates(array $campDates, bool $withUrlNameOnly = false): array
     {
         $campDateIds = array_map(function (CampDate $campDate) {
             return $campDate->getId()->toBinary();
         }, $campDates);
 
-        return $this->_em->createQueryBuilder()
+        $queryBuilder = $this->_em->createQueryBuilder()
             ->select('DISTINCT user')
             ->from(User::class, 'user')
             ->leftJoin(CampDateUser::class, 'campDateUser', 'WITH', 'campDateUser.user = user.id')
             ->andWhere('campDateUser.campDate IN (:campDateIds)')
             ->setParameter('campDateIds', $campDateIds)
             ->addOrderBy('user.guidePriority', 'DESC')
+        ;
+
+        if ($withUrlNameOnly)
+        {
+            $queryBuilder->andWhere('user.urlName IS NOT NULL');
+        }
+
+        return $queryBuilder
             ->getQuery()
             ->getResult()
         ;

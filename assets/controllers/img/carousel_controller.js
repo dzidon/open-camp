@@ -10,30 +10,14 @@ export default class CarouselController extends Controller
     connect()
     {
         this.carousel = $(this.carouselTarget).carousel();
-        this.carousel.on('slid.bs.carousel', (event) => {
-            this.updateActiveIndicator(event.to);
-        });
-
-        this.initializeIndicators();
-    }
-
-    initializeIndicators()
-    {
-        let first = true;
-
-        this.indicatorTargets.forEach((element) =>
+        this.carousel.on('slid.bs.carousel', (event) =>
         {
-            if (first)
-            {
-                first = false;
-
-                $(element).removeClass('image-black-and-white');
-            }
-            else
-            {
-                $(element).addClass('image-black-and-white');
-            }
+            const activeImageIndex = event.to;
+            this.updateActiveIndicator(activeImageIndex);
         });
+
+        const activeImageIndex = $('.carousel-item.active').index();
+        this.updateActiveIndicator(activeImageIndex);
     }
 
     updateActiveIndicator(indicatorNumber)

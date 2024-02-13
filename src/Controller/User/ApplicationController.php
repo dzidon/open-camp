@@ -123,7 +123,6 @@ class ApplicationController extends AbstractController
             'camp_date_deposit_until'         => $campDate->getDepositUntil(),
             'camp_date_price_without_deposit' => $campDate->getPriceWithoutDeposit(),
             'camp_date_full_price'            => $campDate->getFullPrice(),
-            'camp_date_guide_names'           => $campDate->getUserNames(),
             'camp_date_description'           => $campDate->getDescription(),
             'tax'                             => $this->getParameter('app.tax'),
             'form_application_step_one'       => $form->createView(),
@@ -195,7 +194,6 @@ class ApplicationController extends AbstractController
             'camp_date_deposit_until'         => $application->getDepositUntil(),
             'camp_date_price_without_deposit' => $application->getPriceWithoutDeposit(),
             'camp_date_full_price'            => $application->getPricePerCamper(),
-            'camp_date_guide_names'           => $campDate?->getUserNames(),
             'camp_date_description'           => $campDate?->getDescription(),
             'tax'                             => $application->getTax(),
             'currency'                        => $application->getCurrency(),
@@ -271,7 +269,7 @@ class ApplicationController extends AbstractController
         {
             if ($application->canBeCompleted())
             {
-                $response = $this->redirectToRoute('user_application_view_completed', [
+                $response = $this->redirectToRoute('user_application_completed', [
                     'applicationId' => $applicationId,
                 ]);
 
@@ -307,13 +305,16 @@ class ApplicationController extends AbstractController
         ]);
     }
 
-    #[Route('/application/{applicationId}/view-completed', name: 'user_application_view_completed')]
+    #[Route('/application/{applicationId}/completed', name: 'user_application_completed')]
     public function viewCompleted(UuidV4 $applicationId): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
         $this->assertApplicationCompletedAvailability($application);
 
-        return new Response("aaa");
+        return $this->render('user/application/completed.html.twig', [
+            'application' => $application,
+            'breadcrumbs' => $this->breadcrumbs->buildForCompleted($application),
+        ]);
     }
 
     private function assertCampDateAvailability(CampDate $campDate): void
@@ -328,7 +329,7 @@ class ApplicationController extends AbstractController
             throw $redirectException;
         }
 
-        if ($campDate->isHidden())
+        if ($camp->isHidden() || $campDate->isHidden())
         {
             if ($this->isGranted('camp_create') || $this->isGranted('camp_update'))
             {
@@ -363,7 +364,7 @@ class ApplicationController extends AbstractController
             throw $redirectException;
         }
 
-        if ($campDate->isHidden())
+        if ($camp->isHidden() || $campDate->isHidden())
         {
             if ($this->isGranted('camp_create') || $this->isGranted('camp_update'))
             {

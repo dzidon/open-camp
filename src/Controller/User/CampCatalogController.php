@@ -120,7 +120,7 @@ class CampCatalogController extends AbstractController
 
         $campDatesResult = $campDateRepository->findUpcomingByCamp($camp, $showHiddenCamps);
         $campDates = $campDatesResult->getCampDates();
-        $guides = $userRepository->findByCampDates($campDates);
+        $guides = $userRepository->findByCampDates($campDates, true);
         $campImages = $campImageRepository->findByCamp($camp);
         $storedApplicationDraftIds = $applicationDraftHttpStorage->getApplicationDraftIds();
         $applicationsEditableDraftsResult = $applicationRepository->getApplicationsEditableDraftsResult($storedApplicationDraftIds);

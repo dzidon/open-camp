@@ -282,7 +282,9 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
                     application.isDraft = FALSE AND
                     (application.isAccepted IS NULL OR application.isAccepted = TRUE)
                 ')
-                ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', 'application.id = applicationCamper.application')
+                ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', '
+                    application.id = applicationCamper.application
+                ')
                 ->andWhere('campDate.isClosed = FALSE')
                 ->andWhere('campDate.startAt > :now')
                 ->setParameter('now', new DateTimeImmutable('now'))
@@ -292,21 +294,33 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
         }
         else if ($isOpenOnly === false)
         {
+            $openCampDateIdsResult = $this->createQueryBuilder('openCampDate')
+                ->select('DISTINCT openCampDate.id')
+                ->leftJoin(Application::class, 'otherApplication', 'WITH', '
+                    openCampDate.id = otherApplication.campDate AND 
+                    otherApplication.isDraft = FALSE AND
+                    (otherApplication.isAccepted IS NULL OR otherApplication.isAccepted = TRUE)
+                ')
+                ->leftJoin(ApplicationCamper::class, 'otherApplicationCamper', 'WITH', '
+                    otherApplication.id = otherApplicationCamper.application
+                ')
+                ->andWhere('openCampDate.isClosed = FALSE')
+                ->andWhere('openCampDate.startAt > :nowInSubQuery')
+                ->setParameter('nowInSubQuery', new DateTimeImmutable('now'))
+                ->andHaving('(openCampDate.isOpenAboveCapacity = TRUE OR COUNT(otherApplicationCamper.id) < openCampDate.capacity)')
+                ->addGroupBy('openCampDate.id, openCampDate.isOpenAboveCapacity, openCampDate.capacity')
+                ->getQuery()
+                ->getArrayResult()
+            ;
+
+            $openCampDateIds = array_column($openCampDateIdsResult, 'id');
+            $openCampDateIdsBinary = array_map(function (UuidV4 $id) {
+                return $id->toBinary();
+            }, $openCampDateIds);
+
             $queryBuilder
-                ->leftJoin(Application::class, 'application', 'WITH', '
-                    campDate.id = application.campDate AND 
-                    application.isDraft = FALSE AND
-                    (application.isAccepted IS NULL OR application.isAccepted = TRUE)
-                ')
-                ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', 'application.id = applicationCamper.application')
-                ->orHaving('
-                    campDate.isClosed = TRUE OR 
-                    campDate.startAt <= :now OR
-                    COUNT(campDate.id) = 0 OR
-                    (campDate.isOpenAboveCapacity = FALSE AND COUNT(applicationCamper.id) >= campDate.capacity)
-                ')
-                ->setParameter('now', new DateTimeImmutable('now'))
-                ->addGroupBy('campDate.id, campDate.isClosed, campDate.startAt, campDate.isOpenAboveCapacity, campDate.capacity')
+                ->andWhere('campDate.id NOT IN (:openCampDateIds)')
+                ->setParameter('openCampDateIds', $openCampDateIdsBinary)
             ;
         }
 

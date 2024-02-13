@@ -20,7 +20,7 @@ class ApplicationToUserImportBreadcrumbs extends AbstractBreadcrumbs implements 
         $applicationId = $application->getId();
 
         $this->addRoute($root, 'user_home');
-        $this->addRoute($root, 'user_application_view_completed', [
+        $this->addRoute($root, 'user_application_completed', [
             'applicationId' => $applicationId,
         ]);
 

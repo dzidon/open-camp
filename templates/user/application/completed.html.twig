@@ -1,0 +1,91 @@
+{% extends "user/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="mb-0">
+                                {% if application.isAccepted is same as(null) %}
+                                    <i class="fas fa-check-circle text-primary mr-2"></i>
+
+                                    {{ 'application.completed_screen.accepted.not_yet'|trans }}
+                                {% elseif application.isAccepted is same as(true) %}
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+
+                                    {{ 'application.completed_screen.accepted.yes'|trans }}
+                                {% else %}
+                                    <i class="fas fa-check-circle text-danger mr-2"></i>
+
+                                    {{ 'application.completed_screen.accepted.no'|trans }}
+                                {% endif %}
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>
+                        {{ 'entity_attribute.application.simple_id'|trans }}:
+                    </strong>
+                </div>
+
+                <div class="col-6">
+                    <span class="float-right">
+                        {{ application.simpleId }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>
+                        {{ 'entity_attribute.application.payment_method'|trans }}:
+                    </strong>
+                </div>
+
+                <div class="col-6">
+                    <span class="float-right">
+                        {{ application.paymentMethodLabel|trans }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>
+                        {{ 'application.summary.total_price_without_tax'|trans }}:
+                    </strong>
+                </div>
+
+                <div class="col-6">
+                    <span class="float-right">
+                        {{ application.fullPriceWithoutTax|format_currency(application.currency) }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <h3>
+                        <strong>
+                            {{ 'application.summary.total_price'|trans }}:
+                        </strong>
+                    </h3>
+                </div>
+
+                <div class="col-6">
+                    <h3>
+                        <strong class="float-right">
+                            {{ application.fullPrice|format_currency(application.currency) }}
+                        </strong>
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

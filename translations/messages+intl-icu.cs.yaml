@@ -120,6 +120,12 @@ application:
         total_price: 'Celkem'
         total_price_without_tax: 'Celkem bez DPH'
 
+    completed_screen:
+        accepted:
+            not_yet: 'Pracujeme na schválení přihlášky'
+            yes: 'Přihláška schválena'
+            no: 'Přihláška zamítnuta'
+
     to_user_import:
         billing_data: 'Fakturační údaje'
         skip: 'Tuto přihlášku si nechci uložit na svůj profil'
@@ -575,6 +581,7 @@ entity_attribute:
         camp_date_end_at: 'Konec termínu'
         campDate: 'Termín'
         user: 'Uživatel'
+        payment_method: 'Platení metoda'
         application_contacts: 'Kontakty'
         application_campers: 'Táborníci'
         application_form_field_values: 'Formulářová pole'
@@ -1124,7 +1131,7 @@ form:
             from: 'Odjezd od'
             to: 'Návrat do'
             camp_category: 'Kategorie tábora'
-            is_open_only: 'Přijímá přihlášky'
+            is_open_only: 'Pouze otevřené'
             is_featured: 'Doporučený'
             is_hidden: 'Skrytý'
             button: 'Hledat'
@@ -1183,7 +1190,7 @@ form:
                     capacity_asc: 'Kapacita (od nejmenší)'
                     capacity_desc: 'Kapacita (od největší)'
 
-            is_open_only: 'Přijímá přihlášky'
+            is_open_only: 'Pouze otevřené'
             is_hidden: 'Skrytý'
             is_historical:
                 label: 'Typ termínu'
@@ -1738,4 +1745,4 @@ route:
     user_application_step_one_update: 'Údaje'
     user_application_step_two: 'Finance'
     user_application_step_three: 'Souhrn'
-    user_application_view_completed: 'Přihláška'
+    user_application_completed: 'Přihláška vytvořena'

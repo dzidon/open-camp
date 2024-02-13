@@ -23,9 +23,9 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
 
         $this->addCommonLinks($root, $camp);
 
-        $campDateIdString = $campDate->getId()->toRfc4122();
+        $campDateId = $campDate->getId();
         $text = $this->translator->trans('entity.application.singular');
-        $this->addRoute($root, 'user_application_step_one_create', ['campDateId' => $campDateIdString])
+        $this->addRoute($root, 'user_application_step_one_create', ['campDateId' => $campDateId])
             ->setText($text)
             ->setActive()
         ;
@@ -44,9 +44,9 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
 
         $this->addCommonLinks($root, $camp);
 
-        $applicationIdString = $application->getId()->toRfc4122();
+        $applicationId = $application->getId();
         $text = $this->translator->trans('entity.application.singular');
-        $this->addRoute($root, 'user_application_step_one_update', ['applicationId' => $applicationIdString])
+        $this->addRoute($root, 'user_application_step_one_update', ['applicationId' => $applicationId])
             ->setText($text)
             ->setActive()
         ;
@@ -65,9 +65,9 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
 
         $this->addCommonLinks($root, $camp);
 
-        $applicationIdString = $application->getId()->toRfc4122();
+        $applicationId = $application->getId();
         $text = $this->translator->trans('entity.application.singular');
-        $this->addRoute($root, 'user_application_step_two', ['applicationId' => $applicationIdString])
+        $this->addRoute($root, 'user_application_step_two', ['applicationId' => $applicationId])
             ->setText($text)
             ->setActive()
         ;
@@ -86,10 +86,26 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
 
         $this->addCommonLinks($root, $camp);
 
-        $applicationIdString = $application->getId()->toRfc4122();
+        $applicationId = $application->getId();
         $text = $this->translator->trans('entity.application.singular');
-        $this->addRoute($root, 'user_application_step_three', ['applicationId' => $applicationIdString])
+        $this->addRoute($root, 'user_application_step_three', ['applicationId' => $applicationId])
             ->setText($text)
+            ->setActive()
+        ;
+
+        return $root;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function buildForCompleted(Application $application): MenuType
+    {
+        $applicationId = $application->getId();
+        $root = $this->createBreadcrumbs();
+
+        $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_application_completed', ['applicationId' => $applicationId])
             ->setActive()
         ;
 

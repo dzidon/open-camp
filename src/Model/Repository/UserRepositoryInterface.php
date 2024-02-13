@@ -79,10 +79,11 @@ interface UserRepositoryInterface
     /**
      * Finds all users that are assigned as guides to the given camp dates.
      *
-     * @param CampDate[] $campDates
-     * @return User[]
+     * @param array $campDates
+     * @param bool $withUrlNameOnly
+     * @return array
      */
-    public function findByCampDates(array $campDates): array;
+    public function findByCampDates(array $campDates, bool $withUrlNameOnly = false): array;
 
     /**
      * Returns admin user search paginator.
