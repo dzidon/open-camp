@@ -29,7 +29,8 @@ class PurchasableItemSearchType extends AbstractType
             ->add('sortBy', EnumType::class, [
                 'class'        => PurchasableItemSortEnum::class,
                 'label'        => 'form.admin.purchasable_item_search.sort_by.label',
-                'choice_label' => fn ($choice) => match ($choice) {
+                'choice_label' => fn ($choice) => match ($choice)
+                {
                     PurchasableItemSortEnum::CREATED_AT_DESC => 'form.admin.purchasable_item_search.sort_by.options.created_at_desc',
                     PurchasableItemSortEnum::CREATED_AT_ASC  => 'form.admin.purchasable_item_search.sort_by.options.created_at_asc',
                     PurchasableItemSortEnum::NAME_ASC        => 'form.admin.purchasable_item_search.sort_by.options.name_asc',

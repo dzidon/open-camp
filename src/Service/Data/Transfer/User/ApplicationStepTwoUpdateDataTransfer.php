@@ -46,6 +46,7 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
         $applicationStepTwoUpdateData->setPaymentMethod($application->getPaymentMethod());
         $applicationStepTwoUpdateData->setNote($application->getNote());
         $applicationStepTwoUpdateData->setCustomerChannel($application->getCustomerChannel());
+        $applicationStepTwoUpdateData->setCustomerChannelOther($application->getCustomerChannelOther());
 
         $discountSiblingsIntervalFrom = $application->getDiscountSiblingsIntervalFrom();
         $discountSiblingsIntervalTo = $application->getDiscountSiblingsIntervalTo();
@@ -82,7 +83,10 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
 
         $application->setPaymentMethod($applicationStepTwoUpdateData->getPaymentMethod());
         $application->setNote($applicationStepTwoUpdateData->getNote());
-        $application->setCustomerChannel($applicationStepTwoUpdateData->getCustomerChannel());
+        $application->setCustomerChannel(
+            $applicationStepTwoUpdateData->getCustomerChannel(),
+            $applicationStepTwoUpdateData->getCustomerChannelOther()
+        );
 
         $discountSiblingsInterval = $applicationStepTwoUpdateData->getDiscountSiblingsInterval();
 

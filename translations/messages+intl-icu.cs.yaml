@@ -59,6 +59,15 @@ contact_role:
     tutor: 'Vychovatel'
     other: 'Jiná'
 
+application_customer_channel:
+    none: 'Nechci uvádět'
+    facebook: 'Přes Facebook'
+    instagram: 'Přes Instagram'
+    tiktok: 'Přes TikTok'
+    internet_ad: 'Viděl/a jsem reklamu na internetu'
+    word_of_mouth: 'Někdo mi o vás řekl'
+    other: 'Jinak'
+
 attachment_config_required_type:
     optional: 'Volitelný'
     required: 'Povinný'
@@ -579,7 +588,8 @@ entity_attribute:
         is_phone_number_mandatory: 'Povinné telefonní číslo'
         camp_date_start_at: 'Začátek termínu'
         camp_date_end_at: 'Konec termínu'
-        campDate: 'Termín'
+        camp_date_description: 'Instrukce k termínu'
+        camp_date: 'Termín'
         user: 'Uživatel'
         payment_method: 'Platení metoda'
         application_contacts: 'Kontakty'
@@ -951,6 +961,7 @@ form:
         choice:
             choose: '-- vyberte --'
             irrelevant: 'Nezáleží'
+            not_chosen: 'Neuvedeno'
             none:
                 male: 'Žádný'
                 female: 'Žádná'
@@ -1452,7 +1463,8 @@ form:
             payment_method: 'Platební metoda'
             purchasable_items: 'Volitelné položky'
             note: 'Poznámka'
-            customer_channel: 'Kde jste se o nás dozvěděli?'
+            customer_channel: 'Jak jste se o nás dozvěděli?'
+            customer_channel_other: 'Upřesnění'
             discount_siblings:
                 label: 'Sleva pro sourozence'
                 null_option: 'Neuplatňuji slevu pro sourozence'

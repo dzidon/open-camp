@@ -44,6 +44,71 @@
             <div class="row mb-3">
                 <div class="col-6">
                     <strong>
+                        {{ 'entity_attribute.application.camp_name'|trans }}:
+                    </strong>
+                </div>
+
+                <div class="col-6">
+                    <span class="float-right">
+                        {{ application.campName }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>
+                        {{ 'entity_attribute.application.camp_date_start_at'|trans }}:
+                    </strong>
+                </div>
+
+                <div class="col-6">
+                    <span class="float-right">
+                        {{ application.campDateStartAt|date(date_time_format) }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>
+                        {{ 'entity_attribute.application.camp_date_end_at'|trans }}:
+                    </strong>
+                </div>
+
+                <div class="col-6">
+                    <span class="float-right">
+                        {{ application.campDateEndAt|date(date_time_format) }}
+                    </span>
+                </div>
+            </div>
+
+            {% if application.campDateDescription is not null %}
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <strong>
+                            {{ 'entity_attribute.application.camp_date_description'|trans }}:
+                        </strong>
+                    </div>
+
+                    <div class="col-12">
+                        <span>
+                            {{ application.campDateDescription|nl2br }}
+                        </span>
+                    </div>
+                </div>
+            {% endif %}
+
+
+            <div class="row mb-3">
+                <div class="col-12">
+                    <hr>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>
                         {{ 'entity_attribute.application.payment_method'|trans }}:
                     </strong>
                 </div>
@@ -69,7 +134,7 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
+            <div class="row">
                 <div class="col-6">
                     <h3>
                         <strong>

@@ -89,9 +89,9 @@ class CampType extends AbstractType
                     'class' => 'required'
                 ],
                 'row_attr' => [
-                    'class'                                    => 'address-field-visibility',
-                    'data-controller'                          => 'cv--content',
-                    'data-cv--content-show-when-checked-value' => '1',
+                    'class'                                   => 'address-field-visibility',
+                    'data-controller'                         => 'cv--content',
+                    'data-cv--content-show-when-chosen-value' => '1',
                 ],
             ])
             ->add('town', TextType::class, [
@@ -101,9 +101,9 @@ class CampType extends AbstractType
                     'class' => 'required'
                 ],
                 'row_attr' => [
-                    'class'                                    => 'address-field-visibility',
-                    'data-controller'                          => 'cv--content',
-                    'data-cv--content-show-when-checked-value' => '1',
+                    'class'                                   => 'address-field-visibility',
+                    'data-controller'                         => 'cv--content',
+                    'data-cv--content-show-when-chosen-value' => '1',
                 ],
             ])
             ->add('zip', TextType::class, [
@@ -113,9 +113,9 @@ class CampType extends AbstractType
                     'class' => 'required'
                 ],
                 'row_attr' => [
-                    'class'                                    => 'address-field-visibility',
-                    'data-controller'                          => 'cv--content',
-                    'data-cv--content-show-when-checked-value' => '1',
+                    'class'                                   => 'address-field-visibility',
+                    'data-controller'                         => 'cv--content',
+                    'data-cv--content-show-when-chosen-value' => '1',
                 ],
             ])
             ->add('country', CountryType::class, [
@@ -125,9 +125,9 @@ class CampType extends AbstractType
                     'class' => 'required'
                 ],
                 'row_attr' => [
-                    'class'                                    => 'address-field-visibility',
-                    'data-controller'                          => 'cv--content',
-                    'data-cv--content-show-when-checked-value' => '1',
+                    'class'                                   => 'address-field-visibility',
+                    'data-controller'                         => 'cv--content',
+                    'data-cv--content-show-when-chosen-value' => '1',
                 ],
                 'placeholder_attr' => [
                     'disabled' => 'disabled'

@@ -28,7 +28,8 @@ class PurchasableItemVariantValueSearchType extends AbstractType
             ->add('sortBy', EnumType::class, [
                 'class'        => PurchasableItemVariantValueSortEnum::class,
                 'label'        => 'form.admin.purchasable_item_variant_value_search.sort_by.label',
-                'choice_label' => fn ($choice) => match ($choice) {
+                'choice_label' => fn ($choice) => match ($choice)
+                {
                     PurchasableItemVariantValueSortEnum::CREATED_AT_DESC => 'form.admin.purchasable_item_variant_value_search.sort_by.options.created_at_desc',
                     PurchasableItemVariantValueSortEnum::CREATED_AT_ASC  => 'form.admin.purchasable_item_variant_value_search.sort_by.options.created_at_asc',
                     PurchasableItemVariantValueSortEnum::NAME_ASC        => 'form.admin.purchasable_item_variant_value_search.sort_by.options.name_asc',

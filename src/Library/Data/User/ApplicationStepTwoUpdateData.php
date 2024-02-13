@@ -4,6 +4,7 @@ namespace App\Library\Data\User;
 
 use App\Library\Constraint\DiscountSiblingIntervalInConfig;
 use App\Model\Entity\PaymentMethod;
+use App\Model\Enum\Entity\ApplicationCustomerChannelEnum;
 use App\Model\Library\DiscountConfig\DiscountConfigArrayShape;
 use App\Model\Library\DiscountConfig\DiscountSiblingsIntervalShape;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -27,8 +28,16 @@ class ApplicationStepTwoUpdateData
     #[Assert\Length(max: 1000)]
     private ?string $note;
 
-    #[Assert\Length(max: 1000)]
-    private ?string $customerChannel;
+    private ?ApplicationCustomerChannelEnum $customerChannel = null;
+
+    #[Assert\When(
+        expression: 'this.getCustomerChannelOther() === enum("App\\\Model\\\Enum\\\Entity\\\ApplicationCustomerChannelEnum::OTHER")',
+        constraints: [
+            new Assert\Length(max: 255),
+            new Assert\NotBlank(),
+        ],
+    )]
+    private ?string $customerChannelOther = null;
 
     private false|array $discountSiblingsInterval = false;
 
@@ -112,14 +121,26 @@ class ApplicationStepTwoUpdateData
         return $this;
     }
 
-    public function getCustomerChannel(): ?string
+    public function getCustomerChannel(): ?ApplicationCustomerChannelEnum
     {
         return $this->customerChannel;
     }
 
-    public function setCustomerChannel(?string $customerChannel): self
+    public function setCustomerChannel(?ApplicationCustomerChannelEnum $customerChannel): self
     {
         $this->customerChannel = $customerChannel;
+
+        return $this;
+    }
+
+    public function getCustomerChannelOther(): ?string
+    {
+        return $this->customerChannelOther;
+    }
+
+    public function setCustomerChannelOther(?string $customerChannelOther): self
+    {
+        $this->customerChannelOther = $customerChannelOther;
 
         return $this;
     }

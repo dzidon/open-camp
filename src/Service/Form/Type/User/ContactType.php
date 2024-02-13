@@ -57,6 +57,36 @@ class ContactType extends AbstractType
         }
     }
 
+    public function finishView(FormView $view, FormInterface $form, array $options): void
+    {
+        $children = $view->children;
+
+        if (!array_key_exists('role', $children) ||
+            !array_key_exists('roleOther', $children))
+        {
+            return;
+        }
+
+        $role = $children['role'];
+        $roleOther = $children['roleOther'];
+
+        $name = $view->vars['name'];
+        $searchedClassName = 'role-other-field-visibility';
+        $newClassName = $searchedClassName . '-' . $name;
+
+        $role->vars['attr']['data-cv--other-input-cv--content-outlet'] = str_replace(
+            $searchedClassName,
+            $newClassName,
+            $role->vars['attr']['data-cv--other-input-cv--content-outlet']
+        );
+
+        $roleOther->vars['row_attr']['class'] = str_replace(
+            $searchedClassName,
+            $newClassName,
+            $roleOther->vars['row_attr']['class']
+        );
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var ContactData $defaultData */
@@ -116,8 +146,9 @@ class ContactType extends AbstractType
                     'disabled' => 'disabled'
                 ],
                 'attr' => [
-                    'data-fd--contact-target' => 'roleInput',
-                    'data-action'             => 'fd--contact#onRoleInputChange',
+                    'data-controller'                         => 'cv--other-input',
+                    'data-action'                             => 'cv--other-input#updateVisibility',
+                    'data-cv--other-input-cv--content-outlet' => '.role-other-field-visibility',
                 ],
                 'label'    => 'form.user.contact.role',
                 'priority' => 200,
@@ -129,7 +160,9 @@ class ContactType extends AbstractType
                     'class' => 'required'
                 ],
                 'row_attr' => [
-                    'data-fd--contact-target' => 'roleOtherRow',
+                    'class'                                   => 'role-other-field-visibility',
+                    'data-controller'                         => 'cv--content',
+                    'data-cv--content-show-when-chosen-value' => '1',
                 ],
                 'priority' => 100,
             ])
@@ -148,9 +181,6 @@ class ContactType extends AbstractType
             'block_prefix'           => 'user_contact',
             'enable_contact_loading' => false,
             'loadable_contacts'      => [],
-            'attr'                   => [
-                'data-controller' => 'fd--contact',
-            ],
         ]);
 
         $resolver->setAllowedTypes('enable_contact_loading', 'bool');

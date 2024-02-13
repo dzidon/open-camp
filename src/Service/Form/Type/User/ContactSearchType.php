@@ -28,7 +28,8 @@ class ContactSearchType extends AbstractType
             ->add('sortBy', EnumType::class, [
                 'class'        => ContactSortEnum::class,
                 'label'        => 'form.user.contact_search.sort_by.label',
-                'choice_label' => fn ($choice) => match ($choice) {
+                'choice_label' => fn ($choice) => match ($choice)
+                {
                     ContactSortEnum::CREATED_AT_DESC => 'form.user.contact_search.sort_by.options.created_at_desc',
                     ContactSortEnum::CREATED_AT_ASC  => 'form.user.contact_search.sort_by.options.created_at_asc',
                     ContactSortEnum::NAME_LAST_ASC   => 'form.user.contact_search.sort_by.options.name_last_asc',

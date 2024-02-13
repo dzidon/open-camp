@@ -3,6 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Model\Attribute\UpdatedAtProperty;
+use App\Model\Enum\Entity\ApplicationCustomerChannelEnum;
 use App\Model\Library\DiscountConfig\DiscountConfigArrayShape;
 use App\Model\Repository\ApplicationRepository;
 use DateTimeImmutable;
@@ -61,8 +62,11 @@ class Application
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $note = null;
 
-    #[ORM\Column(length: 1000, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $customerChannel = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $customerChannelOther = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isDraft = true;
@@ -369,14 +373,33 @@ class Application
         return $this;
     }
 
-    public function getCustomerChannel(): ?string
+    public function getCustomerChannel(): ?ApplicationCustomerChannelEnum
     {
-        return $this->customerChannel;
+        return ApplicationCustomerChannelEnum::tryFrom($this->customerChannel);
     }
 
-    public function setCustomerChannel(?string $customerChannel): self
+    public function setCustomerChannel(?ApplicationCustomerChannelEnum $customerChannel, ?string $customerChannelOther = null): self
     {
-        $this->customerChannel = $customerChannel;
+        $this->customerChannel = $customerChannel?->value;
+        $this->customerChannelOther = $customerChannelOther;
+
+        $this->assertCustomerChannelOther();
+        $this->setNullCustomerChannelOtherIfCustomerChannelIsNotOther();
+
+        return $this;
+    }
+
+    public function getCustomerChannelOther(): ?string
+    {
+        return $this->customerChannelOther;
+    }
+
+    public function setCustomerChannelOther(?string $customerChannelOther): self
+    {
+        $this->customerChannelOther = $customerChannelOther;
+
+        $this->assertCustomerChannelOther();
+        $this->setNullCustomerChannelOtherIfCustomerChannelIsNotOther();
 
         return $this;
     }
@@ -870,5 +893,21 @@ class Application
         }
 
         return $discountSiblingsIntervalFrom === null || $numberOfApplicationCampers >= $discountSiblingsIntervalFrom;
+    }
+
+    private function assertCustomerChannelOther(): void
+    {
+        if ($this->getCustomerChannel() === ApplicationCustomerChannelEnum::OTHER && $this->getCustomerChannel() === null)
+        {
+            throw new LogicException('Application entity cannot have attribute "customerChannelOther" set to null when attribute "customerChannel" is set to "other".');
+        }
+    }
+
+    private function setNullCustomerChannelOtherIfCustomerChannelIsNotOther(): void
+    {
+        if ($this->getCustomerChannel() !== ApplicationCustomerChannelEnum::OTHER)
+        {
+            $this->customerChannelOther = null;
+        }
     }
 }

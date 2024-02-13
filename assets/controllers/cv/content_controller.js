@@ -1,22 +1,22 @@
 import { Controller } from '@hotwired/stimulus';
 
 /**
- * Controller attached to an element that can be shown/hidden by updating a checkbox.
+ * Controller attached to an element that can be shown/hidden by updating an input (e.g. a checkbox).
  */
 export default class ContentVisibilityController extends Controller
 {
     static values = {
-        showWhenChecked: Boolean,
+        showWhenChosen: Boolean,
     }
 
-    updateVisibility(isChecked)
+    updateVisibility(isChosen)
     {
-        const showWhenChecked = this.showWhenCheckedValue;
+        const showWhenChosen = this.showWhenChosenValue;
         const content = $(this.element);
 
-        if (isChecked)
+        if (isChosen)
         {
-            if (showWhenChecked)
+            if (showWhenChosen)
             {
                 content.show();
             }
@@ -27,7 +27,7 @@ export default class ContentVisibilityController extends Controller
         }
         else
         {
-            if (showWhenChecked)
+            if (showWhenChosen)
             {
                 content.hide();
             }

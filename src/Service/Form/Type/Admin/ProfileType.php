@@ -48,9 +48,9 @@ class ProfileType extends AbstractType
                 'multiple' => false,
                 'label'    => 'form.admin.profile.image',
                 'row_attr' => [
-                    'class'                                    => 'user-image',
-                    'data-controller'                          => 'cv--content',
-                    'data-cv--content-show-when-checked-value' => '0',
+                    'class'                                   => 'user-image',
+                    'data-controller'                         => 'cv--content',
+                    'data-cv--content-show-when-chosen-value' => '0',
                 ],
             ])
         ;

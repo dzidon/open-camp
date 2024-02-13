@@ -2,25 +2,25 @@
 
 namespace App\Service\Form\Type\Common;
 
-use App\Model\Enum\Entity\FormFieldTypeEnum;
+use App\Model\Enum\Entity\ApplicationCustomerChannelEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Form field type enum type.
+ * Application customer channel type.
  */
-class FormFieldTypeType extends AbstractType
+class ApplicationCustomerChannelType extends AbstractType
 {
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'class'        => FormFieldTypeEnum::class,
+            'class'        => ApplicationCustomerChannelEnum::class,
             'expanded'     => false,
             'multiple'     => false,
-            'choice_label' => function (FormFieldTypeEnum $choice): string
+            'choice_label' => function (ApplicationCustomerChannelEnum $choice): string
             {
-                return "form_field_type.$choice->value";
+                return "application_customer_channel.$choice->value";
             },
         ]);
     }

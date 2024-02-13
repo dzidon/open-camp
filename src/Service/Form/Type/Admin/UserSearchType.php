@@ -40,7 +40,8 @@ class UserSearchType extends AbstractType
             ->add('sortBy', EnumType::class, [
                 'class'        => UserSortEnum::class,
                 'label'        => 'form.admin.user_search.sort_by.label',
-                'choice_label' => fn ($choice) => match ($choice) {
+                'choice_label' => fn ($choice) => match ($choice)
+                {
                     UserSortEnum::CREATED_AT_DESC     => 'form.admin.user_search.sort_by.options.created_at_desc',
                     UserSortEnum::CREATED_AT_ASC      => 'form.admin.user_search.sort_by.options.created_at_asc',
                     UserSortEnum::EMAIL_ASC           => 'form.admin.user_search.sort_by.options.email_asc',

@@ -34,7 +34,8 @@ class CampDateSearchType extends AbstractType
             ->add('sortBy', EnumType::class, [
                 'class'        => CampDateSortEnum::class,
                 'label'        => 'form.admin.camp_date_search.sort_by.label',
-                'choice_label' => fn ($choice) => match ($choice) {
+                'choice_label' => fn ($choice) => match ($choice)
+                {
                     CampDateSortEnum::START_AT_ASC               => 'form.admin.camp_date_search.sort_by.options.start_at_asc',
                     CampDateSortEnum::START_AT_DESC              => 'form.admin.camp_date_search.sort_by.options.start_at_desc',
                     CampDateSortEnum::DEPOSIT_ASC                => 'form.admin.camp_date_search.sort_by.options.deposit_asc',

@@ -70,9 +70,9 @@ class BillingType extends AbstractType
                 ->add('businessName', TextType::class, [
                     'label'      => 'form.user.profile_billing.business_name',
                     'row_attr' => [
-                        'class'                                  => 'company-fields-visibility',
-                        'data-controller'                        => 'cv--content',
-                        'data-cv--content-show-when-checked-value' => '1',
+                        'class'                                   => 'company-fields-visibility',
+                        'data-controller'                         => 'cv--content',
+                        'data-cv--content-show-when-chosen-value' => '1',
                     ],
                     'required' => false,
                 ])
@@ -82,9 +82,9 @@ class BillingType extends AbstractType
                         'class' => 'required'
                     ],
                     'row_attr' => [
-                        'class'                                  => 'company-fields-visibility',
-                        'data-controller'                        => 'cv--content',
-                        'data-cv--content-show-when-checked-value' => '1',
+                        'class'                                   => 'company-fields-visibility',
+                        'data-controller'                         => 'cv--content',
+                        'data-cv--content-show-when-chosen-value' => '1',
                     ],
                     'required' => false,
                 ])
@@ -94,9 +94,9 @@ class BillingType extends AbstractType
                         'class' => 'required'
                     ],
                     'row_attr' => [
-                        'class'                                  => 'company-fields-visibility',
-                        'data-controller'                        => 'cv--content',
-                        'data-cv--content-show-when-checked-value' => '1',
+                        'class'                                   => 'company-fields-visibility',
+                        'data-controller'                         => 'cv--content',
+                        'data-cv--content-show-when-chosen-value' => '1',
                     ],
                     'required' => false,
                 ])

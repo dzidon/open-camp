@@ -105,6 +105,7 @@ class ApplicationBreadcrumbs extends AbstractBreadcrumbs implements ApplicationB
         $root = $this->createBreadcrumbs();
 
         $this->addRoute($root, 'user_home');
+        $this->addRoute($root, 'user_camp_catalog');
         $this->addRoute($root, 'user_application_completed', ['applicationId' => $applicationId])
             ->setActive()
         ;

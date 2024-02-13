@@ -5,7 +5,7 @@ import { Controller } from '@hotwired/stimulus';
  */
 export default class CheckBoxVisibilityController extends Controller
 {
-    static outlets = [ 'cv--content' ]
+    static outlets = [ 'cv--content' ];
 
     connect()
     {

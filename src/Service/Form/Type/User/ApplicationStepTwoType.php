@@ -5,6 +5,7 @@ namespace App\Service\Form\Type\User;
 use App\Library\Data\User\ApplicationPurchasableItemInstanceData;
 use App\Library\Data\User\ApplicationStepTwoUpdateData;
 use App\Model\Entity\PaymentMethod;
+use App\Service\Form\Type\Common\ApplicationCustomerChannelType;
 use NumberFormatter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -13,6 +14,7 @@ use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -68,15 +70,34 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
                 ],
                 'priority' => 500,
             ])
-            ->add('customerChannel', TextareaType::class, [
-                'required' => false,
-                'label'    => 'form.user.application_step_two.customer_channel',
+            ->add('customerChannel', ApplicationCustomerChannelType::class, [
+                'required'    => false,
+                'placeholder' => 'application_customer_channel.none',
+                'label'       => 'form.user.application_step_two.customer_channel',
+                'attr'        => [
+                    'data-controller'                         => 'cv--other-input',
+                    'data-action'                             => 'cv--other-input#updateVisibility',
+                    'data-cv--other-input-cv--content-outlet' => '.channel-other-field-visibility',
+                ],
                 'priority' => 200,
+            ])
+            ->add('customerChannelOther', TextType::class, [
+                'required'   => false,
+                'label'      => 'form.user.application_step_two.customer_channel_other',
+                'label_attr' => [
+                    'class' => 'required'
+                ],
+                'row_attr' => [
+                    'class'                                   => 'channel-other-field-visibility',
+                    'data-controller'                         => 'cv--content',
+                    'data-cv--content-show-when-chosen-value' => '1',
+                ],
+                'priority' => 100,
             ])
             ->add('note', TextareaType::class, [
                 'required' => false,
                 'label'    => 'form.user.application_step_two.note',
-                'priority' => 100,
+                'priority' => 0,
             ])
         ;
     }
@@ -128,6 +149,11 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
             $forms['customerChannel']->setData($applicationStepTwoUpdateData->getCustomerChannel());
         }
 
+        if (array_key_exists('customerChannelOther', $forms))
+        {
+            $forms['customerChannelOther']->setData($applicationStepTwoUpdateData->getCustomerChannelOther());
+        }
+
         if (array_key_exists('applicationPurchasableItemsData', $forms))
         {
             $forms['applicationPurchasableItemsData']->setData($applicationStepTwoUpdateData->getApplicationPurchasableItemsData());
@@ -160,6 +186,11 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
         if (array_key_exists('customerChannel', $forms))
         {
             $applicationStepTwoUpdateData->setCustomerChannel($forms['customerChannel']->getData());
+        }
+
+        if (array_key_exists('customerChannelOther', $forms))
+        {
+            $applicationStepTwoUpdateData->setCustomerChannelOther($forms['customerChannelOther']->getData());
         }
 
         if (array_key_exists('applicationPurchasableItemsData', $forms))

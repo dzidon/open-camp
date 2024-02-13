@@ -47,9 +47,9 @@ class CamperType extends AbstractType
                         'class' => 'required'
                     ],
                     'row_attr' => [
-                        'class'                                    => 'national-id-visibility',
-                        'data-controller'                          => 'cv--content',
-                        'data-cv--content-show-when-checked-value' => '0',
+                        'class'                                   => 'national-id-visibility',
+                        'data-controller'                         => 'cv--content',
+                        'data-cv--content-show-when-chosen-value' => '0',
                     ],
                     'required' => false,
                 ])

@@ -75,9 +75,9 @@ class UserType extends AbstractType
                     'multiple' => false,
                     'label'    => 'form.admin.user.image',
                     'row_attr' => [
-                        'class'                                    => 'user-image',
-                        'data-controller'                          => 'cv--content',
-                        'data-cv--content-show-when-checked-value' => '0',
+                        'class'                                   => 'user-image',
+                        'data-controller'                         => 'cv--content',
+                        'data-cv--content-show-when-chosen-value' => '0',
                     ],
                     'priority' => 4400,
                 ])

@@ -108,9 +108,9 @@ class ApplicationStepOneType extends AbstractType
                 ->add('businessName', TextType::class, [
                     'label'    => 'form.user.application_step_one.business_name',
                     'row_attr' => [
-                        'class'                                    => 'company-fields-visibility',
-                        'data-controller'                          => 'cv--content',
-                        'data-cv--content-show-when-checked-value' => '1',
+                        'class'                                   => 'company-fields-visibility',
+                        'data-controller'                         => 'cv--content',
+                        'data-cv--content-show-when-chosen-value' => '1',
                     ],
                     'required' => false,
                     'priority' => 4200,
@@ -121,9 +121,9 @@ class ApplicationStepOneType extends AbstractType
                         'class' => 'required'
                     ],
                     'row_attr' => [
-                        'class'                                    => 'company-fields-visibility',
-                        'data-controller'                          => 'cv--content',
-                        'data-cv--content-show-when-checked-value' => '1',
+                        'class'                                   => 'company-fields-visibility',
+                        'data-controller'                         => 'cv--content',
+                        'data-cv--content-show-when-chosen-value' => '1',
                     ],
                     'required' => false,
                     'priority' => 4100,
@@ -134,9 +134,9 @@ class ApplicationStepOneType extends AbstractType
                         'class' => 'required'
                     ],
                     'row_attr' => [
-                        'class'                                    => 'company-fields-visibility',
-                        'data-controller'                          => 'cv--content',
-                        'data-cv--content-show-when-checked-value' => '1',
+                        'class'                                   => 'company-fields-visibility',
+                        'data-controller'                         => 'cv--content',
+                        'data-cv--content-show-when-chosen-value' => '1',
                     ],
                     'required' => false,
                     'priority' => 4000,

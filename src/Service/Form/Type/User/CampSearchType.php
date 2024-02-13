@@ -24,7 +24,8 @@ class CampSearchType extends AbstractType
             ->add('sortBy', EnumType::class, [
                 'class'        => CampSortEnum::class,
                 'label'        => 'form.user.camp_search.sort_by.label',
-                'choice_label' => fn ($choice) => match ($choice) {
+                'choice_label' => fn ($choice) => match ($choice)
+                {
                     CampSortEnum::PRIORITY_DESC         => 'form.user.camp_search.sort_by.options.priority_desc',
                     CampSortEnum::LOWEST_FULL_PRICE_ASC => 'form.user.camp_search.sort_by.options.lowest_full_price_asc',
                     CampSortEnum::LOWEST_START_AT_ASC   => 'form.user.camp_search.sort_by.options.lowest_start_at_asc',

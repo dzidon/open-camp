@@ -28,7 +28,8 @@ class TripLocationPathSearchType extends AbstractType
             ->add('sortBy', EnumType::class, [
                 'class'        => TripLocationPathSortEnum::class,
                 'label'        => 'form.admin.trip_location_path_search.sort_by.label',
-                'choice_label' => fn ($choice) => match ($choice) {
+                'choice_label' => fn ($choice) => match ($choice)
+                {
                     TripLocationPathSortEnum::CREATED_AT_DESC => 'form.admin.trip_location_path_search.sort_by.options.created_at_desc',
                     TripLocationPathSortEnum::CREATED_AT_ASC  => 'form.admin.trip_location_path_search.sort_by.options.created_at_asc',
                     TripLocationPathSortEnum::NAME_ASC        => 'form.admin.trip_location_path_search.sort_by.options.name_asc',

@@ -28,7 +28,8 @@ class DiscountConfigSearchType extends AbstractType
             ->add('sortBy', EnumType::class, [
                 'class'        => DiscountConfigSortEnum::class,
                 'label'        => 'form.admin.discount_config_search.sort_by.label',
-                'choice_label' => fn ($choice) => match ($choice) {
+                'choice_label' => fn ($choice) => match ($choice)
+                {
                     DiscountConfigSortEnum::CREATED_AT_DESC => 'form.admin.discount_config_search.sort_by.options.created_at_desc',
                     DiscountConfigSortEnum::CREATED_AT_ASC  => 'form.admin.discount_config_search.sort_by.options.created_at_asc',
                     DiscountConfigSortEnum::NAME_ASC        => 'form.admin.discount_config_search.sort_by.options.name_asc',

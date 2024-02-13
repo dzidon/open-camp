@@ -18,10 +18,9 @@ class AttachmentConfigRequiredType extends AbstractType
             'class'        => AttachmentConfigRequiredTypeEnum::class,
             'expanded'     => false,
             'multiple'     => false,
-            'choice_label' => fn ($choice) => match ($choice) {
-                AttachmentConfigRequiredTypeEnum::OPTIONAL       => 'attachment_config_required_type.optional',
-                AttachmentConfigRequiredTypeEnum::REQUIRED       => 'attachment_config_required_type.required',
-                AttachmentConfigRequiredTypeEnum::REQUIRED_LATER => 'attachment_config_required_type.required_later',
+            'choice_label' => function (AttachmentConfigRequiredTypeEnum $choice): string
+            {
+                return "attachment_config_required_type.$choice->value";
             },
         ]);
     }

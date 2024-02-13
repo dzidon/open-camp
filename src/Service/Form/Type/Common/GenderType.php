@@ -18,9 +18,9 @@ class GenderType extends AbstractType
             'class'        => GenderEnum::class,
             'expanded'     => true,
             'multiple'     => false,
-            'choice_label' => fn ($choice) => match ($choice) {
-                GenderEnum::MALE   => 'gender.m',
-                GenderEnum::FEMALE => 'gender.f',
+            'choice_label' => function (GenderEnum $choice): string
+            {
+                return "gender.$choice->value";
             },
         ]);
     }

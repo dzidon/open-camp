@@ -32,7 +32,8 @@ class AttachmentConfigSearchType extends AbstractType
             ->add('sortBy', EnumType::class, [
                 'class'        => AttachmentConfigSortEnum::class,
                 'label'        => 'form.admin.attachment_config_search.sort_by.label',
-                'choice_label' => fn ($choice) => match ($choice) {
+                'choice_label' => fn ($choice) => match ($choice)
+                {
                     AttachmentConfigSortEnum::CREATED_AT_DESC => 'form.admin.attachment_config_search.sort_by.options.created_at_desc',
                     AttachmentConfigSortEnum::CREATED_AT_ASC  => 'form.admin.attachment_config_search.sort_by.options.created_at_asc',
                     AttachmentConfigSortEnum::NAME_ASC        => 'form.admin.attachment_config_search.sort_by.options.name_asc',

@@ -30,7 +30,8 @@ class FormFieldSearchType extends AbstractType
             ->add('sortBy', EnumType::class, [
                 'class'        => FormFieldSortEnum::class,
                 'label'        => 'form.admin.form_field_search.sort_by.label',
-                'choice_label' => fn ($choice) => match ($choice) {
+                'choice_label' => fn ($choice) => match ($choice)
+                {
                     FormFieldSortEnum::CREATED_AT_DESC => 'form.admin.form_field_search.sort_by.options.created_at_desc',
                     FormFieldSortEnum::CREATED_AT_ASC  => 'form.admin.form_field_search.sort_by.options.created_at_asc',
                     FormFieldSortEnum::NAME_ASC        => 'form.admin.form_field_search.sort_by.options.name_asc',
