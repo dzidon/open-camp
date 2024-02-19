@@ -53,6 +53,7 @@ parameters:
     app.last_completed_application_id_session_key: 'last_completed_application_id'
 
     # Applications
+    app.application_purchasable_items_individual: false
     app.sale_camper_recurring: true
     app.sale_camper_siblings: true
     app.contact_email_mandatory: false

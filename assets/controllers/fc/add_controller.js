@@ -17,6 +17,8 @@ export default class FormCollectionAddController extends Controller
             form: this.formNameValue,
         };
 
+        console.log(calledBy);
+
         this.dispatch('addItem', {
             detail: { calledBy }
         });

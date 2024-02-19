@@ -11,17 +11,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ApplicationPurchasableItemType extends AbstractType
 {
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         /** @var ApplicationPurchasableItemInstanceData[] $instanceDefaultsData */
@@ -38,37 +30,46 @@ class ApplicationPurchasableItemType extends AbstractType
             }
 
             $form = $event->getForm();
-            $config = $form->getConfig();
-            $index = $config->getName();
+            $applicationPurchasableItem = $applicationPurchasableItemData->getApplicationPurchasableItem();
+            $idString = $applicationPurchasableItem
+                ->getId()
+                ->toRfc4122()
+            ;
 
-            if (!array_key_exists($index, $instanceDefaultsData))
+            if (!array_key_exists($idString, $instanceDefaultsData))
             {
                 return;
             }
 
-            $defaultInstanceData = $instanceDefaultsData[$index];
-            $applicationPurchasableItem = $applicationPurchasableItemData->getApplicationPurchasableItem();
+            $defaultInstanceData = $instanceDefaultsData[$idString];
             $hasMultipleVariants = $applicationPurchasableItem->hasMultipleVariants();
-            $isCalculatedMaxAmountGreaterThanOne = $applicationPurchasableItem->isCalculatedMaxAmountGreaterThanOne();
-            $canAddAndRemove = $hasMultipleVariants && $isCalculatedMaxAmountGreaterThanOne;
-            $removeButtonLabel = $this->translator->trans('form.user.application_purchasable_item_instance.remove_button');
+            $application = $applicationPurchasableItem->getApplication();
+            $isIndividualMode = $application->isPurchasableItemsIndividualMode();
+            $maxAmount = $applicationPurchasableItem->getMaxAmount();
+
+            if (!$isIndividualMode)
+            {
+                $maxAmount = $applicationPurchasableItem->getCalculatedMaxAmount();
+            }
+
+            $canAddAndRemove = $hasMultipleVariants && $maxAmount > 1;
+            $label = $applicationPurchasableItem->getLabel();
 
             $form
                 ->add('applicationPurchasableItemInstancesData', CollectionType::class, [
                     'entry_type'                  => ApplicationPurchasableItemInstanceType::class,
-                    'label'                       => $applicationPurchasableItem->getLabel(),
+                    'label'                       => $label,
                     'suppress_required_rendering' => true,
-                    'translation_domain'          => false,
                     'allow_add'                   => $canAddAndRemove,
                     'allow_delete'                => $canAddAndRemove,
                     'entry_options'               => [
                         'label'               => false,
-                        'remove_button_label' => $removeButtonLabel,
+                        'remove_button_label' => 'form.user.application_purchasable_item_instance.remove_button',
                         'remove_button'       => $canAddAndRemove,
                         'empty_data'          => $defaultInstanceData,
                     ],
                     'prototype_options' => [
-                        'remove_button_label' => $removeButtonLabel,
+                        'remove_button_label' => 'form.user.application_purchasable_item_instance.remove_button',
                         'remove_button'       => true,
                     ],
                     'prototype'      => $canAddAndRemove,
@@ -91,9 +92,10 @@ class ApplicationPurchasableItemType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ApplicationPurchasableItemData::class,
-            'label'      => false,
-            'row_attr'   => [
+            'data_class'   => ApplicationPurchasableItemData::class,
+            'block_prefix' => 'user_application_purchasable_item',
+            'label'        => false,
+            'row_attr'     => [
                 'class' => 'mb-0'
             ],
         ]);

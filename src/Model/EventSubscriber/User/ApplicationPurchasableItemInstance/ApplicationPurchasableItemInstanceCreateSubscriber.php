@@ -25,6 +25,7 @@ class ApplicationPurchasableItemInstanceCreateSubscriber
     public function onCreateFillEntity(ApplicationPurchasableItemInstanceCreateEvent $event): void
     {
         $data = $event->getApplicationPurchasableItemInstanceData();
+        $applicationCamper = $event->getApplicationCamper();
         $chosenVariantValues = [];
 
         foreach ($data->getApplicationPurchasableItemVariantsData() as $applicationPurchasableItemVariantDatum)
@@ -35,7 +36,14 @@ class ApplicationPurchasableItemInstanceCreateSubscriber
         }
 
         $applicationPurchasableItem = $event->getApplicationPurchasableItem();
-        $applicationPurchasableItemInstance = new ApplicationPurchasableItemInstance($chosenVariantValues, $data->getAmount(), $applicationPurchasableItem);
+        $amount = $data->getAmount();
+        $applicationPurchasableItemInstance = new ApplicationPurchasableItemInstance(
+            $chosenVariantValues,
+            $amount,
+            $applicationPurchasableItem,
+            $applicationCamper
+        );
+
         $this->dataTransfer->fillEntity($data, $applicationPurchasableItemInstance);
         $event->setApplicationPurchasableItemInstance($applicationPurchasableItemInstance);
     }

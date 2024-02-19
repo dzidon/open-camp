@@ -22,9 +22,6 @@ class CheckboxWithUrlTypeTest extends TypeTestCase
         ]);
         $config = $form->getConfig();
 
-        $labelHtml = $config->getOption('label_html');
-        $this->assertTrue($labelHtml);
-
         $url = $config->getOption('checkbox_link_url');
         $this->assertSame('#', $url);
 

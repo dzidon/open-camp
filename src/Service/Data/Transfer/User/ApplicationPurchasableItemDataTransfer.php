@@ -4,7 +4,9 @@ namespace App\Service\Data\Transfer\User;
 
 use App\Library\Data\User\ApplicationPurchasableItemData;
 use App\Library\Data\User\ApplicationPurchasableItemInstanceData;
+use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\ApplicationPurchasableItem;
+use App\Model\Entity\ApplicationPurchasableItemInstance;
 use App\Model\Event\User\ApplicationPurchasableItemInstance\ApplicationPurchasableItemInstanceCreateEvent;
 use App\Model\Event\User\ApplicationPurchasableItemInstance\ApplicationPurchasableItemInstanceDeleteEvent;
 use App\Model\Event\User\ApplicationPurchasableItemInstance\ApplicationPurchasableItemInstanceUpdateEvent;
@@ -50,16 +52,36 @@ class ApplicationPurchasableItemDataTransfer implements DataTransferInterface
         /** @var ApplicationPurchasableItem $applicationPurchasableItem */
         $applicationPurchasableItemData = $data;
         $applicationPurchasableItem = $entity;
+
+        $applicationCamper = $applicationPurchasableItemData->getApplicationCamper();
         $applicationPurchasableItemInstances = $applicationPurchasableItem->getApplicationPurchasableItemInstances();
+        $maxAmount = $applicationPurchasableItem->getMaxAmount();
+        $application = $applicationPurchasableItem->getApplication();
+        $isIndividualMode = $application->isPurchasableItemsIndividualMode();
+
+        if (!$isIndividualMode)
+        {
+            $maxAmount = $applicationPurchasableItem->getCalculatedMaxAmount();
+        }
+
+        $applicationPurchasableItemInstancesFromCamper = [];
 
         foreach ($applicationPurchasableItemInstances as $applicationPurchasableItemInstance)
         {
-            $applicationPurchasableItemInstanceData = new ApplicationPurchasableItemInstanceData($applicationPurchasableItem->getCalculatedMaxAmount());
+            $applicationPurchasableItemInstanceCamper = $applicationPurchasableItemInstance->getApplicationCamper();
+
+            if ($applicationCamper !== $applicationPurchasableItemInstanceCamper)
+            {
+                continue;
+            }
+
+            $applicationPurchasableItemInstancesFromCamper[] = $applicationPurchasableItemInstance;
+            $applicationPurchasableItemInstanceData = new ApplicationPurchasableItemInstanceData($maxAmount);
             $this->dataTransfer->fillData($applicationPurchasableItemInstanceData, $applicationPurchasableItemInstance);
             $applicationPurchasableItemData->addApplicationPurchasableItemInstanceData($applicationPurchasableItemInstanceData);
         }
 
-        if (empty($applicationPurchasableItemInstances))
+        if (empty($applicationPurchasableItemInstancesFromCamper))
         {
             $applicationPurchasableItemInstanceData = $this->applicationPurchasableItemInstanceDataFactory
                 ->createDataFromApplicationPurchasableItem($applicationPurchasableItem)
@@ -80,20 +102,81 @@ class ApplicationPurchasableItemDataTransfer implements DataTransferInterface
         $applicationPurchasableItemData = $data;
         $applicationPurchasableItem = $entity;
 
+        $this->fillEntityApplicationPurchasableItemInstances($applicationPurchasableItemData, $applicationPurchasableItem);
+    }
+
+    /**
+     * @param ApplicationPurchasableItemData $applicationPurchasableItemData
+     * @param ApplicationPurchasableItem $applicationPurchasableItem
+     * @return void
+     */
+    private function fillEntityApplicationPurchasableItemInstances(ApplicationPurchasableItemData $applicationPurchasableItemData,
+                                                                   ApplicationPurchasableItem     $applicationPurchasableItem): void
+    {
         $applicationPurchasableItemInstancesData = $applicationPurchasableItemData->getApplicationPurchasableItemInstancesData();
-        $this->fillEntityApplicationPurchasableItemInstances($applicationPurchasableItemInstancesData, $applicationPurchasableItem);
+        $applicationPurchasableItemInstances = $applicationPurchasableItem->getApplicationPurchasableItemInstances();
+        $applicationCamper = $applicationPurchasableItemData->getApplicationCamper();
+
+        $this->mergeInstancesWithMatchingVariants($applicationPurchasableItemInstancesData);
+        $this->filterApplicationPurchasableItemInstancesByCamper($applicationPurchasableItemInstances, $applicationCamper);
+
+        // delete
+        foreach ($applicationPurchasableItemInstances as $index => $applicationPurchasableItemInstance)
+        {
+            if (!array_key_exists($index, $applicationPurchasableItemInstancesData))
+            {
+                $event = new ApplicationPurchasableItemInstanceDeleteEvent($applicationPurchasableItemInstance);
+                $event->setIsFlush(false);
+                $this->eventDispatcher->dispatch($event, $event::NAME);
+            }
+        }
+
+        // create & update
+        foreach ($applicationPurchasableItemInstancesData as $index => $applicationPurchasableItemInstanceData)
+        {
+            $amount = $applicationPurchasableItemInstanceData->getAmount();
+
+            if (array_key_exists($index, $applicationPurchasableItemInstances))
+            {
+                $applicationPurchasableItemInstance = $applicationPurchasableItemInstances[$index];
+
+                if ($amount > 0)
+                {
+                    $event = new ApplicationPurchasableItemInstanceUpdateEvent(
+                        $applicationPurchasableItemInstanceData,
+                        $applicationPurchasableItemInstance
+                    );
+                }
+                else
+                {
+                    $event = new ApplicationPurchasableItemInstanceDeleteEvent($applicationPurchasableItemInstance);
+                }
+            }
+            else
+            {
+                if ($amount <= 0)
+                {
+                    continue;
+                }
+
+                $event = new ApplicationPurchasableItemInstanceCreateEvent(
+                    $applicationPurchasableItemInstanceData,
+                    $applicationPurchasableItem,
+                    $applicationCamper
+                );
+            }
+
+            $event->setIsFlush(false);
+            $this->eventDispatcher->dispatch($event, $event::NAME);
+        }
     }
 
     /**
      * @param ApplicationPurchasableItemInstanceData[] $applicationPurchasableItemInstancesData
-     * @param ApplicationPurchasableItem $applicationPurchasableItem
      * @return void
      */
-    private function fillEntityApplicationPurchasableItemInstances(array $applicationPurchasableItemInstancesData, ApplicationPurchasableItem $applicationPurchasableItem): void
+    private function mergeInstancesWithMatchingVariants(array &$applicationPurchasableItemInstancesData): void
     {
-        $applicationPurchasableItemInstances = $applicationPurchasableItem->getApplicationPurchasableItemInstances();
-
-        // merge instances with matching variants
         $invalidIndices = [];
 
         foreach ($applicationPurchasableItemInstancesData as $index => $applicationPurchasableItemInstanceData)
@@ -134,48 +217,28 @@ class ApplicationPurchasableItemDataTransfer implements DataTransferInterface
         {
             unset($applicationPurchasableItemInstancesData[$invalidIndex]);
         }
+    }
 
-        // delete
-        foreach ($applicationPurchasableItemInstances as $index => $applicationPurchasableItemInstance)
+    /**
+     * @param ApplicationPurchasableItemInstance[] $applicationPurchasableItemInstances
+     * @param ApplicationCamper|null $applicationCamper
+     * @return void
+     */
+    private function filterApplicationPurchasableItemInstancesByCamper(array              &$applicationPurchasableItemInstances,
+                                                                       ?ApplicationCamper $applicationCamper): void
+    {
+        $applicationPurchasableItemInstancesForCamper = [];
+
+        foreach ($applicationPurchasableItemInstances as $applicationPurchasableItemInstance)
         {
-            if (!array_key_exists($index, $applicationPurchasableItemInstancesData))
+            $applicationCamperFromInstance = $applicationPurchasableItemInstance->getApplicationCamper();
+
+            if ($applicationCamper === $applicationCamperFromInstance)
             {
-                $event = new ApplicationPurchasableItemInstanceDeleteEvent($applicationPurchasableItemInstance);
-                $event->setIsFlush(false);
-                $this->eventDispatcher->dispatch($event, $event::NAME);
+                $applicationPurchasableItemInstancesForCamper[] = $applicationPurchasableItemInstance;
             }
         }
 
-        // create & update
-        foreach ($applicationPurchasableItemInstancesData as $index => $applicationPurchasableItemInstanceData)
-        {
-            $amount = $applicationPurchasableItemInstanceData->getAmount();
-
-            if (array_key_exists($index, $applicationPurchasableItemInstances))
-            {
-                $applicationPurchasableItemInstance = $applicationPurchasableItemInstances[$index];
-
-                if ($amount > 0)
-                {
-                    $event = new ApplicationPurchasableItemInstanceUpdateEvent($applicationPurchasableItemInstanceData, $applicationPurchasableItemInstance);
-                }
-                else
-                {
-                    $event = new ApplicationPurchasableItemInstanceDeleteEvent($applicationPurchasableItemInstance);
-                }
-            }
-            else
-            {
-                if ($amount <= 0)
-                {
-                    continue;
-                }
-
-                $event = new ApplicationPurchasableItemInstanceCreateEvent($applicationPurchasableItemInstanceData, $applicationPurchasableItem);
-            }
-
-            $event->setIsFlush(false);
-            $this->eventDispatcher->dispatch($event, $event::NAME);
-        }
+        $applicationPurchasableItemInstances = $applicationPurchasableItemInstancesForCamper;
     }
 }

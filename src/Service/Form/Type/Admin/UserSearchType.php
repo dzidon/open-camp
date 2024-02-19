@@ -53,7 +53,7 @@ class UserSearchType extends AbstractType
             ])
             ->add('role', ChoiceType::class, [
                 'choices'      => $options['choices_roles'],
-                'choice_label' => function (false|Role $role)
+                'choice_label' => function (false|Role $role): string
                 {
                     if ($role === false)
                     {

@@ -74,7 +74,7 @@ class CampSearchType extends AbstractType
             ])
             ->add('campCategory', ChoiceType::class, [
                 'choices'      => $options['choices_camp_categories'],
-                'choice_label' => function (false|CampCategory $campCategory)
+                'choice_label' => function (false|CampCategory $campCategory): string
                 {
                     if ($campCategory === false)
                     {

@@ -49,6 +49,7 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
             $form = $event->getForm();
 
             $this->addDiscountSiblingsField($data, $form);
+            $this->addCamperApplicationPurchasableItemsData($data, $form, $instanceDefaultsData);
             $this->addApplicationPurchasableItemsData($data, $form, $instanceDefaultsData);
         });
 
@@ -68,7 +69,7 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
                 'placeholder_attr' => [
                     'disabled' => 'disabled'
                 ],
-                'priority' => 500,
+                'priority' => 600,
             ])
             ->add('customerChannel', ApplicationCustomerChannelType::class, [
                 'required'    => false,
@@ -154,6 +155,11 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
             $forms['customerChannelOther']->setData($applicationStepTwoUpdateData->getCustomerChannelOther());
         }
 
+        if (array_key_exists('applicationCamperPurchasableItemsData', $forms))
+        {
+            $forms['applicationCamperPurchasableItemsData']->setData($applicationStepTwoUpdateData->getApplicationCamperPurchasableItemsData());
+        }
+
         if (array_key_exists('applicationPurchasableItemsData', $forms))
         {
             $forms['applicationPurchasableItemsData']->setData($applicationStepTwoUpdateData->getApplicationPurchasableItemsData());
@@ -201,12 +207,43 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
             }
         }
 
+        if (array_key_exists('applicationCamperPurchasableItemsData', $forms))
+        {
+            foreach ($forms['applicationCamperPurchasableItemsData']->getData() as $applicationCamperPurchasableItemsDatum)
+            {
+                $applicationStepTwoUpdateData->addApplicationCamperPurchasableItemsDatum($applicationCamperPurchasableItemsDatum);
+            }
+        }
+
         if (array_key_exists('discountSiblingsInterval', $forms))
         {
             $formDiscountSiblingsInterval = $forms['discountSiblingsInterval']->getData();
             $discountSiblingsInterval = json_decode($formDiscountSiblingsInterval, true);
             $applicationStepTwoUpdateData->setDiscountSiblingsInterval($discountSiblingsInterval);
         }
+    }
+
+    private function addCamperApplicationPurchasableItemsData(ApplicationStepTwoUpdateData $data,
+                                                              FormInterface                $form,
+                                                              array                        $instanceDefaultsData): void
+    {
+        $applicationCamperPurchasableItemsData = $data->getApplicationCamperPurchasableItemsData();
+
+        if (empty($applicationCamperPurchasableItemsData))
+        {
+            return;
+        }
+
+        $form
+            ->add('applicationCamperPurchasableItemsData', CollectionType::class, [
+                'entry_type'    => ApplicationCamperPurchasableItemsType::class,
+                'entry_options' => [
+                    'instance_defaults_data' => $instanceDefaultsData,
+                ],
+                'label'    => false,
+                'priority' => 400,
+            ])
+        ;
     }
 
     private function addApplicationPurchasableItemsData(ApplicationStepTwoUpdateData $data,
@@ -220,13 +257,21 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
             return;
         }
 
+        $label = 'form.user.application_step_two.purchasable_items';
+        $applicationCamperPurchasableItemsData = $data->getApplicationCamperPurchasableItemsData();
+
+        if (!empty($applicationCamperPurchasableItemsData))
+        {
+            $label = 'form.user.application_step_two.purchasable_items_global';
+        }
+
         $form
             ->add('applicationPurchasableItemsData', CollectionType::class, [
                 'entry_type'    => ApplicationPurchasableItemType::class,
                 'entry_options' => [
                     'instance_defaults_data' => $instanceDefaultsData,
                 ],
-                'label'    => 'form.user.application_step_two.purchasable_items',
+                'label'    => $label,
                 'priority' => 300,
             ])
         ;
@@ -308,7 +353,7 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
                 'expanded'                  => true,
                 'label'                     => 'form.user.application_step_two.discount_siblings.label',
                 'choice_translation_domain' => false,
-                'priority'                  => 400,
+                'priority'                  => 500,
             ])
         ;
     }

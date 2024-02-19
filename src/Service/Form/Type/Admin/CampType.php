@@ -57,7 +57,8 @@ class CampType extends AbstractType
             ])
             ->add('campCategory', EntityType::class, [
                 'class'        => CampCategory::class,
-                'choice_label' => function (CampCategory $campCategory) {
+                'choice_label' => function (CampCategory $campCategory): string
+                {
                     return $campCategory->getPath();
                 },
                 'choices'     => $options['choices_camp_categories'],

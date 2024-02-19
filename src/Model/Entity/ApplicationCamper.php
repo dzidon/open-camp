@@ -67,6 +67,10 @@ class ApplicationCamper
     #[ORM\OneToMany(mappedBy: 'applicationCamper', targetEntity: ApplicationAttachment::class)]
     private Collection $applicationAttachments;
 
+    /** @var Collection<ApplicationPurchasableItemInstance> */
+    #[ORM\OneToMany(mappedBy: 'applicationCamper', targetEntity: ApplicationPurchasableItemInstance::class)]
+    private Collection $applicationPurchasableItemInstances;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -85,6 +89,7 @@ class ApplicationCamper
         $this->applicationTripLocationPaths = new ArrayCollection();
         $this->applicationFormFieldValues = new ArrayCollection();
         $this->applicationAttachments = new ArrayCollection();
+        $this->applicationPurchasableItemInstances = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable('now');
 
         $application->addApplicationCamper($this);
@@ -355,6 +360,46 @@ class ApplicationCamper
     public function removeApplicationAttachment(ApplicationAttachment $applicationAttachment): self
     {
         $this->applicationAttachments->removeElement($applicationAttachment);
+
+        return $this;
+    }
+
+    /**
+     * @return ApplicationPurchasableItemInstance[]
+     */
+    public function getApplicationPurchasableItemInstances(): array
+    {
+        return $this->applicationPurchasableItemInstances->toArray();
+    }
+
+    /**
+     * @param ApplicationPurchasableItemInstance $applicationPurchasableItemInstance
+     * @return $this
+     * @internal Inverse side.
+     */
+    public function addApplicationPurchasableItemInstance(ApplicationPurchasableItemInstance $applicationPurchasableItemInstance): self
+    {
+        if ($applicationPurchasableItemInstance->getApplicationCamper() !== $this)
+        {
+            return $this;
+        }
+
+        if (!$this->applicationPurchasableItemInstances->contains($applicationPurchasableItemInstance))
+        {
+            $this->applicationPurchasableItemInstances->add($applicationPurchasableItemInstance);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param ApplicationPurchasableItemInstance $applicationPurchasableItemInstance
+     * @return $this
+     * @internal Inverse side.
+     */
+    public function removeApplicationPurchasableItemInstance(ApplicationPurchasableItemInstance $applicationPurchasableItemInstance): self
+    {
+        $this->applicationPurchasableItemInstances->removeElement($applicationPurchasableItemInstance);
 
         return $this;
     }

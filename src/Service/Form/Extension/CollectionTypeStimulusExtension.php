@@ -14,24 +14,37 @@ class CollectionTypeStimulusExtension extends AbstractTypeExtension
 {
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        if ($form->getParent() === null)
+        $parent = $form->getParent();
+
+        if ($parent === null)
         {
             return;
         }
 
-        $actions = [
+        $formNames = [];
+        $currentType = $form->getParent();
+
+        while ($currentType !== null)
+        {
+            $formName = $currentType->getName();
+            array_unshift($formNames, $formName);
+            $currentType = $currentType->getParent();
+        }
+
+        $formName = implode('_', $formNames);
+        $actions = implode(' ', [
             'fc--add:addItem@window->fc--wrap#addItem',
             'fc--rem-prep:resetPreparedItem@window->fc--wrap#resetPreparedItem',
             'fc--rem-prep:prepareItemForRemoval->fc--wrap#prepareItemForRemoval',
             'fc--rem-mod:removePreparedItem@window->fc--wrap#removePreparedItem',
-        ];
+        ]);
 
         $view->vars['attr'] = array_merge([
             'data-controller'                     => 'fc--wrap',
             'data-fc--wrap-target'                => 'fields',
             'data-fc--wrap-collection-name-value' => $view->vars['name'],
-            'data-fc--wrap-form-name-value'       => $form->getParent()->getName(),
-            'data-action'                         => implode(' ', $actions),
+            'data-fc--wrap-form-name-value'       => $formName,
+            'data-action'                         => $actions,
         ], $view->vars['attr']);
     }
 

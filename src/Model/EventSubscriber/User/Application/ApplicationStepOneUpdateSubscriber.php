@@ -45,6 +45,11 @@ class ApplicationStepOneUpdateSubscriber
         $application = $event->getApplication();
         $applicationPurchasableItems = $application->getApplicationPurchasableItems();
 
+        if ($application->isPurchasableItemsIndividualMode())
+        {
+            return;
+        }
+
         foreach ($applicationPurchasableItems as $applicationPurchasableItem)
         {
             if ($applicationPurchasableItem->isGlobal())

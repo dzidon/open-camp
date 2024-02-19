@@ -95,10 +95,12 @@ application:
     apply: 'Přihláška'
     buyer_details: 'Údaje o objednávajícím'
     discounts: 'Slevy'
-    few_more_optional_fields: 'Poslední volitelné údaje'
+    few_more_optional_fields: 'Pár posledních volitelných údajů'
     cannot_be_completed: 'Je nám líto, ale vaše přihláška ještě nemá všechny náležitosti. Ujistěte se, že zadávate alespoň 1 kontakt, 1 táborníka a že máte zvolenou platební metodu.'
     no_longer_editable: 'Je nám líto, ale tuto přihlášku už není možné upravovat.'
     completed: 'Přihláška úspěšně vytvořena!'
+    item_instance_for_camper: 'pro táborníka'
+    other_fields: 'Další pole'
     discount:
         siblings_single_number: '{number, plural,
               =1    {Uplatnit slevu pro # sourozence}
@@ -1462,6 +1464,8 @@ form:
         application_step_two:
             payment_method: 'Platební metoda'
             purchasable_items: 'Volitelné položky'
+            purchasable_items_camper: 'Volitelné položky ({camper})'
+            purchasable_items_global: 'Volitelné položky (celá přihláška)'
             note: 'Poznámka'
             customer_channel: 'Jak jste se o nás dozvěděli?'
             customer_channel_other: 'Upřesnění'

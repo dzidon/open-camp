@@ -15,7 +15,7 @@ min_or_mar_mandatory: 'Musíte vyplnit minimum nebo maximum.'
 application_purchasable_item_variant_mandatory: 'Musíte vybrat jednu z nabízených možností.'
 invalid_file_extension: 'Tento formát není povolen. Povolené formáty: {extensions}.'
 file_too_large: 'Soubor je příliš velký. Maximální povolená velikost je {limit} {suffix}.'
-application_purchasable_item_amount: 'Maximální množství položky "{item_name}" je {max_amount}, ale nyní se snažíte koupit {current_amount}.'
+application_purchasable_item_amount: 'Maximální množství této položky je {max_amount}, ale nyní se snažíte koupit {current_amount}.'
 discount_sibling_interval_not_in_config: 'Musíte vybrat platnou slevu.'
 application_campers_count: 'Omlouváme se, ale vámi zadaný počet táborníků převyšuje kapacitu o {capacity_exceeded_over}.'
 

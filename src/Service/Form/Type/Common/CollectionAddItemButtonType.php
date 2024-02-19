@@ -28,11 +28,23 @@ class CollectionAddItemButtonType extends AbstractType
             return;
         }
 
+        $formNames = [];
+        $currentType = $form->getParent();
+
+        while ($currentType !== null)
+        {
+            $formName = $currentType->getName();
+            array_unshift($formNames, $formName);
+            $currentType = $currentType->getParent();
+        }
+
+        $formName = implode('_', $formNames);
+
         $view->vars['attr'] = array_merge([
             'data-controller'                    => 'fc--add',
             'data-action'                        => 'fc--add#addItem',
             'data-fc--add-collection-name-value' => $options['collection_name'],
-            'data-fc--add-form-name-value'       => $parent->getName(),
+            'data-fc--add-form-name-value'       => $formName,
         ], $view->vars['attr']);
     }
 

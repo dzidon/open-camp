@@ -34,7 +34,8 @@ class RoleType extends AbstractType
             ])
             ->add('permissions', EntityType::class, [
                 'class'        => Permission::class,
-                'choice_label' => function (Permission $permission) {
+                'choice_label' => function (Permission $permission): string
+                {
                     $label = $permission->getLabel();
 
                     return $this->translator->trans($label);

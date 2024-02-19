@@ -34,7 +34,6 @@ class CheckboxWithUrlType extends AbstractType
         ]);
 
         $resolver->setDefaults([
-            'label_html'                           => true,
             'checkbox_link_url'                    => '#',
             'checkbox_link_attr'                   => [],
             'checkbox_link_translation_parameters' => [],

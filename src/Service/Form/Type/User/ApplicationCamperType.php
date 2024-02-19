@@ -18,6 +18,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Uid\UuidV4;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -79,7 +80,7 @@ class ApplicationCamperType extends AbstractType
         $nationalIdentifier = $camperDataChildren['nationalIdentifier'];
         $isNationalIdentifierAbsent = $camperDataChildren['isNationalIdentifierAbsent'];
 
-        $name = $view->vars['name'];
+        $name = (new UuidV4())->toRfc4122();;
         $searchedClassName = 'national-id-visibility';
         $newClassName = $searchedClassName . '-' . $name;
 

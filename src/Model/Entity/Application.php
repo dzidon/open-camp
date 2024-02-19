@@ -122,6 +122,9 @@ class Application
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isPhoneNumberMandatory;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isPurchasableItemsIndividualMode;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $campDateStartAt;
 
@@ -183,6 +186,7 @@ class Application
                                 bool     $isNationalIdentifierEnabled,
                                 bool     $isEmailMandatory,
                                 bool     $isPhoneNumberMandatory,
+                                bool     $isPurchasableItemsIndividualMode,
                                 CampDate $campDate,
                                 ?string  $campDateDescription = null)
     {
@@ -203,6 +207,7 @@ class Application
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
         $this->isEmailMandatory = $isEmailMandatory;
         $this->isPhoneNumberMandatory = $isPhoneNumberMandatory;
+        $this->isPurchasableItemsIndividualMode = $isPurchasableItemsIndividualMode;
         $this->campDateDescription = $campDateDescription;
         $this->applicationContacts = new ArrayCollection();
         $this->applicationCampers = new ArrayCollection();
@@ -375,6 +380,11 @@ class Application
 
     public function getCustomerChannel(): ?ApplicationCustomerChannelEnum
     {
+        if ($this->customerChannel === null)
+        {
+            return null;
+        }
+
         return ApplicationCustomerChannelEnum::tryFrom($this->customerChannel);
     }
 
@@ -522,6 +532,11 @@ class Application
     public function isPhoneNumberMandatory(): bool
     {
         return $this->isPhoneNumberMandatory;
+    }
+
+    public function isPurchasableItemsIndividualMode(): bool
+    {
+        return $this->isPurchasableItemsIndividualMode;
     }
 
     public function getFullPrice(): float

@@ -54,6 +54,11 @@ class ApplicationAttachmentData
         return $this->maxSize;
     }
 
+    public function isRequiredLater(): bool
+    {
+        return $this->getRequiredType() === AttachmentConfigRequiredTypeEnum::REQUIRED_LATER;
+    }
+
     public function getRequiredType(): AttachmentConfigRequiredTypeEnum
     {
         return AttachmentConfigRequiredTypeEnum::tryFrom($this->requiredType);

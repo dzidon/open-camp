@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApplicationPurchasableItemVariantsNotBlank]
 class ApplicationPurchasableItemInstanceData
 {
-    private int $maxCalculatedAmount;
+    private int $maxAmount;
 
     private int $amount = 1;
 
@@ -16,14 +16,14 @@ class ApplicationPurchasableItemInstanceData
     #[Assert\Valid]
     private array $applicationPurchasableItemVariantsData = [];
 
-    public function __construct(int $maxCalculatedAmount)
+    public function __construct(int $maxAmount)
     {
-        $this->maxCalculatedAmount = $maxCalculatedAmount;
+        $this->maxAmount = $maxAmount;
     }
 
-    public function getMaxCalculatedAmount(): int
+    public function getMaxAmount(): int
     {
-        return $this->maxCalculatedAmount;
+        return $this->maxAmount;
     }
     
     public function getAmount(): int

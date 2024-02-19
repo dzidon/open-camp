@@ -59,6 +59,7 @@ parameters:
     app.last_completed_application_id_session_key: 'last_completed_application_id'
 
     # Applications
+    app.application_purchasable_items_individual: true
     app.sale_camper_recurring: true
     app.sale_camper_siblings: true
     app.contact_email_mandatory: false
@@ -168,6 +169,7 @@ services:
 
     App\Model\Service\Application\ApplicationFactory:
         arguments:
+            $isPurchasableItemsIndividualMode: '%app.application_purchasable_items_individual%'
             $simpleIdCharacters: '%app.application_simple_id_characters%'
             $simpleIdLength: '%app.application_simple_id_length%'
 

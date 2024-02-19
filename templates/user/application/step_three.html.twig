@@ -112,23 +112,28 @@
             <div class="col-md-8 col-lg-6 col-xl-5">
                 {% for application_purchasable_item in application.applicationPurchasableItems %}
                     {% set instances_total_amount = application_purchasable_item.instancesTotalAmount %}
-                    {% set instances_count = application_purchasable_item.applicationPurchasableItemInstances|length %}
 
                     {% if instances_total_amount > 0 %}
+                        {% set instances = application_purchasable_item.applicationPurchasableItemInstances %}
+                        {% set instances_count = instances|length %}
+                        {% set has_multiple_variants = application_purchasable_item.hasMultipleVariants %}
+                        {% set has_instances_assigned_to_camper = application_purchasable_item.hasInstancesAssignedToCamper %}
+                        {% set is_expanded_view = instances_count > 1 or has_multiple_variants or has_instances_assigned_to_camper %}
+
                         <div class="row mb-4">
                             <div class="col-12">
                                 <div class="row d-flex align-items-end">
                                     <div class="col-8">
                                         <strong>
                                             {% if instances_count > 1 %}
-                                                {{ application_purchasable_item.instancesTotalAmount }}x
+                                                {{ instances_total_amount }}x
                                             {% endif %}
 
                                             {{ application_purchasable_item.label }}
                                         </strong>
                                     </div>
 
-                                    {% if instances_count == 1 and not application_purchasable_item.hasMultipleVariants %}
+                                    {% if not is_expanded_view %}
                                         <div class="col-4 text-right">
                                             <span>
                                                 {{ application_purchasable_item.fullPrice|format_currency(application.currency) }}
@@ -137,21 +142,38 @@
                                     {% endif %}
                                 </div>
 
-                                {% if application_purchasable_item.hasMultipleVariants > 0 %}
-                                    {% for application_purchasable_item_instance in application_purchasable_item.applicationPurchasableItemInstances %}
-                                        {% if application_purchasable_item_instance.amount > 0 %}
+                                {% if is_expanded_view %}
+                                    {% for instance in instances %}
+                                        {% if instance.amount > 0 %}
+                                            {% set application_camper = instance.applicationCamper %}
+
                                             <div class="row d-flex align-items-end">
-                                                <div class="col-8">
-                                                    <span>
+                                                <div class="col-8 d-flex">
+                                                    <div class="flex-shrink-0 mr-1">
                                                         &#8627;
-                                                        {{ application_purchasable_item_instance.amount }}x
-                                                        {{ application_purchasable_item_instance.chosenVariantValuesAsString }}
-                                                    </span>
+                                                    </div>
+
+                                                    <div>
+                                                        <span>
+                                                            {{ instance.amount }}x
+                                                            {{ instance.chosenVariantValuesAsString }}
+
+                                                            {% if application_camper is not null %}
+                                                                <span class="text-nowrap">
+                                                                    {{ 'application.item_instance_for_camper'|trans }}
+
+                                                                    <em>
+                                                                        {{ application_camper.nameFull }}
+                                                                    </em>
+                                                                </span>
+                                                            {% endif %}
+                                                        </span>
+                                                    </div>
                                                 </div>
 
                                                 <div class="col-4 text-right">
                                                     <span>
-                                                        {{ application_purchasable_item_instance.price|format_currency(application.currency) }}
+                                                        {{ instance.price|format_currency(application.currency) }}
                                                     </span>
                                                 </div>
                                             </div>

@@ -28,6 +28,10 @@ class ApplicationPurchasableItemInstance
     #[ORM\Column(type: Types::INTEGER)]
     private int $amount;
 
+    #[ORM\ManyToOne(targetEntity: ApplicationCamper::class, inversedBy: 'applicationPurchasableItemInstances')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
+    private ?ApplicationCamper $applicationCamper;
+
     #[ORM\ManyToOne(targetEntity: ApplicationPurchasableItem::class, inversedBy: 'applicationPurchasableItemInstances')]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ApplicationPurchasableItem $applicationPurchasableItem;
@@ -39,21 +43,31 @@ class ApplicationPurchasableItemInstance
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(array $chosenVariantValues, int $amount, ApplicationPurchasableItem $applicationPurchasableItem)
+    public function __construct(array                      $chosenVariantValues,
+                                int                        $amount,
+                                ApplicationPurchasableItem $applicationPurchasableItem,
+                                ?ApplicationCamper         $applicationCamper = null)
     {
         $this->id = Uuid::v4();
         $this->chosenVariantValues = $chosenVariantValues;
         $this->amount = $amount;
         $this->applicationPurchasableItem = $applicationPurchasableItem;
+        $this->applicationCamper = $applicationCamper;
         $this->createdAt = new DateTimeImmutable('now');
 
         $applicationPurchasableItem->addApplicationPurchasableItemInstance($this);
+        $applicationCamper?->addApplicationPurchasableItemInstance($this);
         $this->assertChosenVariantValues();
     }
 
     public function getId(): UuidV4
     {
         return $this->id;
+    }
+
+    public function getApplicationCamper(): ?ApplicationCamper
+    {
+        return $this->applicationCamper;
     }
 
     public function getApplicationPurchasableItem(): ApplicationPurchasableItem

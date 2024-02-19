@@ -15,26 +15,14 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Uid\UuidV4;
 
 class ApplicationPurchasableItemInstanceType extends AbstractType
 {
-    private TranslatorInterface $translator;
-
-    public function __construct(TranslatorInterface $translator)
-    {
-        $this->translator = $translator;
-    }
-
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $searchedClassName = 'value-visibility';
-        $name = $view->parent?->parent?->vars['name'];
-
-        if ($name === null)
-        {
-            return;
-        }
+        $name = (new UuidV4())->toRfc4122();
 
         $newClassName = $searchedClassName . '-' . $name;
         $amount = $view->children['amount'];
@@ -93,12 +81,12 @@ class ApplicationPurchasableItemInstanceType extends AbstractType
             $data = $event->getData();
             $form = $event->getForm();
 
-            if ($data->getMaxCalculatedAmount() <= 1)
+            if ($data->getMaxAmount() <= 1)
             {
                 $form
                     ->add('amount', IntegerCheckboxType::class, [
                         'required' => false,
-                        'label'    => $this->translator->trans('form.user.application_purchasable_item_instance.buy'),
+                        'label'    => 'form.user.application_purchasable_item_instance.buy',
                         'attr'     => [
                             'data-controller'                      => 'cv--checkbox',
                             'data-action'                          => 'cv--checkbox#updateVisibility',
@@ -112,14 +100,14 @@ class ApplicationPurchasableItemInstanceType extends AbstractType
             {
                 $attr = [
                     'min' => 0,
-                    'max' => $data->getMaxCalculatedAmount(),
+                    'max' => $data->getMaxAmount(),
                 ];
 
                 $form
                     ->add('amount', IntegerType::class, [
                         'attr'     => $attr,
                         'required' => false,
-                        'label'    => $this->translator->trans('form.user.application_purchasable_item_instance.amount'),
+                        'label'    => 'form.user.application_purchasable_item_instance.amount',
                         'priority' => 200,
                     ])
                 ;
@@ -153,7 +141,7 @@ class ApplicationPurchasableItemInstanceType extends AbstractType
 
     private function cloneDefaultApplicationPurchasableItemInstanceData(ApplicationPurchasableItemInstanceData $data): ApplicationPurchasableItemInstanceData
     {
-        $newData = new ApplicationPurchasableItemInstanceData($data->getMaxCalculatedAmount());
+        $newData = new ApplicationPurchasableItemInstanceData($data->getMaxAmount());
 
         foreach ($data->getApplicationPurchasableItemVariantsData() as $applicationPurchasableItemVariantData)
         {

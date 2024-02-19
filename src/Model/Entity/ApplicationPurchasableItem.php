@@ -53,6 +53,7 @@ class ApplicationPurchasableItem
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Application $application;
 
+    /** @var Collection<ApplicationPurchasableItemInstance> */
     #[ORM\OneToMany(mappedBy: 'applicationPurchasableItem', targetEntity: ApplicationPurchasableItemInstance::class)]
     private Collection $applicationPurchasableItemInstances;
 
@@ -238,6 +239,21 @@ class ApplicationPurchasableItem
         foreach ($this->validVariantValues as $values)
         {
             if (count($values) >= 2)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function hasInstancesAssignedToCamper(): bool
+    {
+        foreach ($this->applicationPurchasableItemInstances as $applicationPurchasableItemInstance)
+        {
+            $applicationCamper = $applicationPurchasableItemInstance->getApplicationCamper();
+
+            if ($applicationCamper !== null)
             {
                 return true;
             }

@@ -259,6 +259,61 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         ;
     }
 
+    private function loadApplicationPurchasableItems(null|array|Application $applications): void
+    {
+        if (empty($applications))
+        {
+            return;
+        }
+
+        $applicationIds = $this->getApplicationIds($applications);
+
+        /** @var Application[] $applications */
+        $applications = $this->createQueryBuilder('application')
+            ->select('application, applicationPurchasableItem, purchasableItem')
+            ->leftJoin('application.applicationPurchasableItems', 'applicationPurchasableItem')
+            ->leftJoin('applicationPurchasableItem.purchasableItem', 'purchasableItem')
+            ->andWhere('application.id IN (:ids)')
+            ->setParameter('ids', $applicationIds)
+            ->orderBy('applicationPurchasableItem.priority', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $applicationPurchasableItems = [];
+
+        foreach ($applications as $application)
+        {
+            foreach ($application->getApplicationPurchasableItems() as $applicationPurchasableItem)
+            {
+                $applicationPurchasableItems[] = $applicationPurchasableItem;
+            }
+        }
+
+        $this->loadApplicationPurchasableItemInstances($applicationPurchasableItems);
+    }
+
+    private function loadApplicationPurchasableItemInstances(null|array|ApplicationPurchasableItem $applicationPurchasableItems): void
+    {
+        if (empty($applicationPurchasableItems))
+        {
+            return;
+        }
+
+        $applicationPurchasableItemIds = $this->getApplicationPurchasableItemIds($applicationPurchasableItems);
+
+        $this->_em->createQueryBuilder()
+            ->select('applicationPurchasableItem, applicationPurchasableItemInstance')
+            ->from(ApplicationPurchasableItem::class, 'applicationPurchasableItem')
+            ->leftJoin('applicationPurchasableItem.applicationPurchasableItemInstances', 'applicationPurchasableItemInstance')
+            ->andWhere('applicationPurchasableItem.id IN (:ids)')
+            ->setParameter('ids', $applicationPurchasableItemIds)
+            ->addOrderBy('applicationPurchasableItemInstance.applicationCamper', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     private function loadApplicationCampers(null|array|Application $applications): void
     {
         if (empty($applications))
@@ -292,6 +347,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationCamperTripLocationPaths($applicationCampers);
         $this->loadApplicationCamperAttachments($applicationCampers);
         $this->loadApplicationCamperFormFieldValues($applicationCampers);
+        $this->loadApplicationCamperPurchasableItemInstances($applicationCampers);
     }
 
     private function loadApplicationCamperTripLocationPaths(null|array|ApplicationCamper $applicationCampers): void
@@ -356,55 +412,21 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         ;
     }
 
-    private function loadApplicationPurchasableItems(null|array|Application $applications): void
+    private function loadApplicationCamperPurchasableItemInstances(null|array|ApplicationCamper $applicationCampers): void
     {
-        if (empty($applications))
+        if (empty($applicationCampers))
         {
             return;
         }
 
-        $applicationIds = $this->getApplicationIds($applications);
-
-        /** @var Application[] $applications */
-        $applications = $this->createQueryBuilder('application')
-            ->select('application, applicationPurchasableItem, purchasableItem')
-            ->leftJoin('application.applicationPurchasableItems', 'applicationPurchasableItem')
-            ->leftJoin('applicationPurchasableItem.purchasableItem', 'purchasableItem')
-            ->andWhere('application.id IN (:ids)')
-            ->setParameter('ids', $applicationIds)
-            ->orderBy('applicationPurchasableItem.priority', 'DESC')
-            ->getQuery()
-            ->getResult()
-        ;
-
-        $applicationPurchasableItems = [];
-
-        foreach ($applications as $application)
-        {
-            foreach ($application->getApplicationPurchasableItems() as $applicationPurchasableItem)
-            {
-                $applicationPurchasableItems[] = $applicationPurchasableItem;
-            }
-        }
-
-        $this->loadApplicationPurchasableItemInstances($applicationPurchasableItems);
-    }
-
-    private function loadApplicationPurchasableItemInstances(null|array|ApplicationPurchasableItem $applicationPurchasableItems): void
-    {
-        if (empty($applicationPurchasableItems))
-        {
-            return;
-        }
-
-        $applicationPurchasableItemIds = $this->getApplicationPurchasableItemIds($applicationPurchasableItems);
+        $applicationCamperIds = $this->getApplicationCamperIds($applicationCampers);
 
         $this->_em->createQueryBuilder()
-            ->select('applicationPurchasableItem, applicationPurchasableItemInstance')
-            ->from(ApplicationPurchasableItem::class, 'applicationPurchasableItem')
-            ->leftJoin('applicationPurchasableItem.applicationPurchasableItemInstances', 'applicationPurchasableItemInstance')
-            ->andWhere('applicationPurchasableItem.id IN (:ids)')
-            ->setParameter('ids', $applicationPurchasableItemIds)
+            ->select('applicationCamper, applicationPurchasableItemInstance')
+            ->from(ApplicationCamper::class, 'applicationCamper')
+            ->leftJoin('applicationCamper.applicationPurchasableItemInstances', 'applicationPurchasableItemInstance')
+            ->andWhere('applicationCamper.id IN (:ids)')
+            ->setParameter('ids', $applicationCamperIds)
             ->getQuery()
             ->getResult()
         ;

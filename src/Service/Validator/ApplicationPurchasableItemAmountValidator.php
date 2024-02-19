@@ -35,7 +35,10 @@ class ApplicationPurchasableItemAmountValidator extends ConstraintValidator
         }
 
         $applicationPurchasableItemData = $value;
-        $applicationPurchasableItem = $this->propertyAccessor->getValue($applicationPurchasableItemData, $constraint->applicationPurchasableItemProperty);
+        $applicationPurchasableItem = $this->propertyAccessor->getValue(
+            $applicationPurchasableItemData,
+            $constraint->applicationPurchasableItemProperty
+        );
 
         if (!$applicationPurchasableItem instanceof ApplicationPurchasableItem)
         {
@@ -43,27 +46,32 @@ class ApplicationPurchasableItemAmountValidator extends ConstraintValidator
         }
 
         /** @var ApplicationPurchasableItemInstanceData[] $applicationPurchasableItemInstancesData */
-        $applicationPurchasableItemInstancesData = $this->propertyAccessor->getValue($applicationPurchasableItemData, $constraint->applicationPurchasableItemInstancesDataProperty);
+        $applicationPurchasableItemInstancesData = $this->propertyAccessor->getValue(
+            $applicationPurchasableItemData,
+            $constraint->applicationPurchasableItemInstancesDataProperty
+        );
 
         if (!is_iterable($applicationPurchasableItemInstancesData))
         {
             throw new UnexpectedTypeException($applicationPurchasableItemInstancesData, 'iterable');
         }
 
-        foreach ($applicationPurchasableItemInstancesData as $applicationPurchasableItemInstanceData)
+        $totalAmount = 0;
+        $application = $applicationPurchasableItem->getApplication();
+        $maxAmount = $applicationPurchasableItem->getMaxAmount();
+        $isIndividualMode = $application->isPurchasableItemsIndividualMode();
+
+        if (!$isIndividualMode)
         {
-            if (!$applicationPurchasableItemInstanceData instanceof ApplicationPurchasableItemInstanceData)
-            {
-                throw new UnexpectedTypeException($applicationPurchasableItemInstanceData, ApplicationPurchasableItemInstanceData::class);
-            }
+            $maxAmount = $applicationPurchasableItem->getCalculatedMaxAmount();
         }
 
-        $calculatedMaxAmount = $applicationPurchasableItem->getCalculatedMaxAmount();
-        $totalAmount = 0;
-
         foreach ($applicationPurchasableItemInstancesData as $applicationPurchasableItemInstanceData)
         {
-            $amount = $this->propertyAccessor->getValue($applicationPurchasableItemInstanceData, $constraint->applicationPurchasableItemInstanceAmountProperty);
+            $amount = $this->propertyAccessor->getValue(
+                $applicationPurchasableItemInstanceData,
+                $constraint->applicationPurchasableItemInstanceAmountProperty
+            );
 
             if (!is_int($amount))
             {
@@ -78,15 +86,20 @@ class ApplicationPurchasableItemAmountValidator extends ConstraintValidator
             $totalAmount += $amount;
         }
 
-        if ($totalAmount > $calculatedMaxAmount)
+        if ($totalAmount > $maxAmount)
         {
+            $path = sprintf('%s[%s].%s',
+                $constraint->applicationPurchasableItemInstancesDataProperty,
+                array_key_last($applicationPurchasableItemInstancesData),
+                $constraint->applicationPurchasableItemInstanceAmountProperty
+            );
+
             $this->context
                 ->buildViolation($constraint->message, [
-                    'item_name'      => $applicationPurchasableItem->getLabel(),
                     'current_amount' => $totalAmount,
-                    'max_amount'     => $calculatedMaxAmount,
+                    'max_amount'     => $maxAmount,
                 ])
-                ->atPath($constraint->applicationPurchasableItemInstancesDataProperty)
+                ->atPath($path)
                 ->addViolation()
             ;
         }

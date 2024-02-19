@@ -2,6 +2,7 @@
 
 namespace App\Service\Data\Transfer\User;
 
+use App\Library\Data\User\ApplicationCamperPurchasableItemsData;
 use App\Library\Data\User\ApplicationPurchasableItemData;
 use App\Library\Data\User\ApplicationStepTwoUpdateData;
 use App\Model\Entity\Application;
@@ -42,6 +43,7 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
         /** @var Application $application */
         $applicationStepTwoUpdateData = $data;
         $application = $entity;
+        $isPurchasableItemsIndividualMode = $application->isPurchasableItemsIndividualMode();
 
         $applicationStepTwoUpdateData->setPaymentMethod($application->getPaymentMethod());
         $applicationStepTwoUpdateData->setNote($application->getNote());
@@ -65,9 +67,45 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
 
         foreach ($application->getApplicationPurchasableItems() as $applicationPurchasableItem)
         {
+            $isGlobal = $applicationPurchasableItem->isGlobal();
+
+            if ($isPurchasableItemsIndividualMode && !$isGlobal)
+            {
+                continue;
+            }
+
             $applicationPurchasableItemData = new ApplicationPurchasableItemData($applicationPurchasableItem);
             $this->dataTransfer->fillData($applicationPurchasableItemData, $applicationPurchasableItem);
             $applicationStepTwoUpdateData->addApplicationPurchasableItemsDatum($applicationPurchasableItemData);
+        }
+
+        if ($isPurchasableItemsIndividualMode)
+        {
+            foreach ($application->getApplicationCampers() as $applicationCamper)
+            {
+                $skip = true;
+                $applicationCamperPurchasableItemsData = new ApplicationCamperPurchasableItemsData();
+
+                foreach ($application->getApplicationPurchasableItems() as $applicationPurchasableItem)
+                {
+                    $isGlobal = $applicationPurchasableItem->isGlobal();
+
+                    if ($isGlobal)
+                    {
+                        continue;
+                    }
+
+                    $skip = false;
+                    $applicationPurchasableItemData = new ApplicationPurchasableItemData($applicationPurchasableItem, $applicationCamper);
+                    $this->dataTransfer->fillData($applicationPurchasableItemData, $applicationPurchasableItem);
+                    $applicationCamperPurchasableItemsData->addApplicationPurchasableItemsDatum($applicationPurchasableItemData);
+                }
+
+                if (!$skip)
+                {
+                    $applicationStepTwoUpdateData->addApplicationCamperPurchasableItemsDatum($applicationCamperPurchasableItemsData);
+                }
+            }
         }
     }
 
@@ -96,24 +134,34 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
         }
         else
         {
-            $discountSiblingsIntervalFrom = $discountSiblingsInterval[array_key_first($discountSiblingsInterval)];
-            $discountSiblingsIntervalTo = $discountSiblingsInterval[array_key_last($discountSiblingsInterval)];
+            $discountSiblingsIntervalFrom = $discountSiblingsInterval['from'];
+            $discountSiblingsIntervalTo = $discountSiblingsInterval['to'];
             $application->setDiscountSiblingsInterval($discountSiblingsIntervalFrom, $discountSiblingsIntervalTo);
         }
 
-        $applicationPurchasableItems = $application->getApplicationPurchasableItems();
+        $applicationPurchasableItemsData = $applicationStepTwoUpdateData->getApplicationPurchasableItemsData();
 
-        foreach ($applicationStepTwoUpdateData->getApplicationPurchasableItemsData() as $index => $applicationPurchasableItemData)
+        foreach ($applicationPurchasableItemsData as $applicationPurchasableItemData)
         {
-            if (!array_key_exists($index, $applicationPurchasableItems))
-            {
-                continue;
-            }
-
-            $applicationPurchasableItem = $applicationPurchasableItems[$index];
+            $applicationPurchasableItem = $applicationPurchasableItemData->getApplicationPurchasableItem();
             $event = new ApplicationPurchasableItemUpdateEvent($applicationPurchasableItemData, $applicationPurchasableItem);
             $event->setIsFlush(false);
             $this->eventDispatcher->dispatch($event, $event::NAME);
+        }
+
+        $applicationCamperPurchasableItemsData = $applicationStepTwoUpdateData->getApplicationCamperPurchasableItemsData();
+
+        foreach ($applicationCamperPurchasableItemsData as $applicationCamperPurchasableItemsDatum)
+        {
+            $applicationPurchasableItemsData = $applicationCamperPurchasableItemsDatum->getApplicationPurchasableItemsData();
+
+            foreach ($applicationPurchasableItemsData as $applicationPurchasableItemData)
+            {
+                $applicationPurchasableItem = $applicationPurchasableItemData->getApplicationPurchasableItem();
+                $event = new ApplicationPurchasableItemUpdateEvent($applicationPurchasableItemData, $applicationPurchasableItem);
+                $event->setIsFlush(false);
+                $this->eventDispatcher->dispatch($event, $event::NAME);
+            }
         }
     }
 }

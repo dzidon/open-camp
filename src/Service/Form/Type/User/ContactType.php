@@ -17,6 +17,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * User contact edit.
@@ -70,7 +71,7 @@ class ContactType extends AbstractType
         $role = $children['role'];
         $roleOther = $children['roleOther'];
 
-        $name = $view->vars['name'];
+        $name = (new UuidV4())->toRfc4122();;
         $searchedClassName = 'role-other-field-visibility';
         $newClassName = $searchedClassName . '-' . $name;
 

@@ -56,6 +56,7 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
 
         $this->loadApplicationCamperAttachments($applicationCampers);
         $this->loadApplicationCamperFormFieldValues($applicationCampers);
+        $this->loadApplicationCamperPurchasableItemInstances($applicationCampers);
 
         return $applicationCampers;
     }
@@ -156,6 +157,25 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
             ->andWhere('applicationCamper.id IN (:ids)')
             ->setParameter('ids', $applicationCamperIds)
             ->orderBy('applicationAttachment.priority', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    private function loadApplicationCamperPurchasableItemInstances(null|array|ApplicationCamper $applicationCampers): void
+    {
+        if (empty($applicationCampers))
+        {
+            return;
+        }
+
+        $applicationCamperIds = $this->getApplicationCamperIds($applicationCampers);
+
+        $this->createQueryBuilder('applicationCamper')
+            ->select('applicationCamper, applicationPurchasableItemInstance')
+            ->leftJoin('applicationCamper.applicationPurchasableItemInstances', 'applicationPurchasableItemInstance')
+            ->andWhere('applicationCamper.id IN (:ids)')
+            ->setParameter('ids', $applicationCamperIds)
             ->getQuery()
             ->getResult()
         ;

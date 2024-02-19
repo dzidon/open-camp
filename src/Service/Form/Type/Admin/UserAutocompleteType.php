@@ -21,17 +21,20 @@ class UserAutocompleteType extends AbstractType
         $resolver->setDefaults([
             'class'          => User::class,
             'min_characters' => 2,
-            'filter_query'   => function(QueryBuilder $queryBuilder, string $phrase) {
+            'filter_query'   => function(QueryBuilder $queryBuilder, string $phrase): void
+            {
                 $queryBuilder
                     ->andWhere('entity.email LIKE :phrase OR CONCAT(entity.nameFirst, \' \', entity.nameLast) LIKE :phrase')
                     ->setParameter('phrase', '%' . $phrase . '%')
                     ->orderBy('entity.createdAt', 'DESC')
                 ;
             },
-            'security' => function(Security $security): bool {
+            'security' => function(Security $security): bool
+            {
                 return $security->isGranted('camp_create') || $security->isGranted('camp_update');
             },
-            'choice_label' => function (User $user) {
+            'choice_label' => function (User $user): string
+            {
                 $label = $user->getEmail();
                 $nameFull = $user->getNameFull();
 

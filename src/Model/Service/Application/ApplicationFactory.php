@@ -18,6 +18,8 @@ class ApplicationFactory implements ApplicationFactoryInterface
 
     private Security $security;
 
+    private bool $isPurchasableItemsIndividualMode;
+
     private string $simpleIdCharacters;
 
     private int $simpleIdLength;
@@ -26,11 +28,13 @@ class ApplicationFactory implements ApplicationFactoryInterface
 
     public function __construct(ApplicationRepositoryInterface $applicationRepository,
                                 Security                       $security,
+                                bool                           $isPurchasableItemsIndividualMode,
                                 string                         $simpleIdCharacters,
                                 int                            $simpleIdLength)
     {
         $this->applicationRepository = $applicationRepository;
         $this->security = $security;
+        $this->isPurchasableItemsIndividualMode = $isPurchasableItemsIndividualMode;
         $this->simpleIdCharacters = $simpleIdCharacters;
         $this->simpleIdLength = $simpleIdLength;
     }
@@ -99,6 +103,7 @@ class ApplicationFactory implements ApplicationFactoryInterface
             $isNationalIdentifierEnabled,
             $isEmailMandatory,
             $isPhoneNumberMandatory,
+            $this->isPurchasableItemsIndividualMode,
             $campDate,
             $campDateDescription
         );

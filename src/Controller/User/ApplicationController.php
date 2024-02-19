@@ -214,11 +214,10 @@ class ApplicationController extends AbstractController
         $this->assertApplicationDraftAvailability($application);
         $applicationId = $application->getId();
 
-        $numberOfApplicationCampers = count($application->getApplicationCampers());
         $applicationPurchasableItemsData = new ApplicationStepTwoUpdateData(
             $application->getDiscountSiblingsConfig(),
             $application->getCurrency(),
-            $numberOfApplicationCampers
+            count($application->getApplicationCampers())
         );
         $dataTransfer->fillData($applicationPurchasableItemsData, $application);
 
@@ -248,7 +247,7 @@ class ApplicationController extends AbstractController
             'application'               => $application,
             'breadcrumbs'               => $this->breadcrumbs->buildForStepTwo($application),
             'application_back_url'      => $this->generateUrl('user_application_step_one_update', [
-                'applicationId' => $applicationId->toRfc4122(),
+                'applicationId' => $applicationId,
             ]),
         ]);
     }
@@ -294,7 +293,7 @@ class ApplicationController extends AbstractController
         $this->setRouteName();
 
         $applicationBackUrl = $this->generateUrl('user_application_step_two', [
-            'applicationId' => $applicationId->toRfc4122(),
+            'applicationId' => $applicationId,
         ]);
 
         return $this->render('user/application/step_three.html.twig', [

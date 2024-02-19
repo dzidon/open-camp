@@ -21,6 +21,10 @@ class ApplicationStepTwoUpdateData
     #[Assert\NotBlank]
     private ?PaymentMethod $paymentMethod = null;
 
+    /** @var ApplicationCamperPurchasableItemsData[] */
+    #[Assert\Valid]
+    private array $applicationCamperPurchasableItemsData = [];
+
     /** @var ApplicationPurchasableItemData[] */
     #[Assert\Valid]
     private array $applicationPurchasableItemsData = [];
@@ -105,6 +109,37 @@ class ApplicationStepTwoUpdateData
         }
 
         unset($this->applicationPurchasableItemsData[$key]);
+
+        return $this;
+    }
+
+    public function getApplicationCamperPurchasableItemsData(): array
+    {
+        return $this->applicationCamperPurchasableItemsData;
+    }
+
+    public function addApplicationCamperPurchasableItemsDatum(ApplicationCamperPurchasableItemsData $applicationCamperPurchasableItemsData): self
+    {
+        if (in_array($applicationCamperPurchasableItemsData, $this->applicationCamperPurchasableItemsData, true))
+        {
+            return $this;
+        }
+
+        $this->applicationCamperPurchasableItemsData[] = $applicationCamperPurchasableItemsData;
+
+        return $this;
+    }
+
+    public function removeApplicationCamperPurchasableItemsDatum(ApplicationCamperPurchasableItemsData $applicationCamperPurchasableItemsData): self
+    {
+        $key = array_search($applicationCamperPurchasableItemsData, $this->applicationCamperPurchasableItemsData, true);
+
+        if ($key === false)
+        {
+            return $this;
+        }
+
+        unset($this->applicationCamperPurchasableItemsData[$key]);
 
         return $this;
     }

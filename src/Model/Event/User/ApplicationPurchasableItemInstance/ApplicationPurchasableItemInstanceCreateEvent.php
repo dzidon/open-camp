@@ -3,6 +3,7 @@
 namespace App\Model\Event\User\ApplicationPurchasableItemInstance;
 
 use App\Library\Data\User\ApplicationPurchasableItemInstanceData;
+use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\ApplicationPurchasableItem;
 use App\Model\Entity\ApplicationPurchasableItemInstance;
 use App\Model\Event\AbstractModelEvent;
@@ -17,10 +18,15 @@ class ApplicationPurchasableItemInstanceCreateEvent extends AbstractModelEvent
 
     private ?ApplicationPurchasableItemInstance $applicationPurchasableItemInstance = null;
 
-    public function __construct(ApplicationPurchasableItemInstanceData $data, ApplicationPurchasableItem $applicationPurchasableItem)
+    private ?ApplicationCamper $applicationCamper;
+
+    public function __construct(ApplicationPurchasableItemInstanceData $data,
+                                ApplicationPurchasableItem             $applicationPurchasableItem,
+                                ?ApplicationCamper                     $applicationCamper = null)
     {
         $this->data = $data;
         $this->applicationPurchasableItem = $applicationPurchasableItem;
+        $this->applicationCamper = $applicationCamper;
     }
 
     public function getApplicationPurchasableItemInstanceData(): ApplicationPurchasableItemInstanceData
@@ -55,6 +61,18 @@ class ApplicationPurchasableItemInstanceCreateEvent extends AbstractModelEvent
     public function setApplicationPurchasableItemInstance(?ApplicationPurchasableItemInstance $applicationPurchasableItemInstance): self
     {
         $this->applicationPurchasableItemInstance = $applicationPurchasableItemInstance;
+
+        return $this;
+    }
+
+    public function getApplicationCamper(): ?ApplicationCamper
+    {
+        return $this->applicationCamper;
+    }
+
+    public function setApplicationCamper(?ApplicationCamper $applicationCamper): self
+    {
+        $this->applicationCamper = $applicationCamper;
 
         return $this;
     }

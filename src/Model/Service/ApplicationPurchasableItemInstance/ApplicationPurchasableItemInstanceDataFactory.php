@@ -17,7 +17,16 @@ class ApplicationPurchasableItemInstanceDataFactory implements ApplicationPurcha
      */
     public function createDataFromApplicationPurchasableItem(ApplicationPurchasableItem $applicationPurchasableItem): ApplicationPurchasableItemInstanceData
     {
-        $applicationPurchasableItemInstanceData = new ApplicationPurchasableItemInstanceData($applicationPurchasableItem->getCalculatedMaxAmount());
+        $application = $applicationPurchasableItem->getApplication();
+        $isIndividualMode = $application->isPurchasableItemsIndividualMode();
+        $maxAmount = $applicationPurchasableItem->getMaxAmount();
+
+        if (!$isIndividualMode)
+        {
+            $maxAmount = $applicationPurchasableItem->getCalculatedMaxAmount();
+        }
+
+        $applicationPurchasableItemInstanceData = new ApplicationPurchasableItemInstanceData($maxAmount);
 
         if (!$applicationPurchasableItem->hasMultipleVariants())
         {
@@ -42,7 +51,12 @@ class ApplicationPurchasableItemInstanceDataFactory implements ApplicationPurcha
 
         foreach ($application->getApplicationPurchasableItems() as $applicationPurchasableItem)
         {
-            $data[] = $this->createDataFromApplicationPurchasableItem($applicationPurchasableItem);
+            $idString = $applicationPurchasableItem
+                ->getId()
+                ->toRfc4122()
+            ;
+
+            $data[$idString] = $this->createDataFromApplicationPurchasableItem($applicationPurchasableItem);
         }
 
         return $data;

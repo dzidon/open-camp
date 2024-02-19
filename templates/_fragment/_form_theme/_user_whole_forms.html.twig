@@ -50,6 +50,54 @@
     <button type="submit" class="btn btn-primary">{{ 'form.user.camper_search.button'|trans }}</button>
 {% endblock %}
 
+{# Application attachment file help text #}
+{% block user_application_attachment_file_help %}
+    {% set application_attachment_data = form.parent.vars.data %}
+    {% set is_already_uploaded = application_attachment_data.isAlreadyUploaded %}
+    {% set help_configured = application_attachment_data.help %}
+    {% set is_help_configured = help_configured is not same as(null) and help_configured is not same as('') %}
+    {% set is_required_later = application_attachment_data.isRequiredLater %}
+    {% set extensions = application_attachment_data.extensions %}
+    {% set extensions_text = extensions|join(', ') %}
+
+    {% if help is not empty or is_already_uploaded or is_help_configured or is_required_later or extensions_text is not empty %}
+        {% set help_attr = help_attr|merge({class: (help_attr.class|default('') ~ ' form-text text-muted')|trim}) %}
+
+        <small id="{{ id }}_help" {% with { attr: help_attr } %} {{ block('attributes') }} {% endwith %}>
+            {% if is_already_uploaded %}
+                <strong class="text-success">
+                    &check; {{ 'form.user.application_attachment.already_uploaded'|trans }}
+                </strong>
+
+                <br>
+            {% endif %}
+
+            {% if help is not empty %}
+                {{ block('form_help_content') }}
+
+                <br>
+            {% endif %}
+
+            {% if is_help_configured %}
+                {{ help_configured }}
+
+                <br>
+            {% endif %}
+
+            {% if is_required_later %}
+                {{ 'form.user.application_attachment.is_required_later'|trans }}
+
+                <br>
+            {% endif %}
+
+            {% if extensions_text is not empty %}
+                {{ 'form.user.application_attachment.allowed_formats'|trans }}:
+                {{ extensions_text }}
+            {% endif %}
+        </small>
+    {% endif %}
+{% endblock %}
+
 {# Application camper edit #}
 {% block user_application_camper_widget %}
     {{ form_errors(form) }}
@@ -744,119 +792,28 @@
         {{ form_row(form.discountSiblingsInterval) }}
     {% endif %}
 
-    {% if form.applicationPurchasableItemsData is defined %}
-        <h3 class="mb-3">
-            {{ form.applicationPurchasableItemsData.vars.label|trans }}
-        </h3>
+    {% if form.applicationCamperPurchasableItemsData is defined %}
+        {% set label = form.applicationCamperPurchasableItemsData.vars.label %}
 
-        {% if application_purchasable_items is defined %}
-            {% for index, application_purchasable_item_form in form.applicationPurchasableItemsData.children %}
-                <div class="mb-4">
-                    {% if application_purchasable_items[index] is defined %}
-                        {% set application_purchasable_item = application_purchasable_items[index] %}
-                        {% set purchasable_item = application_purchasable_item.purchasableItem %}
-                        {% set application = application_purchasable_item.application %}
-                        {% set label = application_purchasable_item_form.children.applicationPurchasableItemInstancesData.vars.label %}
-                        {% set image_extension = purchasable_item is null ? null : purchasable_item.imageExtension %}
-
-                        <div class="row {% if image_extension is null %} mb-1 {% else %} mb-3 {% endif %}">
-                            <div class="col-12">
-                                <div>
-                                    {% if application_purchasable_item.description is null %}
-                                        <h5>{{ label }}</h5>
-                                    {% else %}
-                                        <h5>
-                                            {{ label }}
-
-                                            <a href="#purchasable-item-description-{{ index }}"
-                                               data-toggle="modal"
-                                               data-target="#purchasable-item-description-{{ index }}"
-                                            >
-                                                <i class="fas fa-info-circle"></i>
-                                            </a>
-                                        </h5>
-
-                                        <div class="modal fade"
-                                             id="purchasable-item-description-{{ index }}"
-                                             tabindex="-1"
-                                             aria-labelledby="purchasable-item-description-{{ index }}"
-                                             aria-hidden="true"
-                                        >
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title">
-                                                            {{ 'entity_attribute.purchasable_item.description'|trans }}
-                                                        </h5>
-
-                                                        <button type="button"
-                                                                class="close"
-                                                                data-dismiss="modal"
-                                                                aria-label="{{ 'modal.button_close'|trans }}"
-                                                        >
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                    </div>
-
-                                                    <div class="modal-body">
-                                                        <p>{{ application_purchasable_item.description|nl2br }}</p>
-                                                    </div>
-
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                                            {{ 'modal.button_close'|trans }}
-                                                        </button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    {% endif %}
-                                </div>
-
-                                <div>
-                                    <span>
-                                        {{ 'entity_attribute.application_purchasable_item.price'|trans }}:
-                                        {{ application_purchasable_item.price|format_currency(application.currency) }}
-                                    </span>
-                                </div>
-
-                                {% if application_purchasable_item.calculatedMaxAmount > 1 %}
-                                    <div>
-                                        <span>
-                                            {{ 'entity_attribute.application_purchasable_item.max_amount'|trans }}:
-                                            {{ application_purchasable_item.calculatedMaxAmount }}
-                                        </span>
-                                    </div>
-                                {% endif %}
-                            </div>
-
-                            {% if image_extension is not null %}
-                                <div class="col-12">
-                                    <div class="row mt-2">
-                                        <div class="col-6 col-md-4">
-                                            <a href="{{ asset(purchasable_item_image_path(purchasable_item)) }}" target="_blank">
-                                                <img class="image-cover-16-9"
-                                                     src="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
-                                                     alt="{{ 'entity_attribute.purchasable_item.image'|trans }} - {{ purchasable_item.name }}"
-                                                >
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-
-                    {{ form_row(application_purchasable_item_form.children.applicationPurchasableItemInstancesData, {label: false}) }}
-
-                    {% if application_purchasable_item_form.children.addApplicationPurchasableItemInstanceData is defined %}
-                        {{ form_row(application_purchasable_item_form.children.addApplicationPurchasableItemInstanceData) }}
-                    {% endif %}
-                </div>
-            {% endfor %}
-        {% else %}
-            {{ form_row(form.applicationPurchasableItemsData) }}
+        {% if label %}
+            <h3 class="mb-3">
+                {{ label|trans }}
+            </h3>
         {% endif %}
+
+        {{ form_widget(form.applicationCamperPurchasableItemsData) }}
+    {% endif %}
+
+    {% if form.applicationPurchasableItemsData is defined %}
+        {% set label = form.applicationPurchasableItemsData.vars.label %}
+
+        {% if label %}
+            <h3 class="mb-3">
+                {{ label|trans }}
+            </h3>
+        {% endif %}
+
+        {{ form_widget(form.applicationPurchasableItemsData) }}
     {% endif %}
 
     <h3 class="mb-3">
@@ -904,4 +861,140 @@
             {{ form_row(form.submit) }}
         </div>
     </div>
+{% endblock %}
+
+{# Application camper purchasable item #}
+{% block user_application_camper_purchasable_item_widget %}
+    {{ form_errors(form) }}
+
+    {% set applicationPurchasableItemsVars = form.applicationPurchasableItemsData.vars %}
+    {% set applicationPurchasableItemsLabel = applicationPurchasableItemsVars.label %}
+    {% set applicationPurchasableItemsLabelVars = applicationPurchasableItemsVars.label_translation_parameters %}
+
+    <h3 class="mb-3">
+        {{ applicationPurchasableItemsLabel|trans(applicationPurchasableItemsLabelVars) }}
+    </h3>
+
+    {{ form_widget(form.applicationPurchasableItemsData) }}
+
+    {{ form_rest(form) }}
+{% endblock %}
+
+{# Application purchasable item widget #}
+{% block user_application_purchasable_item_widget %}
+    {{ form_errors(form) }}
+
+    {% set index = form.vars.name %}
+    {% set children = form.children %}
+    {% set data = form.vars.data %}
+    {% set application_purchasable_item = data.applicationPurchasableItem %}
+    {% set purchasable_item = application_purchasable_item.purchasableItem %}
+    {% set application = application_purchasable_item.application %}
+    {% set label = children.applicationPurchasableItemInstancesData.vars.label %}
+    {% set image_extension = purchasable_item is null ? null : purchasable_item.imageExtension %}
+
+    <div class="row {% if image_extension is null %} mb-1 {% else %} mb-3 {% endif %}">
+        <div class="col-12">
+            <div>
+                {% if application_purchasable_item.description is null %}
+                    <h5>{{ label }}</h5>
+                {% else %}
+                    {% set item_id = application_purchasable_item.id %}
+
+                    <h5>
+                        {{ label }}
+
+                        <a href="#purchasable-item-description-{{ item_id }}"
+                           data-toggle="modal"
+                           data-target="#purchasable-item-description-{{ item_id }}"
+                        >
+                            <i class="fas fa-info-circle"></i>
+                        </a>
+                    </h5>
+
+                    <div class="modal fade"
+                         id="purchasable-item-description-{{ item_id }}"
+                         tabindex="-1"
+                         aria-labelledby="purchasable-item-description-{{ item_id }}"
+                         aria-hidden="true"
+                    >
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">
+                                        {{ 'entity_attribute.purchasable_item.description'|trans }}
+                                    </h5>
+
+                                    <button type="button"
+                                            class="close"
+                                            data-dismiss="modal"
+                                            aria-label="{{ 'modal.button_close'|trans }}"
+                                    >
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p>{{ application_purchasable_item.description|nl2br }}</p>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                        {{ 'modal.button_close'|trans }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div>
+                <span>
+                    {{ 'entity_attribute.application_purchasable_item.price'|trans }}:
+                    {{ application_purchasable_item.price|format_currency(application.currency) }}
+                </span>
+            </div>
+
+            {% if application.isPurchasableItemsIndividualMode %}
+                {% set max_amount = application_purchasable_item.maxAmount %}
+            {% else %}
+                {% set max_amount = application_purchasable_item.calculatedMaxAmount %}
+            {% endif %}
+
+            {% if max_amount > 1 %}
+                <div>
+                    <span>
+                        {{ 'entity_attribute.application_purchasable_item.max_amount'|trans }}:
+                        {{ max_amount }}
+                    </span>
+                </div>
+            {% endif %}
+        </div>
+
+        {% if image_extension is not null %}
+            <div class="col-12">
+                <div class="row mt-2">
+                    <div class="col-6 col-md-4">
+                        <a href="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
+                           target="_blank"
+                        >
+                            <img class="image-cover-16-9"
+                                 src="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
+                                 alt="{{ purchasable_item.name }}"
+                            >
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    {{ form_row(children.applicationPurchasableItemInstancesData, {label: false}) }}
+
+    {% if children.addApplicationPurchasableItemInstanceData is defined %}
+        {{ form_row(children.addApplicationPurchasableItemInstanceData) }}
+    {% endif %}
+
+    {{ form_rest(form) }}
 {% endblock %}
