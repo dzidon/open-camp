@@ -18,15 +18,17 @@ class ApplicationPurchasableItemInstanceCreateEvent extends AbstractModelEvent
 
     private ?ApplicationPurchasableItemInstance $applicationPurchasableItemInstance = null;
 
-    private ?ApplicationCamper $applicationCamper;
+    private ?ApplicationCamper $applicationCamper = null;
+
+    private int $priority;
 
     public function __construct(ApplicationPurchasableItemInstanceData $data,
                                 ApplicationPurchasableItem             $applicationPurchasableItem,
-                                ?ApplicationCamper                     $applicationCamper = null)
+                                int                                    $priority)
     {
         $this->data = $data;
         $this->applicationPurchasableItem = $applicationPurchasableItem;
-        $this->applicationCamper = $applicationCamper;
+        $this->priority = $priority;
     }
 
     public function getApplicationPurchasableItemInstanceData(): ApplicationPurchasableItemInstanceData
@@ -73,6 +75,18 @@ class ApplicationPurchasableItemInstanceCreateEvent extends AbstractModelEvent
     public function setApplicationCamper(?ApplicationCamper $applicationCamper): self
     {
         $this->applicationCamper = $applicationCamper;
+
+        return $this;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(int $priority): self
+    {
+        $this->priority = $priority;
 
         return $this;
     }

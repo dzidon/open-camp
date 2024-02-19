@@ -36,6 +36,9 @@ class ApplicationContact
     #[ORM\Column(type: 'phone_number', nullable: true)]
     private ?PhoneNumber $phoneNumber = null;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $priority;
+
     #[ORM\Column(length: 32)]
     private string $role;
 
@@ -53,12 +56,18 @@ class ApplicationContact
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $nameFirst, string $nameLast, Application $application, ContactRoleEnum $role, ?string $roleOther = null)
+    public function __construct(string          $nameFirst,
+                                string          $nameLast,
+                                Application     $application,
+                                int             $priority,
+                                ContactRoleEnum $role,
+                                ?string         $roleOther = null)
     {
         $this->id = Uuid::v4();
         $this->nameFirst = $nameFirst;
         $this->nameLast = $nameLast;
         $this->application = $application;
+        $this->priority = $priority;
         $this->createdAt = new DateTimeImmutable('now');
         $this->setRole($role, $roleOther);
 
@@ -133,6 +142,11 @@ class ApplicationContact
         $this->phoneNumber = clone $phoneNumber;
 
         return $this;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 
     public function getRole(): ContactRoleEnum

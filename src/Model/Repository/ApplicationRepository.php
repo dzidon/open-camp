@@ -213,7 +213,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
             ->leftJoin('application.applicationContacts', 'applicationContact')
             ->andWhere('application.id IN (:ids)')
             ->setParameter('ids', $applicationIds)
-            ->orderBy('applicationContact.createdAt', 'ASC')
+            ->orderBy('applicationContact.priority', 'DESC')
             ->getQuery()
             ->getResult()
         ;
@@ -306,9 +306,11 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
             ->select('applicationPurchasableItem, applicationPurchasableItemInstance')
             ->from(ApplicationPurchasableItem::class, 'applicationPurchasableItem')
             ->leftJoin('applicationPurchasableItem.applicationPurchasableItemInstances', 'applicationPurchasableItemInstance')
+            ->leftJoin('applicationPurchasableItemInstance.applicationCamper', 'applicationCamper')
             ->andWhere('applicationPurchasableItem.id IN (:ids)')
             ->setParameter('ids', $applicationPurchasableItemIds)
-            ->addOrderBy('applicationPurchasableItemInstance.applicationCamper', 'ASC')
+            ->addOrderBy('applicationCamper.priority', 'DESC')
+            ->addOrderBy('applicationPurchasableItemInstance.priority', 'DESC')
             ->getQuery()
             ->getResult()
         ;
@@ -329,7 +331,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
             ->leftJoin('application.applicationCampers', 'applicationCamper')
             ->andWhere('application.id IN (:ids)')
             ->setParameter('ids', $applicationIds)
-            ->orderBy('applicationCamper.createdAt', 'ASC')
+            ->orderBy('applicationCamper.priority', 'DESC')
             ->getQuery()
             ->getResult()
         ;
@@ -427,6 +429,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
             ->leftJoin('applicationCamper.applicationPurchasableItemInstances', 'applicationPurchasableItemInstance')
             ->andWhere('applicationCamper.id IN (:ids)')
             ->setParameter('ids', $applicationCamperIds)
+            ->orderBy('applicationPurchasableItemInstance.priority', 'DESC')
             ->getQuery()
             ->getResult()
         ;

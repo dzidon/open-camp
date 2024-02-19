@@ -17,10 +17,13 @@ class ApplicationContactCreateEvent extends AbstractModelEvent
 
     private ?ApplicationContact $applicationContact = null;
 
-    public function __construct(ContactData $data, Application $application)
+    private int $priority;
+
+    public function __construct(ContactData $data, Application $application, int $priority)
     {
         $this->data = $data;
         $this->application = $application;
+        $this->priority = $priority;
     }
 
     public function getContactData(): ContactData
@@ -55,6 +58,18 @@ class ApplicationContactCreateEvent extends AbstractModelEvent
     public function setApplicationContact(?ApplicationContact $applicationContact): self
     {
         $this->applicationContact = $applicationContact;
+
+        return $this;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(int $priority): self
+    {
+        $this->priority = $priority;
 
         return $this;
     }

@@ -28,6 +28,9 @@ class ApplicationPurchasableItemInstance
     #[ORM\Column(type: Types::INTEGER)]
     private int $amount;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $priority;
+
     #[ORM\ManyToOne(targetEntity: ApplicationCamper::class, inversedBy: 'applicationPurchasableItemInstances')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     private ?ApplicationCamper $applicationCamper;
@@ -45,12 +48,14 @@ class ApplicationPurchasableItemInstance
 
     public function __construct(array                      $chosenVariantValues,
                                 int                        $amount,
+                                int                        $priority,
                                 ApplicationPurchasableItem $applicationPurchasableItem,
                                 ?ApplicationCamper         $applicationCamper = null)
     {
         $this->id = Uuid::v4();
         $this->chosenVariantValues = $chosenVariantValues;
         $this->amount = $amount;
+        $this->priority = $priority;
         $this->applicationPurchasableItem = $applicationPurchasableItem;
         $this->applicationCamper = $applicationCamper;
         $this->createdAt = new DateTimeImmutable('now');
@@ -113,6 +118,11 @@ class ApplicationPurchasableItemInstance
         $this->assertChosenVariantValues();
 
         return $this;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 
     public function getAmount(): int

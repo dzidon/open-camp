@@ -17,10 +17,13 @@ class ApplicationCamperCreateEvent extends AbstractModelEvent
 
     private ?ApplicationCamper $applicationCamper = null;
 
-    public function __construct(ApplicationCamperData $data, Application $application)
+    private int $priority;
+
+    public function __construct(ApplicationCamperData $data, Application $application, int $priority)
     {
         $this->data = $data;
         $this->application = $application;
+        $this->priority = $priority;
     }
 
     public function getApplicationCamperData(): ApplicationCamperData
@@ -55,6 +58,18 @@ class ApplicationCamperCreateEvent extends AbstractModelEvent
     public function setApplicationCamper(?ApplicationCamper $applicationCamper): self
     {
         $this->applicationCamper = $applicationCamper;
+
+        return $this;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(int $priority): self
+    {
+        $this->priority = $priority;
 
         return $this;
     }

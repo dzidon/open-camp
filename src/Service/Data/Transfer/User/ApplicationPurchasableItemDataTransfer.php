@@ -116,6 +116,7 @@ class ApplicationPurchasableItemDataTransfer implements DataTransferInterface
         $applicationPurchasableItemInstancesData = $applicationPurchasableItemData->getApplicationPurchasableItemInstancesData();
         $applicationPurchasableItemInstances = $applicationPurchasableItem->getApplicationPurchasableItemInstances();
         $applicationCamper = $applicationPurchasableItemData->getApplicationCamper();
+        $lowestExistingPriority = 0;
 
         $this->mergeInstancesWithMatchingVariants($applicationPurchasableItemInstancesData);
         $this->filterApplicationPurchasableItemInstancesByCamper($applicationPurchasableItemInstances, $applicationCamper);
@@ -128,6 +129,15 @@ class ApplicationPurchasableItemDataTransfer implements DataTransferInterface
                 $event = new ApplicationPurchasableItemInstanceDeleteEvent($applicationPurchasableItemInstance);
                 $event->setIsFlush(false);
                 $this->eventDispatcher->dispatch($event, $event::NAME);
+
+                continue;
+            }
+
+            $priority = $applicationPurchasableItemInstance->getPriority();
+
+            if ($priority < $lowestExistingPriority)
+            {
+                $lowestExistingPriority = $priority;
             }
         }
 
@@ -159,11 +169,14 @@ class ApplicationPurchasableItemDataTransfer implements DataTransferInterface
                     continue;
                 }
 
+                $lowestExistingPriority--;
                 $event = new ApplicationPurchasableItemInstanceCreateEvent(
                     $applicationPurchasableItemInstanceData,
                     $applicationPurchasableItem,
-                    $applicationCamper
+                    $lowestExistingPriority
                 );
+
+                $event->setApplicationCamper($applicationCamper);
             }
 
             $event->setIsFlush(false);

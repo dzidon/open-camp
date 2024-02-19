@@ -250,6 +250,7 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
     private function fillEntityContacts(array $contactsData, Application $application): void
     {
         $applicationContacts = $application->getApplicationContacts();
+        $lowestExistingPriority = 0;
 
         // delete
         foreach ($applicationContacts as $index => $applicationContact)
@@ -259,6 +260,15 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
                 $event = new ApplicationContactDeleteEvent($applicationContact);
                 $event->setIsFlush(false);
                 $this->eventDispatcher->dispatch($event, $event::NAME);
+
+                continue;
+            }
+
+            $priority = $applicationContact->getPriority();
+
+            if ($priority < $lowestExistingPriority)
+            {
+                $lowestExistingPriority = $priority;
             }
         }
 
@@ -272,7 +282,8 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
             }
             else
             {
-                $event = new ApplicationContactCreateEvent($contactData, $application);
+                $lowestExistingPriority--;
+                $event = new ApplicationContactCreateEvent($contactData, $application, $lowestExistingPriority);
             }
 
             $event->setIsFlush(false);
@@ -288,6 +299,7 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
     private function fillEntityApplicationCampers(array $applicationCampersData, Application $application): void
     {
         $applicationCampers = $application->getApplicationCampers();
+        $lowestExistingPriority = 0;
 
         // delete
         foreach ($applicationCampers as $index => $applicationCamper)
@@ -297,6 +309,15 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
                 $event = new ApplicationCamperDeleteEvent($applicationCamper);
                 $event->setIsFlush(false);
                 $this->eventDispatcher->dispatch($event, $event::NAME);
+
+                continue;
+            }
+
+            $priority = $applicationCamper->getPriority();
+
+            if ($priority < $lowestExistingPriority)
+            {
+                $lowestExistingPriority = $priority;
             }
         }
 
@@ -310,7 +331,8 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
             }
             else
             {
-                $event = new ApplicationCamperCreateEvent($applicationCamperData, $application);
+                $lowestExistingPriority--;
+                $event = new ApplicationCamperCreateEvent($applicationCamperData, $application, $lowestExistingPriority);
             }
 
             $event->setIsFlush(false);

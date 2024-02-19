@@ -24,8 +24,17 @@ class ApplicationContactCreateSubscriber
     public function onCreateFillEntity(ApplicationContactCreateEvent $event): void
     {
         $data = $event->getContactData();
+        $priority = $event->getPriority();
         $application = $event->getApplication();
-        $applicationContact = new ApplicationContact($data->getNameFirst(), $data->getNameLast(), $application, $data->getRole(), $data->getRoleOther());
+        $applicationContact = new ApplicationContact(
+            $data->getNameFirst(),
+            $data->getNameLast(),
+            $application,
+            $priority,
+            $data->getRole(),
+            $data->getRoleOther()
+        );
+
         $this->dataTransfer->fillEntity($data, $applicationContact);
         $event->setApplicationContact($applicationContact);
     }

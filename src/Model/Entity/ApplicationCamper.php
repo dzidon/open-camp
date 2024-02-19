@@ -33,6 +33,9 @@ class ApplicationCamper
     #[ORM\Column(length: 1)]
     private string $gender;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $priority;
+
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private DateTimeImmutable $bornAt;
 
@@ -78,13 +81,19 @@ class ApplicationCamper
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $nameFirst, string $nameLast, GenderEnum $gender, DateTimeImmutable $bornAt, Application $application)
+    public function __construct(string            $nameFirst,
+                                string            $nameLast,
+                                GenderEnum        $gender,
+                                int               $priority,
+                                DateTimeImmutable $bornAt,
+                                Application       $application)
     {
         $this->id = Uuid::v4();
         $this->nameFirst = $nameFirst;
         $this->nameLast = $nameLast;
         $this->gender = $gender->value;
         $this->bornAt = $bornAt;
+        $this->priority = $priority;
         $this->application = $application;
         $this->applicationTripLocationPaths = new ArrayCollection();
         $this->applicationFormFieldValues = new ArrayCollection();
@@ -127,6 +136,11 @@ class ApplicationCamper
         $this->nameLast = $nameLast;
 
         return $this;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 
     public function getGender(): GenderEnum

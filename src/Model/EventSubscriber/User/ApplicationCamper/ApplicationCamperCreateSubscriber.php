@@ -24,12 +24,14 @@ class ApplicationCamperCreateSubscriber
     public function onCreateFillEntity(ApplicationCamperCreateEvent $event): void
     {
         $data = $event->getApplicationCamperData();
+        $priority = $event->getPriority();
         $camperData = $data->getCamperData();
         $application = $event->getApplication();
         $applicationCamper = new ApplicationCamper(
             $camperData->getNameFirst(),
             $camperData->getNameLast(),
             $camperData->getGender(),
+            $priority,
             $camperData->getBornAt(),
             $application
         );
