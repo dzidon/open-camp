@@ -30,7 +30,6 @@ use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\User\ApplicationStepThreeType;
 use App\Service\Form\Type\User\ApplicationStepTwoType;
 use App\Service\Form\Type\User\ApplicationStepOneType;
-use App\Service\Menu\Breadcrumbs\User\ApplicationBreadcrumbsInterface;
 use App\Service\Routing\RouteNamerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -47,21 +46,18 @@ class ApplicationController extends AbstractController
     private CampCategoryRepositoryInterface $campCategoryRepository;
     private RouteNamerInterface $routeNamer;
     private EventDispatcherInterface $eventDispatcher;
-    private ApplicationBreadcrumbsInterface $breadcrumbs;
 
     public function __construct(CampDateRepositoryInterface     $campDateRepository,
                                 ApplicationRepositoryInterface  $applicationRepository,
                                 CampCategoryRepositoryInterface $campCategoryRepository,
                                 RouteNamerInterface             $routeNamer,
-                                EventDispatcherInterface        $eventDispatcher,
-                                ApplicationBreadcrumbsInterface $breadcrumbs)
+                                EventDispatcherInterface        $eventDispatcher)
     {
         $this->campDateRepository = $campDateRepository;
         $this->applicationRepository = $applicationRepository;
         $this->campCategoryRepository = $campCategoryRepository;
         $this->routeNamer = $routeNamer;
         $this->eventDispatcher = $eventDispatcher;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/application-create/{campDateId}', name: 'user_application_step_one_create')]
@@ -126,7 +122,9 @@ class ApplicationController extends AbstractController
             'camp_date_description'           => $campDate->getDescription(),
             'tax'                             => $this->getParameter('app.tax'),
             'form_application_step_one'       => $form->createView(),
-            'breadcrumbs'                     => $this->breadcrumbs->buildForStepOneCreate($campDate),
+            'breadcrumbs'                     => $this->createBreadcrumbs([
+                'camp_date' => $campDate,
+            ]),
             'application_back_url'            => $this->generateUrl('user_camp_detail', [
                 'urlName' => $camp->getUrlName(),
             ]),
@@ -181,6 +179,8 @@ class ApplicationController extends AbstractController
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
         $camp = $campDate?->getCamp();
+        $campCategory = $camp?->getCampCategory();
+
         $backRoute = $camp === null ? 'user_camp_catalog' : 'user_camp_detail';
         $backUrlParameters = $camp === null ? [] : ['urlName' => $camp->getUrlName()];
         $this->setRouteName();
@@ -198,8 +198,12 @@ class ApplicationController extends AbstractController
             'tax'                             => $application->getTax(),
             'currency'                        => $application->getCurrency(),
             'form_application_step_one'       => $form->createView(),
-            'breadcrumbs'                     => $this->breadcrumbs->buildForStepOneUpdate($application),
             'application_back_url'            => $this->generateUrl($backRoute, $backUrlParameters),
+            'breadcrumbs'                     => $this->createBreadcrumbs([
+                'application'   => $application,
+                'camp'          => $camp,
+                'camp_category' => $campCategory,
+            ]),
         ]);
     }
 
@@ -211,6 +215,9 @@ class ApplicationController extends AbstractController
                             UuidV4                                                 $applicationId): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
+        $campDate = $application->getCampDate();
+        $camp = $campDate?->getCamp();
+        $campCategory = $camp?->getCampCategory();
         $this->assertApplicationDraftAvailability($application);
         $applicationId = $application->getId();
 
@@ -245,8 +252,12 @@ class ApplicationController extends AbstractController
         return $this->render('user/application/step_two.html.twig', [
             'form_application_step_two' => $form->createView(),
             'application'               => $application,
-            'breadcrumbs'               => $this->breadcrumbs->buildForStepTwo($application),
-            'application_back_url'      => $this->generateUrl('user_application_step_one_update', [
+            'breadcrumbs'               => $this->createBreadcrumbs([
+                'application'   => $application,
+                'camp'          => $camp,
+                'camp_category' => $campCategory,
+            ]),
+            'application_back_url' => $this->generateUrl('user_application_step_one_update', [
                 'applicationId' => $applicationId,
             ]),
         ]);
@@ -256,6 +267,9 @@ class ApplicationController extends AbstractController
     public function stepThree(UuidV4 $applicationId, Request $request): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
+        $campDate = $application->getCampDate();
+        $camp = $campDate?->getCamp();
+        $campCategory = $camp?->getCampCategory();
         $this->assertApplicationDraftAvailability($application);
         $applicationId = $application->getId();
 
@@ -300,7 +314,11 @@ class ApplicationController extends AbstractController
             'application'                 => $application,
             'form_application_step_three' => $form->createView(),
             'application_back_url'        => $applicationBackUrl,
-            'breadcrumbs'                 => $this->breadcrumbs->buildForStepThree($application),
+            'breadcrumbs'                 => $this->createBreadcrumbs([
+                'application'   => $application,
+                'camp'          => $camp,
+                'camp_category' => $campCategory,
+            ]),
         ]);
     }
 
@@ -312,7 +330,10 @@ class ApplicationController extends AbstractController
 
         return $this->render('user/application/completed.html.twig', [
             'application' => $application,
-            'breadcrumbs' => $this->breadcrumbs->buildForCompleted($application),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'application'   => $application,
+                'camp_category' => null,
+            ]),
         ]);
     }
 

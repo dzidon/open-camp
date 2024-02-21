@@ -16,7 +16,6 @@ use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\CampImagesUploadType;
 use App\Service\Form\Type\Admin\CampImageType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\CampImageBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -32,15 +31,12 @@ class CampImageController extends AbstractController
 {
     private CampImageRepositoryInterface $campImageRepository;
     private CampRepositoryInterface $campRepository;
-    private CampImageBreadcrumbsInterface $breadcrumbs;
 
     public function __construct(CampImageRepositoryInterface  $campImageRepository,
-                                CampRepositoryInterface       $campRepository,
-                                CampImageBreadcrumbsInterface $breadcrumbs)
+                                CampRepositoryInterface       $campRepository)
     {
         $this->campImageRepository = $campImageRepository;
         $this->campRepository = $campRepository;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/admin/camp/{id}/images', name: 'admin_camp_image_list')]
@@ -65,7 +61,9 @@ class CampImageController extends AbstractController
             'camp'            => $camp,
             'pagination_menu' => $paginationMenu,
             'paginator'       => $paginator,
-            'breadcrumbs'     => $this->breadcrumbs->buildList($camp),
+            'breadcrumbs'     => $this->createBreadcrumbs([
+                'camp' => $camp,
+            ]),
         ]);
     }
 
@@ -88,14 +86,16 @@ class CampImageController extends AbstractController
             $this->addTransFlash('success', 'crud.action_performed.camp_image.upload');
 
             return $this->redirectToRoute('admin_camp_image_list', [
-                'id' => $camp->getId()->toRfc4122(),
+                'id' => $camp->getId(),
             ]);
         }
 
         return $this->render('admin/camp/image/upload.html.twig', [
             'camp'        => $camp,
             'form_upload' => $form,
-            'breadcrumbs' => $this->breadcrumbs->buildUpload($camp),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'camp' => $camp,
+            ]),
         ]);
     }
 
@@ -122,7 +122,7 @@ class CampImageController extends AbstractController
             $this->addTransFlash('success', 'crud.action_performed.camp_image.update');
 
             return $this->redirectToRoute('admin_camp_image_list', [
-                'id' => $camp->getId()->toRfc4122(),
+                'id' => $camp->getId(),
             ]);
         }
 
@@ -130,7 +130,10 @@ class CampImageController extends AbstractController
             'camp'            => $camp,
             'camp_image'      => $campImage,
             'form_camp_image' => $form->createView(),
-            'breadcrumbs'     => $this->breadcrumbs->buildUpdate($campImage),
+            'breadcrumbs'     => $this->createBreadcrumbs([
+                'camp'       => $camp,
+                'camp_image' => $campImage,
+            ]),
         ]);
     }
 
@@ -154,7 +157,7 @@ class CampImageController extends AbstractController
             $this->addTransFlash('success', 'crud.action_performed.camp_image.delete');
 
             return $this->redirectToRoute('admin_camp_image_list', [
-                'id' => $camp->getId()->toRfc4122(),
+                'id' => $camp->getId(),
             ]);
         }
 
@@ -162,7 +165,10 @@ class CampImageController extends AbstractController
             'camp'        => $camp,
             'camp_image'  => $campImage,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildDelete($campImage),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'camp'       => $camp,
+                'camp_image' => $campImage,
+            ]),
         ]);
     }
 

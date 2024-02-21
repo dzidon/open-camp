@@ -2,8 +2,7 @@
 
 namespace App\Tests\Service\Menu\Breadcrumbs\User;
 
-use App\Service\Menu\Breadcrumbs\User\PasswordChangeBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -11,12 +10,12 @@ class PasswordChangeBreadcrumbsTest extends KernelTestCase
 {
     use TreeNodeChildrenIdentifiersTrait;
 
-    private MenuTypeFactoryRegistryInterface $menuTypeRegistry;
-    private PasswordChangeBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testBuildPasswordChange(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildPasswordChange();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_password_change');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame([
             'user_home',
@@ -40,7 +39,11 @@ class PasswordChangeBreadcrumbsTest extends KernelTestCase
     public function testBuildPasswordChangeCompleteWhenNotAuthenticated(): void
     {
         $token = 'xyz';
-        $breadcrumbsMenu = $this->breadcrumbs->buildPasswordChangeComplete($token, false);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_password_change_complete', [
+            'token'            => $token,
+            'is_authenticated' => false,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame([
             'user_home',
@@ -70,7 +73,11 @@ class PasswordChangeBreadcrumbsTest extends KernelTestCase
     public function testBuildPasswordChangeCompleteWhenAuthenticated(): void
     {
         $token = 'xyz';
-        $breadcrumbsMenu = $this->breadcrumbs->buildPasswordChangeComplete($token, true);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_password_change_complete', [
+            'token'            => $token,
+            'is_authenticated' => true,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame([
             'user_home',
@@ -96,12 +103,8 @@ class PasswordChangeBreadcrumbsTest extends KernelTestCase
     {
         $container = static::getContainer();
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->menuTypeRegistry = $menuTypeRegistry;
-
-        /** @var PasswordChangeBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(PasswordChangeBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

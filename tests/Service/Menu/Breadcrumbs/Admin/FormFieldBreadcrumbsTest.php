@@ -4,8 +4,7 @@ namespace App\Tests\Service\Menu\Breadcrumbs\Admin;
 
 use App\Model\Entity\FormField;
 use App\Model\Enum\Entity\FormFieldTypeEnum;
-use App\Service\Menu\Breadcrumbs\Admin\FormFieldBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -17,12 +16,12 @@ class FormFieldBreadcrumbsTest extends KernelTestCase
 
     private FormField $formField;
 
-    private MenuTypeFactoryRegistryInterface $factoryRegistry;
-    private FormFieldBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testList(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildList();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_form_field_list');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_form_field_list'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -37,7 +36,8 @@ class FormFieldBreadcrumbsTest extends KernelTestCase
 
     public function testCreate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildCreate();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_form_field_create');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_form_field_list', 'admin_form_field_create'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -56,7 +56,10 @@ class FormFieldBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->formField);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_form_field_read', [
+            'form_field' => $this->formField
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_form_field_list', 'admin_form_field_read'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -75,7 +78,10 @@ class FormFieldBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->formField);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_form_field_update', [
+            'form_field' => $this->formField
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_form_field_list', 'admin_form_field_update'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -94,7 +100,10 @@ class FormFieldBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->formField);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_form_field_delete', [
+            'form_field' => $this->formField
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_form_field_list', 'admin_form_field_delete'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -120,12 +129,8 @@ class FormFieldBreadcrumbsTest extends KernelTestCase
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->formField, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->factoryRegistry = $menuTypeRegistry;
-
-        /** @var FormFieldBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(FormFieldBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

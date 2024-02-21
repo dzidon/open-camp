@@ -2,8 +2,7 @@
 
 namespace App\Tests\Service\Menu\Breadcrumbs\Admin;
 
-use App\Service\Menu\Breadcrumbs\Admin\ProfileBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -11,12 +10,12 @@ class ProfileBreadcrumbsTest extends KernelTestCase
 {
     use TreeNodeChildrenIdentifiersTrait;
 
-    private MenuTypeFactoryRegistryInterface $factoryRegistry;
-    private ProfileBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testProfile(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildProfile();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_profile');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_profile'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -33,12 +32,8 @@ class ProfileBreadcrumbsTest extends KernelTestCase
     {
         $container = static::getContainer();
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->factoryRegistry = $menuTypeRegistry;
-
-        /** @var ProfileBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(ProfileBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

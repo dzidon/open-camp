@@ -15,7 +15,6 @@ use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\AttachmentConfigSearchType;
 use App\Service\Form\Type\Admin\AttachmentConfigType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\AttachmentConfigBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -31,13 +30,10 @@ use Symfony\Component\Uid\UuidV4;
 class AttachmentConfigController extends AbstractController
 {
     private AttachmentConfigRepositoryInterface $attachmentConfigRepository;
-    private AttachmentConfigBreadcrumbsInterface $attachmentConfigBreadcrumbs;
 
-    public function __construct(AttachmentConfigRepositoryInterface  $attachmentConfigRepository,
-                                AttachmentConfigBreadcrumbsInterface $attachmentConfigBreadcrumbs)
+    public function __construct(AttachmentConfigRepositoryInterface  $attachmentConfigRepository)
     {
         $this->attachmentConfigRepository = $attachmentConfigRepository;
-        $this->attachmentConfigBreadcrumbs = $attachmentConfigBreadcrumbs;
     }
 
     #[IsGranted(new Expression('is_granted("attachment_config_create") or is_granted("attachment_config_read") or 
@@ -74,7 +70,7 @@ class AttachmentConfigController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->attachmentConfigBreadcrumbs->buildList(),
+            'breadcrumbs'       => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -99,7 +95,7 @@ class AttachmentConfigController extends AbstractController
 
         return $this->render('admin/attachment_config/update.html.twig', [
             'form_attachment_config' => $form->createView(),
-            'breadcrumbs'            => $this->attachmentConfigBreadcrumbs->buildCreate(),
+            'breadcrumbs'            => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -111,7 +107,9 @@ class AttachmentConfigController extends AbstractController
 
         return $this->render('admin/attachment_config/read.html.twig', [
             'attachment_config' => $attachmentConfig,
-            'breadcrumbs'       => $this->attachmentConfigBreadcrumbs->buildRead($attachmentConfig),
+            'breadcrumbs'       => $this->createBreadcrumbs([
+                'attachment_config' => $attachmentConfig,
+            ]),
         ]);
     }
 
@@ -140,7 +138,9 @@ class AttachmentConfigController extends AbstractController
         return $this->render('admin/attachment_config/update.html.twig', [
             'attachment_config'      => $attachmentConfig,
             'form_attachment_config' => $form->createView(),
-            'breadcrumbs'            => $this->attachmentConfigBreadcrumbs->buildUpdate($attachmentConfig),
+            'breadcrumbs'            => $this->createBreadcrumbs([
+                'attachment_config' => $attachmentConfig,
+            ]),
         ]);
     }
 
@@ -169,7 +169,9 @@ class AttachmentConfigController extends AbstractController
         return $this->render('admin/attachment_config/delete.html.twig', [
             'attachment_config' => $attachmentConfig,
             'form_delete'       => $form->createView(),
-            'breadcrumbs'       => $this->attachmentConfigBreadcrumbs->buildDelete($attachmentConfig),
+            'breadcrumbs'       => $this->createBreadcrumbs([
+                'attachment_config' => $attachmentConfig,
+            ]),
         ]);
     }
 

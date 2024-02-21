@@ -15,7 +15,6 @@ use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Form\Type\User\CamperSearchType;
 use App\Service\Form\Type\User\CamperType;
-use App\Service\Menu\Breadcrumbs\User\ProfileCamperBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -31,13 +30,10 @@ use Symfony\Component\Uid\UuidV4;
 class ProfileCamperController extends AbstractController
 {
     private CamperRepositoryInterface $camperRepository;
-    private ProfileCamperBreadcrumbsInterface $breadcrumbs;
 
-    public function __construct(CamperRepositoryInterface         $camperRepository,
-                                ProfileCamperBreadcrumbsInterface $breadcrumbs)
+    public function __construct(CamperRepositoryInterface $camperRepository)
     {
         $this->camperRepository = $camperRepository;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/campers', name: 'user_profile_camper_list')]
@@ -72,7 +68,7 @@ class ProfileCamperController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->breadcrumbs->buildList(),
+            'breadcrumbs'       => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -98,7 +94,7 @@ class ProfileCamperController extends AbstractController
 
         return $this->render('user/profile/camper/update.html.twig', [
             'form_camper' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildCreate(),
+            'breadcrumbs' => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -110,7 +106,9 @@ class ProfileCamperController extends AbstractController
 
         return $this->render('user/profile/camper/read.html.twig', [
             'camper'      => $camper,
-            'breadcrumbs' => $this->breadcrumbs->buildRead($camper),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'camper' => $camper,
+            ]),
         ]);
     }
 
@@ -141,7 +139,9 @@ class ProfileCamperController extends AbstractController
 
         return $this->render('user/profile/camper/update.html.twig', [
             'form_camper' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildUpdate($camper),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'camper' => $camper,
+            ]),
         ]);
     }
 
@@ -170,7 +170,9 @@ class ProfileCamperController extends AbstractController
         return $this->render('user/profile/camper/delete.html.twig', [
             'camper'      => $camper,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildDelete($camper),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'camper' => $camper,
+            ]),
         ]);
     }
 

@@ -14,7 +14,6 @@ use App\Model\Repository\TripLocationRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\TripLocationType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\TripLocationBreadcrumbsInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,15 +28,12 @@ class TripLocationController extends AbstractController
 {
     private TripLocationRepositoryInterface $tripLocationRepository;
     private TripLocationPathRepositoryInterface $tripLocationPathRepository;
-    private TripLocationBreadcrumbsInterface $breadcrumbs;
 
     public function __construct(TripLocationRepositoryInterface     $tripLocationRepository,
-                                TripLocationPathRepositoryInterface $tripLocationPathRepository,
-                                TripLocationBreadcrumbsInterface    $breadcrumbs)
+                                TripLocationPathRepositoryInterface $tripLocationPathRepository)
     {
         $this->tripLocationRepository = $tripLocationRepository;
         $this->tripLocationPathRepository = $tripLocationPathRepository;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/admin/trip-location-path/{id}/create-location', name: 'admin_trip_location_create')]
@@ -65,7 +61,9 @@ class TripLocationController extends AbstractController
 
         return $this->render('admin/trip/location/update.html.twig', [
             'form_trip_location' => $form,
-            'breadcrumbs'        => $this->breadcrumbs->buildCreate($tripLocationPath),
+            'breadcrumbs'        => $this->createBreadcrumbs([
+                'trip_location_path' => $tripLocationPath,
+            ]),
         ]);
     }
 
@@ -73,10 +71,14 @@ class TripLocationController extends AbstractController
     public function read(UuidV4 $id): Response
     {
         $tripLocation = $this->findTripLocationOrThrow404($id);
+        $tripLocationPath = $tripLocation->getTripLocationPath();
 
         return $this->render('admin/trip/location/read.html.twig', [
             'trip_location' => $tripLocation,
-            'breadcrumbs'   => $this->breadcrumbs->buildRead($tripLocation),
+            'breadcrumbs'   => $this->createBreadcrumbs([
+                'trip_location_path' => $tripLocationPath,
+                'trip_location'      => $tripLocation,
+            ]),
         ]);
     }
 
@@ -108,7 +110,10 @@ class TripLocationController extends AbstractController
 
         return $this->render('admin/trip/location/update.html.twig', [
             'form_trip_location' => $form->createView(),
-            'breadcrumbs'        => $this->breadcrumbs->buildUpdate($tripLocation),
+            'breadcrumbs'        => $this->createBreadcrumbs([
+                'trip_location_path' => $tripLocationPath,
+                'trip_location'      => $tripLocation,
+            ]),
         ]);
     }
 
@@ -148,7 +153,10 @@ class TripLocationController extends AbstractController
         return $this->render('admin/trip/location/delete.html.twig', [
             'trip_location' => $tripLocation,
             'form_delete'   => $form->createView(),
-            'breadcrumbs'   => $this->breadcrumbs->buildDelete($tripLocation),
+            'breadcrumbs'   => $this->createBreadcrumbs([
+                'trip_location_path' => $tripLocationPath,
+                'trip_location'      => $tripLocation,
+            ]),
         ]);
     }
 

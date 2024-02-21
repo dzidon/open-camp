@@ -16,7 +16,6 @@ use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\RoleSearchType;
 use App\Service\Form\Type\Admin\RoleType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\RoleBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -32,13 +31,10 @@ use Symfony\Component\Uid\UuidV4;
 class RoleController extends AbstractController
 {
     private RoleRepositoryInterface $roleRepository;
-    private RoleBreadcrumbsInterface $roleBreadcrumbs;
 
-    public function __construct(RoleRepositoryInterface  $roleRepository,
-                                RoleBreadcrumbsInterface $roleBreadcrumbs)
+    public function __construct(RoleRepositoryInterface  $roleRepository)
     {
         $this->roleRepository = $roleRepository;
-        $this->roleBreadcrumbs = $roleBreadcrumbs;
     }
 
     #[IsGranted(new Expression('is_granted("role_create") or is_granted("role_read") or 
@@ -72,7 +68,7 @@ class RoleController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->roleBreadcrumbs->buildList(),
+            'breadcrumbs'       => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -100,7 +96,7 @@ class RoleController extends AbstractController
 
         return $this->render('admin/role/update.html.twig', [
             'form_role'   => $form->createView(),
-            'breadcrumbs' => $this->roleBreadcrumbs->buildCreate(),
+            'breadcrumbs' => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -114,7 +110,9 @@ class RoleController extends AbstractController
         return $this->render('admin/role/read.html.twig', [
             'role'        => $role,
             'users'       => $users,
-            'breadcrumbs' => $this->roleBreadcrumbs->buildRead($role),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'role' => $role,
+            ]),
         ]);
     }
 
@@ -148,7 +146,9 @@ class RoleController extends AbstractController
         return $this->render('admin/role/update.html.twig', [
             'role'        => $role,
             'form_role'   => $form->createView(),
-            'breadcrumbs' => $this->roleBreadcrumbs->buildUpdate($role),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'role' => $role,
+            ]),
         ]);
     }
 
@@ -177,7 +177,9 @@ class RoleController extends AbstractController
         return $this->render('admin/role/delete.html.twig', [
             'role'        => $role,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->roleBreadcrumbs->buildDelete($role),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'role' => $role,
+            ]),
         ]);
     }
 

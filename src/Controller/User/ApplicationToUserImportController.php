@@ -11,7 +11,6 @@ use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Service\Application\ApplicationImportToUserDataFactoryInterface;
 use App\Model\Service\Application\ApplicationToUserImporterInterface;
 use App\Service\Form\Type\User\ApplicationImportToUserType;
-use App\Service\Menu\Breadcrumbs\User\ApplicationToUserImportBreadcrumbsInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,17 +27,13 @@ class ApplicationToUserImportController extends AbstractController
 
     private EventDispatcherInterface $eventDispatcher;
 
-    private ApplicationToUserImportBreadcrumbsInterface $breadcrumbs;
-
-    public function __construct(ApplicationRepositoryInterface              $applicationRepository,
-                                ApplicationToUserImporterInterface          $applicationToUserImporter,
-                                EventDispatcherInterface                    $eventDispatcher,
-                                ApplicationToUserImportBreadcrumbsInterface $breadcrumbs)
+    public function __construct(ApplicationRepositoryInterface     $applicationRepository,
+                                ApplicationToUserImporterInterface $applicationToUserImporter,
+                                EventDispatcherInterface           $eventDispatcher)
     {
         $this->applicationRepository = $applicationRepository;
         $this->applicationToUserImporter = $applicationToUserImporter;
         $this->eventDispatcher = $eventDispatcher;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/application-to-user-import', name: 'user_application_import')]
@@ -72,7 +67,10 @@ class ApplicationToUserImportController extends AbstractController
 
         return $this->render('user/import_application/import.html.twig', [
             'form_import' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildForApplicationImport($application),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'application'   => $application,
+                'camp_category' => null,
+            ]),
         ]);
     }
 

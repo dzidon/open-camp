@@ -19,7 +19,6 @@ use App\Service\Form\Type\Admin\TripLocationPathSearchType;
 use App\Service\Form\Type\Admin\TripLocationPathType;
 use App\Service\Form\Type\Admin\TripLocationSearchType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\TripLocationPathBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -36,13 +35,10 @@ use Symfony\Component\Uid\UuidV4;
 class TripLocationPathController extends AbstractController
 {
     private TripLocationPathRepositoryInterface $tripLocationPathRepository;
-    private TripLocationPathBreadcrumbsInterface $breadcrumbs;
 
-    public function __construct(TripLocationPathRepositoryInterface  $tripLocationPathRepository,
-                                TripLocationPathBreadcrumbsInterface $breadcrumbs)
+    public function __construct(TripLocationPathRepositoryInterface  $tripLocationPathRepository)
     {
         $this->tripLocationPathRepository = $tripLocationPathRepository;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[IsGranted(new Expression('is_granted("trip_location_path_create") or is_granted("trip_location_path_read") or 
@@ -76,7 +72,7 @@ class TripLocationPathController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->breadcrumbs->buildList(),
+            'breadcrumbs'       => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -101,7 +97,7 @@ class TripLocationPathController extends AbstractController
 
         return $this->render('admin/trip/location_path/update.html.twig', [
             'form_trip_location_path' => $form->createView(),
-            'breadcrumbs'             => $this->breadcrumbs->buildCreate(),
+            'breadcrumbs'             => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -116,7 +112,9 @@ class TripLocationPathController extends AbstractController
         return $this->render('admin/trip/location_path/read.html.twig', [
             'trip_location_path' => $tripLocationPath,
             'trip_locations'     => $tripLocations,
-            'breadcrumbs'        => $this->breadcrumbs->buildRead($tripLocationPath),
+            'breadcrumbs'        => $this->createBreadcrumbs([
+                'trip_location_path' => $tripLocationPath,
+            ]),
         ]);
     }
 
@@ -145,7 +143,9 @@ class TripLocationPathController extends AbstractController
         }
 
         return $this->render('admin/trip/location_path/update.html.twig', array_merge($updatePartPathResult, $updatePartLocationsResult, [
-            'breadcrumbs' => $this->breadcrumbs->buildUpdate($tripLocationPath),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'trip_location_path' => $tripLocationPath,
+            ]),
         ]));
     }
 
@@ -234,7 +234,9 @@ class TripLocationPathController extends AbstractController
         return $this->render('admin/trip/location_path/delete.html.twig', [
             'trip_location_path' => $tripLocationPath,
             'form_delete'        => $form->createView(),
-            'breadcrumbs'        => $this->breadcrumbs->buildDelete($tripLocationPath),
+            'breadcrumbs'        => $this->createBreadcrumbs([
+                'trip_location_path' => $tripLocationPath,
+            ]),
         ]);
     }
 

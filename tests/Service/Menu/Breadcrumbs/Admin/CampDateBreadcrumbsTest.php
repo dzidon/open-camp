@@ -4,8 +4,7 @@ namespace App\Tests\Service\Menu\Breadcrumbs\Admin;
 
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
-use App\Service\Menu\Breadcrumbs\Admin\CampDateBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use DateTimeImmutable;
 use ReflectionClass;
@@ -19,12 +18,14 @@ class CampDateBreadcrumbsTest extends KernelTestCase
     private Camp $camp;
     private CampDate $campDate;
 
-    private MenuTypeFactoryRegistryInterface $factoryRegistry;
-    private CampDateBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testList(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildList($this->camp);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_camp_date_list', [
+            'camp' => $this->camp,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_date_list'],
@@ -50,7 +51,10 @@ class CampDateBreadcrumbsTest extends KernelTestCase
 
     public function testCreate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildCreate($this->camp);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_camp_date_create', [
+            'camp' => $this->camp,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_date_list', 'admin_camp_date_create'],
@@ -80,7 +84,11 @@ class CampDateBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->campDate);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_camp_date_read', [
+            'camp'      => $this->camp,
+            'camp_date' => $this->campDate
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_date_list', 'admin_camp_date_read'],
@@ -110,7 +118,11 @@ class CampDateBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->campDate);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_camp_date_update', [
+            'camp'      => $this->camp,
+            'camp_date' => $this->campDate
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_date_list', 'admin_camp_date_update'],
@@ -140,7 +152,11 @@ class CampDateBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->campDate);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_camp_date_delete', [
+            'camp'      => $this->camp,
+            'camp_date' => $this->campDate
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_date_list', 'admin_camp_date_delete'],
@@ -182,12 +198,8 @@ class CampDateBreadcrumbsTest extends KernelTestCase
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->campDate, UuidV4::fromString('a37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->factoryRegistry = $menuTypeRegistry;
-
-        /** @var CampDateBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(CampDateBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

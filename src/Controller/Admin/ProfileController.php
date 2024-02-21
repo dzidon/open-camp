@@ -8,7 +8,6 @@ use App\Model\Entity\User;
 use App\Model\Event\Admin\User\ProfileUpdateEvent;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\ProfileType;
-use App\Service\Menu\Breadcrumbs\Admin\ProfileBreadcrumbsInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,13 +19,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin/profile')]
 class ProfileController extends AbstractController
 {
-    private ProfileBreadcrumbsInterface $breadcrumbs;
-
-    public function __construct(ProfileBreadcrumbsInterface $breadcrumbs)
-    {
-        $this->breadcrumbs = $breadcrumbs;
-    }
-
     #[IsGranted('_any_permission')]
     #[Route('', name: 'admin_profile')]
     public function profile(EventDispatcherInterface      $eventDispatcher,
@@ -54,7 +46,7 @@ class ProfileController extends AbstractController
         return $this->render('admin/profile/profile.html.twig', [
             'admin'        => $admin,
             'form_profile' => $form,
-            'breadcrumbs'  => $this->breadcrumbs->buildProfile(),
+            'breadcrumbs'  => $this->createBreadcrumbs(),
         ]);
     }
 }

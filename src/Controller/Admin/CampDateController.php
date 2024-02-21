@@ -21,7 +21,6 @@ use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\CampDateSearchType;
 use App\Service\Form\Type\Admin\CampDateType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\CampDateBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -38,15 +37,12 @@ class CampDateController extends AbstractController
 {
     private CampDateRepositoryInterface $campDateRepository;
     private CampRepositoryInterface $campRepository;
-    private CampDateBreadcrumbsInterface $breadcrumbs;
 
     public function __construct(CampDateRepositoryInterface  $campDateRepository,
-                                CampRepositoryInterface      $campRepository,
-                                CampDateBreadcrumbsInterface $breadcrumbs)
+                                CampRepositoryInterface      $campRepository)
     {
         $this->campDateRepository = $campDateRepository;
         $this->campRepository = $campRepository;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/admin/camp/{id}/dates', name: 'admin_camp_date_list')]
@@ -84,7 +80,9 @@ class CampDateController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->breadcrumbs->buildList($camp),
+            'breadcrumbs'       => $this->createBreadcrumbs([
+                'camp' => $camp,
+            ]),
         ]);
     }
 
@@ -133,7 +131,9 @@ class CampDateController extends AbstractController
         return $this->render('admin/camp/date/update.html.twig', [
             'camp'           => $camp,
             'form_camp_date' => $form,
-            'breadcrumbs'    => $this->breadcrumbs->buildCreate($camp),
+            'breadcrumbs'    => $this->createBreadcrumbs([
+                'camp' => $camp,
+            ]),
         ]);
     }
 
@@ -146,7 +146,10 @@ class CampDateController extends AbstractController
         return $this->render('admin/camp/date/read.html.twig', [
             'camp'         => $camp,
             'camp_date'    => $campDate,
-            'breadcrumbs'  => $this->breadcrumbs->buildRead($campDate),
+            'breadcrumbs'  => $this->createBreadcrumbs([
+                'camp'      => $camp,
+                'camp_date' => $campDate,
+            ]),
         ]);
     }
 
@@ -192,7 +195,10 @@ class CampDateController extends AbstractController
             'camp'           => $camp,
             'camp_date'      => $campDate,
             'form_camp_date' => $form->createView(),
-            'breadcrumbs'    => $this->breadcrumbs->buildUpdate($campDate),
+            'breadcrumbs'    => $this->createBreadcrumbs([
+                'camp'      => $camp,
+                'camp_date' => $campDate,
+            ]),
         ]);
     }
 
@@ -224,7 +230,10 @@ class CampDateController extends AbstractController
             'camp'         => $camp,
             'camp_date'    => $campDate,
             'form_delete'  => $form->createView(),
-            'breadcrumbs'  => $this->breadcrumbs->buildDelete($campDate),
+            'breadcrumbs'  => $this->createBreadcrumbs([
+                'camp'      => $camp,
+                'camp_date' => $campDate,
+            ]),
         ]);
     }
 

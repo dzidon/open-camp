@@ -14,7 +14,6 @@ use App\Model\Repository\PurchasableItemVariantValueRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\PurchasableItemVariantValueType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\PurchasableItemVariantValueBreadcrumbsInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,15 +28,12 @@ class PurchasableItemVariantValueController extends AbstractController
 {
     private PurchasableItemVariantValueRepositoryInterface $purchasableItemVariantValueRepository;
     private PurchasableItemVariantRepositoryInterface $purchasableItemVariantRepository;
-    private PurchasableItemVariantValueBreadcrumbsInterface $breadcrumbs;
 
     public function __construct(PurchasableItemVariantValueRepositoryInterface  $purchasableItemVariantValueRepository,
-                                PurchasableItemVariantRepositoryInterface       $purchasableItemVariantRepository,
-                                PurchasableItemVariantValueBreadcrumbsInterface $breadcrumbs)
+                                PurchasableItemVariantRepositoryInterface       $purchasableItemVariantRepository)
     {
         $this->purchasableItemVariantValueRepository = $purchasableItemVariantValueRepository;
         $this->purchasableItemVariantRepository = $purchasableItemVariantRepository;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/admin/purchasable-item-variant/{id}/create-value', name: 'admin_purchasable_item_variant_value_create')]
@@ -46,6 +42,7 @@ class PurchasableItemVariantValueController extends AbstractController
                            UuidV4                   $id): Response
     {
         $purchasableItemVariant = $this->findPurchasableItemVariantOrThrow404($id);
+        $purchasableItem = $purchasableItemVariant->getPurchasableItem();
 
         $purchasableItemVariantValueData = new PurchasableItemVariantValueData(null, $purchasableItemVariant);
         $form = $this->createForm(PurchasableItemVariantValueType::class, $purchasableItemVariantValueData);
@@ -54,18 +51,21 @@ class PurchasableItemVariantValueController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            $event = new PurchasableItemVariantValueCreateEvent($purchasableItemVariantValueData);
+            $event = new PurchasableItemVariantValueCreateEvent($purchasableItemVariantValueData, $purchasableItemVariant);
             $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item_variant_value.create');
 
             return $this->redirectToRoute('admin_purchasable_item_variant_update', [
-                'id' => $purchasableItemVariant->getId()->toRfc4122(),
+                'id' => $purchasableItemVariant->getId(),
             ]);
         }
 
         return $this->render('admin/purchasable_item/variant_value/update.html.twig', [
             'form_purchasable_item_variant_value' => $form,
-            'breadcrumbs'                         => $this->breadcrumbs->buildCreate($purchasableItemVariant),
+            'breadcrumbs'                         => $this->createBreadcrumbs([
+                'purchasable_item'         => $purchasableItem,
+                'purchasable_item_variant' => $purchasableItemVariant,
+            ]),
         ]);
     }
 
@@ -73,10 +73,16 @@ class PurchasableItemVariantValueController extends AbstractController
     public function read(UuidV4 $id): Response
     {
         $purchasableItemVariantValue = $this->findPurchasableItemVariantValueOrThrow404($id);
+        $purchasableItemVariant = $purchasableItemVariantValue->getPurchasableItemVariant();
+        $purchasableItem = $purchasableItemVariant->getPurchasableItem();
 
         return $this->render('admin/purchasable_item/variant_value/read.html.twig', [
             'purchasable_item_variant_value' => $purchasableItemVariantValue,
-            'breadcrumbs'                    => $this->breadcrumbs->buildRead($purchasableItemVariantValue),
+            'breadcrumbs'                    => $this->createBreadcrumbs([
+                'purchasable_item'               => $purchasableItem,
+                'purchasable_item_variant'       => $purchasableItemVariant,
+                'purchasable_item_variant_value' => $purchasableItemVariantValue,
+            ]),
         ]);
     }
 
@@ -88,6 +94,7 @@ class PurchasableItemVariantValueController extends AbstractController
     {
         $purchasableItemVariantValue = $this->findPurchasableItemVariantValueOrThrow404($id);
         $purchasableItemVariant = $purchasableItemVariantValue->getPurchasableItemVariant();
+        $purchasableItem = $purchasableItemVariant->getPurchasableItem();
 
         $purchasableItemVariantValueData = new PurchasableItemVariantValueData($purchasableItemVariantValue, $purchasableItemVariant);
         $dataTransfer->fillData($purchasableItemVariantValueData, $purchasableItemVariantValue);
@@ -102,13 +109,17 @@ class PurchasableItemVariantValueController extends AbstractController
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item_variant_value.update');
 
             return $this->redirectToRoute('admin_purchasable_item_variant_update', [
-                'id' => $purchasableItemVariant->getId()->toRfc4122(),
+                'id' => $purchasableItemVariant->getId(),
             ]);
         }
 
         return $this->render('admin/purchasable_item/variant_value/update.html.twig', [
             'form_purchasable_item_variant_value' => $form->createView(),
-            'breadcrumbs'                         => $this->breadcrumbs->buildUpdate($purchasableItemVariantValue),
+            'breadcrumbs'                         => $this->createBreadcrumbs([
+                'purchasable_item'               => $purchasableItem,
+                'purchasable_item_variant'       => $purchasableItemVariant,
+                'purchasable_item_variant_value' => $purchasableItemVariantValue,
+            ]),
         ]);
     }
 
@@ -117,13 +128,14 @@ class PurchasableItemVariantValueController extends AbstractController
     {
         $purchasableItemVariantValue = $this->findPurchasableItemVariantValueOrThrow404($id);
         $purchasableItemVariant = $purchasableItemVariantValue->getPurchasableItemVariant();
+        $purchasableItem = $purchasableItemVariant->getPurchasableItem();
 
         if (!$this->purchasableItemVariantValueRepository->canRemovePurchasableItemVariantValue($purchasableItemVariantValue))
         {
             $this->addTransFlash('failure', 'crud.error.purchasable_item_variant_value_delete');
 
             return $this->redirectToRoute('admin_purchasable_item_variant_update', [
-                'id' => $purchasableItemVariant->getId()->toRfc4122(),
+                'id' => $purchasableItemVariant->getId(),
             ]);
         }
 
@@ -141,14 +153,18 @@ class PurchasableItemVariantValueController extends AbstractController
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item_variant_value.delete');
 
             return $this->redirectToRoute('admin_purchasable_item_variant_update', [
-                'id' => $purchasableItemVariant->getId()->toRfc4122(),
+                'id' => $purchasableItemVariant->getId(),
             ]);
         }
 
         return $this->render('admin/purchasable_item/variant_value/delete.html.twig', [
             'purchasable_item_variant_value' => $purchasableItemVariantValue,
             'form_delete'                    => $form->createView(),
-            'breadcrumbs'                    => $this->breadcrumbs->buildDelete($purchasableItemVariantValue),
+            'breadcrumbs'                    => $this->createBreadcrumbs([
+                'purchasable_item'               => $purchasableItem,
+                'purchasable_item_variant'       => $purchasableItemVariant,
+                'purchasable_item_variant_value' => $purchasableItemVariantValue,
+            ]),
         ]);
     }
 

@@ -17,7 +17,6 @@ use App\Service\Form\Type\Admin\PurchasableItemSearchType;
 use App\Service\Form\Type\Admin\PurchasableItemType;
 use App\Service\Form\Type\Admin\PurchasableItemVariantSearchType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\PurchasableItemBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -34,13 +33,10 @@ use Symfony\Component\Uid\UuidV4;
 class PurchasableItemController extends AbstractController
 {
     private PurchasableItemRepositoryInterface $purchasableItemRepository;
-    private PurchasableItemBreadcrumbsInterface $breadcrumbs;
 
-    public function __construct(PurchasableItemRepositoryInterface  $purchasableItemRepository,
-                                PurchasableItemBreadcrumbsInterface $breadcrumbs)
+    public function __construct(PurchasableItemRepositoryInterface $purchasableItemRepository)
     {
         $this->purchasableItemRepository = $purchasableItemRepository;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[IsGranted(new Expression('is_granted("purchasable_item_create") or is_granted("purchasable_item_read") or 
@@ -74,7 +70,7 @@ class PurchasableItemController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->breadcrumbs->buildList(),
+            'breadcrumbs'       => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -99,7 +95,7 @@ class PurchasableItemController extends AbstractController
 
         return $this->render('admin/purchasable_item/update.html.twig', [
             'form_purchasable_item' => $form->createView(),
-            'breadcrumbs'           => $this->breadcrumbs->buildCreate(),
+            'breadcrumbs'           => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -111,7 +107,9 @@ class PurchasableItemController extends AbstractController
 
         return $this->render('admin/purchasable_item/read.html.twig', [
             'purchasable_item' => $purchasableItem,
-            'breadcrumbs'      => $this->breadcrumbs->buildRead($purchasableItem),
+            'breadcrumbs'      => $this->createBreadcrumbs([
+                'purchasable_item' => $purchasableItem
+            ]),
         ]);
     }
 
@@ -140,7 +138,9 @@ class PurchasableItemController extends AbstractController
         }
 
         return $this->render('admin/purchasable_item/update.html.twig', array_merge($updatePartItemResult, $updatePartVariantsResult, [
-            'breadcrumbs' => $this->breadcrumbs->buildUpdate($purchasableItem),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'purchasable_item' => $purchasableItem
+            ]),
         ]));
     }
 
@@ -229,7 +229,9 @@ class PurchasableItemController extends AbstractController
         return $this->render('admin/purchasable_item/delete.html.twig', [
             'purchasable_item' => $purchasableItem,
             'form_delete'      => $form->createView(),
-            'breadcrumbs'      => $this->breadcrumbs->buildDelete($purchasableItem),
+            'breadcrumbs'      => $this->createBreadcrumbs([
+                'purchasable_item' => $purchasableItem
+            ]),
         ]);
     }
 

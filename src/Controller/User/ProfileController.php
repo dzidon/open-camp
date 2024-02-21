@@ -14,7 +14,6 @@ use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Form\Type\User\BillingType;
 use App\Service\Form\Type\User\ProfilePasswordChangeType;
-use App\Service\Menu\Breadcrumbs\User\ProfileBreadcrumbsInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,13 +25,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/profile')]
 class ProfileController extends AbstractController
 {
-    private ProfileBreadcrumbsInterface $breadcrumbs;
-
-    public function __construct(ProfileBreadcrumbsInterface $breadcrumbs)
-    {
-        $this->breadcrumbs = $breadcrumbs;
-    }
-
     #[Route('/billing', name: 'user_profile_billing')]
     public function billing(EventDispatcherInterface      $eventDispatcher,
                             DataTransferRegistryInterface $dataTransfer,
@@ -58,7 +50,7 @@ class ProfileController extends AbstractController
 
         return $this->render('user/profile/billing.html.twig', [
             'form_billing' => $form,
-            'breadcrumbs'  => $this->breadcrumbs->buildBilling(),
+            'breadcrumbs'  => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -89,7 +81,7 @@ class ProfileController extends AbstractController
 
         return $this->render('user/profile/password_change.html.twig', [
             'form_password_change' => $form,
-            'breadcrumbs'          => $this->breadcrumbs->buildPasswordChange(),
+            'breadcrumbs'          => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -120,7 +112,7 @@ class ProfileController extends AbstractController
 
         return $this->render('user/profile/password_change_create.html.twig', [
             'form_password_change_create' => $form,
-            'breadcrumbs'                 => $this->breadcrumbs->buildPasswordChangeCreate(),
+            'breadcrumbs'                 => $this->createBreadcrumbs(),
         ]);
     }
 }

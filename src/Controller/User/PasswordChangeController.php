@@ -11,7 +11,6 @@ use App\Model\Event\User\UserPasswordChange\UserPasswordChangeCreateEvent;
 use App\Model\Repository\UserPasswordChangeRepositoryInterface;
 use App\Service\Form\Type\User\PasswordChangeType;
 use App\Service\Form\Type\User\RepeatedPasswordType;
-use App\Service\Menu\Breadcrumbs\User\PasswordChangeBreadcrumbsInterface;
 use App\Service\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
 use App\Service\Security\Token\TokenSplitterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -25,13 +24,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/password-change')]
 class PasswordChangeController extends AbstractController
 {
-    private PasswordChangeBreadcrumbsInterface $passwordChangeBreadcrumbs;
-
-    public function __construct(PasswordChangeBreadcrumbsInterface $passwordChangeBreadcrumbs)
-    {
-        $this->passwordChangeBreadcrumbs = $passwordChangeBreadcrumbs;
-    }
-
     #[IsGranted(new Expression('not is_authenticated()'), statusCode: 403)]
     #[Route('', name: 'user_password_change')]
     public function passwordChange(EventDispatcherInterface $eventDispatcher, Request $request): Response
@@ -54,7 +46,7 @@ class PasswordChangeController extends AbstractController
 
         return $this->render('user/auth/password_change.html.twig', [
             'form_password_change' => $form->createView(),
-            'breadcrumbs'          => $this->passwordChangeBreadcrumbs->buildPasswordChange(),
+            'breadcrumbs'          => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -102,7 +94,10 @@ class PasswordChangeController extends AbstractController
 
         return $this->render('user/auth/password_change_complete.html.twig', [
             'form_plain_password' => $form->createView(),
-            'breadcrumbs'         => $this->passwordChangeBreadcrumbs->buildPasswordChangeComplete($token, $isAuthenticated),
+            'breadcrumbs'         => $this->createBreadcrumbs([
+                'token'            => $token,
+                'is_authenticated' => $isAuthenticated,
+            ]),
         ]);
     }
 }

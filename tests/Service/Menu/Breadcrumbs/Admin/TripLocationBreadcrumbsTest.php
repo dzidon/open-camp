@@ -4,8 +4,7 @@ namespace App\Tests\Service\Menu\Breadcrumbs\Admin;
 
 use App\Model\Entity\TripLocation;
 use App\Model\Entity\TripLocationPath;
-use App\Service\Menu\Breadcrumbs\Admin\TripLocationBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -18,12 +17,14 @@ class TripLocationBreadcrumbsTest extends KernelTestCase
     private TripLocationPath $tripLocationPath;
     private TripLocation $tripLocation;
 
-    private MenuTypeFactoryRegistryInterface $factoryRegistry;
-    private TripLocationBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testCreate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildCreate($this->tripLocationPath);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_trip_location_create', [
+            'trip_location_path' => $this->tripLocationPath,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_trip_location_path_list', 'admin_trip_location_path_update', 'admin_trip_location_create'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -46,7 +47,11 @@ class TripLocationBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->tripLocation);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_trip_location_read', [
+            'trip_location_path' => $this->tripLocationPath,
+            'trip_location'      => $this->tripLocation,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_trip_location_path_list', 'admin_trip_location_path_update', 'admin_trip_location_read'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -69,7 +74,11 @@ class TripLocationBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->tripLocation);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_trip_location_update', [
+            'trip_location_path' => $this->tripLocationPath,
+            'trip_location'      => $this->tripLocation,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_trip_location_path_list', 'admin_trip_location_path_update', 'admin_trip_location_update'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -92,7 +101,11 @@ class TripLocationBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->tripLocation);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_trip_location_delete', [
+            'trip_location_path' => $this->tripLocationPath,
+            'trip_location'      => $this->tripLocation,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_trip_location_path_list', 'admin_trip_location_path_update', 'admin_trip_location_delete'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -127,12 +140,8 @@ class TripLocationBreadcrumbsTest extends KernelTestCase
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->tripLocation, UuidV4::fromString('a37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->factoryRegistry = $menuTypeRegistry;
-
-        /** @var TripLocationBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(TripLocationBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

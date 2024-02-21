@@ -2,8 +2,13 @@
 
 namespace App\Controller;
 
+use App\Library\Menu\MenuTypeInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use LogicException;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as SymfonyAbstractController;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -15,7 +20,8 @@ abstract class AbstractController extends SymfonyAbstractController
     public static function getSubscribedServices(): array
     {
         $services = parent::getSubscribedServices();
-        $services['translator'] = '?'.TranslatorInterface::class;
+        $services['translator'] = '?' . TranslatorInterface::class;
+        $services['breadcrumbs_registry'] = '?' . BreadcrumbsRegistryInterface::class;
 
         return $services;
     }
@@ -86,6 +92,40 @@ abstract class AbstractController extends SymfonyAbstractController
     {
         $message = $this->trans($id, $parameters, $domain, $locale);
         $this->addFlash($type, $message);
+    }
+
+    /**
+     * Creates breadcrumbs for the current route.
+     *
+     * @param array $options
+     * @return MenuTypeInterface
+     */
+    protected function createBreadcrumbs(array $options = [], string $block = 'breadcrumbs'): MenuTypeInterface
+    {
+        if (!$this->container->has('request_stack'))
+        {
+            throw new LogicException(
+                sprintf('You cannot create breadcrumbs in %s as there is no request stack service.', $this::class)
+            );
+        }
+
+        if (!$this->container->has('breadcrumbs_registry'))
+        {
+            throw new LogicException(
+                sprintf('You cannot create breadcrumbs in %s as there is no breadcrumbs registry service.', $this::class)
+            );
+        }
+
+        /** @var RequestStack $requestStack */
+        $requestStack = $this->container->get('request_stack');
+
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $this->container->get('breadcrumbs_registry');
+
+        $request = $requestStack->getCurrentRequest();
+        $route = $request->attributes->get('_route');
+
+        return $breadcrumbsRegistry->getBreadcrumbs($route, $options, $block);
     }
 
     /**

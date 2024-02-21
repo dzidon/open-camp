@@ -15,7 +15,6 @@ use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Form\Type\User\ContactSearchType;
 use App\Service\Form\Type\User\ContactType;
-use App\Service\Menu\Breadcrumbs\User\ProfileContactBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -31,13 +30,10 @@ use Symfony\Component\Uid\UuidV4;
 class ProfileContactController extends AbstractController
 {
     private ContactRepositoryInterface $contactRepository;
-    private ProfileContactBreadcrumbsInterface $breadcrumbs;
 
-    public function __construct(ContactRepositoryInterface         $contactRepository,
-                                ProfileContactBreadcrumbsInterface $breadcrumbs)
+    public function __construct(ContactRepositoryInterface $contactRepository)
     {
         $this->contactRepository = $contactRepository;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/contacts', name: 'user_profile_contact_list')]
@@ -72,7 +68,7 @@ class ProfileContactController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->breadcrumbs->buildList(),
+            'breadcrumbs'       => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -101,7 +97,7 @@ class ProfileContactController extends AbstractController
 
         return $this->render('user/profile/contact/update.html.twig', [
             'form_contact' => $form->createView(),
-            'breadcrumbs'  => $this->breadcrumbs->buildCreate(),
+            'breadcrumbs'  => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -113,7 +109,9 @@ class ProfileContactController extends AbstractController
 
         return $this->render('user/profile/contact/read.html.twig', [
             'contact'     => $contact,
-            'breadcrumbs' => $this->breadcrumbs->buildRead($contact),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'contact' => $contact,
+            ]),
         ]);
     }
 
@@ -146,7 +144,9 @@ class ProfileContactController extends AbstractController
 
         return $this->render('user/profile/contact/update.html.twig', [
             'form_contact' => $form->createView(),
-            'breadcrumbs'  => $this->breadcrumbs->buildUpdate($contact),
+            'breadcrumbs'  => $this->createBreadcrumbs([
+                'contact' => $contact,
+            ]),
         ]);
     }
 
@@ -175,13 +175,16 @@ class ProfileContactController extends AbstractController
         return $this->render('user/profile/contact/delete.html.twig', [
             'contact'     => $contact,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildDelete($contact),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'contact' => $contact,
+            ]),
         ]);
     }
 
     private function findContactOrThrow404(UuidV4 $id): Contact
     {
         $contact = $this->contactRepository->findOneById($id);
+
         if ($contact === null)
         {
             throw $this->createNotFoundException();

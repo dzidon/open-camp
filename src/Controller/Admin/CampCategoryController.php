@@ -12,7 +12,6 @@ use App\Model\Repository\CampCategoryRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\CampCategoryType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\CampCategoryBreadcrumbsInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -26,13 +25,10 @@ use Symfony\Component\Uid\UuidV4;
 class CampCategoryController extends AbstractController
 {
     private CampCategoryRepositoryInterface $campCategoryRepository;
-    private CampCategoryBreadcrumbsInterface $campCategoryBreadcrumbs;
 
-    public function __construct(CampCategoryRepositoryInterface $campCategoryRepository,
-                                CampCategoryBreadcrumbsInterface $campCategoryBreadcrumbs)
+    public function __construct(CampCategoryRepositoryInterface $campCategoryRepository)
     {
         $this->campCategoryRepository = $campCategoryRepository;
-        $this->campCategoryBreadcrumbs = $campCategoryBreadcrumbs;
     }
 
     #[IsGranted(new Expression('is_granted("camp_category_create") or is_granted("camp_category_read") or 
@@ -44,7 +40,7 @@ class CampCategoryController extends AbstractController
 
         return $this->render('admin/camp_category/list.html.twig', [
             'root_categories' => $rootCategories,
-            'breadcrumbs'     => $this->campCategoryBreadcrumbs->buildList(),
+            'breadcrumbs'     => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -70,7 +66,7 @@ class CampCategoryController extends AbstractController
 
         return $this->render('admin/camp_category/update.html.twig', [
             'form_camp_category' => $form->createView(),
-            'breadcrumbs'        => $this->campCategoryBreadcrumbs->buildCreate(),
+            'breadcrumbs'        => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -82,7 +78,9 @@ class CampCategoryController extends AbstractController
 
         return $this->render('admin/camp_category/read.html.twig', [
             'camp_category' => $campCategory,
-            'breadcrumbs'   => $this->campCategoryBreadcrumbs->buildRead($campCategory),
+            'breadcrumbs'   => $this->createBreadcrumbs([
+                'camp_category' => $campCategory,
+            ]),
         ]);
     }
 
@@ -112,7 +110,9 @@ class CampCategoryController extends AbstractController
         return $this->render('admin/camp_category/update.html.twig', [
             'camp_category'      => $campCategory,
             'form_camp_category' => $form->createView(),
-            'breadcrumbs'        => $this->campCategoryBreadcrumbs->buildUpdate($campCategory),
+            'breadcrumbs'        => $this->createBreadcrumbs([
+                'camp_category' => $campCategory,
+            ]),
         ]);
     }
 
@@ -141,7 +141,9 @@ class CampCategoryController extends AbstractController
         return $this->render('admin/camp_category/delete.html.twig', [
             'camp_category' => $campCategory,
             'form_delete'   => $form->createView(),
-            'breadcrumbs'   => $this->campCategoryBreadcrumbs->buildDelete($campCategory),
+            'breadcrumbs'   => $this->createBreadcrumbs([
+                'camp_category' => $campCategory,
+            ]),
         ]);
     }
 

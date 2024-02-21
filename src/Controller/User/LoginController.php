@@ -5,7 +5,6 @@ namespace App\Controller\User;
 use App\Controller\AbstractController;
 use App\Library\Data\User\LoginData;
 use App\Service\Form\Type\User\LoginType;
-use App\Service\Menu\Breadcrumbs\User\LoginBreadcrumbsInterface;
 use App\Service\Security\Authentication\SocialLoginRedirectResponseFactoryInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -22,13 +21,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 #[Route('/login')]
 class LoginController extends AbstractController
 {
-    private LoginBreadcrumbsInterface $breadcrumbs;
-
-    public function __construct(LoginBreadcrumbsInterface $breadcrumbs)
-    {
-        $this->breadcrumbs = $breadcrumbs;
-    }
-    
     #[Route('', name: 'user_login')]
     public function login(Request              $request,
                           FormFactoryInterface $formFactory,
@@ -48,7 +40,7 @@ class LoginController extends AbstractController
 
         return $this->render('user/auth/login.html.twig', [
             'form_login'  => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildLogin(),
+            'breadcrumbs' => $this->createBreadcrumbs(),
         ]);
     }
 

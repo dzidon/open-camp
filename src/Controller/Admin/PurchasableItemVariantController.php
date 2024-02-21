@@ -19,7 +19,6 @@ use App\Service\Form\Type\Admin\PurchasableItemVariantCreationType;
 use App\Service\Form\Type\Admin\PurchasableItemVariantType;
 use App\Service\Form\Type\Admin\PurchasableItemVariantValueSearchType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\PurchasableItemVariantBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -37,15 +36,12 @@ class PurchasableItemVariantController extends AbstractController
 {
     private PurchasableItemVariantRepositoryInterface $purchasableItemVariantRepository;
     private PurchasableItemRepositoryInterface $purchasableItemRepository;
-    private PurchasableItemVariantBreadcrumbsInterface $breadcrumbs;
 
     public function __construct(PurchasableItemVariantRepositoryInterface  $purchasableItemVariantRepository,
-                                PurchasableItemRepositoryInterface         $purchasableItemRepository,
-                                PurchasableItemVariantBreadcrumbsInterface $breadcrumbs)
+                                PurchasableItemRepositoryInterface         $purchasableItemRepository)
     {
         $this->purchasableItemVariantRepository = $purchasableItemVariantRepository;
         $this->purchasableItemRepository = $purchasableItemRepository;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/admin/purchasable-item/{id}/create-variant', name: 'admin_purchasable_item_variant_create')]
@@ -67,13 +63,15 @@ class PurchasableItemVariantController extends AbstractController
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item_variant.create');
 
             return $this->redirectToRoute('admin_purchasable_item_update', [
-                'id' => $purchasableItem->getId()->toRfc4122(),
+                'id' => $purchasableItem->getId(),
             ]);
         }
 
         return $this->render('admin/purchasable_item/variant/update.html.twig', [
             'form_purchasable_item_variant' => $form,
-            'breadcrumbs'                   => $this->breadcrumbs->buildCreate($purchasableItem),
+            'breadcrumbs'                   => $this->createBreadcrumbs([
+                'purchasable_item' => $purchasableItem,
+            ]),
         ]);
     }
 
@@ -81,10 +79,14 @@ class PurchasableItemVariantController extends AbstractController
     public function read(UuidV4 $id): Response
     {
         $purchasableItemVariant = $this->findPurchasableItemVariantOrThrow404($id);
+        $purchasableItem = $purchasableItemVariant->getPurchasableItem();
 
         return $this->render('admin/purchasable_item/variant/read.html.twig', [
             'purchasable_item_variant' => $purchasableItemVariant,
-            'breadcrumbs'              => $this->breadcrumbs->buildRead($purchasableItemVariant),
+            'breadcrumbs'              => $this->createBreadcrumbs([
+                'purchasable_item'         => $purchasableItem,
+                'purchasable_item_variant' => $purchasableItemVariant,
+            ]),
         ]);
     }
 
@@ -98,6 +100,7 @@ class PurchasableItemVariantController extends AbstractController
                            UuidV4                                         $id): Response
     {
         $purchasableItemVariant = $this->findPurchasableItemVariantOrThrow404($id);
+        $purchasableItem = $purchasableItemVariant->getPurchasableItem();
 
         $updatePartVariantResult = $this->updatePartVariant($eventDispatcher, $dataTransfer, $purchasableItemVariant, $request);
         if ($updatePartVariantResult instanceof RedirectResponse)
@@ -112,7 +115,10 @@ class PurchasableItemVariantController extends AbstractController
         }
 
         return $this->render('admin/purchasable_item/variant/update.html.twig', array_merge($updatePartVariantResult, $updatePartValuesResult, [
-            'breadcrumbs' => $this->breadcrumbs->buildUpdate($purchasableItemVariant),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'purchasable_item'         => $purchasableItem,
+                'purchasable_item_variant' => $purchasableItemVariant,
+            ]),
         ]));
     }
 
@@ -136,7 +142,7 @@ class PurchasableItemVariantController extends AbstractController
             $this->addTransFlash('success', 'crud.action_performed.purchasable_item_variant.update');
 
             return $this->redirectToRoute('admin_purchasable_item_update', [
-                'id' => $purchasableItem->getId()->toRfc4122(),
+                'id' => $purchasableItem->getId(),
             ]);
         }
 
@@ -183,6 +189,7 @@ class PurchasableItemVariantController extends AbstractController
     public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
         $purchasableItemVariant = $this->findPurchasableItemVariantOrThrow404($id);
+        $purchasableItem = $purchasableItemVariant->getPurchasableItem();
 
         $form = $this->createForm(HiddenTrueType::class);
         $form->add('submit', SubmitType::class, [
@@ -199,14 +206,17 @@ class PurchasableItemVariantController extends AbstractController
             $purchasableItem = $purchasableItemVariant->getPurchasableItem();
 
             return $this->redirectToRoute('admin_purchasable_item_update', [
-                'id' => $purchasableItem->getId()->toRfc4122(),
+                'id' => $purchasableItem->getId(),
             ]);
         }
 
         return $this->render('admin/purchasable_item/variant/delete.html.twig', [
             'purchasable_item_variant' => $purchasableItemVariant,
             'form_delete'              => $form->createView(),
-            'breadcrumbs'              => $this->breadcrumbs->buildDelete($purchasableItemVariant),
+            'breadcrumbs'              => $this->createBreadcrumbs([
+                'purchasable_item'         => $purchasableItem,
+                'purchasable_item_variant' => $purchasableItemVariant,
+            ]),
         ]);
     }
 

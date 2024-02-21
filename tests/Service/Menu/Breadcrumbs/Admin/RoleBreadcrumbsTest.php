@@ -3,8 +3,7 @@
 namespace App\Tests\Service\Menu\Breadcrumbs\Admin;
 
 use App\Model\Entity\Role;
-use App\Service\Menu\Breadcrumbs\Admin\RoleBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -16,12 +15,12 @@ class RoleBreadcrumbsTest extends KernelTestCase
 
     private Role $role;
 
-    private MenuTypeFactoryRegistryInterface $factoryRegistry;
-    private RoleBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testList(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildList();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_role_list');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_role_list'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -36,7 +35,8 @@ class RoleBreadcrumbsTest extends KernelTestCase
 
     public function testCreate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildCreate();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_role_create');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_role_list', 'admin_role_create'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -55,7 +55,10 @@ class RoleBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->role);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_role_read', [
+            'role' => $this->role,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_role_list', 'admin_role_read'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -74,7 +77,10 @@ class RoleBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->role);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_role_update', [
+            'role' => $this->role,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_role_list', 'admin_role_update'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -93,7 +99,10 @@ class RoleBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->role);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_role_delete', [
+            'role' => $this->role,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_role_list', 'admin_role_delete'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -119,12 +128,8 @@ class RoleBreadcrumbsTest extends KernelTestCase
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->role, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->factoryRegistry = $menuTypeRegistry;
-
-        /** @var RoleBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(RoleBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

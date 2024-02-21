@@ -5,8 +5,7 @@ namespace App\Tests\Service\Menu\Breadcrumbs\User;
 use App\Library\Enum\GenderEnum;
 use App\Model\Entity\Camper;
 use App\Model\Entity\User;
-use App\Service\Menu\Breadcrumbs\User\ProfileCamperBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use DateTimeImmutable;
 use ReflectionClass;
@@ -19,12 +18,12 @@ class ProfileCamperBreadcrumbsTest extends KernelTestCase
 
     private Camper $camper;
 
-    private MenuTypeFactoryRegistryInterface $factoryRegistry;
-    private ProfileCamperBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testList(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildList();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_profile_camper_list');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_profile_camper_list'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -39,7 +38,8 @@ class ProfileCamperBreadcrumbsTest extends KernelTestCase
 
     public function testCreate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildCreate();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_profile_camper_create');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_profile_camper_list', 'user_profile_camper_create'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -58,7 +58,10 @@ class ProfileCamperBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->camper);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_profile_camper_read', [
+            'camper' => $this->camper,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_profile_camper_list', 'user_profile_camper_read'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -77,7 +80,10 @@ class ProfileCamperBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->camper);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_profile_camper_update', [
+            'camper' => $this->camper,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_profile_camper_list', 'user_profile_camper_update'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -96,7 +102,10 @@ class ProfileCamperBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->camper);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_profile_camper_delete', [
+            'camper' => $this->camper,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_profile_camper_list', 'user_profile_camper_delete'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -123,12 +132,8 @@ class ProfileCamperBreadcrumbsTest extends KernelTestCase
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->camper, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->factoryRegistry = $menuTypeRegistry;
-
-        /** @var ProfileCamperBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(ProfileCamperBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

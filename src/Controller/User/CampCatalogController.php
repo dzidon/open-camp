@@ -14,7 +14,6 @@ use App\Model\Repository\CampRepositoryInterface;
 use App\Model\Repository\UserRepositoryInterface;
 use App\Model\Service\Application\ApplicationDraftHttpStorageInterface;
 use App\Service\Form\Type\User\CampSearchType;
-use App\Service\Menu\Breadcrumbs\User\CampCatalogBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use App\Service\Routing\RouteNamerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -26,17 +25,14 @@ class CampCatalogController extends AbstractController
 {
     private CampRepositoryInterface $campRepository;
     private CampCategoryRepositoryInterface $campCategoryRepository;
-    private CampCatalogBreadcrumbsInterface $breadcrumbs;
     private RouteNamerInterface $routeNamer;
 
     public function __construct(CampRepositoryInterface         $campRepository,
                                 CampCategoryRepositoryInterface $campCategoryRepository,
-                                CampCatalogBreadcrumbsInterface $breadcrumbs,
                                 RouteNamerInterface             $routeNamer)
     {
         $this->campRepository = $campRepository;
         $this->campCategoryRepository = $campCategoryRepository;
-        $this->breadcrumbs = $breadcrumbs;
         $this->routeNamer = $routeNamer;
     }
 
@@ -47,7 +43,6 @@ class CampCatalogController extends AbstractController
                          ?string                          $path = null): Response
     {
         $campCategory = null;
-        $pathCampCategories = [];
         $showHiddenCamps = $this->userCanViewHiddenCamps();
 
         if ($path === null || $path === '')
@@ -57,26 +52,26 @@ class CampCatalogController extends AbstractController
         else
         {
             $campCategory = $this->findCampCategoryOrThrow404($path, $showHiddenCamps);
-            $this->routeNamer->setCurrentRouteName($campCategory->getName());
+            $campCategoryName = $campCategory->getName();
+            $this->routeNamer->setCurrentRouteName($campCategoryName);
             $campCategoryChildren = $campCategory->getChildren();
-            $pathCampCategories = array_merge($campCategory->getAncestors(), [$campCategory]); // for breadcrumbs
         }
 
         $searchData = new CampSearchData();
         $form = $formFactory->createNamed('', CampSearchType::class, $searchData);
         $form->handleRequest($request);
-
         $isSearchInvalid = $form->isSubmitted() && !$form->isValid();
+
         if ($isSearchInvalid)
         {
             $searchData = new CampSearchData();
         }
 
         $campCategoryChildren = $this->campCategoryRepository->filterOutCampCategoriesWithoutCamps($campCategoryChildren, $showHiddenCamps);
-
         $page = (int) $request->query->get('page', 1);
         $result = $this->campRepository->getUserCampCatalogResult($searchData, $campCategory, $showHiddenCamps, $page, 12);
         $paginator = $result->getPaginator();
+
         if ($paginator->isCurrentPageOutOfBounds())
         {
             throw $this->createNotFoundException();
@@ -93,7 +88,9 @@ class CampCatalogController extends AbstractController
             'catalog_result'         => $result,
             'pagination_menu'        => $paginationMenu,
             'is_search_invalid'      => $isSearchInvalid,
-            'breadcrumbs'            => $this->breadcrumbs->buildList($pathCampCategories),
+            'breadcrumbs'            => $this->createBreadcrumbs([
+                'camp_category' => $campCategory,
+            ]),
         ]);
     }
 
@@ -106,6 +103,7 @@ class CampCatalogController extends AbstractController
                            string                               $urlName): Response
     {
         $camp = $this->findCampOrThrow404($urlName);
+        $campCategory = $camp->getCampCategory();
         $showHiddenCamps = $this->userCanViewHiddenCamps();
 
         if ($camp->isHidden())
@@ -137,7 +135,10 @@ class CampCatalogController extends AbstractController
             'camp_images'                         => $campImages,
             'camp_dates_result'                   => $campDatesResult,
             'applications_editable_drafts_result' => $applicationsEditableDraftsResult,
-            'breadcrumbs'                         => $this->breadcrumbs->buildDetail($camp),
+            'breadcrumbs'                         => $this->createBreadcrumbs([
+                'camp'          => $camp,
+                'camp_category' => $campCategory,
+            ]),
         ]);
     }
 

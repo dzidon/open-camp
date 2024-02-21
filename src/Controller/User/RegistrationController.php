@@ -10,7 +10,6 @@ use App\Model\Event\User\UserRegistration\UserRegistrationCreateEvent;
 use App\Model\Repository\UserRegistrationRepositoryInterface;
 use App\Service\Form\Type\User\RegistrationType;
 use App\Service\Form\Type\User\RepeatedPasswordType;
-use App\Service\Menu\Breadcrumbs\User\RegistrationBreadcrumbsInterface;
 use App\Service\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use App\Service\Security\Token\TokenSplitterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -25,13 +24,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/registration')]
 class RegistrationController extends AbstractController
 {
-    private RegistrationBreadcrumbsInterface $registrationBreadcrumbs;
-
-    public function __construct(RegistrationBreadcrumbsInterface $registrationBreadcrumbs)
-    {
-        $this->registrationBreadcrumbs = $registrationBreadcrumbs;
-    }
-
     #[Route('', name: 'user_registration')]
     public function registration(EventDispatcherInterface $eventDispatcher, Request $request): Response
     {
@@ -53,7 +45,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('user/auth/registration.html.twig', [
             'form_registration' => $form->createView(),
-            'breadcrumbs'       => $this->registrationBreadcrumbs->buildRegistration(),
+            'breadcrumbs'       => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -89,7 +81,9 @@ class RegistrationController extends AbstractController
 
         return $this->render('user/auth/registration_complete.html.twig', [
             'form_plain_password' => $form->createView(),
-            'breadcrumbs'         => $this->registrationBreadcrumbs->buildRegistrationComplete($token),
+            'breadcrumbs'         => $this->createBreadcrumbs([
+                'token' => $token,
+            ]),
         ]);
     }
 }

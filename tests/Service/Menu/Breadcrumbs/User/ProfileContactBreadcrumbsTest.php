@@ -5,8 +5,7 @@ namespace App\Tests\Service\Menu\Breadcrumbs\User;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
 use App\Model\Enum\Entity\ContactRoleEnum;
-use App\Service\Menu\Breadcrumbs\User\ProfileContactBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -18,12 +17,12 @@ class ProfileContactBreadcrumbsTest extends KernelTestCase
 
     private Contact $contact;
 
-    private MenuTypeFactoryRegistryInterface $factoryRegistry;
-    private ProfileContactBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testList(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildList();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_profile_contact_list');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_profile_contact_list'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -38,7 +37,8 @@ class ProfileContactBreadcrumbsTest extends KernelTestCase
 
     public function testCreate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildCreate();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_profile_contact_create');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_profile_contact_list', 'user_profile_contact_create'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -57,7 +57,10 @@ class ProfileContactBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->contact);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_profile_contact_read', [
+            'contact' => $this->contact,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_profile_contact_list', 'user_profile_contact_read'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -76,7 +79,10 @@ class ProfileContactBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->contact);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_profile_contact_update', [
+            'contact' => $this->contact,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_profile_contact_list', 'user_profile_contact_update'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -95,7 +101,10 @@ class ProfileContactBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->contact);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_profile_contact_delete', [
+            'contact' => $this->contact,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_profile_contact_list', 'user_profile_contact_delete'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -122,12 +131,8 @@ class ProfileContactBreadcrumbsTest extends KernelTestCase
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->contact, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->factoryRegistry = $menuTypeRegistry;
-
-        /** @var ProfileContactBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(ProfileContactBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

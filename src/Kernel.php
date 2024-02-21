@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Library\DependencyInjection\Compiler\BreadcrumbsRegistryPass;
 use App\Library\DependencyInjection\Compiler\DataTransferRegistryPass;
 use App\Library\DependencyInjection\Compiler\MenuTypeFactoryRegistryPass;
 use App\Library\DependencyInjection\Compiler\PublicServicesInTestCompilerPass;
@@ -19,6 +20,7 @@ class Kernel extends BaseKernel
             ->addCompilerPass(new MenuTypeFactoryRegistryPass())
             ->addCompilerPass(new DataTransferRegistryPass())
             ->addCompilerPass(new PublicServicesInTestCompilerPass())
+            ->addCompilerPass(new BreadcrumbsRegistryPass())
         ;
     }
 }

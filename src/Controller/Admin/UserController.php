@@ -18,7 +18,6 @@ use App\Service\Form\Type\Admin\RepeatedPasswordType;
 use App\Service\Form\Type\Admin\UserSearchType;
 use App\Service\Form\Type\Admin\UserType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\UserBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -34,13 +33,10 @@ use Symfony\Component\Uid\UuidV4;
 class UserController extends AbstractController
 {
     private UserRepositoryInterface $userRepository;
-    private UserBreadcrumbsInterface $userBreadcrumbs;
 
-    public function __construct(UserRepositoryInterface  $userRepository,
-                                UserBreadcrumbsInterface $userBreadcrumbs)
+    public function __construct(UserRepositoryInterface  $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->userBreadcrumbs = $userBreadcrumbs;
     }
 
     #[IsGranted(new Expression('is_granted("user_create") or is_granted("user_read") or 
@@ -78,7 +74,7 @@ class UserController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->userBreadcrumbs->buildList(),
+            'breadcrumbs'       => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -107,7 +103,7 @@ class UserController extends AbstractController
 
         return $this->render('admin/user/update.html.twig', [
             'form_user'   => $form->createView(),
-            'breadcrumbs' => $this->userBreadcrumbs->buildCreate(),
+            'breadcrumbs' => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -119,7 +115,9 @@ class UserController extends AbstractController
 
         return $this->render('admin/user/read.html.twig', [
             'user'        => $user,
-            'breadcrumbs' => $this->userBreadcrumbs->buildRead($user),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'user' => $user,
+            ]),
         ]);
     }
 
@@ -154,7 +152,9 @@ class UserController extends AbstractController
         return $this->render('admin/user/update.html.twig', [
             'user'        => $user,
             'form_user'   => $form->createView(),
-            'breadcrumbs' => $this->userBreadcrumbs->buildUpdate($user),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'user' => $user,
+            ]),
         ]);
     }
 
@@ -182,7 +182,9 @@ class UserController extends AbstractController
         return $this->render('admin/user/update_password.html.twig', [
             'user'          => $user,
             'form_password' => $form->createView(),
-            'breadcrumbs'   => $this->userBreadcrumbs->buildUpdatePassword($user),
+            'breadcrumbs'   => $this->createBreadcrumbs([
+                'user' => $user,
+            ]),
         ]);
     }
 
@@ -211,7 +213,9 @@ class UserController extends AbstractController
         return $this->render('admin/user/delete.html.twig', [
             'user'        => $user,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->userBreadcrumbs->buildDelete($user),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'user' => $user,
+            ]),
         ]);
     }
 

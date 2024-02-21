@@ -3,8 +3,7 @@
 namespace App\Tests\Service\Menu\Breadcrumbs\User;
 
 use App\Model\Entity\CampCategory;
-use App\Service\Menu\Breadcrumbs\User\CampCatalogBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -12,12 +11,11 @@ class CampCatalogBreadcrumbsTest extends KernelTestCase
 {
     use TreeNodeChildrenIdentifiersTrait;
 
-    private MenuTypeFactoryRegistryInterface $factoryRegistry;
-    private CampCatalogBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testListWithEmptyCampCategories(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildList([]);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_camp_catalog');
 
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_camp_catalog'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
@@ -37,7 +35,9 @@ class CampCatalogBreadcrumbsTest extends KernelTestCase
         $campCategoryB = new CampCategory('B', 'b');
         $campCategoryB->setParent($campCategoryA);
 
-        $breadcrumbsMenu = $this->breadcrumbs->buildList([$campCategoryA, $campCategoryB]);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_camp_catalog', [
+            'camp_category' => $campCategoryB,
+        ]);
 
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_camp_catalog', 'user_camp_catalog_0', 'user_camp_catalog_1'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
@@ -63,12 +63,8 @@ class CampCatalogBreadcrumbsTest extends KernelTestCase
     {
         $container = static::getContainer();
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->factoryRegistry = $menuTypeRegistry;
-
-        /** @var CampCatalogBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(CampCatalogBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

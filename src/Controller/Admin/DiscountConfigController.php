@@ -14,7 +14,6 @@ use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\DiscountConfigSearchType;
 use App\Service\Form\Type\Admin\DiscountConfigType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\DiscountConfigBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -30,13 +29,10 @@ use Symfony\Component\Uid\UuidV4;
 class DiscountConfigController extends AbstractController
 {
     private DiscountConfigRepositoryInterface $discountConfigRepository;
-    private DiscountConfigBreadcrumbsInterface $discountConfigBreadcrumbs;
 
-    public function __construct(DiscountConfigRepositoryInterface  $discountConfigRepository,
-                                DiscountConfigBreadcrumbsInterface $discountConfigBreadcrumbs)
+    public function __construct(DiscountConfigRepositoryInterface $discountConfigRepository)
     {
         $this->discountConfigRepository = $discountConfigRepository;
-        $this->discountConfigBreadcrumbs = $discountConfigBreadcrumbs;
     }
 
     #[IsGranted(new Expression('is_granted("discount_config_create") or is_granted("discount_config_read") or 
@@ -70,7 +66,7 @@ class DiscountConfigController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->discountConfigBreadcrumbs->buildList(),
+            'breadcrumbs'       => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -95,7 +91,7 @@ class DiscountConfigController extends AbstractController
 
         return $this->render('admin/discount_config/update.html.twig', [
             'form_discount_config' => $form->createView(),
-            'breadcrumbs'          => $this->discountConfigBreadcrumbs->buildCreate(),
+            'breadcrumbs'          => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -107,7 +103,9 @@ class DiscountConfigController extends AbstractController
 
         return $this->render('admin/discount_config/read.html.twig', [
             'discount_config' => $discountConfig,
-            'breadcrumbs'     => $this->discountConfigBreadcrumbs->buildRead($discountConfig),
+            'breadcrumbs'     => $this->createBreadcrumbs([
+                'discount_config' => $discountConfig,
+            ]),
         ]);
     }
 
@@ -136,7 +134,9 @@ class DiscountConfigController extends AbstractController
         return $this->render('admin/discount_config/update.html.twig', [
             'discount_config'      => $discountConfig,
             'form_discount_config' => $form->createView(),
-            'breadcrumbs'          => $this->discountConfigBreadcrumbs->buildUpdate($discountConfig),
+            'breadcrumbs'          => $this->createBreadcrumbs([
+                'discount_config' => $discountConfig,
+            ]),
         ]);
     }
 
@@ -165,7 +165,9 @@ class DiscountConfigController extends AbstractController
         return $this->render('admin/discount_config/delete.html.twig', [
             'discount_config' => $discountConfig,
             'form_delete'     => $form->createView(),
-            'breadcrumbs'     => $this->discountConfigBreadcrumbs->buildDelete($discountConfig),
+            'breadcrumbs'     => $this->createBreadcrumbs([
+                'discount_config' => $discountConfig,
+            ]),
         ]);
     }
 

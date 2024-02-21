@@ -3,8 +3,7 @@
 namespace App\Tests\Service\Menu\Breadcrumbs\Admin;
 
 use App\Model\Entity\AttachmentConfig;
-use App\Service\Menu\Breadcrumbs\Admin\AttachmentConfigBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -16,12 +15,12 @@ class AttachmentConfigBreadcrumbsTest extends KernelTestCase
 
     private AttachmentConfig $attachmentConfig;
 
-    private MenuTypeFactoryRegistryInterface $factoryRegistry;
-    private AttachmentConfigBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testList(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildList();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_attachment_config_list');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_attachment_config_list'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -36,7 +35,8 @@ class AttachmentConfigBreadcrumbsTest extends KernelTestCase
 
     public function testCreate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildCreate();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_attachment_config_create');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_attachment_config_list', 'admin_attachment_config_create'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -55,7 +55,10 @@ class AttachmentConfigBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->attachmentConfig);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_attachment_config_read', [
+            'attachment_config' => $this->attachmentConfig,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_attachment_config_list', 'admin_attachment_config_read'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -74,7 +77,10 @@ class AttachmentConfigBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->attachmentConfig);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_attachment_config_update', [
+            'attachment_config' => $this->attachmentConfig,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_attachment_config_list', 'admin_attachment_config_update'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -93,7 +99,10 @@ class AttachmentConfigBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->attachmentConfig);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_attachment_config_delete', [
+            'attachment_config' => $this->attachmentConfig,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_attachment_config_list', 'admin_attachment_config_delete'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -119,12 +128,8 @@ class AttachmentConfigBreadcrumbsTest extends KernelTestCase
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->attachmentConfig, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->factoryRegistry = $menuTypeRegistry;
-
-        /** @var AttachmentConfigBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(AttachmentConfigBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

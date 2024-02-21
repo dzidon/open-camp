@@ -5,7 +5,6 @@ namespace App\Controller\User;
 use App\Controller\AbstractController;
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepositoryInterface;
-use App\Service\Menu\Breadcrumbs\User\GuideBreadcrumbsInterface;
 use App\Service\Routing\RouteNamerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,12 +13,9 @@ class GuideController extends AbstractController
 {
     private UserRepositoryInterface $userRepository;
 
-    private GuideBreadcrumbsInterface $breadcrumbs;
-
-    public function __construct(UserRepositoryInterface $userRepository, GuideBreadcrumbsInterface $breadcrumbs)
+    public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[Route('/guide/{urlName}', name: 'user_guide_detail', requirements: ['urlName' => '([a-zA-Z0-9-])+'])]
@@ -40,7 +36,9 @@ class GuideController extends AbstractController
 
         return $this->render('user/guide/detail.html.twig', [
             'guide'        => $guide,
-            'breadcrumbs'  => $this->breadcrumbs->buildDetail($guide),
+            'breadcrumbs'  => $this->createBreadcrumbs([
+                'guide' => $guide,
+            ]),
         ]);
     }
 

@@ -4,8 +4,7 @@ namespace App\Tests\Service\Menu\Breadcrumbs\Admin;
 
 use App\Model\Entity\PurchasableItem;
 use App\Model\Entity\PurchasableItemVariant;
-use App\Service\Menu\Breadcrumbs\Admin\PurchasableItemVariantBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -18,12 +17,14 @@ class PurchasableItemVariantBreadcrumbsTest extends KernelTestCase
     private PurchasableItemVariant $purchasableItemVariant;
     private PurchasableItem $purchasableItem;
 
-    private MenuTypeFactoryRegistryInterface $factoryRegistry;
-    private PurchasableItemVariantBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testCreate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildCreate($this->purchasableItem);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_purchasable_item_variant_create', [
+            'purchasable_item' => $this->purchasableItem,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_purchasable_item_list', 'admin_purchasable_item_update', 'admin_purchasable_item_variant_create'],
@@ -49,7 +50,11 @@ class PurchasableItemVariantBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->purchasableItemVariant);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_purchasable_item_variant_read', [
+            'purchasable_item'         => $this->purchasableItem,
+            'purchasable_item_variant' => $this->purchasableItemVariant,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_purchasable_item_list', 'admin_purchasable_item_update', 'admin_purchasable_item_variant_read'],
@@ -75,7 +80,11 @@ class PurchasableItemVariantBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->purchasableItemVariant);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_purchasable_item_variant_update', [
+            'purchasable_item'         => $this->purchasableItem,
+            'purchasable_item_variant' => $this->purchasableItemVariant,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_purchasable_item_list', 'admin_purchasable_item_update', 'admin_purchasable_item_variant_update'],
@@ -101,7 +110,11 @@ class PurchasableItemVariantBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->purchasableItemVariant);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_purchasable_item_variant_delete', [
+            'purchasable_item'         => $this->purchasableItem,
+            'purchasable_item_variant' => $this->purchasableItemVariant,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
             ['admin_home', 'admin_purchasable_item_list', 'admin_purchasable_item_update', 'admin_purchasable_item_variant_delete'],
@@ -139,12 +152,8 @@ class PurchasableItemVariantBreadcrumbsTest extends KernelTestCase
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->purchasableItemVariant, UuidV4::fromString('b1f5a345-9f80-4949-a692-16adc4f7a05a'));
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->factoryRegistry = $menuTypeRegistry;
-
-        /** @var PurchasableItemVariantBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(PurchasableItemVariantBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

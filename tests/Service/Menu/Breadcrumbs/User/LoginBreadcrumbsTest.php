@@ -2,8 +2,7 @@
 
 namespace App\Tests\Service\Menu\Breadcrumbs\User;
 
-use App\Service\Menu\Breadcrumbs\User\LoginBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
@@ -11,12 +10,12 @@ class LoginBreadcrumbsTest extends KernelTestCase
 {
     use TreeNodeChildrenIdentifiersTrait;
 
-    private MenuTypeFactoryRegistryInterface $menuTypeRegistry;
-    private LoginBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testLogin(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildLogin();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_login');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['user_home', 'user_login'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -33,12 +32,8 @@ class LoginBreadcrumbsTest extends KernelTestCase
     {
         $container = static::getContainer();
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->menuTypeRegistry = $menuTypeRegistry;
-
-        /** @var LoginBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(LoginBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

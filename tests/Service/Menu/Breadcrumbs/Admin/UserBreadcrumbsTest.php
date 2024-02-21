@@ -3,8 +3,7 @@
 namespace App\Tests\Service\Menu\Breadcrumbs\Admin;
 
 use App\Model\Entity\User;
-use App\Service\Menu\Breadcrumbs\Admin\UserBreadcrumbs;
-use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
+use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use App\Tests\Library\DataStructure\TreeNodeChildrenIdentifiersTrait;
 use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -16,12 +15,12 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     private User $user;
 
-    private MenuTypeFactoryRegistryInterface $factoryRegistry;
-    private UserBreadcrumbs $breadcrumbs;
+    private BreadcrumbsRegistryInterface $breadcrumbsRegistry;
 
     public function testList(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildList();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_user_list');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -36,7 +35,8 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     public function testCreate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildCreate();
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_user_create');
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_create'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -55,7 +55,10 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     public function testRead(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildRead($this->user);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_user_read', [
+            'user' => $this->user,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_read'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -74,7 +77,10 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     public function testUpdate(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdate($this->user);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_user_update', [
+            'user' => $this->user,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_update'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -93,7 +99,10 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     public function testUpdatePassword(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildUpdatePassword($this->user);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_user_update_password', [
+            'user' => $this->user,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_update', 'admin_user_update_password'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -116,7 +125,10 @@ class UserBreadcrumbsTest extends KernelTestCase
 
     public function testDelete(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbs->buildDelete($this->user);
+        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('admin_user_delete', [
+            'user' => $this->user,
+        ]);
+
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(['admin_home', 'admin_user_list', 'admin_user_delete'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
 
@@ -142,12 +154,8 @@ class UserBreadcrumbsTest extends KernelTestCase
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->user, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));
 
-        /** @var MenuTypeFactoryRegistryInterface $menuTypeRegistry */
-        $menuTypeRegistry = $container->get(MenuTypeFactoryRegistryInterface::class);
-        $this->factoryRegistry = $menuTypeRegistry;
-
-        /** @var UserBreadcrumbs $breadcrumbs */
-        $breadcrumbs = $container->get(UserBreadcrumbs::class);
-        $this->breadcrumbs = $breadcrumbs;
+        /** @var BreadcrumbsRegistryInterface $breadcrumbsRegistry */
+        $breadcrumbsRegistry = $container->get(BreadcrumbsRegistryInterface::class);
+        $this->breadcrumbsRegistry = $breadcrumbsRegistry;
     }
 }

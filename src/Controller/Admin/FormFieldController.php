@@ -14,7 +14,6 @@ use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\FormFieldSearchType;
 use App\Service\Form\Type\Admin\FormFieldType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\FormFieldBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -30,13 +29,10 @@ use Symfony\Component\Uid\UuidV4;
 class FormFieldController extends AbstractController
 {
     private FormFieldRepositoryInterface $formFieldRepository;
-    private FormFieldBreadcrumbsInterface $breadcrumbs;
 
-    public function __construct(FormFieldRepositoryInterface  $formFieldRepository,
-                                FormFieldBreadcrumbsInterface $breadcrumbs)
+    public function __construct(FormFieldRepositoryInterface  $formFieldRepository)
     {
         $this->formFieldRepository = $formFieldRepository;
-        $this->breadcrumbs = $breadcrumbs;
     }
 
     #[IsGranted(new Expression('is_granted("form_field_create") or is_granted("form_field_read") or 
@@ -70,7 +66,7 @@ class FormFieldController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->breadcrumbs->buildList(),
+            'breadcrumbs'       => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -98,7 +94,7 @@ class FormFieldController extends AbstractController
 
         return $this->render('admin/form_field/update.html.twig', [
             'form_form_field' => $form->createView(),
-            'breadcrumbs'     => $this->breadcrumbs->buildCreate(),
+            'breadcrumbs'     => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -110,7 +106,9 @@ class FormFieldController extends AbstractController
 
         return $this->render('admin/form_field/read.html.twig', [
             'form_field'   => $formField,
-            'breadcrumbs'  => $this->breadcrumbs->buildRead($formField),
+            'breadcrumbs'  => $this->createBreadcrumbs([
+                'form_field' => $formField,
+            ]),
         ]);
     }
 
@@ -144,7 +142,9 @@ class FormFieldController extends AbstractController
         return $this->render('admin/form_field/update.html.twig', [
             'form_field'      => $formField,
             'form_form_field' => $form->createView(),
-            'breadcrumbs'     => $this->breadcrumbs->buildUpdate($formField),
+            'breadcrumbs'     => $this->createBreadcrumbs([
+                'form_field' => $formField,
+            ]),
         ]);
     }
 
@@ -173,7 +173,9 @@ class FormFieldController extends AbstractController
         return $this->render('admin/form_field/delete.html.twig', [
             'form_field'  => $formField,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->breadcrumbs->buildDelete($formField),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'form_field' => $formField,
+            ]),
         ]);
     }
 

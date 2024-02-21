@@ -130,7 +130,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
             // profile - password set
             if ($user->getPassword() === null)
             {
-                $active = $route === 'user_profile_password_change_create';
+                $active = $route === 'user_profile_password_change_create' || $route === 'user_password_change_complete';
 
                 $text = $this->translator->trans('route.user_profile_password_change_create');
                 $url = $this->urlGenerator->generate('user_profile_password_change_create');
@@ -139,7 +139,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
             // profile - password change
             else
             {
-                $active = $route === 'user_profile_password_change';
+                $active = $route === 'user_profile_password_change' || $route === 'user_password_change_complete';
 
                 $text = $this->translator->trans('route.user_profile_password_change');
                 $url = $this->urlGenerator->generate('user_profile_password_change');

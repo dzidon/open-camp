@@ -1340,8 +1340,8 @@ form:
                     name_desc: 'Název (Z-A)'
                     price_asc: 'Cena (Od nejmenší)'
                     price_desc: 'Cena (Od největší)'
-                    max_amount_asc: 'Max. počet pro táborníka (Od nejmenšího)'
-                    max_amount_desc: 'Max. počet pro táborníka (Od největšího)'
+                    max_amount_asc: 'Max. počet (Od nejmenšího)'
+                    max_amount_desc: 'Max. počet (Od největšího)'
 
             is_global: 'Pro celou přihlášku'
             button: 'Hledat'

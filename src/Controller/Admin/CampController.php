@@ -21,7 +21,6 @@ use App\Service\Form\Type\Admin\CampCreationType;
 use App\Service\Form\Type\Admin\CampSearchType;
 use App\Service\Form\Type\Admin\CampType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Menu\Breadcrumbs\Admin\CampBreadcrumbsInterface;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -37,13 +36,10 @@ use Symfony\Component\Uid\UuidV4;
 class CampController extends AbstractController
 {
     private CampRepositoryInterface $campRepository;
-    private CampBreadcrumbsInterface $campBreadcrumbs;
 
-    public function __construct(CampRepositoryInterface $campRepository,
-                                CampBreadcrumbsInterface $campBreadcrumbs)
+    public function __construct(CampRepositoryInterface $campRepository)
     {
         $this->campRepository = $campRepository;
-        $this->campBreadcrumbs = $campBreadcrumbs;
     }
 
     #[IsGranted(new Expression('is_granted("camp_create") or is_granted("camp_read") or 
@@ -82,7 +78,7 @@ class CampController extends AbstractController
             'pagination_menu'   => $paginationMenu,
             'paginator'         => $paginator,
             'is_search_invalid' => $isSearchInvalid,
-            'breadcrumbs'       => $this->campBreadcrumbs->buildList(),
+            'breadcrumbs'       => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -95,7 +91,9 @@ class CampController extends AbstractController
         $campCategoryChoices = $campCategoryRepository->findAll();
 
         $campCreationData = new CampCreationData();
-        $form = $this->createForm(CampCreationType::class, $campCreationData, ['choices_camp_categories' => $campCategoryChoices]);
+        $form = $this->createForm(CampCreationType::class, $campCreationData, [
+            'choices_camp_categories' => $campCategoryChoices
+        ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.admin.camp_creation.button']);
         $form->handleRequest($request);
 
@@ -110,7 +108,7 @@ class CampController extends AbstractController
 
         return $this->render('admin/camp/update.html.twig', [
             'form_camp'   => $form->createView(),
-            'breadcrumbs' => $this->campBreadcrumbs->buildCreate(),
+            'breadcrumbs' => $this->createBreadcrumbs(),
         ]);
     }
 
@@ -142,7 +140,9 @@ class CampController extends AbstractController
             'camp_images'     => $campImages,
             'camp_dates'      => $campDates,
             'more_camp_dates' => $moreCampDates,
-            'breadcrumbs'     => $this->campBreadcrumbs->buildRead($camp),
+            'breadcrumbs'     => $this->createBreadcrumbs([
+                'camp' => $camp,
+            ]),
         ]);
     }
 
@@ -176,7 +176,9 @@ class CampController extends AbstractController
         return $this->render('admin/camp/update.html.twig', [
             'camp'        => $camp,
             'form_camp'   => $form->createView(),
-            'breadcrumbs' => $this->campBreadcrumbs->buildUpdate($camp),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'camp' => $camp,
+            ]),
         ]);
     }
 
@@ -205,7 +207,9 @@ class CampController extends AbstractController
         return $this->render('admin/camp/delete.html.twig', [
             'camp'        => $camp,
             'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->campBreadcrumbs->buildDelete($camp),
+            'breadcrumbs' => $this->createBreadcrumbs([
+                'camp' => $camp,
+            ]),
         ]);
     }
 

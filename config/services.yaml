@@ -98,6 +98,9 @@ services:
         App\Service\Data\Transfer\DataTransferInterface:
             tags: [ 'app.data_transfer' ]
 
+        App\Service\Menu\Breadcrumbs\BreadcrumbInterface:
+            tags: [ 'app.breadcrumb' ]
+
     Symfony\Bridge\Monolog\Processor\TokenProcessor:
         autoconfigure: false
         tags:
