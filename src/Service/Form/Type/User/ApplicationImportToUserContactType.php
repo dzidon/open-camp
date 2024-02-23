@@ -102,9 +102,6 @@ class ApplicationImportToUserContactType extends AbstractType
             'data_class'   => ApplicationImportToUserContactData::class,
             'block_prefix' => 'user_application_import_contact',
             'label'        => false,
-            'row_attr'     => [
-                'class' => 'm-0',
-            ],
         ]);
     }
 }

@@ -98,9 +98,6 @@ class ApplicationImportToUserCamperType extends AbstractType
             'data_class'   => ApplicationImportToUserCamperData::class,
             'block_prefix' => 'user_application_import_camper',
             'label'        => false,
-            'row_attr'     => [
-                'class' => 'm-0',
-            ],
         ]);
     }
 }

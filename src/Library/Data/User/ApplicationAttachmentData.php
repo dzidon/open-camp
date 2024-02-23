@@ -24,6 +24,8 @@ class ApplicationAttachmentData
 
     private ?string $help;
 
+    private bool $suppressRequiredLaterHelp;
+
     #[Assert\When(
         expression: '!this.isAlreadyUploaded() and this.getRequiredType() === enum("App\\\Model\\\Enum\\\Entity\\\AttachmentConfigRequiredTypeEnum::REQUIRED")',
         constraints: [
@@ -38,7 +40,8 @@ class ApplicationAttachmentData
                                 bool                             $isAlreadyUploaded,
                                 int                              $priority,
                                 string                           $label,
-                                ?string                          $help = null)
+                                ?string                          $help = null,
+                                bool                             $suppressRequiredLaterHelp = false)
     {
         $this->maxSize = $maxSize;
         $this->requiredType = $requiredType->value;
@@ -47,6 +50,7 @@ class ApplicationAttachmentData
         $this->priority = $priority;
         $this->label = $label;
         $this->help = $help;
+        $this->suppressRequiredLaterHelp = $suppressRequiredLaterHelp;
     }
 
     public function getMaxSize(): float
@@ -87,6 +91,11 @@ class ApplicationAttachmentData
     public function getHelp(): ?string
     {
         return $this->help;
+    }
+
+    public function suppressRequiredLaterHelp(): bool
+    {
+        return $this->suppressRequiredLaterHelp;
     }
 
     public function getFile(): ?File

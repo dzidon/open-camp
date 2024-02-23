@@ -53,6 +53,7 @@
 {# Application attachment file help text #}
 {% block user_application_attachment_file_help %}
     {% set application_attachment_data = form.parent.vars.data %}
+    {% set suppress_required_later_help = application_attachment_data.suppressRequiredLaterHelp %}
     {% set is_already_uploaded = application_attachment_data.isAlreadyUploaded %}
     {% set help_configured = application_attachment_data.help %}
     {% set is_help_configured = help_configured is not same as(null) and help_configured is not same as('') %}
@@ -84,7 +85,7 @@
                 <br>
             {% endif %}
 
-            {% if is_required_later %}
+            {% if is_required_later and not suppress_required_later_help %}
                 {{ 'form.user.application_attachment.is_required_later'|trans }}
 
                 <br>
@@ -864,7 +865,7 @@
 {% endblock %}
 
 {# Application camper purchasable item #}
-{% block user_application_camper_purchasable_item_widget %}
+{% block user_application_camper_purchasable_items_widget %}
     {{ form_errors(form) }}
 
     {% set applicationPurchasableItemsVars = form.applicationPurchasableItemsData.vars %}
@@ -997,4 +998,11 @@
     {% endif %}
 
     {{ form_rest(form) }}
+{% endblock %}
+
+{# Application attachments widget #}
+{% block user_application_attachments_label %}
+    <h5 class="mb-3">
+        {{ form.vars.label|trans(form.vars.label_translation_parameters) }}
+    </h5>
 {% endblock %}

@@ -147,6 +147,11 @@ class ApplicationStepOneType extends AbstractType
         $builder
             ->add('applicationFormFieldValuesData', CollectionType::class, [
                 'entry_type' => ApplicationFormFieldValueType::class,
+                'entry_options' => [
+                    'row_attr'  => [
+                        'class' => 'm-0',
+                    ],
+                ],
                 'row_attr'   => [
                     'class' => 'm-0',
                 ],
@@ -154,8 +159,13 @@ class ApplicationStepOneType extends AbstractType
                 'priority' => 3900,
             ])
             ->add('applicationAttachmentsData', CollectionType::class, [
-                'entry_type' => ApplicationAttachmentType::class,
-                'row_attr'   => [
+                'entry_type'    => ApplicationAttachmentType::class,
+                'entry_options' => [
+                    'row_attr'  => [
+                        'class' => 'm-0',
+                    ],
+                ],
+                'row_attr'  => [
                     'class' => 'm-0',
                 ],
                 'label'    => false,

@@ -36,8 +36,14 @@ class ApplicationCamperPurchasableItemsType extends AbstractType
                     'entry_type'    => ApplicationPurchasableItemType::class,
                     'entry_options' => [
                         'instance_defaults_data' => $instanceDefaultsData,
+                        'row_attr'               => [
+                            'class' => 'm-0',
+                        ],
                     ],
-                    'label'                        => 'form.user.application_step_two.purchasable_items_camper',
+                    'row_attr' => [
+                        'class' => 'm-0',
+                    ],
+                    'label'                        => 'form.user.application_camper_purchasable_items.purchasable_items',
                     'label_translation_parameters' => [
                         'camper' => $nameFull,
                     ],
@@ -50,11 +56,8 @@ class ApplicationCamperPurchasableItemsType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'   => ApplicationCamperPurchasableItemsData::class,
-            'block_prefix' => 'user_application_camper_purchasable_item',
+            'block_prefix' => 'user_application_camper_purchasable_items',
             'label'        => false,
-            'row_attr' => [
-                'class' => 'mb-0',
-            ]
         ]);
 
         $resolver->setDefined('instance_defaults_data');

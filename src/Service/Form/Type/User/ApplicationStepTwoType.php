@@ -237,10 +237,13 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
         $form
             ->add('applicationCamperPurchasableItemsData', CollectionType::class, [
                 'entry_type'    => ApplicationCamperPurchasableItemsType::class,
+                'label'         => false,
                 'entry_options' => [
                     'instance_defaults_data' => $instanceDefaultsData,
+                    'row_attr'               => [
+                        'class' => 'mb-0',
+                    ],
                 ],
-                'label'    => false,
                 'priority' => 400,
             ])
         ;
@@ -270,6 +273,12 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
                 'entry_type'    => ApplicationPurchasableItemType::class,
                 'entry_options' => [
                     'instance_defaults_data' => $instanceDefaultsData,
+                    'row_attr'               => [
+                        'class' => 'm-0',
+                    ],
+                ],
+                'row_attr' => [
+                    'class' => 'm-0',
                 ],
                 'label'    => $label,
                 'priority' => 300,

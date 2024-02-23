@@ -147,6 +147,11 @@ class ApplicationAttachment
         return $this->applicationCamper;
     }
 
+    public function canBeUploadedLater(): bool
+    {
+        return !$this->isAlreadyUploaded() && $this->getRequiredType() === AttachmentConfigRequiredTypeEnum::REQUIRED_LATER;
+    }
+
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;

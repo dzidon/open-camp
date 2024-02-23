@@ -132,6 +132,9 @@ application:
         total_price_without_tax: 'Celkem bez DPH'
 
     completed_screen:
+        perform_remaining_steps: 'Máte skoro hotovo'
+        upload_required_attachments: 'Nahrajte prosím následující přílohy.'
+        form_attachments_upload_later: 'Donahrání povinných příloh'
         accepted:
             not_yet: 'Pracujeme na schválení přihlášky'
             yes: 'Přihláška schválena'
@@ -342,6 +345,9 @@ crud:
             show_in_catalog: 'Zobrazit v katalogu'
 
     action_performed:
+        application_attachment:
+            upload_later: 'Soubory uloženy!'
+
         contact:
             create: 'Kontakt vytvořen!'
             update: 'Kontakt uložen!'
@@ -1464,7 +1470,6 @@ form:
         application_step_two:
             payment_method: 'Platební metoda'
             purchasable_items: 'Volitelné položky'
-            purchasable_items_camper: 'Volitelné položky ({camper})'
             purchasable_items_global: 'Volitelné položky (celá přihláška)'
             note: 'Poznámka'
             customer_channel: 'Jak jste se o nás dozvěděli?'
@@ -1477,6 +1482,16 @@ form:
 
         application_step_three:
             button: 'Dokončit'
+
+        application_camper_purchasable_items:
+            purchasable_items: 'Volitelné položky ({camper})'
+
+        application_attachments:
+            attachments_camper: 'Přílohy pro táborníka {camper}'
+            attachments_global: 'Přílohy pro celou přihlášku'
+
+        application_attachments_upload_later:
+            button: 'Nahrát'
 
         application_attachment:
             already_uploaded: 'Soubor už je nahraný.'

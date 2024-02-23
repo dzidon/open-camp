@@ -66,7 +66,7 @@ class PurchasableItemVariantRepositoryTest extends KernelTestCase
         $this->assertSame(2, $paginator->getPageSize());
 
         $names = $this->getPurchasableItemVariantNames($paginator->getCurrentPageItems());
-        $this->assertSame(['Variant 2', 'Variant 1'], $names);
+        $this->assertSame(['Variant 1', 'Variant 2'], $names);
     }
 
     public function testGetAdminPaginatorWithName(): void

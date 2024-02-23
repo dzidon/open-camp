@@ -23,10 +23,10 @@ class TripLocationSearchDataTest extends TestCase
     public function testSortBy(): void
     {
         $data = new TripLocationSearchData();
-        $this->assertSame(TripLocationSortEnum::CREATED_AT_DESC, $data->getSortBy());
+        $this->assertSame(TripLocationSortEnum::PRIORITY_DESC, $data->getSortBy());
 
         $data->setSortBy(null);
-        $this->assertSame(TripLocationSortEnum::CREATED_AT_DESC, $data->getSortBy());
+        $this->assertSame(TripLocationSortEnum::PRIORITY_DESC, $data->getSortBy());
 
         $data->setSortBy(TripLocationSortEnum::CREATED_AT_ASC);
         $this->assertSame(TripLocationSortEnum::CREATED_AT_ASC, $data->getSortBy());

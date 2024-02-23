@@ -49,11 +49,8 @@ class ApplicationAttachmentType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'   => ApplicationAttachmentData::class,
-            'label'        => false,
-            'row_attr'     => [
-                'class' => 'm-0',
-            ],
+            'data_class' => ApplicationAttachmentData::class,
+            'label'      => false,
         ]);
     }
 }

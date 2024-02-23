@@ -853,6 +853,30 @@ class Application
         return $totalAmount;
     }
 
+    public function canUploadAttachmentsLater(): bool
+    {
+        foreach ($this->applicationAttachments as $applicationAttachment)
+        {
+            if ($applicationAttachment->canBeUploadedLater())
+            {
+                return true;
+            }
+        }
+
+        foreach ($this->applicationCampers as $applicationCamper)
+        {
+            foreach ($applicationCamper->getApplicationAttachments() as $applicationAttachment)
+            {
+                if ($applicationAttachment->canBeUploadedLater())
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;

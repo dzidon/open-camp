@@ -95,9 +95,6 @@ class ApplicationPurchasableItemType extends AbstractType
             'data_class'   => ApplicationPurchasableItemData::class,
             'block_prefix' => 'user_application_purchasable_item',
             'label'        => false,
-            'row_attr'     => [
-                'class' => 'mb-0'
-            ],
         ]);
 
         $resolver->setDefined('instance_defaults_data');

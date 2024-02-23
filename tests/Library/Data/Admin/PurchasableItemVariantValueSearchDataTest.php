@@ -23,10 +23,10 @@ class PurchasableItemVariantValueSearchDataTest extends TestCase
     public function testSortBy(): void
     {
         $data = new PurchasableItemVariantValueSearchData();
-        $this->assertSame(PurchasableItemVariantValueSortEnum::CREATED_AT_DESC, $data->getSortBy());
+        $this->assertSame(PurchasableItemVariantValueSortEnum::PRIORITY_DESC, $data->getSortBy());
 
         $data->setSortBy(null);
-        $this->assertSame(PurchasableItemVariantValueSortEnum::CREATED_AT_DESC, $data->getSortBy());
+        $this->assertSame(PurchasableItemVariantValueSortEnum::PRIORITY_DESC, $data->getSortBy());
 
         $data->setSortBy(PurchasableItemVariantValueSortEnum::CREATED_AT_ASC);
         $this->assertSame(PurchasableItemVariantValueSortEnum::CREATED_AT_ASC, $data->getSortBy());

@@ -116,9 +116,14 @@ class ApplicationPurchasableItemInstanceType extends AbstractType
 
         $builder
             ->add('applicationPurchasableItemVariantsData', CollectionType::class, [
-                'entry_type' => ApplicationPurchasableItemVariantType::class,
-                'row_attr'   => [
-                    'class' => 'mb-0'
+                'entry_type'    => ApplicationPurchasableItemVariantType::class,
+                'entry_options' => [
+                    'row_attr'  => [
+                        'class' => 'm-0',
+                    ],
+                ],
+                'row_attr' => [
+                    'class' => 'm-0',
                 ],
                 'label'    => false,
                 'priority' => 100,

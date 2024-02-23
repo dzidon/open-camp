@@ -1,0 +1,414 @@
+{% if show_application_completed_data %}
+    <div class="row">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="mb-0">
+                                {% if form_attachments_upload_later is null %}
+                                    {% if application.isAccepted is same as(null) %}
+                                        <i class="fas fa-check-circle text-primary mr-2"></i>
+
+                                        {{ 'application.completed_screen.accepted.not_yet'|trans }}
+                                    {% elseif application.isAccepted is same as(true) %}
+                                        <i class="fas fa-check-circle text-success mr-2"></i>
+
+                                        {{ 'application.completed_screen.accepted.yes'|trans }}
+                                    {% else %}
+                                        <i class="fas fa-check-circle text-danger mr-2"></i>
+
+                                        {{ 'application.completed_screen.accepted.no'|trans }}
+                                    {% endif %}
+                                {% else %}
+                                    <i class="fas fa-exclamation-triangle text-warning"></i>
+
+                                    {{ 'application.completed_screen.perform_remaining_steps'|trans }}
+                                {% endif %}
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if form_attachments_upload_later is not null %}
+                <h3 class="mb-3">
+                    <i class="fas fa-exclamation-triangle text-warning"></i>
+
+                    {{ 'application.completed_screen.form_attachments_upload_later'|trans }}
+                </h3>
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    {{ 'application.completed_screen.upload_required_attachments'|trans }}
+                                </div>
+
+                                {{ form(form_attachments_upload_later) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>
+                        {{ 'entity_attribute.application.simple_id'|trans }}:
+                    </strong>
+                </div>
+
+                <div class="col-6">
+                    <span class="float-right">
+                        {{ application.simpleId }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>
+                        {{ 'entity_attribute.application.camp_name'|trans }}:
+                    </strong>
+                </div>
+
+                <div class="col-6">
+                    <span class="float-right">
+                        {{ application.campName }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>
+                        {{ 'entity_attribute.application.camp_date_start_at'|trans }}:
+                    </strong>
+                </div>
+
+                <div class="col-6">
+                    <span class="float-right">
+                        {{ application.campDateStartAt|date(date_time_format) }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>
+                        {{ 'entity_attribute.application.camp_date_end_at'|trans }}:
+                    </strong>
+                </div>
+
+                <div class="col-6">
+                    <span class="float-right">
+                        {{ application.campDateEndAt|date(date_time_format) }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-6">
+                    <strong>
+                        {{ 'entity_attribute.application.created_at'|trans }}:
+                    </strong>
+                </div>
+
+                <div class="col-6">
+                    <span class="float-right">
+                        {{ application.createdAt|date(date_time_format) }}
+                    </span>
+                </div>
+            </div>
+
+            {% if application.campDateDescription is not null %}
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <strong>
+                            {{ 'entity_attribute.application.camp_date_description'|trans }}:
+                        </strong>
+                    </div>
+
+                    <div class="col-12">
+                        <span>
+                            {{ application.campDateDescription|nl2br }}
+                        </span>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
+
+{% if show_application_completed_data and (show_application_campers or show_application_purchasable_items) %}
+    <div class="row mb-4">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            <hr>
+        </div>
+    </div>
+{% endif %}
+
+{% if show_application_campers %}
+    <div class="row">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            {% for application_camper in application.applicationCampers %}
+                {% set show_camper_total = false %}
+
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="row d-flex align-items-end">
+                            <div class="col-8">
+                                <strong>
+                                    {{ application_camper.nameFull }}
+                                </strong>
+                            </div>
+
+                            <div class="col-4 text-right">
+                                <span>
+                                    {{ application.getPricePerCamper|format_currency(application.currency) }}
+                                </span>
+                            </div>
+                        </div>
+
+                        {% for application_trip_location_path in application_camper.applicationTripLocationPaths %}
+                            {% if application_trip_location_path.price > 0.0 %}
+                                {% set show_camper_total = true %}
+
+                                <div class="row d-flex align-items-end">
+                                    <div class="col-8">
+                                        <span>
+                                            &#8627;
+
+                                            {{ application_trip_location_path.location }}
+
+                                            {% if application_trip_location_path.isThere %}
+                                                ({{ 'application.summary.this_is_where_i_get_on'|trans }})
+                                            {% else %}
+                                                ({{ 'application.summary.this_is_where_i_get_off'|trans }})
+                                            {% endif %}
+                                        </span>
+                                    </div>
+
+                                    <div class="col-4 text-right">
+                                        <span>
+                                            +{{ application_trip_location_path.price|format_currency(application.currency) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if application_camper.discountRecurringCamper > 0.0 %}
+                            {% set show_camper_total = true %}
+
+                            <div class="row d-flex align-items-end">
+                                <div class="col-8">
+                                    <span>
+                                        &#8627; {{ 'application.summary.discount_recurring_camper'|trans }}
+                                    </span>
+                                </div>
+
+                                <div class="col-4 text-right">
+                                    <span>
+                                        -{{ application_camper.discountRecurringCamper|format_currency(application.currency) }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if application_camper.discountSiblings > 0.0 %}
+                            {% set show_camper_total = true %}
+
+                            <div class="row d-flex align-items-end">
+                                <div class="col-8">
+                                    <span>
+                                        &#8627; {{ 'application.summary.discount_siblings'|trans }}
+                                    </span>
+                                </div>
+
+                                <div class="col-4 text-right">
+                                    <span>
+                                        -{{ application_camper.discountSiblings|format_currency(application.currency) }}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if show_camper_total %}
+                            <div class="row d-flex align-items-end">
+                                <div class="col-8">
+                                    <u>
+                                        {{ 'application.summary.camper_total_price'|trans }}
+                                    </u>
+                                </div>
+
+                                <div class="col-4 text-right">
+                                    <u>
+                                        {{ application_camper.fullPrice|format_currency(application.currency) }}
+                                    </u>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+{% if show_application_purchasable_items and application.purchasableItemInstancesTotalAmount > 0 %}
+    <div class="row">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            {% for application_purchasable_item in application.applicationPurchasableItems %}
+                {% set instances_total_amount = application_purchasable_item.instancesTotalAmount %}
+
+                {% if instances_total_amount > 0 %}
+                    {% set instances = application_purchasable_item.applicationPurchasableItemInstances %}
+                    {% set instances_count = instances|length %}
+                    {% set has_multiple_variants = application_purchasable_item.hasMultipleVariants %}
+                    {% set has_instances_assigned_to_camper = application_purchasable_item.hasInstancesAssignedToCamper %}
+                    {% set is_expanded_view = instances_count > 1 or has_multiple_variants or has_instances_assigned_to_camper %}
+
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="row d-flex align-items-end">
+                                <div class="col-8">
+                                    <strong>
+                                        {% if instances_count > 1 %}
+                                            {{ instances_total_amount }}x
+                                        {% endif %}
+
+                                        {{ application_purchasable_item.label }}
+                                    </strong>
+                                </div>
+
+                                {% if not is_expanded_view %}
+                                    <div class="col-4 text-right">
+                                        <span>
+                                            {{ application_purchasable_item.fullPrice|format_currency(application.currency) }}
+                                        </span>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            {% if is_expanded_view %}
+                                {% for instance in instances %}
+                                    {% if instance.amount > 0 %}
+                                        {% set application_camper = instance.applicationCamper %}
+
+                                        <div class="row d-flex align-items-end">
+                                            <div class="col-8 d-flex">
+                                                <div class="flex-shrink-0 mr-1">
+                                                    &#8627;
+                                                </div>
+
+                                                <div>
+                                                    <span>
+                                                        {{ instance.amount }}x
+                                                        {{ instance.chosenVariantValuesAsString }}
+
+                                                        {% if application_camper is not null %}
+                                                            <span class="text-nowrap">
+                                                                {{ 'application.item_instance_for_camper'|trans }}
+
+                                                                <em>
+                                                                    {{ application_camper.nameFull }}
+                                                                </em>
+                                                            </span>
+                                                        {% endif %}
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4 text-right">
+                                                <span>
+                                                    {{ instance.price|format_currency(application.currency) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+                            {% if instances_count > 1 %}
+                                <div class="row d-flex align-items-end">
+                                    <div class="col-8">
+                                        <u>
+                                            {{ 'application.summary.purchasable_item_total_price'|trans }}
+                                        </u>
+                                    </div>
+
+                                    <div class="col-4 text-right">
+                                        <u>
+                                            {{ application_purchasable_item.fullPrice|format_currency(application.currency) }}
+                                        </u>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+{% if show_application_completed_data or show_application_campers or show_application_purchasable_items %}
+    <div class="row mb-4">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            <hr>
+        </div>
+    </div>
+{% endif %}
+
+<div class="row mb-5">
+    <div class="col-md-8 col-lg-6 col-xl-5">
+        {% if application.paymentMethod is not null %}
+            <div class="row d-flex align-items-end mb-3">
+                <div class="col-6">
+                    <span>
+                        {{ 'entity.payment_method.singular'|trans }}
+                    </span>
+                </div>
+
+                <div class="col-6 text-right">
+                    <span>
+                        {{ application.paymentMethod.label|trans }}
+                    </span>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if tax > 0.0 %}
+            <div class="row d-flex align-items-end mb-3">
+                <div class="col-6">
+                    <span>
+                        {{ 'application.summary.total_price_without_tax'|trans }}
+                    </span>
+                </div>
+
+                <div class="col-6 text-right">
+                    <span>
+                        {{ application.fullPriceWithoutTax|format_currency(application.currency) }}
+                    </span>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row d-flex align-items-end">
+            <div class="col-6">
+                <h3>
+                    <strong>{{ 'application.summary.total_price'|trans }}</strong>
+                </h3>
+            </div>
+
+            <div class="col-6 text-right">
+                <h3>
+                    <strong>{{ application.fullPrice|format_currency(application.currency) }}</strong>
+                </h3>
+            </div>
+        </div>
+    </div>
+</div>

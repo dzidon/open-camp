@@ -367,6 +367,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
             ->leftJoin('applicationCamper.applicationTripLocationPaths', 'applicationTripLocationPath')
             ->andWhere('applicationCamper.id IN (:ids)')
             ->setParameter('ids', $applicationCamperIds)
+            ->addOrderBy('applicationTripLocationPath.isThere', 'DESC')
             ->getQuery()
             ->getResult()
         ;

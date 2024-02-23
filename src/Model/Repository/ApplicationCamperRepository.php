@@ -50,6 +50,7 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
             ->andWhere('(application.isAccepted IS NULL OR application.isAccepted = TRUE)')
             ->andWhere('campDate.id = :campDateId')
             ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ->addOrderBy('applicationTripLocationPath.isThere', 'DESC')
             ->getQuery()
             ->getResult()
         ;
@@ -118,6 +119,7 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
             ->leftJoin('applicationCamper.applicationTripLocationPaths', 'applicationTripLocationPath')
             ->andWhere('applicationCamper.id IN (:ids)')
             ->setParameter('ids', $applicationCamperIds)
+            ->addOrderBy('applicationTripLocationPath.isThere', 'DESC')
             ->getQuery()
             ->getResult()
         ;

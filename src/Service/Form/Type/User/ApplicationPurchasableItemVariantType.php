@@ -63,9 +63,6 @@ class ApplicationPurchasableItemVariantType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ApplicationPurchasableItemVariantData::class,
             'label'      => false,
-            'row_attr'   => [
-                'class' => 'm-0',
-            ],
         ]);
     }
 }

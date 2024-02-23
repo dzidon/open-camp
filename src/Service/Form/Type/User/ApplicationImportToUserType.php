@@ -37,16 +37,32 @@ class ApplicationImportToUserType extends AbstractType
 
         $builder
             ->add('applicationImportToUserContactsData', CollectionType::class, [
-                'entry_type' => ApplicationImportToUserContactType::class,
-                'label'      => 'form.user.application_import_to_user.contacts',
-                'priority'   => 200,
+                'entry_type'    => ApplicationImportToUserContactType::class,
+                'entry_options' => [
+                    'row_attr'  => [
+                        'class' => 'm-0',
+                    ],
+                ],
+                'row_attr' => [
+                    'class' => 'm-0',
+                ],
+                'label'    => 'form.user.application_import_to_user.contacts',
+                'priority' => 200,
             ])
         ;
 
         $builder
             ->add('applicationImportToUserCampersData', CollectionType::class, [
-                'entry_type' => ApplicationImportToUserCamperType::class,
-                'label'      => 'form.user.application_import_to_user.campers',
+                'entry_type'    => ApplicationImportToUserCamperType::class,
+                'label'         => 'form.user.application_import_to_user.campers',
+                'entry_options' => [
+                    'row_attr'  => [
+                        'class' => 'm-0',
+                    ],
+                ],
+                'row_attr' => [
+                    'class' => 'm-0',
+                ],
                 'priority'   => 100,
             ])
         ;

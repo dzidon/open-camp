@@ -8,7 +8,7 @@ class PurchasableItemVariantValueSearchData
 {
     private string $phrase = '';
 
-    private PurchasableItemVariantValueSortEnum $sortBy = PurchasableItemVariantValueSortEnum::CREATED_AT_DESC;
+    private PurchasableItemVariantValueSortEnum $sortBy = PurchasableItemVariantValueSortEnum::PRIORITY_DESC;
 
     public function getPhrase(): string
     {
@@ -31,7 +31,7 @@ class PurchasableItemVariantValueSearchData
     {
         if ($sortBy === null)
         {
-            $sortBy = PurchasableItemVariantValueSortEnum::CREATED_AT_DESC;
+            $sortBy = PurchasableItemVariantValueSortEnum::PRIORITY_DESC;
         }
 
         $this->sortBy = $sortBy;

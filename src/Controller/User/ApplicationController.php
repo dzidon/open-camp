@@ -10,6 +10,7 @@ use App\Model\Entity\Application;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
+use App\Model\Event\User\Application\ApplicationAttachmentsUploadLaterEvent;
 use App\Model\Event\User\Application\ApplicationDraftRemoveFromHttpStorageEvent;
 use App\Model\Event\User\Application\ApplicationDraftStoreInHttpStorageEvent;
 use App\Model\Event\User\Application\ApplicationStepOneCreateEvent;
@@ -23,10 +24,12 @@ use App\Model\Repository\CamperRepositoryInterface;
 use App\Model\Repository\ContactRepositoryInterface;
 use App\Model\Repository\PaymentMethodRepositoryInterface;
 use App\Model\Service\Application\ApplicationStepOneDataFactoryInterface;
+use App\Model\Service\ApplicationAttachment\ApplicationAttachmentsUploadLaterDataFactoryInterface;
 use App\Model\Service\ApplicationCamper\ApplicationCamperDataFactoryInterface;
 use App\Model\Service\ApplicationPurchasableItemInstance\ApplicationPurchasableItemInstanceDataFactoryInterface;
 use App\Model\Service\Contact\ContactDataFactoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\User\ApplicationAttachmentsUploadLaterType;
 use App\Service\Form\Type\User\ApplicationStepThreeType;
 use App\Service\Form\Type\User\ApplicationStepTwoType;
 use App\Service\Form\Type\User\ApplicationStepOneType;
@@ -123,6 +126,7 @@ class ApplicationController extends AbstractController
             'tax'                             => $this->getParameter('app.tax'),
             'form_application_step_one'       => $form->createView(),
             'breadcrumbs'                     => $this->createBreadcrumbs([
+                'camp'      => $camp,
                 'camp_date' => $campDate,
             ]),
             'application_back_url'            => $this->generateUrl('user_camp_detail', [
@@ -323,15 +327,38 @@ class ApplicationController extends AbstractController
     }
 
     #[Route('/application/{applicationId}/completed', name: 'user_application_completed')]
-    public function viewCompleted(UuidV4 $applicationId): Response
+    public function viewCompleted(ApplicationAttachmentsUploadLaterDataFactoryInterface $dataFactory,
+                                  UuidV4                                                $applicationId,
+                                  Request                                               $request): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
         $this->assertApplicationCompletedAvailability($application);
+        $form = null;
+
+        if ($application->canUploadAttachmentsLater())
+        {
+            $data = $dataFactory->createApplicationAttachmentsUploadLaterData($application);
+            $form = $this->createForm(ApplicationAttachmentsUploadLaterType::class, $data);
+            $form->add('submit', SubmitType::class, ['label' => 'form.user.application_attachments_upload_later.button']);
+            $form->handleRequest($request);
+
+            if ($form->isSubmitted() && $form->isValid())
+            {
+                $event = new ApplicationAttachmentsUploadLaterEvent($data, $application);
+                $this->eventDispatcher->dispatch($event, $event::NAME);
+                $this->addTransFlash('success', 'crud.action_performed.application_attachment.upload_later');
+
+                return $this->redirectToRoute('user_application_completed', [
+                    'applicationId' => $application->getId(),
+                ]);
+            }
+        }
 
         return $this->render('user/application/completed.html.twig', [
-            'application' => $application,
-            'breadcrumbs' => $this->createBreadcrumbs([
-                'application'   => $application,
+            'application'                   => $application,
+            'form_attachments_upload_later' => $form,
+            'breadcrumbs'                   => $this->createBreadcrumbs([
+                'application' => $application,
                 'camp_category' => null,
             ]),
         ]);

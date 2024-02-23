@@ -8,7 +8,7 @@ class TripLocationSearchData
 {
     private string $phrase = '';
 
-    private TripLocationSortEnum $sortBy = TripLocationSortEnum::CREATED_AT_DESC;
+    private TripLocationSortEnum $sortBy = TripLocationSortEnum::PRIORITY_DESC;
 
     public function getPhrase(): string
     {
@@ -31,7 +31,7 @@ class TripLocationSearchData
     {
         if ($sortBy === null)
         {
-            $sortBy = TripLocationSortEnum::CREATED_AT_DESC;
+            $sortBy = TripLocationSortEnum::PRIORITY_DESC;
         }
 
         $this->sortBy = $sortBy;

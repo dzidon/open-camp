@@ -88,7 +88,7 @@ class TripLocationRepositoryTest extends KernelTestCase
         $this->assertSame(2, $paginator->getPageSize());
 
         $names = $this->getTripLocationNames($paginator->getCurrentPageItems());
-        $this->assertSame(['Location 2', 'Location 1'], $names);
+        $this->assertSame(['Location 1', 'Location 2'], $names);
     }
 
     public function testGetAdminPaginatorWithName(): void

@@ -103,9 +103,6 @@ class ApplicationFormFieldValueType extends AbstractType
         $resolver->setDefaults([
             'data_class' => ApplicationFormFieldValueData::class,
             'label'      => false,
-            'row_attr'   => [
-                'class' => 'm-0',
-            ],
         ]);
     }
 }

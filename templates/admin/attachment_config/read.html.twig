@@ -31,7 +31,11 @@
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            <span>{{ attachment_config.help }}</span>
+                            {% if attachment_config.help is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ attachment_config.help }}</span>
+                            {% endif %}
                         </div>
                     </div>
 

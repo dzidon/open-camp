@@ -105,8 +105,13 @@ class ApplicationCamperType extends AbstractType
                 'priority' => 1000,
             ])
             ->add('applicationFormFieldValuesData', CollectionType::class, [
-                'entry_type' => ApplicationFormFieldValueType::class,
-                'row_attr'   => [
+                'entry_type'    => ApplicationFormFieldValueType::class,
+                'entry_options' => [
+                    'row_attr'  => [
+                        'class' => 'm-0',
+                    ],
+                ],
+                'row_attr' => [
                     'class' => 'm-0',
                 ],
                 'label'    => false,
@@ -114,7 +119,12 @@ class ApplicationCamperType extends AbstractType
             ])
             ->add('applicationAttachmentsData', CollectionType::class, [
                 'entry_type' => ApplicationAttachmentType::class,
-                'row_attr'   => [
+                'entry_options' => [
+                    'row_attr'  => [
+                        'class' => 'm-0',
+                    ],
+                ],
+                'row_attr'  => [
                     'class' => 'm-0',
                 ],
                 'label'    => false,
