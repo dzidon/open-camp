@@ -21,7 +21,7 @@
                                         {{ 'application.completed_screen.accepted.no'|trans }}
                                     {% endif %}
                                 {% else %}
-                                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                                    <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
 
                                     {{ 'application.completed_screen.perform_remaining_steps'|trans }}
                                 {% endif %}
@@ -32,16 +32,16 @@
             </div>
 
             {% if form_attachments_upload_later is not null %}
-                <h3 class="mb-3">
-                    <i class="fas fa-exclamation-triangle text-warning"></i>
-
-                    {{ 'application.completed_screen.form_attachments_upload_later'|trans }}
-                </h3>
-
                 <div class="row mb-4">
                     <div class="col-12">
                         <div class="card">
                             <div class="card-body">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
+
+                                    {{ 'application.completed_screen.form_attachments_upload_later'|trans }}
+                                </h5>
+
                                 <div class="mb-4">
                                     {{ 'application.completed_screen.upload_required_attachments'|trans }}
                                 </div>
@@ -51,6 +51,54 @@
                         </div>
                     </div>
                 </div>
+            {% endif %}
+
+            {% if is_application_stored_in_session(application) %}
+                {% if not app.user %}
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-info-circle text-secondary mr-2"></i>
+
+                                        {{ 'application.completed_screen.import_to_user.heading'|trans }}
+                                    </h5>
+
+                                    <div class="mb-4">
+                                        {{ 'application.completed_screen.import_to_user.call_to_action_register'|trans }}
+                                    </div>
+
+                                    <a href="{{ path('user_registration') }}" class="btn btn-primary">
+                                        {{ 'application.completed_screen.import_to_user.button_register'|trans }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% elseif can_import_application_to_user(application, app.user) %}
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-info-circle text-secondary mr-2"></i>
+
+                                        {{ 'application.completed_screen.import_to_user.heading'|trans }}
+                                    </h5>
+
+                                    <div class="mb-4">
+                                        {{ 'application.completed_screen.import_to_user.call_to_action_import'|trans }}
+                                    </div>
+
+                                    <a href="{{ path('user_application_import') }}" class="btn btn-primary">
+                                        {{ 'application.completed_screen.import_to_user.button_import'|trans }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
             {% endif %}
 
             <div class="row mb-3">
@@ -363,7 +411,7 @@
     </div>
 {% endif %}
 
-<div class="row mb-5">
+<div class="row mb-4">
     <div class="col-md-8 col-lg-6 col-xl-5">
         {% if application.paymentMethod is not null %}
             <div class="row d-flex align-items-end mb-3">

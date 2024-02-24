@@ -132,13 +132,20 @@ application:
         total_price_without_tax: 'Celkem bez DPH'
 
     completed_screen:
-        perform_remaining_steps: 'Máte skoro hotovo'
-        upload_required_attachments: 'Nahrajte prosím následující přílohy.'
+        perform_remaining_steps: 'Máte skoro hotovo!'
         form_attachments_upload_later: 'Donahrání povinných příloh'
+        upload_required_attachments: 'Nahrajte prosím následující přílohy.'
+        import_to_user:
+            heading: 'Uložení údajů na profil'
+            call_to_action_register: 'Můžete se u nás zaregistrovat a my vám na profil uložíme údaje z této přihlášky. Při vyplňování další přihlášky údaje vyplníte jednoduše pár kliknutími!'
+            call_to_action_import: 'Údaje z této přihlášky si můžete uložit na svůj profil.'
+            button_register: 'Zaregistrovat se'
+            button_import: 'Uložit'
+
         accepted:
-            not_yet: 'Pracujeme na schválení přihlášky'
-            yes: 'Přihláška schválena'
-            no: 'Přihláška zamítnuta'
+            not_yet: 'Pracujeme na schválení přihlášky!'
+            yes: 'Přihláška schválena!'
+            no: 'Přihláška zamítnuta!'
 
     to_user_import:
         billing_data: 'Fakturační údaje'

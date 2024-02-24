@@ -215,6 +215,10 @@ services:
         arguments:
             $currency: '%app.currency%'
 
+    App\Service\Twig\ApplicationToUserImportExtension:
+        arguments:
+            $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
+
     App\Service\Form\Type\Admin\DiscountRecurringCamperConfigType:
         arguments:
             $tax: '%app.tax%'

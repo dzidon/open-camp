@@ -339,7 +339,10 @@ class ApplicationController extends AbstractController
         {
             $data = $dataFactory->createApplicationAttachmentsUploadLaterData($application);
             $form = $this->createForm(ApplicationAttachmentsUploadLaterType::class, $data);
-            $form->add('submit', SubmitType::class, ['label' => 'form.user.application_attachments_upload_later.button']);
+            $form->add('submit', SubmitType::class, [
+                'label'    => 'form.user.application_attachments_upload_later.button',
+                'row_attr' => ['class' => 'mb-0'],
+            ]);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid())
