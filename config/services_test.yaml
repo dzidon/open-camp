@@ -58,6 +58,7 @@ parameters:
     app.sale_camper_siblings: true
     app.contact_email_mandatory: false
     app.contact_phone_number_mandatory: false
+    app.application_invoice_number_length: 10
     app.application_simple_id_length: 6
     app.application_simple_id_characters: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 

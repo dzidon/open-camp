@@ -49,6 +49,17 @@ payment_method:
     transfer: 'Převod na bankovní účet'
     invoice: 'Na fakturu'
 
+offline_payment_method_instructions:
+    general: 'Zvolili jste offline platební metodu. Po provedení platby musíme platbu zkontrolovat, schválení přihlášky tak může chvíli trvat, prosíme o trpělivost.'
+    invoice:
+        fully_unpaid_call_to_action: 'Proveďte prosím platbu převodem na náš bankovní účet. Můžete zatím buď zaplatit pouze zálohu, nebo můžete rovnou zaplatit celou přihlášku.'
+        rest_unpaid_call_to_action: 'Zálohu máte zaplacenou, zaplaťte prosím doplatek převodem na náš účet.'
+        bank_account: 'Bankovní účet'
+        invoice_number: 'Variabilní symbol'
+        deposit: 'Záloha'
+        full_price: 'Celá částka'
+        rest: 'Doplatek'
+
 contact_role:
     mother: 'Matka'
     father: 'Otec'
@@ -135,10 +146,18 @@ application:
         perform_remaining_steps: 'Máte skoro hotovo!'
         form_attachments_upload_later: 'Donahrání povinných příloh'
         upload_required_attachments: 'Nahrajte prosím následující přílohy.'
+        payment:
+            heading: 'Platba'
+            online_call_to_action: 'Proveďte prosím on-line platbu přihlášky.'
+            button_online_pay_deposit: 'Zaplatit pouze zálohu ({price})'
+            button_online_pay_full: 'Zaplatit celou přihlášku ({price})'
+            button_online_pay_rest: 'Zaplatit doplatek ({price})'
+            button_online_pay: 'Zaplatit přihlášku ({price})'
+
         import_to_user:
             heading: 'Uložení údajů na profil'
-            call_to_action_register: 'Můžete se u nás zaregistrovat a my vám na profil uložíme údaje z této přihlášky. Při vyplňování další přihlášky údaje vyplníte jednoduše pár kliknutími!'
-            call_to_action_import: 'Údaje z této přihlášky si můžete uložit na svůj profil.'
+            instructions_register: 'Můžete se u nás zaregistrovat a my vám na profil uložíme údaje z této přihlášky. Při vyplňování další přihlášky údaje vyplníte jednoduše pár kliknutími!'
+            instructions_import: 'Údaje z této přihlášky si můžete uložit na svůj profil.'
             button_register: 'Zaregistrovat se'
             button_import: 'Uložit'
 
@@ -1635,6 +1654,7 @@ form:
             modal:
                 title: 'Načíst táborníka'
                 text: 'Vyberte táborníka, kterého si přejete načíst ze svého profilu.'
+                label_born_at: 'nar.'
                 button: 'Načíst'
 
             load_from_profile: 'Načíst táborníka z mého profilu'

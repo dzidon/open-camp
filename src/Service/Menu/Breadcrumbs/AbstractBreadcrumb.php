@@ -11,7 +11,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * Helper class for building breadcrumbs.
  */
-class AbstractBreadcrumb
+abstract class AbstractBreadcrumb implements BreadcrumbInterface
 {
     protected UrlGeneratorInterface $urlGenerator;
     protected TranslatorInterface $translator;

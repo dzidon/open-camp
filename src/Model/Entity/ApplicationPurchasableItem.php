@@ -106,23 +106,9 @@ class ApplicationPurchasableItem
         return $this->price;
     }
 
-    public function getPriceWithoutTax(): float
-    {
-        $application = $this->getApplication();
-
-        return $this->getPrice() / $application->getTaxDenominator();
-    }
-
     public function getFullPrice(): float
     {
         return $this->price * $this->getInstancesTotalAmount();
-    }
-
-    public function getFullPriceWithoutTax(): float
-    {
-        $application = $this->getApplication();
-
-        return $this->getFullPrice() / $application->getTaxDenominator();
     }
 
     public function getInstancesTotalAmount(): int

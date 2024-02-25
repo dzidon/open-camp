@@ -164,6 +164,9 @@
                                         <option data-camper-json="{{ loadable_camper|json_encode }}">
                                             {{ loadable_camper.nameFirst }}
                                             {{ loadable_camper.nameLast }}
+
+                                            ({{ 'form.user.camper.modal.label_born_at'|trans }}
+                                            {{ loadable_camper.bornAt|date(date_format) }})
                                         </option>
                                     {% endfor %}
                                 </select>
@@ -300,6 +303,12 @@
                                         <option data-contact-json="{{ loadable_contact|json_encode }}">
                                             {{ loadable_contact.nameFirst }}
                                             {{ loadable_contact.nameLast }}
+
+                                            ({%- if loadable_contact.role == 'other' -%}
+                                                {{ loadable_contact.roleOther }}
+                                            {%- else -%}
+                                                {{ ('contact_role.' ~ loadable_contact.role)|trans }}
+                                            {%- endif -%})
                                         </option>
                                     {% endfor %}
                                 </select>

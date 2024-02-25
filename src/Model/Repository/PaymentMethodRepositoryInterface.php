@@ -29,5 +29,5 @@ interface PaymentMethodRepositoryInterface
      *
      * @return PaymentMethod[]
      */
-    public function findAll(): array;
+    public function findAll(bool $enabledOnly = false): array;
 }

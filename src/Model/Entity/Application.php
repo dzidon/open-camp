@@ -29,6 +29,9 @@ class Application
     #[ORM\Column(length: 6, unique: true)]
     private string $simpleId;
 
+    #[ORM\Column(type: Types::INTEGER, unique: true)]
+    private int $invoiceNumber;
+
     #[ORM\Column(length: 180)]
     private string $email;
 
@@ -171,6 +174,7 @@ class Application
     private ?DateTimeImmutable $updatedAt = null;
 
     public function __construct(string   $simpleId,
+                                int      $invoiceNumber,
                                 string   $email,
                                 string   $nameFirst,
                                 string   $nameLast,
@@ -192,6 +196,7 @@ class Application
     {
         $this->id = Uuid::v4();
         $this->simpleId = $simpleId;
+        $this->invoiceNumber = $invoiceNumber;
         $this->email = $email;
         $this->nameFirst = $nameFirst;
         $this->nameLast = $nameLast;
@@ -239,6 +244,11 @@ class Application
     public function getSimpleId(): string
     {
         return $this->simpleId;
+    }
+
+    public function getInvoiceNumber(): int
+    {
+        return $this->invoiceNumber;
     }
 
     public function getEmail(): string
@@ -556,6 +566,23 @@ class Application
         return $fullPrice;
     }
 
+    public function getFullDeposit(): float
+    {
+        $fullDeposit = 0.0;
+
+        foreach ($this->applicationCampers as $applicationCamper)
+        {
+            $fullDeposit += $applicationCamper->getDeposit();
+        }
+
+        return $fullDeposit;
+    }
+
+    public function getFullPriceWithoutDeposit(): float
+    {
+        return $this->getFullPrice() - $this->getFullDeposit();
+    }
+
     public function getFullPriceWithoutTax(): float
     {
         return $this->getFullPrice() / $this->getTaxDenominator();
@@ -566,29 +593,14 @@ class Application
         return $this->deposit + $this->priceWithoutDeposit;
     }
 
-    public function getPricePerCamperWithoutTax(): float
-    {
-        return $this->getDepositWithoutTax() + $this->getPriceWithoutDepositWithoutTax();
-    }
-
     public function getDeposit(): float
     {
         return $this->deposit;
     }
 
-    public function getDepositWithoutTax(): float
-    {
-        return $this->deposit / $this->getTaxDenominator();
-    }
-
     public function getPriceWithoutDeposit(): float
     {
         return $this->priceWithoutDeposit;
-    }
-
-    public function getPriceWithoutDepositWithoutTax(): float
-    {
-        return $this->priceWithoutDeposit / $this->getTaxDenominator();
     }
 
     public function getDepositUntil(): ?DateTimeImmutable
@@ -621,6 +633,16 @@ class Application
         $this->user = $user;
 
         return $this;
+    }
+
+    public function isPaymentMethodOnline(): bool
+    {
+        if ($this->paymentMethod === null)
+        {
+            return false;
+        }
+
+        return $this->paymentMethod->isOnline();
     }
 
     public function getPaymentMethodLabel(): ?string

@@ -509,11 +509,6 @@ class ApplicationCamper
         return $this->getDeposit() + $this->getPriceWithoutDeposit();
     }
 
-    public function getPriceWithoutTax(): float
-    {
-        return $this->getFullPrice() / $this->application->getTaxDenominator();
-    }
-
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;

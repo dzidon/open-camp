@@ -1,0 +1,91 @@
+{% set is_application_deposit_paid = false %}
+
+{% if is_application_deposit_paid %}
+    <div class="row mb-3">
+        <div class="col-12">
+            {{ 'offline_payment_method_instructions.invoice.rest_unpaid_call_to_action'|trans }}
+        </div>
+    </div>
+{% else %}
+    <div class="row mb-3">
+        <div class="col-12">
+            {{ 'offline_payment_method_instructions.invoice.fully_unpaid_call_to_action'|trans }}
+        </div>
+    </div>
+{% endif %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-5">
+                <strong>
+                    {{ 'offline_payment_method_instructions.invoice.bank_account'|trans }}
+                </strong>
+            </div>
+
+            <div class="col-7">
+                <span>
+                    {{ bank_account }}
+                </span>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-5">
+                <strong>
+                    {{ 'offline_payment_method_instructions.invoice.invoice_number'|trans }}
+                </strong>
+            </div>
+
+            <div class="col-7">
+                <span>
+                    {{ invoice_number }}
+                </span>
+            </div>
+        </div>
+
+        {% if is_application_deposit_paid %}
+            <div class="row">
+                <div class="col-5">
+                    <strong>
+                        {{ 'offline_payment_method_instructions.invoice.rest'|trans }}
+                    </strong>
+                </div>
+
+                <div class="col-7">
+                    <span>
+                        {{ application.fullPriceWithoutDeposit|format_currency(application.currency) }}
+                    </span>
+                </div>
+            </div>
+        {% else %}
+            <div class="row">
+                <div class="col-5">
+                    <strong>
+                        {{ 'offline_payment_method_instructions.invoice.deposit'|trans }}
+                    </strong>
+                </div>
+
+                <div class="col-7">
+                    <span>
+                        {{ application.fullDeposit|format_currency(application.currency) }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-5">
+                    <strong>
+                        {{ 'offline_payment_method_instructions.invoice.full_price'|trans }}
+                    </strong>
+                </div>
+
+                <div class="col-7">
+                    <span>
+                        {{ application.fullPrice|format_currency(application.currency) }}
+                    </span>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>

@@ -7,7 +7,6 @@ use App\Model\Entity\Application;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
 use App\Model\Repository\ApplicationRepositoryInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 
 /**
  * @inheritDoc
@@ -15,8 +14,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 class ApplicationFactory implements ApplicationFactoryInterface
 {
     private ApplicationRepositoryInterface $applicationRepository;
-
-    private Security $security;
 
     private bool $isPurchasableItemsIndividualMode;
 
@@ -26,14 +23,14 @@ class ApplicationFactory implements ApplicationFactoryInterface
 
     private array $newSimpleIds = [];
 
+    private int $highestInvoiceNumber = 0;
+
     public function __construct(ApplicationRepositoryInterface $applicationRepository,
-                                Security                       $security,
                                 bool                           $isPurchasableItemsIndividualMode,
                                 string                         $simpleIdCharacters,
                                 int                            $simpleIdLength)
     {
         $this->applicationRepository = $applicationRepository;
-        $this->security = $security;
         $this->isPurchasableItemsIndividualMode = $isPurchasableItemsIndividualMode;
         $this->simpleIdCharacters = $simpleIdCharacters;
         $this->simpleIdLength = $simpleIdLength;
@@ -62,12 +59,28 @@ class ApplicationFactory implements ApplicationFactoryInterface
         $isEmailMandatory = false;
         $isPhoneNumberMandatory = false;
 
+        // simple id
+
         while ($simpleId === null || $this->applicationRepository->simpleIdExists($simpleId) || in_array($simpleId, $this->newSimpleIds))
         {
             $simpleId = $this->generateRandomSimpleId();
         }
 
         $this->newSimpleIds[] = $simpleId;
+
+        // invoice number
+
+        $highestInvoiceNumberFromDb = (int) $this->applicationRepository->getHighestInvoiceNumber();
+
+        if ($highestInvoiceNumberFromDb > $this->highestInvoiceNumber)
+        {
+            $this->highestInvoiceNumber = $highestInvoiceNumberFromDb;
+        }
+
+        $this->highestInvoiceNumber++;
+        $invoiceNumber = $this->highestInvoiceNumber;
+
+        // are email & phone number mandatory
 
         if (!empty($contactsData))
         {
@@ -76,6 +89,8 @@ class ApplicationFactory implements ApplicationFactoryInterface
             $isEmailMandatory = $referenceContactData->isEmailMandatory();
             $isPhoneNumberMandatory = $referenceContactData->isPhoneNumberMandatory();
         }
+
+        // discount config
 
         $discountRecurringCampersConfig = [];
         $discountSiblingsConfig = [];
@@ -86,8 +101,11 @@ class ApplicationFactory implements ApplicationFactoryInterface
             $discountSiblingsConfig = $discountConfig->getSiblingsConfig();
         }
 
+        // instantiate
+
         $application = new Application(
             $simpleId,
+            $invoiceNumber,
             $email,
             $nameFirst,
             $nameLast,
@@ -108,8 +126,6 @@ class ApplicationFactory implements ApplicationFactoryInterface
             $campDateDescription
         );
 
-        /** @var null|User $user */
-        $user = $this->security->getUser();
         $application->setUser($user);
 
         return $application;

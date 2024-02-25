@@ -30,11 +30,25 @@ class ApplicationToUserImportSubscriber
         $this->lastCompletedApplicationIdSessionKey = $lastCompletedApplicationIdSessionKey;
     }
 
-    #[AsEventListener(event: ApplicationToUserImportEvent::NAME, priority: 300)]
+    #[AsEventListener(event: ApplicationToUserImportEvent::NAME, priority: 400)]
     public function onImportUpdateUser(ApplicationToUserImportEvent $event): void
     {
         $data = $event->getApplicationImportToUserData();
+
         $this->applicationToUserImporter->importApplicationDataToUser($data);
+    }
+
+    #[AsEventListener(event: ApplicationToUserImportEvent::NAME, priority: 300)]
+    public function onImportUpdateApplication(ApplicationToUserImportEvent $event): void
+    {
+        $data = $event->getApplicationImportToUserData();
+        $application = $data->getApplication();
+        $user = $data->getUser();
+
+        if ($application->getUser() === null)
+        {
+            $application->setUser($user);
+        }
     }
 
     #[AsEventListener(event: ApplicationToUserImportEvent::NAME, priority: 200)]
@@ -43,6 +57,7 @@ class ApplicationToUserImportSubscriber
         $data = $event->getApplicationImportToUserData();
         $user = $data->getUser();
         $isFlush = $event->isFlush();
+
         $this->userRepository->saveUser($user, $isFlush);
     }
 
@@ -52,6 +67,7 @@ class ApplicationToUserImportSubscriber
     {
         $currentRequest = $this->requestStack->getCurrentRequest();
         $session = $currentRequest->getSession();
+
         $session->remove($this->lastCompletedApplicationIdSessionKey);
     }
 }

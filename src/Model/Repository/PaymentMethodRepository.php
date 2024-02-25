@@ -12,9 +12,13 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PaymentMethodRepository extends AbstractRepository implements PaymentMethodRepositoryInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    private array $enabledPaymentMethods;
+
+    public function __construct(ManagerRegistry $registry, array $enabledPaymentMethods)
     {
         parent::__construct($registry, PaymentMethod::class);
+
+        $this->enabledPaymentMethods = $enabledPaymentMethods;
     }
 
     /**
@@ -36,10 +40,21 @@ class PaymentMethodRepository extends AbstractRepository implements PaymentMetho
     /**
      * @inheritDoc
      */
-    public function findAll(): array
+    public function findAll(bool $enabledOnly = false): array
     {
-        return $this->createQueryBuilder('paymentMethod')
+        $queryBuilder = $this->createQueryBuilder('paymentMethod')
             ->orderBy('paymentMethod.priority', 'DESC')
+        ;
+
+        if ($enabledOnly)
+        {
+            $queryBuilder
+                ->andWhere('paymentMethod.name IN (:names)')
+                ->setParameter('names', $this->enabledPaymentMethods)
+            ;
+        }
+
+        return $queryBuilder
             ->getQuery()
             ->getResult()
         ;

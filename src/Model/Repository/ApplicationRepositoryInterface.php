@@ -58,6 +58,13 @@ interface ApplicationRepositoryInterface
     public function simpleIdExists(string $simpleId): bool;
 
     /**
+     * Returns the highest invoice number.
+     *
+     * @return null|int
+     */
+    public function getHighestInvoiceNumber(): ?int;
+
+    /**
      * Returns information about what applications are editable drafts.
      *
      * @param Application[]|UuidV4[] $applications

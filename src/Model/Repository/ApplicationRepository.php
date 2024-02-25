@@ -145,6 +145,18 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
     /**
      * @inheritDoc
      */
+    public function getHighestInvoiceNumber(): ?int
+    {
+        return $this->createQueryBuilder('application')
+            ->select('max(application.invoiceNumber)')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getApplicationsEditableDraftsResult(array $applications): ApplicationsEditableDraftsResult
     {
         $applicationIds = [];

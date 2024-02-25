@@ -16,6 +16,9 @@ parameters:
     app.user_image_directory: 'files/dynamic/user'
     app.no_user_image_path: 'files/static/user_placeholder.png'
 
+    # Financial
+    app.bank_account: '000000-1234567890/0600'
+
     # Mailer
     app.email_no_reply: 'noreply@camp.com'
 
@@ -64,8 +67,10 @@ parameters:
     app.sale_camper_siblings: true
     app.contact_email_mandatory: false
     app.contact_phone_number_mandatory: true
+    app.application_invoice_number_length: 10
     app.application_simple_id_length: 6
     app.application_simple_id_characters: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    app.enabled_payment_methods: ['card', 'transfer', 'invoice']
 
     # Validation
     app.national_identifier_regex: '#^(\d\d)(\d\d)(\d\d)( |/)?(\d\d\d)(\d?)$#'
@@ -100,6 +105,9 @@ services:
 
         App\Service\Menu\Breadcrumbs\BreadcrumbInterface:
             tags: [ 'app.breadcrumb' ]
+
+        App\Model\Service\PaymentMethod\OfflineInstructions\OfflineInstructionRendererInterface:
+            tags: [ 'app.offline_payment_instruction_renderer' ]
 
     Symfony\Bridge\Monolog\Processor\TokenProcessor:
         autoconfigure: false
@@ -186,9 +194,18 @@ services:
             $isEmailMandatory: '%app.contact_email_mandatory%'
             $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
 
+    App\Model\Service\PaymentMethod\OfflineInstructions\InvoiceInstructionRenderer:
+        arguments:
+            $bankAccount: '%app.bank_account%'
+            $invoiceNumberLength: '%app.application_invoice_number_length%'
+
     App\Model\Repository\ApplicationRepository:
         arguments:
             $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
+
+    App\Model\Repository\PaymentMethodRepository:
+        arguments:
+            $enabledPaymentMethods: '%app.enabled_payment_methods%'
 
     App\Service\Logger\ModelLogger:
         arguments:

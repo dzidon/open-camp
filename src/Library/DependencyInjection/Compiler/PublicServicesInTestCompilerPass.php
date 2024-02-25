@@ -11,9 +11,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class PublicServicesInTestCompilerPass implements CompilerPassInterface
 {
-    /**
-     * @inheritDoc
-     */
     public function process(ContainerBuilder $container): void
     {
         if (!$this->isPHPUnit())

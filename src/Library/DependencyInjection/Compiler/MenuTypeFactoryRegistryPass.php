@@ -7,15 +7,8 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-/**
- * A compiler pass which makes the menu type factory registry work. It looks for all services tagged
- * as "app.menu_factory" and adds them to the registry.
- */
 class MenuTypeFactoryRegistryPass implements CompilerPassInterface
 {
-    /**
-     * @inheritDoc
-     */
     public function process(ContainerBuilder $container): void
     {
         if (!$container->has(MenuTypeFactoryRegistryInterface::class))
