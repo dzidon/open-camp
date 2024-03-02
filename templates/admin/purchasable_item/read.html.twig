@@ -87,15 +87,17 @@
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            {% if purchasable_item.imageExtension is null %}
+                            {% set image_url = purchasable_item_image_url(purchasable_item) %}
+
+                            {% if is_purchasable_item_image_url_placeholder(image_url) %}
                                 <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                             {% else %}
                                 <div class="row">
                                     <div class="col-6 col-md-4 col-xl-2 mb-3">
                                         <div class="bg-black">
-                                            <a href="{{ asset(purchasable_item_image_path(purchasable_item)) }}">
+                                            <a href="{{ image_url }}">
                                                 <img class="image-cover-16-9"
-                                                     src="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
+                                                     src="{{ image_url }}"
                                                      alt="{{ 'entity_attribute.purchasable_item.image'|trans }} - {{ purchasable_item.name }}"
                                                 >
                                             </a>

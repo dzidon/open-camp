@@ -144,6 +144,17 @@ class ApplicationPurchasableItemInstance
         return $pricePerInstance * $this->amount;
     }
 
+    public function getPriceWithoutTax(): float
+    {
+        $taxDenominator = $this
+            ->getApplicationPurchasableItem()
+            ->getApplication()
+            ->getTaxDenominator()
+        ;
+
+        return $this->getPrice() / $taxDenominator;
+    }
+
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;

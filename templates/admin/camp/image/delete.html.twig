@@ -12,12 +12,21 @@
                             <div class="row mb-3">
                                 <div class="col-12 col-sm-6 col-lg-4">
                                     <div class="bg-black">
-                                        <a href="{{ asset(camp_image_path(camp_image)) }}">
+                                        {% set image_url = camp_image_url(camp_image) %}
+                                        {% set img %}
                                             <img class="image-cover-16-9"
-                                                 src="{{ asset(camp_image_path(camp_image)) }}"
+                                                 src="{{ image_url }}"
                                                  alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
                                             >
-                                        </a>
+                                        {% endset %}
+
+                                        {% if is_camp_image_url_placeholder(image_url) %}
+                                            {{ img }}
+                                        {% else %}
+                                            <a href="{{ image_url }}">
+                                                {{ img }}
+                                            </a>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>

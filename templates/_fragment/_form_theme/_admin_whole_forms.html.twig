@@ -16,22 +16,26 @@
     {{ form_row(form.bio) }}
     {{ form_row(form.image) }}
 
-    {% if user is defined and user.imageExtension is not null %}
-        <div class="row user-image"
-             data-controller="cv--content"
-             data-cv--content-show-when-chosen-value="0"
-        >
-            <div class="col-4 col-md-3 mb-3">
-                <div class="bg-black">
-                    <a href="{{ asset(user_image_path(user)) }}">
-                        <img class="image-cover-1-1"
-                             src="{{ asset(user_image_path(user)) }}"
-                             alt="{{ 'entity_attribute.user.image'|trans }}"
-                        >
-                    </a>
+    {% if user is defined %}
+        {% set image_url = user_image_url(user) %}
+
+        {% if not is_user_image_url_placeholder(image_url) %}
+            <div class="row user-image"
+                 data-controller="cv--content"
+                 data-cv--content-show-when-chosen-value="0"
+            >
+                <div class="col-4 col-md-3 mb-3">
+                    <div class="bg-black">
+                        <a href="{{ image_url }}">
+                            <img class="image-cover-1-1"
+                                 src="{{ image_url }}"
+                                 alt="{{ 'entity_attribute.user.image'|trans }}"
+                            >
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     {% endif %}
 
     {{ form_rest(form) }}
@@ -49,22 +53,26 @@
     {{ form_row(form.bio) }}
     {{ form_row(form.image) }}
 
-    {% if user is defined and user.imageExtension is not null %}
-        <div class="row user-image"
-             data-controller="cv--content"
-             data-cv--content-show-when-chosen-value="0"
-        >
-            <div class="col-4 col-md-3 mb-3">
-                <div class="bg-black">
-                    <a href="{{ asset(user_image_path(user)) }}">
-                        <img class="image-cover-1-1"
-                             src="{{ asset(user_image_path(user)) }}"
-                             alt="{{ 'entity_attribute.user.image'|trans }}"
-                        >
-                    </a>
+    {% if user is defined %}
+        {% set image_url = user_image_url(user) %}
+
+        {% if not is_user_image_url_placeholder(image_url) %}
+            <div class="row user-image"
+                 data-controller="cv--content"
+                 data-cv--content-show-when-chosen-value="0"
+            >
+                <div class="col-4 col-md-3 mb-3">
+                    <div class="bg-black">
+                        <a href="{{ image_url }}">
+                            <img class="image-cover-1-1"
+                                 src="{{ image_url }}"
+                                 alt="{{ 'entity_attribute.user.image'|trans }}"
+                            >
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     {% endif %}
 
     {{ form_rest(form) }}
@@ -256,22 +264,26 @@
     {{ form_row(form.description) }}
     {{ form_row(form.image) }}
 
-    {% if purchasable_item is defined and purchasable_item.imageExtension is not null %}
-        <div class="row purchasable-item-image"
-             data-controller="cv--content"
-             data-cv--content-show-when-chosen-value="0"
-        >
-            <div class="col-4 col-md-3 mb-3">
-                <div class="bg-black">
-                    <a href="{{ asset(purchasable_item_image_path(purchasable_item)) }}">
-                        <img class="image-cover-16-9"
-                             src="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
-                             alt="{{ 'entity_attribute.purchasable_item.image'|trans }} - {{ purchasable_item.name }}"
-                        >
-                    </a>
+    {% if purchasable_item is defined %}
+        {% set image_url = purchasable_item_image_url(purchasable_item) %}
+
+        {% if not is_purchasable_item_image_url_placeholder(image_url) %}
+            <div class="row purchasable-item-image"
+                 data-controller="cv--content"
+                 data-cv--content-show-when-chosen-value="0"
+            >
+                <div class="col-4 col-md-3 mb-3">
+                    <div class="bg-black">
+                        <a href="{{ image_url }}">
+                            <img class="image-cover-16-9"
+                                 src="{{ image_url }}"
+                                 alt="{{ 'entity_attribute.purchasable_item.image'|trans }} - {{ purchasable_item.name }}"
+                            >
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     {% endif %}
 
     {{ form_rest(form) }}

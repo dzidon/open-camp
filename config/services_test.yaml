@@ -2,14 +2,33 @@ parameters:
     app.menu_theme: '_fragment/_menu_theme/_test.html.twig'
     app.tax: 21 # percent
 
+    # Company info
+    app.company_name: 'Camp'
+    app.company_structure: 'LLC'
+    app.company_cin: '12345678'
+    app.company_vat_id: 'CZ12345678'
+    app.company_extra_business_info: 'Some extra business related info.'
+    app.company_bank_account: '000000-1234567890/0600'
+    app.company_phone_number: '+420 123 456 789'
+    app.company_address_street: 'Green Leaf 123'
+    app.company_address_town: 'Prague'
+    app.company_address_zip: '100 00'
+    app.company_address_country: 'Czech Republic'
+
     # Directories
+    app.public_file_path_prefix: '/'
+    app.company_logo_path: 'files/static/company_logo.png'
+    app.camp_image_public_path_prefix: '%app.public_file_path_prefix%'
     app.camp_image_directory: 'files/dynamic/camp'
-    app.no_camp_image_path: 'files/static/camp/placeholder.jpg'
+    app.no_camp_image_path: 'files/static/placeholder.jpg'
+    app.purchasable_item_image_public_path_prefix: '%app.public_file_path_prefix%'
     app.purchasable_item_image_directory: 'files/dynamic/purchasable-item'
     app.no_purchasable_item_image_path: 'files/static/placeholder.jpg'
-    app.application_attachment_directory: 'files/dynamic/application-attachment'
+    app.user_image_public_path_prefix: '%app.public_file_path_prefix%'
     app.user_image_directory: 'files/dynamic/user'
     app.no_user_image_path: 'files/static/user_placeholder.png'
+    app.application_attachment_directory: 'files/dynamic/application-attachment'
+    app.application_invoice_directory: 'files/dynamic/application-invoice'
 
     # Mailer
     app.email_no_reply: 'noreply@camp.com'
@@ -61,6 +80,8 @@ parameters:
     app.application_invoice_number_length: 10
     app.application_simple_id_length: 6
     app.application_simple_id_characters: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    app.enabled_payment_methods: ['card', 'transfer', 'invoice']
+    app.completed_application_lifetime: '14 days'
 
     # Validation
     app.national_identifier_regex: '#^\s*(\d\d)(\d\d)(\d\d)[ /]*(\d\d\d)(\d?)\s*$#'

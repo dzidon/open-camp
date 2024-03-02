@@ -128,6 +128,9 @@ class Application
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isPurchasableItemsIndividualMode;
 
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $completedAt = null;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $campDateStartAt;
 
@@ -441,6 +444,16 @@ class Application
 
     public function setIsDraft(bool $isDraft): self
     {
+        if ($this->isDraft && !$isDraft)
+        {
+            $this->completedAt = new DateTimeImmutable('now');
+        }
+
+        if (!$this->isDraft && $isDraft)
+        {
+            $this->completedAt = null;
+        }
+
         $this->isDraft = $isDraft;
 
         return $this;
@@ -549,6 +562,11 @@ class Application
         return $this->isPurchasableItemsIndividualMode;
     }
 
+    public function getCompletedAt(): ?DateTimeImmutable
+    {
+        return $this->completedAt;
+    }
+
     public function getFullPrice(): float
     {
         $fullPrice = 0.0;
@@ -591,6 +609,11 @@ class Application
     public function getPricePerCamper(): float
     {
         return $this->deposit + $this->priceWithoutDeposit;
+    }
+
+    public function getPricePerCamperWithoutTax(): float
+    {
+        return $this->getPricePerCamper() / $this->getTaxDenominator();
     }
 
     public function getDeposit(): float
@@ -899,6 +922,71 @@ class Application
         return false;
     }
 
+    public function isDepositPaid(): bool
+    {
+        return false;
+    }
+
+    public function isRestPaid(): bool
+    {
+        return false;
+    }
+
+    public function isFullyPaid(): bool
+    {
+        if ($this->isDepositPaid() && $this->isRestPaid())
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function isAwaitingPayment(): bool
+    {
+        return !$this->isFullyPaid() && $this->getFullPrice() > 0.0;
+    }
+
+    public function canBeAccepted(): bool
+    {
+        if ($this->isDraft)
+        {
+            return false;
+        }
+
+        if (count($this->applicationContacts) < 1)
+        {
+            return false;
+        }
+
+        if (count($this->applicationCampers)  < 1)
+        {
+            return false;
+        }
+
+        if ($this->paymentMethod === null)
+        {
+            return false;
+        }
+
+        if ($this->canUploadAttachmentsLater())
+        {
+            return false;
+        }
+
+        if (!$this->isFullyPaid())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function getTaxDenominator(): float
+    {
+        return 1.0 + ($this->tax / 100);
+    }
+
     public function getCreatedAt(): DateTimeImmutable
     {
         return $this->createdAt;
@@ -907,11 +995,6 @@ class Application
     public function getUpdatedAt(): ?DateTimeImmutable
     {
         return $this->updatedAt;
-    }
-
-    public function getTaxDenominator(): float
-    {
-        return 1.0 + ($this->tax / 100);
     }
 
     private function assertDiscountIntervalExistsInConfig(?int $discountSiblingsIntervalFrom, ?int $discountSiblingsIntervalTo): void

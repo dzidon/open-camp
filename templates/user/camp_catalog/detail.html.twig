@@ -12,16 +12,18 @@
                     {% if camp_images is empty %}
                         <div class="carousel-item active">
                             <img class="d-block w-100"
-                                 src="{{ asset(camp_image_path(null)) }}"
+                                 src="{{ camp_image_url(null) }}"
                                  alt="{{ 'image_carousel.no_image'|trans }}"
                             >
                         </div>
                     {% else %}
                         {% for camp_image in camp_images %}
-                            <div class="carousel-item  {% if loop.first %} active {% endif %}">
-                                <a href="{{ asset(camp_image_path(camp_image)) }}">
+                            {% set image_url = camp_image_url(camp_image) %}
+
+                            <div class="carousel-item {% if loop.first %} active {% endif %}">
+                                <a href="{{ image_url }}">
                                     <img class="d-block w-100 image-cover-16-9"
-                                         src="{{ asset(camp_image_path(camp_image)) }}"
+                                         src="{{ image_url }}"
                                          alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
                                     >
                                 </a>
@@ -46,10 +48,12 @@
             {% if camp_images_length >= 2 %}
                 <div class="row mt-3">
                     {% for key, camp_image in camp_images %}
+                        {% set image_url = camp_image_url(camp_image) %}
+
                         <div class="col-4 col-md-3">
                             <a href="#camp-images-carousel" data-slide-to="{{ key }}">
                                 <img class="image-cover-16-9"
-                                     src="{{ asset(camp_image_path(camp_image)) }}"
+                                     src="{{ image_url }}"
                                      alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
                                      {{ stimulus_target('img--carousel', 'indicator') }}
                                 >
@@ -226,10 +230,12 @@
 
                 <div class="row">
                     {% for guide in guides %}
+                        {% set image_url = user_image_url(guide) %}
+
                         <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex">
                             <div class="card flex-fill">
                                 <img class="card-img-top image-cover-1-1"
-                                     src="{{ asset(user_image_path(guide)) }}"
+                                     src="{{ image_url }}"
                                      alt="{{ 'camp_catalog.guide_image'|trans }}"
                                 >
 

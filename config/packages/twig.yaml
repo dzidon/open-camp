@@ -7,6 +7,19 @@ twig:
         - '_fragment/_form_theme/_user_whole_forms.html.twig'
 
     globals:
+        company_email: '%app.email%'
+        company_name: '%app.company_name%'
+        company_structure: '%app.company_structure%'
+        company_cin: '%app.company_cin%'
+        company_vat_id: '%app.company_vat_id%'
+        company_extra_business_info: '%app.company_extra_business_info%'
+        company_bank_account: '%app.company_bank_account%'
+        company_phone_number: '%app.company_phone_number%'
+        company_address_street: '%app.company_address_street%'
+        company_address_town: '%app.company_address_town%'
+        company_address_zip: '%app.company_address_zip%'
+        company_address_country: '%app.company_address_country%'
+
         tax: '%app.tax%'
         currency: '%app.currency%'
         phone_number_format: '%app.phone_number_format%'

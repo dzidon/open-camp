@@ -29,7 +29,7 @@ class CampImagesCreateSubscriber
 
         foreach ($uploadedImages as $uploadedImage)
         {
-            $campImages[] = $this->campImageFactory->createCampImage($uploadedImage, 0, $camp);
+            $campImages[] = $this->campImageFactory->createCampImage($uploadedImage, $camp, 0);
         }
 
         $event->setCampImages($campImages);

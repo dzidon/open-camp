@@ -5,80 +5,95 @@ namespace App\Tests\Model\Service\PurchasableItem;
 use App\Model\Entity\PurchasableItem;
 use App\Model\Service\PurchasableItem\PurchasableItemImageFilesystem;
 use App\Tests\Library\Http\File\FileMock;
-use App\Tests\Service\Filesystem\FilesystemMock;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class PurchasableItemImageFilesystemTest extends KernelTestCase
 {
-    private FilesystemMock $filesystemMock;
+    private FilesystemOperator $storage;
+
     private PurchasableItemImageFilesystem $purchasableItemImageFilesystem;
+
     private PurchasableItem $purchasableItem;
-    private FileMock $newImage;
+
+    private FileMock $imageFile;
+
     private string $purchasableItemIdString;
 
-    public function testUploadImageFile(): void
+    public function testGetImageLastModified(): void
     {
-        $this->purchasableItemImageFilesystem->uploadImageFile($this->newImage, $this->purchasableItem);
-
-        $this->assertContains('kernel-dir/public/files/dynamic/purchasable-item/' . $this->purchasableItemIdString . '.png', $this->filesystemMock->getRemovedFiles());
-        $this->assertSame('files/dynamic/purchasable-item', $this->newImage->getMovedDirectory());
-        $this->assertSame($this->purchasableItemIdString . '.jpg', $this->newImage->getMovedName());
+        $this->purchasableItemImageFilesystem->uploadImageFile($this->imageFile, $this->purchasableItem);
+        $this->assertSame(time(), $this->purchasableItemImageFilesystem->getImageLastModified($this->purchasableItem));
     }
 
-    public function testUploadImageFileIfNull(): void
+    public function testGetImageLastModifiedForNonexistentFile(): void
+    {
+        $this->assertNull($this->purchasableItemImageFilesystem->getImageLastModified($this->purchasableItem));
+    }
+
+    public function testIsUrlPlaceholder(): void
+    {
+        $this->assertTrue($this->purchasableItemImageFilesystem->isUrlPlaceholder('/files/static/placeholder.jpg'));
+        $this->assertTrue($this->purchasableItemImageFilesystem->isUrlPlaceholder('/files/static/placeholder.jpg?foo=bar&xyz=123'));
+        $this->assertFalse($this->purchasableItemImageFilesystem->isUrlPlaceholder('/a/b/c'));
+    }
+
+    public function testGetImagePublicUrl(): void
+    {
+        $this->purchasableItemImageFilesystem->uploadImageFile($this->imageFile, $this->purchasableItem);
+        $actualUrl = $this->purchasableItemImageFilesystem->getImagePublicUrl($this->purchasableItem);
+        $expectedUrl = '/files/dynamic/purchasable-item/' . $this->purchasableItemIdString . '.png';
+
+        $this->assertSame($expectedUrl, $actualUrl);
+    }
+
+    public function testGetImagePublicUrlWithNonexistentFile(): void
+    {
+        $this->purchasableItem->setImageExtension('jpg');
+        $actualUrl = $this->purchasableItemImageFilesystem->getImagePublicUrl($this->purchasableItem);
+
+        $this->assertSame('/files/static/placeholder.jpg', $actualUrl);
+    }
+
+    public function testGetImagePublicUrlWithNullCampImage(): void
     {
         $this->purchasableItem->setImageExtension(null);
-        $this->purchasableItemImageFilesystem->uploadImageFile($this->newImage, $this->purchasableItem);
+        $actualUrl = $this->purchasableItemImageFilesystem->getImagePublicUrl($this->purchasableItem);
 
-        $this->assertEmpty($this->filesystemMock->getRemovedFiles());
-        $this->assertSame('files/dynamic/purchasable-item', $this->newImage->getMovedDirectory());
-        $this->assertSame($this->purchasableItemIdString . '.jpg', $this->newImage->getMovedName());
+        $this->assertSame('/files/static/placeholder.jpg', $actualUrl);
     }
 
-    public function testGetImageFilePath(): void
+    public function testUploadAndRemoveFile(): void
     {
-        $path = $this->purchasableItemImageFilesystem->getImageFilePath($this->purchasableItem);
+        $fileName = $this->purchasableItemIdString . '.png';
 
-        $this->assertSame('files/dynamic/purchasable-item/' . $this->purchasableItemIdString . '.png', $path);
-    }
+        $this->purchasableItemImageFilesystem->uploadImageFile($this->imageFile, $this->purchasableItem);
+        $this->assertTrue($this->storage->has($fileName));
+        $this->assertSame('png', $this->purchasableItem->getImageExtension());
 
-    public function testGetImageFilePathIfNull(): void
-    {
-        $this->purchasableItem->setImageExtension(null);
-        $path = $this->purchasableItemImageFilesystem->getImageFilePath($this->purchasableItem);
-
-        $this->assertSame('no-image.jpg', $path);
-    }
-
-    public function testRemoveFile(): void
-    {
         $this->purchasableItemImageFilesystem->removeImageFile($this->purchasableItem);
-
-        $this->assertContains('kernel-dir/public/files/dynamic/purchasable-item/' . $this->purchasableItemIdString . '.png', $this->filesystemMock->getRemovedFiles());
-    }
-
-    public function testRemoveFileIfNull(): void
-    {
-        $this->purchasableItem->setImageExtension(null);
-        $this->purchasableItemImageFilesystem->removeImageFile($this->purchasableItem);
-
-        $this->assertEmpty($this->filesystemMock->getRemovedFiles());
+        $this->assertFalse($this->storage->has($fileName));
+        $this->assertNull($this->purchasableItem->getImageExtension());
     }
 
     protected function setUp(): void
     {
         $container = static::getContainer();
-        $imageDirectory = $container->getParameter('app.purchasable_item_image_directory');
 
-        $this->newImage = new FileMock('jpg');
+        /** @var PurchasableItemImageFilesystem $purchasableItemImageFilesystem */
+        $purchasableItemImageFilesystem = $container->get(PurchasableItemImageFilesystem::class);
+        $this->purchasableItemImageFilesystem = $purchasableItemImageFilesystem;
 
-        $this->filesystemMock = new FilesystemMock();
-        $this->purchasableItemImageFilesystem = new PurchasableItemImageFilesystem($this->filesystemMock, $imageDirectory, 'no-image.jpg', 'kernel-dir');
-        $this->purchasableItem = new PurchasableItem("Item", 'Item...', 1000.0, 10);
-        $this->purchasableItem->setImageExtension('png');
+        /** @var FilesystemOperator $storage */
+        $storage = $container->get('purchasable_item_image.storage');
+        $this->storage = $storage;
+
+        $this->purchasableItem = new PurchasableItem('Item', 'Item', 100.0, 10);
         $this->purchasableItemIdString = $this->purchasableItem
             ->getId()
             ->toRfc4122()
         ;
+
+        $this->imageFile = new FileMock('png', 'image.png', 'Content...');
     }
 }

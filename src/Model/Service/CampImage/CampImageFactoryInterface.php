@@ -15,9 +15,9 @@ interface CampImageFactoryInterface
      * Creates a camp image entity for the given file.
      *
      * @param File $file
-     * @param int $priority
      * @param Camp $camp
+     * @param int $priority
      * @return CampImage
      */
-    public function createCampImage(File $file, int $priority, Camp $camp): CampImage;
+    public function createCampImage(File $file, Camp $camp, int $priority): CampImage;
 }

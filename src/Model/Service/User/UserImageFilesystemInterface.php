@@ -11,12 +11,28 @@ use Symfony\Component\HttpFoundation\File\File;
 interface UserImageFilesystemInterface
 {
     /**
-     * Gets the path to the given purchasable item image.
+     * Gets the timestamp of last modification.
+     *
+     * @param User $user
+     * @return int|null
+     */
+    public function getImageLastModified(User $user): ?int;
+
+    /**
+     * Returns true if the given URL is equal to the user image placeholder.
+     *
+     * @param string $publicUrl
+     * @return bool
+     */
+    public function isUrlPlaceholder(string $publicUrl): bool;
+
+    /**
+     * Gets the public path to the given purchasable item image.
      *
      * @param User $user
      * @return string
      */
-    public function getImageFilePath(User $user): string;
+    public function getImagePublicUrl(User $user): string;
 
     /**
      * Uploads the given file and attaches it to the given purchasable item.

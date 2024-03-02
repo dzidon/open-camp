@@ -5,13 +5,15 @@
         <div class="col-12">
             <div class="card card-outline card-primary">
                 <div class="card-body">
-                    {% if user.imageExtension is not null %}
+                    {% set image_url = user_image_url(user) %}
+
+                    {% if not is_user_image_url_placeholder(image_url) %}
                         <div class="row mb-3">
                             <div class="col-6 col-sm-4 col-md-3 col-lg-2 col-xl-1 mb-3">
                                 <div class="bg-black">
-                                    <a href="{{ asset(user_image_path(user)) }}">
+                                    <a href="{{ image_url }}">
                                         <img class="image-cover-1-1"
-                                             src="{{ asset(user_image_path(user)) }}"
+                                             src="{{ image_url }}"
                                              alt="{{ 'entity.user.singular'|trans }}"
                                         >
                                     </a>

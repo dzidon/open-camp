@@ -1,0 +1,18 @@
+<h1>{{ 'mail.dear_customer'|trans }}</h1>
+
+<p>
+    {{ 'mail.application_completed.body1'|trans({
+        camp: application.campName,
+        simple_id: application.simpleId
+    }) }}
+
+    <a href="{{ application_url }}">{{ 'mail.application_completed.link_text'|trans }}</a>.
+
+    {% if application.canBeAccepted %}
+        {{ 'mail.application_completed.body2_nothing_left_to_do'|trans }}
+    {% else %}
+        {{ 'mail.application_completed.body2_stuff_left_to_do'|trans }}
+    {% endif %}
+
+    {{ 'mail.application_completed.body3'|trans }}
+</p>

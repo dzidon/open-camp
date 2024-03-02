@@ -3,44 +3,78 @@
 namespace App\Model\Service\CampImage;
 
 use App\Model\Entity\CampImage;
-use Symfony\Component\Filesystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 
 /**
  * @inheritDoc
  */
 class CampImageFilesystem implements CampImageFilesystemInterface
 {
+    private FilesystemOperator $campImageStorage;
+
+    private string $campImagePublicPathPrefix;
+
     private string $campImageDirectory;
+
     private string $noImagePath;
-    private string $kernelProjectDirectory;
 
-    private Filesystem $filesystem;
-
-    public function __construct(Filesystem $filesystem,
-                                string     $campImageDirectory,
-                                string     $noImagePath,
-                                string     $kernelProjectDirectory)
+    public function __construct(FilesystemOperator $campImageStorage,
+                                string             $campImagePublicPathPrefix,
+                                string             $campImageDirectory,
+                                string             $noImagePath)
     {
-        $this->filesystem = $filesystem;
+        $this->campImageStorage = $campImageStorage;
 
+        $this->campImagePublicPathPrefix = $campImagePublicPathPrefix;
         $this->campImageDirectory = $campImageDirectory;
-        $this->kernelProjectDirectory = $kernelProjectDirectory;
         $this->noImagePath = $noImagePath;
     }
 
     /**
      * @inheritDoc
      */
-    public function getFilePath(?CampImage $campImage): string
+    public function getImageLastModified(CampImage $campImage): ?int
     {
-        if ($campImage === null)
+        $fileName = $this->getCampImageName($campImage);
+
+        if (!$this->campImageStorage->has($fileName))
         {
-            return $this->noImagePath;
+            return null;
         }
 
-        $id = $campImage->getId();
+        return $this->campImageStorage->lastModified($fileName);
+    }
 
-        return $this->campImageDirectory . '/' . $id->toRfc4122() . '.' . $campImage->getExtension();
+    /**
+     * @inheritDoc
+     */
+    public function isUrlPlaceholder(string $publicUrl): bool
+    {
+        return explode('?', $publicUrl)[0] === $this->getNoImageUrl();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getImagePublicUrl(?CampImage $campImage): string
+    {
+        $noImageUrl = $this->getNoImageUrl();
+
+        if ($campImage === null)
+        {
+            return $noImageUrl;
+        }
+
+        $fileName = $this->getCampImageName($campImage);
+
+        if (!$this->campImageStorage->has($fileName))
+        {
+            return $noImageUrl;
+        }
+
+        $fileName = $this->getCampImageName($campImage);
+
+        return $this->campImagePublicPathPrefix . $this->campImageDirectory . '/' . $fileName;
     }
 
     /**
@@ -48,7 +82,19 @@ class CampImageFilesystem implements CampImageFilesystemInterface
      */
     public function removeFile(CampImage $campImage): void
     {
-        $filePath = $this->kernelProjectDirectory . '/public/' . $this->getFilePath($campImage);
-        $this->filesystem->remove($filePath);
+        $fileName = $this->getCampImageName($campImage);
+        $this->campImageStorage->delete($fileName);
+    }
+
+    private function getCampImageName(CampImage $campImage): string
+    {
+        $campImageId = $campImage->getId();
+
+        return $campImageId->toRfc4122() . '.' . $campImage->getExtension();
+    }
+
+    private function getNoImageUrl(): string
+    {
+        return $this->campImagePublicPathPrefix . $this->noImagePath;
     }
 }

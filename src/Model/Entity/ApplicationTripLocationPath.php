@@ -85,6 +85,16 @@ class ApplicationTripLocationPath
         return 0.0;
     }
 
+    public function getPriceWithoutTax(): float
+    {
+        $taxDenominator = $this->applicationCamper
+            ->getApplication()
+            ->getTaxDenominator()
+        ;
+
+        return $this->getPrice() / $taxDenominator;
+    }
+
     /**
      * @return array Contains sub-arrays with the following shape: ["price" => "float", "name" => "string"]
      */

@@ -7,19 +7,36 @@ parameters:
     app.menu_theme: '_fragment/_menu_theme/_main.html.twig'
     app.tax: 21 # percent
 
+    # Company info
+    app.company_name: 'Tábor'
+    app.company_structure: 's.r.o.'
+    app.company_cin: '12345678'
+    app.company_vat_id: 'CZ12345678'
+    app.company_extra_business_info: 'Zapsáno v OR u MS v Praze.'
+    app.company_bank_account: '000000-1234567890/0600'
+    app.company_phone_number: '+420 123 456 789'
+    app.company_address_street: 'Dlouhá 123'
+    app.company_address_town: 'Praha 1'
+    app.company_address_zip: '100 00'
+    app.company_address_country: 'Česko'
+
     # Directories & paths
+    app.public_file_path_prefix: '/'
+    app.company_logo_path: 'files/static/company_logo.png'
+    app.camp_image_public_path_prefix: '%app.public_file_path_prefix%'
     app.camp_image_directory: 'files/dynamic/camp'
     app.no_camp_image_path: 'files/static/placeholder.jpg'
+    app.purchasable_item_image_public_path_prefix: '%app.public_file_path_prefix%'
     app.purchasable_item_image_directory: 'files/dynamic/purchasable-item'
     app.no_purchasable_item_image_path: 'files/static/placeholder.jpg'
-    app.application_attachment_directory: 'files/dynamic/application-attachment'
+    app.user_image_public_path_prefix: '%app.public_file_path_prefix%'
     app.user_image_directory: 'files/dynamic/user'
     app.no_user_image_path: 'files/static/user_placeholder.png'
-
-    # Financial
-    app.bank_account: '000000-1234567890/0600'
+    app.application_attachment_directory: 'files/dynamic/application-attachment'
+    app.application_invoice_directory: 'files/dynamic/application-invoice'
 
     # Mailer
+    app.email: 'contact.us@camp.com'
     app.email_no_reply: 'noreply@camp.com'
 
     # Internationalization
@@ -139,25 +156,21 @@ services:
             $maxActivePasswordChangesPerUser: '%app.max_active_password_changes_per_user%'
             $passwordChangeLifespan: '%app.password_change_lifespan%'
 
-    App\Model\Service\CampImage\CampImageFactory:
-        arguments:
-            $campImageUploadDirectory: '%kernel.project_dir%/public/%app.camp_image_directory%'
-
     App\Model\Service\CampImage\CampImageFilesystem:
         arguments:
-            $kernelProjectDirectory: '%kernel.project_dir%'
+            $campImagePublicPathPrefix: '%app.camp_image_public_path_prefix%'
             $noImagePath: '%app.no_camp_image_path%'
             $campImageDirectory: '%app.camp_image_directory%'
 
     App\Model\Service\PurchasableItem\PurchasableItemImageFilesystem:
         arguments:
-            $kernelProjectDirectory: '%kernel.project_dir%'
+            $purchasableItemImagePublicPathPrefix: '%app.purchasable_item_image_public_path_prefix%'
             $noImagePath: '%app.no_purchasable_item_image_path%'
             $purchasableItemImageDirectory: '%app.purchasable_item_image_directory%'
 
     App\Model\Service\User\UserImageFilesystem:
         arguments:
-            $kernelProjectDirectory: '%kernel.project_dir%'
+            $userImagePublicPathPrefix: '%app.user_image_public_path_prefix%'
             $noImagePath: '%app.no_user_image_path%'
             $userImageDirectory: '%app.user_image_directory%'
 
@@ -184,10 +197,10 @@ services:
             $simpleIdCharacters: '%app.application_simple_id_characters%'
             $simpleIdLength: '%app.application_simple_id_length%'
 
-    App\Model\Service\ApplicationAttachment\ApplicationAttachmentFilesystem:
+    App\Model\Service\Application\ApplicationInvoiceFilesystem:
         arguments:
-            $applicationAttachmentDirectory: '%app.application_attachment_directory%'
-            $kernelProjectDirectory: '%kernel.project_dir%'
+            $publicFilePathPrefix: '%app.public_file_path_prefix%'
+            $invoiceNumberLength: '%app.application_invoice_number_length%'
 
     App\Model\Service\Contact\ContactDataFactory:
         arguments:
@@ -196,7 +209,6 @@ services:
 
     App\Model\Service\PaymentMethod\OfflineInstructions\InvoiceInstructionRenderer:
         arguments:
-            $bankAccount: '%app.bank_account%'
             $invoiceNumberLength: '%app.application_invoice_number_length%'
 
     App\Model\Repository\ApplicationRepository:
@@ -206,6 +218,10 @@ services:
     App\Model\Repository\PaymentMethodRepository:
         arguments:
             $enabledPaymentMethods: '%app.enabled_payment_methods%'
+
+    App\Service\Filesystem\FilePathTransformer:
+        arguments:
+            $kernelProjectDir: '%kernel.project_dir%'
 
     App\Service\Logger\ModelLogger:
         arguments:
@@ -231,6 +247,11 @@ services:
     App\Service\Form\Extension\MoneyTypeDefaultsExtension:
         arguments:
             $currency: '%app.currency%'
+
+    App\Service\Twig\ImageExtension:
+        arguments:
+            $publicFilePathPrefix: '%app.public_file_path_prefix%'
+            $companyLogoPath: '%app.company_logo_path%'
 
     App\Service\Twig\ApplicationToUserImportExtension:
         arguments:
@@ -294,6 +315,10 @@ services:
         arguments:
             $locales: '%app.locales%'
 
+    App\Service\Routing\RouteNamer:
+        arguments:
+            $companyName: '%app.company_name%'
+
     App\Service\EventSubscriber\LocaleCookieSubscriber:
         arguments:
             $locales: '%app.locales%'
@@ -308,6 +333,10 @@ services:
         arguments:
             $emailFrom: '%app.email_no_reply%'
             $dateTimeFormat: '%app.date_time_format%'
+
+    App\Service\Mailer\ApplicationCompletedMailer:
+        arguments:
+            $emailFrom: '%app.email_no_reply%'
 
     App\Service\Data\Transfer\User\BillingDataTransfer:
         arguments:

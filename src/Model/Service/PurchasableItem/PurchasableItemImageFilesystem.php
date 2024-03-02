@@ -3,7 +3,7 @@
 namespace App\Model\Service\PurchasableItem;
 
 use App\Model\Entity\PurchasableItem;
-use Symfony\Component\Filesystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -11,37 +11,76 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class PurchasableItemImageFilesystem implements PurchasableItemImageFilesystemInterface
 {
+    private FilesystemOperator $purchasableItemImageStorage;
+
+    private string $purchasableItemImagePublicPathPrefix;
+
     private string $purchasableItemImageDirectory;
+
     private string $noImagePath;
-    private string $kernelProjectDirectory;
 
-    private Filesystem $filesystem;
-
-    public function __construct(Filesystem $filesystem,
-                                string     $purchasableItemImageDirectory,
-                                string     $noImagePath,
-                                string     $kernelProjectDirectory)
+    public function __construct(FilesystemOperator $purchasableItemImageStorage,
+                                string             $purchasableItemImagePublicPathPrefix,
+                                string             $purchasableItemImageDirectory,
+                                string             $noImagePath)
     {
-        $this->filesystem = $filesystem;
+        $this->purchasableItemImageStorage = $purchasableItemImageStorage;
 
+        $this->purchasableItemImagePublicPathPrefix = $purchasableItemImagePublicPathPrefix;
         $this->purchasableItemImageDirectory = $purchasableItemImageDirectory;
-        $this->kernelProjectDirectory = $kernelProjectDirectory;
         $this->noImagePath = $noImagePath;
     }
 
     /**
      * @inheritDoc
      */
-    public function getImageFilePath(PurchasableItem $purchasableItem): string
+    public function getImageLastModified(PurchasableItem $purchasableItem): ?int
     {
         if ($purchasableItem->getImageExtension() === null)
         {
-            return $this->noImagePath;
+            return null;
         }
 
-        $id = $purchasableItem->getId();
+        $fileName = $this->getPurchasableItemImageName($purchasableItem);
 
-        return $this->purchasableItemImageDirectory . '/' . $id->toRfc4122() . '.' . $purchasableItem->getImageExtension();
+        if (!$this->purchasableItemImageStorage->has($fileName))
+        {
+            return null;
+        }
+
+        return $this->purchasableItemImageStorage->lastModified($fileName);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function isUrlPlaceholder(string $publicUrl): bool
+    {
+        return explode('?', $publicUrl)[0] === $this->getNoImageUrl();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getImagePublicUrl(PurchasableItem $purchasableItem): string
+    {
+        $noImageUrl = $this->getNoImageUrl();
+
+        if ($purchasableItem->getImageExtension() === null)
+        {
+            return $noImageUrl;
+        }
+
+        $fileName = $this->getPurchasableItemImageName($purchasableItem);
+
+        if (!$this->purchasableItemImageStorage->has($fileName))
+        {
+            return $noImageUrl;
+        }
+
+        $fileName = $this->getPurchasableItemImageName($purchasableItem);
+
+        return $this->purchasableItemImagePublicPathPrefix . $this->purchasableItemImageDirectory . '/' . $fileName;
     }
 
     /**
@@ -59,7 +98,8 @@ class PurchasableItemImageFilesystem implements PurchasableItemImageFilesystemIn
         ;
 
         $newFileName = $idString . '.' . $extension;
-        $file->move($this->purchasableItemImageDirectory, $newFileName);
+        $contents = $file->getContent();
+        $this->purchasableItemImageStorage->write($newFileName, $contents);
     }
 
     /**
@@ -72,8 +112,20 @@ class PurchasableItemImageFilesystem implements PurchasableItemImageFilesystemIn
             return;
         }
 
-        $filePath = $this->kernelProjectDirectory . '/public/' . $this->getImageFilePath($purchasableItem);
-        $this->filesystem->remove($filePath);
+        $fileName = $this->getPurchasableItemImageName($purchasableItem);
+        $this->purchasableItemImageStorage->delete($fileName);
         $purchasableItem->setImageExtension(null);
+    }
+
+    private function getPurchasableItemImageName(PurchasableItem $purchasableItem): string
+    {
+        $purchasableItemImageId = $purchasableItem->getId();
+
+        return $purchasableItemImageId->toRfc4122() . '.' . $purchasableItem->getImageExtension();
+    }
+
+    private function getNoImageUrl(): string
+    {
+        return $this->purchasableItemImagePublicPathPrefix . $this->noImagePath;
     }
 }

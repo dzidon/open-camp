@@ -204,9 +204,11 @@
                                     {% for camp_image in camp_images %}
                                         <div class="col-6 col-md-4 col-xl-2 mb-3">
                                             <div class="bg-black">
-                                                <a href="{{ asset(camp_image_path(camp_image)) }}">
+                                                {% set image_url = camp_image_url(camp_image) %}
+
+                                                <a href="{{ image_url }}">
                                                     <img class="image-cover-16-9"
-                                                         src="{{ asset(camp_image_path(camp_image)) }}"
+                                                         src="{{ image_url }}"
                                                          alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
                                                     >
                                                 </a>

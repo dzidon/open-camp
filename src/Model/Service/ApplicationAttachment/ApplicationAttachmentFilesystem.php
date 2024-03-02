@@ -3,7 +3,7 @@
 namespace App\Model\Service\ApplicationAttachment;
 
 use App\Model\Entity\ApplicationAttachment;
-use Symfony\Component\Filesystem\Filesystem;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -11,34 +11,11 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class ApplicationAttachmentFilesystem implements ApplicationAttachmentFilesystemInterface
 {
-    private string $applicationAttachmentDirectory;
-    private string $kernelProjectDirectory;
+    private FilesystemOperator $applicationAttachmentStorage;
 
-    private Filesystem $filesystem;
-
-    public function __construct(Filesystem $filesystem,
-                                string     $applicationAttachmentDirectory,
-                                string     $kernelProjectDirectory)
+    public function __construct(FilesystemOperator $applicationAttachmentStorage)
     {
-        $this->filesystem = $filesystem;
-
-        $this->applicationAttachmentDirectory = $applicationAttachmentDirectory;
-        $this->kernelProjectDirectory = $kernelProjectDirectory;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getFilePath(ApplicationAttachment $applicationAttachment): ?string
-    {
-        if ($applicationAttachment->getExtension() === null)
-        {
-            return null;
-        }
-
-        $id = $applicationAttachment->getId();
-
-        return $this->applicationAttachmentDirectory . '/' . $id->toRfc4122() . '.' . $applicationAttachment->getExtension();
+        $this->applicationAttachmentStorage = $applicationAttachmentStorage;
     }
 
     /**
@@ -56,7 +33,8 @@ class ApplicationAttachmentFilesystem implements ApplicationAttachmentFilesystem
         ;
 
         $newFileName = $idString . '.' . $extension;
-        $file->move($this->applicationAttachmentDirectory, $newFileName);
+        $contents = $file->getContent();
+        $this->applicationAttachmentStorage->write($newFileName, $contents);
     }
 
     /**
@@ -69,8 +47,15 @@ class ApplicationAttachmentFilesystem implements ApplicationAttachmentFilesystem
             return;
         }
 
-        $filePath = $this->kernelProjectDirectory . '/public/' . $this->getFilePath($applicationAttachment);
-        $this->filesystem->remove($filePath);
+        $fileName = $this->getApplicationAttachmentName($applicationAttachment);
+        $this->applicationAttachmentStorage->delete($fileName);
         $applicationAttachment->setExtension(null);
+    }
+
+    private function getApplicationAttachmentName(ApplicationAttachment $applicationAttachment): string
+    {
+        $applicationAttachmentId = $applicationAttachment->getId();
+
+        return $applicationAttachmentId->toRfc4122() . '.' . $applicationAttachment->getExtension();
     }
 }

@@ -1,7 +1,8 @@
 {% if show_application_completed_data %}
-    {% set is_application_fully_paid = false %}
-    {% set is_application_deposit_paid = false %}
-    {% set is_payment_required = not is_application_fully_paid and application.fullPrice > 0.0 %}
+    {% set is_application_fully_paid = application.isFullyPaid %}
+    {% set is_application_deposit_paid = application.isDepositPaid %}
+    {% set is_application_rest_paid = application.isRestPaid %}
+    {% set is_application_awaiting_payment = application.isAwaitingPayment %}
 
     <div class="row">
         <div class="col-md-8 col-lg-6 col-xl-5">
@@ -35,29 +36,7 @@
                 </div>
             </div>
 
-            {% if form_attachments_upload_later is not null %}
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 class="mb-3">
-                                    <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
-
-                                    {{ 'application.completed_screen.form_attachments_upload_later'|trans }}
-                                </h5>
-
-                                <div class="mb-4">
-                                    {{ 'application.completed_screen.upload_required_attachments'|trans }}
-                                </div>
-
-                                {{ form(form_attachments_upload_later) }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
-
-            {% if is_payment_required %}
+            {% if is_application_awaiting_payment %}
                 <div class="row mb-4">
                     <div class="col-12">
                         <div class="card">
@@ -83,7 +62,7 @@
                                                 </a>
                                             </div>
                                         {% else %}
-                                            <div class="mb-3">
+                                            <div>
                                                 <a href="" class="btn btn-primary">
                                                     {{ 'application.completed_screen.payment.button_online_pay_deposit'|trans({
                                                         price: application.fullDeposit|format_currency(application.currency)
@@ -91,13 +70,15 @@
                                                 </a>
                                             </div>
 
-                                            <div>
-                                                <a href="" class="btn btn-primary">
-                                                    {{ 'application.completed_screen.payment.button_online_pay_full'|trans({
-                                                        price: application.fullPrice|format_currency(application.currency)
-                                                    }) }}
-                                                </a>
-                                            </div>
+                                            {% if not is_application_rest_paid %}
+                                                <div class="mt-3">
+                                                    <a href="" class="btn btn-primary">
+                                                        {{ 'application.completed_screen.payment.button_online_pay_full'|trans({
+                                                            price: application.fullPrice|format_currency(application.currency)
+                                                        }) }}
+                                                    </a>
+                                                </div>
+                                            {% endif %}
                                         {% endif %}
                                     {% elseif application.fullPrice > 0.0 %}
                                         <div>
@@ -119,6 +100,28 @@
                                         </em>
                                     </div>
                                 {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if form_attachments_upload_later is not null %}
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
+
+                                    {{ 'application.completed_screen.form_attachments_upload_later'|trans }}
+                                </h5>
+
+                                <div class="mb-4">
+                                    {{ 'application.completed_screen.upload_required_attachments'|trans }}
+                                </div>
+
+                                {{ form(form_attachments_upload_later) }}
                             </div>
                         </div>
                     </div>
@@ -173,6 +176,35 @@
                         </div>
                     </div>
                 {% endif %}
+            {% endif %}
+
+            {% if show_invoice_link %}
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="mb-3">
+                                    <i class="fas fa-file-invoice text-secondary mr-2"></i>
+
+                                    {{ 'application.completed_screen.invoice.title'|trans }}
+                                </h5>
+
+                                <div class="mb-4">
+                                    {{ 'application.completed_screen.invoice.instructions'|trans }}
+                                </div>
+
+                                <div>
+                                    <a href="{{ path('user_profile_application_invoice', {id: application.id}) }}"
+                                       class="btn btn-primary"
+                                       target="_blank"
+                                    >
+                                        {{ 'application.completed_screen.invoice.link'|trans }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
 
             <div class="row mb-3">
@@ -231,19 +263,21 @@
                 </div>
             </div>
 
-            <div class="row mb-3">
-                <div class="col-6">
-                    <strong>
-                        {{ 'entity_attribute.application.created_at'|trans }}:
-                    </strong>
-                </div>
+            {% if application.completedAt is not null %}
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <strong>
+                            {{ 'entity_attribute.application.completed_at'|trans }}:
+                        </strong>
+                    </div>
 
-                <div class="col-6">
-                    <span class="float-right">
-                        {{ application.createdAt|date(date_time_format) }}
-                    </span>
+                    <div class="col-6">
+                        <span class="float-right">
+                            {{ application.completedAt|date(date_time_format) }}
+                        </span>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
             {% if application.campDateDescription is not null %}
                 <div class="row mb-3">
@@ -433,7 +467,7 @@
 
                                                         {% if application_camper is not null %}
                                                             <span class="text-nowrap">
-                                                                {{ 'application.item_instance_for_camper'|trans }}
+                                                                {{ 'application.summary.item_instance_for_camper'|trans }}
 
                                                                 <em>
                                                                     {{ application_camper.nameFull }}
@@ -522,13 +556,17 @@
         <div class="row d-flex align-items-end">
             <div class="col-6">
                 <h3>
-                    <strong>{{ 'application.summary.total_price'|trans }}</strong>
+                    <strong>
+                        {{ 'application.summary.total_price'|trans }}
+                    </strong>
                 </h3>
             </div>
 
             <div class="col-6 text-right">
                 <h3>
-                    <strong>{{ application.fullPrice|format_currency(application.currency) }}</strong>
+                    <strong>
+                        {{ application.fullPrice|format_currency(application.currency) }}
+                    </strong>
                 </h3>
             </div>
         </div>

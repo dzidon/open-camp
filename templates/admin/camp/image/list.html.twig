@@ -13,7 +13,9 @@
                         {% endif %}
                     </h3>
 
-                    <a href="{{ path('admin_camp_image_upload', {id: camp.id.toRfc4122}) }}" class="btn btn-success ml-3">{{ 'crud.action.common.upload'|trans }}</a>
+                    <a href="{{ path('admin_camp_image_upload', {id: camp.id.toRfc4122}) }}" class="btn btn-success ml-3">
+                        {{ 'crud.action.common.upload'|trans }}
+                    </a>
                 </div>
 
                 {% if paginator.totalItems > 0 %}
@@ -32,12 +34,21 @@
                                     <tr class="align-items-center">
                                         <td class="align-middle cell-5">
                                             <div class="bg-black">
-                                                <a href="{{ asset(camp_image_path(camp_image)) }}">
+                                                {% set image_url = camp_image_url(camp_image) %}
+                                                {% set img %}
                                                     <img class="image-cover-16-9"
-                                                         src="{{ asset(camp_image_path(camp_image)) }}"
+                                                         src="{{ image_url }}"
                                                          alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
                                                     >
-                                                </a>
+                                                {% endset %}
+
+                                                {% if is_camp_image_url_placeholder(image_url) %}
+                                                    {{ img }}
+                                                {% else %}
+                                                    <a href="{{ image_url }}">
+                                                        {{ img }}
+                                                    </a>
+                                                {% endif %}
                                             </div>
                                         </td>
 
@@ -46,9 +57,17 @@
                                         </td>
 
                                         <td class="align-middle cell-25">
-                                            <a href="{{ asset(camp_image_path(camp_image)) }}" class="btn btn-secondary">{{ 'crud.action.common.read'|trans }}</a>
-                                            <a href="{{ path('admin_camp_image_update', {id: camp_image.id.toRfc4122}) }}" class="btn btn-primary">{{ 'crud.action.common.update'|trans }}</a>
-                                            <a href="{{ path('admin_camp_image_delete', {id: camp_image.id.toRfc4122}) }}" class="btn btn-danger">{{ 'crud.action.common.delete'|trans }}</a>
+                                            <a href="{{ camp_image_url(camp_image) }}" class="btn btn-secondary">
+                                                {{ 'crud.action.common.read'|trans }}
+                                            </a>
+
+                                            <a href="{{ path('admin_camp_image_update', {id: camp_image.id.toRfc4122}) }}" class="btn btn-primary">
+                                                {{ 'crud.action.common.update'|trans }}
+                                            </a>
+
+                                            <a href="{{ path('admin_camp_image_delete', {id: camp_image.id.toRfc4122}) }}" class="btn btn-danger">
+                                                {{ 'crud.action.common.delete'|trans }}
+                                            </a>
                                         </td>
                                     </tr>
                                 {% endfor %}

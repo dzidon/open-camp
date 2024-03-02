@@ -1,5 +1,16 @@
-app:
-    site_name: 'Kemp'
+company:
+    name: 'Tábor'
+    structure: 's.r.o.'
+    cin: '12345678'
+    vat_id: 'CZ12345678'
+    extra_business_info: 'Zapsáno v OR u MS v Praze'
+    bank_account: '000000-1234567890/0600'
+    phone_number: '+420 123 456 789'
+    address:
+        street: 'Dlouhá 123'
+        town: 'Praha 1'
+        zip: '100 00'
+        country: 'Česko'
 
 api:
     fragment:
@@ -110,8 +121,6 @@ application:
     cannot_be_completed: 'Je nám líto, ale vaše přihláška ještě nemá všechny náležitosti. Ujistěte se, že zadávate alespoň 1 kontakt, 1 táborníka a že máte zvolenou platební metodu.'
     no_longer_editable: 'Je nám líto, ale tuto přihlášku už není možné upravovat.'
     completed: 'Přihláška úspěšně vytvořena!'
-    item_instance_for_camper: 'pro táborníka'
-    other_fields: 'Další pole'
     discount:
         siblings_single_number: '{number, plural,
               =1    {Uplatnit slevu pro # sourozence}
@@ -133,6 +142,7 @@ application:
         siblings_interval_from_null: 'Uplatnit slevu pro {number_to} a méně sourozenců'
 
     summary:
+        item_instance_for_camper: 'pro táborníka'
         discount_recurring_camper: 'Sleva pro vracejícího se táborníka'
         discount_siblings: 'Sleva pro sourozence'
         this_is_where_i_get_on: 'zde nasednu'
@@ -146,10 +156,15 @@ application:
         perform_remaining_steps: 'Máte skoro hotovo!'
         form_attachments_upload_later: 'Donahrání povinných příloh'
         upload_required_attachments: 'Nahrajte prosím následující přílohy.'
+        invoice:
+            title: 'Faktura'
+            instructions: 'Zde si můžete zobrazit fakturu k této přihlášce.'
+            link: 'Zobrazit fakturu'
+
         payment:
             heading: 'Platba'
             online_call_to_action: 'Proveďte prosím on-line platbu přihlášky.'
-            button_online_pay_deposit: 'Zaplatit pouze zálohu ({price})'
+            button_online_pay_deposit: 'Zaplatit zálohu ({price})'
             button_online_pay_full: 'Zaplatit celou přihlášku ({price})'
             button_online_pay_rest: 'Zaplatit doplatek ({price})'
             button_online_pay: 'Zaplatit přihlášku ({price})'
@@ -166,9 +181,56 @@ application:
             yes: 'Přihláška schválena!'
             no: 'Přihláška zamítnuta!'
 
-    to_user_import:
+    import_to_user:
         billing_data: 'Fakturační údaje'
         skip: 'Tuto přihlášku si nechci uložit na svůj profil'
+
+    invoice:
+        title: 'Faktura'
+        seller: 'Prodávající'
+        contact_info: 'Kontaktní údaje'
+        buyer: 'Kupující'
+        cin: 'IČ'
+        vat_id: 'DIČ'
+        phone_number: 'Tel.'
+        email: 'E-mail'
+        bank_account: 'Bankovní účet'
+        invoice_number: 'Variabilní symbol'
+        payment_method: 'Platební metoda'
+        items:
+            title: 'Položky'
+            name: 'Název'
+            amount: 'Množství'
+            unit_price_without_tax: 'Jedn. cena bez daně'
+            tax: 'Daň'
+            unit_price_with_tax: 'Jedn. cena s daní'
+            unit_price: 'Jedn. cena'
+            total_price: 'Celkem'
+            camper: 'Táborník'
+
+        dates:
+            title: 'Datumy'
+            completed_at: 'Datum vystavení'
+            payment_deadline_at: 'Datum splatnosti'
+
+        purchasable_item:
+            instance_for_camper: 'pro táborníka'
+
+        trip_location:
+            this_is_where_i_get_on: 'zde nasednu'
+            this_is_where_i_get_off: 'zde vysednu'
+
+        discount:
+            recurring_camper: 'Sleva za vracejícího se táborníka'
+            siblings: 'Sleva za sourozence'
+
+        tax_total:
+            title: 'Vyčíslení daně'
+            tax_percentage: 'Sazba'
+            tax_amount: 'Daň'
+            price_without_tax: 'Cena bez daně'
+
+        page_number: 'Strana {PAGENO} z {nbpg}'
 
 camp_catalog:
     hidden_camp: 'Skrytý'
@@ -224,6 +286,7 @@ auth:
 
 mail:
     greeting: 'Zdravíme!'
+    dear_customer: 'Vážený zákazníku,'
 
     user_registration:
         subject: 'Registrace'
@@ -236,6 +299,15 @@ mail:
         body1: 'Pro nastevení nového hesla k Vašemu účtu klikněte '
         link_text: 'ZDE'
         body2: 'Odkaz vyprší {date}.'
+
+    application_completed:
+        invoice_attachment_name: 'Faktura'
+        subject: 'Přihláška vytvořena ({camp})'
+        body1: 'děkujeme za vytvoření přihlášky na tábor {camp} (kód: {simple_id}). Stav své přihlášky můžete sledovat '
+        link_text: 'ZDE'
+        body2_stuff_left_to_do: 'Použijte prosím tento odkaz pro dokončení pár zbývajících kroků, abychom mohli přijmout Vaší přihlášku.'
+        body2_nothing_left_to_do: 'Na schválení Vaší přihlášky pracujeme.'
+        body3: 'Po schválení přihlášky Vám pošleme další e-mail. Fakturu naleznete v příloze tohoto e-mailu.'
 
 search:
     label: 'Vyhledávání'
@@ -620,6 +692,7 @@ entity_attribute:
         is_national_identifier_enabled: 'Rodné číslo'
         is_email_mandatory: 'Povinný e-mail'
         is_phone_number_mandatory: 'Povinné telefonní číslo'
+        completed_at: 'Datum dokončení'
         camp_date_start_at: 'Začátek termínu'
         camp_date_end_at: 'Konec termínu'
         camp_date_description: 'Instrukce k termínu'

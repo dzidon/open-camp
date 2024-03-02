@@ -10,15 +10,12 @@ use Twig\Environment;
  */
 class InvoiceInstructionRenderer extends AbstractOfflineInstructionRenderer
 {
-    private string $bankAccount;
-
     private int $invoiceNumberLength;
 
-    public function __construct(Environment $twig, string $bankAccount, int $invoiceNumberLength)
+    public function __construct(Environment $twig, int $invoiceNumberLength)
     {
         parent::__construct($twig);
 
-        $this->bankAccount = $bankAccount;
         $this->invoiceNumberLength = $invoiceNumberLength;
     }
 
@@ -44,7 +41,6 @@ class InvoiceInstructionRenderer extends AbstractOfflineInstructionRenderer
 
         return $template->render([
             'application'    => $application,
-            'bank_account'   => $this->bankAccount,
             'invoice_number' => $invoiceNumberFormatted,
         ]);
     }

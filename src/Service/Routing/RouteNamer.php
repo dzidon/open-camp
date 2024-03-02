@@ -12,13 +12,17 @@ class RouteNamer implements RouteNamerInterface
 {
     private string|null $currentRouteName = null;
 
+    private string $companyName;
+
     private RequestStack $requestStack;
+
     private TranslatorInterface $translator;
 
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, string $companyName)
     {
         $this->requestStack = $requestStack;
         $this->translator = $translator;
+        $this->companyName = $companyName;
     }
 
     /**
@@ -42,7 +46,8 @@ class RouteNamer implements RouteNamerInterface
      */
     public function getCurrentTitle(): string
     {
-        $fullPageName = $this->translator->trans('app.site_name');
+        $fullPageName = $this->companyName;
+
         if ($this->currentRouteName !== null)
         {
             $fullPageName = $this->currentRouteName . ' - ' . $fullPageName;

@@ -11,14 +11,6 @@ use Symfony\Component\HttpFoundation\File\File;
 interface ApplicationAttachmentFilesystemInterface
 {
     /**
-     * Gets the path to the given application attachment file.
-     *
-     * @param ApplicationAttachment $applicationAttachment
-     * @return null|string
-     */
-    public function getFilePath(ApplicationAttachment $applicationAttachment): ?string;
-
-    /**
      * Uploads the given file and attaches it to the given application attachment.
      *
      * @param File $file

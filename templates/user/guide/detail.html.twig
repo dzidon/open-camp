@@ -6,17 +6,19 @@
     <div class="row">
         <div class="col-12 col-md-4 col-lg-4 mb-3">
             <div class="bg-black">
+                {% set image_url = user_image_url(guide) %}
+
                 {% set guide_img %}
                     <img class="image-cover-1-1"
-                         src="{{ asset(user_image_path(guide)) }}"
+                         src="{{ image_url }}"
                          alt="{{ 'camp_catalog.guide_image'|trans }}"
                     >
                 {% endset %}
 
-                {% if guide.imageExtension is null %}
+                {% if is_user_image_url_placeholder(image_url) %}
                     {{ guide_img }}
                 {% else %}
-                    <a href="{{ asset(user_image_path(guide)) }}">
+                    <a href="{{ image_url }}">
                         {{ guide_img }}
                     </a>
                 {% endif %}

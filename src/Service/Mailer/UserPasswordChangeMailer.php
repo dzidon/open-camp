@@ -14,12 +14,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserPasswordChangeMailer implements UserPasswordChangeMailerInterface
 {
-    private string $emailFrom;
-    private string $dateTimeFormat;
-
     private MailerInterface $mailer;
     private UrlGeneratorInterface $urlGenerator;
     private TranslatorInterface $translator;
+
+    private string $emailFrom;
+    private string $dateTimeFormat;
 
     public function __construct(MailerInterface $mailer,
                                 UrlGeneratorInterface $urlGenerator,

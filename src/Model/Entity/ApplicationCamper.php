@@ -436,6 +436,13 @@ class ApplicationCamper
         return 0.0;
     }
 
+    public function getDiscountRecurringCamperWithoutTax(): float
+    {
+        $application = $this->getApplication();
+
+        return $this->getDiscountRecurringCamper() / $application->getTaxDenominator();
+    }
+
     public function getDiscountSiblings(): float
     {
         $siblingsIntervalFrom = $this->application->getDiscountSiblingsIntervalFrom();
@@ -459,6 +466,13 @@ class ApplicationCamper
         }
 
         return 0.0;
+    }
+
+    public function getDiscountSiblingsWithoutTax(): float
+    {
+        $application = $this->getApplication();
+
+        return $this->getDiscountSiblings() / $application->getTaxDenominator();
     }
 
     public function getTotalDiscount(): float

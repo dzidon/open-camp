@@ -12,12 +12,14 @@ class FileMock extends File
     private ?string $guessedExtension;
     private ?string $movedDirectory = null;
     private ?string $movedName = null;
+    private string $content;
 
-    public function __construct(?string $guessedExtension = null, string $path = '')
+    public function __construct(?string $guessedExtension = null, string $path = '', string $content = '')
     {
         parent::__construct($path, false);
 
         $this->guessedExtension = $guessedExtension;
+        $this->content = $content;
     }
 
     public function move(string $directory, string $name = null): self
@@ -31,6 +33,11 @@ class FileMock extends File
     public function guessExtension(): ?string
     {
         return $this->guessedExtension;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
     }
 
     public function getMovedDirectory(): ?string

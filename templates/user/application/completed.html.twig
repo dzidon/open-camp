@@ -1,11 +1,14 @@
 {% extends "user/base.html.twig" %}
 
 {% block main %}
+    {% set is_owned_by_auth_user = application.user is not null and application.user is same as(app.user) %}
+
     {{ include('_fragment/_application/_application_summary.html.twig', {
         application: application,
         form_attachments_upload_later: form_attachments_upload_later,
         show_application_completed_data: true,
-        show_application_campers: false,
-        show_application_purchasable_items: false,
+        show_invoice_link: is_owned_by_auth_user,
+        show_application_campers: is_owned_by_auth_user,
+        show_application_purchasable_items: is_owned_by_auth_user,
     }) }}
 {% endblock %}

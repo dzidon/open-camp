@@ -34,7 +34,13 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Logo -->
             <a href="{{ path('admin_home') }}" class="brand-link">
-                <span class="brand-text font-weight-light">{{ 'app.site_name'|trans }}</span>
+                <img src="{{ company_logo_url() }}"
+                     alt="{{ company_name }}"
+                     class="brand-image elevation-3"
+                     style="opacity: 0.8;"
+                >
+
+                <span class="brand-text font-weight-light">{{ company_name }}</span>
             </a>
 
             <!-- Sidebar -->
@@ -86,7 +92,7 @@
 
         <!-- Footer -->
         <footer class="main-footer">
-            <strong>&copy; {{ 'now' | date('Y') }}, {{ 'app.site_name'|trans }}</strong>
+            <strong>&copy; {{ 'now' | date('Y') }}, {{ company_name }}</strong>
         </footer>
     </div>
 {% endblock %}

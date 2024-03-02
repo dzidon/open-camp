@@ -4,6 +4,7 @@ namespace App\Model\Service\CampImage;
 
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampImage;
+use League\Flysystem\FilesystemOperator;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -11,17 +12,17 @@ use Symfony\Component\HttpFoundation\File\File;
  */
 class CampImageFactory implements CampImageFactoryInterface
 {
-    private string $campImageUploadDirectory;
+    private FilesystemOperator $campImageStorage;
 
-    public function __construct(string $campImageUploadDirectory)
+    public function __construct(FilesystemOperator $campImageStorage)
     {
-        $this->campImageUploadDirectory = $campImageUploadDirectory;
+        $this->campImageStorage = $campImageStorage;
     }
 
     /**
      * @inheritDoc
      */
-    public function createCampImage(File $file, int $priority, Camp $camp): CampImage
+    public function createCampImage(File $file, Camp $camp, int $priority): CampImage
     {
         $extension = $file->guessExtension();
         $campImage = new CampImage($priority, $extension, $camp);
@@ -31,7 +32,8 @@ class CampImageFactory implements CampImageFactoryInterface
         ;
 
         $newFileName = $idString . '.' . $extension;
-        $file->move($this->campImageUploadDirectory, $newFileName);
+        $contents = $file->getContent();
+        $this->campImageStorage->write($newFileName, $contents);
 
         return $campImage;
     }

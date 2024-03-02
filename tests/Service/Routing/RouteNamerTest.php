@@ -54,10 +54,10 @@ class RouteNamerTest extends KernelTestCase
     public function testGetCurrentTitle(): void
     {
         $routeNamer = $this->getRouteNamer(null);
-        $this->assertSame('app.site_name', $routeNamer->getCurrentTitle());
+        $this->assertSame('Camp', $routeNamer->getCurrentTitle());
 
         $routeNamer->setCurrentRouteName('Name');
-        $this->assertSame('Name - app.site_name', $routeNamer->getCurrentTitle());
+        $this->assertSame('Name - Camp', $routeNamer->getCurrentTitle());
     }
 
     /**

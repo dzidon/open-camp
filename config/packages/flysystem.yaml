@@ -1,0 +1,45 @@
+# Read the documentation at https://github.com/thephpleague/flysystem-bundle/blob/master/docs/1-getting-started.md
+flysystem:
+    storages:
+        user_image.storage:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/public/%app.user_image_directory%'
+
+        camp_image.storage:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/public/%app.camp_image_directory%'
+
+        purchasable_item_image.storage:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/public/%app.purchasable_item_image_directory%'
+
+        application_attachment.storage:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/private/%app.application_attachment_directory%'
+
+        application_invoice.storage:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/private/%app.application_invoice_directory%'
+
+when@test:
+    flysystem:
+        storages:
+            user_image.storage:
+                adapter: 'memory'
+
+            camp_image.storage:
+                adapter: 'memory'
+
+            purchasable_item_image.storage:
+                adapter: 'memory'
+
+            application_attachment.storage:
+                adapter: 'memory'
+
+            application_invoice.storage:
+                adapter: 'memory'

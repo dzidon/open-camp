@@ -384,7 +384,7 @@
 
     {% if form.skipBillingData is defined %}
         <h3 class="mb-3">
-            {{ 'application.to_user_import.billing_data'|trans }}
+            {{ 'application.import_to_user.billing_data'|trans }}
         </h3>
 
         <div class="row">
@@ -901,9 +901,10 @@
     {% set purchasable_item = application_purchasable_item.purchasableItem %}
     {% set application = application_purchasable_item.application %}
     {% set label = children.applicationPurchasableItemInstancesData.vars.label %}
-    {% set image_extension = purchasable_item is null ? null : purchasable_item.imageExtension %}
+    {% set image_url = purchasable_item_image_url(purchasable_item) %}
+    {% set is_purchasable_item_image_url_placeholder = is_purchasable_item_image_url_placeholder(image_url) %}
 
-    <div class="row {% if image_extension is null %} mb-1 {% else %} mb-3 {% endif %}">
+    <div class="row {% if is_purchasable_item_image_url_placeholder %} mb-1 {% else %} mb-3 {% endif %}">
         <div class="col-12">
             <div>
                 {% if application_purchasable_item.description is null %}
@@ -982,15 +983,15 @@
             {% endif %}
         </div>
 
-        {% if image_extension is not null %}
+        {% if not is_purchasable_item_image_url_placeholder %}
             <div class="col-12">
                 <div class="row mt-2">
                     <div class="col-6 col-md-4">
-                        <a href="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
+                        <a href="{{ image_url }}"
                            target="_blank"
                         >
                             <img class="image-cover-16-9"
-                                 src="{{ asset(purchasable_item_image_path(purchasable_item)) }}"
+                                 src="{{ image_url }}"
                                  alt="{{ purchasable_item.name }}"
                             >
                         </a>

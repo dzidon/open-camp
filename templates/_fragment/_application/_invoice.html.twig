@@ -1,0 +1,523 @@
+{% set is_eu_business_data_enabled = application.euBusinessDataEnabled %}
+{% set application_full_price = application.fullPrice %}
+{% set application_full_price_without_tax = application.fullPriceWithoutTax %}
+
+<style>
+    table.table-solid {
+        margin-left: 4px;
+        margin-right: 4px;
+    }
+
+    table.table-solid td {
+        padding: 6px;
+    }
+
+    table.table-solid thead td,
+    table.table-solid tfoot td {
+        font-weight: bold;
+    }
+
+    table.table-solid,
+    table.table-solid th,
+    table.table-solid td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+
+<table style="width: 100%; margin-bottom: 32px;">
+    <tbody>
+        <tr>
+            <td style="width: 64px;">
+                <img src="{{ company_logo_url(withPrefix = false) }}"
+                     alt="{{ company_name }}"
+                     class="d-inline-block align-top mr-2"
+                     width="48"
+                     height="48"
+                >
+            </td>
+
+            <td>
+                <h2>
+                    {{ company_name }}
+                </h2>
+            </td>
+
+            <td style="text-align: right;">
+                <h2>
+                    {{ 'application.invoice.title'|trans }}
+
+                    {{ invoice_number }}
+                </h2>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table style="width: 100%; margin-bottom: 32px;">
+    <tbody>
+        <tr>
+            <td style="vertical-align: top; width: 50%;">
+                <h3>
+                    {{ 'application.invoice.seller'|trans }}:
+                </h3>
+
+                <br>
+
+                <div>
+                    {{ company_name }} {{ company_structure }}
+                </div>
+
+                <div>
+                    {{ company_address_street }}
+                </div>
+
+                <div>
+                    {{ company_address_town }}
+                </div>
+
+                <div>
+                    {{ company_address_zip }}
+                </div>
+
+                <div>
+                    {{ company_address_country }}
+                </div>
+
+                {% if is_eu_business_data_enabled %}
+                    <br>
+
+                    <div>
+                        {{ 'application.invoice.cin'|trans }}: {{ company_cin }}
+                    </div>
+
+                    <div>
+                        {% if application.tax > 0.0 %}
+                            {{ 'application.invoice.vat_id'|trans }}: {{ company_vat_id }}
+                        {% else %}
+                            {{ 'we_are_not_tax_payers'|trans }}
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                {% if company_extra_business_info is not null %}
+                    <div>
+                        {{ company_extra_business_info }}
+                    </div>
+                {% endif %}
+
+                <br>
+
+                <div>
+                    {{ 'application.invoice.contact_info'|trans }}
+                </div>
+
+                <div>
+                    {{ 'application.invoice.email'|trans }}: {{ company_email }}
+                </div>
+
+                <div>
+                    {{ 'application.invoice.phone_number'|trans }}: {{ company_phone_number }}
+                </div>
+
+                <br>
+
+                <div>
+                    {{ 'application.invoice.bank_account'|trans }}: {{ company_bank_account }}
+                </div>
+
+                <div>
+                    {{ 'application.invoice.invoice_number'|trans }}: {{ invoice_number }}
+                </div>
+            </td>
+
+            <td style="vertical-align: top; width: 50%;">
+                <h3>
+                    {{ 'application.invoice.buyer'|trans }}:
+                </h3>
+
+                <br>
+
+                <div>
+                    {{ application.nameFull }}
+                </div>
+
+                <div>
+                    {{ application.street }}
+                </div>
+
+                <div>
+                    {{ application.town }}
+                </div>
+
+                <div>
+                    {{ application.zip }}
+                </div>
+
+                <div>
+                    {{ country_name_for_code(application.country) }}
+                </div>
+
+                {% if application.businessName is not null or (is_eu_business_data_enabled and (application.businessCin is not null or application.businessVatId is not null)) %}
+                    <br>
+                {% endif %}
+
+                {% if application.businessName is not null %}
+                    <div>
+                        {{ application.businessName }}
+                    </div>
+                {% endif %}
+
+                {% if is_eu_business_data_enabled %}
+                    {% if application.businessCin is not null %}
+                        <div>
+                            {{ application.businessCin }}
+                        </div>
+                    {% endif %}
+
+                    {% if application.businessVatId is not null %}
+                        <div>
+                            {{ application.businessVatId }}
+                        </div>
+                    {% endif %}
+                {% endif %}
+
+                <br>
+
+                <div>
+                    {{ 'application.invoice.payment_method'|trans }}: {{ application.paymentMethod.label|trans }}
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table style="width: 100%; margin-bottom: 32px;">
+    <tbody>
+        <tr>
+            <td>
+                <h3>
+                    {{ 'application.invoice.dates.title'|trans }}
+                </h3>
+
+                <br>
+
+                <div>
+                    {{ 'application.invoice.dates.completed_at'|trans }}:
+
+                    <strong>
+                        {{ application.completedAt|date(date_format) }}
+                    </strong>
+                </div>
+
+                <div>
+                    {{ 'application.invoice.dates.payment_deadline_at'|trans }}:
+
+                    <strong>
+                        {{ application.campDateStartAt|date(date_format) }}
+                    </strong>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table style="width: 100%; margin-bottom: 16px;">
+    <tbody>
+        <tr>
+            <td>
+                <h3>
+                    {{ 'application.invoice.items.title'|trans }}
+                </h3>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table-solid" style="width: 100%; margin-bottom: 32px;">
+    <thead>
+        <tr>
+            <td>
+                {{ 'application.invoice.items.name'|trans }}
+            </td>
+
+            <td>
+                {{ 'application.invoice.items.amount'|trans }}
+            </td>
+
+            {% if application.tax > 0.0 %}
+                <td>
+                    {{ 'application.invoice.items.unit_price_without_tax'|trans }}
+                </td>
+
+                <td>
+                    {{ 'application.invoice.items.tax'|trans }}
+                </td>
+            {% endif %}
+
+            <td>
+                {{ 'application.invoice.items.unit_price'|trans }}
+            </td>
+
+            <td>
+                {{ 'application.invoice.items.total_price'|trans }}
+            </td>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for application_camper in application.applicationCampers %}
+            <tr>
+                <td>
+                    {{ 'application.invoice.items.camper'|trans }} {{ application_camper.nameFull }}
+                </td>
+
+                <td>
+                    1
+                </td>
+
+                {% if application.tax > 0.0 %}
+                    <td>
+                        {{ application.pricePerCamperWithoutTax|format_currency(application.currency) }}
+                    </td>
+
+                    <td>
+                        {{ application.tax }}%
+                    </td>
+                {% endif %}
+
+                {% set application_camper_price = application.pricePerCamper|format_currency(application.currency) %}
+
+                <td>
+                    {{ application_camper_price }}
+                </td>
+
+                <td>
+                    {{ application_camper_price }}
+                </td>
+            </tr>
+
+            {% for application_trip_location_path in application_camper.applicationTripLocationPaths %}
+                {% if application_trip_location_path.price > 0.0 %}
+                    <tr>
+                        <td>
+                            &#8627;
+
+                            {{ application_trip_location_path.location }}
+
+                            {% if application_trip_location_path.isThere %}
+                                ({{ 'application.invoice.trip_location.this_is_where_i_get_on'|trans }})
+                            {% else %}
+                                ({{ 'application.invoice.trip_location.this_is_where_i_get_off'|trans }})
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            1
+                        </td>
+
+                        {% if application.tax > 0.0 %}
+                            <td>
+                                {{ application_trip_location_path.priceWithoutTax|format_currency(application.currency) }}
+                            </td>
+
+                            <td>
+                                {{ application.tax }}%
+                            </td>
+                        {% endif %}
+
+                        {% set application_trip_location_path_price = application_trip_location_path.price|format_currency(application.currency) %}
+
+                        <td>
+                            {{ application_trip_location_path_price }}
+                        </td>
+
+                        <td>
+                            {{ application_trip_location_path_price }}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+
+            {% set discount_recurring_camper = application_camper.discountRecurringCamper %}
+
+            {% if discount_recurring_camper > 0.0 %}
+                <tr>
+                    <td>
+                        &#8627;
+
+                        {{ 'application.summary.discount_recurring_camper'|trans }}
+                    </td>
+
+                    <td>
+                        1
+                    </td>
+
+                    {% if application.tax > 0.0 %}
+                        <td>
+                            -{{ application_camper.discountRecurringCamperWithoutTax|format_currency(application.currency) }}
+                        </td>
+
+                        <td>
+                            {{ application.tax }}%
+                        </td>
+                    {% endif %}
+
+                    {% set discount_recurring_camper_formatted = discount_recurring_camper|format_currency(application.currency) %}
+
+                    <td>
+                        -{{ discount_recurring_camper_formatted }}
+                    </td>
+
+                    <td>
+                        -{{ discount_recurring_camper_formatted }}
+                    </td>
+                </tr>
+            {% endif %}
+
+            {% set discount_siblings = application_camper.discountSiblings %}
+
+            {% if discount_siblings > 0.0 %}
+                <tr>
+                    <td>
+                        &#8627;
+
+                        {{ 'application.summary.discount_siblings'|trans }}
+                    </td>
+
+                    <td>
+                        1
+                    </td>
+
+                    {% if application.tax > 0.0 %}
+                        <td>
+                            -{{ application_camper.discountSiblingsWithoutTax|format_currency(application.currency) }}
+                        </td>
+
+                        <td>
+                            {{ application.tax }}%
+                        </td>
+                    {% endif %}
+
+                    {% set discount_siblings_formatted = discount_siblings|format_currency(application.currency) %}
+
+                    <td>
+                        -{{ discount_siblings_formatted }}
+                    </td>
+
+                    <td>
+                        -{{ discount_siblings_formatted }}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+
+        {% for application_purchasable_item in application.applicationPurchasableItems %}
+            {% for instance in application_purchasable_item.applicationPurchasableItemInstances %}
+                {% if instance.amount > 0 %}
+                    {% set application_camper = instance.applicationCamper %}
+
+                    <tr>
+                        <td>
+                            {{ application_purchasable_item.label }}
+
+                            {% set chosen_variant_values = instance.chosenVariantValuesAsString %}
+
+                            {% if chosen_variant_values is not empty %}
+                                ({{ chosen_variant_values }})
+                            {% endif %}
+
+                            {% if instance.applicationCamper is not null %}
+                                {{ 'application.invoice.purchasable_item.instance_for_camper'|trans }}
+
+                                {{ application_camper.nameFull }}
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ instance.amount }}
+                        </td>
+
+                        {% if application.tax > 0.0 %}
+                            <td>
+                                {{ application_purchasable_item.priceWithoutTax|format_currency(application.currency) }}
+                            </td>
+
+                            <td>
+                                {{ application.tax }}%
+                            </td>
+                        {% endif %}
+
+                        <td>
+                            {{ application_purchasable_item.price|format_currency(application.currency) }}
+                        </td>
+
+                        <td>
+                            {{ instance.price|format_currency(application.currency) }}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </tbody>
+
+    <tfoot>
+        <tr>
+            <td colspan="{% if application.tax > 0.0 %} 5 {% else %} 3 {% endif %}">
+                {{ 'application.invoice.items.total_price'|trans }}
+            </td>
+
+            <td>
+                {{ application_full_price|format_currency(application.currency) }}
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+{% if application.tax > 0.0 %}
+    <table style="width: 100%; margin-bottom: 16px;">
+        <tbody>
+            <tr>
+                <td>
+                    <h3>
+                        {{ 'application.invoice.tax_total.title'|trans }}
+                    </h3>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="table-solid" style="margin-bottom: 32px;">
+        <thead>
+            <tr>
+                <td>
+                    {{ 'application.invoice.tax_total.tax_percentage'|trans }}
+                </td>
+
+                <td>
+                    {{ 'application.invoice.tax_total.price_without_tax'|trans }}
+                </td>
+
+                <td>
+                    {{ 'application.invoice.tax_total.tax_amount'|trans }}
+                </td>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>
+                    {{ application.tax }}%
+                </td>
+
+                <td>
+                    {{ application_full_price_without_tax|format_currency(application.currency) }}
+                </td>
+
+                <td>
+                    {{ (application_full_price - application_full_price_without_tax)|format_currency(application.currency) }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% endif %}

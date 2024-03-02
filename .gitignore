@@ -5,6 +5,7 @@
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
 /public/files/dynamic/
+/private/files/dynamic/
 /var/
 /vendor/
 /.idea/
