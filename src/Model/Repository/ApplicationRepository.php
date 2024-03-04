@@ -2,11 +2,15 @@
 
 namespace App\Model\Repository;
 
+use App\Library\Data\User\ApplicationProfileSearchData;
+use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\ApplicationPurchasableItem;
+use App\Model\Entity\User;
 use App\Model\Library\Application\ApplicationsEditableDraftsResult;
 use DateTimeImmutable;
+use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -209,6 +213,34 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         }
 
         return new ApplicationsEditableDraftsResult($isApplicationEditableDraft);
+    }
+
+    public function getUserPaginator(ApplicationProfileSearchData $data, User $user, int $currentPage, int $pageSize): DqlPaginator
+    {
+        $phrase = $data->getPhrase();
+        $sortBy = $data->getSortBy();
+
+        $query = $this->createQueryBuilder('application')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('application.simpleId LIKE :simpleId')
+            ->setParameter('simpleId', '%' . $phrase . '%')
+            ->andWhere('application.user = :userId')
+            ->setParameter('userId', $user->getId(), UuidType::NAME)
+            ->orderBy($sortBy->property(), $sortBy->order())
+            ->getQuery()
+        ;
+
+        $paginator = new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
+
+        /** @var Application[] $applications */
+        $applications = $paginator->getCurrentPageItems();
+        $this->loadApplicationContacts($applications);
+        $this->loadApplicationCampers($applications);
+        $this->loadApplicationAttachments($applications);
+        $this->loadApplicationFormFieldValues($applications);
+        $this->loadApplicationPurchasableItems($applications);
+
+        return $paginator;
     }
 
     private function loadApplicationContacts(null|array|Application $applications): void

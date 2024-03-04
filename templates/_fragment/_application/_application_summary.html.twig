@@ -11,24 +11,24 @@
                     <div class="card">
                         <div class="card-body">
                             <h5 class="mb-0">
-                                {% if form_attachments_upload_later is null and is_application_fully_paid %}
-                                    {% if application.isAccepted is same as(null) %}
+                                {% if application.isAccepted is same as(true) %}
+                                    <i class="fas fa-check-circle text-success mr-2"></i>
+
+                                    {{ 'application.is_accepted_state.yes'|trans }}
+                                {% elseif application.isAccepted is same as(false) %}
+                                    <i class="fas fas fa-times-circle text-danger mr-2"></i>
+
+                                    {{ 'application.is_accepted_state.no'|trans }}
+                                {% elseif application.isAccepted is same as(null) %}
+                                    {% if form_attachments_upload_later is null and not is_application_awaiting_payment %}
                                         <i class="fas fa-check-circle text-primary mr-2"></i>
 
-                                        {{ 'application.completed_screen.accepted.not_yet'|trans }}
-                                    {% elseif application.isAccepted is same as(true) %}
-                                        <i class="fas fa-check-circle text-success mr-2"></i>
-
-                                        {{ 'application.completed_screen.accepted.yes'|trans }}
+                                        {{ 'application.is_accepted_state.null_and_working_on_it'|trans }}
                                     {% else %}
-                                        <i class="fas fa-check-circle text-danger mr-2"></i>
+                                        <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
 
-                                        {{ 'application.completed_screen.accepted.no'|trans }}
+                                        {{ 'application.is_accepted_state.null_and_not_ready'|trans }}
                                     {% endif %}
-                                {% else %}
-                                    <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
-
-                                    {{ 'application.completed_screen.perform_remaining_steps'|trans }}
                                 {% endif %}
                             </h5>
                         </div>
@@ -221,6 +221,22 @@
                 </div>
             </div>
 
+            {% if application.completedAt is not null %}
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <strong>
+                            {{ 'entity_attribute.application.completed_at'|trans }}:
+                        </strong>
+                    </div>
+
+                    <div class="col-6">
+                        <span class="float-right">
+                            {{ application.completedAt|date(date_time_format) }}
+                        </span>
+                    </div>
+                </div>
+            {% endif %}
+
             <div class="row mb-3">
                 <div class="col-6">
                     <strong>
@@ -262,22 +278,6 @@
                     </span>
                 </div>
             </div>
-
-            {% if application.completedAt is not null %}
-                <div class="row mb-3">
-                    <div class="col-6">
-                        <strong>
-                            {{ 'entity_attribute.application.completed_at'|trans }}:
-                        </strong>
-                    </div>
-
-                    <div class="col-6">
-                        <span class="float-right">
-                            {{ application.completedAt|date(date_time_format) }}
-                        </span>
-                    </div>
-                </div>
-            {% endif %}
 
             {% if application.campDateDescription is not null %}
                 <div class="row mb-3">

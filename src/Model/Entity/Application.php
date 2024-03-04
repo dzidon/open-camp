@@ -898,8 +898,43 @@ class Application
         return $totalAmount;
     }
 
-    public function canUploadAttachmentsLater(): bool
+    public function isCompleted(): bool
     {
+        if ($this->isDraft)
+        {
+            return false;
+        }
+
+        if (count($this->applicationContacts) < 1)
+        {
+            return false;
+        }
+
+        if (count($this->applicationCampers)  < 1)
+        {
+            return false;
+        }
+
+        if ($this->paymentMethod === null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function isAwaitingUploadOfAttachmentsRequiredLater(): bool
+    {
+        if (!$this->isCompleted())
+        {
+            return false;
+        }
+
+        if ($this->isAccepted() !== null)
+        {
+            return false;
+        }
+
         foreach ($this->applicationAttachments as $applicationAttachment)
         {
             if ($applicationAttachment->canBeUploadedLater())
@@ -944,37 +979,47 @@ class Application
 
     public function isAwaitingPayment(): bool
     {
-        return !$this->isFullyPaid() && $this->getFullPrice() > 0.0;
+        if (!$this->isCompleted())
+        {
+            return false;
+        }
+
+        if ($this->isAccepted() !== null)
+        {
+            return false;
+        }
+
+        if ($this->isFullyPaid())
+        {
+            return false;
+        }
+
+        if ($this->getFullPrice() <= 0.0)
+        {
+            return false;
+        }
+
+        return true;
     }
 
-    public function canBeAccepted(): bool
+    public function isAwaitingAcceptOrDecline(): bool
     {
-        if ($this->isDraft)
+        if (!$this->isCompleted())
         {
             return false;
         }
 
-        if (count($this->applicationContacts) < 1)
+        if ($this->isAccepted() !== null)
         {
             return false;
         }
 
-        if (count($this->applicationCampers)  < 1)
+        if ($this->isAwaitingUploadOfAttachmentsRequiredLater())
         {
             return false;
         }
 
-        if ($this->paymentMethod === null)
-        {
-            return false;
-        }
-
-        if ($this->canUploadAttachmentsLater())
-        {
-            return false;
-        }
-
-        if (!$this->isFullyPaid())
+        if ($this->isAwaitingPayment())
         {
             return false;
         }

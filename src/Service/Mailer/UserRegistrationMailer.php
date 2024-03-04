@@ -14,25 +14,24 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserRegistrationMailer implements UserRegistrationMailerInterface
 {
-    private string $emailFrom;
-    private string $dateTimeFormat;
-
     private MailerInterface $mailer;
+
     private UrlGeneratorInterface $urlGenerator;
+
     private TranslatorInterface $translator;
+
+    private string $emailFrom;
 
     public function __construct(MailerInterface $mailer,
                                 UrlGeneratorInterface $urlGenerator,
                                 TranslatorInterface $translator,
-                                string $emailFrom,
-                                string $dateTimeFormat)
+                                string $emailFrom)
     {
         $this->mailer = $mailer;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
 
         $this->emailFrom = $emailFrom;
-        $this->dateTimeFormat = $dateTimeFormat;
     }
 
     /**
@@ -45,11 +44,6 @@ class UserRegistrationMailer implements UserRegistrationMailerInterface
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $subject = $this->translator->trans('mail.user_registration.subject');
-        $body1 = $this->translator->trans('mail.user_registration.body1');
-        $linkText = $this->translator->trans('mail.user_registration.link_text');
-        $body2 = $this->translator->trans('mail.user_registration.body2', [
-            'date' => $expireAt->format($this->dateTimeFormat),
-        ]);
 
         $email = (new TemplatedEmail())
             ->from($this->emailFrom)
@@ -58,9 +52,7 @@ class UserRegistrationMailer implements UserRegistrationMailerInterface
             ->htmlTemplate('_fragment/_email/_user_registration.html.twig')
             ->context([
                 'completion_url' => $completionUrl,
-                'body1'          => $body1,
-                'link_text'      => $linkText,
-                'body2'          => $body2,
+                'expire_at'      => $expireAt,
             ])
         ;
 

@@ -224,6 +224,23 @@
     {{ form_rest(form) }}
 {% endblock %}
 
+{# Application profile search #}
+{% block user_application_profile_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">{{ 'form.user.application_profile_search.button'|trans }}</button>
+{% endblock %}
+
 {# Contact profile search #}
 {% block user_contact_search_widget %}
     {{ form_errors(form) }}

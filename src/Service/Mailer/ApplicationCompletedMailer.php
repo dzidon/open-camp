@@ -12,11 +12,17 @@ use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @inheritDoc
+ */
 class ApplicationCompletedMailer implements ApplicationCompletedMailerInterface
 {
     private MailerInterface $mailer;
+
     private ApplicationInvoiceFilesystemInterface $applicationInvoiceFilesystem;
+
     private UrlGeneratorInterface $urlGenerator;
+
     private TranslatorInterface $translator;
 
     private string $emailFrom;
@@ -35,6 +41,9 @@ class ApplicationCompletedMailer implements ApplicationCompletedMailerInterface
         $this->emailFrom = $emailFrom;
     }
 
+    /**
+     * @inheritDoc
+     */
     public function sendEmail(Application $application): void
     {
         $campName = $application->getCampName();

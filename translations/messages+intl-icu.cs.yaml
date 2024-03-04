@@ -121,6 +121,12 @@ application:
     cannot_be_completed: 'Je nám líto, ale vaše přihláška ještě nemá všechny náležitosti. Ujistěte se, že zadávate alespoň 1 kontakt, 1 táborníka a že máte zvolenou platební metodu.'
     no_longer_editable: 'Je nám líto, ale tuto přihlášku už není možné upravovat.'
     completed: 'Přihláška úspěšně vytvořena!'
+    is_accepted_state:
+        yes: 'Přihláška schválena'
+        no: 'Přihláška zamítnuta'
+        null_and_working_on_it: 'Pracujeme na schválení přihlášky'
+        null_and_not_ready: 'Máte skoro hotovo'
+
     discount:
         siblings_single_number: '{number, plural,
               =1    {Uplatnit slevu pro # sourozence}
@@ -153,7 +159,6 @@ application:
         total_price_without_tax: 'Celkem bez DPH'
 
     completed_screen:
-        perform_remaining_steps: 'Máte skoro hotovo!'
         form_attachments_upload_later: 'Donahrání povinných příloh'
         upload_required_attachments: 'Nahrajte prosím následující přílohy.'
         invoice:
@@ -175,11 +180,6 @@ application:
             instructions_import: 'Údaje z této přihlášky si můžete uložit na svůj profil.'
             button_register: 'Zaregistrovat se'
             button_import: 'Uložit'
-
-        accepted:
-            not_yet: 'Pracujeme na schválení přihlášky!'
-            yes: 'Přihláška schválena!'
-            no: 'Přihláška zamítnuta!'
 
     import_to_user:
         billing_data: 'Fakturační údaje'
@@ -1759,6 +1759,16 @@ form:
 
             button: 'Hledat'
 
+        application_profile_search:
+            phrase: 'Hledat podle kódu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    completed_at_asc: 'Od nejstarší'
+                    completed_at_desc: 'Od nejnovější'
+
+            button: 'Hledat'
+
 route:
     admin_home: 'Přehled'
     admin_profile: 'Administrátorský profil'
@@ -1871,6 +1881,8 @@ route:
     user_profile_camper_delete: 'Odstranění táborníka'
     user_profile_password_change: 'Změna hesla'
     user_profile_password_change_create: 'Nastavení hesla'
+    user_profile_application_list: 'Přihlášky'
+    user_profile_application_read: 'Přihláška'
 
     user_application_step_one_create: 'Údaje'
     user_application_step_one_update: 'Údaje'

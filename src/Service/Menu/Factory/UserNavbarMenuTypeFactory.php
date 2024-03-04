@@ -124,8 +124,13 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
             $itemProfileCampers->setActive($active, $active);
 
             // profile - applications
-            $itemProfileApplications = new MenuType('user_profile_application_list', 'navbar_user_dropdown_item', 'applications', '#');
+            $active = $route === 'user_profile_application_list' || $route === 'user_profile_application_read';
+
+            $text = $this->translator->trans('route.user_profile_application_list');
+            $url = $this->urlGenerator->generate('user_profile_application_list');
+            $itemProfileApplications = new MenuType('user_profile_application_list', 'navbar_user_dropdown_item', $text, $url);
             $itemProfileParent->addChild($itemProfileApplications);
+            $itemProfileApplications->setActive($active, $active);
 
             // profile - password set
             if ($user->getPassword() === null)

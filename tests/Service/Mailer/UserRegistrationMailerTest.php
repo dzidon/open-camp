@@ -43,9 +43,7 @@ class UserRegistrationMailerTest extends KernelTestCase
         $this->assertSame('_fragment/_email/_user_registration.html.twig', $email->getHtmlTemplate());
 
         $context = $email->getContext();
-        $this->assertSame('mail.user_registration.body1', $context['body1']);
-        $this->assertSame('mail.user_registration.link_text', $context['link_text']);
-        $this->assertSame('mail.user_registration.body2', $context['body2']);
+        $this->assertSame($expireAt, $context['expire_at']);
         $this->assertStringContainsString('abc', $context['completion_url']);
     }
 

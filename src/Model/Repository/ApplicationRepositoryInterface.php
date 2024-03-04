@@ -2,7 +2,10 @@
 
 namespace App\Model\Repository;
 
+use App\Library\Data\User\ApplicationProfileSearchData;
+use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Application;
+use App\Model\Entity\User;
 use App\Model\Library\Application\ApplicationsEditableDraftsResultInterface;
 use Symfony\Component\Uid\UuidV4;
 
@@ -71,4 +74,15 @@ interface ApplicationRepositoryInterface
      * @return ApplicationsEditableDraftsResultInterface
      */
     public function getApplicationsEditableDraftsResult(array $applications): ApplicationsEditableDraftsResultInterface;
+
+    /**
+     * Returns user application search paginator.
+     *
+     * @param ApplicationProfileSearchData $data
+     * @param User $user
+     * @param int $currentPage
+     * @param int $pageSize
+     * @return PaginatorInterface
+     */
+    public function getUserPaginator(ApplicationProfileSearchData $data, User $user, int $currentPage, int $pageSize): PaginatorInterface;
 }

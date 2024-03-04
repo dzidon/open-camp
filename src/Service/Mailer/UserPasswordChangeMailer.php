@@ -15,24 +15,23 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class UserPasswordChangeMailer implements UserPasswordChangeMailerInterface
 {
     private MailerInterface $mailer;
+
     private UrlGeneratorInterface $urlGenerator;
+
     private TranslatorInterface $translator;
 
     private string $emailFrom;
-    private string $dateTimeFormat;
 
     public function __construct(MailerInterface $mailer,
                                 UrlGeneratorInterface $urlGenerator,
                                 TranslatorInterface $translator,
-                                string $emailFrom,
-                                string $dateTimeFormat)
+                                string $emailFrom)
     {
         $this->mailer = $mailer;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
 
         $this->emailFrom = $emailFrom;
-        $this->dateTimeFormat = $dateTimeFormat;
     }
 
     /**
@@ -45,11 +44,6 @@ class UserPasswordChangeMailer implements UserPasswordChangeMailerInterface
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
         $subject = $this->translator->trans('mail.user_password_change.subject');
-        $body1 = $this->translator->trans('mail.user_password_change.body1');
-        $linkText = $this->translator->trans('mail.user_password_change.link_text');
-        $body2 = $this->translator->trans('mail.user_password_change.body2', [
-            'date' => $expireAt->format($this->dateTimeFormat),
-        ]);
 
         $email = (new TemplatedEmail())
             ->from($this->emailFrom)
@@ -58,9 +52,7 @@ class UserPasswordChangeMailer implements UserPasswordChangeMailerInterface
             ->htmlTemplate('_fragment/_email/_user_password_change.html.twig')
             ->context([
                 'completion_url' => $completionUrl,
-                'body1'          => $body1,
-                'link_text'      => $linkText,
-                'body2'          => $body2,
+                'expire_at'      => $expireAt,
             ])
         ;
 

@@ -327,12 +327,10 @@ services:
     App\Service\Mailer\UserRegistrationMailer:
         arguments:
             $emailFrom: '%app.email_no_reply%'
-            $dateTimeFormat: '%app.date_time_format%'
 
     App\Service\Mailer\UserPasswordChangeMailer:
         arguments:
             $emailFrom: '%app.email_no_reply%'
-            $dateTimeFormat: '%app.date_time_format%'
 
     App\Service\Mailer\ApplicationCompletedMailer:
         arguments:

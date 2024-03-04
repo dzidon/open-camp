@@ -5,8 +5,6 @@ namespace App\Controller;
 use App\Library\Menu\MenuTypeInterface;
 use App\Service\Menu\Breadcrumbs\BreadcrumbsRegistryInterface;
 use LogicException;
-use Psr\Container\ContainerExceptionInterface;
-use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as SymfonyAbstractController;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\HttpException;

@@ -335,7 +335,7 @@ class ApplicationController extends AbstractController
         $this->assertApplicationCompletedAvailability($application);
         $form = null;
 
-        if ($application->canUploadAttachmentsLater())
+        if ($application->isAwaitingUploadOfAttachmentsRequiredLater())
         {
             $data = $dataFactory->createApplicationAttachmentsUploadLaterData($application);
             $form = $this->createForm(ApplicationAttachmentsUploadLaterType::class, $data);
@@ -361,7 +361,7 @@ class ApplicationController extends AbstractController
             'application'                   => $application,
             'form_attachments_upload_later' => $form,
             'breadcrumbs'                   => $this->createBreadcrumbs([
-                'application' => $application,
+                'application'   => $application,
                 'camp_category' => null,
             ]),
         ]);

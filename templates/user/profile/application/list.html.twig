@@ -1,0 +1,96 @@
+{% extends "user/profile/base.html.twig" %}
+
+{% block profile_content %}
+    <div class="row mb-5">
+        <div class="col">
+            {{ form(form_search) }}
+        </div>
+    </div>
+
+    {% if is_search_invalid %}
+        <div class="row mb-4">
+            <div class="col">
+                <div class="alert alert-danger" role="alert">
+                    {{ 'search.error.invalid_filter'|trans }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row mb-3">
+        <div class="col">
+            <h4>
+                {% if paginator.totalItems > 0 %}
+                    {{ 'search.results'|trans }} ({{ 'search.total'|trans }} {{ paginator.totalItems }})
+                {% else %}
+                    {{ 'search.error.no_results'|trans }}
+                {% endif %}
+            </h4>
+        </div>
+    </div>
+
+    {% if paginator.totalItems > 0 %}
+        <div class="row">
+            {% for application in paginator.currentPageItems %}
+                <div class="col-sm-12 col-md-6 d-flex">
+                    <div class="card mb-4 flex-fill">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ 'entity.application.singular'|trans }} {{ application.simpleId }}
+                            </h5>
+
+                            <div class="mb-2">
+                                {% if application.isAccepted is same as(true) %}
+                                    <span class="badge badge-success">
+                                        {{ 'application.is_accepted_state.yes'|trans }}
+                                    </span>
+                                {% elseif application.isAccepted is same as(false) %}
+                                    <span class="badge badge-danger">
+                                        {{ 'application.is_accepted_state.no'|trans }}
+                                    </span>
+                                {% elseif application.isAccepted is same as(null) %}
+                                    {% if application.isAwaitingAcceptOrDecline %}
+                                        <span class="badge badge-warning">
+                                            {{ 'application.is_accepted_state.null_and_working_on_it'|trans }}
+                                        </span>
+                                    {% else %}
+                                        <span class="badge badge-warning">
+                                            {{ 'application.is_accepted_state.null_and_not_ready'|trans }}
+                                        </span>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                {{ 'entity_attribute.application.camp_name'|trans }}:
+                                {{ application.campName }}
+                            </div>
+
+                            <div>
+                                {{ 'entity_attribute.application.full_price'|trans }}:
+                                {{ application.fullPrice|format_currency(application.currency) }}
+                            </div>
+
+                            <div>
+                                {{ 'entity_attribute.application.completed_at'|trans }}:
+                                {{ application.completedAt|date(date_time_format) }}
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <a href="{{ path('user_profile_application_read', {id: application.id}) }}" class="card-link">
+                                {{ 'crud.action.common.read'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row">
+            <div class="col">
+                {{ menu(pagination_menu) }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
