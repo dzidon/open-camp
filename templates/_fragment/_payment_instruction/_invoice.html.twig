@@ -1,9 +1,16 @@
-{% set is_application_deposit_paid = false %}
+{% set is_application_deposit_paid = application.isDepositPaid %}
+{% set is_application_rest_paid = application.isRestPaid %}
 
-{% if is_application_deposit_paid %}
+{% if is_application_deposit_paid and not is_application_rest_paid %}
     <div class="row mb-3">
         <div class="col-12">
             {{ 'offline_payment_method_instructions.invoice.rest_unpaid_call_to_action'|trans }}
+        </div>
+    </div>
+{% elseif not is_application_deposit_paid and is_application_rest_paid %}
+    <div class="row mb-3">
+        <div class="col-12">
+            {{ 'offline_payment_method_instructions.invoice.deposit_unpaid_call_to_action'|trans }}
         </div>
     </div>
 {% else %}
@@ -44,21 +51,7 @@
             </div>
         </div>
 
-        {% if is_application_deposit_paid %}
-            <div class="row">
-                <div class="col-5">
-                    <strong>
-                        {{ 'offline_payment_method_instructions.invoice.rest'|trans }}
-                    </strong>
-                </div>
-
-                <div class="col-7">
-                    <span>
-                        {{ application.fullPriceWithoutDeposit|format_currency(application.currency) }}
-                    </span>
-                </div>
-            </div>
-        {% else %}
+        {% set deposit_row %}
             <div class="row">
                 <div class="col-5">
                     <strong>
@@ -72,6 +65,26 @@
                     </span>
                 </div>
             </div>
+        {% endset %}
+
+        {% if is_application_deposit_paid and not is_application_rest_paid %}
+            <div class="row">
+                <div class="col-5">
+                    <strong>
+                        {{ 'offline_payment_method_instructions.invoice.rest'|trans }}
+                    </strong>
+                </div>
+
+                <div class="col-7">
+                    <span>
+                        {{ application.fullPriceWithoutDeposit|format_currency(application.currency) }}
+                    </span>
+                </div>
+            </div>
+        {% elseif not is_application_deposit_paid and is_application_rest_paid %}
+            {{ deposit_row }}
+        {% else %}
+            {{ deposit_row }}
 
             <div class="row">
                 <div class="col-5">

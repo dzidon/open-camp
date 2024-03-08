@@ -45,9 +45,13 @@ use Symfony\Component\Uid\UuidV4;
 class ApplicationController extends AbstractController
 {
     private CampDateRepositoryInterface $campDateRepository;
+
     private ApplicationRepositoryInterface $applicationRepository;
+
     private CampCategoryRepositoryInterface $campCategoryRepository;
+
     private RouteNamerInterface $routeNamer;
+
     private EventDispatcherInterface $eventDispatcher;
 
     public function __construct(CampDateRepositoryInterface     $campDateRepository,
@@ -147,8 +151,8 @@ class ApplicationController extends AbstractController
         /** @var User|null $user */
         $user = $this->getUser();
         $application = $this->findApplicationOrThrow404($applicationId);
-        $campDate = $application->getCampDate();
         $this->assertApplicationDraftAvailability($application);
+        $campDate = $application->getCampDate();
 
         $contactData = $contactDataFactory->createContactDataFromApplication($application);
         $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromApplication($application);
@@ -219,10 +223,10 @@ class ApplicationController extends AbstractController
                             UuidV4                                                 $applicationId): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
+        $this->assertApplicationDraftAvailability($application);
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
         $campCategory = $camp?->getCampCategory();
-        $this->assertApplicationDraftAvailability($application);
         $applicationId = $application->getId();
 
         $applicationPurchasableItemsData = new ApplicationStepTwoUpdateData(
@@ -271,10 +275,10 @@ class ApplicationController extends AbstractController
     public function stepThree(UuidV4 $applicationId, Request $request): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
+        $this->assertApplicationDraftAvailability($application);
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
         $campCategory = $camp?->getCampCategory();
-        $this->assertApplicationDraftAvailability($application);
         $applicationId = $application->getId();
 
         $applicationStepThreeUpdateData = new ApplicationStepThreeUpdateData($this->getUser());
@@ -359,7 +363,7 @@ class ApplicationController extends AbstractController
 
         return $this->render('user/application/completed.html.twig', [
             'application'                   => $application,
-            'form_attachments_upload_later' => $form,
+            'form_attachments_upload_later' => $form?->createView(),
             'breadcrumbs'                   => $this->createBreadcrumbs([
                 'application'   => $application,
                 'camp_category' => null,
@@ -430,7 +434,7 @@ class ApplicationController extends AbstractController
 
     private function assertApplicationCompletedAvailability(Application $application): void
     {
-        if ($application->isDraft())
+        if (!$application->isCompleted())
         {
             throw $this->createNotFoundException();
         }

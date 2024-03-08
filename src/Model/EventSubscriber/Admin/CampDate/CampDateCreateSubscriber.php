@@ -24,7 +24,15 @@ class CampDateCreateSubscriber
     public function onCreateFillEntity(CampDateCreateEvent $event): void
     {
         $data = $event->getCampDateData();
-        $entity = new CampDate($data->getStartAt(), $data->getEndAt(), $data->getDeposit(), $data->getPriceWithoutDeposit(), $data->getCapacity(), $data->getCamp());
+        $entity = new CampDate(
+            $data->getStartAt(),
+            $data->getEndAt(),
+            $data->getDeposit(),
+            $data->getPriceWithoutDeposit(),
+            $data->getCapacity(),
+            $data->getCamp()
+        );
+
         $this->dataTransfer->fillEntity($data, $entity);
         $event->setCampDate($entity);
     }

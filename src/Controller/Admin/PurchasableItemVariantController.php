@@ -68,7 +68,7 @@ class PurchasableItemVariantController extends AbstractController
         }
 
         return $this->render('admin/purchasable_item/variant/update.html.twig', [
-            'form_purchasable_item_variant' => $form,
+            'form_purchasable_item_variant' => $form->createView(),
             'breadcrumbs'                   => $this->createBreadcrumbs([
                 'purchasable_item' => $purchasableItem,
             ]),

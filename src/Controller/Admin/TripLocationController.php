@@ -60,7 +60,7 @@ class TripLocationController extends AbstractController
         }
 
         return $this->render('admin/trip/location/update.html.twig', [
-            'form_trip_location' => $form,
+            'form_trip_location' => $form->createView(),
             'breadcrumbs'        => $this->createBreadcrumbs([
                 'trip_location_path' => $tripLocationPath,
             ]),

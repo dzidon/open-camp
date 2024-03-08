@@ -4,6 +4,7 @@ namespace App\Model\Entity;
 
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Enum\Entity\ApplicationCustomerChannelEnum;
+use App\Model\Enum\Entity\ApplicationPaymentTypeEnum;
 use App\Model\Library\DiscountConfig\DiscountConfigArrayShape;
 use App\Model\Repository\ApplicationRepository;
 use DateTimeImmutable;
@@ -169,6 +170,10 @@ class Application
     #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationPurchasableItem::class)]
     private Collection $applicationPurchasableItems;
 
+    /** @var Collection<ApplicationPayment> */
+    #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationPayment::class)]
+    private Collection $applicationPayments;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -194,8 +199,7 @@ class Application
                                 bool     $isEmailMandatory,
                                 bool     $isPhoneNumberMandatory,
                                 bool     $isPurchasableItemsIndividualMode,
-                                CampDate $campDate,
-                                ?string  $campDateDescription = null)
+                                CampDate $campDate)
     {
         $this->id = Uuid::v4();
         $this->simpleId = $simpleId;
@@ -216,12 +220,12 @@ class Application
         $this->isEmailMandatory = $isEmailMandatory;
         $this->isPhoneNumberMandatory = $isPhoneNumberMandatory;
         $this->isPurchasableItemsIndividualMode = $isPurchasableItemsIndividualMode;
-        $this->campDateDescription = $campDateDescription;
         $this->applicationContacts = new ArrayCollection();
         $this->applicationCampers = new ArrayCollection();
         $this->applicationFormFieldValues = new ArrayCollection();
         $this->applicationAttachments = new ArrayCollection();
         $this->applicationPurchasableItems = new ArrayCollection();
+        $this->applicationPayments = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable('now');
 
         $this->campDate = $campDate;
@@ -233,6 +237,7 @@ class Application
         $this->deposit = $this->campDate->getDeposit();
         $this->priceWithoutDeposit = $this->campDate->getPriceWithoutDeposit();
         $this->depositUntil = $this->campDate->getDepositUntil();
+        $this->campDateDescription = $this->campDate->getDescription();
 
         $discountConfigArrayShape = new DiscountConfigArrayShape();
         $discountConfigArrayShape->assertRecurringCampersConfig($this->discountRecurringCampersConfig);
@@ -668,6 +673,16 @@ class Application
         return $this->paymentMethod->isOnline();
     }
 
+    public function isPaymentMethodOffline(): bool
+    {
+        if ($this->paymentMethod === null)
+        {
+            return false;
+        }
+
+        return !$this->paymentMethod->isOnline();
+    }
+
     public function getPaymentMethodLabel(): ?string
     {
         return $this->paymentMethodLabel;
@@ -886,6 +901,46 @@ class Application
         return $this;
     }
 
+    /**
+     * @return ApplicationPayment[]
+     */
+    public function getApplicationPayments(): array
+    {
+        return $this->applicationPayments->toArray();
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param ApplicationPayment $applicationPayment
+     * @return $this
+     */
+    public function addApplicationPayment(ApplicationPayment $applicationPayment): self
+    {
+        if ($applicationPayment->getApplication() !== $this)
+        {
+            return $this;
+        }
+
+        if (!$this->applicationPayments->contains($applicationPayment))
+        {
+            $this->applicationPayments->add($applicationPayment);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param ApplicationPayment $applicationPayment
+     * @return $this
+     */
+    public function removeApplicationPayment(ApplicationPayment $applicationPayment): self
+    {
+        $this->applicationPayments->removeElement($applicationPayment);
+
+        return $this;
+    }
+
     public function getPurchasableItemInstancesTotalAmount(): int
     {
         $totalAmount = 0.0;
@@ -957,14 +1012,218 @@ class Application
         return false;
     }
 
+    public function getPendingDepositApplicationPayment(): ?ApplicationPayment
+    {
+        $depositAmount = $this->getFullDeposit();
+
+        foreach ($this->applicationPayments as $applicationPayment)
+        {
+            if ($applicationPayment->isOnline() !== $this->paymentMethod?->isOnline())
+            {
+                continue;
+            }
+
+            if (!$applicationPayment->isPending())
+            {
+                continue;
+            }
+
+            if ($applicationPayment->getType() !== ApplicationPaymentTypeEnum::DEPOSIT)
+            {
+                continue;
+            }
+
+            if ($applicationPayment->getAmount() !== $depositAmount)
+            {
+                continue;
+            }
+
+            return $applicationPayment;
+        }
+
+        return null;
+    }
+
+    public function canCreateNewDepositPayment(): bool
+    {
+        if ($this->getFullDeposit() <= 0.0)
+        {
+            return false;
+        }
+
+        if ($this->isDepositPaid())
+        {
+            return false;
+        }
+
+        if ($this->getPendingDepositApplicationPayment() !== null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public function isDepositPaid(): bool
     {
+        $depositAmount = $this->getFullDeposit();
+
+        foreach ($this->applicationPayments as $applicationPayment)
+        {
+            $paymentType = $applicationPayment->getType();
+
+            if ($paymentType !== ApplicationPaymentTypeEnum::DEPOSIT && $paymentType !== ApplicationPaymentTypeEnum::FULL)
+            {
+                continue;
+            }
+
+            if (!$applicationPayment->isPaid())
+            {
+                continue;
+            }
+
+            if ($applicationPayment->getAmount() < $depositAmount)
+            {
+                continue;
+            }
+
+            return true;
+        }
+
         return false;
+    }
+
+    public function getPendingRestApplicationPayment(): ?ApplicationPayment
+    {
+        $restAmount = $this->getFullPriceWithoutDeposit();
+
+        foreach ($this->applicationPayments as $applicationPayment)
+        {
+            if ($applicationPayment->isOnline() !== $this->paymentMethod?->isOnline())
+            {
+                continue;
+            }
+
+            if (!$applicationPayment->isPending())
+            {
+                continue;
+            }
+
+            if ($applicationPayment->getType() !== ApplicationPaymentTypeEnum::REST)
+            {
+                continue;
+            }
+
+            if ($applicationPayment->getAmount() !== $restAmount)
+            {
+                continue;
+            }
+
+            return $applicationPayment;
+        }
+
+        return null;
+    }
+
+    public function canCreateNewRestPayment(): bool
+    {
+        if ($this->getFullPriceWithoutDeposit() <= 0.0)
+        {
+            return false;
+        }
+
+        if ($this->isRestPaid())
+        {
+            return false;
+        }
+
+        if ($this->getPendingRestApplicationPayment() !== null)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public function isRestPaid(): bool
     {
+        $restAmount = $this->getFullPriceWithoutDeposit();
+
+        foreach ($this->applicationPayments as $applicationPayment)
+        {
+            $paymentType = $applicationPayment->getType();
+
+            if ($paymentType !== ApplicationPaymentTypeEnum::REST && $paymentType !== ApplicationPaymentTypeEnum::FULL)
+            {
+                continue;
+            }
+
+            if (!$applicationPayment->isPaid())
+            {
+                continue;
+            }
+
+            if ($applicationPayment->getAmount() < $restAmount)
+            {
+                continue;
+            }
+
+            return true;
+        }
+
         return false;
+    }
+
+    public function getPendingFullApplicationPayment(): ?ApplicationPayment
+    {
+        $fullAmount = $this->getFullPrice();
+
+        foreach ($this->applicationPayments as $applicationPayment)
+        {
+            if ($applicationPayment->isOnline() !== $this->paymentMethod?->isOnline())
+            {
+                continue;
+            }
+
+            if (!$applicationPayment->isPending())
+            {
+                continue;
+            }
+
+            if ($applicationPayment->getType() !== ApplicationPaymentTypeEnum::FULL)
+            {
+                continue;
+            }
+
+            if ($applicationPayment->getAmount() !== $fullAmount)
+            {
+                continue;
+            }
+
+            return $applicationPayment;
+        }
+
+        return null;
+    }
+
+    public function canCreateNewFullPayment(): bool
+    {
+        if ($this->getFullPrice() <= 0.0)
+        {
+            return false;
+        }
+
+        if ($this->isFullyPaid())
+        {
+            return false;
+        }
+
+        if ($this->getPendingFullApplicationPayment() !== null)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public function isFullyPaid(): bool
@@ -977,7 +1236,7 @@ class Application
         return false;
     }
 
-    public function isAwaitingPayment(): bool
+    public function isAwaitingPayment(?ApplicationPaymentTypeEnum $type = null): bool
     {
         if (!$this->isCompleted())
         {
@@ -989,14 +1248,53 @@ class Application
             return false;
         }
 
-        if ($this->isFullyPaid())
+        if ($type === ApplicationPaymentTypeEnum::DEPOSIT)
         {
-            return false;
-        }
+            if ($this->getFullDeposit() <= 0.0)
+            {
+                return false;
+            }
 
-        if ($this->getFullPrice() <= 0.0)
+            if ($this->isDepositPaid())
+            {
+                return false;
+            }
+        }
+        else if ($type === ApplicationPaymentTypeEnum::REST)
         {
-            return false;
+            if ($this->getFullPriceWithoutDeposit() <= 0.0)
+            {
+                return false;
+            }
+
+            if ($this->isRestPaid())
+            {
+                return false;
+            }
+        }
+        else if ($type === ApplicationPaymentTypeEnum::FULL)
+        {
+            if ($this->getFullPrice() <= 0.0)
+            {
+                return false;
+            }
+
+            if ($this->isDepositPaid() || $this->isRestPaid() || $this->isFullyPaid())
+            {
+                return false;
+            }
+        }
+        else if ($type === null)
+        {
+            if ($this->getFullPrice() <= 0.0)
+            {
+                return false;
+            }
+
+            if ($this->isFullyPaid())
+            {
+                return false;
+            }
         }
 
         return true;

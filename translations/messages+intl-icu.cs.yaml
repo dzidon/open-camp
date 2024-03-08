@@ -64,12 +64,24 @@ offline_payment_method_instructions:
     general: 'Zvolili jste offline platební metodu. Po provedení platby musíme platbu zkontrolovat, schválení přihlášky tak může chvíli trvat, prosíme o trpělivost.'
     invoice:
         fully_unpaid_call_to_action: 'Proveďte prosím platbu převodem na náš bankovní účet. Můžete zatím buď zaplatit pouze zálohu, nebo můžete rovnou zaplatit celou přihlášku.'
+        deposit_unpaid_call_to_action: 'Doplatek máte zaplacený, zaplaťte prosím zálohu převodem na náš účet.'
         rest_unpaid_call_to_action: 'Zálohu máte zaplacenou, zaplaťte prosím doplatek převodem na náš účet.'
         bank_account: 'Bankovní účet'
         invoice_number: 'Variabilní symbol'
         deposit: 'Záloha'
         full_price: 'Celá částka'
         rest: 'Doplatek'
+
+payment_state:
+    paid: 'Zaplacena'
+    cancelled: 'Zrušena'
+    refunded: 'Vrácena'
+    pending: 'Rozpracovaná'
+
+online_payment_gate_mock:
+    pay: 'Simulovat platbu'
+    cancel: 'Zrušit platbu'
+    back_to_application: 'Zpět na přihlášku'
 
 contact_role:
     mother: 'Matka'
@@ -126,6 +138,16 @@ application:
         no: 'Přihláška zamítnuta'
         null_and_working_on_it: 'Pracujeme na schválení přihlášky'
         null_and_not_ready: 'Máte skoro hotovo'
+
+    payment:
+        unable_to_create: 'Platbu se nepodařilo vytvořit, zkuste to prosím pozdějí.'
+        state:
+            paid: 'Platba zaplacena'
+            cancelled: 'Platba zrušena'
+            refunded: 'Platba vrácena'
+            pending: 'Čeká se na dokončení platby'
+
+        back_to_application: 'Zpět na přihlášku'
 
     discount:
         siblings_single_number: '{number, plural,
@@ -1889,3 +1911,6 @@ route:
     user_application_step_two: 'Finance'
     user_application_step_three: 'Souhrn'
     user_application_completed: 'Přihláška vytvořena'
+
+    user_application_payment_online_status: 'Stav platby'
+    user_application_payment_simulate: 'Simulace platební brány'

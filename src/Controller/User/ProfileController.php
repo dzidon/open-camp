@@ -49,7 +49,7 @@ class ProfileController extends AbstractController
         }
 
         return $this->render('user/profile/billing.html.twig', [
-            'form_billing' => $form,
+            'form_billing' => $form->createView(),
             'breadcrumbs'  => $this->createBreadcrumbs(),
         ]);
     }
@@ -80,7 +80,7 @@ class ProfileController extends AbstractController
         }
 
         return $this->render('user/profile/password_change.html.twig', [
-            'form_password_change' => $form,
+            'form_password_change' => $form->createView(),
             'breadcrumbs'          => $this->createBreadcrumbs(),
         ]);
     }
@@ -111,7 +111,7 @@ class ProfileController extends AbstractController
         }
 
         return $this->render('user/profile/password_change_create.html.twig', [
-            'form_password_change_create' => $form,
+            'form_password_change_create' => $form->createView(),
             'breadcrumbs'                 => $this->createBreadcrumbs(),
         ]);
     }

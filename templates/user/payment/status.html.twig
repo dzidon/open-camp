@@ -1,0 +1,36 @@
+{% extends "user/base.html.twig" %}
+
+{% block h1 %}{% endblock %}
+
+{% block main %}
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <h1 class="mb-3">
+                {% if application_payment.paid %}
+                    <i class="fas fa-check-circle mb-2 text-success"></i>
+                    <br>
+                    {{ 'application.payment.state.paid'|trans }}
+                {% elseif application_payment.cancelled %}
+                    <i class="fas fa-times-circle mb-2 text-danger"></i>
+                    <br>
+                    {{ 'application.payment.state.cancelled'|trans }}
+                {% elseif application_payment.refunded %}
+                    <i class="fas fa-check-circle mb-2 text-primary"></i>
+                    <br>
+                    {{ 'application.payment.state.refunded'|trans }}
+                {% elseif application_payment.pending %}
+                    <i class="fas fa-question-circle mb-2 text-secondary"></i>
+                    <br>
+                    {{ 'application.payment.state.pending'|trans }}
+                {% endif %}
+            </h1>
+
+            {% set application = application_payment.application %}
+
+            <a href="{{ path('user_application_completed', {applicationId: application.id}) }}">
+                <i class="fas fa-long-arrow-alt-left mr-2"></i>
+                {{ 'application.payment.back_to_application'|trans }}
+            </a>
+        </div>
+    </div>
+{% endblock %}

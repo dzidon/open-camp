@@ -92,7 +92,7 @@ class CampImageController extends AbstractController
 
         return $this->render('admin/camp/image/upload.html.twig', [
             'camp'        => $camp,
-            'form_upload' => $form,
+            'form_upload' => $form->createView(),
             'breadcrumbs' => $this->createBreadcrumbs([
                 'camp' => $camp,
             ]),

@@ -34,7 +34,12 @@ class PurchasableItemVariantCreateSubscriber
         $purchasableItemVariantData = $creationData->getPurchasableItemVariantData();
         $purchasableItemVariantValuesData = $creationData->getPurchasableItemVariantValuesData();
 
-        $purchasableItemVariant = new PurchasableItemVariant($purchasableItemVariantData->getName(), $purchasableItemVariantData->getPriority(), $purchasableItemVariantData->getPurchasableItem());
+        $purchasableItemVariant = new PurchasableItemVariant(
+            $purchasableItemVariantData->getName(),
+            $purchasableItemVariantData->getPriority(),
+            $purchasableItemVariantData->getPurchasableItem()
+        );
+
         $this->dataTransfer->fillEntity($purchasableItemVariantData, $purchasableItemVariant);
         $event->setPurchasableItemVariant($purchasableItemVariant);
 

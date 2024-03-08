@@ -13,8 +13,8 @@ class ContactUpdateSubscriber
 
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(ContactRepositoryInterface $repository,
-                                DataTransferRegistryInterface       $dataTransfer)
+    public function __construct(ContactRepositoryInterface    $repository,
+                                DataTransferRegistryInterface $dataTransfer)
     {
         $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;

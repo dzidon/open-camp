@@ -108,7 +108,7 @@ class ProfileApplicationController extends AbstractController
         return $this->render('user/profile/application/read.html.twig', [
             'application'                   => $application,
             'invoice_found'                 => $invoiceFound,
-            'form_attachments_upload_later' => $form,
+            'form_attachments_upload_later' => $form?->createView(),
             'breadcrumbs'                   => $this->createBreadcrumbs([
                 'application' => $application,
             ]),

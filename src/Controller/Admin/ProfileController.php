@@ -45,7 +45,7 @@ class ProfileController extends AbstractController
 
         return $this->render('admin/profile/profile.html.twig', [
             'admin'        => $admin,
-            'form_profile' => $form,
+            'form_profile' => $form->createView(),
             'breadcrumbs'  => $this->createBreadcrumbs(),
         ]);
     }

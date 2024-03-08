@@ -50,7 +50,7 @@
                                     </span>
                                 {% elseif application.isAccepted is same as(null) %}
                                     {% if application.isAwaitingAcceptOrDecline %}
-                                        <span class="badge badge-warning">
+                                        <span class="badge badge-primary">
                                             {{ 'application.is_accepted_state.null_and_working_on_it'|trans }}
                                         </span>
                                     {% else %}

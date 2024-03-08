@@ -110,6 +110,7 @@ services:
             - '../src/Model/Entity/'
             - '../src/Model/Enum/'
             - '../src/Model/Event/'
+            - '../src/Model/Exception/'
             - '../src/Model/Library/'
             - '../src/Kernel.php'
 

@@ -79,6 +79,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationCampers($application);
         $this->loadApplicationAttachments($application);
         $this->loadApplicationFormFieldValues($application);
+        $this->loadApplicationPayments($application);
         $this->loadApplicationPurchasableItems($application);
 
         return $application;
@@ -125,6 +126,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationCampers($application);
         $this->loadApplicationAttachments($application);
         $this->loadApplicationFormFieldValues($application);
+        $this->loadApplicationPayments($application);
         $this->loadApplicationPurchasableItems($application);
 
         return $application;
@@ -238,6 +240,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationCampers($applications);
         $this->loadApplicationAttachments($applications);
         $this->loadApplicationFormFieldValues($applications);
+        $this->loadApplicationPayments($applications);
         $this->loadApplicationPurchasableItems($applications);
 
         return $paginator;
@@ -298,6 +301,27 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
             ->andWhere('application.id IN (:ids)')
             ->setParameter('ids', $applicationIds)
             ->orderBy('applicationFormFieldValue.priority', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    private function loadApplicationPayments(null|array|Application $applications): void
+    {
+        if (empty($applications))
+        {
+            return;
+        }
+
+        $applicationIds = $this->getApplicationIds($applications);
+
+        $this->createQueryBuilder('application')
+            ->select('application, applicationPayment, applicationPaymentStateConfig')
+            ->leftJoin('application.applicationPayments', 'applicationPayment')
+            ->leftJoin('applicationPayment.applicationPaymentStateConfig', 'applicationPaymentStateConfig')
+            ->andWhere('application.id IN (:ids)')
+            ->setParameter('ids', $applicationIds)
+            ->orderBy('applicationPayment.createdAt', 'ASC')
             ->getQuery()
             ->getResult()
         ;

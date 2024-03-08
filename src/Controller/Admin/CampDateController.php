@@ -130,7 +130,7 @@ class CampDateController extends AbstractController
 
         return $this->render('admin/camp/date/update.html.twig', [
             'camp'           => $camp,
-            'form_camp_date' => $form,
+            'form_camp_date' => $form->createView(),
             'breadcrumbs'    => $this->createBreadcrumbs([
                 'camp' => $camp,
             ]),

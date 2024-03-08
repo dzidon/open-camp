@@ -1,0 +1,50 @@
+{% extends "base.html.twig" %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('user') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('user') }}
+{% endblock %}
+
+{% block body %}
+    {% set url_pay = path('user_application_payment_online_status', {externalId: application_payment.externalId, newState: 'PAID'}) %}
+    {% set url_cancel = path('user_application_payment_online_status', {externalId: application_payment.externalId, newState: 'CANCELLED'}) %}
+    {% set application = application_payment.application %}
+
+    <div class="container pt-4">
+        <main role="main" class="flex-fill mb-4">
+            <div class="row d-flex justify-content-around">
+                <div class="col-12 col-sm-9 col-md-7 col-lg-5 col-xl-4">
+                    <a href="{{ path('user_application_completed', {applicationId: application.id}) }}">
+                        <i class="fas fa-long-arrow-alt-left mr-2"></i>
+                        {{ 'online_payment_gate_mock.back_to_application'|trans }}
+                    </a>
+
+                    <div class="text-center mt-3">
+                        <h2 class="mb-3">
+                            {{ route_name() }}
+                        </h2>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <a href="{{ url_pay }}" class="stretched-link">
+                                    {{ 'online_payment_gate_mock.pay'|trans }}
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <a href="{{ url_cancel }}" class="stretched-link">
+                                    {{ 'online_payment_gate_mock.cancel'|trans }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

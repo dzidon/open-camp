@@ -55,7 +55,6 @@ class ApplicationFactory implements ApplicationFactoryInterface
         $tax = $data->getTax();
         $discountConfig = $campDate->getDiscountConfig();
         $contactsData = $data->getContactsData();
-        $campDateDescription = $campDate->getDescription();
         $isEmailMandatory = false;
         $isPhoneNumberMandatory = false;
 
@@ -122,8 +121,7 @@ class ApplicationFactory implements ApplicationFactoryInterface
             $isEmailMandatory,
             $isPhoneNumberMandatory,
             $this->isPurchasableItemsIndividualMode,
-            $campDate,
-            $campDateDescription
+            $campDate
         );
 
         $application->setUser($user);

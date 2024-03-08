@@ -24,7 +24,7 @@ class ApplicationContactDeleteSubscriber
     }
 
     #[AsEventListener(event: ApplicationContactDeleteEvent::NAME, priority: 100)]
-    public function onDeleteRemoveFromCampDateCollection(ApplicationContactDeleteEvent $event): void
+    public function onDeleteRemoveFromApplicationCollection(ApplicationContactDeleteEvent $event): void
     {
         $entity = $event->getApplicationContact();
         $application = $entity->getApplication();
