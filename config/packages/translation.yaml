@@ -4,6 +4,7 @@ framework:
         default_path: '%kernel.project_dir%/translations'
         fallbacks:
             - en
+        providers:
 
 when@test:
     framework:
