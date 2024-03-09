@@ -16,6 +16,7 @@ doctrine:
                 dir: '%kernel.project_dir%/src/Model/Entity'
                 prefix: 'App\Model\Entity'
                 alias: App
+                type: attribute
 
 when@test:
     doctrine:
