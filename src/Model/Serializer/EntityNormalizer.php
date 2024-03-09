@@ -85,7 +85,7 @@ class EntityNormalizer implements NormalizerInterface, NormalizerAwareInterface
     /**
      * @inheritDoc
      */
-    public function supportsNormalization(mixed $data, string $format = null /* , array $context = [] */): bool
+    public function supportsNormalization(mixed $data, string $format = null, array $context = []): bool
     {
         $class = ClassUtils::getClass($data);
 
