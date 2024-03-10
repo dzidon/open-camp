@@ -45,7 +45,7 @@ workers:
             start: symfony console --time-limit=3600 --memory-limit=64M messenger:consume async
 
 relationships:
-    mysql_database: "db:maindb"
+    database: "database:maindb"
 
 dependencies:
     php:
