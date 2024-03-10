@@ -67,8 +67,8 @@ hooks:
     deploy: |
         set -x -e
 
+        symfony-deploy
+        
         php bin/console app:create-permissions
         php bin/console app:create-payment-methods
         php bin/console app:initialize-super-admin-role
-
-        symfony-deploy
