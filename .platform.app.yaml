@@ -47,6 +47,10 @@ workers:
 relationships:
     mysql_database: "db:mysql"
 
+dependencies:
+    php:
+        composer/composer: "^2"
+
 mounts:
     "/var": { source: local, source_path: var }
     "/public/files/dynamic": "shared:files/public/files/dynamic"
