@@ -1,0 +1,70 @@
+name: app
+
+type: php:8.1
+
+runtime:
+    extensions:
+        - apcu
+        - mbstring
+        - sodium
+        - ctype
+        - iconv
+
+variables:
+    env:
+        APP_ENV: 'prod'
+        APP_DEBUG: 1
+
+    php:
+        opcache.preload: config/preload.php
+
+build:
+    flavor: composer
+
+disk: 512
+
+web:
+    locations:
+        "/":
+            root: "public"
+            expires: 1h
+            passthru: "/index.php"
+
+workers:
+    messenger:
+        # PHP background workers usually don't require much CPU. See
+        # https://symfony.com/doc/current/cloud/cookbooks/resources_allocation.html
+        # for more information
+        size: XS
+        resources:
+            base_memory: 64 # Keep in sync with the `memory-limit` flag value
+            memory_ratio: 128
+
+        commands:
+            # Don't forget to update your receiver name(s)
+            start: symfony console --time-limit=3600 --memory-limit=64M messenger:consume async
+
+relationships:
+    mysql_database: "db:mysql"
+
+mounts:
+    "/var": { source: local, source_path: var }
+    "/public/files/dynamic": "shared:files/public/files/dynamic"
+    "/private/files/dynamic": "shared:files/private/files/dynamic"
+
+hooks:
+    build: |
+        set -x -e
+
+        curl -fs https://get.symfony.com/cloud/configurator | bash
+        
+        NODE_VERSION=18 symfony-build
+
+    deploy: |
+        set -x -e
+
+        php bin/console app:create-permissions
+        php bin/console app:create-payment-methods
+        php bin/console app:initialize-super-admin-role
+
+        symfony-deploy
