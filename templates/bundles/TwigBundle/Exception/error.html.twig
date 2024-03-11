@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('user') }}
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('user') }}
+{% endblock %}
+
+{% block body %}
+    <div class="container pt-4">
+        <main role="main" class="flex-fill mb-4">
+            <div class="row d-flex justify-content-around mt-5">
+                <div class="col-12 col-sm-9 col-md-7 col-lg-6">
+                    <div class="text-center mt-3">
+                        <div class="mb-5">
+                            <h1>
+                                <i class="fas fa-frown text-danger mb-2"></i>
+                                <br>
+                                {{ 'site_error.title'|trans }}
+                                {{ status_code }}
+                            </h1>
+
+                            {% set trans_reference = 'site_error.message.' ~ status_code %}
+                            {% set trans_error = trans_reference|trans %}
+
+                            {% if trans_reference is not same as(trans_error) %}
+                                <p class="lead">
+                                    {{ trans_error }}
+                                </p>
+                            {% endif %}
+                        </div>
+
+                        <a href="{{ path('user_home') }}" class="btn btn-primary">
+                            <i class="fas fa-long-arrow-alt-left mr-2"></i>
+                            {{ 'site_error.go_back_home'|trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

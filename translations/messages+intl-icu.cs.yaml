@@ -12,6 +12,14 @@ company:
         zip: '100 00'
         country: 'Česko'
 
+site_error:
+    title: 'Chyba'
+    go_back_home: 'Zpět na domovskou stránku'
+    message:
+        404: 'Stránka nenalezena'
+        403: 'Přístup odepřen'
+        500: 'Chyba serveru'
+
 api:
     fragment:
         form:
@@ -1914,3 +1922,5 @@ route:
 
     user_application_payment_online_status: 'Stav platby'
     user_application_payment_simulate: 'Simulace platební brány'
+
+    _preview_error: 'Chyba'

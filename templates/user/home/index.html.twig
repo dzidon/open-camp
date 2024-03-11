@@ -3,7 +3,18 @@
 {% block main %}
     <div class="row">
         <div class="col">
-            <p class="lead">...</p>
+            {# This will be removed after user testing #}
+            <h1 class="mb-3">Vítejte!</h1>
+
+            <p class="lead mb-4">
+                Toto je rozpracovaná verze nové webové aplikace pro dětské tábory.
+                <br>
+                Už teď ale potřebujeme Vaší pomoc při testování přihlášek!
+            </p>
+
+            <a href="{{ path('user_camp_catalog') }}" class="btn btn-primary">
+                Podat testovací přihlášku
+            </a>
         </div>
     </div>
 {% endblock %}
