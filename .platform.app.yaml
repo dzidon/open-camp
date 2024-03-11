@@ -17,6 +17,7 @@ variables:
 
     php:
         opcache.preload: config/preload.php
+        date.timezone: "Europe/Prague"
 
 build:
     flavor: composer
