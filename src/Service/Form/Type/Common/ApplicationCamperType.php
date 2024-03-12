@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Service\Form\Type\User;
+namespace App\Service\Form\Type\Common;
 
 use App\Library\Data\User\ApplicationAttachmentData;
 use App\Library\Data\User\ApplicationCamperData;
 use App\Library\Data\User\ApplicationFormFieldValueData;
 use App\Model\Entity\Camper;
-use App\Service\Form\Type\Common\CollectionItemType;
 use NumberFormatter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;

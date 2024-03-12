@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Service\Form\Type\User;
+namespace App\Service\Form\Type\Common;
 
 use App\Library\Data\User\ApplicationPurchasableItemInstanceData;
 use App\Library\Data\User\ApplicationPurchasableItemVariantData;
-use App\Service\Form\Type\Common\CollectionItemType;
-use App\Service\Form\Type\Common\IntegerCheckboxType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;

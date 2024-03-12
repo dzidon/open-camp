@@ -1,11 +1,9 @@
 <?php
 
-namespace App\Service\Form\Type\User;
+namespace App\Service\Form\Type\Common;
 
 use App\Library\Data\User\ContactData;
 use App\Model\Entity\Contact;
-use App\Service\Form\Type\Common\CollectionItemType;
-use App\Service\Form\Type\Common\ContactRoleType;
 use libphonenumber\PhoneNumberUtil;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
 use Symfony\Component\Form\AbstractType;
@@ -71,7 +69,7 @@ class ContactType extends AbstractType
         $role = $children['role'];
         $roleOther = $children['roleOther'];
 
-        $name = (new UuidV4())->toRfc4122();;
+        $name = (new UuidV4())->toRfc4122();
         $searchedClassName = 'role-other-field-visibility';
         $newClassName = $searchedClassName . '-' . $name;
 

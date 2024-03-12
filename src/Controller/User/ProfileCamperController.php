@@ -14,7 +14,6 @@ use App\Model\Repository\CamperRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Form\Type\User\CamperSearchType;
-use App\Service\Form\Type\User\CamperType;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -79,7 +78,7 @@ class ProfileCamperController extends AbstractController
         $user = $this->getUser();
         $camperData = new CamperData($this->getParameter('app.national_identifier'));
 
-        $form = $this->createForm(CamperType::class, $camperData);
+        $form = $this->createForm(\App\Service\Form\Type\Common\CamperType::class, $camperData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.camper.button']);
         $form->handleRequest($request);
 
@@ -124,7 +123,7 @@ class ProfileCamperController extends AbstractController
         $camperData = new CamperData($this->getParameter('app.national_identifier'));
         $dataTransfer->fillData($camperData, $camper);
 
-        $form = $this->createForm(CamperType::class, $camperData);
+        $form = $this->createForm(\App\Service\Form\Type\Common\CamperType::class, $camperData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.camper.button']);
         $form->handleRequest($request);
 

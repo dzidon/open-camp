@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Service\Form\Type\User;
+namespace App\Service\Form\Type\Common;
 
 use App\Library\Data\User\ApplicationPurchasableItemData;
 use App\Library\Data\User\ApplicationPurchasableItemInstanceData;
-use App\Service\Form\Type\Common\CollectionAddItemButtonType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;

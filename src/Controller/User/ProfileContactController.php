@@ -14,7 +14,6 @@ use App\Model\Repository\ContactRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Form\Type\User\ContactSearchType;
-use App\Service\Form\Type\User\ContactType;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -82,7 +81,7 @@ class ProfileContactController extends AbstractController
             $this->getParameter('app.contact_phone_number_mandatory')
         );
 
-        $form = $this->createForm(ContactType::class, $contactData);
+        $form = $this->createForm(\App\Service\Form\Type\Common\ContactType::class, $contactData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.contact.button']);
         $form->handleRequest($request);
 
@@ -129,7 +128,7 @@ class ProfileContactController extends AbstractController
             $this->getParameter('app.contact_phone_number_mandatory')
         );
         $dataTransfer->fillData($contactData, $contact);
-        $form = $this->createForm(ContactType::class, $contactData);
+        $form = $this->createForm(\App\Service\Form\Type\Common\ContactType::class, $contactData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.contact.button']);
         $form->handleRequest($request);
 

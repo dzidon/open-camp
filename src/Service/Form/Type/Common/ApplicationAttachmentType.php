@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Form\Type\User;
+namespace App\Service\Form\Type\Common;
 
 use App\Library\Data\User\ApplicationAttachmentData;
 use App\Model\Enum\Entity\AttachmentConfigRequiredTypeEnum;

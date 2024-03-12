@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Form\Type\User;
+namespace App\Service\Form\Type\Common;
 
 use App\Library\Data\User\ApplicationCamperPurchasableItemsData;
 use App\Library\Data\User\ApplicationPurchasableItemInstanceData;
