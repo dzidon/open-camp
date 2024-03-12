@@ -612,6 +612,22 @@ entity:
         singular: 'Termín tábora'
         plural: 'Termíny tábora'
 
+    camp_date_attachment_config:
+        singular: 'Propojení mezi termínem tábora a konfigurací příloh'
+        plural: 'Propojení mezi termíny táborů a konfiguracemi příloh'
+
+    camp_date_form_field:
+        singular: 'Propojení mezi termínem tábora a formulářovým polem'
+        plural: 'Propojení mezi termíny táborů a formulářovými poli'
+
+    camp_date_purchasable_item:
+        singular: 'Propojení mezi termínem tábora a volitelnou platbou'
+        plural: 'Propojení mezi termíny táborů a volitelnými platbami'
+
+    camp_date_user:
+        singular: 'Propojení mezi termínem tábora a uživatelem'
+        plural: 'Propojení mezi termíny táborů a uživateli'
+
     trip_location_path:
         singular: 'Trasa'
         plural: 'Trasy'
@@ -672,6 +688,14 @@ entity:
         singular: 'Hodnota formulářového pole'
         plural: 'Hodnoty formulářových polí'
 
+    application_payment:
+        singular: 'Platba'
+        plural: 'Platby'
+
+    application_payment_state_config:
+        singular: 'Konfigurace stavů plateb'
+        plural: 'Konfigurace stavů plateb'
+
     application_purchasable_item:
         singular: 'Volitelná položka'
         plural: 'Volitelné položky'
@@ -691,7 +715,8 @@ entity_attribute:
 
     payment_method:
         id: 'ID'
-        identifier: 'Identifikátor'
+        name: 'Identifikátor'
+        label: 'Název'
         is_online: 'On-line'
         priority: 'Priorita'
         created_at: 'Datum vytvoření'
@@ -699,6 +724,7 @@ entity_attribute:
     application:
         id: 'ID'
         simple_id: 'Kód'
+        invoice_number: 'Číslo faktury'
         email: 'E-mail'
         name_full: 'Celé jméno'
         name_first: 'Jméno'
@@ -710,18 +736,27 @@ entity_attribute:
         business_name: 'Obchodní název'
         business_cin: 'IČO'
         business_vat_id: 'DIČ'
+        note: 'Poznámka'
+        customer_channel: 'Odkud přišel zákazník'
+        customer_channel_other: 'Upřesnění odkud zákazník přišel'
         is_draft: 'Draft'
         is_accepted: 'Přijata'
         camp_name: 'Tábor'
         deposit: 'Záloha'
+        deposit_until: 'Zálohu nutno zaplatit do'
         price_without_deposit: 'Doplatek'
         full_price: 'Cena'
         currency: 'Měna'
         tax: 'DPH'
+        discount_recurring_campers_config: 'Konfigurace slev pro vracející se táborníky'
+        discount_siblings_config: 'Konfigurace slev pro sourozence'
+        discount_siblings_interval_from: 'Vybraný interval pro sourozeneckou slevu (od)'
+        discount_siblings_interval_to: 'Vybraný interval pro sourozeneckou slevu (do)'
         is_eu_business_data_enabled: 'Obchodní údaje (EU)'
         is_national_identifier_enabled: 'Rodné číslo'
         is_email_mandatory: 'Povinný e-mail'
         is_phone_number_mandatory: 'Povinné telefonní číslo'
+        is_purchasable_items_individual_mode: 'Nákup volitelných položek po jednotlivých tábornících'
         completed_at: 'Datum dokončení'
         camp_date_start_at: 'Začátek termínu'
         camp_date_end_at: 'Konec termínu'
@@ -734,6 +769,7 @@ entity_attribute:
         application_form_field_values: 'Formulářová pole'
         application_attachments: 'Přílohy'
         application_purchasable_items: 'Volitelné platby'
+        application_payments: 'Platby'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -757,15 +793,18 @@ entity_attribute:
         name_first: 'Jméno'
         name_last: 'Příjmení'
         gender: 'Pohlaví'
+        priority: 'Priorita'
         born_at: 'Datum narození'
         national_identifier: 'Rodné číslo'
         dietary_restrictions: 'Dietní omezení'
         health_restrictions: 'Další zdravotní omezení'
         medication: 'Léky'
+        trips_in_the_past: 'Kolikrát jsem jel na nějaký tábor v minulosti'
         application: 'Přihláška'
         application_trip_location_paths: 'Trasy'
         application_form_field_values: 'Formulářová pole'
         application_attachments: 'Přílohy'
+        application_purchasable_item_instances: 'Volitelné platby'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -776,6 +815,7 @@ entity_attribute:
         name_last: 'Příjmení'
         email: 'E-mail'
         phone_number: 'Telefonní číslo'
+        priority: 'Priorita'
         role: 'Role'
         role_other: 'Upřesnění role'
         application: 'Přihláška'
@@ -796,6 +836,29 @@ entity_attribute:
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
+    application_payment:
+        id: 'ID'
+        amount: 'Částka'
+        type: 'Typ'
+        state: 'Stav'
+        is_online: 'On-line'
+        external_id: 'ID v platební bráně'
+        external_url: 'Odkaz na platební bránu'
+        application_payment_state_config: 'Konfigurace stavů platby'
+        application: 'Přihláška'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    application_payment_state_config:
+        id: 'ID'
+        states: 'Stavy'
+        paid_states: 'Zaplacené stavy'
+        cancelled_states: 'Zrušené stavy'
+        refunded_states: 'Vrácené stavy'
+        pending_states: 'Probíhající stavy'
+        valid_state_changes: 'Validní změny stavů'
+        created_at: 'Datum vytvoření'
+
     application_purchasable_item:
         id: 'ID'
         label: 'Název'
@@ -815,6 +878,8 @@ entity_attribute:
         id: 'ID'
         chosen_variant_values: 'Zvolené hodnoty variant'
         amount: 'Množství'
+        priority: 'Priorita'
+        application_camper: 'Táborník'
         application_purchasable_item: 'Volitelná platba'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -860,7 +925,8 @@ entity_attribute:
         id: 'ID'
         name: 'Interní označení'
         label: 'Název'
-        group: 'Skupina oprávnění'
+        priority: 'Priorita'
+        permission_group: 'Skupina oprávnění'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -868,6 +934,7 @@ entity_attribute:
         id: 'ID'
         name: 'Interní označení'
         label: 'Název'
+        priority: 'Priorita'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -900,7 +967,7 @@ entity_attribute:
         age: 'Věk'
         guide_priority: 'Priorita v seznamu vedoucích'
         image: 'Obrázek'
-        remove_image: 'Odstranit obrázek'
+        image_extension: 'Formát obrázku'
         last_active_at: 'Datum posledního přihlášení'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
@@ -987,6 +1054,40 @@ entity_attribute:
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
+    camp_date_attachment_config:
+        id: 'ID'
+        camp_date: 'Termín tábora'
+        attachment_config: 'Konfigurace přílohy'
+        priority: 'Priorita'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    camp_date_form_field:
+        id: 'ID'
+        camp_date: 'Termín tábora'
+        form_field: 'Formulářové pole'
+        priority: 'Priorita'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    camp_date_purchasable_item:
+        id: 'ID'
+        camp_date: 'Termín tábora'
+        purchasable_item: 'Volitelná platba'
+        priority: 'Priorita'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    camp_date_user:
+        id: 'ID'
+        camp_date: 'Termín tábora'
+        user: 'Uživatel'
+        can_update_applications_state: 'Může schvalovat a zamítat přihlášky'
+        can_manage_applications: 'Může spravovat přihlášky'
+        can_manage_application_payments: 'Může spravovat platby'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
     trip_location_path:
         id: 'ID'
         name: 'Název'
@@ -1050,6 +1151,7 @@ entity_attribute:
         is_global: 'Pro celou přihlášku'
         description: 'Popis'
         image: 'Obrázek'
+        image_extension: 'Formát obrázku'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
