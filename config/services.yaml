@@ -286,11 +286,11 @@ services:
         arguments:
             $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
-    App\Service\Form\Type\User\ContactType:
+    App\Service\Form\Type\Common\ContactType:
         arguments:
             $phoneNumberFormat: '%app.phone_number_format%'
 
-    App\Service\Form\Type\User\CamperType:
+    App\Service\Form\Type\Common\CamperType:
         arguments:
             $isNationalIdentifierEnabled: '%app.national_identifier%'
 

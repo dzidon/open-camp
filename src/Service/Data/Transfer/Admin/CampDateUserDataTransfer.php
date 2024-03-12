@@ -30,8 +30,8 @@ class CampDateUserDataTransfer implements DataTransferInterface
         $campDateUser = $entity;
 
         $campDateUserData->setUser($campDateUser->getUser());
-        $campDateUserData->setCanUpdateApplicationPayments($campDateUser->canUpdateApplicationPayments());
-        $campDateUserData->setCanUpdateApplications($campDateUser->canUpdateApplications());
+        $campDateUserData->setCanManageApplicationPayments($campDateUser->canManageApplicationPayments());
+        $campDateUserData->setCanManageApplications($campDateUser->canManageApplications());
         $campDateUserData->setCanUpdateApplicationsState($campDateUser->canUpdateApplicationsState());
     }
 
@@ -46,8 +46,8 @@ class CampDateUserDataTransfer implements DataTransferInterface
         $campDateUser = $entity;
 
         $campDateUser->setUser($campDateUserData->getUser());
-        $campDateUser->setCanUpdateApplicationPayments($campDateUserData->canUpdateApplicationPayments());
-        $campDateUser->setCanUpdateApplications($campDateUserData->canUpdateApplications());
+        $campDateUser->setCanManageApplicationPayments($campDateUserData->canManageApplicationPayments());
+        $campDateUser->setCanManageApplications($campDateUserData->canManageApplications());
         $campDateUser->setCanUpdateApplicationsState($campDateUserData->canUpdateApplicationsState());
     }
 }

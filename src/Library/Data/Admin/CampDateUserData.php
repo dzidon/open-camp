@@ -12,9 +12,9 @@ class CampDateUserData
 
     private bool $canUpdateApplicationsState = false;
 
-    private bool $canUpdateApplications = false;
+    private bool $canManageApplications = false;
 
-    private bool $canUpdateApplicationPayments = false;
+    private bool $canManageApplicationPayments = false;
 
     public function getUser(): ?User
     {
@@ -40,26 +40,26 @@ class CampDateUserData
         return $this;
     }
 
-    public function canUpdateApplications(): bool
+    public function canManageApplications(): bool
     {
-        return $this->canUpdateApplications;
+        return $this->canManageApplications;
     }
 
-    public function setCanUpdateApplications(bool $canUpdateApplications): self
+    public function setCanManageApplications(bool $canManageApplications): self
     {
-        $this->canUpdateApplications = $canUpdateApplications;
+        $this->canManageApplications = $canManageApplications;
 
         return $this;
     }
 
-    public function canUpdateApplicationPayments(): bool
+    public function canManageApplicationPayments(): bool
     {
-        return $this->canUpdateApplicationPayments;
+        return $this->canManageApplicationPayments;
     }
 
-    public function setCanUpdateApplicationPayments(bool $canUpdateApplicationPayments): self
+    public function setCanManageApplicationPayments(bool $canManageApplicationPayments): self
     {
-        $this->canUpdateApplicationPayments = $canUpdateApplicationPayments;
+        $this->canManageApplicationPayments = $canManageApplicationPayments;
 
         return $this;
     }

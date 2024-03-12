@@ -1362,8 +1362,8 @@ form:
         camp_date_user:
             user: 'Uživatel'
             can_update_applications_state: 'Může schvalovat a zamítat přihlášky'
-            can_update_applications: 'Může editovat přihlášky'
-            can_update_application_payments: 'Může editovat platby u přihlášek'
+            can_manage_applications: 'Může spravovat přihlášky'
+            can_manage_application_payments: 'Může spravovat platby u přihlášek'
 
         camp_date_purchasable_item:
             purchasable_item: 'Volitelná platba'

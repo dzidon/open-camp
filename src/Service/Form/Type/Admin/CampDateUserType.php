@@ -24,13 +24,13 @@ class CampDateUserType extends AbstractType
                 'required' => false,
                 'label'    => 'form.admin.camp_date_user.can_update_applications_state',
             ])
-            ->add('canUpdateApplications', CheckboxType::class, [
+            ->add('canManageApplications', CheckboxType::class, [
                 'required' => false,
-                'label'    => 'form.admin.camp_date_user.can_update_applications',
+                'label'    => 'form.admin.camp_date_user.can_manage_applications',
             ])
-            ->add('canUpdateApplicationPayments', CheckboxType::class, [
+            ->add('canManageApplicationPayments', CheckboxType::class, [
                 'required' => false,
-                'label'    => 'form.admin.camp_date_user.can_update_application_payments',
+                'label'    => 'form.admin.camp_date_user.can_manage_application_payments',
             ])
         ;
     }

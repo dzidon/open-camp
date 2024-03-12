@@ -17,7 +17,7 @@ class ListBreadcrumb extends AbstractBreadcrumb implements BreadcrumbInterface
 
     public function getPreviousRoute(array $options): ?string
     {
-        return 'admin_camp_update';
+        return 'admin_camp_list';
     }
 
     public function buildBreadcrumb(MenuTypeInterface $breadcrumbs, array $options): void
