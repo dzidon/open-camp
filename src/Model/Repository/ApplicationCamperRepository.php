@@ -66,6 +66,33 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
     /**
      * @inheritDoc
      */
+    public function findAcceptedByCampDate(CampDate $campDate): array
+    {
+        $applicationCampers = $this->createQueryBuilder('applicationCamper')
+            ->select('applicationCamper, application, campDate, applicationTripLocationPath')
+            ->leftJoin('applicationCamper.application', 'application')
+            ->leftJoin('applicationCamper.applicationTripLocationPaths', 'applicationTripLocationPath')
+            ->leftJoin('application.campDate', 'campDate')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('application.isAccepted = TRUE')
+            ->andWhere('campDate.id = :campDateId')
+            ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ->addOrderBy('applicationCamper.nameLast', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $this->loadApplicationCamperTripLocationPaths($applicationCampers);
+        $this->loadApplicationCamperAttachments($applicationCampers);
+        $this->loadApplicationCamperFormFieldValues($applicationCampers);
+        $this->loadApplicationCamperPurchasableItemInstances($applicationCampers);
+
+        return $applicationCampers;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getNumberOfOtherCompleteAcceptedApplications(ApplicationCamper $applicationCamper): int
     {
         $application = $applicationCamper->getApplication();
@@ -100,6 +127,23 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
             ->setParameter('bornAt', $bornAt)
             ->andWhere('applicationCamper.gender = :gender')
             ->setParameter('gender', $gender->value)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getNumberOfAcceptedApplicationCampersForCampDate(CampDate $campDate): int
+    {
+        return (int) $this->createQueryBuilder('applicationCamper')
+            ->select('COUNT(applicationCamper.id)')
+            ->leftJoin('applicationCamper.application', 'application')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('application.isAccepted = TRUE')
+            ->andWhere('application.campDate = :campDateId')
+            ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
             ->getQuery()
             ->getSingleScalarResult()
         ;

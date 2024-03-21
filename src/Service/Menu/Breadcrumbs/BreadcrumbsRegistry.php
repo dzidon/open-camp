@@ -5,6 +5,8 @@ namespace App\Service\Menu\Breadcrumbs;
 use App\Library\Menu\MenuType;
 use App\Library\Menu\MenuTypeInterface;
 use LogicException;
+use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
+use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -47,7 +49,19 @@ class BreadcrumbsRegistry implements BreadcrumbsRegistryInterface
             $resolver->setIgnoreUndefined();
 
             $currentBreadcrumb->configureOptions($resolver);
-            $resolvedOptions = $resolver->resolve($options);
+
+            try
+            {
+                $resolvedOptions = $resolver->resolve($options);
+            }
+            catch (ExceptionInterface $exception)
+            {
+                $originalMessage = $exception->getMessage();
+                $currentRoute = $currentBreadcrumb->getSupportedRoute();
+                $newMessage = sprintf('An exception was thrown when building breadcrumbs for route "%s" on breadcrumb "%s": %s', $route, $currentRoute, $originalMessage);
+
+                throw new LogicException(message: $newMessage, previous: $exception);
+            }
 
             array_unshift($breadcrumbsToBuild, [
                 'breadcrumb' => $currentBreadcrumb,

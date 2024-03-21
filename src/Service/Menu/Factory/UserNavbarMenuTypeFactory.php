@@ -72,7 +72,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $menu->addChild($itemCampCatalog);
 
         // admin
-        if ($this->security->isGranted('_any_permission'))
+        if ($this->security->isGranted('admin_access'))
         {
             $text = $this->translator->trans('module.admin');
             $url = $this->urlGenerator->generate('admin_home');

@@ -7,9 +7,9 @@ use App\Model\Event\User\Application\ApplicationStepThreeUpdateEvent;
 use App\Model\Event\User\ApplicationPayment\ApplicationPaymentOfflineDepositCreateEvent;
 use App\Model\Event\User\ApplicationPayment\ApplicationPaymentOfflineRestCreateEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
+use App\Model\Service\Application\ApplicationCompletedMailerInterface;
 use App\Model\Service\Application\ApplicationCompleterInterface;
 use App\Model\Service\Application\ApplicationInvoiceFilesystemInterface;
-use App\Service\Mailer\ApplicationCompletedMailerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -52,7 +52,7 @@ class ApplicationStepThreeUpdateSubscriber
         $this->lastCompletedApplicationIdSessionKey = $lastCompletedApplicationIdSessionKey;
     }
 
-    #[AsEventListener(event: ApplicationStepThreeUpdateEvent::NAME, priority: 600)]
+    #[AsEventListener(event: ApplicationStepThreeUpdateEvent::NAME, priority: 700)]
     public function onCompleteUpdateApplication(ApplicationStepThreeUpdateEvent $event): void
     {
         /** @var User|null $user */
@@ -61,7 +61,7 @@ class ApplicationStepThreeUpdateSubscriber
         $this->applicationCompleter->completeApplication($application, $user);
     }
 
-    #[AsEventListener(event: ApplicationStepThreeUpdateEvent::NAME, priority: 500)]
+    #[AsEventListener(event: ApplicationStepThreeUpdateEvent::NAME, priority: 600)]
     public function onCompleteCreateOfflinePayments(ApplicationStepThreeUpdateEvent $event): void
     {
         $application = $event->getApplication();
@@ -84,6 +84,13 @@ class ApplicationStepThreeUpdateSubscriber
             $event->setIsFlush(false);
             $this->eventDispatcher->dispatch($event, $event::NAME);
         }
+    }
+
+    #[AsEventListener(event: ApplicationStepThreeUpdateEvent::NAME, priority: 500)]
+    public function onUpdateCacheFullPrice(ApplicationStepThreeUpdateEvent $event): void
+    {
+        $application = $event->getApplication();
+        $application->cacheFullPrice();
     }
 
     #[AsEventListener(event: ApplicationStepThreeUpdateEvent::NAME, priority: 400)]

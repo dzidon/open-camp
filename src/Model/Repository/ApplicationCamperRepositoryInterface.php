@@ -34,10 +34,24 @@ interface ApplicationCamperRepositoryInterface
     public function findThoseThatOccupySlotsInCampDate(CampDate $campDate): array;
 
     /**
+     * Finds accepted application campers assigned the given camp date.
+     *
+     * @param CampDate $campDate
+     * @return ApplicationCamper[]
+     */
+    public function findAcceptedByCampDate(CampDate $campDate): array;
+
+    /**
      * Returns the number of other complete (isDraft = false) and accepted applications that contain the given camper.
      *
      * @param ApplicationCamper $applicationCamper
      * @return int
      */
     public function getNumberOfOtherCompleteAcceptedApplications(ApplicationCamper $applicationCamper): int;
+
+    /**
+     * @param CampDate $campDate
+     * @return int
+     */
+    public function getNumberOfAcceptedApplicationCampersForCampDate(CampDate $campDate): int;
 }

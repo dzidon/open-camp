@@ -35,8 +35,7 @@ class FormFieldController extends AbstractController
         $this->formFieldRepository = $formFieldRepository;
     }
 
-    #[IsGranted(new Expression('is_granted("form_field_create") or is_granted("form_field_read") or 
-                                         is_granted("form_field_update") or is_granted("form_field_delete")'))]
+    #[IsGranted(new Expression('is_granted("form_field", "any_admin_permission")'))]
     #[Route('/admin/form-fields', name: 'admin_form_field_list')]
     public function list(MenuTypeFactoryRegistryInterface $menuFactory,
                          FormFactoryInterface             $formFactory,

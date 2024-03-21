@@ -2,11 +2,14 @@
 
 namespace App\Model\Repository;
 
+use App\Library\Data\Admin\ApplicationCampSearchData;
 use App\Library\Data\Admin\CampSearchData as AdminCampSearchData;
 use App\Library\Data\User\CampSearchData as UserCampSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
+use App\Model\Entity\User;
+use App\Model\Library\Camp\AdminApplicationCampsResultInterface;
 use App\Model\Library\Camp\CampLifespanCollectionInterface;
 use App\Model\Library\Camp\UserCampCatalogResultInterface;
 use Symfony\Component\Uid\UuidV4;
@@ -72,6 +75,20 @@ interface CampRepositoryInterface
                                              bool               $showHidden,
                                              int                $currentPage,
                                              int                $pageSize): UserCampCatalogResultInterface;
+
+    /**
+     * Returns admin camp search result with numbers of pending applications for each camp.
+     *
+     * @param ApplicationCampSearchData $data
+     * @param User|null $guide
+     * @param int $currentPage
+     * @param int $pageSize
+     * @return AdminApplicationCampsResultInterface
+     */
+    public function getAdminApplicationCampsResult(ApplicationCampSearchData $data,
+                                                   ?User                     $guide,
+                                                   int                       $currentPage,
+                                                   int                       $pageSize): AdminApplicationCampsResultInterface;
 
     /**
      * Takes an array of camps and fetches a collection of their min start dates and max end dates.

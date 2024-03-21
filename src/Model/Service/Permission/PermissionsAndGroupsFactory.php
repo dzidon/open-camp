@@ -81,6 +81,8 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
      */
     private function createPermissionGroups(): array
     {
+        $groups['application'] = new PermissionGroup('application', 'permission_group.application', 1100);
+        $groups['application_payment'] = new PermissionGroup('application_payment', 'permission_group.application_payment', 1000);
         $groups['user'] = new PermissionGroup('user', 'permission_group.user', 900);
         $groups['role'] = new PermissionGroup('role', 'permission_group.role', 800);
         $groups['camp_category'] = new PermissionGroup('camp_category', 'permission_group.camp_category', 700);
@@ -102,10 +104,21 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
      */
     private function createPermissions(array $groups): array
     {
+        $permissions['application_summary_read'] = new Permission('application_summary_read', 'permission.application_summary_read', 500, $groups['application']);
+        $permissions['application_read'] = new Permission('application_read', 'permission.application_read', 400, $groups['application']);
+        $permissions['application_state_update'] = new Permission('application_state_update', 'permission.application_state_update', 300, $groups['application']);
+        $permissions['application_update'] = new Permission('application_update', 'permission.application_update', 200, $groups['application']);
+        $permissions['application_delete'] = new Permission('application_delete', 'permission.application_delete', 100, $groups['application']);
+        
+        $permissions['application_payment_create'] = new Permission('application_payment_create', 'permission.application_payment_create', 400, $groups['application_payment']);
+        $permissions['application_payment_read'] = new Permission('application_payment_read', 'permission.application_payment_read', 300, $groups['application_payment']);
+        $permissions['application_payment_update'] = new Permission('application_payment_update', 'permission.application_payment_update', 200, $groups['application_payment']);
+        $permissions['application_payment_delete'] = new Permission('application_payment_delete', 'permission.application_payment_delete', 100, $groups['application_payment']);
+        
         $permissions['user_create'] = new Permission('user_create', 'permission.user_create', 500, $groups['user']);
         $permissions['user_read'] = new Permission('user_read', 'permission.user_read', 400, $groups['user']);
         $permissions['user_update'] = new Permission('user_update', 'permission.user_update', 300, $groups['user']);
-        $permissions['user_update_role'] = new Permission('user_update_role', 'permission.user_update_role', 200, $groups['user']);
+        $permissions['user_role_update'] = new Permission('user_role_update', 'permission.user_role_update', 200, $groups['user']);
         $permissions['user_delete'] = new Permission('user_delete', 'permission.user_delete', 100, $groups['user']);
 
         $permissions['role_create'] = new Permission('role_create', 'permission.role_create', 400, $groups['role']);

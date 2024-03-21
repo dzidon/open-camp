@@ -1,0 +1,149 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <a href="{{ path('admin_application_list') }}" class="stretched-link">
+                        <i class="fas fa-list mr-2"></i>
+
+                        {{ 'application.admin.show_all_applications'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <a data-toggle="collapse" href="#search-content" role="button">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-search mr-2"></i>
+                            {{ 'search.label'|trans }}
+                        </h3>
+                    </div>
+                </a>
+
+                <div class="card-body collapse {% if is_search_invalid %} show {% endif %}" id="search-content">
+                    {{ form(form_search) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if is_search_invalid %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-outline card-danger">
+                    <div class="card-header">
+                        <span>
+                            {{ 'search.error.invalid_filter'|trans }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% set paginator = search_result.paginator %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header d-flex w-100 align-items-center">
+                    <h3 class="card-title">
+                        {% if paginator.totalItems > 0 %}
+                            {{ 'search.results'|trans }} ({{ 'search.total'|trans }} {{ paginator.totalItems }})
+                        {% else %}
+                            {{ 'search.error.no_results'|trans }}
+                        {% endif %}
+                    </h3>
+                </div>
+
+                {% if paginator.totalItems > 0 %}
+                    <div class="card-body table-responsive p-0">
+                        <table class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'entity_attribute.camp.name'|trans }}</th>
+                                    <th>{{ 'entity_attribute.camp.camp_category'|trans }}</th>
+                                    <th>{{ 'application.admin.number_of_pending'|trans }}</th>
+                                    <th class="cell-25">{{ 'search.item_action'|trans }}</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% set granted_summary = is_granted('application_summary_read') %}
+                                {% set granted_update =
+                                    is_granted('application', 'any_admin_permission')         or
+                                    is_granted('application_payment', 'any_admin_permission') or
+                                    is_granted('camp_date_guide')
+                                %}
+
+                                {% for camp in paginator.currentPageItems %}
+                                    {% set number_of_pending_applications = search_result.numberOfPendingApplications(camp) %}
+                                    {% set pending_badge_color = "badge-secondary" %}
+
+                                    {% if number_of_pending_applications > 0 %}
+                                        {% set pending_badge_color = "badge-warning" %}
+                                    {% endif %}
+
+                                    <tr class="align-items-center">
+                                        <td class="align-middle">
+                                            <span>
+                                                {{ camp.name }}
+                                            </span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if camp.campCategory is null %}
+                                                <em>{{ 'search.item_no_reference.female'|trans }}</em>
+                                            {% else %}
+                                                <span>{{ camp.campCategory.path }}</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <span class="badge badge-pill {{ pending_badge_color }}">
+                                                {{ number_of_pending_applications }}
+                                            </span>
+                                        </td>
+
+                                        <td class="align-middle cell-25">
+                                            {% if granted_summary or granted_update %}
+                                                {% if granted_summary %}
+                                                    <a href="{{ path('admin_application_camp_summary', {campId: camp.id}) }}"
+                                                       class="btn btn-secondary"
+                                                    >
+                                                        {{ 'route.admin_application_camp_summary'|trans }}
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if granted_update %}
+                                                    <a href="{{ path('admin_application_camp_date_list', {campId: camp.id}) }}"
+                                                       class="btn btn-primary"
+                                                    >
+                                                        {{ 'route.admin_application_camp_date_list'|trans }}
+                                                    </a>
+                                                {% endif %}
+                                            {% else %}
+                                                <span>-</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-footer clearfix">
+                        {{ menu(pagination_menu) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

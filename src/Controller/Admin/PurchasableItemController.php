@@ -39,8 +39,7 @@ class PurchasableItemController extends AbstractController
         $this->purchasableItemRepository = $purchasableItemRepository;
     }
 
-    #[IsGranted(new Expression('is_granted("purchasable_item_create") or is_granted("purchasable_item_read") or 
-                                         is_granted("purchasable_item_update") or is_granted("purchasable_item_delete")'))]
+    #[IsGranted(new Expression('is_granted("purchasable_item", "any_admin_permission")'))]
     #[Route('/admin/purchasable-items', name: 'admin_purchasable_item_list')]
     public function list(MenuTypeFactoryRegistryInterface $menuFactory,
                          FormFactoryInterface             $formFactory,

@@ -1,7 +1,11 @@
-<div>
-    <a href="{{ path('user_login_oauth', {service: 'facebook'}) }}">Facebook</a>
-</div>
+{% if 'facebook' in social_login_services %}
+    <div>
+        <a href="{{ path('user_login_oauth', {service: 'facebook'}) }}">Facebook</a>
+    </div>
+{% endif %}
 
-<div>
-    <a href="{{ path('user_login_oauth', {service: 'google'}) }}">Google</a>
-</div>
+{% if 'google' in social_login_services %}
+    <div>
+        <a href="{{ path('user_login_oauth', {service: 'google'}) }}">Google</a>
+    </div>
+{% endif %}

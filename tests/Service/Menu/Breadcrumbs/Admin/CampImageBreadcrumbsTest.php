@@ -27,7 +27,7 @@ class CampImageBreadcrumbsTest extends KernelTestCase
 
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
-            ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_image_list'],
+            ['admin_home', 'admin_camp_list', 'admin_camp_image_list'],
             $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu)
         );
 
@@ -38,10 +38,6 @@ class CampImageBreadcrumbsTest extends KernelTestCase
         $button = $breadcrumbsMenu->getChild('admin_camp_list');
         $this->assertSame(false, $button->isActive());
         $this->assertSame('/admin/camps', $button->getUrl());
-
-        $button = $breadcrumbsMenu->getChild('admin_camp_update');
-        $this->assertSame(false, $button->isActive());
-        $this->assertSame('/admin/camp/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b/update', $button->getUrl());
 
         $button = $breadcrumbsMenu->getChild('admin_camp_image_list');
         $this->assertSame(true, $button->isActive());
@@ -56,7 +52,7 @@ class CampImageBreadcrumbsTest extends KernelTestCase
 
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
-            ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_image_list', 'admin_camp_image_upload'],
+            ['admin_home', 'admin_camp_list', 'admin_camp_image_list', 'admin_camp_image_upload'],
             $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu)
         );
 
@@ -67,10 +63,6 @@ class CampImageBreadcrumbsTest extends KernelTestCase
         $button = $breadcrumbsMenu->getChild('admin_camp_list');
         $this->assertSame(false, $button->isActive());
         $this->assertSame('/admin/camps', $button->getUrl());
-
-        $button = $breadcrumbsMenu->getChild('admin_camp_update');
-        $this->assertSame(false, $button->isActive());
-        $this->assertSame('/admin/camp/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b/update', $button->getUrl());
 
         $button = $breadcrumbsMenu->getChild('admin_camp_image_list');
         $this->assertSame(false, $button->isActive());
@@ -90,7 +82,7 @@ class CampImageBreadcrumbsTest extends KernelTestCase
 
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
-            ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_image_list', 'admin_camp_image_update'],
+            ['admin_home', 'admin_camp_list', 'admin_camp_image_list', 'admin_camp_image_update'],
             $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu)
         );
 
@@ -101,10 +93,6 @@ class CampImageBreadcrumbsTest extends KernelTestCase
         $button = $breadcrumbsMenu->getChild('admin_camp_list');
         $this->assertSame(false, $button->isActive());
         $this->assertSame('/admin/camps', $button->getUrl());
-
-        $button = $breadcrumbsMenu->getChild('admin_camp_update');
-        $this->assertSame(false, $button->isActive());
-        $this->assertSame('/admin/camp/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b/update', $button->getUrl());
 
         $button = $breadcrumbsMenu->getChild('admin_camp_image_list');
         $this->assertSame(false, $button->isActive());
@@ -124,7 +112,7 @@ class CampImageBreadcrumbsTest extends KernelTestCase
 
         $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
         $this->assertSame(
-            ['admin_home', 'admin_camp_list', 'admin_camp_update', 'admin_camp_image_list', 'admin_camp_image_delete'],
+            ['admin_home', 'admin_camp_list', 'admin_camp_image_list', 'admin_camp_image_delete'],
             $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu)
         );
 
@@ -135,10 +123,6 @@ class CampImageBreadcrumbsTest extends KernelTestCase
         $button = $breadcrumbsMenu->getChild('admin_camp_list');
         $this->assertSame(false, $button->isActive());
         $this->assertSame('/admin/camps', $button->getUrl());
-
-        $button = $breadcrumbsMenu->getChild('admin_camp_update');
-        $this->assertSame(false, $button->isActive());
-        $this->assertSame('/admin/camp/e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b/update', $button->getUrl());
 
         $button = $breadcrumbsMenu->getChild('admin_camp_image_list');
         $this->assertSame(false, $button->isActive());

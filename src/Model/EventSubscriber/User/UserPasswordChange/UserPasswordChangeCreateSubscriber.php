@@ -5,7 +5,7 @@ namespace App\Model\EventSubscriber\User\UserPasswordChange;
 use App\Model\Event\User\UserPasswordChange\UserPasswordChangeCreateEvent;
 use App\Model\Repository\UserPasswordChangeRepositoryInterface;
 use App\Model\Service\UserPasswordChange\UserPasswordChangeFactoryInterface;
-use App\Service\Mailer\UserPasswordChangeMailerInterface;
+use App\Model\Service\UserPasswordChange\UserPasswordChangeMailerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 class UserPasswordChangeCreateSubscriber

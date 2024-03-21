@@ -2,13 +2,18 @@
 
 namespace App\Model\Repository;
 
+use App\Library\Data\Admin\ApplicationSearchData;
 use App\Library\Data\User\ApplicationProfileSearchData;
+use App\Library\Enum\Search\Data\Admin\ApplicationAcceptedStateEnum;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\ApplicationPurchasableItem;
+use App\Model\Entity\Camp;
+use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
 use App\Model\Library\Application\ApplicationsEditableDraftsResult;
+use App\Model\Library\Application\ApplicationTotalRevenueResult;
 use DateTimeImmutable;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -27,15 +32,19 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
 {
     private RequestStack $requestStack;
 
+    private string $currency;
+
     private string $lastCompletedApplicationIdSessionKey;
 
     public function __construct(ManagerRegistry $registry,
                                 RequestStack    $requestStack,
+                                string          $currency,
                                 string          $lastCompletedApplicationIdSessionKey)
     {
         parent::__construct($registry, Application::class);
 
         $this->requestStack = $requestStack;
+        $this->currency = $currency;
         $this->lastCompletedApplicationIdSessionKey = $lastCompletedApplicationIdSessionKey;
     }
 
@@ -217,6 +226,9 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         return new ApplicationsEditableDraftsResult($isApplicationEditableDraft);
     }
 
+    /**
+     * @inheritDoc
+     */
     public function getUserPaginator(ApplicationProfileSearchData $data, User $user, int $currentPage, int $pageSize): DqlPaginator
     {
         $phrase = $data->getPhrase();
@@ -244,6 +256,195 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationPurchasableItems($applications);
 
         return $paginator;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAdminPaginator(ApplicationSearchData $data,
+                                      null|User|CampDate    $guideOrCampDate,
+                                      int                   $currentPage,
+                                      int                   $pageSize): DqlPaginator
+    {
+        $phrase = $data->getPhrase();
+        $sortBy = $data->getSortBy();
+        $isAccepted = $data->getIsAccepted();
+        $isOnlinePaymentMethod = $data->isOnlinePaymentMethod();
+        $invoiceNumberParameter = -1;
+
+        if (is_numeric($phrase))
+        {
+            $invoiceNumberParameter = ltrim($phrase, '0');
+        }
+
+        $queryBuilder = $this->createQueryBuilder('application')
+            ->select('application, paymentMethod')
+            ->leftJoin('application.paymentMethod', 'paymentMethod')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('(
+                application.simpleId      LIKE :phrase      OR
+                application.email         LIKE :phrase      OR
+                application.invoiceNumber =    :invoiceNumber
+            )')
+            ->setParameter('phrase', '%' . $phrase . '%')
+            ->setParameter('invoiceNumber', $invoiceNumberParameter)
+            ->orderBy($sortBy->property(), $sortBy->order())
+            ->groupBy('application.id')
+        ;
+
+        if ($isOnlinePaymentMethod !== null)
+        {
+            $queryBuilder
+                ->andWhere('paymentMethod.isOnline = :isOnline')
+                ->setParameter('isOnline', $isOnlinePaymentMethod)
+            ;
+        }
+
+        if ($isAccepted === ApplicationAcceptedStateEnum::ACCEPTED)
+        {
+            $queryBuilder->andWhere('application.isAccepted = TRUE');
+        }
+        else if ($isAccepted === ApplicationAcceptedStateEnum::DECLINED)
+        {
+            $queryBuilder->andWhere('application.isAccepted = FALSE');
+        }
+        else if ($isAccepted === ApplicationAcceptedStateEnum::UNSETTLED)
+        {
+            $queryBuilder->andWhere('application.isAccepted IS NULL');
+        }
+
+        if ($guideOrCampDate instanceof User)
+        {
+            $guide = $guideOrCampDate;
+
+            $queryBuilder
+                ->leftJoin('application.campDate', 'campDate')
+                ->leftJoin('campDate.campDateUsers', 'campDateUser')
+                ->andWhere('campDateUser.user = :guideId')
+                ->setParameter('guideId', $guide->getId(), UuidType::NAME)
+            ;
+        }
+        else if ($guideOrCampDate instanceof CampDate)
+        {
+            $campDate = $guideOrCampDate;
+
+            $queryBuilder
+                ->andWhere('application.campDate = :campDateId')
+                ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ;
+        }
+
+        $query = $queryBuilder->getQuery();
+        $paginator = new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
+
+        /** @var Application[] $applications */
+        $applications = $paginator->getCurrentPageItems();
+        $this->loadApplicationContacts($applications);
+        $this->loadApplicationCampers($applications);
+        $this->loadApplicationAttachments($applications);
+        $this->loadApplicationFormFieldValues($applications);
+        $this->loadApplicationPayments($applications);
+        $this->loadApplicationPurchasableItems($applications);
+
+        return $paginator;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTotalRevenueForCampResult(Camp $camp): ApplicationTotalRevenueResult
+    {
+        $arrayResult = $this->createQueryBuilder('application')
+            ->select('application.currency, SUM(application.fullPriceCached) AS fullPrice')
+            ->leftJoin('application.campDate', 'campDate')
+            ->leftJoin('campDate.camp', 'camp')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('application.isAccepted = TRUE')
+            ->andWhere('camp.id = :campId')
+            ->setParameter('campId', $camp->getId(), UuidType::NAME)
+            ->groupBy('application.currency')
+            ->orderBy('application.completedAt', 'DESC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        $locale = $this->getLocale();
+        $totalsByCurrency = [];
+
+        foreach ($arrayResult as $data)
+        {
+            $currency = $data['currency'];
+            $total = $data['fullPrice'];
+            $totalsByCurrency[$currency] = $total;
+        }
+
+        return new ApplicationTotalRevenueResult($this->currency, $locale, $totalsByCurrency);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getNumberOfAcceptedApplicationsForCamp(Camp $camp): int
+    {
+        return (int) $this->createQueryBuilder('application')
+            ->select('COUNT(application.id)')
+            ->leftJoin('application.campDate', 'campDate')
+            ->leftJoin('campDate.camp', 'camp')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('application.isAccepted = TRUE')
+            ->andWhere('camp.id = :campId')
+            ->setParameter('campId', $camp->getId(), UuidType::NAME)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getTotalRevenueForCampDateResult(CampDate $campDate): ApplicationTotalRevenueResult
+    {
+        $arrayResult = $this->createQueryBuilder('application')
+            ->select('application.currency AS currency, SUM(application.fullPriceCached) AS fullPrice')
+            ->leftJoin('application.campDate', 'campDate')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('application.isAccepted = TRUE')
+            ->andWhere('campDate.id = :campDateId')
+            ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ->groupBy('application.currency')
+            ->orderBy('application.completedAt', 'DESC')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        $locale = $this->getLocale();
+        $totalsByCurrency = [];
+
+        foreach ($arrayResult as $data)
+        {
+            $currency = $data['currency'];
+            $total = $data['fullPrice'];
+            $totalsByCurrency[$currency] = $total;
+        }
+
+        return new ApplicationTotalRevenueResult($this->currency, $locale, $totalsByCurrency);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getNumberOfAcceptedApplicationsForCampDate(CampDate $campDate): int
+    {
+        return (int) $this->createQueryBuilder('application')
+            ->select('COUNT(application.id)')
+            ->leftJoin('application.campDate', 'campDate')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('application.isAccepted = TRUE')
+            ->andWhere('campDate.id = :campDateId')
+            ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 
     private function loadApplicationContacts(null|array|Application $applications): void
@@ -545,5 +746,11 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $currentRequest = $this->requestStack->getCurrentRequest();
 
         return $currentRequest->getSession();
+    }
+
+    private function getLocale(): string
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        return $request->getLocale();
     }
 }

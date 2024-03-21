@@ -27,6 +27,7 @@ twig:
         date_format: '%app.date_format%'
         date_time_format: '%app.date_time_format%'
         national_identifier_enabled: '%app.national_identifier%'
+        social_login_services: '%app.social_login_services%'
 
 when@test:
     twig:

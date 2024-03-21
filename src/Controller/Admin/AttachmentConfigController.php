@@ -36,8 +36,7 @@ class AttachmentConfigController extends AbstractController
         $this->attachmentConfigRepository = $attachmentConfigRepository;
     }
 
-    #[IsGranted(new Expression('is_granted("attachment_config_create") or is_granted("attachment_config_read") or 
-                                         is_granted("attachment_config_update") or is_granted("attachment_config_delete")'))]
+    #[IsGranted(new Expression('is_granted("attachment_config", "any_admin_permission")'))]
     #[Route('/admin/attachment-configs', name: 'admin_attachment_config_list')]
     public function list(FileExtensionRepositoryInterface $fileExtensionRepository,
                          MenuTypeFactoryRegistryInterface $menuFactory,

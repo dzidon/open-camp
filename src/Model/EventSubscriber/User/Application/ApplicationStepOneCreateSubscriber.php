@@ -36,7 +36,7 @@ class ApplicationStepOneCreateSubscriber
         $this->dataTransfer = $dataTransfer;
     }
 
-    #[AsEventListener(event: ApplicationStepOneCreateEvent::NAME, priority: 400)]
+    #[AsEventListener(event: ApplicationStepOneCreateEvent::NAME, priority: 500)]
     public function onCreateInstantiateEntity(ApplicationStepOneCreateEvent $event): void
     {
         $data = $event->getApplicationStepOneData();
@@ -47,7 +47,7 @@ class ApplicationStepOneCreateSubscriber
         $event->setApplication($application);
     }
 
-    #[AsEventListener(event: ApplicationStepOneCreateEvent::NAME, priority: 300)]
+    #[AsEventListener(event: ApplicationStepOneCreateEvent::NAME, priority: 400)]
     public function onCreateInstantiatePurchasableItems(ApplicationStepOneCreateEvent $event): void
     {
         $campDate = $event->getCampDate();
@@ -61,7 +61,7 @@ class ApplicationStepOneCreateSubscriber
         }
     }
 
-    #[AsEventListener(event: ApplicationStepOneCreateEvent::NAME, priority: 200)]
+    #[AsEventListener(event: ApplicationStepOneCreateEvent::NAME, priority: 300)]
     public function onCreateSetApplicationCampersTripsInThePast(ApplicationStepOneCreateEvent $event): void
     {
         $application = $event->getApplication();
@@ -72,6 +72,13 @@ class ApplicationStepOneCreateSubscriber
             $numberOfOtherCompleteAcceptedApplications = $this->applicationCamperRepository->getNumberOfOtherCompleteAcceptedApplications($applicationCamper);
             $applicationCamper->setTripsInThePast($numberOfOtherCompleteAcceptedApplications);
         }
+    }
+
+    #[AsEventListener(event: ApplicationStepOneCreateEvent::NAME, priority: 200)]
+    public function onCreateCacheFullPrice(ApplicationStepOneCreateEvent $event): void
+    {
+        $application = $event->getApplication();
+        $application->cacheFullPrice();
     }
 
     #[AsEventListener(event: ApplicationStepOneCreateEvent::NAME, priority: 100)]

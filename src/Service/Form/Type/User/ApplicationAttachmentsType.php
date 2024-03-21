@@ -3,7 +3,6 @@
 namespace App\Service\Form\Type\User;
 
 use App\Library\Data\User\ApplicationAttachmentsData;
-use App\Service\Form\Type\Common\ApplicationAttachmentType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;

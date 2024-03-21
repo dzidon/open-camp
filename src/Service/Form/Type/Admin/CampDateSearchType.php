@@ -50,8 +50,8 @@ class CampDateSearchType extends AbstractType
                 'placeholder' => 'form.common.choice.irrelevant',
                 'required'    => false,
                 'choices'     => [
-                    'form.admin.camp_date_search.is_historical.choices.current_and_upcoming' => false,
-                    'form.admin.camp_date_search.is_historical.choices.historical'           => true,
+                    'form.admin.camp_date_search.is_historical.options.current_and_upcoming' => false,
+                    'form.admin.camp_date_search.is_historical.options.historical'           => true,
                 ],
                 'label' => 'form.admin.camp_date_search.is_historical.label',
             ])

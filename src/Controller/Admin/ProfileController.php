@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin/profile')]
 class ProfileController extends AbstractController
 {
-    #[IsGranted('_any_permission')]
+    #[IsGranted('admin_access')]
     #[Route('', name: 'admin_profile')]
     public function profile(EventDispatcherInterface      $eventDispatcher,
                             DataTransferRegistryInterface $dataTransfer,

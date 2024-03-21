@@ -46,7 +46,19 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Groups
          */
-        $this->assertCount(9, $groupsSerialized);
+        $this->assertCount(11, $groupsSerialized);
+
+        $this->assertContains([
+            'name'     => 'application',
+            'priority' => 1100,
+            'label'    => 'permission_group.application',
+        ], $groupsSerialized);
+
+        $this->assertContains([
+            'name'     => 'application_payment',
+            'priority' => 1000,
+            'label'    => 'permission_group.application_payment',
+        ], $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'user',
@@ -105,7 +117,72 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Permissions
          */
-        $this->assertCount(37, $permissionsSerialized);
+        $this->assertCount(46, $permissionsSerialized);
+
+        // application
+        $this->assertContains([
+            'name'             => 'application_summary_read',
+            'priority'         => 500,
+            'label'            => 'permission.application_summary_read',
+            'permission_group' => 'application',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'application_read',
+            'priority'         => 400,
+            'label'            => 'permission.application_read',
+            'permission_group' => 'application',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'application_state_update',
+            'priority'         => 300,
+            'label'            => 'permission.application_state_update',
+            'permission_group' => 'application',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'application_update',
+            'priority'         => 200,
+            'label'            => 'permission.application_update',
+            'permission_group' => 'application',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'application_delete',
+            'priority'         => 100,
+            'label'            => 'permission.application_delete',
+            'permission_group' => 'application',
+        ], $permissionsSerialized);
+
+        // application payment
+        $this->assertContains([
+            'name'             => 'application_payment_create',
+            'priority'         => 400,
+            'label'            => 'permission.application_payment_create',
+            'permission_group' => 'application_payment',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'application_payment_read',
+            'priority'         => 300,
+            'label'            => 'permission.application_payment_read',
+            'permission_group' => 'application_payment',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'application_payment_update',
+            'priority'         => 200,
+            'label'            => 'permission.application_payment_update',
+            'permission_group' => 'application_payment',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'application_payment_delete',
+            'priority'         => 100,
+            'label'            => 'permission.application_payment_delete',
+            'permission_group' => 'application_payment',
+        ], $permissionsSerialized);
 
         // user
         $this->assertContains([
@@ -130,9 +207,9 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         ], $permissionsSerialized);
 
         $this->assertContains([
-            'name'             => 'user_update_role',
+            'name'             => 'user_role_update',
             'priority'         => 200,
-            'label'            => 'permission.user_update_role',
+            'label'            => 'permission.user_role_update',
             'permission_group' => 'user',
         ], $permissionsSerialized);
 

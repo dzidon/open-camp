@@ -35,8 +35,7 @@ class DiscountConfigController extends AbstractController
         $this->discountConfigRepository = $discountConfigRepository;
     }
 
-    #[IsGranted(new Expression('is_granted("discount_config_create") or is_granted("discount_config_read") or 
-                                         is_granted("discount_config_update") or is_granted("discount_config_delete")'))]
+    #[IsGranted(new Expression('is_granted("discount_config", "any_admin_permission")'))]
     #[Route('/admin/discount-configs', name: 'admin_discount_config_list')]
     public function list(MenuTypeFactoryRegistryInterface $menuFactory,
                          FormFactoryInterface             $formFactory,

@@ -4,21 +4,12 @@ controllers:
         namespace: App\Controller
 
     type: attribute
-    # prefix: '/{_locale<%app.locales%>}'
-
-user_home_no_locale:
-    path: '/'
-    prefix: ''
-    controller: App\Controller\User\HomeController::noLocale
 
 user_login_oauth_check:
-    path: '/login/{service<%app.social_login_services%>}/check'
-    prefix: ''
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    path: '/login/{service}/check'
 
 user_logout:
     path: '/logout'
-    prefix: ''
 
 when@test:
     # By default, locale is not required when generating URLs in test environment.
@@ -28,7 +19,6 @@ when@test:
             namespace: App\Controller
 
         type: attribute
-        prefix: ''
 
     route_mock:
         path: '/route/mock'

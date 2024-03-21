@@ -34,13 +34,13 @@ class PermissionVoterTest extends KernelTestCase
         $user3 = $userRepository->findOneByEmail('jeff@gmail.com');
 
         $tokenMock = $this->createTokenMock($user1);
-        $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, null, ['_any_permission']));
+        $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, null, ['any_admin_permission']));
 
         $tokenMock = $this->createTokenMock($user2);
-        $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, null, ['_any_permission']));
+        $this->assertSame(VoterInterface::ACCESS_GRANTED, $voter->vote($tokenMock, null, ['any_admin_permission']));
 
         $tokenMock = $this->createTokenMock($user3);
-        $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, null, ['_any_permission']));
+        $this->assertSame(VoterInterface::ACCESS_DENIED, $voter->vote($tokenMock, null, ['any_admin_permission']));
     }
 
     public function testVoteNoUser(): void

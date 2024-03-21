@@ -37,8 +37,7 @@ class RoleController extends AbstractController
         $this->roleRepository = $roleRepository;
     }
 
-    #[IsGranted(new Expression('is_granted("role_create") or is_granted("role_read") or 
-                                         is_granted("role_update") or is_granted("role_delete")'))]
+    #[IsGranted(new Expression('is_granted("role", "any_admin_permission")'))]
     #[Route('/admin/roles', name: 'admin_role_list')]
     public function list(MenuTypeFactoryRegistryInterface $menuFactory,
                          FormFactoryInterface             $formFactory,

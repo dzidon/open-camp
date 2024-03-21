@@ -11,7 +11,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[Route('/admin')]
 class HomeController extends AbstractController
 {
-    #[IsGranted('_any_permission')]
+    #[IsGranted('admin_access')]
     #[Route('', name: 'admin_home')]
     public function index(): Response
     {

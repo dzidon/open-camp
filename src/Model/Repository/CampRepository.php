@@ -2,6 +2,7 @@
 
 namespace App\Model\Repository;
 
+use App\Library\Data\Admin\ApplicationCampSearchData;
 use App\Library\Data\Admin\CampSearchData as AdminCampSearchData;
 use App\Library\Data\User\CampSearchData as UserCampSearchData;
 use App\Library\Enum\Search\Data\User\CampSortEnum;
@@ -12,6 +13,8 @@ use App\Model\Entity\Camp;
 use App\Model\Entity\CampCategory;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\CampImage;
+use App\Model\Entity\User;
+use App\Model\Library\Camp\AdminApplicationCampsResult;
 use App\Model\Library\Camp\CampLifespan;
 use App\Model\Library\Camp\CampLifespanCollection;
 use App\Model\Library\Camp\UserCampCatalogResult;
@@ -414,6 +417,90 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         ;
 
         return new UserCampCatalogResult($paginator, $campImages, $campDates, $openCampDates);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAdminApplicationCampsResult(ApplicationCampSearchData $data,
+                                                   ?User                     $guide,
+                                                   int                       $currentPage,
+                                                   int                       $pageSize): AdminApplicationCampsResult
+    {
+        // paginator
+
+        $sortBy = $data->getSortBy();
+        $phrase = $data->getPhrase();
+
+        $queryBuilder = $this->createQueryBuilder('camp')
+            ->select('camp, COUNT(application.id) AS HIDDEN numberOfPendingApplications')
+            ->leftJoin(CampDate::class, 'campDate', 'WITH', 'camp.id = campDate.camp')
+            ->leftJoin(Application::class, 'application', 'WITH', '
+                campDate.id = application.campDate AND
+                application.isAccepted IS NULL
+            ')
+            ->andWhere('camp.name LIKE :phrase')
+            ->setParameter('phrase', '%' . $phrase . '%')
+            ->groupBy('camp.id')
+            ->orderBy($sortBy->property(), $sortBy->order())
+        ;
+
+        if ($guide !== null)
+        {
+            $queryBuilder
+                ->leftJoin('campDate.campDateUsers', 'campDateUser')
+                ->andWhere('campDateUser.user = :guideId')
+                ->setParameter('guideId', $guide->getId(), UuidType::NAME)
+            ;
+        }
+
+        $query = $queryBuilder->getQuery();
+        $paginator = new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
+
+        // numbers of pending applications
+
+        $camps = $paginator->getCurrentPageItems();
+        $campBinaryIds = array_map(function (Camp $camp) {
+            return $camp->getId()->toBinary();
+        }, $camps);
+
+        $queryBuilder = $this->createQueryBuilder('camp')
+            ->select('camp.id, COUNT(application.id) AS numberOfPendingApplications')
+            ->leftJoin(CampDate::class, 'campDate', 'WITH', 'camp.id = campDate.camp')
+            ->leftJoin(Application::class, 'application', 'WITH', '
+                campDate.id = application.campDate AND
+                application.isAccepted IS NULL
+            ')
+            ->andWhere('camp.id IN (:ids)')
+            ->setParameter('ids', $campBinaryIds)
+            ->groupBy('camp.id')
+        ;
+
+        if ($guide !== null)
+        {
+            $queryBuilder
+                ->leftJoin('campDate.campDateUsers', 'campDateUser')
+                ->andWhere('campDateUser.user = :guideId')
+                ->setParameter('guideId', $guide->getId(), UuidType::NAME)
+            ;
+        }
+
+        $queryResult = $queryBuilder
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        $numbersOfPendingApplications = [];
+
+        foreach ($queryResult as $data)
+        {
+            /** @var UuidV4 $campId */
+            $campId = $data['id'];
+            $campIdString = $campId->toRfc4122();
+            $numbersOfPendingApplications[$campIdString] = $data['numberOfPendingApplications'];
+        }
+
+        return new AdminApplicationCampsResult($paginator, $numbersOfPendingApplications);
     }
 
     /**

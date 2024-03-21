@@ -41,8 +41,7 @@ class TripLocationPathController extends AbstractController
         $this->tripLocationPathRepository = $tripLocationPathRepository;
     }
 
-    #[IsGranted(new Expression('is_granted("trip_location_path_create") or is_granted("trip_location_path_read") or 
-                                         is_granted("trip_location_path_update") or is_granted("trip_location_path_delete")'))]
+    #[IsGranted(new Expression('is_granted("trip_location_path", "any_admin_permission")'))]
     #[Route('/admin/trip-location-paths', name: 'admin_trip_location_path_list')]
     public function list(MenuTypeFactoryRegistryInterface $menuFactory,
                          FormFactoryInterface             $formFactory,

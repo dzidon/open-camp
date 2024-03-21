@@ -43,10 +43,6 @@ parameters:
     app.date_format: 'd.m.Y'
     app.date_time_format: 'd.m.Y H:i'
     app.currency: 'CZK'
-    app.locales: 'cs' # Enabled locales (languages) divided by "|"
-    app.locale_names:
-        cs: 'Česky'
-
     app.phone_number_default_locale: 'CZ'
     app.phone_number_format: 1 # e.g. +420 123 456 789
     app.national_identifier: true
@@ -60,7 +56,7 @@ parameters:
     app.registration_lifespan: '1 hour'
     app.max_active_password_changes_per_user: 5
     app.password_change_lifespan: '1 hour'
-    app.social_login_services: 'facebook|google'
+    app.social_login_services: [ 'facebook', 'google' ]
     app.social_login_scopes:
         facebook:
             - 'public_profile'
@@ -71,7 +67,6 @@ parameters:
             - 'https://www.googleapis.com/auth/userinfo.email'
 
     # Cookies
-    app.cookie_lifespan_locale: '1 year'
     app.cookie_lifespan_application_draft: '1 year'
     app.cookie_prefix_application_draft: 'application_draft_'
 
@@ -80,14 +75,12 @@ parameters:
 
     # Applications
     app.application_purchasable_items_individual: true
-    app.sale_camper_recurring: true
-    app.sale_camper_siblings: true
     app.contact_email_mandatory: false
     app.contact_phone_number_mandatory: true
     app.application_invoice_number_length: 10
     app.application_simple_id_length: 6
     app.application_simple_id_characters: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    app.enabled_payment_methods: ['card', 'transfer', 'invoice']
+    app.enabled_payment_methods: [ 'card', 'transfer', 'invoice' ]
 
     # Validation
     app.national_identifier_regex: '#^(\d\d)(\d\d)(\d\d)( |/)?(\d\d\d)(\d?)$#'
@@ -201,28 +194,36 @@ services:
     App\Model\Service\Application\ApplicationInvoiceFilesystem:
         arguments:
             $publicFilePathPrefix: '%app.public_file_path_prefix%'
+
+    App\Model\Service\Application\ApplicationInvoiceNumberFormatter:
+        arguments:
             $invoiceNumberLength: '%app.application_invoice_number_length%'
+
+    App\Model\Service\Application\ApplicationCompletedMailer:
+        arguments:
+            $emailFrom: '%app.email_no_reply%'
 
     App\Model\Service\Contact\ContactDataFactory:
         arguments:
             $isEmailMandatory: '%app.contact_email_mandatory%'
             $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
 
-    App\Model\Service\PaymentMethod\OfflineInstructions\InvoiceInstructionRenderer:
+    App\Model\Service\UserPasswordChange\UserPasswordChangeMailer:
         arguments:
-            $invoiceNumberLength: '%app.application_invoice_number_length%'
+            $emailFrom: '%app.email_no_reply%'
+
+    App\Model\Service\UserRegistration\UserRegistrationMailer:
+        arguments:
+            $emailFrom: '%app.email_no_reply%'
 
     App\Model\Repository\ApplicationRepository:
         arguments:
+            $currency: '%app.currency%'
             $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
 
     App\Model\Repository\PaymentMethodRepository:
         arguments:
             $enabledPaymentMethods: '%app.enabled_payment_methods%'
-
-    App\Service\Filesystem\FilePathTransformer:
-        arguments:
-            $kernelProjectDir: '%kernel.project_dir%'
 
     App\Service\Logger\ModelLogger:
         arguments:
@@ -286,11 +287,11 @@ services:
         arguments:
             $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
-    App\Service\Form\Type\Common\ContactType:
+    App\Service\Form\Type\User\ContactType:
         arguments:
             $phoneNumberFormat: '%app.phone_number_format%'
 
-    App\Service\Form\Type\Common\CamperType:
+    App\Service\Form\Type\User\CamperType:
         arguments:
             $isNationalIdentifierEnabled: '%app.national_identifier%'
 
@@ -302,40 +303,9 @@ services:
         arguments:
             $menuTheme: '%app.menu_theme%'
 
-    App\Service\Menu\Factory\LocaleSwitchMenuTypeFactory:
-        arguments:
-            $locales: '%app.locales%'
-            $localeNames: '%app.locale_names%'
-
-    App\Service\Translation\LocaleGuesser:
-        arguments:
-            $locales: '%app.locales%'
-            $defaultLocale: '%kernel.default_locale%'
-
-    App\Service\Translation\LocaleRedirectResponseFactory:
-        arguments:
-            $locales: '%app.locales%'
-
     App\Service\Routing\RouteNamer:
         arguments:
             $companyName: '%app.company_name%'
-
-    App\Service\EventSubscriber\LocaleCookieSubscriber:
-        arguments:
-            $locales: '%app.locales%'
-            $cookieLifespan: '%app.cookie_lifespan_locale%'
-
-    App\Service\Mailer\UserRegistrationMailer:
-        arguments:
-            $emailFrom: '%app.email_no_reply%'
-
-    App\Service\Mailer\UserPasswordChangeMailer:
-        arguments:
-            $emailFrom: '%app.email_no_reply%'
-
-    App\Service\Mailer\ApplicationCompletedMailer:
-        arguments:
-            $emailFrom: '%app.email_no_reply%'
 
     App\Service\Data\Transfer\User\BillingDataTransfer:
         arguments:

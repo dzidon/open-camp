@@ -3,6 +3,7 @@
 namespace App\Model\Service\PaymentMethod\OfflineInstructions;
 
 use App\Model\Entity\Application;
+use App\Model\Service\Application\ApplicationInvoiceNumberFormatterInterface;
 use Twig\Environment;
 
 /**
@@ -10,13 +11,13 @@ use Twig\Environment;
  */
 class InvoiceInstructionRenderer extends AbstractOfflineInstructionRenderer
 {
-    private int $invoiceNumberLength;
+    private ApplicationInvoiceNumberFormatterInterface $invoiceNumberFormatter;
 
-    public function __construct(Environment $twig, int $invoiceNumberLength)
+    public function __construct(Environment $twig, ApplicationInvoiceNumberFormatterInterface $invoiceNumberFormatter)
     {
         parent::__construct($twig);
 
-        $this->invoiceNumberLength = $invoiceNumberLength;
+        $this->invoiceNumberFormatter = $invoiceNumberFormatter;
     }
 
     /**
@@ -34,9 +35,7 @@ class InvoiceInstructionRenderer extends AbstractOfflineInstructionRenderer
      */
     public function getOfflineInstructionHtml(Application $application, array $options = []): string
     {
-        $invoiceNumberString = (string) $application->getInvoiceNumber();
-        $invoiceNumberFormatted = str_pad($invoiceNumberString, $this->invoiceNumberLength, "0", STR_PAD_LEFT);
-
+        $invoiceNumberFormatted = $this->invoiceNumberFormatter->getFormattedInvoiceNumber($application);
         $template = $this->twig->load('_fragment/_payment_instruction/_invoice.html.twig');
 
         return $template->render([

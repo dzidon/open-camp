@@ -4,6 +4,7 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\CampDate;
 use App\Model\Entity\CampDateUser;
+use App\Model\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 
@@ -50,6 +51,41 @@ class CampDateUserRepository extends AbstractRepository implements CampDateUserR
             ->addOrderBy('user.guidePriority', 'DESC')
             ->getQuery()
             ->getResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findByUser(User $user): array
+    {
+        return $this->createQueryBuilder('campDateUser')
+            ->select('campDateUser, campDate, user')
+            ->leftJoin('campDateUser.campDate', 'campDate')
+            ->leftJoin('campDateUser.user', 'user')
+            ->andWhere('campDateUser.user = :userId')
+            ->setParameter('userId', $user->getId(), UuidType::NAME)
+            ->addOrderBy('campDate.startAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findOneForCampDateAndUser(CampDate $campDate, User $user): ?CampDateUser
+    {
+        return $this->createQueryBuilder('campDateUser')
+            ->select('campDateUser, campDate, user')
+            ->leftJoin('campDateUser.campDate', 'campDate')
+            ->leftJoin('campDateUser.user', 'user')
+            ->andWhere('campDateUser.campDate = :campDateId')
+            ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ->andWhere('campDateUser.user = :userId')
+            ->setParameter('userId', $user->getId(), UuidType::NAME)
+            ->getQuery()
+            ->getOneOrNullResult()
         ;
     }
 }

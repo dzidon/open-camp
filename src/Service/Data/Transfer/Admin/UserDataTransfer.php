@@ -73,7 +73,7 @@ class UserDataTransfer implements DataTransferInterface
             $this->transferRegistry->fillEntity($billingData, $user);
         }
 
-        if ($this->security->isGranted('user_update_role'))
+        if ($this->security->isGranted('user_role_update'))
         {
             $user->setRole($userData->getRole());
         }

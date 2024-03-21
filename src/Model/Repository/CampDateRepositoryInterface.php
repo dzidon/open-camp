@@ -2,11 +2,14 @@
 
 namespace App\Model\Repository;
 
+use App\Library\Data\Admin\ApplicationCampDateSearchData;
 use App\Library\Data\Admin\CampDateSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\User;
 use App\Model\Library\Camp\UserUpcomingCampDatesResultInterface;
+use App\Model\Library\CampDate\AdminApplicationCampDatesResultInterface;
 use DateTimeInterface;
 use Symfony\Component\Uid\UuidV4;
 
@@ -75,4 +78,20 @@ interface CampDateRepositoryInterface
      * @return PaginatorInterface
      */
     public function getAdminPaginator(CampDateSearchData $data, Camp $camp, int $currentPage, int $pageSize): PaginatorInterface;
+
+    /**
+     * Returns admin camp date search result with numbers of pending applications for each camp date.
+     *
+     * @param ApplicationCampDateSearchData $data
+     * @param Camp $camp
+     * @param User|null $guide
+     * @param int $currentPage
+     * @param int $pageSize
+     * @return AdminApplicationCampDatesResultInterface
+     */
+    public function getAdminApplicationCampDatesResult(ApplicationCampDateSearchData $data,
+                                                       Camp                          $camp,
+                                                       ?User                         $guide,
+                                                       int                           $currentPage,
+                                                       int                           $pageSize): AdminApplicationCampDatesResultInterface;
 }

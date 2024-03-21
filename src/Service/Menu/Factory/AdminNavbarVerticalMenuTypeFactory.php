@@ -48,14 +48,14 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
 
         $menu = new MenuType(self::getMenuIdentifier(), 'navbar_admin_vertical_root');
 
-        // back to user web
+        // back to user website
         $text = $this->translator->trans('module.user');
         $url = $this->urlGenerator->generate('user_home');
         $itemDashboard = new MenuIconType('user_home', 'navbar_admin_vertical_item', $text, $url, 'fas fa-backward');
         $menu->addChild($itemDashboard);
 
         // dashboard
-        if ($this->security->isGranted('_any_permission'))
+        if ($this->security->isGranted('admin_access'))
         {
             $text = $this->translator->trans('route.admin_home');
             $url = $this->urlGenerator->generate('admin_home');
@@ -65,36 +65,38 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
         }
 
         // applications
-        $isGrantedFormField =
-            $this->security->isGranted('form_field_create') || $this->security->isGranted('form_field_read') ||
-            $this->security->isGranted('form_field_update') || $this->security->isGranted('form_field_delete')
-        ;
+        $isGrantedApplication = $this->security->isGranted('application', 'any_admin_permission');
+        $isGrantedApplicationPayment = $this->security->isGranted('application_payment', 'any_admin_permission');
+        $isGrantedApplicationAccessAsGuideList = $this->security->isGranted('camp_date_guide');
 
-        $isGrantedAttachmentConfig =
-            $this->security->isGranted('attachment_config_create') || $this->security->isGranted('attachment_config_read') ||
-            $this->security->isGranted('attachment_config_update') || $this->security->isGranted('attachment_config_delete')
-        ;
+        if ($isGrantedApplication || $isGrantedApplicationPayment || $isGrantedApplicationAccessAsGuideList)
+        {
+            $active =
+                $route === 'admin_application_camp_list'      || $route === 'admin_application_camp_summary'      ||
+                $route === 'admin_application_camp_date_list' || $route === 'admin_application_camp_date_summary' ||
+                $route === 'admin_application_list'           || $route === 'admin_application_read'              ||
+                $route === 'admin_application_edit'           || $route === 'admin_application_delete'
+            ;
 
-        $isGrantedDiscountConfig =
-            $this->security->isGranted('discount_config_create') || $this->security->isGranted('discount_config_read') ||
-            $this->security->isGranted('discount_config_update') || $this->security->isGranted('discount_config_delete')
-        ;
+            $text = $this->translator->trans('route.admin_application_camp_list');
+            $url = $this->urlGenerator->generate('admin_application_camp_list');
+            $itemApplications = new MenuIconType('admin_application_camp_list', 'navbar_admin_vertical_item', $text, $url, 'fas fa-sticky-note');
+            $menu->addChild($itemApplications);
+            $itemApplications->setActive($active, $active);
+        }
 
-        $isGrantedTripLocationPath =
-            $this->security->isGranted('trip_location_path_create') || $this->security->isGranted('trip_location_path_read') ||
-            $this->security->isGranted('trip_location_path_update') || $this->security->isGranted('trip_location_path_delete')
-        ;
-
-        $isGrantedPurchasableItem =
-            $this->security->isGranted('purchasable_item_create') || $this->security->isGranted('purchasable_item_read') ||
-            $this->security->isGranted('purchasable_item_update') || $this->security->isGranted('purchasable_item_delete')
-        ;
+        // components
+        $isGrantedFormField = $this->security->isGranted('form_field', 'any_admin_permission');
+        $isGrantedAttachmentConfig = $this->security->isGranted('attachment_config', 'any_admin_permission');
+        $isGrantedDiscountConfig = $this->security->isGranted('discount_config', 'any_admin_permission');
+        $isGrantedTripLocationPath = $this->security->isGranted('trip_location_path', 'any_admin_permission');
+        $isGrantedPurchasableItem = $this->security->isGranted('purchasable_item', 'any_admin_permission');
 
         if ($isGrantedFormField || $isGrantedAttachmentConfig || $isGrantedTripLocationPath || $isGrantedPurchasableItem || $isGrantedDiscountConfig)
         {
-            $text = $this->translator->trans('route.admin_application_list');
-            $itemApplicationsParent = new MenuIconType('parent_applications', 'navbar_admin_vertical_item', $text, '#', 'fas fa-sticky-note');
-            $menu->addChild($itemApplicationsParent);
+            $text = $this->translator->trans('menu.navbar_admin_vertical.components');
+            $itemComponentsParent = new MenuIconType('parent_applications', 'navbar_admin_vertical_item', $text, '#', 'fas fa-puzzle-piece');
+            $menu->addChild($itemComponentsParent);
 
             if ($isGrantedFormField)
             {
@@ -106,7 +108,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                 $text = $this->translator->trans('route.admin_form_field_list');
                 $url = $this->urlGenerator->generate('admin_form_field_list');
                 $itemFormFields = new MenuIconType('admin_form_field_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
-                $itemApplicationsParent->addChild($itemFormFields);
+                $itemComponentsParent->addChild($itemFormFields);
                 $itemFormFields->setActive($active, $active);
             }
 
@@ -120,7 +122,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                 $text = $this->translator->trans('route.admin_attachment_config_list');
                 $url = $this->urlGenerator->generate('admin_attachment_config_list');
                 $itemAttachmentConfigs = new MenuIconType('admin_attachment_config_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
-                $itemApplicationsParent->addChild($itemAttachmentConfigs);
+                $itemComponentsParent->addChild($itemAttachmentConfigs);
                 $itemAttachmentConfigs->setActive($active, $active);
             }
 
@@ -137,7 +139,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                 $text = $this->translator->trans('route.admin_trip_location_path_list');
                 $url = $this->urlGenerator->generate('admin_trip_location_path_list');
                 $itemTripLocationPaths = new MenuIconType('admin_trip_location_path_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
-                $itemApplicationsParent->addChild($itemTripLocationPaths);
+                $itemComponentsParent->addChild($itemTripLocationPaths);
                 $itemTripLocationPaths->setActive($active, $active);
             }
 
@@ -157,7 +159,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                 $text = $this->translator->trans('route.admin_purchasable_item_list');
                 $url = $this->urlGenerator->generate('admin_purchasable_item_list');
                 $itemPurchasableItems = new MenuIconType('admin_purchasable_item_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
-                $itemApplicationsParent->addChild($itemPurchasableItems);
+                $itemComponentsParent->addChild($itemPurchasableItems);
                 $itemPurchasableItems->setActive($active, $active);
             }
             
@@ -171,7 +173,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                 $text = $this->translator->trans('route.admin_discount_config_list');
                 $url = $this->urlGenerator->generate('admin_discount_config_list');
                 $itemDiscountConfigs = new MenuIconType('admin_discount_config_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
-                $itemApplicationsParent->addChild($itemDiscountConfigs);
+                $itemComponentsParent->addChild($itemDiscountConfigs);
                 $itemDiscountConfigs->setActive($active, $active);
             }
         }
@@ -233,7 +235,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
         $isGrantedUser =
             $this->security->isGranted('user_create') || $this->security->isGranted('user_read') ||
             $this->security->isGranted('user_update') || $this->security->isGranted('user_delete') ||
-            $this->security->isGranted('user_update_role')
+            $this->security->isGranted('user_role_update')
         ;
 
         $isGrantedRole =

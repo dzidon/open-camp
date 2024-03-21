@@ -108,7 +108,7 @@ class UserDataTransferTest extends KernelTestCase
 
     public function testFillEntityUserUpdateRoleGranted(): void
     {
-        $dataTransfer = $this->getUserDataTransfer(['user_update_role']);
+        $dataTransfer = $this->getUserDataTransfer(['user_role_update']);
 
         $expectedEmail = 'abc@gmail.com';
         $expectedRole = new Role('label');

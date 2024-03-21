@@ -42,8 +42,7 @@ class CampController extends AbstractController
         $this->campRepository = $campRepository;
     }
 
-    #[IsGranted(new Expression('is_granted("camp_create") or is_granted("camp_read") or 
-                                         is_granted("camp_update") or is_granted("camp_delete")'))]
+    #[IsGranted(new Expression('is_granted("camp", "any_admin_permission")'))]
     #[Route('/admin/camps', name: 'admin_camp_list')]
     public function list(FormFactoryInterface             $formFactory,
                          MenuTypeFactoryRegistryInterface $menuFactory,

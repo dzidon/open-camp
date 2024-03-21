@@ -14,6 +14,8 @@ class PermissionVoter implements VoterInterface
 {
     private ?array $permissionNames = null;
 
+    private ?array $permissionGroupedNames = null;
+
     private PermissionRepositoryInterface $permissionRepository;
 
     public function __construct(PermissionRepositoryInterface $permissionRepository)
@@ -34,11 +36,16 @@ class PermissionVoter implements VoterInterface
             return $vote;
         }
 
-        $this->loadPermissionNamesIfNotYetLoaded();
+        $this->loadPermissionAndGroupNamesIfNotYetLoaded();
 
-        foreach ($attributes as $attribute)
+        foreach ($attributes as $permissionName)
         {
-            if ($attribute === '_any_permission')
+            if (!is_string($permissionName))
+            {
+                continue;
+            }
+
+            if ($permissionName === 'any_admin_permission' && $subject === null)
             {
                 $vote = self::ACCESS_DENIED;
 
@@ -47,13 +54,50 @@ class PermissionVoter implements VoterInterface
                     return self::ACCESS_GRANTED;
                 }
             }
-            else if (in_array($attribute, $this->permissionNames))
+            else if (array_key_exists($permissionName, $this->permissionNames) && $subject === null)
             {
                 $vote = self::ACCESS_DENIED;
 
-                if ($user->hasPermission($attribute))
+                if ($user->hasPermission($permissionName))
                 {
                     return self::ACCESS_GRANTED;
+                }
+            }
+            else if (array_key_exists($permissionName, $this->permissionGroupedNames) && ($subject === 'any_admin_permission' || $subject === 'all_admin_permissions'))
+            {
+                $permissionGroupName = $permissionName;
+                $permissionNamesFromGroup = $this->permissionGroupedNames[$permissionGroupName];
+                $vote = self::ACCESS_DENIED;
+
+                if ($subject === 'any_admin_permission')
+                {
+                    foreach ($permissionNamesFromGroup as $permissionNameFromGroup)
+                    {
+                        if ($user->hasPermission($permissionNameFromGroup))
+                        {
+                            return self::ACCESS_GRANTED;
+                        }
+                    }
+                }
+
+                if ($subject === 'all_admin_permissions')
+                {
+                    $hasAllPermissions = true;
+
+                    foreach ($permissionNamesFromGroup as $permissionNameFromGroup)
+                    {
+                        if (!$user->hasPermission($permissionNameFromGroup))
+                        {
+                            $hasAllPermissions = false;
+
+                            break;
+                        }
+                    }
+
+                    if ($hasAllPermissions)
+                    {
+                        return self::ACCESS_GRANTED;
+                    }
                 }
             }
         }
@@ -62,22 +106,26 @@ class PermissionVoter implements VoterInterface
     }
 
     /**
-     * Loads permission names only if they haven't been loaded yet.
+     * Loads permission names if they haven't been loaded yet.
      *
      * @return void
      */
-    private function loadPermissionNamesIfNotYetLoaded(): void
+    private function loadPermissionAndGroupNamesIfNotYetLoaded(): void
     {
-        if ($this->permissionNames !== null)
+        if ($this->permissionNames === null || $this->permissionGroupedNames === null)
         {
-            return;
-        }
+            $this->permissionNames = [];
+            $this->permissionGroupedNames = [];
 
-        $this->permissionNames = [];
+            foreach ($this->permissionRepository->findAll() as $permission)
+            {
+                $permissionName = $permission->getName();
+                $this->permissionNames[$permissionName] = $permissionName;
 
-        foreach ($this->permissionRepository->findAll() as $permission)
-        {
-            $this->permissionNames[] = $permission->getName();
+                $permissionGroup = $permission->getPermissionGroup();
+                $permissionGroupName = $permissionGroup->getName();
+                $this->permissionGroupedNames[$permissionGroupName][] = $permissionName;
+            }
         }
     }
 }

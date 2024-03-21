@@ -96,6 +96,9 @@ class Application
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $depositUntil;
 
+    #[ORM\Column(type: Types::FLOAT)]
+    private float $fullPriceCached = 0.0;
+
     #[ORM\Column(length: 3)]
     private string $currency;
 
@@ -636,6 +639,18 @@ class Application
         return $this->depositUntil;
     }
 
+    public function getFullPriceCached(): float
+    {
+        return $this->fullPriceCached;
+    }
+
+    public function cacheFullPrice(): self
+    {
+        $this->fullPriceCached = $this->getFullPrice();
+
+        return $this;
+    }
+
     public function getCampDateStartAt(): ?DateTimeImmutable
     {
         return $this->campDateStartAt;
@@ -978,18 +993,8 @@ class Application
         return true;
     }
 
-    public function isAwaitingUploadOfAttachmentsRequiredLater(): bool
+    public function areAttachmentsRequiredLaterMissing(): bool
     {
-        if (!$this->isCompleted())
-        {
-            return false;
-        }
-
-        if ($this->isAccepted() !== null)
-        {
-            return false;
-        }
-
         foreach ($this->applicationAttachments as $applicationAttachment)
         {
             if ($applicationAttachment->canBeUploadedLater())
@@ -1010,6 +1015,21 @@ class Application
         }
 
         return false;
+    }
+
+    public function isAwaitingUploadOfAttachmentsRequiredLater(): bool
+    {
+        if (!$this->isCompleted())
+        {
+            return false;
+        }
+
+        if ($this->isAccepted() !== null)
+        {
+            return false;
+        }
+
+        return $this->areAttachmentsRequiredLaterMissing();
     }
 
     public function getPendingDepositApplicationPayment(): ?ApplicationPayment

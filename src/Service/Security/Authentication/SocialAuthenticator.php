@@ -3,12 +3,15 @@
 namespace App\Service\Security\Authentication;
 
 use App\Library\Security\Authentication\Exception\AlreadyAuthenticatedException;
+use App\Library\Security\Authentication\Exception\InvalidSocialEmailException;
 use App\Library\Security\Authentication\Exception\SocialUserNotFoundException;
 use App\Model\Entity\User;
+use App\Model\Event\User\User\UserSocialLoginCreateEvent;
 use App\Model\Repository\UserRepositoryInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -33,26 +36,23 @@ class SocialAuthenticator extends OAuth2Authenticator
     private UserRepositoryInterface $userRepository;
     private TranslatorInterface $translator;
     private UrlGeneratorInterface $urlGenerator;
+    private EventDispatcherInterface $eventDispatcher;
     private Security $security;
 
-    public function __construct(ClientRegistry $clientRegistry,
-                                UserRepositoryInterface $userRepository,
-                                TranslatorInterface $translator,
-                                UrlGeneratorInterface $urlGenerator,
-                                Security $security,
-                                array|string $services)
+    public function __construct(ClientRegistry           $clientRegistry,
+                                UserRepositoryInterface  $userRepository,
+                                TranslatorInterface      $translator,
+                                UrlGeneratorInterface    $urlGenerator,
+                                EventDispatcherInterface $eventDispatcher,
+                                Security                 $security,
+                                array                    $services)
     {
         $this->clientRegistry = $clientRegistry;
         $this->userRepository = $userRepository;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
+        $this->eventDispatcher = $eventDispatcher;
         $this->security = $security;
-
-        if (is_string($services))
-        {
-            $services = explode('|', $services);
-        }
-
         $this->services = $services;
     }
 
@@ -91,13 +91,20 @@ class SocialAuthenticator extends OAuth2Authenticator
         }
 
         return new SelfValidatingPassport(
-            new UserBadge($accessToken->getToken(), function() use ($socialEmail)
+            new UserBadge($accessToken->getToken(), function() use ($socialEmail): User
             {
                 $user = $this->userRepository->findOneByEmail($socialEmail);
+
                 if ($user === null)
                 {
-                    $user = new User($socialEmail);
-                    $this->userRepository->saveUser($user, true);
+                    if (!filter_var($socialEmail, FILTER_VALIDATE_EMAIL))
+                    {
+                        throw new InvalidSocialEmailException();
+                    }
+
+                    $event = new UserSocialLoginCreateEvent($socialEmail);
+                    $this->eventDispatcher->dispatch($event, $event::NAME);
+                    $user = $event->getUser();
                 }
 
                 return $user;

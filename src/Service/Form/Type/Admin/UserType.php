@@ -112,7 +112,7 @@ class UserType extends AbstractType
             );
         }
 
-        if ($this->security->isGranted('user_update_role'))
+        if ($this->security->isGranted('user_role_update'))
         {
             $builder
                 ->add('role', EntityType::class, [

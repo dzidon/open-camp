@@ -31,18 +31,13 @@ parameters:
     app.application_invoice_directory: 'files/dynamic/application-invoice'
 
     # Mailer
+    app.email: 'contact.us@camp.com'
     app.email_no_reply: 'noreply@camp.com'
 
     # Internationalization
     app.date_format: 'd. m. Y'
     app.date_time_format: 'd.m.Y H:i'
     app.currency: 'CZK'
-    app.locales: 'en|cs|de'
-    app.locale_names:
-        en: 'English'
-        cs: 'Čeština'
-        de: 'Deutsch'
-
     app.phone_number_default_locale: 'CZ'
     app.phone_number_format: 1
     app.national_identifier: true
@@ -57,14 +52,13 @@ parameters:
     app.registration_lifespan: '1 hour'
     app.max_active_password_changes_per_user: 2
     app.password_change_lifespan: '1 hour'
-    app.social_login_services: 'facebook'
+    app.social_login_services: [ 'facebook' ]
     app.social_login_scopes:
         facebook:
             - 'public_profile'
             - 'email'
 
     # Cookies
-    app.cookie_lifespan_locale: '1 year'
     app.cookie_lifespan_application_draft: '1 year'
     app.cookie_prefix_application_draft: 'application_draft_'
 
@@ -73,15 +67,12 @@ parameters:
 
     # Applications
     app.application_purchasable_items_individual: false
-    app.sale_camper_recurring: true
-    app.sale_camper_siblings: true
     app.contact_email_mandatory: false
     app.contact_phone_number_mandatory: false
     app.application_invoice_number_length: 10
     app.application_simple_id_length: 6
     app.application_simple_id_characters: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    app.enabled_payment_methods: ['card', 'transfer', 'invoice']
-    app.completed_application_lifetime: '14 days'
+    app.enabled_payment_methods: [ 'card', 'transfer', 'invoice' ]
 
     # Validation
     app.national_identifier_regex: '#^\s*(\d\d)(\d\d)(\d\d)[ /]*(\d\d\d)(\d?)\s*$#'

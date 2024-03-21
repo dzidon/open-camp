@@ -14,20 +14,20 @@
                                 {% if application.isAccepted is same as(true) %}
                                     <i class="fas fa-check-circle text-success mr-2"></i>
 
-                                    {{ 'application.is_accepted_state.yes'|trans }}
+                                    {{ 'application.is_accepted_state.user.accepted'|trans }}
                                 {% elseif application.isAccepted is same as(false) %}
                                     <i class="fas fas fa-times-circle text-danger mr-2"></i>
 
-                                    {{ 'application.is_accepted_state.no'|trans }}
+                                    {{ 'application.is_accepted_state.user.declined'|trans }}
                                 {% elseif application.isAccepted is same as(null) %}
                                     {% if form_attachments_upload_later is null and not is_application_awaiting_payment %}
                                         <i class="fas fa-check-circle text-primary mr-2"></i>
 
-                                        {{ 'application.is_accepted_state.null_and_working_on_it'|trans }}
+                                        {{ 'application.is_accepted_state.user.null_and_working_on_it'|trans }}
                                     {% else %}
                                         <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
 
-                                        {{ 'application.is_accepted_state.null_and_not_ready'|trans }}
+                                        {{ 'application.is_accepted_state.user.null_and_not_ready'|trans }}
                                     {% endif %}
                                 {% endif %}
                             </h5>
@@ -300,9 +300,7 @@
             {% endif %}
         </div>
     </div>
-{% endif %}
 
-{% if show_application_completed_data and (show_application_campers or show_application_purchasable_items) %}
     <div class="row mb-4">
         <div class="col-md-8 col-lg-6 col-xl-5">
             <hr>
@@ -316,7 +314,7 @@
             {% for application_camper in application.applicationCampers %}
                 {% set show_camper_total = false %}
 
-                <div class="row mb-4">
+                <div class="row mb-3">
                     <div class="col-12">
                         <div class="row d-flex align-items-end">
                             <div class="col-8">
@@ -431,7 +429,7 @@
                     {% set has_instances_assigned_to_camper = application_purchasable_item.hasInstancesAssignedToCamper %}
                     {% set is_expanded_view = instances_count > 1 or has_multiple_variants or has_instances_assigned_to_camper %}
 
-                    <div class="row mb-4">
+                    <div class="row mb-3">
                         <div class="col-12">
                             <div class="row d-flex align-items-end">
                                 <div class="col-8">
@@ -515,22 +513,14 @@
     </div>
 {% endif %}
 
-{% if show_application_completed_data or show_application_campers or show_application_purchasable_items %}
-    <div class="row mb-4">
-        <div class="col-md-8 col-lg-6 col-xl-5">
-            <hr>
-        </div>
-    </div>
-{% endif %}
-
 <div class="row mb-4">
     <div class="col-md-8 col-lg-6 col-xl-5">
         {% if application.paymentMethod is not null %}
             <div class="row d-flex align-items-end mb-3">
                 <div class="col-6">
-                    <span>
-                        {{ 'entity.payment_method.singular'|trans }}
-                    </span>
+                    <strong>
+                        {{ 'entity.payment_method.singular'|trans }}:
+                    </strong>
                 </div>
 
                 <div class="col-6 text-right">
@@ -544,9 +534,9 @@
         {% if tax > 0.0 %}
             <div class="row d-flex align-items-end mb-3">
                 <div class="col-6">
-                    <span>
-                        {{ 'application.summary.total_price_without_tax'|trans }}
-                    </span>
+                    <strong>
+                        {{ 'application.summary.total_price_without_tax'|trans }}:
+                    </strong>
                 </div>
 
                 <div class="col-6 text-right">

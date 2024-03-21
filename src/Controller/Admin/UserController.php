@@ -39,9 +39,7 @@ class UserController extends AbstractController
         $this->userRepository = $userRepository;
     }
 
-    #[IsGranted(new Expression('is_granted("user_create") or is_granted("user_read") or 
-                                         is_granted("user_update") or is_granted("user_delete") or
-                                         is_granted("user_update_role")'))]
+    #[IsGranted(new Expression('is_granted("user", "any_admin_permission")'))]
     #[Route('/admin/users', name: 'admin_user_list')]
     public function list(MenuTypeFactoryRegistryInterface $menuFactory,
                          FormFactoryInterface             $formFactory,
@@ -121,7 +119,7 @@ class UserController extends AbstractController
         ]);
     }
 
-    #[IsGranted(new Expression('is_granted("user_update") or is_granted("user_update_role")'))]
+    #[IsGranted(new Expression('is_granted("user_update") or is_granted("user_role_update")'))]
     #[Route('/admin/user/{id}/update', name: 'admin_user_update')]
     public function update(EventDispatcherInterface      $eventDispatcher,
                            DataTransferRegistryInterface $dataTransfer,

@@ -31,8 +31,7 @@ class CampCategoryController extends AbstractController
         $this->campCategoryRepository = $campCategoryRepository;
     }
 
-    #[IsGranted(new Expression('is_granted("camp_category_create") or is_granted("camp_category_read") or 
-                                         is_granted("camp_category_update") or is_granted("camp_category_delete")'))]
+    #[IsGranted(new Expression('is_granted("camp_category", "any_admin_permission")'))]
     #[Route('/admin/camp-categories', name: 'admin_camp_category_list')]
     public function list(): Response
     {

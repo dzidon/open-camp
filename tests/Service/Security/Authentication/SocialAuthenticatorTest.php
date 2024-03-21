@@ -14,6 +14,7 @@ use League\OAuth2\Client\Token\AccessToken;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
@@ -396,6 +397,17 @@ class SocialAuthenticatorTest extends KernelTestCase
         /** @var UrlGeneratorInterface $urlGenerator */
         $urlGenerator = $container->get(UrlGeneratorInterface::class);
 
-        return new SocialAuthenticator($clientRegistry, $userRepository, $translator, $urlGenerator, $security, ['facebook']);
+        /** @var EventDispatcherInterface $eventDispatcher */
+        $eventDispatcher = $container->get(EventDispatcherInterface::class);
+
+        return new SocialAuthenticator(
+            $clientRegistry,
+            $userRepository,
+            $translator,
+            $urlGenerator,
+            $eventDispatcher,
+            $security,
+            ['facebook']
+        );
     }
 }

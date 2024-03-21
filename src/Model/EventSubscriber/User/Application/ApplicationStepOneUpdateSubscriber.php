@@ -30,7 +30,7 @@ class ApplicationStepOneUpdateSubscriber
         $this->dataTransfer = $dataTransfer;
     }
 
-    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 500)]
+    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 600)]
     public function onUpdateFillEntity(ApplicationStepOneUpdateEvent $event): void
     {
         $data = $event->getApplicationStepOneData();
@@ -38,14 +38,14 @@ class ApplicationStepOneUpdateSubscriber
         $this->dataTransfer->fillEntity($data, $entity);
     }
 
-    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 400)]
+    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 500)]
     public function onUpdateFixOverflownPurchasableItems(ApplicationStepOneUpdateEvent $event): void
     {
         $application = $event->getApplication();
         $this->applicationOverflownPurchasableItemsRemover->removeOverflownPurchasableItems($application);
     }
 
-    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 300)]
+    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 400)]
     public function onUpdateSetApplicationCampersTripsInThePast(ApplicationStepOneUpdateEvent $event): void
     {
         $application = $event->getApplication();
@@ -58,11 +58,18 @@ class ApplicationStepOneUpdateSubscriber
         }
     }
 
-    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 200)]
+    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 300)]
     public function onUpdateResetSiblingsDiscountIfInvalid(ApplicationStepOneUpdateEvent $event): void
     {
         $application = $event->getApplication();
         $application->resetSiblingsDiscountIfIntervalNotEligibleForNumberOfCampers();
+    }
+
+    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 200)]
+    public function onUpdateCacheFullPrice(ApplicationStepOneUpdateEvent $event): void
+    {
+        $application = $event->getApplication();
+        $application->cacheFullPrice();
     }
 
     #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 100)]

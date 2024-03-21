@@ -20,12 +20,19 @@ class ApplicationStepTwoUpdateSubscriber
         $this->dataTransfer = $dataTransfer;
     }
 
-    #[AsEventListener(event: ApplicationStepTwoUpdateEvent::NAME, priority: 200)]
+    #[AsEventListener(event: ApplicationStepTwoUpdateEvent::NAME, priority: 300)]
     public function onUpdateFillEntity(ApplicationStepTwoUpdateEvent $event): void
     {
         $data = $event->getApplicationStepTwoUpdateData();
         $entity = $event->getApplication();
         $this->dataTransfer->fillEntity($data, $entity);
+    }
+
+    #[AsEventListener(event: ApplicationStepTwoUpdateEvent::NAME, priority: 200)]
+    public function onUpdateCacheFullPrice(ApplicationStepTwoUpdateEvent $event): void
+    {
+        $application = $event->getApplication();
+        $application->cacheFullPrice();
     }
 
     #[AsEventListener(event: ApplicationStepTwoUpdateEvent::NAME, priority: 100)]

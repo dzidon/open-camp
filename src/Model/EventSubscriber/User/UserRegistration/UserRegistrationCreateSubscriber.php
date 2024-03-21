@@ -5,7 +5,7 @@ namespace App\Model\EventSubscriber\User\UserRegistration;
 use App\Model\Event\User\UserRegistration\UserRegistrationCreateEvent;
 use App\Model\Repository\UserRegistrationRepositoryInterface;
 use App\Model\Service\UserRegistration\UserRegistrationFactoryInterface;
-use App\Service\Mailer\UserRegistrationMailerInterface;
+use App\Model\Service\UserRegistration\UserRegistrationMailerInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 class UserRegistrationCreateSubscriber

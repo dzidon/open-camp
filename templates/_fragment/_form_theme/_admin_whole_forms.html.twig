@@ -104,7 +104,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.attachment_config_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.attachment_config_search.button'|trans }}
+    </button>
 {% endblock %}
 
 {# Discount config search #}
@@ -121,7 +123,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.discount_config_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.discount_config_search.button'|trans }}
+    </button>
 {% endblock %}
 
 {# Camp date search #}
@@ -154,7 +158,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.camp_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.camp_search.button'|trans }}
+    </button>
 {% endblock %}
 
 {# Camp search #}
@@ -199,7 +205,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.camp_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.camp_search.button'|trans }}
+    </button>
 {% endblock %}
 
 {# Form field search #}
@@ -228,7 +236,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.form_field_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.form_field_search.button'|trans }}
+    </button>
 {% endblock %}
 
 {# Purchasable item search #}
@@ -249,7 +259,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.purchasable_item_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.purchasable_item_search.button'|trans }}
+    </button>
 {% endblock %}
 
 {# Purchasable item edit #}
@@ -303,7 +315,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.purchasable_item_variant_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.purchasable_item_variant_search.button'|trans }}
+    </button>
 {% endblock %}
 
 {# Purchasable item variant value search #}
@@ -320,7 +334,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.purchasable_item_variant_value_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.purchasable_item_variant_value_search.button'|trans }}
+    </button>
 {% endblock %}
 
 {# Role search #}
@@ -337,7 +353,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.role_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.role_search.button'|trans }}
+    </button>
 {% endblock %}
 
 {# User search #}
@@ -358,7 +376,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.user_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.user_search.button'|trans }}
+    </button>
 {% endblock %}
 
 {# Trip location path search #}
@@ -375,7 +395,9 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.trip_location_path_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.trip_location_path_search.button'|trans }}
+    </button>
 {% endblock %}
 
 {# Trip location search #}
@@ -392,5 +414,76 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary mb-2">{{ 'form.admin.trip_location_search.button'|trans }}</button>
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.trip_location_search.button'|trans }}
+    </button>
+{% endblock %}
+
+{# Application camp search #}
+{% block admin_application_camp_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.application_camp_search.button'|trans }}
+    </button>
+{% endblock %}
+
+{# Application camp date search #}
+{% block admin_application_camp_date_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            {{ form_row(form.from) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.to) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.application_camp_date_search.button'|trans }}
+    </button>
+{% endblock %}
+
+{# Application search #}
+{% block admin_application_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="form-group col-md-6">
+            {{ form_row(form.isOnlinePaymentMethod) }}
+        </div>
+
+        <div class="form-group col-md-6">
+            {{ form_row(form.isAccepted) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.application_camp_date_search.button'|trans }}
+    </button>
 {% endblock %}

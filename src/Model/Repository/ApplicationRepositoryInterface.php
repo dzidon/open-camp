@@ -2,11 +2,15 @@
 
 namespace App\Model\Repository;
 
+use App\Library\Data\Admin\ApplicationSearchData;
 use App\Library\Data\User\ApplicationProfileSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Application;
+use App\Model\Entity\Camp;
+use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
 use App\Model\Library\Application\ApplicationsEditableDraftsResultInterface;
+use App\Model\Library\Application\ApplicationTotalRevenueResultInterface;
 use Symfony\Component\Uid\UuidV4;
 
 interface ApplicationRepositoryInterface
@@ -85,4 +89,46 @@ interface ApplicationRepositoryInterface
      * @return PaginatorInterface
      */
     public function getUserPaginator(ApplicationProfileSearchData $data, User $user, int $currentPage, int $pageSize): PaginatorInterface;
+
+    /**
+     * Returns admin application search paginator.
+     *
+     * @param ApplicationSearchData $data
+     * @param null|User|CampDate $guideOrCampDate
+     * @param int $currentPage
+     * @param int $pageSize
+     * @return PaginatorInterface
+     */
+    public function getAdminPaginator(ApplicationSearchData $data,
+                                      null|User|CampDate    $guideOrCampDate,
+                                      int                   $currentPage,
+                                      int                   $pageSize): PaginatorInterface;
+
+    /**
+     * Returns the total full prices in available currencies of accepted applications assigned to the given camp.
+     *
+     * @param Camp $camp
+     * @return ApplicationTotalRevenueResultInterface
+     */
+    public function getTotalRevenueForCampResult(Camp $camp): ApplicationTotalRevenueResultInterface;
+
+    /**
+     * @param Camp $camp
+     * @return int
+     */
+    public function getNumberOfAcceptedApplicationsForCamp(Camp $camp): int;
+
+    /**
+     * Returns the total full prices in available currencies of accepted applications assigned to the given camp date.
+     *
+     * @param CampDate $campDate
+     * @return ApplicationTotalRevenueResultInterface
+     */
+    public function getTotalRevenueForCampDateResult(CampDate $campDate): ApplicationTotalRevenueResultInterface;
+
+    /**
+     * @param CampDate $campDate
+     * @return int
+     */
+    public function getNumberOfAcceptedApplicationsForCampDate(CampDate $campDate): int;
 }

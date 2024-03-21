@@ -15,7 +15,7 @@ class HiddenTrueType extends AbstractType
     {
         $builder->add('hiddenTrue', HiddenType::class, [
             'mapped' => false,
-            'data' => true,
+            'data'   => true,
         ]);
     }
 }

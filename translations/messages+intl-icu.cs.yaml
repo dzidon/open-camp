@@ -26,7 +26,6 @@ api:
             form_field_options: 'Byly zadány neplatné volby editovatelného formálářového pole.'
 
 back: 'Zpět'
-
 loading: 'Načítání'
 
 we_are_not_tax_payers: 'Nejsme plátci DPH.'
@@ -142,10 +141,16 @@ application:
     no_longer_editable: 'Je nám líto, ale tuto přihlášku už není možné upravovat.'
     completed: 'Přihláška úspěšně vytvořena!'
     is_accepted_state:
-        yes: 'Přihláška schválena'
-        no: 'Přihláška zamítnuta'
-        null_and_working_on_it: 'Pracujeme na schválení přihlášky'
-        null_and_not_ready: 'Máte skoro hotovo'
+        user:
+            accepted: 'Přihláška schválena'
+            declined: 'Přihláška zamítnuta'
+            null_and_working_on_it: 'Pracujeme na schválení přihlášky'
+            null_and_not_ready: 'Máte skoro hotovo'
+
+        admin:
+            accepted: 'Schválena'
+            declined: 'Zamítnuta'
+            unsettled: 'Nevypořádána'
 
     payment:
         unable_to_create: 'Platbu se nepodařilo vytvořit, zkuste to prosím pozdějí.'
@@ -176,6 +181,21 @@ application:
 
         siblings_interval_to_null: 'Uplatnit slevu pro {number_from} a více sourozenců'
         siblings_interval_from_null: 'Uplatnit slevu pro {number_to} a méně sourozenců'
+
+    admin:
+        number_of_pending: 'Nevyřízených přihlášek'
+        show_all_applications: 'Procházet všechny přihlášky'
+
+        list:
+            attachments_uploaded: 'Přílohy nahrány'
+            paid: 'Zaplacena'
+            settled: 'Vypořádána'
+
+        summary:
+            total_revenue: 'Celkový příjem'
+            number_of_accepted_applications: 'Počet schválených přihlášek'
+            number_of_accepted_application_campers: 'Počet schválených táborníků'
+            accepted_campers: 'Schválení táborníci'
 
     summary:
         item_instance_for_camper: 'pro táborníka'
@@ -369,9 +389,12 @@ modal:
 
 menu:
     navbar_admin_vertical:
+        components: 'Komponenty'
         browse: 'Procházet'
 
 permission_group:
+    application: 'Přihlášky'
+    application_payment: 'Platby'
     user: 'Uživatelé'
     role: 'Role'
     camp_category: 'Kategorie tábora'
@@ -383,10 +406,20 @@ permission_group:
     discount_config: 'Konfigurace slev'
 
 permission:
+    application_summary_read: 'Zobrazení souhrnů přihlášek za tábory a termíny'
+    application_read: 'Zobrazení přihlášky'
+    application_update: 'Editace přihlášky'
+    application_delete: 'Odstranění přihlášky'
+
+    application_payment_read: 'Zobrazení platby'
+    application_payment_create: 'Tvorba platby'
+    application_payment_update: 'Editace platby'
+    application_payment_delete: 'Odstranění platby'
+
     user_read: 'Zobrazení uživatele'
     user_create: 'Tvorba uživatele'
     user_update: 'Editace uživatele'
-    user_update_role: 'Nastavení role uživatele'
+    user_role_update: 'Nastavení role uživatele'
     user_delete: 'Odstranění uživatele'
 
     role_read: 'Zobrazení role'
@@ -436,6 +469,7 @@ crud:
             update_password_not_set: 'Tento uživatel nemá nastavené heslo. Kliknutím na následující tlačítko přejdete do nastavení hesla.'
 
     confirmation:
+        simple_id: 'Opravdu si přejete odstranit přihlášku s kódem "{simple_id}"?'
         contact_delete: 'Opravdu si přejete odstranit kontakt "{full_name}"?'
         camper_delete: 'Opravdu si přejete odstranit táborníka "{full_name}"?'
         role_delete: 'Opravdu si přejete odstranit roli "{label}"?'
@@ -452,6 +486,7 @@ crud:
         purchasable_item_variant_value_delete: 'Opravdu si přejete odstranit hodnotu "{name}"?'
         form_field_delete: 'Opravdu si přejete odstranit formulářové pole "{name}"?'
         discount_config_delete: 'Opravdu si přejete odstranit konfiguraci slev "{name}"?'
+        application_delete: 'Opravdu si přejete odstranit přihlášku "{simple_id}"?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
@@ -745,7 +780,8 @@ entity_attribute:
         deposit: 'Záloha'
         deposit_until: 'Zálohu nutno zaplatit do'
         price_without_deposit: 'Doplatek'
-        full_price: 'Cena'
+        full_price: 'Celková cena'
+        full_price_cached: 'Celková cena'
         currency: 'Měna'
         tax: 'DPH'
         discount_recurring_campers_config: 'Konfigurace slev pro vracející se táborníky'
@@ -764,6 +800,8 @@ entity_attribute:
         camp_date: 'Termín'
         user: 'Uživatel'
         payment_method: 'Platení metoda'
+        is_payment_method_online: 'Placena online'
+        is_payment_method_offline: 'Placena offline'
         application_contacts: 'Kontakty'
         application_campers: 'Táborníci'
         application_form_field_values: 'Formulářová pole'
@@ -1444,7 +1482,7 @@ form:
             is_hidden: 'Skrytý'
             is_historical:
                 label: 'Typ termínu'
-                choices:
+                options:
                     current_and_upcoming: 'Probíhající a nadcházející'
                     historical: 'Historický'
 
@@ -1675,6 +1713,53 @@ form:
         form_field_delete:
             button: 'Odstranit'
 
+        application_camp_search:
+            phrase: 'Hledat podle názvu tábora'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    camp_name_asc: 'Název (A-Z)'
+                    camp_name_desc: 'Název (Z-A)'
+                    number_of_pending_applications_desc: 'Od nevyřízených'
+
+            button: 'Hledat'
+
+        application_camp_date_search:
+            from: 'Odjezd od'
+            to: 'Příjezd do'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    camp_date_start_at_asc: 'Datum odjezdu (vzestupně)'
+                    camp_date_start_at_desc: 'Datum odjezdu (sestupně)'
+                    number_of_pending_applications_desc: 'Od nevyřízených'
+
+            button: 'Hledat'
+
+        application_search:
+            phrase: 'Hledat podle kódu, čísla faktury nebo e-mailu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    completed_at_desc: 'Od naposledy dokončených'
+                    completed_at_asc: 'Od nejdříve dokončených'
+
+            is_online_payment_method:
+                label: 'On-line platba'
+                options:
+                    yes: 'Ano'
+                    no: 'Ne'
+
+            is_accepted:
+                label: 'Stav'
+                options:
+                    unsettled: 'Nevypořádána'
+                    accepted: 'Přijata'
+                    declined: 'Zamítnuta'
+
+        application_delete:
+            button: 'Odstranit'
+
     user:
         application_step_one:
             email:
@@ -1903,7 +1988,7 @@ form:
 
 route:
     admin_home: 'Přehled'
-    admin_profile: 'Administrátorský profil'
+    admin_profile: 'Profil'
 
     admin_role_list: 'Role'
     admin_role_create: 'Nová role'
@@ -1986,7 +2071,12 @@ route:
     admin_discount_config_update: 'Editace konfigurace slev'
     admin_discount_config_delete: 'Odstranění konfigurace slev'
 
-    admin_application_list: 'Přihlášky'
+    admin_application_camp_list: 'Přihlášky'
+    admin_application_camp_summary: 'Souhrn za tábor'
+    admin_application_camp_date_list: 'Termíny'
+    admin_application_camp_date_summary: 'Souhrn za termín'
+    admin_application_list: 'Seznam přihlášek'
+    admin_application_delete: 'Odstranění přihlášky'
 
     user_home: 'Domů'
     user_login: 'Přihlášení'

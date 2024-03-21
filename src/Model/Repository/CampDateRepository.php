@@ -2,6 +2,7 @@
 
 namespace App\Model\Repository;
 
+use App\Library\Data\Admin\ApplicationCampDateSearchData;
 use App\Library\Data\Admin\CampDateSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Application;
@@ -10,7 +11,9 @@ use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\PurchasableItem;
 use App\Model\Entity\PurchasableItemVariant;
+use App\Model\Entity\User;
 use App\Model\Library\Camp\UserUpcomingCampDatesResult;
+use App\Model\Library\CampDate\AdminApplicationCampDatesResult;
 use DateTimeInterface;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
@@ -327,6 +330,95 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
         $query = $queryBuilder->getQuery();
 
         return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAdminApplicationCampDatesResult(ApplicationCampDateSearchData $data,
+                                                       Camp                          $camp,
+                                                       ?User                         $guide,
+                                                       int                           $currentPage,
+                                                       int                           $pageSize): AdminApplicationCampDatesResult
+    {
+        // paginator
+
+        $sortBy = $data->getSortBy();
+        $from = $data->getFrom();
+        $to = $data->getTo();
+
+        $queryBuilder = $this->createQueryBuilder('campDate')
+            ->select('campDate, COUNT(application.id) AS HIDDEN numberOfPendingApplications')
+            ->leftJoin('campDate.camp', 'camp')
+            ->leftJoin(Application::class, 'application', 'WITH', '
+                campDate.id = application.campDate AND
+                application.isAccepted IS NULL
+            ')
+            ->andWhere('campDate.camp = :campId')
+            ->setParameter('campId', $camp->getId(), UuidType::NAME)
+            ->groupBy('campDate.id')
+            ->orderBy($sortBy->property(), $sortBy->order())
+        ;
+
+        if ($from !== null)
+        {
+            $queryBuilder
+                ->andWhere('campDate.startAt >= :from')
+                ->setParameter('from', $from->format('Y-m-d 00:00:00'))
+            ;
+        }
+
+        if ($to !== null)
+        {
+            $queryBuilder
+                ->andWhere('campDate.endAt <= :to')
+                ->setParameter('to', $to->format('Y-m-d 23:59:59'))
+            ;
+        }
+
+        if ($guide !== null)
+        {
+            $queryBuilder
+                ->leftJoin('campDate.campDateUsers', 'campDateUser')
+                ->andWhere('campDateUser.user = :guideId')
+                ->setParameter('guideId', $guide->getId(), UuidType::NAME)
+            ;
+        }
+
+        $query = $queryBuilder->getQuery();
+        $paginator = new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
+
+        // numbers of pending applications
+
+        $campDates = $paginator->getCurrentPageItems();
+        $campDateBinaryIds = array_map(function (CampDate $campDate) {
+            return $campDate->getId()->toBinary();
+        }, $campDates);
+
+        $queryResult = $this->createQueryBuilder('campDate')
+            ->select('campDate.id, COUNT(application.id) AS numberOfPendingApplications')
+            ->leftJoin(Application::class, 'application', 'WITH', '
+                campDate.id = application.campDate AND
+                application.isAccepted IS NULL
+            ')
+            ->andWhere('campDate.id IN (:ids)')
+            ->setParameter('ids', $campDateBinaryIds)
+            ->groupBy('campDate.id')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        $numbersOfPendingApplications = [];
+
+        foreach ($queryResult as $data)
+        {
+            /** @var UuidV4 $campDateId */
+            $campDateId = $data['id'];
+            $campDateIdString = $campDateId->toRfc4122();
+            $numbersOfPendingApplications[$campDateIdString] = $data['numberOfPendingApplications'];
+        }
+
+        return new AdminApplicationCampDatesResult($paginator, $numbersOfPendingApplications);
     }
 
     private function loadCampDateFormFields(null|array|CampDate $campDates): void

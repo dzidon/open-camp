@@ -68,7 +68,7 @@
 
                             <tbody>
                                 {% set granted_read = is_granted('user_read') %}
-                                {% set granted_update = is_granted('user_update') or is_granted('user_update_role') %}
+                                {% set granted_update = is_granted('user_update') or is_granted('user_role_update') %}
                                 {% set granted_delete = is_granted('user_delete') %}
 
                                 {% for user in paginator.currentPageItems %}

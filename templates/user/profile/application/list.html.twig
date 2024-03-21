@@ -42,20 +42,20 @@
                             <div class="mb-2">
                                 {% if application.isAccepted is same as(true) %}
                                     <span class="badge badge-success">
-                                        {{ 'application.is_accepted_state.yes'|trans }}
+                                        {{ 'application.is_accepted_state.user.accepted'|trans }}
                                     </span>
                                 {% elseif application.isAccepted is same as(false) %}
                                     <span class="badge badge-danger">
-                                        {{ 'application.is_accepted_state.no'|trans }}
+                                        {{ 'application.is_accepted_state.user.declined'|trans }}
                                     </span>
                                 {% elseif application.isAccepted is same as(null) %}
                                     {% if application.isAwaitingAcceptOrDecline %}
                                         <span class="badge badge-primary">
-                                            {{ 'application.is_accepted_state.null_and_working_on_it'|trans }}
+                                            {{ 'application.is_accepted_state.user.null_and_working_on_it'|trans }}
                                         </span>
                                     {% else %}
                                         <span class="badge badge-warning">
-                                            {{ 'application.is_accepted_state.null_and_not_ready'|trans }}
+                                            {{ 'application.is_accepted_state.user.null_and_not_ready'|trans }}
                                         </span>
                                     {% endif %}
                                 {% endif %}

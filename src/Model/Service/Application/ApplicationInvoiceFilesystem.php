@@ -18,23 +18,23 @@ class ApplicationInvoiceFilesystem implements ApplicationInvoiceFilesystemInterf
 
     private FilesystemOperator $applicationInvoiceStorage;
 
+    private ApplicationInvoiceNumberFormatterInterface $invoiceNumberFormatter;
+
     private Environment $twig;
 
     private string $publicFilePathPrefix;
 
-    private int $invoiceNumberLength;
-
-    public function __construct(TranslatorInterface $translator,
-                                FilesystemOperator  $applicationInvoiceStorage,
-                                Environment         $twig,
-                                string              $publicFilePathPrefix,
-                                int                 $invoiceNumberLength)
+    public function __construct(TranslatorInterface                        $translator,
+                                FilesystemOperator                         $applicationInvoiceStorage,
+                                ApplicationInvoiceNumberFormatterInterface $invoiceNumberFormatter,
+                                Environment                                $twig,
+                                string                                     $publicFilePathPrefix)
     {
         $this->translator = $translator;
         $this->applicationInvoiceStorage = $applicationInvoiceStorage;
+        $this->invoiceNumberFormatter = $invoiceNumberFormatter;
         $this->twig = $twig;
         $this->publicFilePathPrefix = $publicFilePathPrefix;
-        $this->invoiceNumberLength = $invoiceNumberLength;
     }
 
     /**
@@ -66,8 +66,7 @@ class ApplicationInvoiceFilesystem implements ApplicationInvoiceFilesystemInterf
         $pageNumberText = $this->translator->trans('application.invoice.page_number');
         $pdf->setFooter("|$pageNumberText|");
 
-        $invoiceNumberString = (string) $application->getInvoiceNumber();
-        $invoiceNumberFormatted = str_pad($invoiceNumberString, $this->invoiceNumberLength, "0", STR_PAD_LEFT);
+        $invoiceNumberFormatted = $this->invoiceNumberFormatter->getFormattedInvoiceNumber($application);
 
         $html = $this->twig->render('_fragment\_application\_invoice.html.twig', [
             'application'    => $application,
