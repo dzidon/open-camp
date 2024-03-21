@@ -2,8 +2,8 @@
 
 namespace App\Model\Service\ApplicationPurchasableItemInstance;
 
-use App\Library\Data\User\ApplicationPurchasableItemInstanceData;
-use App\Library\Data\User\ApplicationPurchasableItemVariantData;
+use App\Library\Data\Common\ApplicationPurchasableItemInstanceData;
+use App\Library\Data\Common\ApplicationPurchasableItemVariantData;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationPurchasableItem;
 

@@ -2,8 +2,8 @@
 
 namespace App\Service\Data\Transfer\User;
 
-use App\Library\Data\User\ApplicationCamperPurchasableItemsData;
-use App\Library\Data\User\ApplicationPurchasableItemData;
+use App\Library\Data\Common\ApplicationCamperPurchasableItemsData;
+use App\Library\Data\Common\ApplicationPurchasableItemData;
 use App\Library\Data\User\ApplicationStepTwoUpdateData;
 use App\Model\Entity\Application;
 use App\Model\Event\User\ApplicationPurchasableItem\ApplicationPurchasableItemUpdateEvent;

@@ -3,7 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Library\Data\User\ContactData;
+use App\Library\Data\Common\ContactData;
 use App\Library\Data\User\ContactSearchData;
 use App\Model\Entity\Contact;
 use App\Model\Entity\User;
@@ -12,9 +12,9 @@ use App\Model\Event\User\Contact\ContactDeleteEvent;
 use App\Model\Event\User\Contact\ContactUpdateEvent;
 use App\Model\Repository\ContactRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\Common\ContactType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Form\Type\User\ContactSearchType;
-use App\Service\Form\Type\User\ContactType;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -124,7 +124,7 @@ class ProfileContactController extends AbstractController
         $contact = $this->findContactOrThrow404($id);
         $this->denyAccessUnlessGranted('contact_update', $contact);
 
-        $contactData = new ContactData(
+        $contactData = new \App\Library\Data\Common\ContactData(
             $this->getParameter('app.contact_email_mandatory'),
             $this->getParameter('app.contact_phone_number_mandatory')
         );

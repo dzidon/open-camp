@@ -3,7 +3,7 @@
 namespace App\Tests\Library\Data\Admin;
 
 use App\Library\Data\Admin\UserData;
-use App\Library\Data\User\BillingData;
+use App\Library\Data\Common\BillingData;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepositoryInterface;

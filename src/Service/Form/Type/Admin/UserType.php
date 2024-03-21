@@ -5,7 +5,7 @@ namespace App\Service\Form\Type\Admin;
 use App\Library\Data\Admin\ProfileData;
 use App\Library\Data\Admin\UserData;
 use App\Model\Entity\Role;
-use App\Service\Form\Type\User\BillingType;
+use App\Service\Form\Type\Common\BillingType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;

@@ -2,9 +2,9 @@
 
 namespace App\Model\Service\Application;
 
-use App\Library\Data\User\ApplicationCamperData;
+use App\Library\Data\Common\ApplicationCamperData;
+use App\Library\Data\Common\ContactData;
 use App\Library\Data\User\ApplicationStepOneData;
-use App\Library\Data\User\ContactData;
 use App\Model\Entity\CampDate;
 
 /**
@@ -17,7 +17,7 @@ interface ApplicationStepOneDataFactoryInterface
      *
      * @param CampDate $campDate
      * @param ApplicationCamperData|null $defaultApplicationCamperData
-     * @param ContactData|null $defaultContactData
+     * @param \App\Library\Data\Common\ContactData|null $defaultContactData
      * @return ApplicationStepOneData
      */
     public function createApplicationStepOneData(CampDate               $campDate,

@@ -2,10 +2,12 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\User\ApplicationPurchasableItemInstanceData;
+use App\Library\Data\Common\ApplicationPurchasableItemInstanceData;
 use App\Library\Data\User\ApplicationStepTwoUpdateData;
 use App\Model\Entity\PaymentMethod;
+use App\Service\Form\Type\Common\ApplicationCamperPurchasableItemsType;
 use App\Service\Form\Type\Common\ApplicationCustomerChannelType;
+use App\Service\Form\Type\Common\ApplicationPurchasableItemType;
 use NumberFormatter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

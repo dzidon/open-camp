@@ -2,9 +2,9 @@
 
 namespace App\Model\Service\ApplicationCamper;
 
-use App\Library\Data\User\ApplicationAttachmentData;
-use App\Library\Data\User\ApplicationCamperData;
-use App\Library\Data\User\ApplicationFormFieldValueData;
+use App\Library\Data\Common\ApplicationAttachmentData;
+use App\Library\Data\Common\ApplicationCamperData;
+use App\Library\Data\Common\ApplicationFormFieldValueData;
 use App\Model\Entity\Application;
 use App\Model\Entity\CampDate;
 use App\Model\Repository\TripLocationRepositoryInterface;

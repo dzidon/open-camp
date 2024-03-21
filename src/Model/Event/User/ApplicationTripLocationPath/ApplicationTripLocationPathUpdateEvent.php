@@ -2,7 +2,7 @@
 
 namespace App\Model\Event\User\ApplicationTripLocationPath;
 
-use App\Library\Data\User\ApplicationCamperData;
+use App\Library\Data\Common\ApplicationCamperData;
 use App\Model\Entity\ApplicationTripLocationPath;
 use App\Model\Event\AbstractModelEvent;
 

@@ -2,7 +2,7 @@
 
 namespace App\Model\Service\ApplicationCamper;
 
-use App\Library\Data\User\ApplicationCamperData;
+use App\Library\Data\Common\ApplicationCamperData;
 use App\Model\Entity\Application;
 use App\Model\Entity\CampDate;
 
@@ -15,7 +15,7 @@ interface ApplicationCamperDataFactoryInterface
      * Creates application camper data from a camp date.
      *
      * @param CampDate $campDate
-     * @return ApplicationCamperData
+     * @return \App\Library\Data\Common\ApplicationCamperData
      */
     public function createApplicationCamperDataFromCampDate(CampDate $campDate): ApplicationCamperData;
 
@@ -23,7 +23,7 @@ interface ApplicationCamperDataFactoryInterface
      * Creates application camper data from an application.
      *
      * @param Application $application
-     * @return ApplicationCamperData
+     * @return \App\Library\Data\Common\ApplicationCamperData
      */
     public function createApplicationCamperDataFromApplication(Application $application): ApplicationCamperData;
 }

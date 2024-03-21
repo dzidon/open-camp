@@ -2,7 +2,7 @@
 
 namespace App\Model\Event\User\ApplicationContact;
 
-use App\Library\Data\User\ContactData;
+use App\Library\Data\Common\ContactData;
 use App\Model\Entity\ApplicationContact;
 use App\Model\Event\AbstractModelEvent;
 

@@ -2,6 +2,7 @@
 
 namespace App\Library\Data\User;
 
+use App\Library\Data\Common\ApplicationAttachmentData;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use LogicException;

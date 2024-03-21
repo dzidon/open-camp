@@ -2,7 +2,7 @@
 
 namespace App\Model\Event\User\Camper;
 
-use App\Library\Data\User\CamperData;
+use App\Library\Data\Common\CamperData;
 use App\Model\Entity\Camper;
 use App\Model\Entity\User;
 use App\Model\Event\AbstractModelEvent;

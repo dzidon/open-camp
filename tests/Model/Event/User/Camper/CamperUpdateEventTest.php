@@ -2,7 +2,7 @@
 
 namespace App\Tests\Model\Event\User\Camper;
 
-use App\Library\Data\User\CamperData;
+use App\Library\Data\Common\CamperData;
 use App\Library\Enum\GenderEnum;
 use App\Model\Entity\Camper;
 use App\Model\Entity\User;

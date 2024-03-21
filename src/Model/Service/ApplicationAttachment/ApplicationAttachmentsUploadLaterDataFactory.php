@@ -2,7 +2,7 @@
 
 namespace App\Model\Service\ApplicationAttachment;
 
-use App\Library\Data\User\ApplicationAttachmentData;
+use App\Library\Data\Common\ApplicationAttachmentData;
 use App\Library\Data\User\ApplicationAttachmentsData;
 use App\Library\Data\User\ApplicationAttachmentsUploadLaterData;
 use App\Model\Entity\Application;

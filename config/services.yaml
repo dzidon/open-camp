@@ -259,6 +259,18 @@ services:
         arguments:
             $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
 
+    App\Service\Form\Type\Common\BillingType:
+        arguments:
+            $isEuBusinessDataEnabled: '%app.eu_business_data%'
+
+    App\Service\Form\Type\Common\ContactType:
+        arguments:
+            $phoneNumberFormat: '%app.phone_number_format%'
+
+    App\Service\Form\Type\Common\CamperType:
+        arguments:
+            $isNationalIdentifierEnabled: '%app.national_identifier%'
+
     App\Service\Form\Type\Admin\DiscountRecurringCamperConfigType:
         arguments:
             $tax: '%app.tax%'
@@ -283,18 +295,6 @@ services:
         arguments:
             $dateFormat: '%app.date_format%'
 
-    App\Service\Form\Type\User\BillingType:
-        arguments:
-            $isEuBusinessDataEnabled: '%app.eu_business_data%'
-
-    App\Service\Form\Type\User\ContactType:
-        arguments:
-            $phoneNumberFormat: '%app.phone_number_format%'
-
-    App\Service\Form\Type\User\CamperType:
-        arguments:
-            $isNationalIdentifierEnabled: '%app.national_identifier%'
-
     App\Service\Form\Type\User\ApplicationStepOneType:
         arguments:
             $isEuBusinessDataEnabled: '%app.eu_business_data%'
@@ -307,11 +307,11 @@ services:
         arguments:
             $companyName: '%app.company_name%'
 
-    App\Service\Data\Transfer\User\BillingDataTransfer:
+    App\Service\Data\Transfer\Common\BillingDataTransfer:
         arguments:
             $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
-    App\Service\Data\Transfer\User\CamperDataTransfer:
+    App\Service\Data\Transfer\Common\CamperDataTransfer:
         arguments:
             $isNationalIdentifierEnabled: '%app.national_identifier%'
 

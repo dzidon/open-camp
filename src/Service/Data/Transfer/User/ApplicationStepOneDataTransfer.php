@@ -2,11 +2,11 @@
 
 namespace App\Service\Data\Transfer\User;
 
-use App\Library\Data\User\ApplicationAttachmentData;
-use App\Library\Data\User\ApplicationCamperData;
-use App\Library\Data\User\ApplicationFormFieldValueData;
+use App\Library\Data\Common\ApplicationAttachmentData;
+use App\Library\Data\Common\ApplicationCamperData;
+use App\Library\Data\Common\ApplicationFormFieldValueData;
+use App\Library\Data\Common\ContactData;
 use App\Library\Data\User\ApplicationStepOneData;
-use App\Library\Data\User\ContactData;
 use App\Model\Entity\Application;
 use App\Model\Event\User\ApplicationAttachment\ApplicationAttachmentCreateEvent;
 use App\Model\Event\User\ApplicationAttachment\ApplicationAttachmentUpdateEvent;

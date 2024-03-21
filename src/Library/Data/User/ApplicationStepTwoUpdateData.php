@@ -3,6 +3,8 @@
 namespace App\Library\Data\User;
 
 use App\Library\Constraint\DiscountSiblingIntervalInConfig;
+use App\Library\Data\Common\ApplicationCamperPurchasableItemsData;
+use App\Library\Data\Common\ApplicationPurchasableItemData;
 use App\Model\Entity\PaymentMethod;
 use App\Model\Enum\Entity\ApplicationCustomerChannelEnum;
 use App\Model\Library\DiscountConfig\DiscountConfigArrayShape;

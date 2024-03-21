@@ -2,7 +2,7 @@
 
 namespace App\Model\Event\User\User;
 
-use App\Library\Data\User\BillingData;
+use App\Library\Data\Common\BillingData;
 use App\Model\Entity\User;
 use App\Model\Event\AbstractModelEvent;
 

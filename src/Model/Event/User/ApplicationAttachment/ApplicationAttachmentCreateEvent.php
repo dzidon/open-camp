@@ -2,10 +2,10 @@
 
 namespace App\Model\Event\User\ApplicationAttachment;
 
-use App\Library\Data\User\ApplicationAttachmentData;
+use App\Library\Data\Common\ApplicationAttachmentData;
 use App\Model\Entity\Application;
-use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\ApplicationAttachment;
+use App\Model\Entity\ApplicationCamper;
 use App\Model\Event\AbstractModelEvent;
 use LogicException;
 

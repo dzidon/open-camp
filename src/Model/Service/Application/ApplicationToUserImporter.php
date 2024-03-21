@@ -2,10 +2,10 @@
 
 namespace App\Model\Service\Application;
 
+use App\Library\Data\Common\BillingData;
+use App\Library\Data\Common\CamperData;
+use App\Library\Data\Common\ContactData;
 use App\Library\Data\User\ApplicationImportToUserData;
-use App\Library\Data\User\BillingData;
-use App\Library\Data\User\CamperData;
-use App\Library\Data\User\ContactData;
 use App\Model\Entity\Application;
 use App\Model\Entity\User;
 use App\Model\Event\User\Camper\CamperCreateEvent;

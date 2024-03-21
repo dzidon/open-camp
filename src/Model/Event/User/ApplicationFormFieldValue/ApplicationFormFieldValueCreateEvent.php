@@ -2,7 +2,7 @@
 
 namespace App\Model\Event\User\ApplicationFormFieldValue;
 
-use App\Library\Data\User\ApplicationFormFieldValueData;
+use App\Library\Data\Common\ApplicationFormFieldValueData;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\ApplicationFormFieldValue;

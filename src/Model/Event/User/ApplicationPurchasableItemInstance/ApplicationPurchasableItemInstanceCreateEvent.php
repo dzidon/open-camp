@@ -2,7 +2,7 @@
 
 namespace App\Model\Event\User\ApplicationPurchasableItemInstance;
 
-use App\Library\Data\User\ApplicationPurchasableItemInstanceData;
+use App\Library\Data\Common\ApplicationPurchasableItemInstanceData;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\ApplicationPurchasableItem;
 use App\Model\Entity\ApplicationPurchasableItemInstance;

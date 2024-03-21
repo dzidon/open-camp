@@ -2,7 +2,7 @@
 
 namespace App\Service\Data\Transfer\User;
 
-use App\Library\Data\User\ApplicationCamperData;
+use App\Library\Data\Common\ApplicationCamperData;
 use App\Model\Entity\ApplicationTripLocationPath;
 use App\Service\Data\Transfer\DataTransferInterface;
 

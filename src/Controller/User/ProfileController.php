@@ -3,7 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Library\Data\User\BillingData;
+use App\Library\Data\Common\BillingData;
 use App\Library\Data\User\PasswordChangeData;
 use App\Library\Data\User\ProfilePasswordChangeData;
 use App\Model\Entity\User;
@@ -11,8 +11,8 @@ use App\Model\Event\User\User\UserBillingUpdateEvent;
 use App\Model\Event\User\User\UserPasswordChangeEvent;
 use App\Model\Event\User\UserPasswordChange\UserPasswordChangeCreateEvent;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\Common\BillingType;
 use App\Service\Form\Type\Common\HiddenTrueType;
-use App\Service\Form\Type\User\BillingType;
 use App\Service\Form\Type\User\ProfilePasswordChangeType;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;

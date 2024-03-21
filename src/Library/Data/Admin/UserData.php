@@ -5,7 +5,7 @@ namespace App\Library\Data\Admin;
 use App\Library\Constraint\Compound\SlugRequirements;
 use App\Library\Constraint\UniqueUserEmail;
 use App\Library\Constraint\UniqueUserUrlName;
-use App\Library\Data\User\BillingData;
+use App\Library\Data\Common\BillingData;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use DateTimeImmutable;

@@ -2,12 +2,16 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\User\ApplicationCamperData;
+use App\Library\Data\Common\ApplicationCamperData;
+use App\Library\Data\Common\ContactData;
 use App\Library\Data\User\ApplicationStepOneData;
-use App\Library\Data\User\ContactData;
 use App\Model\Entity\Camper;
 use App\Model\Entity\Contact;
+use App\Service\Form\Type\Common\ApplicationAttachmentType;
+use App\Service\Form\Type\Common\ApplicationCamperType;
+use App\Service\Form\Type\Common\ApplicationFormFieldValueType;
 use App\Service\Form\Type\Common\CollectionAddItemButtonType;
+use App\Service\Form\Type\Common\ContactType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;

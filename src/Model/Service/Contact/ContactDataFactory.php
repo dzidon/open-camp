@@ -2,7 +2,7 @@
 
 namespace App\Model\Service\Contact;
 
-use App\Library\Data\User\ContactData;
+use App\Library\Data\Common\ContactData;
 use App\Model\Entity\Application;
 
 /**
