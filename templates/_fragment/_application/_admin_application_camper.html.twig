@@ -1,0 +1,182 @@
+{% set application = application_camper.application %}
+
+<div class="row mb-2 mt-5">
+    <div class="col-12">
+        <h4>{{ 'entity.application_camper.singular'|trans }} {{ application_camper.nameFull }}</h4>
+    </div>
+</div>
+
+<div class="row mb-3">
+    <div class="col-12 col-sm-3">
+        <strong>{{ 'entity_attribute.application_camper.gender'|trans }}:</strong>
+    </div>
+
+    <div class="col-12 col-sm-9">
+        <span>{{ ('gender_childish.' ~ application_camper.gender.value)|trans }}</span>
+    </div>
+</div>
+
+{% if application_camper.nationalIdentifier is not null %}
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3">
+            <strong>{{ 'entity_attribute.application_camper.national_identifier'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9">
+            <span>
+                {{ application_camper.nationalIdentifier }}
+            </span>
+        </div>
+    </div>
+{% endif %}
+
+<div class="row mb-3">
+    <div class="col-12 col-sm-3">
+        <strong>{{ 'entity_attribute.application_camper.born_at'|trans }}:</strong>
+    </div>
+
+    <div class="col-12 col-sm-9">
+        <span>{{ application_camper.bornAt|date(date_format) }}</span>
+    </div>
+</div>
+
+{% if application_camper.dietaryRestrictions is not null %}
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3">
+            <strong>{{ 'entity_attribute.application_camper.dietary_restrictions'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9">
+            <span>{{ application_camper.dietaryRestrictions|nl2br }}</span>
+        </div>
+    </div>
+{% endif %}
+
+{% if application_camper.healthRestrictions is not null %}
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3">
+            <strong>{{ 'entity_attribute.application_camper.health_restrictions'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9">
+            <span>{{ application_camper.healthRestrictions|nl2br }}</span>
+        </div>
+    </div>
+{% endif %}
+
+{% if application_camper.medication is not null %}
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3">
+            <strong>{{ 'entity_attribute.application_camper.medication'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9">
+            <span>{{ application_camper.medication|nl2br }}</span>
+        </div>
+    </div>
+{% endif %}
+
+{% for application_camper_form_field_value in application_camper.applicationFormFieldValues %}
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3">
+            <strong>{{ application_camper_form_field_value.label }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9">
+            {% if application_camper_form_field_value.value is null %}
+                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+            {% else %}
+                <span>
+                    {% if application_camper_form_field_value.value is iterable %}
+                        {{ application_camper_form_field_value.value|join(', ') }}
+                    {% else %}
+                        {{ application_camper_form_field_value.value }}
+                    {% endif %}
+                </span>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}
+
+{% if application_camper.applicationAttachments is not empty %}
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3">
+            <strong>{{ 'entity_attribute.application_camper.application_attachments'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9">
+            {% for application_camper_attachment in application_camper.applicationAttachments %}
+                <div>
+                    {% if application_camper_attachment.extension is null %}
+                        <em>
+                            {{ application_camper_attachment.label }} ({{ 'application.admin.attachment_not_uploaded'|trans }})
+                        </em>
+                    {% else %}
+                        <a href="{{ path('admin_application_attachment', {id: application_camper_attachment.id}) }}">
+                            {{ application_camper_attachment.label }} ({{ application_camper_attachment.extension }})
+                        </a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+{% for application_trip_location_path in application_camper.applicationTripLocationPaths %}
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3">
+            <strong>
+                {% if application_trip_location_path.isThere %}
+                    {{ 'entity_attribute.application_camper.trip_location_there'|trans }}:
+                {% else %}
+                    {{ 'entity_attribute.application_camper.trip_location_back'|trans }}:
+                {% endif %}
+            </strong>
+        </div>
+
+        <div class="col-12 col-sm-9">
+            <span>
+                {{ application_trip_location_path.location }}
+                ({{ application_trip_location_path.price|format_currency(application.currency) }})
+            </span>
+        </div>
+    </div>
+{% endfor %}
+
+{% if application_camper.discountRecurringCamper > 0.0 %}
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3">
+            <strong>{{ 'application.admin.discount_recurring_camper'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9">
+            <span>
+                -{{ application_camper.discountRecurringCamper|format_currency(application.currency) }}
+            </span>
+        </div>
+    </div>
+{% endif %}
+
+{% if application_camper.discountSiblings > 0.0 %}
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3">
+            <strong>{{ 'application.admin.discount_siblings'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9">
+            <span>
+                -{{ application_camper.discountSiblings|format_currency(application.currency) }}
+            </span>
+        </div>
+    </div>
+{% endif %}
+
+<div class="row mb-3">
+    <div class="col-12 col-sm-3">
+        <strong>{{ 'entity_attribute.application_camper.full_price'|trans }}:</strong>
+    </div>
+
+    <div class="col-12 col-sm-9">
+        <span>{{ application_camper.fullPrice|format_currency(application.currency) }}</span>
+    </div>
+</div>

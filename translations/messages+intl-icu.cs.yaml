@@ -185,6 +185,11 @@ application:
     admin:
         number_of_pending: 'Nevyřízených přihlášek'
         show_all_applications: 'Procházet všechny přihlášky'
+        view_invoice: 'Zobrazit fakturu'
+        attachment_not_uploaded: 'Nenahráno'
+        discount_recurring_camper: 'Sleva pro vracejícího se táborníka'
+        discount_siblings: 'Sleva pro sourozence'
+        item_instance_for_camper: 'pro'
 
         list:
             attachments_uploaded: 'Přílohy nahrány'
@@ -198,7 +203,7 @@ application:
             accepted_campers: 'Schválení táborníci'
 
     summary:
-        item_instance_for_camper: 'pro táborníka'
+        item_instance_for_camper: 'pro'
         discount_recurring_camper: 'Sleva pro vracejícího se táborníka'
         discount_siblings: 'Sleva pro sourozence'
         this_is_where_i_get_on: 'zde nasednu'
@@ -264,7 +269,7 @@ application:
             payment_deadline_at: 'Datum splatnosti'
 
         purchasable_item:
-            instance_for_camper: 'pro táborníka'
+            instance_for_camper: 'pro'
 
         trip_location:
             this_is_where_i_get_on: 'zde nasednu'
@@ -775,12 +780,13 @@ entity_attribute:
         customer_channel: 'Odkud přišel zákazník'
         customer_channel_other: 'Upřesnění odkud zákazník přišel'
         is_draft: 'Draft'
-        is_accepted: 'Přijata'
+        is_accepted: 'Vypořádána'
         camp_name: 'Tábor'
         deposit: 'Záloha'
         deposit_until: 'Zálohu nutno zaplatit do'
         price_without_deposit: 'Doplatek'
         full_price: 'Celková cena'
+        full_price_without_tax: 'Celková cena bez DPH'
         full_price_cached: 'Celková cena'
         currency: 'Měna'
         tax: 'DPH'
@@ -800,6 +806,10 @@ entity_attribute:
         camp_date: 'Termín'
         user: 'Uživatel'
         payment_method: 'Platení metoda'
+        are_attachments_uploaded: 'Přílohy nahrány'
+        is_awaiting_payment: 'Očekává platbu'
+        is_awaiting_payment_deposit: 'Očekává platbu zálohy'
+        is_awaiting_payment_rest: 'Očekává platbu doplatku'
         is_payment_method_online: 'Placena online'
         is_payment_method_offline: 'Placena offline'
         application_contacts: 'Kontakty'
@@ -837,7 +847,10 @@ entity_attribute:
         dietary_restrictions: 'Dietní omezení'
         health_restrictions: 'Další zdravotní omezení'
         medication: 'Léky'
+        full_price: 'Celková cena'
         trips_in_the_past: 'Kolikrát jsem jel na nějaký tábor v minulosti'
+        trip_location_there: 'Místo nasednutí na cestě na tábor'
+        trip_location_back: 'Místo vysednutí na cestě z tábora'
         application: 'Přihláška'
         application_trip_location_paths: 'Trasy'
         application_form_field_values: 'Formulářová pole'
@@ -2076,6 +2089,7 @@ route:
     admin_application_camp_date_list: 'Termíny'
     admin_application_camp_date_summary: 'Souhrn za termín'
     admin_application_list: 'Seznam přihlášek'
+    admin_application_read: 'Zobrazení přihlášky'
     admin_application_delete: 'Odstranění přihlášky'
 
     user_home: 'Domů'

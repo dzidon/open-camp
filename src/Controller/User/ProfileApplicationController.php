@@ -103,7 +103,7 @@ class ProfileApplicationController extends AbstractController
             }
         }
 
-        $invoiceFound = $applicationInvoiceFilesystem->getInvoiceContents($application);
+        $invoiceFound = $applicationInvoiceFilesystem->getInvoiceContents($application) !== null;
 
         return $this->render('user/profile/application/read.html.twig', [
             'application'                   => $application,

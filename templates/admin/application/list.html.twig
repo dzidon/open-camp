@@ -59,13 +59,14 @@
                                     <th>{{ 'entity_attribute.application.full_price'|trans }}</th>
                                     <th>{{ 'entity_attribute.application.completed_at'|trans }}</th>
                                     <th>{{ 'entity_attribute.application.is_payment_method_online'|trans }}</th>
-                                    <th>{{ 'application.admin.list.attachments_uploaded'|trans }}</th>
-                                    <th>{{ 'application.admin.list.paid'|trans }}</th>
-                                    <th>{{ 'application.admin.list.settled'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application.are_attachments_uploaded'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application.is_awaiting_payment'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application.is_accepted'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
                                 </tr>
                             </thead>
 
+                            {% set granted_read = is_granted('application_read') %}
                             {% set granted_delete = is_granted('application_delete') %}
 
                             <tbody>
@@ -130,37 +131,45 @@
                                         </td>
 
                                         <td class="align-middle">
-                                            {% if application.isFullyPaid %}
-                                                <span class="badge badge-success">
+                                            {% if application.isAwaitingPayment %}
+                                                <span class="badge badge-danger">
                                                     {{ 'bool.yes'|trans }}
                                                 </span>
                                             {% else %}
-                                                <span class="badge badge-danger">
+                                                <span class="badge badge-success">
                                                     {{ 'bool.no'|trans }}
                                                 </span>
                                             {% endif %}
                                         </td>
 
                                         <td class="align-middle">
-                                            <span>
-                                                {% if application.isAccepted is same as(true) %}
-                                                    <span class="badge badge-success">
-                                                        {{ 'application.is_accepted_state.admin.accepted'|trans }}
-                                                    </span>
-                                                {% elseif application.isAccepted is same as(false) %}
-                                                    <span class="badge badge-danger">
-                                                        {{ 'application.is_accepted_state.admin.declined'|trans }}
-                                                    </span>
-                                                {% elseif application.isAccepted is same as(null) %}
-                                                    <span class="badge badge-warning">
-                                                        {{ 'application.is_accepted_state.admin.unsettled'|trans }}
-                                                    </span>
-                                                {% endif %}
-                                            </span>
+                                            {% if application.isAccepted is same as(true) %}
+                                                <span class="badge badge-success">
+                                                    {{ 'application.is_accepted_state.admin.accepted'|trans }}
+                                                </span>
+                                            {% elseif application.isAccepted is same as(false) %}
+                                                <span class="badge badge-danger">
+                                                    {{ 'application.is_accepted_state.admin.declined'|trans }}
+                                                </span>
+                                            {% elseif application.isAccepted is same as(null) %}
+                                                <span class="badge badge-warning">
+                                                    {{ 'application.is_accepted_state.admin.unsettled'|trans }}
+                                                </span>
+                                            {% endif %}
                                         </td>
 
+                                        {% set granted_read_or_guide = granted_read or is_granted('application_guide', application) %}
+
                                         <td class="align-middle cell-25">
-                                            {% if granted_delete %}
+                                            {% if granted_read_or_guide or granted_delete %}
+                                                {% if granted_read_or_guide %}
+                                                    <a href="{{ path('admin_application_read', {id: application.id}) }}"
+                                                       class="btn btn-secondary"
+                                                    >
+                                                        {{ 'crud.action.common.read'|trans }}
+                                                    </a>
+                                                {% endif %}
+
                                                 {% if granted_delete %}
                                                     <a href="{{ path('admin_application_delete', {id: application.id}) }}"
                                                        class="btn btn-danger"

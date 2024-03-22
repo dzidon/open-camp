@@ -3,6 +3,7 @@
 namespace App\Model\Repository;
 
 use App\Model\Entity\ApplicationAttachment;
+use Symfony\Component\Uid\UuidV4;
 
 interface ApplicationAttachmentRepositoryInterface
 {
@@ -23,4 +24,12 @@ interface ApplicationAttachmentRepositoryInterface
      * @return void
      */
     public function removeApplicationAttachment(ApplicationAttachment $applicationAttachment, bool $flush): void;
+
+    /**
+     * Finds one application attachment by id.
+     *
+     * @param UuidV4 $id
+     * @return ApplicationAttachment|null
+     */
+    public function findOneById(UuidV4 $id): ?ApplicationAttachment;
 }

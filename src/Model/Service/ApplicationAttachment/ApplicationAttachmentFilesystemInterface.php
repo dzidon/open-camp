@@ -11,6 +11,14 @@ use Symfony\Component\HttpFoundation\File\File;
 interface ApplicationAttachmentFilesystemInterface
 {
     /**
+     * Returns the contents of the given application attachment.
+     *
+     * @param ApplicationAttachment $applicationAttachment
+     * @return string|null
+     */
+    public function getFileContents(ApplicationAttachment $applicationAttachment): ?string;
+
+    /**
      * Uploads the given file and attaches it to the given application attachment.
      *
      * @param File $file

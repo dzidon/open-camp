@@ -1,7 +1,7 @@
 {% extends "user/profile/base.html.twig" %}
 
 {% block profile_content %}
-    {{ include('_fragment/_application/_application_summary.html.twig', {
+    {{ include('_fragment/_application/_summary.html.twig', {
         application: application,
         form_attachments_upload_later: form_attachments_upload_later,
         show_application_completed_data: true,

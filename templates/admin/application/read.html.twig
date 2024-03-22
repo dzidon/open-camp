@@ -1,0 +1,453 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.simple_id'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ application.simpleId }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.invoice_number'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ formatted_invoice_number(application.invoiceNumber) }}</span>
+
+                            {% if invoice_found %}
+                                <a href="{{ path('admin_application_invoice', {id: application.id}) }}"
+                                   class="ml-3"
+                                   target="_blank"
+                                >
+                                    <i class="fas fa-file-invoice mr-1"></i>
+                                    {{ 'application.admin.view_invoice'|trans }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.are_attachments_uploaded'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if application.areAttachmentsRequiredLaterMissing %}
+                                <span class="badge badge-danger">
+                                    {{ 'bool.no'|trans }}
+                                </span>
+                            {% else %}
+                                <span class="badge badge-success">
+                                    {{ 'bool.yes'|trans }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>
+                                {{ 'entity_attribute.application.is_awaiting_payment_deposit'|trans }}
+                                ({{ application.fullDeposit|format_currency(application.currency) }}):
+                            </strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% set deposit_type = constant('App\\Model\\Enum\\Entity\\ApplicationPaymentTypeEnum::DEPOSIT') %}
+
+                            {% if application.isAwaitingPayment(deposit_type) %}
+                                <span class="badge badge-danger">
+                                    {{ 'bool.yes'|trans }}
+                                </span>
+                            {% else %}
+                                <span class="badge badge-success">
+                                    {{ 'bool.no'|trans }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>
+                                {{ 'entity_attribute.application.is_awaiting_payment_rest'|trans }}
+                                ({{ application.fullPriceWithoutDeposit|format_currency(application.currency) }}):
+                            </strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% set deposit_type = constant('App\\Model\\Enum\\Entity\\ApplicationPaymentTypeEnum::REST') %}
+
+                            {% if application.isAwaitingPayment(deposit_type) %}
+                                <span class="badge badge-danger">
+                                    {{ 'bool.yes'|trans }}
+                                </span>
+                            {% else %}
+                                <span class="badge badge-success">
+                                    {{ 'bool.no'|trans }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.is_accepted'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if application.isAccepted is same as(true) %}
+                                <span class="badge badge-success">
+                                    {{ 'application.is_accepted_state.admin.accepted'|trans }}
+                                </span>
+                            {% elseif application.isAccepted is same as(false) %}
+                                <span class="badge badge-danger">
+                                    {{ 'application.is_accepted_state.admin.declined'|trans }}
+                                </span>
+                            {% elseif application.isAccepted is same as(null) %}
+                                <span class="badge badge-warning">
+                                    {{ 'application.is_accepted_state.admin.unsettled'|trans }}
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if application.depositUntil is not null %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ 'entity_attribute.application.deposit_until'|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>
+                                    {{ application.depositUntil|date(date_time_format) }}
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if application.completedAt is not null %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ 'entity_attribute.application.completed_at'|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>
+                                    {{ application.completedAt|date(date_time_format) }}
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.camp_name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {{ application.campName }}
+
+                                ({{ application.campDateStartAt|date(date_time_format) }} - {{ application.campDateEndAt|date(date_time_format) }})
+                            </span>
+                        </div>
+                    </div>
+
+                    {% if application.paymentMethodLabel is not null %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ 'entity_attribute.application.payment_method'|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>{{ application.paymentMethodLabel|trans }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if application.customerChannel is not null %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ 'entity_attribute.application.customer_channel'|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>
+                                    {% if application.customerChannel.value == 'other' %}
+                                        {{ application.customerChannelOther }}
+                                    {% else %}
+                                        {{ ('application_customer_channel.' ~ application.customerChannel.value)|trans }}
+                                    {% endif %}
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if application.note is not null %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ 'entity_attribute.application.note'|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>{{ application.note }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% for application_form_field_value in application.applicationFormFieldValues %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ application_form_field_value.label }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                {% if application_form_field_value.value is null %}
+                                    <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                                {% else %}
+                                    <span>
+                                        {% if application_form_field_value.value is iterable %}
+                                            {{ application_form_field_value.value|join(', ') }}
+                                        {% else %}
+                                            {{ application_form_field_value.value }}
+                                        {% endif %}
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                    {% if application.applicationAttachments is not empty %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ 'entity_attribute.application.application_attachments'|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                {% for application_attachment in application.applicationAttachments %}
+                                    <div>
+                                        {% if application_attachment.extension is null %}
+                                            <em>
+                                                {{ application_attachment.label }} ({{ 'application.admin.attachment_not_uploaded'|trans }})
+                                            </em>
+                                        {% else %}
+                                            <a href="{{ path('admin_application_attachment', {id: application_attachment.id}) }}">
+                                                {{ application_attachment.label }} ({{ application_attachment.extension }})
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if application.tax > 0.0 %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ 'entity_attribute.application.full_price_without_tax'|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>{{ application.fullPriceWithoutTax|format_currency(application.currency) }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.full_price'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ application.fullPrice|format_currency(application.currency) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-2 mt-5">
+                        <div class="col-12">
+                            <h4>{{ 'application.buyer_details'|trans }}</h4>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.email'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ application.email }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.name_full'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ application.nameFull }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.street'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ application.street }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.town'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ application.town }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.zip'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ application.zip }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application.country'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ country_name_for_code(application.country) }}</span>
+                        </div>
+                    </div>
+
+                    {% if application.businessName is not null %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ 'entity_attribute.application.business_name'|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>{{ application.businessName }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if application.businessCin is not null %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ 'entity_attribute.application.business_cin'|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>{{ application.businessCin }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if application.businessVatId is not null %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ 'entity_attribute.application.business_vat_id'|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>{{ application.businessVatId }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% for application_contact in application.applicationContacts %}
+                        {{ include('_fragment/_application/_admin_application_contact.html.twig', {
+                            application_contact: application_contact
+                        }) }}
+                    {% endfor %}
+
+                    {% for application_camper in application.applicationCampers %}
+                        {{ include('_fragment/_application/_admin_application_camper.html.twig', {
+                            application_camper: application_camper
+                        }) }}
+                    {% endfor %}
+
+                    {% for application_purchasable_item in application.applicationPurchasableItems %}
+                        {% set instances_total_amount = application_purchasable_item.instancesTotalAmount %}
+
+                        {% if instances_total_amount > 0 %}
+                            {% set instances = application_purchasable_item.applicationPurchasableItemInstances %}
+
+                            <div class="row mb-2 mt-5">
+                                <div class="col-12">
+                                    <h4>
+                                        {{ 'entity.application_purchasable_item.singular'|trans }}
+                                        {{ application_purchasable_item.label }}
+                                    </h4>
+                                </div>
+                            </div>
+
+                            {% for instance in instances %}
+                                {% if instance.amount > 0 %}
+                                    {% set application_camper = instance.applicationCamper %}
+
+                                    <div class="row mb-3">
+                                        <div class="col-12 col-sm-3">
+                                            <strong>
+                                                {{ instance.amount }}x
+
+                                                {%- if instance.chosenVariantValuesAsString is not empty %}
+                                                    {{ instance.chosenVariantValuesAsString }}
+                                                {% endif -%}
+
+                                                {%- if application_camper is not null -%}
+                                                    {{ 'application.admin.item_instance_for_camper'|trans }}
+                                                    {{ application_camper.nameFull }}
+                                                {%- endif -%}:
+                                            </strong>
+                                        </div>
+
+                                        <div class="col-12 col-sm-9">
+                                            <span>
+                                                {{ instance.price|format_currency(application.currency) }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                {% set granted_delete = is_granted('application_delete') %}
+
+                {% if granted_delete %}
+                    <div class="card-footer">
+                        {% if granted_delete %}
+                            <a href="{{ path('admin_application_delete', {id: application.id}) }}"
+                               class="btn btn-danger"
+                            >
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

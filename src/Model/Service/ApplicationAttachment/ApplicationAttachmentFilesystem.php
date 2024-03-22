@@ -21,6 +21,21 @@ class ApplicationAttachmentFilesystem implements ApplicationAttachmentFilesystem
     /**
      * @inheritDoc
      */
+    public function getFileContents(ApplicationAttachment $applicationAttachment): ?string
+    {
+        $fileName = $this->getApplicationAttachmentName($applicationAttachment);
+
+        if (!$this->applicationAttachmentStorage->has($fileName))
+        {
+            return null;
+        }
+
+        return $this->applicationAttachmentStorage->read($fileName);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function uploadFile(File $file, ApplicationAttachment $applicationAttachment): void
     {
         $this->removeFile($applicationAttachment);

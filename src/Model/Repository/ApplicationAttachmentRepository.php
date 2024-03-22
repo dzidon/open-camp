@@ -4,6 +4,8 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\ApplicationAttachment;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @method ApplicationAttachment|null find($id, $lockMode = null, $lockVersion = null)
@@ -32,5 +34,22 @@ class ApplicationAttachmentRepository extends AbstractRepository implements Appl
     public function removeApplicationAttachment(ApplicationAttachment $applicationAttachment, bool $flush): void
     {
         $this->remove($applicationAttachment, $flush);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findOneById(UuidV4 $id): ?ApplicationAttachment
+    {
+        return $this->createQueryBuilder('applicationAttachment')
+            ->select('applicationAttachment, application, applicationCamper, applicationCamperApplication')
+            ->leftJoin('applicationAttachment.application', 'application')
+            ->leftJoin('applicationAttachment.applicationCamper', 'applicationCamper')
+            ->leftJoin('applicationCamper.application', 'applicationCamperApplication')
+            ->andWhere('applicationAttachment.id = :id')
+            ->setParameter('id', $id, UuidType::NAME)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
     }
 }

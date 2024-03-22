@@ -4,12 +4,14 @@ namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
 use App\Library\Data\Admin\ApplicationSearchData;
+use App\Library\Http\Response\PdfResponse;
 use App\Model\Entity\Application;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
 use App\Model\Event\Admin\Application\ApplicationDeleteEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
+use App\Model\Service\Application\ApplicationInvoiceFilesystemInterface;
 use App\Service\Form\Type\Admin\ApplicationSearchType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
@@ -114,11 +116,56 @@ class ApplicationController extends AbstractController
         ]);
     }
 
+    #[Route('/admin/application/{id}/invoice', name: 'admin_application_invoice')]
+    public function invoice(ApplicationInvoiceFilesystemInterface $applicationInvoiceFilesystem, UuidV4 $id): PdfResponse
+    {
+        $application = $this->findCompletedApplicationOrThrow404($id);
+
+        if (!$this->isGranted('application_read') && !$this->isGranted('application_guide', $application))
+        {
+            throw $this->createAccessDeniedException();
+        }
+
+        $invoiceContents = $applicationInvoiceFilesystem->getInvoiceContents($application);
+
+        if ($invoiceContents === null)
+        {
+            throw $this->createNotFoundException();
+        }
+
+        return new PdfResponse('', $invoiceContents);
+    }
+
+    #[Route('/admin/application/{id}/read', name: 'admin_application_read')]
+    public function read(ApplicationInvoiceFilesystemInterface $applicationInvoiceFilesystem, UuidV4 $id): Response
+    {
+        $application = $this->findCompletedApplicationOrThrow404($id);
+
+        if (!$this->isGranted('application_read') && !$this->isGranted('application_guide', $application))
+        {
+            throw $this->createAccessDeniedException();
+        }
+
+        $campDate = $application->getCampDate();
+        $camp = $campDate?->getCamp();
+        $invoiceFound = $applicationInvoiceFilesystem->getInvoiceContents($application) !== null;
+
+        return $this->render('admin/application/read.html.twig', [
+            'application'   => $application,
+            'invoice_found' => $invoiceFound,
+            'breadcrumbs'   => $this->createBreadcrumbs([
+                'application' => $application,
+                'camp_date'   => $campDate,
+                'camp'        => $camp,
+            ]),
+        ]);
+    }
+
     #[IsGranted('application_delete')]
     #[Route('/admin/application/{id}/delete', name: 'admin_application_delete')]
     public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
     {
-        $application = $this->findApplicationOrThrow404($id);
+        $application = $this->findCompletedApplicationOrThrow404($id);
 
         $form = $this->createForm(HiddenTrueType::class);
         $form->add('submit', SubmitType::class, [
@@ -150,11 +197,11 @@ class ApplicationController extends AbstractController
         ]);
     }
 
-    private function findApplicationOrThrow404(UuidV4 $id): Application
+    private function findCompletedApplicationOrThrow404(UuidV4 $id): Application
     {
         $application = $this->applicationRepository->findOneById($id);
 
-        if ($application === null)
+        if ($application === null || !$application->isCompleted())
         {
             throw $this->createNotFoundException();
         }
