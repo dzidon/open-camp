@@ -108,7 +108,7 @@ class BillingType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'   => BillingData::class,
-            'block_prefix' => 'user_billing',
+            'block_prefix' => 'common_billing',
         ]);
     }
 }

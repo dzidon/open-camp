@@ -56,7 +56,7 @@ class ApplicationCamperPurchasableItemsType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'   => ApplicationCamperPurchasableItemsData::class,
-            'block_prefix' => 'user_application_camper_purchasable_items',
+            'block_prefix' => 'common_application_camper_purchasable_items',
             'label'        => false,
         ]);
 

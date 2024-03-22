@@ -36,7 +36,7 @@ class ApplicationAttachmentType extends AbstractType
 
             $form
                 ->add('file', FileType::class, [
-                    'block_prefix'       => 'user_application_attachment_file',
+                    'block_prefix'       => 'common_application_attachment_file',
                     'multiple'           => false,
                     'required'           => $isRequired,
                     'label'              => $label,

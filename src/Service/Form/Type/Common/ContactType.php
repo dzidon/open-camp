@@ -177,7 +177,7 @@ class ContactType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'             => ContactData::class,
-            'block_prefix'           => 'user_contact',
+            'block_prefix'           => 'common_contact',
             'enable_contact_loading' => false,
             'loadable_contacts'      => [],
         ]);

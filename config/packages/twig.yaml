@@ -4,6 +4,7 @@ twig:
     form_themes:
         - 'bootstrap_4_layout.html.twig'
         - '_fragment/_form_theme/_custom_layout.html.twig'
+        - '_fragment/_form_theme/_common_whole_forms.html.twig'
         - '_fragment/_form_theme/_admin_whole_forms.html.twig'
         - '_fragment/_form_theme/_user_whole_forms.html.twig'
 

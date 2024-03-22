@@ -229,7 +229,7 @@ class ApplicationCamperType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'             => ApplicationCamperData::class,
-            'block_prefix'           => 'user_application_camper',
+            'block_prefix'           => 'common_application_camper',
             'enable_camper_loading'  => false,
             'loadable_campers'       => [],
         ]);

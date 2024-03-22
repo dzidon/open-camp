@@ -92,7 +92,7 @@ class ApplicationPurchasableItemType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'   => ApplicationPurchasableItemData::class,
-            'block_prefix' => 'user_application_purchasable_item',
+            'block_prefix' => 'common_application_purchasable_item',
             'label'        => false,
         ]);
 
