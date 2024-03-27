@@ -2,8 +2,6 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\Common\ApplicationCamperData;
-use App\Library\Data\Common\ContactData;
 use App\Library\Data\User\ApplicationStepOneData;
 use App\Model\Entity\Camper;
 use App\Model\Entity\Contact;
@@ -19,6 +17,8 @@ use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -26,26 +26,85 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ApplicationStepOneType extends AbstractType
 {
-    private bool $isEuBusinessDataEnabled;
-
-    public function __construct(bool $isEuBusinessDataEnabled)
-    {
-        $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var ApplicationCamperData $defaultApplicationCamperData */
-        $defaultApplicationCamperData = $options['application_camper_default_data'];
+        /** @var callable $emptyApplicationCamperData */
+        $emptyApplicationCamperData = $options['application_camper_empty_data'];
 
-        /** @var ContactData $defaultContactData */
-        $defaultContactData = $options['contact_default_data'];
+        /** @var callable $contactEmptyData */
+        $contactEmptyData = $options['contact_empty_data'];
 
         /** @var Contact[] $loadableContacts */
         $loadableContacts = $options['loadable_contacts'];
 
         /** @var Camper[] $loadableCampers */
         $loadableCampers = $options['loadable_campers'];
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void
+        {
+            /** @var null|ApplicationStepOneData $applicationStepOneData */
+            $applicationStepOneData = $event->getData();
+            $form = $event->getForm();
+
+            if ($applicationStepOneData === null)
+            {
+                return;
+            }
+
+            if (!$applicationStepOneData->isEuBusinessDataEnabled())
+            {
+                return;
+            }
+
+            $form
+                ->add('isCompany', CheckboxType::class, [
+                    'label'  => 'form.user.application_step_one.is_company',
+                    'attr'   => [
+                        'data-controller'                      => 'cv--checkbox',
+                        'data-action'                          => 'cv--checkbox#updateVisibility',
+                        'data-cv--checkbox-cv--content-outlet' => '.company-fields-visibility',
+                    ],
+                    'required' => false,
+                    'priority' => 4300,
+                ])
+                ->add('businessName', TextType::class, [
+                    'label'    => 'form.user.application_step_one.business_name',
+                    'row_attr' => [
+                        'class'                                   => 'company-fields-visibility',
+                        'data-controller'                         => 'cv--content',
+                        'data-cv--content-show-when-chosen-value' => '1',
+                    ],
+                    'required' => false,
+                    'priority' => 4200,
+                ])
+                ->add('businessCin', TextType::class, [
+                    'label'      => 'form.user.application_step_one.business_cin',
+                    'label_attr' => [
+                        'class' => 'required'
+                    ],
+                    'row_attr' => [
+                        'class'                                   => 'company-fields-visibility',
+                        'data-controller'                         => 'cv--content',
+                        'data-cv--content-show-when-chosen-value' => '1',
+                    ],
+                    'required' => false,
+                    'priority' => 4100,
+                ])
+                ->add('businessVatId', TextType::class, [
+                    'label'      => 'form.user.application_step_one.business_vat_id',
+                    'label_attr' => [
+                        'class' => 'required'
+                    ],
+                    'row_attr' => [
+                        'class'                                   => 'company-fields-visibility',
+                        'data-controller'                         => 'cv--content',
+                        'data-cv--content-show-when-chosen-value' => '1',
+                    ],
+                    'required' => false,
+                    'priority' => 4000,
+                ])
+            ;
+        });
 
         $builder
             ->add('email', EmailType::class, [
@@ -94,61 +153,6 @@ class ApplicationStepOneType extends AbstractType
                 'label'    => 'form.user.application_step_one.country',
                 'priority' => 4400,
             ])
-        ;
-
-        if ($this->isEuBusinessDataEnabled)
-        {
-            $builder
-                ->add('isCompany', CheckboxType::class, [
-                    'label'  => 'form.user.application_step_one.is_company',
-                    'attr'   => [
-                        'data-controller'                      => 'cv--checkbox',
-                        'data-action'                          => 'cv--checkbox#updateVisibility',
-                        'data-cv--checkbox-cv--content-outlet' => '.company-fields-visibility',
-                    ],
-                    'required' => false,
-                    'priority' => 4300,
-                ])
-                ->add('businessName', TextType::class, [
-                    'label'    => 'form.user.application_step_one.business_name',
-                    'row_attr' => [
-                        'class'                                   => 'company-fields-visibility',
-                        'data-controller'                         => 'cv--content',
-                        'data-cv--content-show-when-chosen-value' => '1',
-                    ],
-                    'required' => false,
-                    'priority' => 4200,
-                ])
-                ->add('businessCin', TextType::class, [
-                    'label'      => 'form.user.application_step_one.business_cin',
-                    'label_attr' => [
-                        'class' => 'required'
-                    ],
-                    'row_attr' => [
-                        'class'                                   => 'company-fields-visibility',
-                        'data-controller'                         => 'cv--content',
-                        'data-cv--content-show-when-chosen-value' => '1',
-                    ],
-                    'required' => false,
-                    'priority' => 4100,
-                ])
-                ->add('businessVatId', TextType::class, [
-                    'label'      => 'form.user.application_step_one.business_vat_id',
-                    'label_attr' => [
-                        'class' => 'required'
-                    ],
-                    'row_attr' => [
-                        'class'                                   => 'company-fields-visibility',
-                        'data-controller'                         => 'cv--content',
-                        'data-cv--content-show-when-chosen-value' => '1',
-                    ],
-                    'required' => false,
-                    'priority' => 4000,
-                ])
-            ;
-        }
-
-        $builder
             ->add('applicationFormFieldValuesData', CollectionType::class, [
                 'entry_type' => ApplicationFormFieldValueType::class,
                 'entry_options' => [
@@ -188,7 +192,7 @@ class ApplicationStepOneType extends AbstractType
                     'remove_button_label'    => 'form.user.application_contact.remove_button',
                     'remove_button'          => true,
                     'enable_contact_loading' => true,
-                    'empty_data'             => $defaultContactData,
+                    'empty_data'             => $contactEmptyData,
                     'loadable_contacts'      => $loadableContacts,
                 ],
                 'prototype_options' => [
@@ -197,7 +201,7 @@ class ApplicationStepOneType extends AbstractType
                     'enable_contact_loading' => true,
                     'loadable_contacts'      => $loadableContacts,
                 ],
-                'prototype_data' => $defaultContactData,
+                'prototype_data' => $contactEmptyData(),
                 'priority'       => 3700,
             ])
             ->add('addContactData', CollectionAddItemButtonType::class, [
@@ -215,7 +219,7 @@ class ApplicationStepOneType extends AbstractType
                     'remove_button_label'   => 'form.user.application_camper.remove_button',
                     'remove_button'         => true,
                     'enable_camper_loading' => true,
-                    'empty_data'            => $defaultApplicationCamperData,
+                    'empty_data'            => $emptyApplicationCamperData,
                     'loadable_campers'      => $loadableCampers,
                 ],
                 'prototype_options' => [
@@ -224,7 +228,7 @@ class ApplicationStepOneType extends AbstractType
                     'enable_camper_loading' => true,
                     'loadable_campers'      => $loadableCampers,
                 ],
-                'prototype_data' => $defaultApplicationCamperData,
+                'prototype_data' => $emptyApplicationCamperData(),
                 'priority'       => 3500,
             ])
             ->add('addCamperData', CollectionAddItemButtonType::class, [
@@ -250,12 +254,12 @@ class ApplicationStepOneType extends AbstractType
         $resolver->setAllowedTypes('loadable_contacts', Contact::class . '[]');
         $resolver->setAllowedTypes('loadable_campers', Camper::class . '[]');
 
-        $resolver->setDefined('application_camper_default_data');
-        $resolver->setAllowedTypes('application_camper_default_data', ApplicationCamperData::class);
-        $resolver->setRequired('application_camper_default_data');
+        $resolver->setDefined('application_camper_empty_data');
+        $resolver->setAllowedTypes('application_camper_empty_data', 'callable');
+        $resolver->setRequired('application_camper_empty_data');
 
-        $resolver->setDefined('contact_default_data');
-        $resolver->setAllowedTypes('contact_default_data', ContactData::class);
-        $resolver->setRequired('contact_default_data');
+        $resolver->setDefined('contact_empty_data');
+        $resolver->setAllowedTypes('contact_empty_data', 'callable');
+        $resolver->setRequired('contact_empty_data');
     }
 }

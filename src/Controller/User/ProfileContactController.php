@@ -124,7 +124,7 @@ class ProfileContactController extends AbstractController
         $contact = $this->findContactOrThrow404($id);
         $this->denyAccessUnlessGranted('contact_update', $contact);
 
-        $contactData = new \App\Library\Data\Common\ContactData(
+        $contactData = new ContactData(
             $this->getParameter('app.contact_email_mandatory'),
             $this->getParameter('app.contact_phone_number_mandatory')
         );

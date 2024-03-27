@@ -15,7 +15,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Uid\UuidV4;
+use Symfony\Component\Uid\Uuid;
 
 /**
  * User contact edit.
@@ -69,7 +69,8 @@ class ContactType extends AbstractType
         $role = $children['role'];
         $roleOther = $children['roleOther'];
 
-        $name = (new UuidV4())->toRfc4122();
+        $uid = (Uuid::v4())->toRfc4122();
+        $name = $uid . '-' . $form->getName();
         $searchedClassName = 'role-other-field-visibility';
         $newClassName = $searchedClassName . '-' . $name;
 
@@ -88,21 +89,21 @@ class ContactType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var ContactData $defaultData */
-        $defaultData = $options['empty_data'];
+        /** @var callable $emptyData */
+        $emptyData = $options['empty_data'];
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($defaultData): void
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($emptyData): void
         {
-            /** @var ContactData $data */
+            /** @var null|ContactData $data */
             $data = $event->getData();
-            $form = $event->getForm();
 
             if ($data === null)
             {
-                $data = $this->cloneDefaultContactData($defaultData);
+                $data = $emptyData();
                 $event->setData($data);
             }
 
+            $form = $event->getForm();
             $isEmailMandatory = $data->isEmailMandatory();
             $isPhoneNumberMandatory = $data->isPhoneNumberMandatory();
 
@@ -186,10 +187,5 @@ class ContactType extends AbstractType
         $resolver->setAllowedTypes('loadable_contacts', Contact::class . '[]');
 
         $resolver->setRequired('empty_data');
-    }
-
-    private function cloneDefaultContactData(ContactData $data): ContactData
-    {
-        return new ContactData($data->isEmailMandatory(), $data->isPhoneNumberMandatory());
     }
 }

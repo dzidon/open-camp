@@ -437,6 +437,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             ->leftJoin(CampDate::class, 'campDate', 'WITH', 'camp.id = campDate.camp')
             ->leftJoin(Application::class, 'application', 'WITH', '
                 campDate.id = application.campDate AND
+                application.isDraft = FALSE AND
                 application.isAccepted IS NULL
             ')
             ->andWhere('camp.name LIKE :phrase')
@@ -469,6 +470,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
             ->leftJoin(CampDate::class, 'campDate', 'WITH', 'camp.id = campDate.camp')
             ->leftJoin(Application::class, 'application', 'WITH', '
                 campDate.id = application.campDate AND
+                application.isDraft = FALSE AND
                 application.isAccepted IS NULL
             ')
             ->andWhere('camp.id IN (:ids)')

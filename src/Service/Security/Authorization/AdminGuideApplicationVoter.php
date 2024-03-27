@@ -15,7 +15,17 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 class AdminGuideApplicationVoter extends Voter
 {
     const CAMP_DATE_GUIDE = 'camp_date_guide';
-    const APPLICATION_GUIDE = 'application_guide';
+    const APPLICATION_GUIDE_READ = 'application_guide_read';
+    const APPLICATION_GUIDE_STATE = 'application_guide_state';
+    const APPLICATION_GUIDE_UPDATE = 'application_guide_update';
+    const APPLICATION_GUIDE_PAYMENTS = 'application_guide_payments';
+
+    const APPLICATION_GUIDE_PERMISSIONS = [
+        self::APPLICATION_GUIDE_READ,
+        self::APPLICATION_GUIDE_STATE,
+        self::APPLICATION_GUIDE_UPDATE,
+        self::APPLICATION_GUIDE_PAYMENTS,
+    ];
 
     private CampDateUserRepositoryInterface $campDateUserRepository;
 
@@ -34,7 +44,7 @@ class AdminGuideApplicationVoter extends Voter
             return true;
         }
 
-        if ($attribute === self::APPLICATION_GUIDE && $subject instanceof Application)
+        if (in_array($attribute, self::APPLICATION_GUIDE_PERMISSIONS) && $subject instanceof Application)
         {
             return true;
         }
@@ -67,7 +77,7 @@ class AdminGuideApplicationVoter extends Voter
                 return null !== $this->campDateUserRepository->findOneForCampDateAndUser($campDate, $user);
             }
         }
-        else if ($attribute === self::APPLICATION_GUIDE)
+        else if (in_array($attribute, self::APPLICATION_GUIDE_PERMISSIONS))
         {
             /** @var Application $application */
             $application = $subject;
@@ -78,7 +88,32 @@ class AdminGuideApplicationVoter extends Voter
                 return false;
             }
 
-            return null !== $this->campDateUserRepository->findOneForCampDateAndUser($campDate, $user);
+            $campDateUser = $this->campDateUserRepository->findOneForCampDateAndUser($campDate, $user);
+
+            if ($campDateUser === null)
+            {
+                return false;
+            }
+
+            if ($attribute === self::APPLICATION_GUIDE_READ)
+            {
+                return true;
+            }
+
+            if ($attribute === self::APPLICATION_GUIDE_STATE && $campDateUser->canUpdateApplicationsState())
+            {
+                return true;
+            }
+
+            if ($attribute === self::APPLICATION_GUIDE_UPDATE && $campDateUser->canUpdateApplicationsState())
+            {
+                return true;
+            }
+
+            if ($attribute === self::APPLICATION_GUIDE_PAYMENTS && $campDateUser->canManageApplicationPayments())
+            {
+                return true;
+            }
         }
 
         return false;

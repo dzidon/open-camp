@@ -11,13 +11,6 @@ use App\Service\Data\Transfer\DataTransferInterface;
  */
 class CamperDataTransfer implements DataTransferInterface
 {
-    private bool $isNationalIdentifierEnabled;
-
-    public function __construct(bool $isNationalIdentifierEnabled)
-    {
-        $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
-    }
-
     /**
      * @inheritDoc
      */
@@ -44,7 +37,7 @@ class CamperDataTransfer implements DataTransferInterface
         $camperData->setHealthRestrictions($camper->getHealthRestrictions());
         $camperData->setMedication($camper->getMedication());
 
-        if ($this->isNationalIdentifierEnabled)
+        if ($camperData->isNationalIdentifierEnabled())
         {
             if ($camper->getNationalIdentifier() === null)
             {
@@ -75,7 +68,7 @@ class CamperDataTransfer implements DataTransferInterface
         $camper->setHealthRestrictions($camperData->getHealthRestrictions());
         $camper->setMedication($camperData->getMedication());
 
-        if ($this->isNationalIdentifierEnabled)
+        if ($camperData->isNationalIdentifierEnabled())
         {
             if ($camperData->isNationalIdentifierAbsent())
             {

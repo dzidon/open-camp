@@ -3,7 +3,6 @@
 namespace App\Service\Form\Type\Common;
 
 use App\Library\Data\Common\ApplicationPurchasableItemData;
-use App\Library\Data\Common\ApplicationPurchasableItemInstanceData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,10 +14,10 @@ class ApplicationPurchasableItemType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var ApplicationPurchasableItemInstanceData[] $instanceDefaultsData */
-        $instanceDefaultsData = $options['instance_defaults_data'];
+        /** @var callable[] $instancesEmptyData */
+        $instancesEmptyData = $options['instances_empty_data'];
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($instanceDefaultsData): void
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($instancesEmptyData): void
         {
             /** @var ApplicationPurchasableItemData $applicationPurchasableItemData */
             $applicationPurchasableItemData = $event->getData();
@@ -35,12 +34,12 @@ class ApplicationPurchasableItemType extends AbstractType
                 ->toRfc4122()
             ;
 
-            if (!array_key_exists($idString, $instanceDefaultsData))
+            if (!array_key_exists($idString, $instancesEmptyData))
             {
                 return;
             }
 
-            $defaultInstanceData = $instanceDefaultsData[$idString];
+            $emptyInstanceData = $instancesEmptyData[$idString];
             $hasMultipleVariants = $applicationPurchasableItem->hasMultipleVariants();
             $application = $applicationPurchasableItem->getApplication();
             $isIndividualMode = $application->isPurchasableItemsIndividualMode();
@@ -65,14 +64,14 @@ class ApplicationPurchasableItemType extends AbstractType
                         'label'               => false,
                         'remove_button_label' => 'form.user.application_purchasable_item_instance.remove_button',
                         'remove_button'       => $canAddAndRemove,
-                        'empty_data'          => $defaultInstanceData,
+                        'empty_data'          => $emptyInstanceData,
                     ],
                     'prototype_options' => [
                         'remove_button_label' => 'form.user.application_purchasable_item_instance.remove_button',
                         'remove_button'       => true,
                     ],
                     'prototype'      => $canAddAndRemove,
-                    'prototype_data' => $defaultInstanceData,
+                    'prototype_data' => $emptyInstanceData(),
                 ])
             ;
 
@@ -96,8 +95,8 @@ class ApplicationPurchasableItemType extends AbstractType
             'label'        => false,
         ]);
 
-        $resolver->setDefined('instance_defaults_data');
-        $resolver->setAllowedTypes('instance_defaults_data', ApplicationPurchasableItemInstanceData::class . '[]');
-        $resolver->setRequired('instance_defaults_data');
+        $resolver->setDefined('instances_empty_data');
+        $resolver->setAllowedTypes('instances_empty_data', 'callable[]');
+        $resolver->setRequired('instances_empty_data');
     }
 }

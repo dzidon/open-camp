@@ -3,16 +3,20 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
+use App\Library\Data\Admin\ApplicationData;
 use App\Library\Data\Admin\ApplicationSearchData;
 use App\Library\Http\Response\PdfResponse;
 use App\Model\Entity\Application;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
 use App\Model\Event\Admin\Application\ApplicationDeleteEvent;
+use App\Model\Event\Admin\Application\ApplicationUpdateEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Service\Application\ApplicationInvoiceFilesystemInterface;
+use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\ApplicationSearchType;
+use App\Service\Form\Type\Admin\ApplicationType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -121,7 +125,7 @@ class ApplicationController extends AbstractController
     {
         $application = $this->findCompletedApplicationOrThrow404($id);
 
-        if (!$this->isGranted('application_read') && !$this->isGranted('application_guide', $application))
+        if (!$this->isGranted('application_read') && !$this->isGranted('application_guide_read', $application))
         {
             throw $this->createAccessDeniedException();
         }
@@ -141,7 +145,7 @@ class ApplicationController extends AbstractController
     {
         $application = $this->findCompletedApplicationOrThrow404($id);
 
-        if (!$this->isGranted('application_read') && !$this->isGranted('application_guide', $application))
+        if (!$this->isGranted('application_read') && !$this->isGranted('application_guide_read', $application))
         {
             throw $this->createAccessDeniedException();
         }
@@ -154,6 +158,50 @@ class ApplicationController extends AbstractController
             'application'   => $application,
             'invoice_found' => $invoiceFound,
             'breadcrumbs'   => $this->createBreadcrumbs([
+                'application' => $application,
+                'camp_date'   => $campDate,
+                'camp'        => $camp,
+            ]),
+        ]);
+    }
+
+    #[Route('/admin/application/{id}/update', name: 'admin_application_update')]
+    public function update(EventDispatcherInterface      $eventDispatcher,
+                           DataTransferRegistryInterface $dataTransfer,
+                           Request                       $request,
+                           UuidV4                        $id): Response
+    {
+        $application = $this->findCompletedApplicationOrThrow404($id);
+        $campDate = $application->getCampDate();
+        $camp = $campDate?->getCamp();
+
+        if (!$this->isGranted('application_update') && !$this->isGranted('application_guide_update', $application))
+        {
+            throw $this->createAccessDeniedException();
+        }
+
+        $applicationData = new ApplicationData($application);
+        $dataTransfer->fillData($applicationData, $application);
+        $form = $this->createForm(ApplicationType::class, $applicationData);
+        $form->add('submit', SubmitType::class, ['label' => 'form.admin.application.button']);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $event = new ApplicationUpdateEvent($applicationData, $application);
+            $eventDispatcher->dispatch($event, $event::NAME);
+            $this->addTransFlash('success', 'crud.action_performed.application.update');
+            $campDateId = $campDate?->getId();
+
+            return $this->redirectToRoute('admin_application_list', [
+                'campDateId' => $campDateId,
+            ]);
+        }
+
+        return $this->render('admin/application/update.html.twig', [
+            'application'      => $application,
+            'form_application' => $form->createView(),
+            'breadcrumbs'      => $this->createBreadcrumbs([
                 'application' => $application,
                 'camp_date'   => $campDate,
                 'camp'        => $camp,
@@ -179,8 +227,11 @@ class ApplicationController extends AbstractController
             $event = new ApplicationDeleteEvent($application);
             $eventDispatcher->dispatch($event, $event::NAME);
             $this->addTransFlash('success', 'crud.action_performed.application.delete');
+            $campDateId = $application->getCampDate()->getId();
 
-            return $this->redirectToRoute('admin_application_camp_list');
+            return $this->redirectToRoute('admin_application_list', [
+                'campDateId' => $campDateId,
+            ]);
         }
 
         $campDate = $application->getCampDate();

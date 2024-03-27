@@ -203,11 +203,6 @@ services:
         arguments:
             $emailFrom: '%app.email_no_reply%'
 
-    App\Model\Service\Contact\ContactDataFactory:
-        arguments:
-            $isEmailMandatory: '%app.contact_email_mandatory%'
-            $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
-
     App\Model\Service\UserPasswordChange\UserPasswordChangeMailer:
         arguments:
             $emailFrom: '%app.email_no_reply%'
@@ -267,10 +262,6 @@ services:
         arguments:
             $phoneNumberFormat: '%app.phone_number_format%'
 
-    App\Service\Form\Type\Common\CamperType:
-        arguments:
-            $isNationalIdentifierEnabled: '%app.national_identifier%'
-
     App\Service\Form\Type\Admin\DiscountRecurringCamperConfigType:
         arguments:
             $tax: '%app.tax%'
@@ -295,10 +286,6 @@ services:
         arguments:
             $dateFormat: '%app.date_format%'
 
-    App\Service\Form\Type\User\ApplicationStepOneType:
-        arguments:
-            $isEuBusinessDataEnabled: '%app.eu_business_data%'
-
     App\Service\Menu\Renderer\MenuTypeRenderer:
         arguments:
             $menuTheme: '%app.menu_theme%'
@@ -310,10 +297,6 @@ services:
     App\Service\Data\Transfer\Common\BillingDataTransfer:
         arguments:
             $isEuBusinessDataEnabled: '%app.eu_business_data%'
-
-    App\Service\Data\Transfer\Common\CamperDataTransfer:
-        arguments:
-            $isNationalIdentifierEnabled: '%app.national_identifier%'
 
     App\Service\Validator\NationalIdentifierValidator:
         arguments:

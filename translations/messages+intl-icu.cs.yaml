@@ -414,6 +414,7 @@ permission:
     application_summary_read: 'Zobrazení souhrnů přihlášek za tábory a termíny'
     application_read: 'Zobrazení přihlášky'
     application_update: 'Editace přihlášky'
+    application_state_update: 'Vypořádání přihlášky'
     application_delete: 'Odstranění přihlášky'
 
     application_payment_read: 'Zobrazení platby'
@@ -513,6 +514,10 @@ crud:
             show_in_catalog: 'Zobrazit v katalogu'
 
     action_performed:
+        application:
+            update: 'Přihláška uložena!'
+            delete: 'Přihláška odstraněna!'
+
         application_attachment:
             upload_later: 'Soubory uloženy!'
 
@@ -810,7 +815,7 @@ entity_attribute:
         is_awaiting_payment: 'Očekává platbu'
         is_awaiting_payment_deposit: 'Očekává platbu zálohy'
         is_awaiting_payment_rest: 'Očekává platbu doplatku'
-        is_payment_method_online: 'Placena online'
+        is_payment_method_online: 'Platba online'
         is_payment_method_offline: 'Placena offline'
         application_contacts: 'Kontakty'
         application_campers: 'Táborníci'
@@ -1770,6 +1775,21 @@ form:
                     accepted: 'Přijata'
                     declined: 'Zamítnuta'
 
+        application:
+            is_accepted: 'Stav'
+            email: 'E-mail'
+            name_first: 'Jméno'
+            name_last: 'Příjmení'
+            street: 'Ulice a číslo popisné'
+            town: 'Obec'
+            zip: 'PSČ'
+            country: 'Země'
+            is_company: 'Nakupuji na firmu'
+            business_name: 'Obchodní název'
+            business_cin: 'IČO'
+            business_vat_id: 'DIČ'
+            button: 'Uložit'
+
         application_delete:
             button: 'Odstranit'
 
@@ -2090,7 +2110,25 @@ route:
     admin_application_camp_date_summary: 'Souhrn za termín'
     admin_application_list: 'Seznam přihlášek'
     admin_application_read: 'Zobrazení přihlášky'
+    admin_application_update: 'Editace přihlášky'
     admin_application_delete: 'Odstranění přihlášky'
+    
+    admin_application_contact_list: 'Kontakty'
+    admin_application_contact_read: 'Zobrazení kontaktu'
+    admin_application_contact_update: 'Editace kontaktu'
+    admin_application_contact_delete: 'Odstranění kontaktu'
+    
+    admin_application_camper_list: 'Táborníci'
+    admin_application_camper_read: 'Zobrazení táborníka'
+    admin_application_camper_update: 'Editace táborníka'
+    admin_application_camper_delete: 'Odstranění táborníka'
+
+    admin_application_payment_list: 'Platby'
+    admin_application_payment_read: 'Zobrazení platby'
+    admin_application_payment_update: 'Editace platby'
+    admin_application_payment_delete: 'Odstranění platby'
+
+    admin_application_purchasable_items_update: 'Volitelné platby'
 
     user_home: 'Domů'
     user_login: 'Přihlášení'

@@ -2,9 +2,7 @@
 
 namespace App\Service\Form\Type\Common;
 
-use App\Library\Data\Common\ApplicationAttachmentData;
 use App\Library\Data\Common\ApplicationCamperData;
-use App\Library\Data\Common\ApplicationFormFieldValueData;
 use App\Model\Entity\Camper;
 use NumberFormatter;
 use Symfony\Component\Form\AbstractType;
@@ -17,7 +15,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Uid\UuidV4;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -79,7 +77,8 @@ class ApplicationCamperType extends AbstractType
         $nationalIdentifier = $camperDataChildren['nationalIdentifier'];
         $isNationalIdentifierAbsent = $camperDataChildren['isNationalIdentifierAbsent'];
 
-        $name = (new UuidV4())->toRfc4122();
+        $uid = (Uuid::v4())->toRfc4122();
+        $name = $uid . '-' . $form->getName();
         $searchedClassName = 'national-id-visibility';
         $newClassName = $searchedClassName . '-' . $name;
 
@@ -131,28 +130,28 @@ class ApplicationCamperType extends AbstractType
             ])
         ;
 
-        /** @var ApplicationCamperData $defaultData */
-        $defaultData = $options['empty_data'];
+        /** @var callable $emptyData */
+        $emptyData = $options['empty_data'];
         $request = $this->requestStack->getCurrentRequest();
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($defaultData, $request): void
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($emptyData, $request): void
         {
-            /** @var null|ApplicationCamperData $applicationCamperData */
-            $applicationCamperData = $event->getData();
+            /** @var null|ApplicationCamperData $data */
+            $data = $event->getData();
             $form = $event->getForm();
 
-            if ($applicationCamperData === null)
+            if ($data === null)
             {
-                $applicationCamperData = $this->cloneDefaultApplicationCamperData($defaultData);
-                $event->setData($applicationCamperData);
+                $data = $emptyData();
+                $event->setData($data);
             }
 
             $fmt = numfmt_create($request->getLocale(), NumberFormatter::CURRENCY);
-            $currency = $applicationCamperData->getCurrency();
+            $currency = $data->getCurrency();
 
             // trip there
 
-            $tripLocationsThere = $applicationCamperData->getTripLocationsThere();
+            $tripLocationsThere = $data->getTripLocationsThere();
 
             if (!empty($tripLocationsThere))
             {
@@ -186,7 +185,7 @@ class ApplicationCamperType extends AbstractType
 
             // trip back
 
-            $tripLocationsBack = $applicationCamperData->getTripLocationsBack();
+            $tripLocationsBack = $data->getTripLocationsBack();
 
             if (!empty($tripLocationsBack))
             {
@@ -238,54 +237,5 @@ class ApplicationCamperType extends AbstractType
         $resolver->setAllowedTypes('loadable_campers', Camper::class . '[]');
 
         $resolver->setRequired('empty_data');
-    }
-
-    private function cloneDefaultApplicationCamperData(ApplicationCamperData $data): ApplicationCamperData
-    {
-        $camperData = $data->getCamperData();
-        $isNationalIdentifierEnabled = $camperData->isNationalIdentifierEnabled();
-        $currency = $data->getCurrency();
-        $tripLocationsThere = $data->getTripLocationsThere();
-        $tripLocationsBack = $data->getTripLocationsBack();
-        $applicationCamperId = $data->getApplicationCamperId();
-
-        $newData = new ApplicationCamperData(
-            $isNationalIdentifierEnabled,
-            $currency,
-            $tripLocationsThere,
-            $tripLocationsBack,
-            $applicationCamperId
-        );
-
-        foreach ($data->getApplicationAttachmentsData() as $applicationAttachmentData)
-        {
-            $newApplicationAttachmentData = new ApplicationAttachmentData(
-                $applicationAttachmentData->getMaxSize(),
-                $applicationAttachmentData->getRequiredType(),
-                $applicationAttachmentData->getExtensions(),
-                $applicationAttachmentData->isAlreadyUploaded(),
-                $applicationAttachmentData->getPriority(),
-                $applicationAttachmentData->getLabel(),
-                $applicationAttachmentData->getHelp()
-            );
-
-            $newData->addApplicationAttachmentsDatum($newApplicationAttachmentData);
-        }
-
-        foreach ($data->getApplicationFormFieldValuesData() as $applicationFormFieldValueData)
-        {
-            $newApplicationFormFieldValueData = new ApplicationFormFieldValueData(
-                $applicationFormFieldValueData->getType(),
-                $applicationFormFieldValueData->isRequired(),
-                $applicationFormFieldValueData->getOptions(),
-                $applicationFormFieldValueData->getPriority(),
-                $applicationFormFieldValueData->getLabel(),
-                $applicationFormFieldValueData->getHelp()
-            );
-
-            $newData->addApplicationFormFieldValuesDatum($newApplicationFormFieldValueData);
-        }
-
-        return $newData;
     }
 }

@@ -3,39 +3,30 @@
 namespace App\Model\Service\Contact;
 
 use App\Library\Data\Common\ContactData;
-use App\Model\Entity\Application;
 
 /**
  * @inheritDoc
  */
 class ContactDataFactory implements ContactDataFactoryInterface
 {
-    private bool $isEmailMandatory;
-
-    private bool $isPhoneNumberMandatory;
-
-    public function __construct(bool $isEmailMandatory, bool $isPhoneNumberMandatory)
-    {
-        $this->isEmailMandatory = $isEmailMandatory;
-        $this->isPhoneNumberMandatory = $isPhoneNumberMandatory;
-    }
-
     /**
      * @inheritDoc
      */
-    public function createContactData(): ContactData
+    public function createContactData(bool $isEmailMandatory, bool $isPhoneNumberMandatory): ContactData
     {
-        return new ContactData($this->isEmailMandatory, $this->isPhoneNumberMandatory);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function createContactDataFromApplication(Application $application): ContactData
-    {
-        $isEmailMandatory = $application->isEmailMandatory();
-        $isPhoneNumberMandatory = $application->isPhoneNumberMandatory();
-
         return new ContactData($isEmailMandatory, $isPhoneNumberMandatory);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCreateContactDataCallable(bool $isEmailMandatory, bool $isPhoneNumberMandatory): callable
+    {
+        $factory = $this;
+
+        return function () use ($factory, $isEmailMandatory, $isPhoneNumberMandatory)
+        {
+            return $factory->createContactData($isEmailMandatory, $isPhoneNumberMandatory);
+        };
     }
 }

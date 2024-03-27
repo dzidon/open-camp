@@ -3,7 +3,6 @@
 namespace App\Service\Form\Type\Common;
 
 use App\Library\Data\Common\ApplicationCamperPurchasableItemsData;
-use App\Library\Data\Common\ApplicationPurchasableItemInstanceData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,9 +14,9 @@ class ApplicationCamperPurchasableItemsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $instanceDefaultsData = $options['instance_defaults_data'];
+        $instancesEmptyData = $options['instances_empty_data'];
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($instanceDefaultsData): void
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($instancesEmptyData): void
         {
             /** @var ApplicationCamperPurchasableItemsData $data */
             $data = $event->getData();
@@ -35,8 +34,8 @@ class ApplicationCamperPurchasableItemsType extends AbstractType
                 ->add('applicationPurchasableItemsData', CollectionType::class, [
                     'entry_type'    => ApplicationPurchasableItemType::class,
                     'entry_options' => [
-                        'instance_defaults_data' => $instanceDefaultsData,
-                        'row_attr'               => [
+                        'instances_empty_data' => $instancesEmptyData,
+                        'row_attr'             => [
                             'class' => 'm-0',
                         ],
                     ],
@@ -60,8 +59,8 @@ class ApplicationCamperPurchasableItemsType extends AbstractType
             'label'        => false,
         ]);
 
-        $resolver->setDefined('instance_defaults_data');
-        $resolver->setAllowedTypes('instance_defaults_data', ApplicationPurchasableItemInstanceData::class . '[]');
-        $resolver->setRequired('instance_defaults_data');
+        $resolver->setDefined('instances_empty_data');
+        $resolver->setAllowedTypes('instances_empty_data', 'callable[]');
+        $resolver->setRequired('instances_empty_data');
     }
 }

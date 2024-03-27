@@ -67,6 +67,9 @@
                             </thead>
 
                             {% set granted_read = is_granted('application_read') %}
+                            {% set granted_update = is_granted('application_update') %}
+                            {% set granted_state_update = is_granted('application_state_update') %}
+                            {% set granted_payments = is_granted('application_payment', 'any_admin_permission') %}
                             {% set granted_delete = is_granted('application_delete') %}
 
                             <tbody>
@@ -158,15 +161,38 @@
                                             {% endif %}
                                         </td>
 
-                                        {% set granted_read_or_guide = granted_read or is_granted('application_guide', application) %}
+                                        {% set granted_read_or_guide = granted_read or is_granted('application_guide_read', application) %}
+
+                                        {% set granted_update_or_state_update_or_guide =
+                                            granted_update or
+                                            granted_state_update or
+                                            is_granted('application_guide_update', application) or
+                                            is_granted('application_guide_state', application)
+                                        %}
+
+                                        {% set granted_payments_or_guide = granted_payments or is_granted('application_guide_payments', application) %}
 
                                         <td class="align-middle cell-25">
-                                            {% if granted_read_or_guide or granted_delete %}
+                                            {% if granted_read_or_guide or granted_update_or_state_update_or_guide or granted_payments_or_guide or granted_delete %}
                                                 {% if granted_read_or_guide %}
                                                     <a href="{{ path('admin_application_read', {id: application.id}) }}"
                                                        class="btn btn-secondary"
                                                     >
                                                         {{ 'crud.action.common.read'|trans }}
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if granted_update_or_state_update_or_guide %}
+                                                    <a href="{{ path('admin_application_update', {id: application.id}) }}"
+                                                       class="btn btn-primary"
+                                                    >
+                                                        {{ 'crud.action.common.update'|trans }}
+                                                    </a>
+                                                {% elseif granted_payments_or_guide %}
+                                                    <a href=""
+                                                       class="btn btn-primary"
+                                                    >
+                                                        {{ 'entity.application_payment.plural'|trans }}
                                                     </a>
                                                 {% endif %}
 

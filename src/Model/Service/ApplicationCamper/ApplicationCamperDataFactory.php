@@ -33,7 +33,7 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
      * @inheritDoc
      */
     public function createApplicationCamperDataFromCampDate(CampDate $campDate): ApplicationCamperData
-    {;
+    {
         $tripLocationPathThere = $campDate->getTripLocationPathThere();
         $tripLocationPathBack = $campDate->getTripLocationPathBack();
         $tripLocationPathThereArray = [];
@@ -140,6 +140,19 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
     /**
      * @inheritDoc
      */
+    public function getApplicationCamperDataCallableFromCampDate(CampDate $campDate): callable
+    {
+        $factory = $this;
+
+        return function () use ($factory, $campDate): ApplicationCamperData
+        {
+            return $factory->createApplicationCamperDataFromCampDate($campDate);
+        };
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function createApplicationCamperDataFromApplication(Application $application): ApplicationCamperData
     {
         $applicationCampers = $application->getApplicationCampers();
@@ -206,5 +219,18 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
         }
 
         return $newData;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getApplicationCamperDataCallableFromApplication(Application $application): callable
+    {
+        $factory = $this;
+
+        return function () use ($factory, $application): ApplicationCamperData
+        {
+            return $factory->createApplicationCamperDataFromApplication($application);
+        };
     }
 }

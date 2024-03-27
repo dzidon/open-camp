@@ -352,6 +352,7 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ->leftJoin('campDate.camp', 'camp')
             ->leftJoin(Application::class, 'application', 'WITH', '
                 campDate.id = application.campDate AND
+                application.isDraft = FALSE AND
                 application.isAccepted IS NULL
             ')
             ->andWhere('campDate.camp = :campId')
@@ -399,6 +400,7 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             ->select('campDate.id, COUNT(application.id) AS numberOfPendingApplications')
             ->leftJoin(Application::class, 'application', 'WITH', '
                 campDate.id = application.campDate AND
+                application.isDraft = FALSE AND
                 application.isAccepted IS NULL
             ')
             ->andWhere('campDate.id IN (:ids)')

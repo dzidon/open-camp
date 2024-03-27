@@ -81,15 +81,21 @@ class ApplicationController extends AbstractController
         $campDate = $this->findCampDateOrThrow404($campDateId);
         $this->assertCampDateAvailability($campDate);
 
-        $contactData = $contactDataFactory->createContactData();
-        $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromCampDate($campDate);
-        $applicationStepOneData = $applicationStepOneDataFactory->createApplicationStepOneData($campDate, $applicationCamperData, $contactData);
+        $isEmailMandatory = $this->getParameter('app.contact_email_mandatory');
+        $isPhoneNumberMandatory = $this->getParameter('app.contact_phone_number_mandatory');
+        $contactDataCallable = $contactDataFactory->getCreateContactDataCallable($isEmailMandatory, $isPhoneNumberMandatory);
+        $applicationCamperDataCallable = $applicationCamperDataFactory->getApplicationCamperDataCallableFromCampDate($campDate);
+        $applicationStepOneData = $applicationStepOneDataFactory->createApplicationStepOneData(
+            $campDate,
+            $applicationCamperDataCallable(),
+            $contactDataCallable()
+        );
 
         $form = $this->createForm(ApplicationStepOneType::class, $applicationStepOneData, [
-            'application_camper_default_data'  => $applicationCamperData,
-            'contact_default_data'             => $contactData,
-            'loadable_contacts'                => $user === null ? [] : $contactRepository->findByUser($user),
-            'loadable_campers'                 => $user === null ? [] : $camperRepository->findByUser($user),
+            'application_camper_empty_data' => $applicationCamperDataCallable,
+            'contact_empty_data'            => $contactDataCallable,
+            'loadable_contacts'             => $user === null ? [] : $contactRepository->findByUser($user),
+            'loadable_campers'              => $user === null ? [] : $camperRepository->findByUser($user),
         ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_one.button']);
         $form->handleRequest($request);
@@ -154,22 +160,24 @@ class ApplicationController extends AbstractController
         $this->assertApplicationDraftAvailability($application);
         $campDate = $application->getCampDate();
 
-        $contactData = $contactDataFactory->createContactDataFromApplication($application);
-        $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromApplication($application);
+        $isEmailMandatory = $application->isEmailMandatory();
+        $isPhoneNumberMandatory = $application->isPhoneNumberMandatory();
+        $contactDataCallable = $contactDataFactory->getCreateContactDataCallable($isEmailMandatory, $isPhoneNumberMandatory);
+        $applicationCamperDataCallable = $applicationCamperDataFactory->getApplicationCamperDataCallableFromApplication($application);
         $applicationStepOneData = new ApplicationStepOneData(
             $application->isEuBusinessDataEnabled(),
             $application->isNationalIdentifierEnabled(),
             $application->getCurrency(),
             $application->getTax(),
-            $application->getCampDate()
+            $application->getCampDate(),
         );
         $dataTransfer->fillData($applicationStepOneData, $application);
 
         $form = $this->createForm(ApplicationStepOneType::class, $applicationStepOneData, [
-            'application_camper_default_data' => $applicationCamperData,
-            'contact_default_data'            => $contactData,
-            'loadable_contacts'               => $user === null ? [] : $contactRepository->findByUser($user),
-            'loadable_campers'                => $user === null ? [] : $camperRepository->findByUser($user),
+            'application_camper_empty_data' => $applicationCamperDataCallable,
+            'contact_empty_data'            => $contactDataCallable,
+            'loadable_contacts'             => $user === null ? [] : $contactRepository->findByUser($user),
+            'loadable_campers'              => $user === null ? [] : $camperRepository->findByUser($user),
         ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_one.button',]);
         $form->handleRequest($request);
@@ -237,7 +245,7 @@ class ApplicationController extends AbstractController
         $dataTransfer->fillData($applicationPurchasableItemsData, $application);
 
         $form = $this->createForm(ApplicationStepTwoType::class, $applicationPurchasableItemsData, [
-            'instance_defaults_data'  => $applicationPurchasableItemInstanceDataFactory->createDataFromApplication($application),
+            'instances_empty_data'    => $applicationPurchasableItemInstanceDataFactory->getDataCallableArrayFromApplication($application),
             'choices_payment_methods' => $paymentMethodRepository->findAll(),
         ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_two.button']);

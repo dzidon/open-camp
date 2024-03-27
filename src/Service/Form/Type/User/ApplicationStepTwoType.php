@@ -2,7 +2,6 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\Common\ApplicationPurchasableItemInstanceData;
 use App\Library\Data\User\ApplicationStepTwoUpdateData;
 use App\Model\Entity\PaymentMethod;
 use App\Service\Form\Type\Common\ApplicationCamperPurchasableItemsType;
@@ -40,19 +39,19 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $instanceDefaultsData = $options['instance_defaults_data'];
+        $instancesEmptyData = $options['instances_empty_data'];
 
         $builder->setDataMapper($this);
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($instanceDefaultsData): void
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($instancesEmptyData): void
         {
             /** @var ApplicationStepTwoUpdateData $data */
             $data = $event->getData();
             $form = $event->getForm();
 
             $this->addDiscountSiblingsField($data, $form);
-            $this->addCamperApplicationPurchasableItemsData($data, $form, $instanceDefaultsData);
-            $this->addApplicationPurchasableItemsData($data, $form, $instanceDefaultsData);
+            $this->addCamperApplicationPurchasableItemsData($data, $form, $instancesEmptyData);
+            $this->addApplicationPurchasableItemsData($data, $form, $instancesEmptyData);
         });
 
         $builder
@@ -115,9 +114,9 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
 
         $resolver->setAllowedTypes('choices_payment_methods', ['array']);
 
-        $resolver->setDefined('instance_defaults_data');
-        $resolver->setAllowedTypes('instance_defaults_data', ApplicationPurchasableItemInstanceData::class . '[]');
-        $resolver->setRequired('instance_defaults_data');
+        $resolver->setDefined('instances_empty_data');
+        $resolver->setAllowedTypes('instances_empty_data', 'callable[]');
+        $resolver->setRequired('instances_empty_data');
     }
 
     public function mapDataToForms(mixed $viewData, Traversable $forms): void
@@ -227,7 +226,7 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
 
     private function addCamperApplicationPurchasableItemsData(ApplicationStepTwoUpdateData $data,
                                                               FormInterface                $form,
-                                                              array                        $instanceDefaultsData): void
+                                                              array                        $instancesEmptyData): void
     {
         $applicationCamperPurchasableItemsData = $data->getApplicationCamperPurchasableItemsData();
 
@@ -241,8 +240,8 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
                 'entry_type'    => ApplicationCamperPurchasableItemsType::class,
                 'label'         => false,
                 'entry_options' => [
-                    'instance_defaults_data' => $instanceDefaultsData,
-                    'row_attr'               => [
+                    'instances_empty_data' => $instancesEmptyData,
+                    'row_attr'             => [
                         'class' => 'mb-0',
                     ],
                 ],
@@ -253,7 +252,7 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
 
     private function addApplicationPurchasableItemsData(ApplicationStepTwoUpdateData $data,
                                                         FormInterface                $form,
-                                                        array                        $instanceDefaultsData): void
+                                                        array                        $instancesEmptyData): void
     {
         $applicationPurchasableItemsData = $data->getApplicationPurchasableItemsData();
 
@@ -274,8 +273,8 @@ class ApplicationStepTwoType extends AbstractType implements DataMapperInterface
             ->add('applicationPurchasableItemsData', CollectionType::class, [
                 'entry_type'    => ApplicationPurchasableItemType::class,
                 'entry_options' => [
-                    'instance_defaults_data' => $instanceDefaultsData,
-                    'row_attr'               => [
+                    'instances_empty_data' => $instancesEmptyData,
+                    'row_attr'             => [
                         'class' => 'm-0',
                     ],
                 ],

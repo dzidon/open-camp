@@ -434,10 +434,36 @@
                     {% endfor %}
                 </div>
 
+                {% set granted_update_or_state_update_or_guide =
+                    is_granted('application_update') or
+                    is_granted('application_state_update') or
+                    is_granted('application_guide_update', application) or
+                    is_granted('application_guide_state', application)
+                %}
+
+                {% set granted_payments_or_guide =
+                    is_granted('application_payment', 'any_admin_permission') or
+                    is_granted('application_guide_payments', application)
+                %}
+
                 {% set granted_delete = is_granted('application_delete') %}
 
-                {% if granted_delete %}
+                {% if granted_update_or_state_update_or_guide or granted_payments_or_guide or granted_delete %}
                     <div class="card-footer">
+                        {% if granted_update_or_state_update_or_guide %}
+                            <a href="{{ path('admin_application_update', {id: application.id}) }}"
+                               class="btn btn-primary"
+                            >
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
+                        {% elseif granted_payments_or_guide %}
+                            <a href=""
+                               class="btn btn-primary"
+                            >
+                                {{ 'entity.application_payment.plural'|trans }}
+                            </a>
+                        {% endif %}
+
                         {% if granted_delete %}
                             <a href="{{ path('admin_application_delete', {id: application.id}) }}"
                                class="btn btn-danger"

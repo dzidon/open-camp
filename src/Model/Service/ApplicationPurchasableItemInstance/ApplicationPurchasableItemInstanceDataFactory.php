@@ -45,18 +45,34 @@ class ApplicationPurchasableItemInstanceDataFactory implements ApplicationPurcha
     /**
      * @inheritDoc
      */
-    public function createDataFromApplication(Application $application): array
+    public function createDataArrayFromApplication(Application $application): array
     {
         $data = [];
 
         foreach ($application->getApplicationPurchasableItems() as $applicationPurchasableItem)
         {
-            $idString = $applicationPurchasableItem
-                ->getId()
-                ->toRfc4122()
-            ;
-
+            $idString = $applicationPurchasableItem->getId()->toRfc4122();
             $data[$idString] = $this->createDataFromApplicationPurchasableItem($applicationPurchasableItem);
+        }
+
+        return $data;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDataCallableArrayFromApplication(Application $application): array
+    {
+        $factory = $this;
+        $data = [];
+
+        foreach ($application->getApplicationPurchasableItems() as $applicationPurchasableItem)
+        {
+            $idString = $applicationPurchasableItem->getId()->toRfc4122();
+            $data[$idString] = function () use ($factory, $applicationPurchasableItem)
+            {
+                return $factory->createDataFromApplicationPurchasableItem($applicationPurchasableItem);
+            };
         }
 
         return $data;

@@ -44,12 +44,12 @@ class AdminNavbarCampUpdate extends AbstractMenuTypeFactory
         $request = $this->requestStack->getCurrentRequest();
         $route = $request->get('_route', '');
 
-        $menu = new MenuType(self::getMenuIdentifier(), 'navbar_admin_camp_update_root');
+        $menu = new MenuType(self::getMenuIdentifier(), 'navbar_admin_horizontal_update_root');
 
         // camp update
         $text = $this->translator->trans('route.admin_camp_update');
         $url = $this->urlGenerator->generate('admin_camp_update', ['id' => $campId->toRfc4122()]);
-        $itemCampUpdate = new MenuType('admin_camp_update', 'navbar_admin_camp_update_item', $text, $url);
+        $itemCampUpdate = new MenuType('admin_camp_update', 'navbar_admin_horizontal_update_item', $text, $url);
         $menu->addChild($itemCampUpdate);
         $itemCampUpdate->setActive($route === 'admin_camp_update');
 
@@ -61,7 +61,7 @@ class AdminNavbarCampUpdate extends AbstractMenuTypeFactory
 
         $text = $this->translator->trans('route.admin_camp_image_list');
         $url = $this->urlGenerator->generate('admin_camp_image_list', ['id' => $campId->toRfc4122()]);
-        $itemCampImages = new MenuType('admin_camp_image_list', 'navbar_admin_camp_update_item', $text, $url);
+        $itemCampImages = new MenuType('admin_camp_image_list', 'navbar_admin_horizontal_update_item', $text, $url);
         $menu->addChild($itemCampImages);
         $itemCampImages->setActive($active);
 
@@ -73,14 +73,14 @@ class AdminNavbarCampUpdate extends AbstractMenuTypeFactory
 
         $text = $this->translator->trans('route.admin_camp_date_list');
         $url = $this->urlGenerator->generate('admin_camp_date_list', ['id' => $campId->toRfc4122()]);
-        $itemCampDates = new MenuType('admin_camp_date_list', 'navbar_admin_camp_update_item', $text, $url);
+        $itemCampDates = new MenuType('admin_camp_date_list', 'navbar_admin_horizontal_update_item', $text, $url);
         $menu->addChild($itemCampDates);
         $itemCampDates->setActive($active);
 
         // show in camp catalog
         $text = $this->translator->trans('crud.action.camp.show_in_catalog');
         $url = $this->urlGenerator->generate('user_camp_detail', ['urlName' => $camp->getUrlName()]);
-        $itemCampDates = new MenuType('user_camp_detail', 'navbar_admin_camp_update_item', $text, $url);
+        $itemCampDates = new MenuType('user_camp_detail', 'navbar_admin_horizontal_update_item', $text, $url);
         $menu->addChild($itemCampDates);
 
         return $menu;

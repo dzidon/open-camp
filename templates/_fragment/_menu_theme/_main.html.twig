@@ -223,8 +223,8 @@
     </li>
 {% endblock %}
 
-{# Admin navbar camp update #}
-{% block navbar_admin_camp_update_root %}
+{# Admin navbar horizontal update #}
+{% block navbar_admin_horizontal_update_root %}
     <ul class="nav nav-tabs" role="tablist">
         {% for menu_child in menu_type.children %}
             {% with {'menu_type': menu_child} %}
@@ -234,9 +234,12 @@
     </ul>
 {% endblock %}
 
-{% block navbar_admin_camp_update_item %}
+{% block navbar_admin_horizontal_update_item %}
     <li class="nav-item">
-        <a class="nav-link{% if menu_type.active %} active{% endif %}" href="{{ menu_type.url }}" role="tab" aria-selected="{% if menu_type.active %}true{% else %}false{% endif %}">
+        <a class="nav-link {% if menu_type.active %}active{% endif %}"
+           href="{{ menu_type.url }}" role="tab"
+           aria-selected="{% if menu_type.active %}true{% else %}false{% endif %}"
+        >
             {{ menu_type.text }}
         </a>
     </li>

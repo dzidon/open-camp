@@ -3,7 +3,6 @@
 namespace App\Model\Service\Contact;
 
 use App\Library\Data\Common\ContactData;
-use App\Model\Entity\Application;
 
 /**
  * Creates contact data.
@@ -13,15 +12,18 @@ interface ContactDataFactoryInterface
     /**
      * Creates new contact data.
      *
+     * @param bool $isEmailMandatory
+     * @param bool $isPhoneNumberMandatory
      * @return ContactData
      */
-    public function createContactData(): ContactData;
+    public function createContactData(bool $isEmailMandatory, bool $isPhoneNumberMandatory): ContactData;
 
     /**
-     * Creates contact data from an application.
+     * Gets a callable that creates new contact data.
      *
-     * @param Application $application
-     * @return ContactData
+     * @param bool $isEmailMandatory
+     * @param bool $isPhoneNumberMandatory
+     * @return callable
      */
-    public function createContactDataFromApplication(Application $application): ContactData;
+    public function getCreateContactDataCallable(bool $isEmailMandatory, bool $isPhoneNumberMandatory): callable;
 }

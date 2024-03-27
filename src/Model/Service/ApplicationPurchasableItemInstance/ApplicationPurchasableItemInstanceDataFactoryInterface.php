@@ -18,8 +18,19 @@ interface ApplicationPurchasableItemInstanceDataFactoryInterface
     public function createDataFromApplicationPurchasableItem(ApplicationPurchasableItem $applicationPurchasableItem): ApplicationPurchasableItemInstanceData;
 
     /**
+     * Creates an array of default instance data objects for each purchasable item in the given application.
+     *
      * @param Application $application
      * @return ApplicationPurchasableItemInstanceData[]
      */
-    public function createDataFromApplication(Application $application): array;
+    public function createDataArrayFromApplication(Application $application): array;
+
+    /**
+     * Creates an array of callables that instantiate default instance data objects for each purchasable
+     * item in the given application.
+     *
+     * @param Application $application
+     * @return callable[]
+     */
+    public function getDataCallableArrayFromApplication(Application $application): array;
 }

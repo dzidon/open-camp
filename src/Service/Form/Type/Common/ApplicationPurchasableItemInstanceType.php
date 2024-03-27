@@ -3,7 +3,6 @@
 namespace App\Service\Form\Type\Common;
 
 use App\Library\Data\Common\ApplicationPurchasableItemInstanceData;
-use App\Library\Data\Common\ApplicationPurchasableItemVariantData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -13,14 +12,15 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Uid\UuidV4;
+use Symfony\Component\Uid\Uuid;
 
 class ApplicationPurchasableItemInstanceType extends AbstractType
 {
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
         $searchedClassName = 'value-visibility';
-        $name = (new UuidV4())->toRfc4122();
+        $uid = (Uuid::v4())->toRfc4122();
+        $name = $uid . '-' . $form->getName();
 
         $newClassName = $searchedClassName . '-' . $name;
         $amount = $view->children['amount'];
@@ -64,19 +64,20 @@ class ApplicationPurchasableItemInstanceType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        /** @var ApplicationPurchasableItemInstanceData $defaultData */
-        $defaultData = $options['empty_data'];
+        /** @var callable $emptyData */
+        $emptyData = $options['empty_data'];
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($defaultData): void
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($emptyData): void
         {
-            if ($event->getData() === null)
+            /** @var null|ApplicationPurchasableItemInstanceData $data */
+            $data = $event->getData();
+
+            if ($data === null)
             {
-                $clonedDefaultData = $this->cloneDefaultApplicationPurchasableItemInstanceData($defaultData);
-                $event->setData($clonedDefaultData);
+                $data = $emptyData();
+                $event->setData($data);
             }
 
-            /** @var ApplicationPurchasableItemInstanceData $data */
-            $data = $event->getData();
             $form = $event->getForm();
 
             if ($data->getMaxAmount() <= 1)
@@ -140,22 +141,7 @@ class ApplicationPurchasableItemInstanceType extends AbstractType
             'data_class' => ApplicationPurchasableItemInstanceData::class,
             'label'      => false,
         ]);
-    }
 
-    private function cloneDefaultApplicationPurchasableItemInstanceData(ApplicationPurchasableItemInstanceData $data): ApplicationPurchasableItemInstanceData
-    {
-        $newData = new ApplicationPurchasableItemInstanceData($data->getMaxAmount());
-
-        foreach ($data->getApplicationPurchasableItemVariantsData() as $applicationPurchasableItemVariantData)
-        {
-            $newApplicationPurchasableItemVariantData = new ApplicationPurchasableItemVariantData(
-                $applicationPurchasableItemVariantData->getLabel(),
-                $applicationPurchasableItemVariantData->getValidValues(),
-            );
-
-            $newData->addApplicationPurchasableItemVariantsDatum($newApplicationPurchasableItemVariantData);
-        }
-
-        return $newData;
+        $resolver->setRequired('empty_data');
     }
 }

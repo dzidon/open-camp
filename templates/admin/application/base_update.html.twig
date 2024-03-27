@@ -1,0 +1,21 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    {% if application is defined %}
+        <div class="row mb-3">
+            <div class="col">
+                <div class="card card-primary card-outline card-outline-tabs m-0">
+                    <div class="card-header p-0 border-bottom-0">
+                        {% set navbar_admin_application_update = build_menu('navbar_admin_application_update', {
+                            application: application
+                        }) %}
+
+                        {{ menu(navbar_admin_application_update) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% block application_update_content %}{% endblock %}
+{% endblock %}
