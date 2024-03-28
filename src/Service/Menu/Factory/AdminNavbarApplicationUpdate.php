@@ -78,7 +78,7 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
             ;
 
             $text = $this->translator->trans('route.admin_application_contact_list');
-            $url = '#' /*$this->urlGenerator->generate('admin_application_contact_list', ['applicationId' => $applicationId])*/;
+            $url = $this->urlGenerator->generate('admin_application_contact_list', ['id' => $applicationId]);
             $itemApplicationContacts = new MenuType('admin_application_contact_list', 'navbar_admin_horizontal_update_item', $text, $url);
             $menu->addChild($itemApplicationContacts);
             $itemApplicationContacts->setActive($active);
@@ -91,7 +91,7 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
             ;
 
             $text = $this->translator->trans('route.admin_application_camper_list');
-            $url = '#' /*$this->urlGenerator->generate('admin_application_camper_list', ['applicationId' => $applicationId])*/;
+            $url = '#' /*$this->urlGenerator->generate('admin_application_camper_list', ['id' => $applicationId])*/;
             $itemApplicationCampers = new MenuType('admin_application_camper_list', 'navbar_admin_horizontal_update_item', $text, $url);
             $menu->addChild($itemApplicationCampers);
             $itemApplicationCampers->setActive($active);
@@ -115,7 +115,7 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
             ;
 
             $text = $this->translator->trans('route.admin_application_payment_list');
-            $url = '#' /*$this->urlGenerator->generate('admin_application_payment_list', ['applicationId' => $applicationId])*/;
+            $url = '#' /*$this->urlGenerator->generate('admin_application_payment_list', ['id' => $applicationId])*/;
             $itemApplicationPayments = new MenuType('admin_application_payment_list', 'navbar_admin_horizontal_update_item', $text, $url);
             $menu->addChild($itemApplicationPayments);
             $itemApplicationPayments->setActive($active);

@@ -1,0 +1,144 @@
+{% extends "admin/application/base_update.html.twig" %}
+
+{% block application_update_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <a data-toggle="collapse" href="#search-content" role="button">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-search mr-2"></i>
+                            {{ 'search.label'|trans }}
+                        </h3>
+                    </div>
+                </a>
+
+                <div class="card-body collapse {% if is_search_invalid %} show {% endif %}" id="search-content">
+                    {{ form(form_search) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if is_search_invalid %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-outline card-danger">
+                    <div class="card-header">
+                        <span>
+                            {{ 'search.error.invalid_filter'|trans }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header d-flex w-100 align-items-center">
+                    <h3 class="card-title">
+                        {% if paginator.totalItems > 0 %}
+                            {{ 'search.results'|trans }} ({{ 'search.total'|trans }} {{ paginator.totalItems }})
+                        {% else %}
+                            {{ 'search.error.no_results'|trans }}
+                        {% endif %}
+                    </h3>
+
+                    <a href="{{ path('admin_application_contact_create', {id: application.id}) }}"
+                       class="btn btn-success ml-3"
+                    >
+                        {{ 'crud.action.common.create'|trans }}
+                    </a>
+                </div>
+
+                {% if paginator.totalItems > 0 %}
+                    <div class="card-body table-responsive p-0">
+                        <table class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'entity_attribute.application_contact.name_full'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application_contact.email'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application_contact.phone_number'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application_contact.role'|trans }}</th>
+                                    <th class="cell-25">{{ 'search.item_action'|trans }}</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for application_contact in paginator.currentPageItems %}
+                                    <tr class="align-items-center">
+                                        <td class="align-middle">
+                                            <span>
+                                                {{ application_contact.nameFull }}
+                                            </span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if application_contact.email is null %}
+                                                <em>
+                                                    {{ 'search.item_no_reference.male'|trans }}
+                                                </em>
+                                            {% else %}
+                                                <span>
+                                                    {{ application_contact.email }}
+                                                </span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if application_contact.phoneNumber is null %}
+                                                <em>
+                                                    {{ 'search.item_no_reference.neutral'|trans }}
+                                                </em>
+                                            {% else %}
+                                                <span>
+                                                    {{ application_contact.phoneNumber|phone_number_format(phone_number_format) }}
+                                                </span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <span>
+                                                {% if application_contact.role.value == 'other' %}
+                                                    {{ application_contact.roleOther }}
+                                                {% else %}
+                                                    {{ ('contact_role.' ~ application_contact.role.value)|trans }}
+                                                {% endif %}
+                                            </span>
+                                        </td>
+
+                                        <td class="align-middle cell-25">
+                                            <a href="{{ path('admin_application_contact_read', {id: application_contact.id}) }}"
+                                               class="btn btn-secondary"
+                                            >
+                                                {{ 'crud.action.common.read'|trans }}
+                                            </a>
+
+                                            <a href="{{ path('admin_application_contact_update', {id: application_contact.id}) }}"
+                                               class="btn btn-primary"
+                                            >
+                                                {{ 'crud.action.common.update'|trans }}
+                                            </a>
+
+                                            <a href="{{ path('admin_application_contact_delete', {id: application_contact.id}) }}"
+                                               class="btn btn-danger"
+                                            >
+                                                {{ 'crud.action.common.delete'|trans }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-footer clearfix">
+                        {{ menu(pagination_menu) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -493,10 +493,12 @@ crud:
         form_field_delete: 'Opravdu si přejete odstranit formulářové pole "{name}"?'
         discount_config_delete: 'Opravdu si přejete odstranit konfiguraci slev "{name}"?'
         application_delete: 'Opravdu si přejete odstranit přihlášku "{simple_id}"?'
+        application_contact_delete: 'Opravdu si přejete odstranit kontakt "{name}"?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
         purchasable_item_variant_value_delete: 'Tuto hodnotu nejde smazat, protože by pak varianta byla prázdná.'
+        application_contact_delete: 'Tento kontakt nejde smazat, protože nejde mít přihlášku bez kontaktů.'
 
     action:
         common:
@@ -517,6 +519,11 @@ crud:
         application:
             update: 'Přihláška uložena!'
             delete: 'Přihláška odstraněna!'
+
+        application_contact:
+            create: 'Kontakt vytvořen!'
+            update: 'Kontakt uložen!'
+            delete: 'Kontakt odstraněn!'
 
         application_attachment:
             upload_later: 'Soubory uloženy!'
@@ -1282,6 +1289,73 @@ form:
             label: 'Souhlasím se zásadami ochrany soukromí'
             link_label: 'Přečíst'
 
+        application_camper_purchasable_items:
+            purchasable_items: 'Volitelné položky ({camper})'
+
+        application_camper:
+            remove_button: 'Odebrat táborníka'
+            trip_location_path_there: 'Kde nasednu'
+            trip_location_path_back: 'Kde vysednu'
+
+        application_purchasable_item_instance:
+            amount: 'Množství'
+            buy: 'Přikoupit'
+            remove_button: 'Odebrat variantu'
+
+        application_purchasable_item:
+            add_instance: 'Přidat variantu'
+
+        billing:
+            name_full: 'Celé jméno'
+            name_first: 'Jméno'
+            name_last: 'Příjmení'
+            street: 'Ulice a číslo popisné'
+            town: 'Obec'
+            zip: 'PSČ'
+            country: 'Země'
+            is_company: 'Nakupuji na firmu'
+            business_name: 'Obchodní název'
+            business_cin: 'IČO'
+            business_vat_id: 'DIČ'
+            button: 'Uložit'
+
+        camper:
+            modal:
+                title: 'Načíst táborníka'
+                text: 'Vyberte táborníka, kterého si přejete načíst ze svého profilu.'
+                label_born_at: 'nar.'
+                button: 'Načíst'
+
+            load_from_profile: 'Načíst táborníka z mého profilu'
+            name_full: 'Celé jméno'
+            name_first: 'Jméno'
+            name_last: 'Příjmení'
+            gender: 'Pohlaví'
+            national_identifier: 'Rodné číslo'
+            is_national_identifier_absent: 'Nemám české/slovenské rodné číslo'
+            born_at: 'Datum narození'
+            health_insurance_company: 'Zdravotní pojišťovna'
+            dietary_restrictions: 'Dietní omezení'
+            health_restrictions: 'Další zdravotní omezení'
+            medication: 'Léky'
+            button: 'Uložit'
+
+        contact:
+            modal:
+                title: 'Načíst kontakt'
+                text: 'Vyberte kontakt, který si přejete načíst ze svého profilu.'
+                button: 'Načíst'
+
+            load_from_profile: 'Načíst kontakt z mého profilu'
+            name_full: 'Celé jméno'
+            name_first: 'Jméno'
+            name_last: 'Příjmení'
+            email: 'E-mail'
+            phone_number: 'Telefonní číslo'
+            role: 'Role'
+            role_other: 'Upřesnění role'
+            button: 'Uložit'
+
     admin:
         help:
             value_visible_for_admins_only: 'Tento údaj vidí pouze administrátoři.'
@@ -1793,6 +1867,21 @@ form:
         application_delete:
             button: 'Odstranit'
 
+        application_contact_search:
+            phrase: 'Hledat podle jména'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovějších'
+                    created_at_asc: 'Od nejstarších'
+                    name_last_asc: 'Příjmení (A-Z)'
+                    name_last_desc: 'Příjmení (Z-A)'
+
+            button: 'Hledat'
+
+        application_contact_delete:
+            button: 'Odstranit'
+
     user:
         application_step_one:
             email:
@@ -1832,9 +1921,6 @@ form:
         application_step_three:
             button: 'Dokončit'
 
-        application_camper_purchasable_items:
-            purchasable_items: 'Volitelné položky ({camper})'
-
         application_attachments:
             attachments_camper: 'Přílohy pro táborníka {camper}'
             attachments_global: 'Přílohy pro celou přihlášku'
@@ -1849,19 +1935,6 @@ form:
 
         application_contact:
             remove_button: 'Odebrat kontakt'
-
-        application_camper:
-            remove_button: 'Odebrat táborníka'
-            trip_location_path_there: 'Kde nasednu'
-            trip_location_path_back: 'Kde vysednu'
-
-        application_purchasable_item_instance:
-            amount: 'Množství'
-            buy: 'Přikoupit'
-            remove_button: 'Odebrat variantu'
-
-        application_purchasable_item:
-            add_instance: 'Přidat variantu'
 
         application_import_to_user:
             skip_billing_data: 'Neukládat fakturační údaje'
@@ -1921,42 +1994,12 @@ form:
             is_open_only: 'Pouze volné termíny'
             button: 'Hledat'
 
-        profile_billing:
-            name_full: 'Celé jméno'
-            name_first: 'Jméno'
-            name_last: 'Příjmení'
-            street: 'Ulice a číslo popisné'
-            town: 'Obec'
-            zip: 'PSČ'
-            country: 'Země'
-            is_company: 'Nakupuji na firmu'
-            business_name: 'Obchodní název'
-            business_cin: 'IČO'
-            business_vat_id: 'DIČ'
-            button: 'Uložit'
-
         profile_password_change:
             current_password: 'Aktuální heslo'
             button: 'Nastavit heslo'
 
         profile_password_change_create:
             button: 'Poslat email'
-
-        contact:
-            modal:
-                title: 'Načíst kontakt'
-                text: 'Vyberte kontakt, který si přejete načíst ze svého profilu.'
-                button: 'Načíst'
-
-            load_from_profile: 'Načíst kontakt z mého profilu'
-            name_full: 'Celé jméno'
-            name_first: 'Jméno'
-            name_last: 'Příjmení'
-            email: 'E-mail'
-            phone_number: 'Telefonní číslo'
-            role: 'Role'
-            role_other: 'Upřesnění role'
-            button: 'Uložit'
 
         contact_delete:
             button: 'Odstranit'
@@ -1972,27 +2015,6 @@ form:
                     name_last_desc: 'Příjmení (Z-A)'
 
             button: 'Hledat'
-
-        camper:
-            modal:
-                title: 'Načíst táborníka'
-                text: 'Vyberte táborníka, kterého si přejete načíst ze svého profilu.'
-                label_born_at: 'nar.'
-                button: 'Načíst'
-
-            load_from_profile: 'Načíst táborníka z mého profilu'
-            name_full: 'Celé jméno'
-            name_first: 'Jméno'
-            name_last: 'Příjmení'
-            gender: 'Pohlaví'
-            national_identifier: 'Rodné číslo'
-            is_national_identifier_absent: 'Nemám české/slovenské rodné číslo'
-            born_at: 'Datum narození'
-            health_insurance_company: 'Zdravotní pojišťovna'
-            dietary_restrictions: 'Dietní omezení'
-            health_restrictions: 'Další zdravotní omezení'
-            medication: 'Léky'
-            button: 'Uložit'
 
         camper_delete:
             button: 'Odstranit'
@@ -2114,11 +2136,13 @@ route:
     admin_application_delete: 'Odstranění přihlášky'
     
     admin_application_contact_list: 'Kontakty'
+    admin_application_contact_create: 'Vytvoření kontaktu'
     admin_application_contact_read: 'Zobrazení kontaktu'
     admin_application_contact_update: 'Editace kontaktu'
     admin_application_contact_delete: 'Odstranění kontaktu'
     
     admin_application_camper_list: 'Táborníci'
+    admin_application_camper_create: 'Vytvoření táborníka'
     admin_application_camper_read: 'Zobrazení táborníka'
     admin_application_camper_update: 'Editace táborníka'
     admin_application_camper_delete: 'Odstranění táborníka'

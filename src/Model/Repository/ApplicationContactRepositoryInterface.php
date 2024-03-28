@@ -2,7 +2,10 @@
 
 namespace App\Model\Repository;
 
+use App\Library\Data\Admin\ApplicationContactSearchData;
+use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\ApplicationContact;
+use Symfony\Component\Uid\UuidV4;
 
 interface ApplicationContactRepositoryInterface
 {
@@ -23,4 +26,22 @@ interface ApplicationContactRepositoryInterface
      * @return void
      */
     public function removeApplicationContact(ApplicationContact $applicationContact, bool $flush): void;
+
+    /**
+     * Finds one application contact by id.
+     *
+     * @param UuidV4 $id
+     * @return ApplicationContact|null
+     */
+    public function findOneById(UuidV4 $id): ?ApplicationContact;
+
+    /**
+     * Returns admin application contact search paginator.
+     *
+     * @param ApplicationContactSearchData $data
+     * @param int $currentPage
+     * @param int $pageSize
+     * @return PaginatorInterface
+     */
+    public function getAdminPaginator(ApplicationContactSearchData $data, int $currentPage, int $pageSize): PaginatorInterface;
 }

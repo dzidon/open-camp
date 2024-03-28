@@ -42,7 +42,7 @@ class ApplicationCamperPurchasableItemsType extends AbstractType
                     'row_attr' => [
                         'class' => 'm-0',
                     ],
-                    'label'                        => 'form.user.application_camper_purchasable_items.purchasable_items',
+                    'label'                        => 'form.common.application_camper_purchasable_items.purchasable_items',
                     'label_translation_parameters' => [
                         'camper' => $nameFull,
                     ],

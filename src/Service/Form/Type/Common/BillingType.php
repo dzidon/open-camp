@@ -30,28 +30,28 @@ class BillingType extends AbstractType
                     'autofocus' => 'autofocus'
                 ],
                 'required' => false,
-                'label'    => 'form.user.profile_billing.name_first',
+                'label'    => 'form.common.billing.name_first',
             ])
             ->add('nameLast', TextType::class, [
                 'required' => false,
-                'label'    => 'form.user.profile_billing.name_last',
+                'label'    => 'form.common.billing.name_last',
             ])
             ->add('street', TextType::class, [
                 'required' => false,
-                'label'    => 'form.user.profile_billing.street',
+                'label'    => 'form.common.billing.street',
             ])
             ->add('town', TextType::class, [
                 'required' => false,
-                'label'    => 'form.user.profile_billing.town',
+                'label'    => 'form.common.billing.town',
             ])
             ->add('zip', TextType::class, [
                 'required' => false,
-                'label'    => 'form.user.profile_billing.zip',
+                'label'    => 'form.common.billing.zip',
             ])
             ->add('country', CountryType::class, [
                 'placeholder' => 'form.common.choice.none.female',
                 'required'    => false,
-                'label'       => 'form.user.profile_billing.country',
+                'label'       => 'form.common.billing.country',
             ])
         ;
 
@@ -59,7 +59,7 @@ class BillingType extends AbstractType
         {
             $builder
                 ->add('isCompany', CheckboxType::class, [
-                    'label'    => 'form.user.profile_billing.is_company',
+                    'label'    => 'form.common.billing.is_company',
                     'attr'     => [
                         'data-controller'                      => 'cv--checkbox',
                         'data-action'                          => 'cv--checkbox#updateVisibility',
@@ -68,7 +68,7 @@ class BillingType extends AbstractType
                     'required' => false,
                 ])
                 ->add('businessName', TextType::class, [
-                    'label'      => 'form.user.profile_billing.business_name',
+                    'label'      => 'form.common.billing.business_name',
                     'row_attr' => [
                         'class'                                   => 'company-fields-visibility',
                         'data-controller'                         => 'cv--content',
@@ -77,7 +77,7 @@ class BillingType extends AbstractType
                     'required' => false,
                 ])
                 ->add('businessCin', TextType::class, [
-                    'label'      => 'form.user.profile_billing.business_cin',
+                    'label'      => 'form.common.billing.business_cin',
                     'label_attr' => [
                         'class' => 'required'
                     ],
@@ -89,7 +89,7 @@ class BillingType extends AbstractType
                     'required' => false,
                 ])
                 ->add('businessVatId', TextType::class, [
-                    'label'      => 'form.user.profile_billing.business_vat_id',
+                    'label'      => 'form.common.billing.business_vat_id',
                     'label_attr' => [
                         'class' => 'required'
                     ],

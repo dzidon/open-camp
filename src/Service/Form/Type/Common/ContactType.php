@@ -115,13 +115,13 @@ class ContactType extends AbstractType
             $form
                 ->add('email', EmailType::class, [
                     'required'   => $isEmailMandatory,
-                    'label'      => 'form.user.contact.email',
+                    'label'      => 'form.common.contact.email',
                     'label_attr' => $emailAndPhoneLabelAttr,
                     'priority'   => 400,
                 ])
                 ->add('phoneNumber', PhoneNumberType::class, [
                     'required'   => $isPhoneNumberMandatory,
-                    'label'      => 'form.user.contact.phone_number',
+                    'label'      => 'form.common.contact.phone_number',
                     'label_attr' => $emailAndPhoneLabelAttr,
                     'priority'   => 300,
                 ])
@@ -133,11 +133,11 @@ class ContactType extends AbstractType
                 'attr' => [
                     'autofocus' => 'autofocus'
                 ],
-                'label'    => 'form.user.contact.name_first',
+                'label'    => 'form.common.contact.name_first',
                 'priority' => 600,
             ])
             ->add('nameLast', TextType::class, [
-                'label'    => 'form.user.contact.name_last',
+                'label'    => 'form.common.contact.name_last',
                 'priority' => 500,
             ])
             ->add('role', ContactRoleType::class, [
@@ -150,12 +150,12 @@ class ContactType extends AbstractType
                     'data-action'                             => 'cv--other-input#updateVisibility',
                     'data-cv--other-input-cv--content-outlet' => '.role-other-field-visibility',
                 ],
-                'label'    => 'form.user.contact.role',
+                'label'    => 'form.common.contact.role',
                 'priority' => 200,
             ])
             ->add('roleOther', TextType::class, [
                 'required'   => false,
-                'label'      => 'form.user.contact.role_other',
+                'label'      => 'form.common.contact.role_other',
                 'label_attr' => [
                     'class' => 'required'
                 ],

@@ -38,7 +38,7 @@ class CamperType extends AbstractType
 
             $form
                 ->add('nationalIdentifier', TextType::class, [
-                    'label'      => 'form.user.camper.national_identifier',
+                    'label'      => 'form.common.camper.national_identifier',
                     'label_attr' => [
                         'class' => 'required'
                     ],
@@ -51,7 +51,7 @@ class CamperType extends AbstractType
                     'priority' => 700,
                 ])
                 ->add('isNationalIdentifierAbsent', CheckboxType::class, [
-                    'label' => 'form.user.camper.is_national_identifier_absent',
+                    'label' => 'form.common.camper.is_national_identifier_absent',
                     'attr'  => [
                         'data-controller'                      => 'cv--checkbox',
                         'data-action'                          => 'cv--checkbox#updateVisibility',
@@ -68,36 +68,36 @@ class CamperType extends AbstractType
                 'attr' => [
                     'autofocus' => 'autofocus'
                 ],
-                'label'    => 'form.user.camper.name_first',
+                'label'    => 'form.common.camper.name_first',
                 'priority' => 900,
             ])
             ->add('nameLast', TextType::class, [
-                'label'    => 'form.user.camper.name_last',
+                'label'    => 'form.common.camper.name_last',
                 'priority' => 800,
             ])
             ->add('bornAt', DateType::class, [
                 'widget'   => 'single_text',
                 'input'    => 'datetime_immutable',
-                'label'    => 'form.user.camper.born_at',
+                'label'    => 'form.common.camper.born_at',
                 'priority' => 500,
             ])
             ->add('gender', GenderChildishType::class, [
-                'label'    => 'form.user.camper.gender',
+                'label'    => 'form.common.camper.gender',
                 'priority' => 400,
             ])
             ->add('dietaryRestrictions', TextareaType::class, [
                 'required' => false,
-                'label'    => 'form.user.camper.dietary_restrictions',
+                'label'    => 'form.common.camper.dietary_restrictions',
                 'priority' => 300,
             ])
             ->add('healthRestrictions', TextareaType::class, [
                 'required' => false,
-                'label'    => 'form.user.camper.health_restrictions',
+                'label'    => 'form.common.camper.health_restrictions',
                 'priority' => 200,
             ])
             ->add('medication', TextareaType::class, [
                 'required' => false,
-                'label'    => 'form.user.camper.medication',
+                'label'    => 'form.common.camper.medication',
                 'priority' => 100,
             ])
         ;

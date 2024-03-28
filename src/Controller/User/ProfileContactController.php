@@ -83,7 +83,7 @@ class ProfileContactController extends AbstractController
         );
 
         $form = $this->createForm(ContactType::class, $contactData);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.contact.button']);
+        $form->add('submit', SubmitType::class, ['label' => 'form.common.contact.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
@@ -130,7 +130,7 @@ class ProfileContactController extends AbstractController
         );
         $dataTransfer->fillData($contactData, $contact);
         $form = $this->createForm(ContactType::class, $contactData);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.contact.button']);
+        $form->add('submit', SubmitType::class, ['label' => 'form.common.contact.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())

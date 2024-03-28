@@ -62,12 +62,12 @@ class ApplicationPurchasableItemType extends AbstractType
                     'allow_delete'                => $canAddAndRemove,
                     'entry_options'               => [
                         'label'               => false,
-                        'remove_button_label' => 'form.user.application_purchasable_item_instance.remove_button',
+                        'remove_button_label' => 'form.common.application_purchasable_item_instance.remove_button',
                         'remove_button'       => $canAddAndRemove,
                         'empty_data'          => $emptyInstanceData,
                     ],
                     'prototype_options' => [
-                        'remove_button_label' => 'form.user.application_purchasable_item_instance.remove_button',
+                        'remove_button_label' => 'form.common.application_purchasable_item_instance.remove_button',
                         'remove_button'       => true,
                     ],
                     'prototype'      => $canAddAndRemove,
@@ -79,7 +79,7 @@ class ApplicationPurchasableItemType extends AbstractType
             {
                 $form
                     ->add('addApplicationPurchasableItemInstanceData', CollectionAddItemButtonType::class, [
-                        'label'           => 'form.user.application_purchasable_item.add_instance',
+                        'label'           => 'form.common.application_purchasable_item.add_instance',
                         'collection_name' => 'applicationPurchasableItemInstancesData',
                     ])
                 ;

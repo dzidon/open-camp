@@ -716,6 +716,23 @@ class Application
         return $this;
     }
 
+    public function getLowestApplicationContactPriority(): int
+    {
+        $lowestExistingPriority = 0;
+
+        foreach ($this->applicationContacts as $applicationContact)
+        {
+            $priority = $applicationContact->getPriority();
+
+            if ($priority < $lowestExistingPriority)
+            {
+                $lowestExistingPriority = $priority;
+            }
+        }
+
+        return $lowestExistingPriority;
+    }
+
     /**
      * @return ApplicationContact[]
      */
@@ -754,6 +771,23 @@ class Application
         $this->applicationContacts->removeElement($applicationContact);
 
         return $this;
+    }
+
+    public function getLowestApplicationCamperPriority(): int
+    {
+        $lowestExistingPriority = 0;
+
+        foreach ($this->applicationCampers as $applicationCamper)
+        {
+            $priority = $applicationCamper->getPriority();
+
+            if ($priority < $lowestExistingPriority)
+            {
+                $lowestExistingPriority = $priority;
+            }
+        }
+
+        return $lowestExistingPriority;
     }
 
     /**

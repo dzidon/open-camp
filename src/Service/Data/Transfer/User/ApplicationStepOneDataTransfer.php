@@ -184,7 +184,7 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
         $this->fillApplicationAttachments($applicationAttachmentsData, $application);
 
         $contactsData = $applicationStepOneData->getContactsData();
-        $this->fillEntityContacts($contactsData, $application);
+        $this->fillEntityApplicationContacts($contactsData, $application);
 
         $applicationCampersData = $applicationStepOneData->getApplicationCampersData();
         $this->fillEntityApplicationCampers($applicationCampersData, $application);
@@ -247,10 +247,9 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
      * @param Application $application
      * @return void
      */
-    private function fillEntityContacts(array $contactsData, Application $application): void
+    private function fillEntityApplicationContacts(array $contactsData, Application $application): void
     {
         $applicationContacts = $application->getApplicationContacts();
-        $lowestExistingPriority = 0;
 
         // delete
         foreach ($applicationContacts as $index => $applicationContact)
@@ -260,17 +259,11 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
                 $event = new ApplicationContactDeleteEvent($applicationContact);
                 $event->setIsFlush(false);
                 $this->eventDispatcher->dispatch($event, $event::NAME);
-
-                continue;
-            }
-
-            $priority = $applicationContact->getPriority();
-
-            if ($priority < $lowestExistingPriority)
-            {
-                $lowestExistingPriority = $priority;
             }
         }
+
+        // priority
+        $lowestExistingPriority = $application->getLowestApplicationContactPriority();
 
         // create & update
         foreach ($contactsData as $index => $contactData)
@@ -299,7 +292,6 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
     private function fillEntityApplicationCampers(array $applicationCampersData, Application $application): void
     {
         $applicationCampers = $application->getApplicationCampers();
-        $lowestExistingPriority = 0;
 
         // delete
         foreach ($applicationCampers as $index => $applicationCamper)
@@ -309,17 +301,11 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
                 $event = new ApplicationCamperDeleteEvent($applicationCamper);
                 $event->setIsFlush(false);
                 $this->eventDispatcher->dispatch($event, $event::NAME);
-
-                continue;
-            }
-
-            $priority = $applicationCamper->getPriority();
-
-            if ($priority < $lowestExistingPriority)
-            {
-                $lowestExistingPriority = $priority;
             }
         }
+
+        // priority
+        $lowestExistingPriority = $application->getLowestApplicationCamperPriority();
 
         // create & update
         foreach ($applicationCampersData as $index => $applicationCamperData)

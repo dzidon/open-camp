@@ -487,3 +487,93 @@
         {{ 'form.admin.application_camp_date_search.button'|trans }}
     </button>
 {% endblock %}
+
+{# Application edit #}
+{% block admin_application_widget %}
+    {{ form_errors(form) }}
+
+    {% if form.isAccepted is defined %}
+        {{ form_row(form.isAccepted) }}
+    {% endif %}
+
+    {% if form.email is defined %}
+        {{ form_row(form.email) }}
+    {% endif %}
+
+    {% if form.nameFirst is defined and form.nameLast is defined %}
+        <div class="form-row">
+            <div class="col-md-6">
+                {{ form_row(form.nameFirst) }}
+            </div>
+
+            <div class="col-md-6">
+                {{ form_row(form.nameLast) }}
+            </div>
+        </div>
+    {% elseif form.nameFirst is defined %}
+        {{ form_row(form.nameFirst) }}
+    {% elseif form.nameLast is defined %}
+        {{ form_row(form.nameLast) }}
+    {% endif %}
+
+    {% if form.street is defined %}
+        {{ form_row(form.street) }}
+    {% endif %}
+
+    {% if form.town is defined %}
+        {{ form_row(form.town) }}
+    {% endif %}
+
+    {% if form.zip is defined %}
+        {{ form_row(form.zip) }}
+    {% endif %}
+
+    {% if form.country is defined %}
+        {{ form_row(form.country) }}
+    {% endif %}
+
+    {% if form.isCompany is defined %}
+        {{ form_row(form.isCompany) }}
+    {% endif %}
+
+    {% if form.businessName is defined %}
+        {{ form_row(form.businessName) }}
+    {% endif %}
+
+    {% if form.businessCin is defined %}
+        {{ form_row(form.businessCin) }}
+    {% endif %}
+
+    {% if form.businessVatId is defined %}
+        {{ form_row(form.businessVatId) }}
+    {% endif %}
+
+    {% if form.applicationFormFieldValuesData is defined %}
+        {{ form_row(form.applicationFormFieldValuesData) }}
+    {% endif %}
+
+    {% if form.applicationAttachmentsData is defined %}
+        {{ form_row(form.applicationAttachmentsData) }}
+    {% endif %}
+
+    {{ form_rest(form) }}
+{% endblock %}
+
+{# Application contact search #}
+{% block admin_application_contact_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.application_contact_search.button'|trans }}
+    </button>
+{% endblock %}

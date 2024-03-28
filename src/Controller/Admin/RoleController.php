@@ -32,7 +32,7 @@ class RoleController extends AbstractController
 {
     private RoleRepositoryInterface $roleRepository;
 
-    public function __construct(RoleRepositoryInterface  $roleRepository)
+    public function __construct(RoleRepositoryInterface $roleRepository)
     {
         $this->roleRepository = $roleRepository;
     }

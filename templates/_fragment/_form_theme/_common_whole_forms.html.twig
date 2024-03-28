@@ -75,7 +75,7 @@
                     <a href="javascript:void(0);" data-toggle="modal" data-target="#camper-load-modal-{{ name }}">
                         <i class="fas fa-user-circle"></i>
 
-                        {{ 'form.user.camper.load_from_profile'|trans }}
+                        {{ 'form.common.camper.load_from_profile'|trans }}
                     </a>
                 </div>
             </div>
@@ -97,7 +97,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">{{ 'form.user.camper.modal.title'|trans }}</h5>
+                            <h5 class="modal-title">{{ 'form.common.camper.modal.title'|trans }}</h5>
 
                             <button type="button"
                                     class="close"
@@ -109,7 +109,7 @@
                         </div>
 
                         <div class="modal-body">
-                            <p>{{ 'form.user.camper.modal.text'|trans }}</p>
+                            <p>{{ 'form.common.camper.modal.text'|trans }}</p>
 
                             <div class="form-group">
                                 <label for="camper-load-select-{{ name }}" class="required">
@@ -130,7 +130,7 @@
                                             {{ loadable_camper.nameFirst }}
                                             {{ loadable_camper.nameLast }}
 
-                                            ({{ 'form.user.camper.modal.label_born_at'|trans }}
+                                            ({{ 'form.common.camper.modal.label_born_at'|trans }}
                                             {{ loadable_camper.bornAt|date(date_format) }})
                                         </option>
                                     {% endfor %}
@@ -152,7 +152,7 @@
                                     {{ stimulus_target('mod--camper-load', 'buttonLoad') }}
                                     {{ stimulus_action('mod--camper-load', 'fillCamperForm') }}
                             >
-                                {{ 'form.user.camper.modal.button'|trans }}
+                                {{ 'form.common.camper.modal.button'|trans }}
                             </button>
                         </div>
                     </div>
@@ -337,7 +337,7 @@
                     <a href="javascript:void(0);" data-toggle="modal" data-target="#contact-load-modal-{{ name }}">
                         <i class="fas fa-user-circle"></i>
 
-                        {{ 'form.user.contact.load_from_profile'|trans }}
+                        {{ 'form.common.contact.load_from_profile'|trans }}
                     </a>
                 </div>
             </div>
@@ -356,7 +356,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">{{ 'form.user.contact.modal.title'|trans }}</h5>
+                            <h5 class="modal-title">{{ 'form.common.contact.modal.title'|trans }}</h5>
 
                             <button type="button"
                                     class="close"
@@ -368,7 +368,7 @@
                         </div>
 
                         <div class="modal-body">
-                            <p>{{ 'form.user.contact.modal.text'|trans }}</p>
+                            <p>{{ 'form.common.contact.modal.text'|trans }}</p>
 
                             <div class="form-group">
                                 <label for="contact-load-select-{{ name }}" class="required">
@@ -414,7 +414,7 @@
                                     {{ stimulus_target('mod--contact-load', 'buttonLoad') }}
                                     {{ stimulus_action('mod--contact-load', 'fillContactForm') }}
                             >
-                                {{ 'form.user.contact.modal.button'|trans }}
+                                {{ 'form.common.contact.modal.button'|trans }}
                             </button>
                         </div>
                     </div>

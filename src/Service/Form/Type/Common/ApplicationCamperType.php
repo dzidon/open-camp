@@ -176,7 +176,7 @@ class ApplicationCamperType extends AbstractType
                     ->add('tripLocationThere', ChoiceType::class, [
                         'placeholder'               => 'form.common.choice.choose',
                         'choices'                   => $choices,
-                        'label'                     => 'form.user.application_camper.trip_location_path_there',
+                        'label'                     => 'form.common.application_camper.trip_location_path_there',
                         'choice_translation_domain' => false,
                         'priority'                  => 900,
                     ])
@@ -210,7 +210,7 @@ class ApplicationCamperType extends AbstractType
                     ->add('tripLocationBack', ChoiceType::class, [
                         'placeholder'               => 'form.common.choice.choose',
                         'choices'                   => $choices,
-                        'label'                     => 'form.user.application_camper.trip_location_path_back',
+                        'label'                     => 'form.common.application_camper.trip_location_path_back',
                         'choice_translation_domain' => false,
                         'priority'                  => 800,
                     ])

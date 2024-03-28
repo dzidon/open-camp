@@ -85,7 +85,7 @@ class ApplicationPurchasableItemInstanceType extends AbstractType
                 $form
                     ->add('amount', IntegerCheckboxType::class, [
                         'required' => false,
-                        'label'    => 'form.user.application_purchasable_item_instance.buy',
+                        'label'    => 'form.common.application_purchasable_item_instance.buy',
                         'attr'     => [
                             'data-controller'                      => 'cv--checkbox',
                             'data-action'                          => 'cv--checkbox#updateVisibility',
@@ -106,7 +106,7 @@ class ApplicationPurchasableItemInstanceType extends AbstractType
                     ->add('amount', IntegerType::class, [
                         'attr'     => $attr,
                         'required' => false,
-                        'label'    => 'form.user.application_purchasable_item_instance.amount',
+                        'label'    => 'form.common.application_purchasable_item_instance.amount',
                         'priority' => 200,
                     ])
                 ;

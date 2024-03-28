@@ -1,0 +1,87 @@
+{% extends 'admin/application/base_update.html.twig' %}
+
+{% block application_update_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>
+                                {{ 'entity_attribute.application_contact.name_full'|trans }}:
+                            </strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {{ application_contact.nameFull }}
+                            </span>
+                        </div>
+                    </div>
+
+                    {% if application_contact.email is not null %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>
+                                    {{ 'entity_attribute.application_contact.email'|trans }}:
+                                </strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>
+                                    {{ application_contact.email }}
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if application_contact.phoneNumber is not null %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>
+                                    {{ 'entity_attribute.application_contact.phone_number'|trans }}:
+                                </strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>
+                                    {{ application_contact.phoneNumber|phone_number_format(phone_number_format) }}
+                                </span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application_contact.role'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {% if application_contact.role.value == 'other' %}
+                                    {{ application_contact.roleOther }}
+                                {% else %}
+                                    {{ ('contact_role.' ~ application_contact.role.value)|trans }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <a href="{{ path('admin_application_contact_update', {id: application_contact.id}) }}"
+                       class="btn btn-primary mr-2"
+                    >
+                        {{ 'crud.action.common.update'|trans }}
+                    </a>
+
+                    <a href="{{ path('admin_application_contact_delete', {id: application_contact.id}) }}"
+                       class="btn btn-danger"
+                    >
+                        {{ 'crud.action.common.delete'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

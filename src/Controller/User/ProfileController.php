@@ -36,7 +36,7 @@ class ProfileController extends AbstractController
         $dataTransfer->fillData($billingData, $user);
 
         $form = $this->createForm(BillingType::class, $billingData);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.profile_billing.button']);
+        $form->add('submit', SubmitType::class, ['label' => 'form.common.billing.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
