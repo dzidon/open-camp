@@ -364,6 +364,19 @@ mail:
         body2_nothing_left_to_do: 'Na schválení Vaší přihlášky pracujeme.'
         body3: 'Po schválení přihlášky Vám pošleme další e-mail. Fakturu naleznete v příloze tohoto e-mailu.'
 
+    application_state_changed:
+        subject:
+            unsettled: 'Přihláška nastavena do nevyřízeného stavu'
+            accepted: 'Přihláška schválena'
+            declined: 'Přihláška zamítnuta'
+
+        body1: 'vaše přihláška na tábor {camp} (kód: {simple_id}) byla '
+        body2_unsettled: 'nastavena do nevyřízeného stavu.'
+        body2_accepted: 'schválena.'
+        body2_declined: 'zamítnuta.'
+        body3: 'Přihlášku si můžete zobrazit '
+        link_text: 'ZDE'
+
 search:
     label: 'Vyhledávání'
     results: 'Výsledky'

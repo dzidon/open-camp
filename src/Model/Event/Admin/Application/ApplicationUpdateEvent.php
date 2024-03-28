@@ -14,10 +14,26 @@ class ApplicationUpdateEvent extends AbstractModelEvent
 
     private Application $entity;
 
+    private bool $isStateChange;
+
     public function __construct(ApplicationData $data, Application $entity)
     {
         $this->data = $data;
         $this->entity = $entity;
+
+        if ($this->entity->isAccepted() !== $this->data->isAccepted())
+        {
+            $this->isStateChange = true;
+        }
+        else
+        {
+            $this->isStateChange = false;
+        }
+    }
+
+    public function isStateChange(): bool
+    {
+        return $this->isStateChange;
     }
 
     public function getApplicationData(): ApplicationData

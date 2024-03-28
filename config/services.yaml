@@ -203,6 +203,10 @@ services:
         arguments:
             $emailFrom: '%app.email_no_reply%'
 
+    App\Model\Service\Application\ApplicationStateChangedMailer:
+        arguments:
+            $emailFrom: '%app.email_no_reply%'
+
     App\Model\Service\UserPasswordChange\UserPasswordChangeMailer:
         arguments:
             $emailFrom: '%app.email_no_reply%'

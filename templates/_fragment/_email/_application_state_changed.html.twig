@@ -1,0 +1,20 @@
+<h1>{{ 'mail.dear_customer'|trans }}</h1>
+
+<p>
+    {{ 'mail.application_state_changed.body1'|trans({
+        camp: application.campName,
+        simple_id: application.simpleId
+    }) }}
+
+    {% if application.isAccepted is same as(true) %}
+        {{ 'mail.application_state_changed.body2_accepted'|trans }}
+    {% elseif application.isAccepted is same as(false) %}
+        {{ 'mail.application_state_changed.body2_declined'|trans }}
+    {% elseif application.isAccepted is same as(null) %}
+        {{ 'mail.application_state_changed.body2_unsettled'|trans }}
+    {% endif %}
+
+    {{ 'mail.application_state_changed.body3'|trans }}
+
+    <a href="{{ application_url }}">{{ 'mail.application_state_changed.link_text'|trans }}</a>.
+</p>
