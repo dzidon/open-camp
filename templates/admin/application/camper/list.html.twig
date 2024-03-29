@@ -1,0 +1,155 @@
+{% extends "admin/application/base_update.html.twig" %}
+
+{% block application_update_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <a data-toggle="collapse" href="#search-content" role="button">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-search mr-2"></i>
+                            {{ 'search.label'|trans }}
+                        </h3>
+                    </div>
+                </a>
+
+                <div class="card-body collapse {% if is_search_invalid %} show {% endif %}" id="search-content">
+                    {{ form(form_search) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if is_search_invalid %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-outline card-danger">
+                    <div class="card-header">
+                        <span>
+                            {{ 'search.error.invalid_filter'|trans }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header d-flex w-100 align-items-center">
+                    <h3 class="card-title">
+                        {% if paginator.totalItems > 0 %}
+                            {{ 'search.results'|trans }} ({{ 'search.total'|trans }} {{ paginator.totalItems }})
+                        {% else %}
+                            {{ 'search.error.no_results'|trans }}
+                        {% endif %}
+                    </h3>
+
+                    {% if application is not null %}
+                        <a href="{{ path('admin_application_camper_create', {id: application.id}) }}"
+                           class="btn btn-success ml-3"
+                        >
+                            {{ 'crud.action.common.create'|trans }}
+                        </a>
+                    {% endif %}
+                </div>
+
+                {% if paginator.totalItems > 0 %}
+                    <div class="card-body table-responsive p-0">
+                        <table class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'entity_attribute.application_camper.name_full'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application_camper.gender'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application_camper.age'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application_camper.full_price'|trans }}</th>
+
+                                    {% if application is null %}
+                                        <th>{{ 'entity_attribute.application_camper.application_state'|trans }}</th>
+                                    {% endif %}
+
+                                    <th class="cell-25">{{ 'search.item_action'|trans }}</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for application_camper in paginator.currentPageItems %}
+                                    <tr class="align-items-center">
+                                        <td class="align-middle">
+                                            <span>
+                                                {{ application_camper.nameFull }}
+                                            </span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <span>
+                                                {{ ('gender_childish.' ~ application_camper.gender.value)|trans }}
+                                            </span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <span>
+                                                {{ application_camper.age }}
+                                            </span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <span>
+                                                {{ application_camper.fullPrice|format_currency(application_camper.application.currency) }}
+                                            </span>
+                                        </td>
+
+                                        {% if application is null %}
+                                            {% set isAccepted = application_camper.application.isAccepted %}
+
+                                            <td class="align-middle">
+                                                {% if isAccepted is same as(true) %}
+                                                    <span class="badge badge-success">
+                                                        {{ 'application.is_accepted_state.admin.accepted'|trans }}
+                                                    </span>
+                                                {% elseif isAccepted is same as(false) %}
+                                                    <span class="badge badge-danger">
+                                                        {{ 'application.is_accepted_state.admin.declined'|trans }}
+                                                    </span>
+                                                {% elseif isAccepted is same as(null) %}
+                                                    <span class="badge badge-warning">
+                                                        {{ 'application.is_accepted_state.admin.unsettled'|trans }}
+                                                    </span>
+                                                {% endif %}
+                                            </td>
+                                        {% endif %}
+                                        
+                                        <td class="align-middle cell-25">
+                                            <a href="{{ path('admin_application_camper_read', {id: application_camper.id}) }}"
+                                               class="btn btn-secondary"
+                                            >
+                                                {{ 'crud.action.common.read'|trans }}
+                                            </a>
+
+                                            <a href="{{ path('admin_application_camper_update', {id: application_camper.id}) }}"
+                                               class="btn btn-primary"
+                                            >
+                                                {{ 'crud.action.common.update'|trans }}
+                                            </a>
+
+                                            <a href="{{ path('admin_application_camper_delete', {id: application_camper.id}) }}"
+                                               class="btn btn-danger"
+                                            >
+                                                {{ 'crud.action.common.delete'|trans }}
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-footer clearfix">
+                        {{ menu(pagination_menu) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

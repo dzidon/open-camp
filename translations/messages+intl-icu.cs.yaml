@@ -507,11 +507,13 @@ crud:
         discount_config_delete: 'Opravdu si přejete odstranit konfiguraci slev "{name}"?'
         application_delete: 'Opravdu si přejete odstranit přihlášku "{simple_id}"?'
         application_contact_delete: 'Opravdu si přejete odstranit kontakt "{name}"?'
+        application_camper_delete: 'Opravdu si přejete odstranit táborníka "{name}"?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
         purchasable_item_variant_value_delete: 'Tuto hodnotu nejde smazat, protože by pak varianta byla prázdná.'
         application_contact_delete: 'Tento kontakt nejde smazat, protože nejde mít přihlášku bez kontaktů.'
+        application_camper_delete: 'Tohoto táborníka nejde smazat, protože nejde mít přihlášku bez táborníků.'
 
     action:
         common:
@@ -537,6 +539,11 @@ crud:
             create: 'Kontakt vytvořen!'
             update: 'Kontakt uložen!'
             delete: 'Kontakt odstraněn!'
+
+        application_camper:
+            create: 'Táborník vytvořen!'
+            update: 'Táborník uložen!'
+            delete: 'Táborník odstraněn!'
 
         application_attachment:
             upload_later: 'Soubory uloženy!'
@@ -867,15 +874,18 @@ entity_attribute:
         name_last: 'Příjmení'
         gender: 'Pohlaví'
         priority: 'Priorita'
+        age: 'Věk'
         born_at: 'Datum narození'
         national_identifier: 'Rodné číslo'
         dietary_restrictions: 'Dietní omezení'
         health_restrictions: 'Další zdravotní omezení'
         medication: 'Léky'
+        medical_diary: 'Zdravotní deník'
         full_price: 'Celková cena'
         trips_in_the_past: 'Kolikrát jsem jel na nějaký tábor v minulosti'
         trip_location_there: 'Místo nasednutí na cestě na tábor'
         trip_location_back: 'Místo vysednutí na cestě z tábora'
+        application_state: 'Stav přihlášky'
         application: 'Přihláška'
         application_trip_location_paths: 'Trasy'
         application_form_field_values: 'Formulářová pole'
@@ -1302,13 +1312,20 @@ form:
             label: 'Souhlasím se zásadami ochrany soukromí'
             link_label: 'Přečíst'
 
+        application_accepted_state:
+            unsettled: 'Nevypořádána'
+            accepted: 'Přijata'
+            declined: 'Zamítnuta'
+
         application_camper_purchasable_items:
             purchasable_items: 'Volitelné položky ({camper})'
 
         application_camper:
             remove_button: 'Odebrat táborníka'
+            medical_diary: 'Zdravotní deník'
             trip_location_path_there: 'Kde nasednu'
             trip_location_path_back: 'Kde vysednu'
+            button: 'Uložit'
 
         application_purchasable_item_instance:
             amount: 'Množství'
@@ -1855,12 +1872,7 @@ form:
                     yes: 'Ano'
                     no: 'Ne'
 
-            is_accepted:
-                label: 'Stav'
-                options:
-                    unsettled: 'Nevypořádána'
-                    accepted: 'Přijata'
-                    declined: 'Zamítnuta'
+            is_accepted: 'Stav'
 
         application:
             is_accepted: 'Stav'
@@ -1893,6 +1905,25 @@ form:
             button: 'Hledat'
 
         application_contact_delete:
+            button: 'Odstranit'
+
+        application_camper_search:
+            phrase: 'Hledat podle jména'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od naposledy vytvořených'
+                    created_at_asc: 'Od nejdéle vytvořených'
+                    born_at_desc: 'Od nejmladších (věk)'
+                    born_at_asc: 'Od nejstarších (věk)'
+
+            age_min: 'Min. věk'
+            age_max: 'Max. věk'
+            gender: 'Pohlaví'
+            is_accepted: 'Stav přihlášky táborníka'
+            button: 'Hledat'
+
+        application_camper_delete:
             button: 'Odstranit'
 
     user:

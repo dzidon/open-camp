@@ -1,8 +1,14 @@
-<div class="row mb-2 mt-5">
-    <div class="col-12">
-        <h4>{{ 'entity.application_contact.singular'|trans }} {{ application_contact.nameFull }}</h4>
+{% if show_name_full is defined and show_name_full %}
+    <div class="row mb-3">
+        <div class="col-12 col-sm-3">
+            <strong>{{ 'entity_attribute.application_contact.name_full'|trans }}:</strong>
+        </div>
+
+        <div class="col-12 col-sm-9">
+            <span>{{ application_contact.nameFull }}</span>
+        </div>
     </div>
-</div>
+{% endif %}
 
 {% if application_contact.email is not null %}
     <div class="row mb-3">

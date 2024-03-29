@@ -2,8 +2,12 @@
 
 namespace App\Model\Repository;
 
+use App\Library\Data\Admin\ApplicationCamperSearchData;
+use App\Library\Search\Paginator\PaginatorInterface;
+use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\CampDate;
+use Symfony\Component\Uid\UuidV4;
 
 interface ApplicationCamperRepositoryInterface
 {
@@ -24,6 +28,14 @@ interface ApplicationCamperRepositoryInterface
      * @return void
      */
     public function removeApplicationCamper(ApplicationCamper $applicationCamper, bool $flush): void;
+
+    /**
+     * Finds one application camper by id.
+     *
+     * @param UuidV4 $id
+     * @return ApplicationCamper|null
+     */
+    public function findOneById(UuidV4 $id): ?ApplicationCamper;
 
     /**
      * Finds application campers who occupy slots in the given camp date.
@@ -54,4 +66,18 @@ interface ApplicationCamperRepositoryInterface
      * @return int
      */
     public function getNumberOfAcceptedApplicationCampersForCampDate(CampDate $campDate): int;
+
+    /**
+     * Returns admin application camper search paginator.
+     *
+     * @param ApplicationCamperSearchData $data
+     * @param Application|CampDate $applicationOrCampDate
+     * @param int $currentPage
+     * @param int $pageSize
+     * @return PaginatorInterface
+     */
+    public function getAdminPaginator(ApplicationCamperSearchData $data,
+                                      Application|CampDate        $applicationOrCampDate,
+                                      int                         $currentPage,
+                                      int                         $pageSize): PaginatorInterface;
 }

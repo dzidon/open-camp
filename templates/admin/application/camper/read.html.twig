@@ -5,20 +5,20 @@
         <div class="col-12">
             <div class="card card-outline card-primary">
                 <div class="card-body">
-                    {{ include('_fragment/_application/_admin_application_contact.html.twig', {
-                        application_contact: application_contact,
+                    {{ include('_fragment/_application/_admin_application_camper.html.twig', {
+                        application_camper: application_camper,
                         show_name_full: true
                     }) }}
                 </div>
 
                 <div class="card-footer">
-                    <a href="{{ path('admin_application_contact_update', {id: application_contact.id}) }}"
+                    <a href="{{ path('admin_application_camper_update', {id: application_camper.id}) }}"
                        class="btn btn-primary mr-2"
                     >
                         {{ 'crud.action.common.update'|trans }}
                     </a>
 
-                    <a href="{{ path('admin_application_contact_delete', {id: application_contact.id}) }}"
+                    <a href="{{ path('admin_application_camper_delete', {id: application_camper.id}) }}"
                        class="btn btn-danger"
                     >
                         {{ 'crud.action.common.delete'|trans }}

@@ -91,7 +91,7 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
             ;
 
             $text = $this->translator->trans('route.admin_application_camper_list');
-            $url = '#' /*$this->urlGenerator->generate('admin_application_camper_list', ['id' => $applicationId])*/;
+            $url = $this->urlGenerator->generate('admin_application_camper_list', ['id' => $applicationId]);
             $itemApplicationCampers = new MenuType('admin_application_camper_list', 'navbar_admin_horizontal_update_item', $text, $url);
             $menu->addChild($itemApplicationCampers);
             $itemApplicationCampers->setActive($active);

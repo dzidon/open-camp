@@ -58,6 +58,11 @@ class ApplicationCamperDataTransfer implements DataTransferInterface
         $camperData->setHealthRestrictions($applicationCamper->getHealthRestrictions());
         $camperData->setMedication($applicationCamper->getMedication());
 
+        if ($applicationCamperData->isMedicalDiaryEnabled())
+        {
+            $applicationCamperData->setMedicalDiary($applicationCamper->getMedicalDiary());
+        }
+
         if ($camperData->isNationalIdentifierEnabled())
         {
             if ($applicationCamper->getNationalIdentifier() === null)
@@ -124,6 +129,11 @@ class ApplicationCamperDataTransfer implements DataTransferInterface
         $applicationCamper->setDietaryRestrictions($camperData->getDietaryRestrictions());
         $applicationCamper->setHealthRestrictions($camperData->getHealthRestrictions());
         $applicationCamper->setMedication($camperData->getMedication());
+
+        if ($applicationCamperData->isMedicalDiaryEnabled())
+        {
+            $applicationCamper->setMedicalDiary($applicationCamperData->getMedicalDiary());
+        }
 
         if ($camperData->isNationalIdentifierEnabled())
         {

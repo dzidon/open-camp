@@ -80,7 +80,11 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
 
                 $route === 'admin_application_contact_list'   || $route === 'admin_application_contact_create' ||
                 $route === 'admin_application_contact_read'   || $route === 'admin_application_contact_update' ||
-                $route === 'admin_application_contact_delete'
+                $route === 'admin_application_contact_delete' ||
+
+                $route === 'admin_application_camper_list'   || $route === 'admin_application_camper_create' ||
+                $route === 'admin_application_camper_read'   || $route === 'admin_application_camper_update' ||
+                $route === 'admin_application_camper_delete'
             ;
 
             $text = $this->translator->trans('route.admin_application_camp_list');

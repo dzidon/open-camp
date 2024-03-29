@@ -577,3 +577,52 @@
         {{ 'form.admin.application_contact_search.button'|trans }}
     </button>
 {% endblock %}
+
+{# Application camper search #}
+{% block admin_application_camper_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        {% if form.isApplicationAccepted is defined %}
+            <div class="form-group col-md-6">
+                {{ form_row(form.ageMin) }}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{ form_row(form.ageMax) }}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{ form_row(form.gender) }}
+            </div>
+
+            <div class="form-group col-md-6">
+                {{ form_row(form.isApplicationAccepted) }}
+            </div>
+        {% else %}
+            <div class="form-group col-md-4">
+                {{ form_row(form.ageMin) }}
+            </div>
+
+            <div class="form-group col-md-4">
+                {{ form_row(form.ageMax) }}
+            </div>
+
+            <div class="form-group col-md-4">
+                {{ form_row(form.gender) }}
+            </div>
+        {% endif %}
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.application_camper_search.button'|trans }}
+    </button>
+{% endblock %}

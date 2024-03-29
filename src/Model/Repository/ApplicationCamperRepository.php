@@ -2,10 +2,17 @@
 
 namespace App\Model\Repository;
 
+use App\Library\Data\Admin\ApplicationCamperSearchData;
+use App\Library\Enum\Search\Data\Admin\ApplicationAcceptedStateEnum;
+use App\Library\Search\Paginator\DqlPaginator;
+use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\CampDate;
+use DateTimeImmutable;
+use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\Uid\UuidV4;
 
 /**
  * @method ApplicationCamper|null find($id, $lockMode = null, $lockVersion = null)
@@ -39,6 +46,31 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
     /**
      * @inheritDoc
      */
+    public function findOneById(UuidV4 $id): ?ApplicationCamper
+    {
+        $applicationCamper = $this->createQueryBuilder('applicationCamper')
+            ->select('applicationCamper, application, campDate, camp, applicationTripLocationPath')
+            ->leftJoin('applicationCamper.application', 'application')
+            ->leftJoin('applicationCamper.applicationTripLocationPaths', 'applicationTripLocationPath')
+            ->leftJoin('application.campDate', 'campDate')
+            ->leftJoin('campDate.camp', 'camp')
+            ->andWhere('applicationCamper.id = :applicationCamperId')
+            ->setParameter('applicationCamperId', $id, UuidType::NAME)
+            ->addOrderBy('applicationTripLocationPath.isThere', 'DESC')
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        $this->loadApplicationCamperAttachments($applicationCamper);
+        $this->loadApplicationCamperFormFieldValues($applicationCamper);
+        $this->loadApplicationCamperPurchasableItemInstances($applicationCamper);
+
+        return $applicationCamper;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findThoseThatOccupySlotsInCampDate(CampDate $campDate): array
     {
         $applicationCampers = $this->createQueryBuilder('applicationCamper')
@@ -55,7 +87,6 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
             ->getResult()
         ;
 
-        $this->loadApplicationCamperTripLocationPaths($applicationCampers);
         $this->loadApplicationCamperAttachments($applicationCampers);
         $this->loadApplicationCamperFormFieldValues($applicationCampers);
         $this->loadApplicationCamperPurchasableItemInstances($applicationCampers);
@@ -82,7 +113,6 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
             ->getResult()
         ;
 
-        $this->loadApplicationCamperTripLocationPaths($applicationCampers);
         $this->loadApplicationCamperAttachments($applicationCampers);
         $this->loadApplicationCamperFormFieldValues($applicationCampers);
         $this->loadApplicationCamperPurchasableItemInstances($applicationCampers);
@@ -147,6 +177,107 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
             ->getQuery()
             ->getSingleScalarResult()
         ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getAdminPaginator(ApplicationCamperSearchData $data,
+                                      Application|CampDate        $applicationOrCampDate,
+                                      int                         $currentPage,
+                                      int                         $pageSize): DqlPaginator
+    {
+        $phrase = $data->getPhrase();
+        $sortBy = $data->getSortBy();
+        $ageMin = $data->getAgeMin();
+        $ageMax = $data->getAgeMax();
+        $gender = $data->getGender();
+        $isApplicationAccepted = $data->getIsApplicationAccepted();
+        $isEnabledApplicationAcceptedSearch = $data->isEnabledApplicationAcceptedSearch();
+
+        $queryBuilder = $this->createQueryBuilder('applicationCamper')
+            ->select('applicationCamper, application')
+            ->leftJoin('applicationCamper.application', 'application')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('CONCAT(applicationCamper.nameFirst, \' \', applicationCamper.nameLast) LIKE :phrase')
+            ->setParameter('phrase', '%' . $phrase . '%')
+            ->orderBy($sortBy->property(), $sortBy->order())
+        ;
+
+        if ($applicationOrCampDate instanceof Application)
+        {
+            $application = $applicationOrCampDate;
+
+            $queryBuilder
+                ->andWhere('application.id = :applicationId')
+                ->setParameter('applicationId', $application->getId(), UuidType::NAME)
+            ;
+        }
+        else
+        {
+            $campDate = $applicationOrCampDate;
+
+            $queryBuilder
+                ->andWhere('application.campDate = :campDateId')
+                ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ;
+        }
+
+        if ($ageMin !== null)
+        {
+            $maxDateTime = new DateTimeImmutable(sprintf('-%s years', $ageMin));
+
+            $queryBuilder
+                ->andWhere('applicationCamper.bornAt <= :maxDateTime')
+                ->setParameter('maxDateTime', $maxDateTime)
+            ;
+        }
+
+        if ($ageMax !== null)
+        {
+            $ageMax++;
+            $minDateTime = new DateTimeImmutable(sprintf('-%s years', $ageMax));
+
+            $queryBuilder
+                ->andWhere('applicationCamper.bornAt > :minDateTime')
+                ->setParameter('minDateTime', $minDateTime)
+            ;
+        }
+
+        if ($gender !== null)
+        {
+            $queryBuilder
+                ->andWhere('applicationCamper.gender = :gender')
+                ->setParameter('gender', $gender->value)
+            ;
+        }
+
+        if ($isEnabledApplicationAcceptedSearch && $isApplicationAccepted !== null)
+        {
+            if ($isApplicationAccepted === ApplicationAcceptedStateEnum::ACCEPTED)
+            {
+                $queryBuilder->andWhere('application.isAccepted = TRUE');
+            }
+            else if ($isApplicationAccepted === ApplicationAcceptedStateEnum::DECLINED)
+            {
+                $queryBuilder->andWhere('application.isAccepted = FALSE');
+            }
+            else if ($isApplicationAccepted === ApplicationAcceptedStateEnum::UNSETTLED)
+            {
+                $queryBuilder->andWhere('application.isAccepted IS NULL');
+            }
+        }
+
+        $query = $queryBuilder->getQuery();
+        $paginator = new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
+
+        /** @var ApplicationCamper[] $applicationCampers */
+        $applicationCampers = $paginator->getCurrentPageItems();
+
+        $this->loadApplicationCamperTripLocationPaths($applicationCampers);
+        $this->loadApplicationCamperPurchasableItemInstances($applicationCampers);
+
+        return $paginator;
     }
 
     private function loadApplicationCamperTripLocationPaths(null|array|ApplicationCamper $applicationCampers): void

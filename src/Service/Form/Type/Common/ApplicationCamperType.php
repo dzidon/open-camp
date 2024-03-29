@@ -8,6 +8,7 @@ use NumberFormatter;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -100,7 +101,7 @@ class ApplicationCamperType extends AbstractType
         $builder
             ->add('camperData', CamperType::class, [
                 'label'    => false,
-                'priority' => 1000,
+                'priority' => 1100,
             ])
             ->add('applicationFormFieldValuesData', CollectionType::class, [
                 'entry_type'    => ApplicationFormFieldValueType::class,
@@ -133,8 +134,10 @@ class ApplicationCamperType extends AbstractType
         /** @var callable $emptyData */
         $emptyData = $options['empty_data'];
         $request = $this->requestStack->getCurrentRequest();
+        $locale = $request->getLocale();
+        $fmt = numfmt_create($locale, NumberFormatter::CURRENCY);
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($emptyData, $request): void
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($emptyData, $fmt): void
         {
             /** @var null|ApplicationCamperData $data */
             $data = $event->getData();
@@ -146,11 +149,22 @@ class ApplicationCamperType extends AbstractType
                 $event->setData($data);
             }
 
-            $fmt = numfmt_create($request->getLocale(), NumberFormatter::CURRENCY);
-            $currency = $data->getCurrency();
+            // medical diary
+
+            if ($data->isMedicalDiaryEnabled())
+            {
+                $form
+                    ->add('medicalDiary', TextareaType::class, [
+                        'required' => false,
+                        'label'    => 'form.common.application_camper.medical_diary',
+                        'priority' => 1000,
+                    ])
+                ;
+            }
 
             // trip there
 
+            $currency = $data->getCurrency();
             $tripLocationsThere = $data->getTripLocationsThere();
 
             if (!empty($tripLocationsThere))
@@ -227,10 +241,10 @@ class ApplicationCamperType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'             => ApplicationCamperData::class,
-            'block_prefix'           => 'common_application_camper',
-            'enable_camper_loading'  => false,
-            'loadable_campers'       => [],
+            'data_class'            => ApplicationCamperData::class,
+            'block_prefix'          => 'common_application_camper',
+            'enable_camper_loading' => false,
+            'loadable_campers'      => [],
         ]);
 
         $resolver->setAllowedTypes('enable_camper_loading', 'bool');

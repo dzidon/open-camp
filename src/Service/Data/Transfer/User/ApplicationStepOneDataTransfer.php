@@ -135,7 +135,8 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
                 $application->getCurrency(),
                 $tripLocationPathThereArray,
                 $tripLocationPathBackArray,
-                $applicationCamper->getId()
+                false,
+                $applicationCamper->getId(),
             );
 
             $this->dataTransferRegistry->fillData($applicationCamperData, $applicationCamper);

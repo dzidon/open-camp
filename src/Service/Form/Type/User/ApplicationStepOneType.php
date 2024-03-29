@@ -216,14 +216,14 @@ class ApplicationStepOneType extends AbstractType
                 'allow_delete'  => true,
                 'entry_options' => [
                     'label'                 => false,
-                    'remove_button_label'   => 'form.user.application_camper.remove_button',
+                    'remove_button_label'   => 'form.common.application_camper.remove_button',
                     'remove_button'         => true,
                     'enable_camper_loading' => true,
                     'empty_data'            => $emptyApplicationCamperData,
                     'loadable_campers'      => $loadableCampers,
                 ],
                 'prototype_options' => [
-                    'remove_button_label'   => 'form.user.application_camper.remove_button',
+                    'remove_button_label'   => 'form.common.application_camper.remove_button',
                     'remove_button'         => true,
                     'enable_camper_loading' => true,
                     'loadable_campers'      => $loadableCampers,

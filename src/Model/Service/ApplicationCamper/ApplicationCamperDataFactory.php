@@ -6,6 +6,7 @@ use App\Library\Data\Common\ApplicationAttachmentData;
 use App\Library\Data\Common\ApplicationCamperData;
 use App\Library\Data\Common\ApplicationFormFieldValueData;
 use App\Model\Entity\Application;
+use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\CampDate;
 use App\Model\Repository\TripLocationRepositoryInterface;
 
@@ -32,7 +33,7 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
     /**
      * @inheritDoc
      */
-    public function createApplicationCamperDataFromCampDate(CampDate $campDate): ApplicationCamperData
+    public function createApplicationCamperDataFromCampDate(CampDate $campDate, bool $isMedicalDiaryEnabled): ApplicationCamperData
     {
         $tripLocationPathThere = $campDate->getTripLocationPathThere();
         $tripLocationPathBack = $campDate->getTripLocationPathBack();
@@ -76,6 +77,7 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
             $this->currency,
             $tripLocationPathThereArray,
             $tripLocationPathBackArray,
+            $isMedicalDiaryEnabled,
         );
 
         $campDateAttachmentConfigs = $campDate->getCampDateAttachmentConfigs();
@@ -140,20 +142,20 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
     /**
      * @inheritDoc
      */
-    public function getApplicationCamperDataCallableFromCampDate(CampDate $campDate): callable
+    public function getApplicationCamperDataCallableFromCampDate(CampDate $campDate, bool $isMedicalDiaryEnabled): callable
     {
         $factory = $this;
 
-        return function () use ($factory, $campDate): ApplicationCamperData
+        return function () use ($factory, $campDate, $isMedicalDiaryEnabled): ApplicationCamperData
         {
-            return $factory->createApplicationCamperDataFromCampDate($campDate);
+            return $factory->createApplicationCamperDataFromCampDate($campDate, $isMedicalDiaryEnabled);
         };
     }
 
     /**
      * @inheritDoc
      */
-    public function createApplicationCamperDataFromApplication(Application $application): ApplicationCamperData
+    public function createApplicationCamperDataFromApplication(Application $application, bool $isMedicalDiaryEnabled): ApplicationCamperData
     {
         $applicationCampers = $application->getApplicationCampers();
         $isNationalIdentifierEnabled = $application->isNationalIdentifierEnabled();
@@ -161,7 +163,7 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
 
         if (empty($applicationCampers))
         {
-            return new ApplicationCamperData($isNationalIdentifierEnabled, $currency, [], []);
+            return new ApplicationCamperData($isNationalIdentifierEnabled, $currency, [], [], $isMedicalDiaryEnabled);
         }
 
         $firstKey = array_key_first($applicationCampers);
@@ -187,6 +189,7 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
             $currency,
             $tripLocationThere,
             $tripLocationBack,
+            $isMedicalDiaryEnabled,
         );
 
         foreach ($referenceApplicationCamper->getApplicationAttachments() as $applicationAttachment)
@@ -224,13 +227,58 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
     /**
      * @inheritDoc
      */
-    public function getApplicationCamperDataCallableFromApplication(Application $application): callable
+    public function getApplicationCamperDataCallableFromApplication(Application $application, bool $isMedicalDiaryEnabled): callable
     {
         $factory = $this;
 
-        return function () use ($factory, $application): ApplicationCamperData
+        return function () use ($factory, $application, $isMedicalDiaryEnabled): ApplicationCamperData
         {
-            return $factory->createApplicationCamperDataFromApplication($application);
+            return $factory->createApplicationCamperDataFromApplication($application, $isMedicalDiaryEnabled);
+        };
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createApplicationCamperDataFromApplicationCamper(ApplicationCamper $applicationCamper, bool $isMedicalDiaryEnabled): ApplicationCamperData
+    {
+        $applicationTripLocationPaths = $applicationCamper->getApplicationTripLocationPaths();
+        $application = $applicationCamper->getApplication();
+        $tripLocationPathThereArray = [];
+        $tripLocationPathBackArray = [];
+
+        foreach ($applicationTripLocationPaths as $applicationTripLocationPath)
+        {
+            if ($applicationTripLocationPath->isThere())
+            {
+                $tripLocationPathThereArray = $applicationTripLocationPath->getLocations();
+            }
+            else
+            {
+                $tripLocationPathBackArray = $applicationTripLocationPath->getLocations();
+            }
+        }
+
+        return new ApplicationCamperData(
+            $application->isNationalIdentifierEnabled(),
+            $application->getCurrency(),
+            $tripLocationPathThereArray,
+            $tripLocationPathBackArray,
+            $isMedicalDiaryEnabled,
+            $applicationCamper->getId(),
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getApplicationCamperDataCallableFromApplicationCamper(ApplicationCamper $applicationCamper, bool $isMedicalDiaryEnabled): callable
+    {
+        $factory = $this;
+
+        return function () use ($factory, $applicationCamper, $isMedicalDiaryEnabled): ApplicationCamperData
+        {
+            return $factory->createApplicationCamperDataFromApplicationCamper($applicationCamper, $isMedicalDiaryEnabled);
         };
     }
 }

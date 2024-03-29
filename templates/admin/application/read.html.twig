@@ -376,12 +376,24 @@
                     {% endif %}
 
                     {% for application_contact in application.applicationContacts %}
+                        <div class="row mb-2 mt-5">
+                            <div class="col-12">
+                                <h4>{{ 'entity.application_contact.singular'|trans }} {{ application_contact.nameFull }}</h4>
+                            </div>
+                        </div>
+
                         {{ include('_fragment/_application/_admin_application_contact.html.twig', {
                             application_contact: application_contact
                         }) }}
                     {% endfor %}
 
                     {% for application_camper in application.applicationCampers %}
+                        <div class="row mb-2 mt-5">
+                            <div class="col-12">
+                                <h4>{{ 'entity.application_camper.singular'|trans }} {{ application_camper.nameFull }}</h4>
+                            </div>
+                        </div>
+
                         {{ include('_fragment/_application/_admin_application_camper.html.twig', {
                             application_camper: application_camper
                         }) }}

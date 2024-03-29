@@ -84,7 +84,7 @@ class ApplicationController extends AbstractController
         $isEmailMandatory = $this->getParameter('app.contact_email_mandatory');
         $isPhoneNumberMandatory = $this->getParameter('app.contact_phone_number_mandatory');
         $contactDataCallable = $contactDataFactory->getCreateContactDataCallable($isEmailMandatory, $isPhoneNumberMandatory);
-        $applicationCamperDataCallable = $applicationCamperDataFactory->getApplicationCamperDataCallableFromCampDate($campDate);
+        $applicationCamperDataCallable = $applicationCamperDataFactory->getApplicationCamperDataCallableFromCampDate($campDate, false);
         $applicationStepOneData = $applicationStepOneDataFactory->createApplicationStepOneData(
             $campDate,
             $applicationCamperDataCallable(),
@@ -163,7 +163,7 @@ class ApplicationController extends AbstractController
         $isEmailMandatory = $application->isEmailMandatory();
         $isPhoneNumberMandatory = $application->isPhoneNumberMandatory();
         $contactDataCallable = $contactDataFactory->getCreateContactDataCallable($isEmailMandatory, $isPhoneNumberMandatory);
-        $applicationCamperDataCallable = $applicationCamperDataFactory->getApplicationCamperDataCallableFromApplication($application);
+        $applicationCamperDataCallable = $applicationCamperDataFactory->getApplicationCamperDataCallableFromApplication($application, false);
         $applicationStepOneData = new ApplicationStepOneData(
             $application->isEuBusinessDataEnabled(),
             $application->isNationalIdentifierEnabled(),

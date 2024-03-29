@@ -51,6 +51,9 @@ class ApplicationCamper
     #[ORM\Column(length: 1000, nullable: true)]
     private ?string $medication = null;
 
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $medicalDiary = null;
+
     #[ORM\Column(type: Types::INTEGER)]
     private int $tripsInThePast = 0;
 
@@ -155,6 +158,14 @@ class ApplicationCamper
         return $this;
     }
 
+    public function getAge(): int
+    {
+        $now = new DateTimeImmutable('now');
+        $interval = $now->diff($this->bornAt);
+
+        return $interval->y;
+    }
+
     public function getBornAt(): DateTimeImmutable
     {
         return $this->bornAt;
@@ -211,6 +222,18 @@ class ApplicationCamper
     public function setMedication(?string $medication): self
     {
         $this->medication = $medication;
+
+        return $this;
+    }
+
+    public function getMedicalDiary(): ?string
+    {
+        return $this->medicalDiary;
+    }
+
+    public function setMedicalDiary(?string $medicalDiary): self
+    {
+        $this->medicalDiary = $medicalDiary;
 
         return $this;
     }

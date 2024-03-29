@@ -16,8 +16,12 @@ class ApplicationCamperData
 
     private string $currency;
 
+    private bool $isMedicalDiaryEnabled;
+
     #[Assert\Valid]
     private CamperData $camperData;
+
+    private ?string $medicalDiary = null;
 
     #[Assert\When(
         expression: '!this.hasTripLocationsThere()',
@@ -61,6 +65,7 @@ class ApplicationCamperData
                                 string  $currency,
                                 array   $tripLocationsThere,
                                 array   $tripLocationsBack,
+                                bool    $isMedicalDiaryEnabled,
                                 ?UuidV4 $applicationCamperId = null)
     {
         $tripLocationArrayShape = new ApplicationTripLocationArrayShape();
@@ -79,6 +84,7 @@ class ApplicationCamperData
         $this->currency = $currency;
         $this->tripLocationsThere = $tripLocationsThere;
         $this->tripLocationsBack = $tripLocationsBack;
+        $this->isMedicalDiaryEnabled = $isMedicalDiaryEnabled;
         $this->applicationCamperId = $applicationCamperId;
     }
 
@@ -136,9 +142,26 @@ class ApplicationCamperData
         return $this->currency;
     }
 
+    public function isMedicalDiaryEnabled(): bool
+    {
+        return $this->isMedicalDiaryEnabled;
+    }
+
     public function getCamperData(): CamperData
     {
         return $this->camperData;
+    }
+
+    public function getMedicalDiary(): ?string
+    {
+        return $this->medicalDiary;
+    }
+
+    public function setMedicalDiary(?string $medicalDiary): self
+    {
+        $this->medicalDiary = $medicalDiary;
+
+        return $this;
     }
 
     public function getTripLocationThere(): ?string

@@ -3,8 +3,8 @@
 namespace App\Service\Form\Type\Admin;
 
 use App\Library\Data\Admin\ApplicationSearchData;
-use App\Library\Enum\Search\Data\Admin\ApplicationAcceptedStateEnum;
 use App\Library\Enum\Search\Data\Admin\ApplicationSortEnum;
+use App\Service\Form\Type\Common\ApplicationAcceptedStateType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
@@ -45,17 +45,10 @@ class ApplicationSearchType extends AbstractType
                 ],
                 'label' => 'form.admin.application_search.is_online_payment_method.label',
             ])
-            ->add('isAccepted', EnumType::class, [
-                'class'        => ApplicationAcceptedStateEnum::class,
-                'label'        => 'form.admin.application_search.is_accepted.label',
-                'placeholder'  => 'form.common.choice.irrelevant',
-                'required'     => false,
-                'choice_label' => fn ($choice) => match ($choice)
-                {
-                    ApplicationAcceptedStateEnum::UNSETTLED => 'form.admin.application_search.is_accepted.options.unsettled',
-                    ApplicationAcceptedStateEnum::ACCEPTED  => 'form.admin.application_search.is_accepted.options.accepted',
-                    ApplicationAcceptedStateEnum::DECLINED  => 'form.admin.application_search.is_accepted.options.declined',
-                },
+            ->add('isAccepted', ApplicationAcceptedStateType::class, [
+                'label'       => 'form.admin.application_search.is_accepted',
+                'placeholder' => 'form.common.choice.irrelevant',
+                'required'    => false,
             ])
         ;
     }
