@@ -68,16 +68,14 @@ class ApplicationCamperData
                                 bool    $isMedicalDiaryEnabled,
                                 ?UuidV4 $applicationCamperId = null)
     {
-        $tripLocationArrayShape = new ApplicationTripLocationArrayShape();
-
         foreach ($tripLocationsThere as $location)
         {
-            $tripLocationArrayShape->assertLocationArrayShape($location);
+            ApplicationTripLocationArrayShape::assertLocationArrayShape($location);
         }
 
         foreach ($tripLocationsBack as $location)
         {
-            $tripLocationArrayShape->assertLocationArrayShape($location);
+            ApplicationTripLocationArrayShape::assertLocationArrayShape($location);
         }
 
         $this->camperData = new CamperData($isNationalIdentifierEnabled);

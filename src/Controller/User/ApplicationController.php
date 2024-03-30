@@ -3,8 +3,8 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
-use App\Library\Data\User\ApplicationStepThreeUpdateData;
-use App\Library\Data\User\ApplicationStepTwoUpdateData;
+use App\Library\Data\User\ApplicationStepThreeData;
+use App\Library\Data\User\ApplicationStepTwoData;
 use App\Library\Data\User\ApplicationStepOneData;
 use App\Model\Entity\Application;
 use App\Model\Entity\Camp;
@@ -237,9 +237,9 @@ class ApplicationController extends AbstractController
         $campCategory = $camp?->getCampCategory();
         $applicationId = $application->getId();
 
-        $applicationPurchasableItemsData = new ApplicationStepTwoUpdateData(
-            $application->getDiscountSiblingsConfig(),
+        $applicationPurchasableItemsData = new ApplicationStepTwoData(
             $application->getCurrency(),
+            $application->getDiscountSiblingsConfig(),
             count($application->getApplicationCampers())
         );
         $dataTransfer->fillData($applicationPurchasableItemsData, $application);
@@ -289,7 +289,7 @@ class ApplicationController extends AbstractController
         $campCategory = $camp?->getCampCategory();
         $applicationId = $application->getId();
 
-        $applicationStepThreeUpdateData = new ApplicationStepThreeUpdateData($this->getUser());
+        $applicationStepThreeUpdateData = new ApplicationStepThreeData($this->getUser());
         $form = $this->createForm(ApplicationStepThreeType::class, $applicationStepThreeUpdateData);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_three.button']);
         $form->handleRequest($request);

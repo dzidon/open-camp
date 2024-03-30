@@ -4,6 +4,7 @@ namespace App\Model\Repository;
 
 use App\Library\Data\Admin\ApplicationContactSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
+use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationContact;
 use Symfony\Component\Uid\UuidV4;
 
@@ -39,9 +40,13 @@ interface ApplicationContactRepositoryInterface
      * Returns admin application contact search paginator.
      *
      * @param ApplicationContactSearchData $data
+     * @param Application $application
      * @param int $currentPage
      * @param int $pageSize
      * @return PaginatorInterface
      */
-    public function getAdminPaginator(ApplicationContactSearchData $data, int $currentPage, int $pageSize): PaginatorInterface;
+    public function getAdminPaginator(ApplicationContactSearchData $data,
+                                      Application                  $application,
+                                      int                          $currentPage,
+                                      int                          $pageSize): PaginatorInterface;
 }

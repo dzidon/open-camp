@@ -55,10 +55,10 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
 
         $menu = new MenuType(self::getMenuIdentifier(), 'navbar_admin_horizontal_update_root');
 
-        if ($this->security->isGranted('application_update')                     ||
-            $this->security->isGranted('application_state_update')               ||
-            $this->security->isGranted('application_guide_update', $application) ||
-            $this->security->isGranted('application_guide_state', $application))
+        if ($this->security->isGranted('application_update')                ||
+            $this->security->isGranted('application_state_update')          ||
+            $this->security->isGranted('guide_access_update', $application) ||
+            $this->security->isGranted('guide_access_state', $application))
         {
             // application update
             $text = $this->translator->trans('route.admin_application_update');
@@ -68,21 +68,8 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
             $itemApplicationUpdate->setActive($route === 'admin_application_update');
         }
 
-        if ($this->security->isGranted('application_update') || $this->security->isGranted('application_guide_update', $application))
+        if ($this->security->isGranted('application_update') || $this->security->isGranted('guide_access_update', $application))
         {
-            // application contacts
-            $active =
-                $route === 'admin_application_contact_list' || $route === 'admin_application_contact_create' ||
-                $route === 'admin_application_contact_read' || $route === 'admin_application_contact_update' ||
-                $route === 'admin_application_contact_delete'
-            ;
-
-            $text = $this->translator->trans('route.admin_application_contact_list');
-            $url = $this->urlGenerator->generate('admin_application_contact_list', ['id' => $applicationId]);
-            $itemApplicationContacts = new MenuType('admin_application_contact_list', 'navbar_admin_horizontal_update_item', $text, $url);
-            $menu->addChild($itemApplicationContacts);
-            $itemApplicationContacts->setActive($active);
-
             // application campers
             $active =
                 $route === 'admin_application_camper_list' || $route === 'admin_application_camper_create' ||
@@ -96,6 +83,19 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
             $menu->addChild($itemApplicationCampers);
             $itemApplicationCampers->setActive($active);
 
+            // application contacts
+            $active =
+                $route === 'admin_application_contact_list' || $route === 'admin_application_contact_create' ||
+                $route === 'admin_application_contact_read' || $route === 'admin_application_contact_update' ||
+                $route === 'admin_application_contact_delete'
+            ;
+
+            $text = $this->translator->trans('route.admin_application_contact_list');
+            $url = $this->urlGenerator->generate('admin_application_contact_list', ['id' => $applicationId]);
+            $itemApplicationContacts = new MenuType('admin_application_contact_list', 'navbar_admin_horizontal_update_item', $text, $url);
+            $menu->addChild($itemApplicationContacts);
+            $itemApplicationContacts->setActive($active);
+
             // application purchasable items
             $text = $this->translator->trans('route.admin_application_purchasable_items_update');
             $url = '#' /*$this->urlGenerator->generate('admin_application_purchasable_items_update', ['id' => $applicationId])*/;
@@ -105,7 +105,7 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
         }
 
         if ($this->security->isGranted('application_payment', 'any_admin_permission') ||
-            $this->security->isGranted('application_guide_payments', $application))
+            $this->security->isGranted('guide_access_payments', $application))
         {
             // application payments
             $active =

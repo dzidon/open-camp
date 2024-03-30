@@ -102,6 +102,9 @@ class ApplicationDataTransfer implements DataTransferInterface
             $this->dataTransfer->fillData($applicationFormFieldValueData, $applicationFormFieldValue);
             $applicationData->addApplicationFormFieldValuesDatum($applicationFormFieldValueData);
         }
+
+        $applicationDiscountsData = $applicationData->getApplicationDiscountsData();
+        $this->dataTransfer->fillData($applicationDiscountsData, $application);
     }
 
     /**
@@ -114,12 +117,12 @@ class ApplicationDataTransfer implements DataTransferInterface
         $applicationData = $data;
         $application = $entity;
 
-        if ($this->security->isGranted('application_state_update') || $this->security->isGranted('application_guide_state', $application))
+        if ($this->security->isGranted('application_state_update') || $this->security->isGranted('guide_access_state', $application))
         {
             $application->setIsAccepted($applicationData->isAccepted());
         }
 
-        if ($this->security->isGranted('application_update') || $this->security->isGranted('application_guide_update', $application))
+        if ($this->security->isGranted('application_update') || $this->security->isGranted('guide_access_update', $application))
         {
             $application->setEmail($applicationData->getEmail());
             $application->setNameFirst($applicationData->getNameFirst());
@@ -151,6 +154,9 @@ class ApplicationDataTransfer implements DataTransferInterface
             $applicationAttachmentsData = $applicationData->getApplicationAttachmentsData();
             $this->fillApplicationAttachments($applicationAttachmentsData, $application);
         }
+
+        $applicationDiscountsData = $applicationData->getApplicationDiscountsData();
+        $this->dataTransfer->fillEntity($applicationDiscountsData, $application);
     }
 
     /**

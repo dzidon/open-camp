@@ -4,9 +4,9 @@ namespace App\Model\Library\DiscountConfig;
 
 use LogicException;
 
-class DiscountSiblingsIntervalShape implements DiscountSiblingsIntervalShapeInterface
+class DiscountSiblingsIntervalShape
 {
-    public function assertDiscountSiblingsInterval(array $interval): void
+    public static function assertDiscountSiblingsInterval(array $interval): void
     {
         $exception = new LogicException('Discount siblings interval must contain a combination of two integers, or a combination of an integer and a null value. The two integers must be indexed as "from" and "to"');
 

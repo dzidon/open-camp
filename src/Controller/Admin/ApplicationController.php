@@ -55,7 +55,7 @@ class ApplicationController extends AbstractController
 
         if ($campDateId === null)
         {
-            $isGuide = $this->isGranted('camp_date_guide');
+            $isGuide = $this->isGranted('guide_access_read');
 
             if (!$isGuide && !$isAdmin)
             {
@@ -77,7 +77,7 @@ class ApplicationController extends AbstractController
                 throw $this->createNotFoundException();
             }
 
-            if (!$isAdmin && !$this->isGranted('camp_date_guide', $campDate))
+            if (!$isAdmin && !$this->isGranted('guide_access_read', $campDate))
             {
                 throw $this->createAccessDeniedException();
             }
@@ -125,7 +125,7 @@ class ApplicationController extends AbstractController
     {
         $application = $this->findCompletedApplicationOrThrow404($id);
 
-        if (!$this->isGranted('application_read') && !$this->isGranted('application_guide_read', $application))
+        if (!$this->isGranted('application_read') && !$this->isGranted('guide_access_read', $application))
         {
             throw $this->createAccessDeniedException();
         }
@@ -145,7 +145,7 @@ class ApplicationController extends AbstractController
     {
         $application = $this->findCompletedApplicationOrThrow404($id);
 
-        if (!$this->isGranted('application_read') && !$this->isGranted('application_guide_read', $application))
+        if (!$this->isGranted('application_read') && !$this->isGranted('guide_access_read', $application))
         {
             throw $this->createAccessDeniedException();
         }
@@ -175,7 +175,7 @@ class ApplicationController extends AbstractController
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
 
-        if (!$this->isGranted('application_update') && !$this->isGranted('application_guide_update', $application))
+        if (!$this->isGranted('application_update') && !$this->isGranted('guide_access_update', $application))
         {
             throw $this->createAccessDeniedException();
         }

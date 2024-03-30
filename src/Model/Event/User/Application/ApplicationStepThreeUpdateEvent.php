@@ -2,7 +2,7 @@
 
 namespace App\Model\Event\User\Application;
 
-use App\Library\Data\User\ApplicationStepThreeUpdateData;
+use App\Library\Data\User\ApplicationStepThreeData;
 use App\Model\Entity\Application;
 use App\Model\Event\AbstractModelEvent;
 
@@ -10,22 +10,22 @@ class ApplicationStepThreeUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.application.step_three_update';
 
-    private ApplicationStepThreeUpdateData $data;
+    private ApplicationStepThreeData $data;
 
     private Application $application;
 
-    public function __construct(ApplicationStepThreeUpdateData $data, Application $application)
+    public function __construct(ApplicationStepThreeData $data, Application $application)
     {
         $this->data = $data;
         $this->application = $application;
     }
 
-    public function getApplicationStepThreeUpdateData(): ApplicationStepThreeUpdateData
+    public function getApplicationStepThreeUpdateData(): ApplicationStepThreeData
     {
         return $this->data;
     }
 
-    public function setApplicationStepThreeUpdateData(ApplicationStepThreeUpdateData $data): self
+    public function setApplicationStepThreeUpdateData(ApplicationStepThreeData $data): self
     {
         $this->data = $data;
 

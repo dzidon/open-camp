@@ -447,15 +447,15 @@
                 </div>
 
                 {% set granted_update_or_state_update_or_guide =
-                    is_granted('application_update') or
-                    is_granted('application_state_update') or
-                    is_granted('application_guide_update', application) or
-                    is_granted('application_guide_state', application)
+                    is_granted('application_update')               or
+                    is_granted('application_state_update')         or
+                    is_granted('guide_access_update', application) or
+                    is_granted('guide_access_state', application)
                 %}
 
                 {% set granted_payments_or_guide =
                     is_granted('application_payment', 'any_admin_permission') or
-                    is_granted('application_guide_payments', application)
+                    is_granted('guide_access_payments', application)
                 %}
 
                 {% set granted_delete = is_granted('application_delete') %}

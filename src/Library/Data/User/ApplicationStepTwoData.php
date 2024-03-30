@@ -2,23 +2,17 @@
 
 namespace App\Library\Data\User;
 
-use App\Library\Constraint\DiscountSiblingIntervalInConfig;
 use App\Library\Data\Common\ApplicationCamperPurchasableItemsData;
+use App\Library\Data\Common\ApplicationDiscountsData;
 use App\Library\Data\Common\ApplicationPurchasableItemData;
 use App\Model\Entity\PaymentMethod;
 use App\Model\Enum\Entity\ApplicationCustomerChannelEnum;
-use App\Model\Library\DiscountConfig\DiscountConfigArrayShape;
-use App\Model\Library\DiscountConfig\DiscountSiblingsIntervalShape;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[DiscountSiblingIntervalInConfig]
-class ApplicationStepTwoUpdateData
+class ApplicationStepTwoData
 {
-    private array $discountSiblingsConfig;
-
-    private string $currency;
-
-    private int $numberOfApplicationCampers;
+    #[Assert\Valid]
+    private ApplicationDiscountsData $applicationDiscountsData;
 
     #[Assert\NotBlank]
     private ?PaymentMethod $paymentMethod = null;
@@ -45,31 +39,18 @@ class ApplicationStepTwoUpdateData
     )]
     private ?string $customerChannelOther = null;
 
-    private false|array $discountSiblingsInterval = false;
-
-    public function __construct(array $discountSiblingsConfig, string $currency, int $numberOfApplicationCampers)
+    public function __construct(string $currency, array $discountSiblingsConfig, int $numberOfApplicationCampers)
     {
-        $this->discountSiblingsConfig = $discountSiblingsConfig;
-        $this->currency = $currency;
-        $this->numberOfApplicationCampers = $numberOfApplicationCampers;
-
-        $discountConfigArrayShape = new DiscountConfigArrayShape();
-        $discountConfigArrayShape->assertSiblingsConfig($this->discountSiblingsConfig);
+        $this->applicationDiscountsData = new ApplicationDiscountsData(
+            $currency,
+            $discountSiblingsConfig,
+            $numberOfApplicationCampers
+        );
     }
 
-    public function getDiscountSiblingsConfig(): array
+    public function getApplicationDiscountsData(): ApplicationDiscountsData
     {
-        return $this->discountSiblingsConfig;
-    }
-
-    public function getCurrency(): string
-    {
-        return $this->currency;
-    }
-
-    public function getNumberOfApplicationCampers(): string
-    {
-        return $this->numberOfApplicationCampers;
+        return $this->applicationDiscountsData;
     }
 
     public function getPaymentMethod(): ?PaymentMethod
@@ -178,24 +159,6 @@ class ApplicationStepTwoUpdateData
     public function setCustomerChannelOther(?string $customerChannelOther): self
     {
         $this->customerChannelOther = $customerChannelOther;
-
-        return $this;
-    }
-
-    public function getDiscountSiblingsInterval(): false|array
-    {
-        return $this->discountSiblingsInterval;
-    }
-
-    public function setDiscountSiblingsInterval(false|array $discountSiblingsInterval): self
-    {
-        $this->discountSiblingsInterval = $discountSiblingsInterval;
-
-        if ($this->discountSiblingsInterval !== false)
-        {
-            $discountSiblingsIntervalShape = new DiscountSiblingsIntervalShape();
-            $discountSiblingsIntervalShape->assertDiscountSiblingsInterval($this->discountSiblingsInterval);
-        }
 
         return $this;
     }

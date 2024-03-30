@@ -6,11 +6,13 @@ use App\Controller\AbstractController;
 use App\Library\Data\Admin\ApplicationCamperSearchData;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
+use App\Model\Entity\CampDate;
 use App\Model\Event\Admin\ApplicationCamper\ApplicationCamperCreateEvent;
 use App\Model\Event\Admin\ApplicationCamper\ApplicationCamperDeleteEvent;
 use App\Model\Event\Admin\ApplicationCamper\ApplicationCamperUpdateEvent;
 use App\Model\Repository\ApplicationCamperRepositoryInterface;
 use App\Model\Repository\ApplicationRepositoryInterface;
+use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Service\ApplicationCamper\ApplicationCamperDataFactoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\ApplicationCamperSearchType;
@@ -33,21 +35,69 @@ class ApplicationCamperController extends AbstractController
 
     private ApplicationRepositoryInterface $applicationRepository;
 
+    private CampDateRepositoryInterface $campDateRepository;
+
     public function __construct(ApplicationCamperRepositoryInterface $applicationCamperRepository,
-                                ApplicationRepositoryInterface       $applicationRepository)
+                                ApplicationRepositoryInterface       $applicationRepository,
+                                CampDateRepositoryInterface          $campDateRepository)
     {
         $this->applicationCamperRepository = $applicationCamperRepository;
         $this->applicationRepository = $applicationRepository;
+        $this->campDateRepository = $campDateRepository;
+    }
+
+    #[Route('/admin/application-campers/{campDateId}', name: 'admin_camp_date_application_camper_list')]
+    public function listPerCampDate(MenuTypeFactoryRegistryInterface $menuFactory,
+                                    FormFactoryInterface             $formFactory,
+                                    Request                          $request,
+                                    UuidV4                           $campDateId): Response
+    {
+        $campDate = $this->findCampDateOrThrow404($campDateId);
+        $this->assertIsGrantedCampDateRead($campDate);
+
+        $page = (int) $request->query->get('page', 1);
+        $searchData = new ApplicationCamperSearchData(true);
+        $form = $formFactory->createNamed('', ApplicationCamperSearchType::class, $searchData);
+        $form->handleRequest($request);
+
+        $isSearchInvalid = $form->isSubmitted() && !$form->isValid();
+        if ($isSearchInvalid)
+        {
+            $searchData = new ApplicationCamperSearchData(true);
+        }
+
+        $paginator = $this->applicationCamperRepository->getAdminPaginator($searchData, $campDate, $page, 20);
+        if ($paginator->isCurrentPageOutOfBounds())
+        {
+            throw $this->createNotFoundException();
+        }
+
+        $paginationMenu = $menuFactory->buildMenuType('pagination', [
+            'paginator' => $paginator,
+        ]);
+
+        $camp = $campDate->getCamp();
+
+        return $this->render('admin/application/camper/list.html.twig', [
+            'form_search'       => $form->createView(),
+            'pagination_menu'   => $paginationMenu,
+            'paginator'         => $paginator,
+            'is_search_invalid' => $isSearchInvalid,
+            'breadcrumbs'       => $this->createBreadcrumbs([
+                'camp_date' => $campDate,
+                'camp'      => $camp,
+            ]),
+        ]);
     }
 
     #[Route('/admin/application/{id}/campers', name: 'admin_application_camper_list')]
-    public function list(MenuTypeFactoryRegistryInterface $menuFactory,
-                         FormFactoryInterface             $formFactory,
-                         Request                          $request,
-                         UuidV4                           $id): Response
+    public function listPerApplication(MenuTypeFactoryRegistryInterface $menuFactory,
+                                       FormFactoryInterface             $formFactory,
+                                       Request                          $request,
+                                       UuidV4                           $id): Response
     {
         $application = $this->findApplicationOrThrow404($id);
-        $this->assertIsGrantedAccess($application);
+        $this->assertIsGrantedApplicationUpdate($application);
 
         $page = (int) $request->query->get('page', 1);
         $searchData = new ApplicationCamperSearchData(false);
@@ -94,7 +144,7 @@ class ApplicationCamperController extends AbstractController
                            UuidV4                                $id): Response
     {
         $application = $this->findApplicationOrThrow404($id);
-        $this->assertIsGrantedAccess($application);
+        $this->assertIsGrantedApplicationUpdate($application);
 
         $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromApplication($application, true);
         $form = $this->createForm(ApplicationCamperType::class, $applicationCamperData);
@@ -131,7 +181,7 @@ class ApplicationCamperController extends AbstractController
     {
         $applicationCamper = $this->findApplicationCamperOrThrow404($id);
         $application = $applicationCamper->getApplication();
-        $this->assertIsGrantedAccess($application);
+        $this->assertIsGrantedApplicationUpdate($application);
 
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
@@ -157,7 +207,7 @@ class ApplicationCamperController extends AbstractController
     {
         $applicationCamper = $this->findApplicationCamperOrThrow404($id);
         $application = $applicationCamper->getApplication();
-        $this->assertIsGrantedAccess($application);
+        $this->assertIsGrantedApplicationUpdate($application);
 
         $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromApplicationCamper($applicationCamper, true);
         $dataTransfer->fillData($applicationCamperData, $applicationCamper);
@@ -198,7 +248,7 @@ class ApplicationCamperController extends AbstractController
     {
         $applicationCamper = $this->findApplicationCamperOrThrow404($id);
         $application = $applicationCamper->getApplication();
-        $this->assertIsGrantedAccess($application);
+        $this->assertIsGrantedApplicationUpdate($application);
 
         if (count($application->getApplicationCampers()) <= 1)
         {
@@ -243,9 +293,17 @@ class ApplicationCamperController extends AbstractController
         ]);
     }
 
-    private function assertIsGrantedAccess(Application $application): void
+    private function assertIsGrantedApplicationUpdate(Application $application): void
     {
-        if (!$this->isGranted('application_update') && !$this->isGranted('application_guide_update', $application))
+        if (!$this->isGranted('application_update') && !$this->isGranted('guide_access_update', $application))
+        {
+            throw $this->createAccessDeniedException();
+        }
+    }
+
+    private function assertIsGrantedCampDateRead(CampDate $campDate): void
+    {
+        if (!$this->isGranted('application_read') && !$this->isGranted('guide_access_read', $campDate))
         {
             throw $this->createAccessDeniedException();
         }
@@ -273,5 +331,17 @@ class ApplicationCamperController extends AbstractController
         }
 
         return $application;
+    }
+
+    private function findCampDateOrThrow404(UuidV4 $id): CampDate
+    {
+        $campDate = $this->campDateRepository->findOneById($id);
+
+        if ($campDate === null)
+        {
+            throw $this->createNotFoundException();
+        }
+
+        return $campDate;
     }
 }

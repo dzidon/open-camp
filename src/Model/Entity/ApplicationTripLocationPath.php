@@ -45,11 +45,9 @@ class ApplicationTripLocationPath
 
     public function __construct(bool $isThere, array $locations, string $location, ApplicationCamper $applicationCamper)
     {
-        $tripLocationArrayShape = new ApplicationTripLocationArrayShape();
-
         foreach ($locations as $locationFromCollection)
         {
-            $tripLocationArrayShape->assertLocationArrayShape($locationFromCollection);
+            ApplicationTripLocationArrayShape::assertLocationArrayShape($locationFromCollection);
         }
 
         $this->id = Uuid::v4();

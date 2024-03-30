@@ -66,7 +66,7 @@
                                 {% set granted_update =
                                     is_granted('application', 'any_admin_permission')         or
                                     is_granted('application_payment', 'any_admin_permission') or
-                                    is_granted('camp_date_guide')
+                                    is_granted('guide_access_read')
                                 %}
 
                                 {% for camp_date in paginator.currentPageItems %}
@@ -111,6 +111,12 @@
                                                        class="btn btn-primary"
                                                     >
                                                         {{ 'route.admin_application_list'|trans }}
+                                                    </a>
+
+                                                    <a href="{{ path('admin_camp_date_application_camper_list', {campDateId: camp_date.id}) }}"
+                                                       class="btn btn-primary"
+                                                    >
+                                                        {{ 'route.admin_camp_date_application_camper_list'|trans }}
                                                     </a>
                                                 {% endif %}
                                             {% else %}

@@ -32,7 +32,7 @@ class ApplicationCampDateController extends AbstractController
 
     #[IsGranted(new Expression('is_granted("application", "any_admin_permission")         or 
                                 is_granted("application_payment", "any_admin_permission") or
-                                is_granted("camp_date_guide")'))]
+                                is_granted("guide_access_read")'))]
     #[Route('/admin/application-camp/{campId}/dates', name: 'admin_application_camp_date_list')]
     public function list(FormFactoryInterface             $formFactory,
                          MenuTypeFactoryRegistryInterface $menuFactory,

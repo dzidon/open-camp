@@ -35,7 +35,7 @@ class ApplicationAttachmentController extends AbstractController
             ;
         }
 
-        if (!$this->isGranted('application_read') && !$this->isGranted('application_guide_read', $application))
+        if (!$this->isGranted('application_read') && !$this->isGranted('guide_access_read', $application))
         {
             throw $this->createAccessDeniedException();
         }

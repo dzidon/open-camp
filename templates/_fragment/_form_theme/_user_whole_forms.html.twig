@@ -506,9 +506,7 @@
 
     {{ form_row(form.paymentMethod) }}
 
-    {% if form.discountSiblingsInterval is defined %}
-        {{ form_row(form.discountSiblingsInterval) }}
-    {% endif %}
+    {{ form_row(form.applicationDiscountsData) }}
 
     {% if form.applicationCamperPurchasableItemsData is defined %}
         {% set label = form.applicationCamperPurchasableItemsData.vars.label %}

@@ -6,7 +6,7 @@ use App\Model\Entity\User;
 use EWZ\Bundle\RecaptchaBundle\Validator\Constraints as Recaptcha;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class ApplicationStepThreeUpdateData
+class ApplicationStepThreeData
 {
     private ?User $user;
 

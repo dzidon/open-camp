@@ -161,16 +161,16 @@
                                             {% endif %}
                                         </td>
 
-                                        {% set granted_read_or_guide = granted_read or is_granted('application_guide_read', application) %}
+                                        {% set granted_read_or_guide = granted_read or is_granted('guide_access_read', application) %}
 
                                         {% set granted_update_or_state_update_or_guide =
                                             granted_update or
                                             granted_state_update or
-                                            is_granted('application_guide_update', application) or
-                                            is_granted('application_guide_state', application)
+                                            is_granted('guide_access_update', application) or
+                                            is_granted('guide_access_state', application)
                                         %}
 
-                                        {% set granted_payments_or_guide = granted_payments or is_granted('application_guide_payments', application) %}
+                                        {% set granted_payments_or_guide = granted_payments or is_granted('guide_access_payments', application) %}
 
                                         <td class="align-middle cell-25">
                                             {% if granted_read_or_guide or granted_update_or_state_update_or_guide or granted_payments_or_guide or granted_delete %}

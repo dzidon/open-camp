@@ -4,7 +4,7 @@ namespace App\Service\Data\Transfer\User;
 
 use App\Library\Data\Common\ApplicationCamperPurchasableItemsData;
 use App\Library\Data\Common\ApplicationPurchasableItemData;
-use App\Library\Data\User\ApplicationStepTwoUpdateData;
+use App\Library\Data\User\ApplicationStepTwoData;
 use App\Model\Entity\Application;
 use App\Model\Event\User\ApplicationPurchasableItem\ApplicationPurchasableItemUpdateEvent;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
@@ -12,9 +12,9 @@ use App\Service\Data\Transfer\DataTransferInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Transfers data from {@link ApplicationStepTwoUpdateData} to {@link Application} and vice versa.
+ * Transfers data from {@link ApplicationStepTwoData} to {@link Application} and vice versa.
  */
-class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
+class ApplicationStepTwoDataTransfer implements DataTransferInterface
 {
     private DataTransferRegistryInterface $dataTransfer;
 
@@ -31,7 +31,7 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
      */
     public function supports(object $data, object $entity): bool
     {
-        return $data instanceof ApplicationStepTwoUpdateData && $entity instanceof Application;
+        return $data instanceof ApplicationStepTwoData && $entity instanceof Application;
     }
 
     /**
@@ -39,7 +39,7 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
      */
     public function fillData(object $data, object $entity): void
     {
-        /** @var ApplicationStepTwoUpdateData $applicationStepTwoUpdateData */
+        /** @var ApplicationStepTwoData $applicationStepTwoUpdateData */
         /** @var Application $application */
         $applicationStepTwoUpdateData = $data;
         $application = $entity;
@@ -50,20 +50,8 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
         $applicationStepTwoUpdateData->setCustomerChannel($application->getCustomerChannel());
         $applicationStepTwoUpdateData->setCustomerChannelOther($application->getCustomerChannelOther());
 
-        $discountSiblingsIntervalFrom = $application->getDiscountSiblingsIntervalFrom();
-        $discountSiblingsIntervalTo = $application->getDiscountSiblingsIntervalTo();
-
-        if ($discountSiblingsIntervalFrom === null && $discountSiblingsIntervalTo === null)
-        {
-            $applicationStepTwoUpdateData->setDiscountSiblingsInterval(false);
-        }
-        else
-        {
-            $applicationStepTwoUpdateData->setDiscountSiblingsInterval([
-                'from' => $discountSiblingsIntervalFrom,
-                'to'   => $discountSiblingsIntervalTo,
-            ]);
-        }
+        $applicationDiscountsData = $applicationStepTwoUpdateData->getApplicationDiscountsData();
+        $this->dataTransfer->fillData($applicationDiscountsData, $application);
 
         foreach ($application->getApplicationPurchasableItems() as $applicationPurchasableItem)
         {
@@ -114,7 +102,7 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
      */
     public function fillEntity(object $data, object $entity): void
     {
-        /** @var ApplicationStepTwoUpdateData $applicationStepTwoUpdateData */
+        /** @var ApplicationStepTwoData $applicationStepTwoUpdateData */
         /** @var Application $application */
         $applicationStepTwoUpdateData = $data;
         $application = $entity;
@@ -126,18 +114,8 @@ class ApplicationStepTwoUpdateDataTransfer implements DataTransferInterface
             $applicationStepTwoUpdateData->getCustomerChannelOther()
         );
 
-        $discountSiblingsInterval = $applicationStepTwoUpdateData->getDiscountSiblingsInterval();
-
-        if ($discountSiblingsInterval === false)
-        {
-            $application->setDiscountSiblingsInterval(null, null);
-        }
-        else
-        {
-            $discountSiblingsIntervalFrom = $discountSiblingsInterval['from'];
-            $discountSiblingsIntervalTo = $discountSiblingsInterval['to'];
-            $application->setDiscountSiblingsInterval($discountSiblingsIntervalFrom, $discountSiblingsIntervalTo);
-        }
+        $applicationDiscountsData = $applicationStepTwoUpdateData->getApplicationDiscountsData();
+        $this->dataTransfer->fillEntity($applicationDiscountsData, $application);
 
         $applicationPurchasableItemsData = $applicationStepTwoUpdateData->getApplicationPurchasableItemsData();
 

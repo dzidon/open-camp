@@ -2,7 +2,7 @@
 
 namespace App\Model\Event\User\Application;
 
-use App\Library\Data\User\ApplicationStepTwoUpdateData;
+use App\Library\Data\User\ApplicationStepTwoData;
 use App\Model\Entity\Application;
 use App\Model\Event\AbstractModelEvent;
 
@@ -10,22 +10,22 @@ class ApplicationStepTwoUpdateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.application.step_two_update';
 
-    private ApplicationStepTwoUpdateData $data;
+    private ApplicationStepTwoData $data;
 
     private Application $application;
 
-    public function __construct(ApplicationStepTwoUpdateData $data, Application $application)
+    public function __construct(ApplicationStepTwoData $data, Application $application)
     {
         $this->data = $data;
         $this->application = $application;
     }
 
-    public function getApplicationStepTwoUpdateData(): ApplicationStepTwoUpdateData
+    public function getApplicationStepTwoUpdateData(): ApplicationStepTwoData
     {
         return $this->data;
     }
 
-    public function setApplicationStepTwoUpdateData(ApplicationStepTwoUpdateData $data): self
+    public function setApplicationStepTwoUpdateData(ApplicationStepTwoData $data): self
     {
         $this->data = $data;
 

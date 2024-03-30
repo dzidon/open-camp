@@ -556,6 +556,10 @@
         {{ form_row(form.applicationAttachmentsData) }}
     {% endif %}
 
+    {% if form.applicationDiscountsData is defined %}
+        {{ form_row(form.applicationDiscountsData) }}
+    {% endif %}
+
     {{ form_rest(form) }}
 {% endblock %}
 

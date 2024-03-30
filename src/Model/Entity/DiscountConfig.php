@@ -3,7 +3,7 @@
 namespace App\Model\Entity;
 
 use App\Model\Attribute\UpdatedAtProperty;
-use App\Model\Library\DiscountConfig\DiscountConfigArrayShape;
+use App\Model\Library\DiscountConfig\DiscountConfigArrayValidator;
 use App\Model\Repository\DiscountConfigRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
@@ -69,8 +69,8 @@ class DiscountConfig
 
     public function setRecurringCampersConfig(array $recurringCampersConfig): self
     {
-        $discountConfigArrayShape = new DiscountConfigArrayShape();
-        $discountConfigArrayShape->assertRecurringCampersConfig($recurringCampersConfig);
+        DiscountConfigArrayValidator::assertRecurringCampersConfig($recurringCampersConfig);
+
         $this->recurringCampersConfig = [];
 
         foreach ($recurringCampersConfig as $recurringCamperConfig)
@@ -93,8 +93,8 @@ class DiscountConfig
 
     public function setSiblingsConfig(array $siblingsConfig): self
     {
-        $discountConfigArrayShape = new DiscountConfigArrayShape();
-        $discountConfigArrayShape->assertSiblingsConfig($siblingsConfig);
+        DiscountConfigArrayValidator::assertSiblingsConfig($siblingsConfig);
+
         $this->siblingsConfig = [];
 
         foreach ($siblingsConfig as $siblingConfig)

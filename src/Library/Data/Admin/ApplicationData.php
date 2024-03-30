@@ -7,6 +7,7 @@ use App\Library\Constraint\Compound\ZipCodeRequirements;
 use App\Library\Constraint\EuCin;
 use App\Library\Constraint\EuVatId;
 use App\Library\Data\Common\ApplicationAttachmentData;
+use App\Library\Data\Common\ApplicationDiscountsData;
 use App\Library\Data\Common\ApplicationFormFieldValueData;
 use App\Model\Entity\Application;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -84,9 +85,18 @@ class ApplicationData
     #[Assert\Valid]
     private array $applicationFormFieldValuesData = [];
 
+    #[Assert\Valid]
+    private ApplicationDiscountsData $applicationDiscountsData;
+
     public function __construct(Application $application)
     {
         $this->application = $application;
+
+        $this->applicationDiscountsData = new ApplicationDiscountsData(
+            $this->application->getCurrency(),
+            $this->application->getDiscountSiblingsConfig(),
+            count($this->application->getApplicationCampers()),
+        );
     }
 
     public function getApplication(): Application
@@ -298,5 +308,10 @@ class ApplicationData
         unset($this->applicationFormFieldValuesData[$key]);
 
         return $this;
+    }
+
+    public function getApplicationDiscountsData(): ApplicationDiscountsData
+    {
+        return $this->applicationDiscountsData;
     }
 }

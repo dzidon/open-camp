@@ -4,6 +4,7 @@ namespace App\Model\Repository;
 
 use App\Library\Data\Admin\ApplicationContactSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
+use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationContact;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -60,12 +61,17 @@ class ApplicationContactRepository extends AbstractRepository implements Applica
     /**
      * @inheritDoc
      */
-    public function getAdminPaginator(ApplicationContactSearchData $data, int $currentPage, int $pageSize): DqlPaginator
+    public function getAdminPaginator(ApplicationContactSearchData $data,
+                                      Application                  $application,
+                                      int                          $currentPage,
+                                      int                          $pageSize): DqlPaginator
     {
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();
 
         $query = $this->createQueryBuilder('applicationContact')
+            ->andWhere('applicationContact.application = :applicationId')
+            ->setParameter('applicationId', $application->getId(), UuidType::NAME)
             ->andWhere('CONCAT(applicationContact.nameFirst, \' \', applicationContact.nameLast) LIKE :phrase')
             ->setParameter('phrase', '%' . $phrase . '%')
             ->orderBy($sortBy->property(), $sortBy->order())

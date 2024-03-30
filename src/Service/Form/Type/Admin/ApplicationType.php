@@ -4,6 +4,7 @@ namespace App\Service\Form\Type\Admin;
 
 use App\Library\Data\Admin\ApplicationData;
 use App\Service\Form\Type\Common\ApplicationAttachmentType;
+use App\Service\Form\Type\Common\ApplicationDiscountsType;
 use App\Service\Form\Type\Common\ApplicationFormFieldValueType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
@@ -36,7 +37,7 @@ class ApplicationType extends AbstractType
         $applicationData = $builder->getData();
         $application = $applicationData->getApplication();
 
-        if ($this->security->isGranted('application_state_update') || $this->security->isGranted('application_guide_state', $application))
+        if ($this->security->isGranted('application_state_update') || $this->security->isGranted('guide_access_state', $application))
         {
             $builder
                 ->add('isAccepted', ChoiceType::class, [
@@ -53,7 +54,7 @@ class ApplicationType extends AbstractType
             ;
         }
 
-        if ($this->security->isGranted('application_update') || $this->security->isGranted('application_guide_update', $application))
+        if ($this->security->isGranted('application_update') || $this->security->isGranted('guide_access_update', $application))
         {
             $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void
             {
@@ -184,6 +185,13 @@ class ApplicationType extends AbstractType
                     ],
                     'label'    => false,
                     'priority' => 100,
+                ])
+                ->add('applicationDiscountsData', ApplicationDiscountsType::class, [
+                    'row_attr' => [
+                        'class' => 'm-0',
+                    ],
+                    'label'    => false,
+                    'priority' => 0,
                 ])
             ;
         }

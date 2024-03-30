@@ -1386,6 +1386,10 @@ form:
             role_other: 'Upřesnění role'
             button: 'Uložit'
 
+        application_discounts:
+            label: 'Sleva pro sourozence'
+            siblings_null_option: 'Neuplatňuji slevu pro sourozence'
+
     admin:
         help:
             value_visible_for_admins_only: 'Tento údaj vidí pouze administrátoři.'
@@ -1956,10 +1960,6 @@ form:
             note: 'Poznámka'
             customer_channel: 'Jak jste se o nás dozvěděli?'
             customer_channel_other: 'Upřesnění'
-            discount_siblings:
-                label: 'Sleva pro sourozence'
-                null_option: 'Neuplatňuji slevu pro sourozence'
-
             button: 'Pokračovat'
 
         application_step_three:
@@ -2174,7 +2174,7 @@ route:
     admin_application_camp_summary: 'Souhrn za tábor'
     admin_application_camp_date_list: 'Termíny'
     admin_application_camp_date_summary: 'Souhrn za termín'
-    admin_application_list: 'Seznam přihlášek'
+    admin_application_list: 'Přihlášky'
     admin_application_read: 'Zobrazení přihlášky'
     admin_application_update: 'Editace přihlášky'
     admin_application_delete: 'Odstranění přihlášky'
@@ -2186,6 +2186,7 @@ route:
     admin_application_contact_delete: 'Odstranění kontaktu'
     
     admin_application_camper_list: 'Táborníci'
+    admin_camp_date_application_camper_list: 'Táborníci'
     admin_application_camper_create: 'Vytvoření táborníka'
     admin_application_camper_read: 'Zobrazení táborníka'
     admin_application_camper_update: 'Editace táborníka'

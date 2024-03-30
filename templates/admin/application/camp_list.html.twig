@@ -80,7 +80,7 @@
                                 {% set granted_update =
                                     is_granted('application', 'any_admin_permission')         or
                                     is_granted('application_payment', 'any_admin_permission') or
-                                    is_granted('camp_date_guide')
+                                    is_granted('guide_access_read')
                                 %}
 
                                 {% for camp in paginator.currentPageItems %}

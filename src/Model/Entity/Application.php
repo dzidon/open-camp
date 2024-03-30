@@ -5,7 +5,7 @@ namespace App\Model\Entity;
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Enum\Entity\ApplicationCustomerChannelEnum;
 use App\Model\Enum\Entity\ApplicationPaymentTypeEnum;
-use App\Model\Library\DiscountConfig\DiscountConfigArrayShape;
+use App\Model\Library\DiscountConfig\DiscountConfigArrayValidator;
 use App\Model\Repository\ApplicationRepository;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -242,9 +242,8 @@ class Application
         $this->depositUntil = $this->campDate->getDepositUntil();
         $this->campDateDescription = $this->campDate->getDescription();
 
-        $discountConfigArrayShape = new DiscountConfigArrayShape();
-        $discountConfigArrayShape->assertRecurringCampersConfig($this->discountRecurringCampersConfig);
-        $discountConfigArrayShape->assertSiblingsConfig($this->discountSiblingsConfig);
+        DiscountConfigArrayValidator::assertRecurringCampersConfig($this->discountRecurringCampersConfig);
+        DiscountConfigArrayValidator::assertSiblingsConfig($this->discountSiblingsConfig);
     }
 
     public function getId(): UuidV4

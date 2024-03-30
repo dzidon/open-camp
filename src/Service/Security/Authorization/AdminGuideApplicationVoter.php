@@ -10,24 +10,25 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
- * Grants admin application access to guides.
+ * Grants admin access to camp date guides.
  */
 class AdminGuideApplicationVoter extends Voter
 {
-    const CAMP_DATE_GUIDE = 'camp_date_guide';
-    const APPLICATION_GUIDE_READ = 'application_guide_read';
-    const APPLICATION_GUIDE_STATE = 'application_guide_state';
-    const APPLICATION_GUIDE_UPDATE = 'application_guide_update';
-    const APPLICATION_GUIDE_PAYMENTS = 'application_guide_payments';
+    const GUIDE_ACCESS_READ = 'guide_access_read';
+    const GUIDE_ACCESS_STATE = 'guide_access_state';
+    const GUIDE_ACCESS_UPDATE = 'guide_access_update';
+    const GUIDE_ACCESS_PAYMENTS = 'guide_access_payments';
 
-    const APPLICATION_GUIDE_PERMISSIONS = [
-        self::APPLICATION_GUIDE_READ,
-        self::APPLICATION_GUIDE_STATE,
-        self::APPLICATION_GUIDE_UPDATE,
-        self::APPLICATION_GUIDE_PAYMENTS,
+    const GUIDE_ACCESS_PERMISSIONS = [
+        self::GUIDE_ACCESS_READ,
+        self::GUIDE_ACCESS_STATE,
+        self::GUIDE_ACCESS_UPDATE,
+        self::GUIDE_ACCESS_PAYMENTS,
     ];
 
     private CampDateUserRepositoryInterface $campDateUserRepository;
+
+    private ?array $cachedCampDateUsers = null;
 
     public function __construct(CampDateUserRepositoryInterface $campDateUserRepository)
     {
@@ -39,12 +40,9 @@ class AdminGuideApplicationVoter extends Voter
      */
     protected function supports(string $attribute, mixed $subject): bool
     {
-        if ($attribute === self::CAMP_DATE_GUIDE && ($subject === null || $subject instanceof CampDate))
-        {
-            return true;
-        }
+        $isSubjectSupported = $subject === null || $subject instanceof CampDate || $subject instanceof Application;
 
-        if (in_array($attribute, self::APPLICATION_GUIDE_PERMISSIONS) && $subject instanceof Application)
+        if (in_array($attribute, self::GUIDE_ACCESS_PERMISSIONS) && $isSubjectSupported)
         {
             return true;
         }
@@ -64,53 +62,65 @@ class AdminGuideApplicationVoter extends Voter
             return false;
         }
 
-        if ($attribute === self::CAMP_DATE_GUIDE)
-        {
-            if ($subject === null)
-            {
-                return !empty($this->campDateUserRepository->findByUser($user));
-            }
-            else if ($subject instanceof CampDate)
-            {
-                $campDate = $subject;
+        /** @var null|CampDate $campDate */
+        $campDate = $subject;
 
-                return null !== $this->campDateUserRepository->findOneForCampDateAndUser($campDate, $user);
-            }
-        }
-        else if (in_array($attribute, self::APPLICATION_GUIDE_PERMISSIONS))
+        if ($subject instanceof Application)
         {
-            /** @var Application $application */
-            $application = $subject;
-            $campDate = $application->getCampDate();
+            $campDate = $subject->getCampDate();
 
             if ($campDate === null)
             {
                 return false;
             }
+        }
 
-            $campDateUser = $this->campDateUserRepository->findOneForCampDateAndUser($campDate, $user);
+        if ($this->cachedCampDateUsers === null)
+        {
+            $this->cachedCampDateUsers = $this->campDateUserRepository->findByUser($user);
+        }
 
-            if ($campDateUser === null)
+        if ($campDate === null)
+        {
+            $campDateUsersToCheck = $this->cachedCampDateUsers;
+        }
+        else
+        {
+            $campDateUsersToCheck = [];
+            $campDateIdString = $campDate->getId()->toRfc4122();
+
+            foreach ($this->cachedCampDateUsers as $cachedCampDateUser)
             {
-                return false;
-            }
+                $cachedCampDate = $cachedCampDateUser->getCampDate();
+                $cachedCampDateIdString = $cachedCampDate->getId()->toRfc4122();
 
-            if ($attribute === self::APPLICATION_GUIDE_READ)
+                if ($cachedCampDateIdString === $campDateIdString)
+                {
+                    $campDateUsersToCheck = [$cachedCampDateUser];
+
+                    break;
+                }
+            }
+        }
+
+        foreach ($campDateUsersToCheck as $campDateUser)
+        {
+            if ($attribute === self::GUIDE_ACCESS_READ)
             {
                 return true;
             }
 
-            if ($attribute === self::APPLICATION_GUIDE_STATE && $campDateUser->canUpdateApplicationsState())
+            if ($attribute === self::GUIDE_ACCESS_STATE && $campDateUser->canUpdateApplicationsState())
             {
                 return true;
             }
 
-            if ($attribute === self::APPLICATION_GUIDE_UPDATE && $campDateUser->canUpdateApplicationsState())
+            if ($attribute === self::GUIDE_ACCESS_UPDATE && $campDateUser->canManageApplications())
             {
                 return true;
             }
 
-            if ($attribute === self::APPLICATION_GUIDE_PAYMENTS && $campDateUser->canManageApplicationPayments())
+            if ($attribute === self::GUIDE_ACCESS_PAYMENTS && $campDateUser->canManageApplicationPayments())
             {
                 return true;
             }

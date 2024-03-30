@@ -2,7 +2,7 @@
 
 namespace App\Service\Form\Type\User;
 
-use App\Library\Data\User\ApplicationStepThreeUpdateData;
+use App\Library\Data\User\ApplicationStepThreeData;
 use App\Service\Form\Type\Common\PrivacyType;
 use App\Service\Form\Type\Common\TermsOfUseType;
 use EWZ\Bundle\RecaptchaBundle\Form\Type\EWZRecaptchaType;
@@ -19,7 +19,7 @@ class ApplicationStepThreeType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SET_DATA,
             function (FormEvent $event): void
             {
-                /** @var ApplicationStepThreeUpdateData $data */
+                /** @var ApplicationStepThreeData $data */
                 $data = $event->getData();
                 $user = $data->getUser();
 
@@ -48,7 +48,7 @@ class ApplicationStepThreeType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'   => ApplicationStepThreeUpdateData::class,
+            'data_class'   => ApplicationStepThreeData::class,
             'block_prefix' => 'user_application_step_three',
         ]);
     }

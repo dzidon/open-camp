@@ -67,7 +67,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
         // applications
         $isGrantedApplication = $this->security->isGranted('application', 'any_admin_permission');
         $isGrantedApplicationPayment = $this->security->isGranted('application_payment', 'any_admin_permission');
-        $isGrantedApplicationAccessAsGuideList = $this->security->isGranted('camp_date_guide');
+        $isGrantedApplicationAccessAsGuideList = $this->security->isGranted('guide_access_read');
 
         if ($isGrantedApplication || $isGrantedApplicationPayment || $isGrantedApplicationAccessAsGuideList)
         {
@@ -82,9 +82,9 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                 $route === 'admin_application_contact_read'   || $route === 'admin_application_contact_update' ||
                 $route === 'admin_application_contact_delete' ||
 
-                $route === 'admin_application_camper_list'   || $route === 'admin_application_camper_create' ||
-                $route === 'admin_application_camper_read'   || $route === 'admin_application_camper_update' ||
-                $route === 'admin_application_camper_delete'
+                $route === 'admin_application_camper_list'   || $route === 'admin_camp_date_application_camper_list' ||
+                $route === 'admin_application_camper_create' || $route === 'admin_application_camper_read'           ||
+                $route === 'admin_application_camper_update' || $route === 'admin_application_camper_delete'
             ;
 
             $text = $this->translator->trans('route.admin_application_camp_list');

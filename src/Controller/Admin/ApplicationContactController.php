@@ -60,7 +60,7 @@ class ApplicationContactController extends AbstractController
             $searchData = new ApplicationContactSearchData();
         }
 
-        $paginator = $this->applicationContactRepository->getAdminPaginator($searchData, $page, 20);
+        $paginator = $this->applicationContactRepository->getAdminPaginator($searchData, $application, $page, 20);
         if ($paginator->isCurrentPageOutOfBounds())
         {
             throw $this->createNotFoundException();
@@ -241,7 +241,7 @@ class ApplicationContactController extends AbstractController
 
     private function assertIsGrantedAccess(Application $application): void
     {
-        if (!$this->isGranted('application_update') && !$this->isGranted('application_guide_update', $application))
+        if (!$this->isGranted('application_update') && !$this->isGranted('guide_access_update', $application))
         {
             throw $this->createAccessDeniedException();
         }

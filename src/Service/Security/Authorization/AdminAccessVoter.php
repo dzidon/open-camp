@@ -38,6 +38,6 @@ class AdminAccessVoter extends Voter
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
-        return $this->security->isGranted('any_admin_permission') || $this->security->isGranted('camp_date_guide');
+        return $this->security->isGranted('any_admin_permission') || $this->security->isGranted('guide_access_read');
     }
 }
