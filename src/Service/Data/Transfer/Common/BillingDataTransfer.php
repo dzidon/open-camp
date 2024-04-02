@@ -3,27 +3,21 @@
 namespace App\Service\Data\Transfer\Common;
 
 use App\Library\Data\Common\BillingData;
+use App\Model\Entity\Application;
 use App\Model\Entity\User;
 use App\Service\Data\Transfer\DataTransferInterface;
 
 /**
- * Transfers data from {@link BillingData} to {@link User} and vice versa.
+ * Transfers data from {@link BillingData} to {@link User} or {@link Application} and vice versa.
  */
 class BillingDataTransfer implements DataTransferInterface
 {
-    private bool $isEuBusinessDataEnabled;
-
-    public function __construct(bool $isEuBusinessDataEnabled)
-    {
-        $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
-    }
-
     /**
      * @inheritDoc
      */
     public function supports(object $data, object $entity): bool
     {
-        return $data instanceof BillingData && $entity instanceof User;
+        return $data instanceof BillingData && ($entity instanceof User || $entity instanceof Application);
     }
 
     /**
@@ -32,24 +26,23 @@ class BillingDataTransfer implements DataTransferInterface
     public function fillData(object $data, object $entity): void
     {
         /** @var BillingData $billingData */
-        /** @var User $user */
+        /** @var User|Application $entity */
         $billingData = $data;
-        $user = $entity;
 
-        $billingData->setNameFirst($user->getNameFirst());
-        $billingData->setNameLast($user->getNameLast());
-        $billingData->setCountry($user->getCountry());
-        $billingData->setStreet($user->getStreet());
-        $billingData->setTown($user->getTown());
-        $billingData->setZip($user->getZip());
+        $billingData->setNameFirst($entity->getNameFirst());
+        $billingData->setNameLast($entity->getNameLast());
+        $billingData->setCountry($entity->getCountry());
+        $billingData->setStreet($entity->getStreet());
+        $billingData->setTown($entity->getTown());
+        $billingData->setZip($entity->getZip());
 
-        if ($this->isEuBusinessDataEnabled)
+        if ($billingData->isEuBusinessDataEnabled())
         {
-            if ($user->getBusinessName() !== null || $user->getBusinessCin() !== null || $user->getBusinessVatId() !== null)
+            if ($entity->getBusinessName() !== null || $entity->getBusinessCin() !== null || $entity->getBusinessVatId() !== null)
             {
-                $billingData->setBusinessName($user->getBusinessName());
-                $billingData->setBusinessCin($user->getBusinessCin());
-                $billingData->setBusinessVatId($user->getBusinessVatId());
+                $billingData->setBusinessName($entity->getBusinessName());
+                $billingData->setBusinessCin($entity->getBusinessCin());
+                $billingData->setBusinessVatId($entity->getBusinessVatId());
 
                 $billingData->setIsCompany(true);
             }
@@ -73,7 +66,7 @@ class BillingDataTransfer implements DataTransferInterface
         $user->setTown($billingData->getTown());
         $user->setZip($billingData->getZip());
 
-        if ($this->isEuBusinessDataEnabled)
+        if ($billingData->isEuBusinessDataEnabled())
         {
             if ($billingData->isCompany())
             {

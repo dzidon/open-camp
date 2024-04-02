@@ -6,10 +6,10 @@ use App\Library\Data\Admin\ApplicationData;
 use App\Library\Data\Common\ApplicationAttachmentData;
 use App\Library\Data\Common\ApplicationFormFieldValueData;
 use App\Model\Entity\Application;
-use App\Model\Event\User\ApplicationAttachment\ApplicationAttachmentCreateEvent;
-use App\Model\Event\User\ApplicationAttachment\ApplicationAttachmentUpdateEvent;
-use App\Model\Event\User\ApplicationFormFieldValue\ApplicationFormFieldValueCreateEvent;
-use App\Model\Event\User\ApplicationFormFieldValue\ApplicationFormFieldValueUpdateEvent;
+use App\Model\Event\Admin\ApplicationAttachment\ApplicationAttachmentCreateEvent;
+use App\Model\Event\Admin\ApplicationAttachment\ApplicationAttachmentUpdateEvent;
+use App\Model\Event\Admin\ApplicationFormFieldValue\ApplicationFormFieldValueCreateEvent;
+use App\Model\Event\Admin\ApplicationFormFieldValue\ApplicationFormFieldValueUpdateEvent;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Data\Transfer\DataTransferInterface;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -54,24 +54,12 @@ class ApplicationDataTransfer implements DataTransferInterface
         $application = $entity;
 
         $applicationData->setEmail($application->getEmail());
-        $applicationData->setNameFirst($application->getNameFirst());
-        $applicationData->setNameLast($application->getNameLast());
-        $applicationData->setStreet($application->getStreet());
-        $applicationData->setTown($application->getTown());
-        $applicationData->setZip($application->getZip());
-        $applicationData->setCountry($application->getCountry());
-        $applicationData->setIsAccepted($application->isAccepted());
+        $applicationData->setNote($application->getNote());
+        $applicationData->setCustomerChannel($application->getCustomerChannel());
+        $applicationData->setCustomerChannelOther($application->getCustomerChannelOther());
 
-        if ($application->isEuBusinessDataEnabled())
-        {
-            if ($application->getBusinessName() !== null || $application->getBusinessCin() !== null || $application->getBusinessVatId() !== null)
-            {
-                $applicationData->setBusinessName($application->getBusinessName());
-                $applicationData->setBusinessCin($application->getBusinessCin());
-                $applicationData->setBusinessVatId($application->getBusinessVatId());
-                $applicationData->setIsCompany(true);
-            }
-        }
+        $billingData = $applicationData->getBillingData();
+        $this->dataTransfer->fillData($billingData, $application);
 
         foreach ($application->getApplicationAttachments() as $applicationAttachment)
         {
@@ -125,28 +113,14 @@ class ApplicationDataTransfer implements DataTransferInterface
         if ($this->security->isGranted('application_update') || $this->security->isGranted('guide_access_update', $application))
         {
             $application->setEmail($applicationData->getEmail());
-            $application->setNameFirst($applicationData->getNameFirst());
-            $application->setNameLast($applicationData->getNameLast());
-            $application->setCountry($applicationData->getCountry());
-            $application->setStreet($applicationData->getStreet());
-            $application->setTown($applicationData->getTown());
-            $application->setZip($applicationData->getZip());
+            $application->setNote($applicationData->getNote());
+            $application->setCustomerChannel(
+                $applicationData->getCustomerChannel(),
+                $applicationData->getCustomerChannelOther()
+            );
 
-            if ($application->isEuBusinessDataEnabled())
-            {
-                if ($applicationData->isCompany())
-                {
-                    $application->setBusinessName($applicationData->getBusinessName());
-                    $application->setBusinessCin($applicationData->getBusinessCin());
-                    $application->setBusinessVatId($applicationData->getBusinessVatId());
-                }
-                else
-                {
-                    $application->setBusinessName(null);
-                    $application->setBusinessCin(null);
-                    $application->setBusinessVatId(null);
-                }
-            }
+            $billingData = $applicationData->getBillingData();
+            $this->dataTransfer->fillEntity($billingData, $application);
 
             $applicationFormFieldValuesData = $applicationData->getApplicationFormFieldValuesData();
             $this->fillApplicationFormFieldValues($applicationFormFieldValuesData, $application);

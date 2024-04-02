@@ -2,7 +2,8 @@
 
 namespace App\Service\Form\Type\Common;
 
-use App\Library\Data\Common\ApplicationPurchasableItemInstanceData;
+use App\Library\Data\User\ApplicationPurchasableItemInstanceData as UserApplicationPurchasableItemInstanceData;
+use App\Library\Data\Admin\ApplicationPurchasableItemInstanceData as AdminApplicationPurchasableItemInstanceData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -69,7 +70,7 @@ class ApplicationPurchasableItemInstanceType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($emptyData): void
         {
-            /** @var null|ApplicationPurchasableItemInstanceData $data */
+            /** @var null|UserApplicationPurchasableItemInstanceData|AdminApplicationPurchasableItemInstanceData $data */
             $data = $event->getData();
 
             if ($data === null)
@@ -138,8 +139,7 @@ class ApplicationPurchasableItemInstanceType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ApplicationPurchasableItemInstanceData::class,
-            'label'      => false,
+            'label' => false,
         ]);
 
         $resolver->setRequired('empty_data');

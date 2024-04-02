@@ -2,8 +2,8 @@
 
 namespace App\Service\Data\Transfer\User;
 
-use App\Library\Data\Common\ApplicationCamperPurchasableItemsData;
-use App\Library\Data\Common\ApplicationPurchasableItemData;
+use App\Library\Data\User\ApplicationPurchasableItemData;
+use App\Library\Data\User\ApplicationCamperPurchasableItemsData;
 use App\Library\Data\User\ApplicationStepTwoData;
 use App\Model\Entity\Application;
 use App\Model\Event\User\ApplicationPurchasableItem\ApplicationPurchasableItemUpdateEvent;
@@ -122,6 +122,12 @@ class ApplicationStepTwoDataTransfer implements DataTransferInterface
         foreach ($applicationPurchasableItemsData as $applicationPurchasableItemData)
         {
             $applicationPurchasableItem = $applicationPurchasableItemData->getApplicationPurchasableItem();
+
+            if (!in_array($applicationPurchasableItem, $application->getApplicationPurchasableItems()))
+            {
+                continue;
+            }
+
             $event = new ApplicationPurchasableItemUpdateEvent($applicationPurchasableItemData, $applicationPurchasableItem);
             $event->setIsFlush(false);
             $this->eventDispatcher->dispatch($event, $event::NAME);
@@ -136,6 +142,12 @@ class ApplicationStepTwoDataTransfer implements DataTransferInterface
             foreach ($applicationPurchasableItemsData as $applicationPurchasableItemData)
             {
                 $applicationPurchasableItem = $applicationPurchasableItemData->getApplicationPurchasableItem();
+
+                if (!in_array($applicationPurchasableItem, $application->getApplicationPurchasableItems()))
+                {
+                    continue;
+                }
+
                 $event = new ApplicationPurchasableItemUpdateEvent($applicationPurchasableItemData, $applicationPurchasableItem);
                 $event->setIsFlush(false);
                 $this->eventDispatcher->dispatch($event, $event::NAME);

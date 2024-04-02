@@ -500,52 +500,20 @@
         {{ form_row(form.email) }}
     {% endif %}
 
-    {% if form.nameFirst is defined and form.nameLast is defined %}
-        <div class="form-row">
-            <div class="col-md-6">
-                {{ form_row(form.nameFirst) }}
-            </div>
-
-            <div class="col-md-6">
-                {{ form_row(form.nameLast) }}
-            </div>
-        </div>
-    {% elseif form.nameFirst is defined %}
-        {{ form_row(form.nameFirst) }}
-    {% elseif form.nameLast is defined %}
-        {{ form_row(form.nameLast) }}
+    {% if form.billingData is defined %}
+        {{ form_row(form.billingData) }}
     {% endif %}
 
-    {% if form.street is defined %}
-        {{ form_row(form.street) }}
+    {% if form.customerChannel is defined %}
+        {{ form_row(form.customerChannel) }}
     {% endif %}
 
-    {% if form.town is defined %}
-        {{ form_row(form.town) }}
+    {% if form.customerChannelOther is defined %}
+        {{ form_row(form.customerChannelOther) }}
     {% endif %}
 
-    {% if form.zip is defined %}
-        {{ form_row(form.zip) }}
-    {% endif %}
-
-    {% if form.country is defined %}
-        {{ form_row(form.country) }}
-    {% endif %}
-
-    {% if form.isCompany is defined %}
-        {{ form_row(form.isCompany) }}
-    {% endif %}
-
-    {% if form.businessName is defined %}
-        {{ form_row(form.businessName) }}
-    {% endif %}
-
-    {% if form.businessCin is defined %}
-        {{ form_row(form.businessCin) }}
-    {% endif %}
-
-    {% if form.businessVatId is defined %}
-        {{ form_row(form.businessVatId) }}
+    {% if form.note is defined %}
+        {{ form_row(form.note) }}
     {% endif %}
 
     {% if form.applicationFormFieldValuesData is defined %}
@@ -629,4 +597,34 @@
     <button type="submit" class="btn btn-primary mb-2">
         {{ 'form.admin.application_camper_search.button'|trans }}
     </button>
+{% endblock %}
+
+{% block admin_application_purchasable_items_widget %}
+    {{ form_errors(form) }}
+
+    {% if form.applicationCamperPurchasableItemsData is defined %}
+        {% set label = form.applicationCamperPurchasableItemsData.vars.label %}
+
+        {% if label %}
+            <h3 class="mb-3">
+                {{ label|trans }}
+            </h3>
+        {% endif %}
+
+        {{ form_widget(form.applicationCamperPurchasableItemsData) }}
+    {% endif %}
+
+    {% if form.applicationPurchasableItemsData is defined %}
+        {% set label = form.applicationPurchasableItemsData.vars.label %}
+
+        {% if label %}
+            <h3 class="mb-3">
+                {{ label|trans }}
+            </h3>
+        {% endif %}
+
+        {{ form_widget(form.applicationPurchasableItemsData) }}
+    {% endif %}
+
+    {{ form_rest(form) }}
 {% endblock %}

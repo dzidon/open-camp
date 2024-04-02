@@ -2,9 +2,7 @@
 
 namespace App\Library\Data\User;
 
-use App\Library\Data\Common\ApplicationCamperPurchasableItemsData;
 use App\Library\Data\Common\ApplicationDiscountsData;
-use App\Library\Data\Common\ApplicationPurchasableItemData;
 use App\Model\Entity\PaymentMethod;
 use App\Model\Enum\Entity\ApplicationCustomerChannelEnum;
 use Symfony\Component\Validator\Constraints as Assert;

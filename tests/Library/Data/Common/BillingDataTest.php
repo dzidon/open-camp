@@ -10,7 +10,7 @@ class BillingDataTest extends KernelTestCase
 {
     public function testNameFirst(): void
     {
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $this->assertNull($data->getNameFirst());
 
         $data->setNameFirst('text');
@@ -24,7 +24,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $result = $validator->validateProperty($data, 'nameFirst');
         $this->assertEmpty($result); // valid
 
@@ -56,7 +56,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testNameLast(): void
     {
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $this->assertNull($data->getNameLast());
 
         $data->setNameLast('text');
@@ -70,7 +70,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $result = $validator->validateProperty($data, 'nameLast');
         $this->assertEmpty($result); // valid
 
@@ -102,7 +102,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testStreet(): void
     {
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $this->assertSame(null, $data->getStreet());
 
         $data->setStreet('text');
@@ -116,7 +116,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $result = $validator->validateProperty($data, 'street');
         $this->assertEmpty($result); // valid
 
@@ -167,7 +167,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testTown(): void
     {
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $this->assertSame(null, $data->getTown());
 
         $data->setTown('text');
@@ -181,7 +181,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $result = $validator->validateProperty($data, 'town');
         $this->assertEmpty($result); // valid
 
@@ -196,7 +196,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testCountry(): void
     {
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $this->assertNull($data->getCountry());
 
         $data->setCountry('text');
@@ -210,7 +210,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $result = $validator->validateProperty($data, 'country');
         $this->assertEmpty($result); // valid
 
@@ -225,7 +225,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testZip(): void
     {
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $this->assertSame(null, $data->getZip());
 
         $data->setZip('text');
@@ -239,7 +239,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $result = $validator->validateProperty($data, 'zip');
         $this->assertEmpty($result); // valid
 
@@ -341,7 +341,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testIsCompany(): void
     {
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $this->assertFalse($data->isCompany());
 
         $data->setIsCompany(true);
@@ -353,7 +353,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testBusinessName(): void
     {
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $this->assertSame(null, $data->getBusinessName());
 
         $data->setBusinessName('text');
@@ -367,7 +367,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $data->setIsCompany(true);
 
         $result = $validator->validateProperty($data, 'businessName');
@@ -394,7 +394,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $data->setIsCompany(false);
 
         $result = $validator->validateProperty($data, 'businessName');
@@ -421,7 +421,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(false);
+        $data = new BillingData(false, false);
         $data->setIsCompany(true);
 
         $result = $validator->validateProperty($data, 'businessName');
@@ -446,7 +446,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testBusinessCin(): void
     {
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $this->assertSame(null, $data->getBusinessCin());
 
         $data->setBusinessCin('text');
@@ -460,7 +460,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $data->setIsCompany(true);
 
         $result = $validator->validateProperty($data, 'businessCin');
@@ -495,7 +495,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $data->setIsCompany(false);
 
         $result = $validator->validateProperty($data, 'businessCin');
@@ -530,7 +530,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(false);
+        $data = new BillingData(false, false);
         $data->setIsCompany(true);
 
         $result = $validator->validateProperty($data, 'businessCin');
@@ -563,7 +563,7 @@ class BillingDataTest extends KernelTestCase
 
     public function testBusinessVatId(): void
     {
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $this->assertSame(null, $data->getBusinessVatId());
 
         $data->setBusinessVatId('text');
@@ -577,7 +577,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $data->setIsCompany(true);
 
         $result = $validator->validateProperty($data, 'businessVatId');
@@ -628,7 +628,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $data->setIsCompany(false);
 
         $result = $validator->validateProperty($data, 'businessVatId');
@@ -679,7 +679,7 @@ class BillingDataTest extends KernelTestCase
     {
         $validator = $this->getValidator();
 
-        $data = new BillingData(false);
+        $data = new BillingData(false, false);
         $data->setIsCompany(true);
 
         $result = $validator->validateProperty($data, 'businessVatId');

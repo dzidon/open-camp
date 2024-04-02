@@ -3,11 +3,12 @@
 namespace App\Service\Data\Transfer\Common;
 
 use App\Library\Data\Common\ContactData;
+use App\Model\Entity\ApplicationContact;
 use App\Model\Entity\Contact;
 use App\Service\Data\Transfer\DataTransferInterface;
 
 /**
- * Transfers data from {@link ContactData} to {@link Contact} and vice versa.
+ * Transfers data from {@link ContactData} to {@link Contact} or {@link ApplicationContact} and vice versa.
  */
 class ContactDataTransfer implements DataTransferInterface
 {
@@ -16,7 +17,7 @@ class ContactDataTransfer implements DataTransferInterface
      */
     public function supports(object $data, object $entity): bool
     {
-        return $data instanceof ContactData && $entity instanceof Contact;
+        return $data instanceof ContactData && ($entity instanceof Contact || $entity instanceof ApplicationContact);
     }
 
     /**
@@ -25,7 +26,7 @@ class ContactDataTransfer implements DataTransferInterface
     public function fillData(object $data, object $entity): void
     {
         /** @var ContactData $contactData */
-        /** @var Contact $contact */
+        /** @var Contact|ApplicationContact $contact */
         $contactData = $data;
         $contact = $entity;
 
@@ -43,7 +44,7 @@ class ContactDataTransfer implements DataTransferInterface
     public function fillEntity(object $data, object $entity): void
     {
         /** @var ContactData $contactData */
-        /** @var Contact $contact */
+        /** @var Contact|ApplicationContact $contact */
         $contactData = $data;
         $contact = $entity;
 

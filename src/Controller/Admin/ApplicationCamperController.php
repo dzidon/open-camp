@@ -13,7 +13,7 @@ use App\Model\Event\Admin\ApplicationCamper\ApplicationCamperUpdateEvent;
 use App\Model\Repository\ApplicationCamperRepositoryInterface;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
-use App\Model\Service\ApplicationCamper\ApplicationCamperDataFactoryInterface;
+use App\Service\Data\Factory\ApplicationCamper\ApplicationCamperDataFactoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\ApplicationCamperSearchType;
 use App\Service\Form\Type\Common\ApplicationCamperType;
@@ -146,7 +146,7 @@ class ApplicationCamperController extends AbstractController
         $application = $this->findApplicationOrThrow404($id);
         $this->assertIsGrantedApplicationUpdate($application);
 
-        $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromApplication($application, true);
+        $applicationCamperData = $applicationCamperDataFactory->createFromApplicationForAdminModule($application);
         $form = $this->createForm(ApplicationCamperType::class, $applicationCamperData);
         $form->add('submit', SubmitType::class, ['label' => 'form.common.application_camper.button']);
         $form->handleRequest($request);
@@ -209,7 +209,7 @@ class ApplicationCamperController extends AbstractController
         $application = $applicationCamper->getApplication();
         $this->assertIsGrantedApplicationUpdate($application);
 
-        $applicationCamperData = $applicationCamperDataFactory->createApplicationCamperDataFromApplicationCamper($applicationCamper, true);
+        $applicationCamperData = $applicationCamperDataFactory->createFromApplicationCamperForAdminModule($applicationCamper);
         $dataTransfer->fillData($applicationCamperData, $applicationCamper);
 
         $form = $this->createForm(ApplicationCamperType::class, $applicationCamperData);

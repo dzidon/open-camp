@@ -10,11 +10,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class BillingData
 {
+    private bool $isRequired;
+
     private bool $isEuBusinessDataEnabled;
 
     #[Assert\Length(max: 255)]
     #[Assert\When(
-        expression: 'this.getNameLast() !== null',
+        expression: 'this.isRequired() || this.getNameLast() !== null',
         constraints: [
             new Assert\NotBlank(),
         ],
@@ -23,7 +25,7 @@ class BillingData
 
     #[Assert\Length(max: 255)]
     #[Assert\When(
-        expression: 'this.getNameFirst() !== null',
+        expression: 'this.isRequired()|| this.getNameFirst() !== null',
         constraints: [
             new Assert\NotBlank(),
         ],
@@ -31,15 +33,39 @@ class BillingData
     private ?string $nameLast = null;
 
     #[StreetRequirements]
+    #[Assert\When(
+        expression: 'this.isRequired()',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
     private ?string $street = null;
 
     #[Assert\Length(max: 255)]
+    #[Assert\When(
+        expression: 'this.isRequired()',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
     private ?string $town = null;
 
     #[ZipCodeRequirements]
+    #[Assert\When(
+        expression: 'this.isRequired()',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
     private ?string $zip = null;
 
     #[Assert\Country]
+    #[Assert\When(
+        expression: 'this.isRequired()',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
     private ?string $country = null;
 
     private bool $isCompany = false;
@@ -72,9 +98,15 @@ class BillingData
     )]
     private ?string $businessVatId = null;
 
-    public function __construct(bool $isEuBusinessDataEnabled)
+    public function __construct(bool $isRequired, bool $isEuBusinessDataEnabled)
     {
+        $this->isRequired = $isRequired;
         $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
+    }
+
+    public function isRequired(): bool
+    {
+        return $this->isRequired;
     }
 
     public function isEuBusinessDataEnabled(): bool

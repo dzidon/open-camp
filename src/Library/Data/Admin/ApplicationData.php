@@ -2,14 +2,12 @@
 
 namespace App\Library\Data\Admin;
 
-use App\Library\Constraint\Compound\StreetRequirements;
-use App\Library\Constraint\Compound\ZipCodeRequirements;
-use App\Library\Constraint\EuCin;
-use App\Library\Constraint\EuVatId;
 use App\Library\Data\Common\ApplicationAttachmentData;
 use App\Library\Data\Common\ApplicationDiscountsData;
 use App\Library\Data\Common\ApplicationFormFieldValueData;
+use App\Library\Data\Common\BillingData;
 use App\Model\Entity\Application;
+use App\Model\Enum\Entity\ApplicationCustomerChannelEnum;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class ApplicationData
@@ -23,59 +21,22 @@ class ApplicationData
     #[Assert\NotBlank]
     private ?string $email = null;
 
-    #[Assert\Length(max: 255)]
-    #[Assert\NotBlank]
-    private ?string $nameFirst = null;
+    #[Assert\Valid]
+    private BillingData $billingData;
 
-    #[Assert\Length(max: 255)]
-    #[Assert\NotBlank]
-    private ?string $nameLast = null;
+    #[Assert\Length(max: 1000)]
+    private ?string $note;
 
-    #[StreetRequirements]
-    #[Assert\NotBlank]
-    private ?string $street = null;
-
-    #[Assert\Length(max: 255)]
-    #[Assert\NotBlank]
-    private ?string $town = null;
-
-    #[ZipCodeRequirements]
-    #[Assert\NotBlank]
-    private ?string $zip = null;
-
-    #[Assert\Country]
-    #[Assert\NotBlank]
-    private ?string $country = null;
-
-    private bool $isCompany = false;
+    private ?ApplicationCustomerChannelEnum $customerChannel = null;
 
     #[Assert\When(
-        expression: 'this.getApplication().isEuBusinessDataEnabled() and this.isCompany()',
+        expression: 'this.getCustomerChannelOther() === enum("App\\\Model\\\Enum\\\Entity\\\ApplicationCustomerChannelEnum::OTHER")',
         constraints: [
             new Assert\Length(max: 255),
-        ],
-    )]
-    private ?string $businessName = null;
-
-    #[Assert\When(
-        expression: 'this.getApplication().isEuBusinessDataEnabled() and this.isCompany()',
-        constraints: [
-            new Assert\Length(max: 32),
-            new EuCin(),
             new Assert\NotBlank(),
         ],
     )]
-    private ?string $businessCin = null;
-
-    #[Assert\When(
-        expression: 'this.getApplication().isEuBusinessDataEnabled() and this.isCompany()',
-        constraints: [
-            new Assert\Length(max: 32),
-            new EuVatId(),
-            new Assert\NotBlank(),
-        ],
-    )]
-    private ?string $businessVatId = null;
+    private ?string $customerChannelOther = null;
 
     /** @var ApplicationAttachmentData[] */
     #[Assert\Valid]
@@ -91,7 +52,7 @@ class ApplicationData
     public function __construct(Application $application)
     {
         $this->application = $application;
-
+        $this->billingData = new BillingData(true, $this->application->isEuBusinessDataEnabled());
         $this->applicationDiscountsData = new ApplicationDiscountsData(
             $this->application->getCurrency(),
             $this->application->getDiscountSiblingsConfig(),
@@ -128,122 +89,43 @@ class ApplicationData
         return $this;
     }
 
-    public function getNameFirst(): ?string
+    public function getBillingData(): BillingData
     {
-        return $this->nameFirst;
+        return $this->billingData;
     }
 
-    public function setNameFirst(?string $nameFirst): self
+    public function getNote(): ?string
     {
-        $this->nameFirst = $nameFirst;
+        return $this->note;
+    }
+
+    public function setNote(?string $note): self
+    {
+        $this->note = $note;
 
         return $this;
     }
 
-    public function getNameLast(): ?string
+    public function getCustomerChannel(): ?ApplicationCustomerChannelEnum
     {
-        return $this->nameLast;
+        return $this->customerChannel;
     }
 
-    public function setNameLast(?string $nameLast): self
+    public function setCustomerChannel(?ApplicationCustomerChannelEnum $customerChannel): self
     {
-        $this->nameLast = $nameLast;
+        $this->customerChannel = $customerChannel;
 
         return $this;
     }
 
-    public function getStreet(): ?string
+    public function getCustomerChannelOther(): ?string
     {
-        return $this->street;
+        return $this->customerChannelOther;
     }
 
-    public function setStreet(?string $street): self
+    public function setCustomerChannelOther(?string $customerChannelOther): self
     {
-        $this->street = $street;
-
-        return $this;
-    }
-
-    public function getTown(): ?string
-    {
-        return $this->town;
-    }
-
-    public function setTown(?string $town): self
-    {
-        $this->town = $town;
-
-        return $this;
-    }
-
-    public function getZip(): ?string
-    {
-        return $this->zip;
-    }
-
-    public function setZip(?string $zip): self
-    {
-        $this->zip = $zip;
-
-        return $this;
-    }
-
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(?string $country): self
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    public function isCompany(): bool
-    {
-        return $this->isCompany;
-    }
-
-    public function setIsCompany(bool $isCompany): self
-    {
-        $this->isCompany = $isCompany;
-
-        return $this;
-    }
-
-    public function getBusinessName(): ?string
-    {
-        return $this->businessName;
-    }
-
-    public function setBusinessName(?string $businessName): self
-    {
-        $this->businessName = $businessName;
-
-        return $this;
-    }
-
-    public function getBusinessCin(): ?string
-    {
-        return $this->businessCin;
-    }
-
-    public function setBusinessCin(?string $businessCin): self
-    {
-        $this->businessCin = $businessCin;
-
-        return $this;
-    }
-
-    public function getBusinessVatId(): ?string
-    {
-        return $this->businessVatId;
-    }
-
-    public function setBusinessVatId(?string $businessVatId): self
-    {
-        $this->businessVatId = $businessVatId;
+        $this->customerChannelOther = $customerChannelOther;
 
         return $this;
     }

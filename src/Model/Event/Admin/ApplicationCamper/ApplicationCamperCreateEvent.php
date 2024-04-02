@@ -2,7 +2,7 @@
 
 namespace App\Model\Event\Admin\ApplicationCamper;
 
-use App\Library\Data\Common\ApplicationCamperData;
+use App\Library\Data\Admin\ApplicationCamperData;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Event\AbstractModelEvent;

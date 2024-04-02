@@ -20,12 +20,12 @@ class ApplicationStepThreeUpdateEvent extends AbstractModelEvent
         $this->application = $application;
     }
 
-    public function getApplicationStepThreeUpdateData(): ApplicationStepThreeData
+    public function getApplicationStepThreeData(): ApplicationStepThreeData
     {
         return $this->data;
     }
 
-    public function setApplicationStepThreeUpdateData(ApplicationStepThreeData $data): self
+    public function setApplicationStepThreeData(ApplicationStepThreeData $data): self
     {
         $this->data = $data;
 

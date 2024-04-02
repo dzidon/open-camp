@@ -98,7 +98,7 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
 
             // application purchasable items
             $text = $this->translator->trans('route.admin_application_purchasable_items_update');
-            $url = '#' /*$this->urlGenerator->generate('admin_application_purchasable_items_update', ['id' => $applicationId])*/;
+            $url = $this->urlGenerator->generate('admin_application_purchasable_items_update', ['id' => $applicationId]);
             $itemApplicationPurchasableItemsUpdate = new MenuType('admin_application_purchasable_items_update', 'navbar_admin_horizontal_update_item', $text, $url);
             $menu->addChild($itemApplicationPurchasableItemsUpdate);
             $itemApplicationPurchasableItemsUpdate->setActive($route === 'admin_application_purchasable_items_update');

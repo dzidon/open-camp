@@ -48,7 +48,7 @@ class UserData
 
     public function __construct(bool $isEuBusinessDataEnabled, ?User $user = null)
     {
-        $this->billingData = new BillingData($isEuBusinessDataEnabled);
+        $this->billingData = new BillingData(false, $isEuBusinessDataEnabled);
         $this->user = $user;
     }
 

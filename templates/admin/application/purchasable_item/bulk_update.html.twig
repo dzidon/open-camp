@@ -1,0 +1,19 @@
+{% extends "admin/application/base_update.html.twig" %}
+
+{% block application_update_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-8 col-xl-5">
+                            {{ form(form_application_purchasable_items) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ include('_fragment/_modal/_form_collection_removal.html.twig') }}
+{% endblock %}

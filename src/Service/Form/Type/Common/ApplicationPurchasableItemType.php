@@ -2,7 +2,10 @@
 
 namespace App\Service\Form\Type\Common;
 
-use App\Library\Data\Common\ApplicationPurchasableItemData;
+use App\Library\Data\User\ApplicationPurchasableItemData as UserApplicationPurchasableItemData;
+use App\Library\Data\Admin\ApplicationPurchasableItemData as AdminApplicationPurchasableItemData;
+use App\Library\Data\User\ApplicationPurchasableItemInstanceData as UserApplicationPurchasableItemInstanceData;
+use App\Library\Data\Admin\ApplicationPurchasableItemInstanceData as AdminApplicationPurchasableItemInstanceData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,16 +22,16 @@ class ApplicationPurchasableItemType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($instancesEmptyData): void
         {
-            /** @var ApplicationPurchasableItemData $applicationPurchasableItemData */
-            $applicationPurchasableItemData = $event->getData();
+            /** @var UserApplicationPurchasableItemData|AdminApplicationPurchasableItemData $data */
+            $data = $event->getData();
 
-            if ($applicationPurchasableItemData === null)
+            if ($data === null)
             {
                 return;
             }
 
             $form = $event->getForm();
-            $applicationPurchasableItem = $applicationPurchasableItemData->getApplicationPurchasableItem();
+            $applicationPurchasableItem = $data->getApplicationPurchasableItem();
             $idString = $applicationPurchasableItem
                 ->getId()
                 ->toRfc4122()
@@ -53,6 +56,13 @@ class ApplicationPurchasableItemType extends AbstractType
             $canAddAndRemove = $hasMultipleVariants && $maxAmount > 1;
             $label = $applicationPurchasableItem->getLabel();
 
+            $instancesDataClass = UserApplicationPurchasableItemInstanceData::class;
+
+            if ($data instanceof AdminApplicationPurchasableItemData)
+            {
+                $instancesDataClass = AdminApplicationPurchasableItemInstanceData::class;
+            }
+
             $form
                 ->add('applicationPurchasableItemInstancesData', CollectionType::class, [
                     'entry_type'                  => ApplicationPurchasableItemInstanceType::class,
@@ -61,12 +71,14 @@ class ApplicationPurchasableItemType extends AbstractType
                     'allow_add'                   => $canAddAndRemove,
                     'allow_delete'                => $canAddAndRemove,
                     'entry_options'               => [
+                        'data_class'          => $instancesDataClass,
                         'label'               => false,
                         'remove_button_label' => 'form.common.application_purchasable_item_instance.remove_button',
                         'remove_button'       => $canAddAndRemove,
                         'empty_data'          => $emptyInstanceData,
                     ],
                     'prototype_options' => [
+                        'data_class'          => $instancesDataClass,
                         'remove_button_label' => 'form.common.application_purchasable_item_instance.remove_button',
                         'remove_button'       => true,
                     ],
@@ -90,7 +102,6 @@ class ApplicationPurchasableItemType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'   => ApplicationPurchasableItemData::class,
             'block_prefix' => 'common_application_purchasable_item',
             'label'        => false,
         ]);

@@ -548,6 +548,9 @@ crud:
         application_attachment:
             upload_later: 'Soubory uloženy!'
 
+        application_purchasable_item:
+            bulk_update: 'Volitelné položky uloženy!'
+
         contact:
             create: 'Kontakt vytvořen!'
             update: 'Kontakt uložen!'
@@ -1881,16 +1884,9 @@ form:
         application:
             is_accepted: 'Stav'
             email: 'E-mail'
-            name_first: 'Jméno'
-            name_last: 'Příjmení'
-            street: 'Ulice a číslo popisné'
-            town: 'Obec'
-            zip: 'PSČ'
-            country: 'Země'
-            is_company: 'Nakupuji na firmu'
-            business_name: 'Obchodní název'
-            business_cin: 'IČO'
-            business_vat_id: 'DIČ'
+            note: 'Poznámka'
+            customer_channel: 'Jak se o nás zákazník dozvěděl'
+            customer_channel_other: 'Upřesnění jak se o nás zákazník dozvěděl'
             button: 'Uložit'
 
         application_delete:
@@ -1929,6 +1925,11 @@ form:
 
         application_camper_delete:
             button: 'Odstranit'
+
+        application_purchasable_items:
+            label_individual: 'Volitelné položky'
+            label_global: 'Volitelné položky (celá přihláška)'
+            button: 'Uložit'
 
     user:
         application_step_one:

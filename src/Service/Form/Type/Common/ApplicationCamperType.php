@@ -2,7 +2,8 @@
 
 namespace App\Service\Form\Type\Common;
 
-use App\Library\Data\Common\ApplicationCamperData;
+use App\Library\Data\User\ApplicationCamperData as UserApplicationCamperData;
+use App\Library\Data\Admin\ApplicationCamperData as AdminApplicationCamperData;
 use App\Model\Entity\Camper;
 use NumberFormatter;
 use Symfony\Component\Form\AbstractType;
@@ -139,7 +140,7 @@ class ApplicationCamperType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($emptyData, $fmt): void
         {
-            /** @var null|ApplicationCamperData $data */
+            /** @var null|UserApplicationCamperData|AdminApplicationCamperData $data */
             $data = $event->getData();
             $form = $event->getForm();
 
@@ -151,7 +152,7 @@ class ApplicationCamperType extends AbstractType
 
             // medical diary
 
-            if ($data->isMedicalDiaryEnabled())
+            if ($data instanceof AdminApplicationCamperData)
             {
                 $form
                     ->add('medicalDiary', TextareaType::class, [
@@ -241,7 +242,6 @@ class ApplicationCamperType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'            => ApplicationCamperData::class,
             'block_prefix'          => 'common_application_camper',
             'enable_camper_loading' => false,
             'loadable_campers'      => [],

@@ -10,14 +10,14 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 class ApplicationPurchasableItemInstanceCreateSubscriber
 {
-    private ApplicationPurchasableItemInstanceRepositoryInterface $applicationPurchasableItemInstanceRepository;
+    private ApplicationPurchasableItemInstanceRepositoryInterface $repository;
 
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(ApplicationPurchasableItemInstanceRepositoryInterface $applicationPurchasableItemInstanceRepository,
+    public function __construct(ApplicationPurchasableItemInstanceRepositoryInterface $repository,
                                 DataTransferRegistryInterface                         $dataTransfer)
     {
-        $this->applicationPurchasableItemInstanceRepository = $applicationPurchasableItemInstanceRepository;
+        $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;
     }
 
@@ -27,17 +27,10 @@ class ApplicationPurchasableItemInstanceCreateSubscriber
         $data = $event->getApplicationPurchasableItemInstanceData();
         $priority = $event->getPriority();
         $applicationCamper = $event->getApplicationCamper();
-        $chosenVariantValues = [];
-
-        foreach ($data->getApplicationPurchasableItemVariantsData() as $applicationPurchasableItemVariantDatum)
-        {
-            $variant = $applicationPurchasableItemVariantDatum->getLabel();
-            $value = $applicationPurchasableItemVariantDatum->getValue();
-            $chosenVariantValues[$variant] = $value;
-        }
-
+        $chosenVariantValues = $data->getChosenApplicationPurchasableItemVariants();
         $applicationPurchasableItem = $event->getApplicationPurchasableItem();
         $amount = $data->getAmount();
+
         $applicationPurchasableItemInstance = new ApplicationPurchasableItemInstance(
             $chosenVariantValues,
             $amount,
@@ -55,6 +48,6 @@ class ApplicationPurchasableItemInstanceCreateSubscriber
     {
         $applicationPurchasableItemInstance = $event->getApplicationPurchasableItemInstance();
         $isFlush = $event->isFlush();
-        $this->applicationPurchasableItemInstanceRepository->saveApplicationPurchasableItemInstance($applicationPurchasableItemInstance, $isFlush);
+        $this->repository->saveApplicationPurchasableItemInstance($applicationPurchasableItemInstance, $isFlush);
     }
 }

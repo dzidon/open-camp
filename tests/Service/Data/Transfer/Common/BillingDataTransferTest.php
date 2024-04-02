@@ -11,7 +11,7 @@ class BillingDataTransferTest extends KernelTestCase
 {
     public function testFillData(): void
     {
-        $dataTransfer = $this->getProfileBillingDataTransfer(true);
+        $dataTransfer = $this->getProfileBillingDataTransfer();
 
         $expectedNameFirst = 'John';
         $expectedNameLast = 'Doe';
@@ -34,7 +34,7 @@ class BillingDataTransferTest extends KernelTestCase
         $user->setBusinessCin($expectedBusinessCin);
         $user->setBusinessVatId($expectedBusinessVatId);
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $dataTransfer->fillData($data, $user);
 
         $this->assertSame($expectedNameFirst, $data->getNameFirst());
@@ -51,14 +51,14 @@ class BillingDataTransferTest extends KernelTestCase
 
     public function testFillDataNoCompany(): void
     {
-        $dataTransfer = $this->getProfileBillingDataTransfer(true);
+        $dataTransfer = $this->getProfileBillingDataTransfer();
 
         $user = new User('bob@gmail.com');
         $user->setBusinessName(null);
         $user->setBusinessCin(null);
         $user->setBusinessVatId(null);
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $dataTransfer->fillData($data, $user);
 
         $this->assertNull($data->getBusinessName());
@@ -69,14 +69,14 @@ class BillingDataTransferTest extends KernelTestCase
 
     public function testFillDataIfEuBusinessDataIsDisabled(): void
     {
-        $dataTransfer = $this->getProfileBillingDataTransfer(false);
+        $dataTransfer = $this->getProfileBillingDataTransfer();
 
         $user = new User('bob@gmail.com');
         $user->setBusinessName('Name');
         $user->setBusinessCin('1234');
         $user->setBusinessVatId('4321');
 
-        $data = new BillingData(false);
+        $data = new BillingData(false, false);
         $dataTransfer->fillData($data, $user);
 
         $this->assertNull($data->getBusinessName());
@@ -87,7 +87,7 @@ class BillingDataTransferTest extends KernelTestCase
 
     public function testFillEntity(): void
     {
-        $dataTransfer = $this->getProfileBillingDataTransfer(true);
+        $dataTransfer = $this->getProfileBillingDataTransfer();
 
         $expectedNameFirst = 'John';
         $expectedNameLast = 'Doe';
@@ -99,7 +99,7 @@ class BillingDataTransferTest extends KernelTestCase
         $expectedBusinessCin = '12345678';
         $expectedBusinessVatId = 'CZ12345678';
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $data->setNameFirst($expectedNameFirst);
         $data->setNameLast($expectedNameLast);
         $data->setStreet($expectedStreet);
@@ -127,9 +127,9 @@ class BillingDataTransferTest extends KernelTestCase
 
     public function testFillEntityNoCompany(): void
     {
-        $dataTransfer = $this->getProfileBillingDataTransfer(true);
+        $dataTransfer = $this->getProfileBillingDataTransfer();
 
-        $data = new BillingData(true);
+        $data = new BillingData(false, true);
         $data->setBusinessName('Business');
         $data->setBusinessCin('12345678');
         $data->setBusinessVatId('CZ12345678');
@@ -145,9 +145,9 @@ class BillingDataTransferTest extends KernelTestCase
 
     public function testFillEntityIfEuBusinessDataIsDisabled(): void
     {
-        $dataTransfer = $this->getProfileBillingDataTransfer(false);
+        $dataTransfer = $this->getProfileBillingDataTransfer();
 
-        $data = new BillingData(false);
+        $data = new BillingData(false, false);
         $data->setBusinessName('Business');
         $data->setBusinessCin('12345678');
         $data->setBusinessVatId('CZ12345678');
@@ -161,8 +161,8 @@ class BillingDataTransferTest extends KernelTestCase
         $this->assertNull($user->getBusinessVatId());
     }
 
-    private function getProfileBillingDataTransfer(bool $isEuBusinessDataEnabled): BillingDataTransfer
+    private function getProfileBillingDataTransfer(): BillingDataTransfer
     {
-        return new BillingDataTransfer($isEuBusinessDataEnabled);
+        return new BillingDataTransfer();
     }
 }

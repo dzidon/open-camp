@@ -2,7 +2,10 @@
 
 namespace App\Service\Form\Type\Common;
 
-use App\Library\Data\Common\ApplicationCamperPurchasableItemsData;
+use App\Library\Data\User\ApplicationCamperPurchasableItemsData as UserApplicationCamperPurchasableItemsData;
+use App\Library\Data\Admin\ApplicationCamperPurchasableItemsData as AdminApplicationCamperPurchasableItemsData;
+use App\Library\Data\User\ApplicationPurchasableItemData as UserApplicationPurchasableItemData;
+use App\Library\Data\Admin\ApplicationPurchasableItemData as AdminApplicationPurchasableItemData;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -18,7 +21,7 @@ class ApplicationCamperPurchasableItemsType extends AbstractType
 
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($instancesEmptyData): void
         {
-            /** @var ApplicationCamperPurchasableItemsData $data */
+            /** @var UserApplicationCamperPurchasableItemsData|AdminApplicationCamperPurchasableItemsData $data */
             $data = $event->getData();
             $form = $event->getForm();
             $applicationCamper = $data->getApplicationCamper();
@@ -29,11 +32,18 @@ class ApplicationCamperPurchasableItemsType extends AbstractType
             }
 
             $nameFull = $applicationCamper->getNameFull();
+            $purchasableItemDataClass = UserApplicationPurchasableItemData::class;
+
+            if ($data instanceof AdminApplicationCamperPurchasableItemsData)
+            {
+                $purchasableItemDataClass = AdminApplicationPurchasableItemData::class;
+            }
 
             $form
                 ->add('applicationPurchasableItemsData', CollectionType::class, [
                     'entry_type'    => ApplicationPurchasableItemType::class,
                     'entry_options' => [
+                        'data_class'           => $purchasableItemDataClass,
                         'instances_empty_data' => $instancesEmptyData,
                         'row_attr'             => [
                             'class' => 'm-0',
@@ -54,7 +64,6 @@ class ApplicationCamperPurchasableItemsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'   => ApplicationCamperPurchasableItemsData::class,
             'block_prefix' => 'common_application_camper_purchasable_items',
             'label'        => false,
         ]);

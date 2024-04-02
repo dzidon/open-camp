@@ -2,6 +2,8 @@
 
 namespace App\Service\Form\Type\User;
 
+use App\Library\Data\User\ApplicationCamperPurchasableItemsData;
+use App\Library\Data\User\ApplicationPurchasableItemData;
 use App\Library\Data\User\ApplicationStepTwoData;
 use App\Model\Entity\PaymentMethod;
 use App\Service\Form\Type\Common\ApplicationCamperPurchasableItemsType;
@@ -131,6 +133,7 @@ class ApplicationStepTwoType extends AbstractType
                 'entry_type'    => ApplicationCamperPurchasableItemsType::class,
                 'label'         => false,
                 'entry_options' => [
+                    'data_class'           => ApplicationCamperPurchasableItemsData::class,
                     'instances_empty_data' => $instancesEmptyData,
                     'row_attr'             => [
                         'class' => 'mb-0',
@@ -164,6 +167,7 @@ class ApplicationStepTwoType extends AbstractType
             ->add('applicationPurchasableItemsData', CollectionType::class, [
                 'entry_type'    => ApplicationPurchasableItemType::class,
                 'entry_options' => [
+                    'data_class'           => ApplicationPurchasableItemData::class,
                     'instances_empty_data' => $instancesEmptyData,
                     'row_attr'             => [
                         'class' => 'm-0',

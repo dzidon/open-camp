@@ -19,7 +19,7 @@ class UserBillingUpdateEventTest extends TestCase
     {
         $this->assertSame($this->data, $this->event->getBillingData());
 
-        $newData = new BillingData(true);
+        $newData = new BillingData(false, true);
         $this->event->setBillingData($newData);
         $this->assertSame($newData, $this->event->getBillingData());
     }
@@ -47,7 +47,7 @@ class UserBillingUpdateEventTest extends TestCase
     protected function setUp(): void
     {
         $this->entity = new User('bob@gmail.com');
-        $this->data = new BillingData(true);
+        $this->data = new BillingData(false, true);
         $this->event = new UserBillingUpdateEvent($this->data, $this->entity);
     }
 }

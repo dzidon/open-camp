@@ -2,7 +2,7 @@
 
 namespace App\Model\Event\User\ApplicationPurchasableItem;
 
-use App\Library\Data\Common\ApplicationPurchasableItemData;
+use App\Library\Data\User\ApplicationPurchasableItemData;
 use App\Model\Entity\ApplicationPurchasableItem;
 use App\Model\Event\AbstractModelEvent;
 

@@ -20,12 +20,12 @@ class ApplicationStepTwoUpdateEvent extends AbstractModelEvent
         $this->application = $application;
     }
 
-    public function getApplicationStepTwoUpdateData(): ApplicationStepTwoData
+    public function getApplicationStepTwoData(): ApplicationStepTwoData
     {
         return $this->data;
     }
 
-    public function setApplicationStepTwoUpdateData(ApplicationStepTwoData $data): self
+    public function setApplicationStepTwoData(ApplicationStepTwoData $data): self
     {
         $this->data = $data;
 

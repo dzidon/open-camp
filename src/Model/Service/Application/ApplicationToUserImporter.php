@@ -161,7 +161,7 @@ class ApplicationToUserImporter implements ApplicationToUserImporterInterface
 
         if ($allowImportBillingData && !$skipBillingData)
         {
-            $billingData = new BillingData($this->isEuBusinessDataEnabled);
+            $billingData = new BillingData(false, $this->isEuBusinessDataEnabled);
 
             $billingData->setNameFirst($application->getNameFirst());
             $billingData->setNameLast($application->getNameLast());

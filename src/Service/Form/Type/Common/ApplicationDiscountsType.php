@@ -129,7 +129,7 @@ class ApplicationDiscountsType extends AbstractType implements DataMapperInterfa
         ]);
     }
 
-    public function mapDataToForms(mixed $viewData, Traversable $forms)
+    public function mapDataToForms(mixed $viewData, Traversable $forms): void
     {
         if ($viewData === null)
         {
@@ -153,7 +153,7 @@ class ApplicationDiscountsType extends AbstractType implements DataMapperInterfa
         }
     }
 
-    public function mapFormsToData(Traversable $forms, mixed &$viewData)
+    public function mapFormsToData(Traversable $forms, mixed &$viewData): void
     {
         /** @var ApplicationDiscountsData $applicationDiscountsData */
         /** @var FormInterface[] $forms */

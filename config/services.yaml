@@ -173,18 +173,6 @@ services:
             $cookieKeyPrefix: '%app.cookie_prefix_application_draft%'
             $cookieLifespan: '%app.cookie_lifespan_application_draft%'
 
-    App\Model\Service\ApplicationCamper\ApplicationCamperDataFactory:
-        arguments:
-            $isNationalIdentifierEnabled: '%app.national_identifier%'
-            $currency: '%app.currency%'
-
-    App\Model\Service\Application\ApplicationStepOneDataFactory:
-        arguments:
-            $isEuBusinessDataEnabled: '%app.eu_business_data%'
-            $isNationalIdentifierEnabled: '%app.national_identifier%'
-            $currency: '%app.currency%'
-            $tax: '%app.tax%'
-
     App\Model\Service\Application\ApplicationFactory:
         arguments:
             $isPurchasableItemsIndividualMode: '%app.application_purchasable_items_individual%'
@@ -224,6 +212,18 @@ services:
         arguments:
             $enabledPaymentMethods: '%app.enabled_payment_methods%'
 
+    App\Service\Data\Factory\ApplicationCamper\ApplicationCamperDataFactory:
+        arguments:
+            $isNationalIdentifierEnabled: '%app.national_identifier%'
+            $currency: '%app.currency%'
+
+    App\Service\Data\Factory\Application\ApplicationStepOneDataFactory:
+        arguments:
+            $isEuBusinessDataEnabled: '%app.eu_business_data%'
+            $isNationalIdentifierEnabled: '%app.national_identifier%'
+            $currency: '%app.currency%'
+            $tax: '%app.tax%'
+
     App\Service\Logger\ModelLogger:
         arguments:
             $logger: '@monolog.logger.model'
@@ -257,10 +257,6 @@ services:
     App\Service\Twig\ApplicationToUserImportExtension:
         arguments:
             $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
-
-    App\Service\Form\Type\Common\BillingType:
-        arguments:
-            $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
     App\Service\Form\Type\Common\ContactType:
         arguments:
@@ -297,10 +293,6 @@ services:
     App\Service\Routing\RouteNamer:
         arguments:
             $companyName: '%app.company_name%'
-
-    App\Service\Data\Transfer\Common\BillingDataTransfer:
-        arguments:
-            $isEuBusinessDataEnabled: '%app.eu_business_data%'
 
     App\Service\Validator\NationalIdentifierValidator:
         arguments:

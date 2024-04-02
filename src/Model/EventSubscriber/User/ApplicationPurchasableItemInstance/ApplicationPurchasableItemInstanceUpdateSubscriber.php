@@ -9,14 +9,14 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 class ApplicationPurchasableItemInstanceUpdateSubscriber
 {
-    private ApplicationPurchasableItemInstanceRepositoryInterface $ApplicationPurchasableItemInstanceRepository;
+    private ApplicationPurchasableItemInstanceRepositoryInterface $repository;
 
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(ApplicationPurchasableItemInstanceRepositoryInterface $ApplicationPurchasableItemInstanceRepository,
+    public function __construct(ApplicationPurchasableItemInstanceRepositoryInterface $repository,
                                 DataTransferRegistryInterface                         $dataTransfer)
     {
-        $this->ApplicationPurchasableItemInstanceRepository = $ApplicationPurchasableItemInstanceRepository;
+        $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;
     }
 
@@ -33,6 +33,6 @@ class ApplicationPurchasableItemInstanceUpdateSubscriber
     {
         $entity = $event->getApplicationPurchasableItemInstance();
         $isFlush = $event->isFlush();
-        $this->ApplicationPurchasableItemInstanceRepository->saveApplicationPurchasableItemInstance($entity, $isFlush);
+        $this->repository->saveApplicationPurchasableItemInstance($entity, $isFlush);
     }
 }

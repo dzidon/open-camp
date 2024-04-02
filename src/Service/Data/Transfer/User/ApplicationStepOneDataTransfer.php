@@ -3,9 +3,9 @@
 namespace App\Service\Data\Transfer\User;
 
 use App\Library\Data\Common\ApplicationAttachmentData;
-use App\Library\Data\Common\ApplicationCamperData;
 use App\Library\Data\Common\ApplicationFormFieldValueData;
 use App\Library\Data\Common\ContactData;
+use App\Library\Data\User\ApplicationCamperData;
 use App\Library\Data\User\ApplicationStepOneData;
 use App\Model\Entity\Application;
 use App\Model\Event\User\ApplicationAttachment\ApplicationAttachmentCreateEvent;
@@ -57,23 +57,8 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
         $application = $entity;
 
         $applicationStepOneData->setEmail($application->getEmail());
-        $applicationStepOneData->setNameFirst($application->getNameFirst());
-        $applicationStepOneData->setNameLast($application->getNameLast());
-        $applicationStepOneData->setStreet($application->getStreet());
-        $applicationStepOneData->setTown($application->getTown());
-        $applicationStepOneData->setZip($application->getZip());
-        $applicationStepOneData->setCountry($application->getCountry());
-
-        if ($application->isEuBusinessDataEnabled())
-        {
-            if ($application->getBusinessName() !== null || $application->getBusinessCin() !== null || $application->getBusinessVatId() !== null)
-            {
-                $applicationStepOneData->setBusinessName($application->getBusinessName());
-                $applicationStepOneData->setBusinessCin($application->getBusinessCin());
-                $applicationStepOneData->setBusinessVatId($application->getBusinessVatId());
-                $applicationStepOneData->setIsCompany(true);
-            }
-        }
+        $billingData = $applicationStepOneData->getBillingData();
+        $this->dataTransferRegistry->fillData($billingData, $application);
 
         foreach ($application->getApplicationAttachments() as $applicationAttachment)
         {
@@ -135,7 +120,6 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
                 $application->getCurrency(),
                 $tripLocationPathThereArray,
                 $tripLocationPathBackArray,
-                false,
                 $applicationCamper->getId(),
             );
 
@@ -155,28 +139,8 @@ class ApplicationStepOneDataTransfer implements DataTransferInterface
         $application = $entity;
 
         $application->setEmail($applicationStepOneData->getEmail());
-        $application->setNameFirst($applicationStepOneData->getNameFirst());
-        $application->setNameLast($applicationStepOneData->getNameLast());
-        $application->setCountry($applicationStepOneData->getCountry());
-        $application->setStreet($applicationStepOneData->getStreet());
-        $application->setTown($applicationStepOneData->getTown());
-        $application->setZip($applicationStepOneData->getZip());
-
-        if ($application->isEuBusinessDataEnabled())
-        {
-            if ($applicationStepOneData->isCompany())
-            {
-                $application->setBusinessName($applicationStepOneData->getBusinessName());
-                $application->setBusinessCin($applicationStepOneData->getBusinessCin());
-                $application->setBusinessVatId($applicationStepOneData->getBusinessVatId());
-            }
-            else
-            {
-                $application->setBusinessName(null);
-                $application->setBusinessCin(null);
-                $application->setBusinessVatId(null);
-            }
-        }
+        $billingData = $applicationStepOneData->getBillingData();
+        $this->dataTransferRegistry->fillEntity($billingData, $application);
 
         $applicationFormFieldValuesData = $applicationStepOneData->getApplicationFormFieldValuesData();
         $this->fillApplicationFormFieldValues($applicationFormFieldValuesData, $application);

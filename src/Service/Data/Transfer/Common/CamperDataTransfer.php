@@ -3,11 +3,12 @@
 namespace App\Service\Data\Transfer\Common;
 
 use App\Library\Data\Common\CamperData;
+use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\Camper;
 use App\Service\Data\Transfer\DataTransferInterface;
 
 /**
- * Transfers data from {@link CamperData} to {@link Camper} and vice versa.
+ * Transfers data from {@link CamperData} to {@link Camper} or {@link ApplicationCamper} and vice versa.
  */
 class CamperDataTransfer implements DataTransferInterface
 {
@@ -16,7 +17,7 @@ class CamperDataTransfer implements DataTransferInterface
      */
     public function supports(object $data, object $entity): bool
     {
-        return $data instanceof CamperData && $entity instanceof Camper;
+        return $data instanceof CamperData && ($entity instanceof Camper || $entity instanceof ApplicationCamper);
     }
 
     /**
@@ -25,7 +26,7 @@ class CamperDataTransfer implements DataTransferInterface
     public function fillData(object $data, object $entity): void
     {
         /** @var CamperData $camperData */
-        /** @var Camper $camper */
+        /** @var Camper|ApplicationCamper $camper */
         $camperData = $data;
         $camper = $entity;
 
@@ -56,7 +57,7 @@ class CamperDataTransfer implements DataTransferInterface
     public function fillEntity(object $data, object $entity): void
     {
         /** @var CamperData $camperData */
-        /** @var Camper $camper */
+        /** @var Camper|ApplicationCamper $camper */
         $camperData = $data;
         $camper = $entity;
 

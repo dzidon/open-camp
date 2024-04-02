@@ -2,23 +2,20 @@
 
 namespace App\Service\Form\Type\User;
 
+use App\Library\Data\User\ApplicationCamperData;
 use App\Library\Data\User\ApplicationStepOneData;
 use App\Model\Entity\Camper;
 use App\Model\Entity\Contact;
 use App\Service\Form\Type\Common\ApplicationAttachmentType;
 use App\Service\Form\Type\Common\ApplicationCamperType;
 use App\Service\Form\Type\Common\ApplicationFormFieldValueType;
+use App\Service\Form\Type\Common\BillingType;
 use App\Service\Form\Type\Common\CollectionAddItemButtonType;
 use App\Service\Form\Type\Common\ContactType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -40,72 +37,6 @@ class ApplicationStepOneType extends AbstractType
         /** @var Camper[] $loadableCampers */
         $loadableCampers = $options['loadable_campers'];
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void
-        {
-            /** @var null|ApplicationStepOneData $applicationStepOneData */
-            $applicationStepOneData = $event->getData();
-            $form = $event->getForm();
-
-            if ($applicationStepOneData === null)
-            {
-                return;
-            }
-
-            if (!$applicationStepOneData->isEuBusinessDataEnabled())
-            {
-                return;
-            }
-
-            $form
-                ->add('isCompany', CheckboxType::class, [
-                    'label'  => 'form.user.application_step_one.is_company',
-                    'attr'   => [
-                        'data-controller'                      => 'cv--checkbox',
-                        'data-action'                          => 'cv--checkbox#updateVisibility',
-                        'data-cv--checkbox-cv--content-outlet' => '.company-fields-visibility',
-                    ],
-                    'required' => false,
-                    'priority' => 4300,
-                ])
-                ->add('businessName', TextType::class, [
-                    'label'    => 'form.user.application_step_one.business_name',
-                    'row_attr' => [
-                        'class'                                   => 'company-fields-visibility',
-                        'data-controller'                         => 'cv--content',
-                        'data-cv--content-show-when-chosen-value' => '1',
-                    ],
-                    'required' => false,
-                    'priority' => 4200,
-                ])
-                ->add('businessCin', TextType::class, [
-                    'label'      => 'form.user.application_step_one.business_cin',
-                    'label_attr' => [
-                        'class' => 'required'
-                    ],
-                    'row_attr' => [
-                        'class'                                   => 'company-fields-visibility',
-                        'data-controller'                         => 'cv--content',
-                        'data-cv--content-show-when-chosen-value' => '1',
-                    ],
-                    'required' => false,
-                    'priority' => 4100,
-                ])
-                ->add('businessVatId', TextType::class, [
-                    'label'      => 'form.user.application_step_one.business_vat_id',
-                    'label_attr' => [
-                        'class' => 'required'
-                    ],
-                    'row_attr' => [
-                        'class'                                   => 'company-fields-visibility',
-                        'data-controller'                         => 'cv--content',
-                        'data-cv--content-show-when-chosen-value' => '1',
-                    ],
-                    'required' => false,
-                    'priority' => 4000,
-                ])
-            ;
-        });
-
         $builder
             ->add('email', EmailType::class, [
                 'attr' => [
@@ -115,43 +46,15 @@ class ApplicationStepOneType extends AbstractType
                 ],
                 'label'    => 'form.user.application_step_one.email.label',
                 'help'     => 'form.user.application_step_one.email.help',
-                'priority' => 5000,
+                'priority' => 4100,
             ])
-            ->add('nameFirst', TextType::class, [
-                'label'    => 'form.user.application_step_one.name_first',
-                'attr'     => [
-                    'data-app--contact-autofill-target' => 'nameFirst',
-                    'data-action'                       => 'app--contact-autofill#fillFirstContact'
+            ->add('billingData', BillingType::class, [
+                'row_attr' => [
+                    'class' => 'm-0',
                 ],
-                'priority' => 4900,
-            ])
-            ->add('nameLast', TextType::class, [
-                'label'    => 'form.user.application_step_one.name_last',
-                'attr'     => [
-                    'data-app--contact-autofill-target' => 'nameLast',
-                    'data-action'                       => 'app--contact-autofill#fillFirstContact'
-                ],
-                'priority' => 4800,
-            ])
-            ->add('street', TextType::class, [
-                'label'    => 'form.user.application_step_one.street',
-                'priority' => 4700,
-            ])
-            ->add('town', TextType::class, [
-                'label'    => 'form.user.application_step_one.town',
-                'priority' => 4600,
-            ])
-            ->add('zip', TextType::class, [
-                'label'    => 'form.user.application_step_one.zip',
-                'priority' => 4500,
-            ])
-            ->add('country', CountryType::class, [
-                'placeholder'      => 'form.common.choice.choose',
-                'placeholder_attr' => [
-                    'disabled' => 'disabled'
-                ],
-                'label'    => 'form.user.application_step_one.country',
-                'priority' => 4400,
+                'enable_contact_autofill' => true,
+                'label'                   => false,
+                'priority'                => 4000,
             ])
             ->add('applicationFormFieldValuesData', CollectionType::class, [
                 'entry_type' => ApplicationFormFieldValueType::class,
@@ -215,6 +118,7 @@ class ApplicationStepOneType extends AbstractType
                 'allow_add'     => true,
                 'allow_delete'  => true,
                 'entry_options' => [
+                    'data_class'            => ApplicationCamperData::class,
                     'label'                 => false,
                     'remove_button_label'   => 'form.common.application_camper.remove_button',
                     'remove_button'         => true,
@@ -223,6 +127,7 @@ class ApplicationStepOneType extends AbstractType
                     'loadable_campers'      => $loadableCampers,
                 ],
                 'prototype_options' => [
+                    'data_class'            => ApplicationCamperData::class,
                     'remove_button_label'   => 'form.common.application_camper.remove_button',
                     'remove_button'         => true,
                     'enable_camper_loading' => true,

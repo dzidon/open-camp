@@ -3,13 +3,9 @@
 namespace App\Library\Data\User;
 
 use App\Library\Constraint\ApplicationCampersCount;
-use App\Library\Constraint\Compound\StreetRequirements;
-use App\Library\Constraint\Compound\ZipCodeRequirements;
-use App\Library\Constraint\EuCin;
-use App\Library\Constraint\EuVatId;
 use App\Library\Data\Common\ApplicationAttachmentData;
-use App\Library\Data\Common\ApplicationCamperData;
 use App\Library\Data\Common\ApplicationFormFieldValueData;
+use App\Library\Data\Common\BillingData;
 use App\Library\Data\Common\ContactData;
 use App\Model\Entity\CampDate;
 use LogicException;
@@ -33,59 +29,8 @@ class ApplicationStepOneData
     #[Assert\NotBlank]
     private ?string $email = null;
 
-    #[Assert\Length(max: 255)]
-    #[Assert\NotBlank]
-    private ?string $nameFirst = null;
-
-    #[Assert\Length(max: 255)]
-    #[Assert\NotBlank]
-    private ?string $nameLast = null;
-
-    #[StreetRequirements]
-    #[Assert\NotBlank]
-    private ?string $street = null;
-
-    #[Assert\Length(max: 255)]
-    #[Assert\NotBlank]
-    private ?string $town = null;
-
-    #[ZipCodeRequirements]
-    #[Assert\NotBlank]
-    private ?string $zip = null;
-
-    #[Assert\Country]
-    #[Assert\NotBlank]
-    private ?string $country = null;
-
-    private bool $isCompany = false;
-
-    #[Assert\When(
-        expression: 'this.isEuBusinessDataEnabled() and this.isCompany()',
-        constraints: [
-            new Assert\Length(max: 255),
-        ],
-    )]
-    private ?string $businessName = null;
-
-    #[Assert\When(
-        expression: 'this.isEuBusinessDataEnabled() and this.isCompany()',
-        constraints: [
-            new Assert\Length(max: 32),
-            new EuCin(),
-            new Assert\NotBlank(),
-        ],
-    )]
-    private ?string $businessCin = null;
-
-    #[Assert\When(
-        expression: 'this.isEuBusinessDataEnabled() and this.isCompany()',
-        constraints: [
-            new Assert\Length(max: 32),
-            new EuVatId(),
-            new Assert\NotBlank(),
-        ],
-    )]
-    private ?string $businessVatId = null;
+    #[Assert\Valid]
+    private BillingData $billingData;
 
     /** @var ContactData[] */
     #[Assert\Valid]
@@ -111,6 +56,7 @@ class ApplicationStepOneData
                                 float     $tax,
                                 ?CampDate $campDate = null)
     {
+        $this->billingData = new BillingData(true, $isEuBusinessDataEnabled);
         $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
         $this->currency = $currency;
@@ -155,124 +101,9 @@ class ApplicationStepOneData
         return $this;
     }
 
-    public function getNameFirst(): ?string
+    public function getBillingData(): BillingData
     {
-        return $this->nameFirst;
-    }
-
-    public function setNameFirst(?string $nameFirst): self
-    {
-        $this->nameFirst = $nameFirst;
-
-        return $this;
-    }
-
-    public function getNameLast(): ?string
-    {
-        return $this->nameLast;
-    }
-
-    public function setNameLast(?string $nameLast): self
-    {
-        $this->nameLast = $nameLast;
-
-        return $this;
-    }
-
-    public function getStreet(): ?string
-    {
-        return $this->street;
-    }
-
-    public function setStreet(?string $street): self
-    {
-        $this->street = $street;
-
-        return $this;
-    }
-
-    public function getTown(): ?string
-    {
-        return $this->town;
-    }
-
-    public function setTown(?string $town): self
-    {
-        $this->town = $town;
-
-        return $this;
-    }
-
-    public function getZip(): ?string
-    {
-        return $this->zip;
-    }
-
-    public function setZip(?string $zip): self
-    {
-        $this->zip = $zip;
-
-        return $this;
-    }
-
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(?string $country): self
-    {
-        $this->country = $country;
-
-        return $this;
-    }
-
-    public function isCompany(): bool
-    {
-        return $this->isCompany;
-    }
-
-    public function setIsCompany(bool $isCompany): self
-    {
-        $this->isCompany = $isCompany;
-
-        return $this;
-    }
-
-    public function getBusinessName(): ?string
-    {
-        return $this->businessName;
-    }
-
-    public function setBusinessName(?string $businessName): self
-    {
-        $this->businessName = $businessName;
-
-        return $this;
-    }
-
-    public function getBusinessCin(): ?string
-    {
-        return $this->businessCin;
-    }
-
-    public function setBusinessCin(?string $businessCin): self
-    {
-        $this->businessCin = $businessCin;
-
-        return $this;
-    }
-
-    public function getBusinessVatId(): ?string
-    {
-        return $this->businessVatId;
-    }
-
-    public function setBusinessVatId(?string $businessVatId): self
-    {
-        $this->businessVatId = $businessVatId;
-
-        return $this;
+        return $this->billingData;
     }
 
     public function getContactsData(): array

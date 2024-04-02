@@ -458,26 +458,7 @@
     </h3>
 
     {{ form_row(form.email) }}
-
-    <div class="form-row">
-        <div class="col-md-6">
-            {{ form_row(form.nameFirst) }}
-        </div>
-
-        <div class="col-md-6">
-            {{ form_row(form.nameLast) }}
-        </div>
-    </div>
-
-    {{ form_row(form.street) }}
-    {{ form_row(form.town) }}
-    {{ form_row(form.zip) }}
-    {{ form_row(form.country) }}
-    {{ form_row(form.isCompany) }}
-    {{ form_row(form.businessName) }}
-    {{ form_row(form.businessCin) }}
-    {{ form_row(form.businessVatId) }}
-
+    {{ form_row(form.billingData) }}
     {{ form_row(form.applicationFormFieldValuesData) }}
     {{ form_row(form.applicationAttachmentsData) }}
 

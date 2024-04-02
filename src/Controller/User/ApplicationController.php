@@ -3,9 +3,9 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
+use App\Library\Data\User\ApplicationStepOneData;
 use App\Library\Data\User\ApplicationStepThreeData;
 use App\Library\Data\User\ApplicationStepTwoData;
-use App\Library\Data\User\ApplicationStepOneData;
 use App\Model\Entity\Application;
 use App\Model\Entity\Camp;
 use App\Model\Entity\CampDate;
@@ -23,16 +23,16 @@ use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CamperRepositoryInterface;
 use App\Model\Repository\ContactRepositoryInterface;
 use App\Model\Repository\PaymentMethodRepositoryInterface;
-use App\Model\Service\Application\ApplicationStepOneDataFactoryInterface;
-use App\Model\Service\ApplicationAttachment\ApplicationAttachmentsUploadLaterDataFactoryInterface;
-use App\Model\Service\ApplicationCamper\ApplicationCamperDataFactoryInterface;
-use App\Model\Service\ApplicationPurchasableItemInstance\ApplicationPurchasableItemInstanceDataFactoryInterface;
-use App\Model\Service\Contact\ContactDataFactoryInterface;
+use App\Service\Data\Factory\Application\ApplicationStepOneDataFactoryInterface;
+use App\Service\Data\Factory\ApplicationAttachment\ApplicationAttachmentsUploadLaterDataFactoryInterface;
+use App\Service\Data\Factory\ApplicationCamper\ApplicationCamperDataFactoryInterface;
+use App\Service\Data\Factory\ApplicationPurchasableItemInstance\ApplicationPurchasableItemInstanceDataFactoryInterface;
+use App\Service\Data\Factory\Contact\ContactDataFactoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\User\ApplicationAttachmentsUploadLaterType;
+use App\Service\Form\Type\User\ApplicationStepOneType;
 use App\Service\Form\Type\User\ApplicationStepThreeType;
 use App\Service\Form\Type\User\ApplicationStepTwoType;
-use App\Service\Form\Type\User\ApplicationStepOneType;
 use App\Service\Routing\RouteNamerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -84,9 +84,10 @@ class ApplicationController extends AbstractController
         $isEmailMandatory = $this->getParameter('app.contact_email_mandatory');
         $isPhoneNumberMandatory = $this->getParameter('app.contact_phone_number_mandatory');
         $contactDataCallable = $contactDataFactory->getCreateContactDataCallable($isEmailMandatory, $isPhoneNumberMandatory);
-        $applicationCamperDataCallable = $applicationCamperDataFactory->getApplicationCamperDataCallableFromCampDate($campDate, false);
+        $applicationCamperDataCallable = $applicationCamperDataFactory->getCallableFromCampDateForUserModule($campDate);
         $applicationStepOneData = $applicationStepOneDataFactory->createApplicationStepOneData(
             $campDate,
+            $user,
             $applicationCamperDataCallable(),
             $contactDataCallable()
         );
@@ -163,7 +164,7 @@ class ApplicationController extends AbstractController
         $isEmailMandatory = $application->isEmailMandatory();
         $isPhoneNumberMandatory = $application->isPhoneNumberMandatory();
         $contactDataCallable = $contactDataFactory->getCreateContactDataCallable($isEmailMandatory, $isPhoneNumberMandatory);
-        $applicationCamperDataCallable = $applicationCamperDataFactory->getApplicationCamperDataCallableFromApplication($application, false);
+        $applicationCamperDataCallable = $applicationCamperDataFactory->getCallableFromApplicationForUserModule($application);
         $applicationStepOneData = new ApplicationStepOneData(
             $application->isEuBusinessDataEnabled(),
             $application->isNationalIdentifierEnabled(),
@@ -245,7 +246,7 @@ class ApplicationController extends AbstractController
         $dataTransfer->fillData($applicationPurchasableItemsData, $application);
 
         $form = $this->createForm(ApplicationStepTwoType::class, $applicationPurchasableItemsData, [
-            'instances_empty_data'    => $applicationPurchasableItemInstanceDataFactory->getDataCallableArrayFromApplication($application),
+            'instances_empty_data'    => $applicationPurchasableItemInstanceDataFactory->getDataCallableArrayForUserModule($application),
             'choices_payment_methods' => $paymentMethodRepository->findAll(),
         ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_two.button']);

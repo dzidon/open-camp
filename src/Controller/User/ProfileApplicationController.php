@@ -10,7 +10,7 @@ use App\Model\Entity\User;
 use App\Model\Event\User\Application\ApplicationAttachmentsUploadLaterEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Service\Application\ApplicationInvoiceFilesystemInterface;
-use App\Model\Service\ApplicationAttachment\ApplicationAttachmentsUploadLaterDataFactoryInterface;
+use App\Service\Data\Factory\ApplicationAttachment\ApplicationAttachmentsUploadLaterDataFactoryInterface;
 use App\Service\Form\Type\User\ApplicationAttachmentsUploadLaterType;
 use App\Service\Form\Type\User\ApplicationProfileSearchType;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;

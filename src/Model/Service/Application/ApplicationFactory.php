@@ -43,12 +43,15 @@ class ApplicationFactory implements ApplicationFactoryInterface
     {
         $simpleId = null;
         $email = $data->getEmail();
-        $nameFirst = $data->getNameFirst();
-        $nameLast = $data->getNameLast();
-        $street = $data->getStreet();
-        $town = $data->getTown();
-        $zip = $data->getZip();
-        $country = $data->getCountry();
+
+        $billingData = $data->getBillingData();
+        $nameFirst = $billingData->getNameFirst();
+        $nameLast = $billingData->getNameLast();
+        $street = $billingData->getStreet();
+        $town = $billingData->getTown();
+        $zip = $billingData->getZip();
+        $country = $billingData->getCountry();
+
         $isEuBusinessDataEnabled = $data->isEuBusinessDataEnabled();
         $isNationalIdentifierEnabled = $data->isNationalIdentifierEnabled();
         $currency = $data->getCurrency();
