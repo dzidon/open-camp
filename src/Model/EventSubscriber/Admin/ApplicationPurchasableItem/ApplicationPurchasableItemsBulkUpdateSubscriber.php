@@ -24,22 +24,22 @@ class ApplicationPurchasableItemsBulkUpdateSubscriber
     public function onUpdateFillEntity(ApplicationPurchasableItemsBulkUpdateEvent $event): void
     {
         $data = $event->getApplicationPurchasableItemsData();
-        $entity = $event->getApplication();
-        $this->dataTransfer->fillEntity($data, $entity);
+        $application = $event->getApplication();
+        $this->dataTransfer->fillEntity($data, $application);
     }
 
     #[AsEventListener(event: ApplicationPurchasableItemsBulkUpdateEvent::NAME, priority: 200)]
-    public function onUpdateCacheFullPrice(ApplicationPurchasableItemsBulkUpdateEvent $event): void
+    public function onUpdateCacheAllFullPrices(ApplicationPurchasableItemsBulkUpdateEvent $event): void
     {
         $application = $event->getApplication();
-        $application->cacheFullPrice();
+        $application->cacheAllFullPrices();
     }
 
     #[AsEventListener(event: ApplicationPurchasableItemsBulkUpdateEvent::NAME, priority: 100)]
     public function onUpdateSaveEntity(ApplicationPurchasableItemsBulkUpdateEvent $event): void
     {
-        $entity = $event->getApplication();
+        $application = $event->getApplication();
         $isFlush = $event->isFlush();
-        $this->applicationRepository->saveApplication($entity, $isFlush);
+        $this->applicationRepository->saveApplication($application, $isFlush);
     }
 }

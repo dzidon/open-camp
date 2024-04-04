@@ -4,6 +4,7 @@ namespace App\Model\Service\ApplicatonPayment\Online;
 
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationPayment;
+use App\Model\Entity\ApplicationPaymentStateConfig;
 use App\Model\Enum\Entity\ApplicationPaymentTypeEnum;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,13 +14,46 @@ use Symfony\Component\HttpFoundation\Request;
 interface ApplicationPaymentOnlineGateInterface
 {
     /**
+     * @return string[]
+     */
+    public function getStates(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getPaidStates(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getCancelledStates(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getRefundedStates(): array;
+
+    /**
+     * @return string[]
+     */
+    public function getPendingStates(): array;
+
+    /**
+     * @return array
+     */
+    public function getValidStateChanges(): array;
+
+    /**
      * Tells the online payment gate to create an online payment for the given application.
      *
      * @param ApplicationPaymentTypeEnum $type
      * @param Application $application
+     * @param ApplicationPaymentStateConfig $stateConfig
      * @return ApplicationPayment|null
      */
-    public function createOnlinePayment(ApplicationPaymentTypeEnum $type, Application $application): ?ApplicationPayment;
+    public function createOnlinePayment(ApplicationPaymentTypeEnum    $type,
+                                        Application                   $application,
+                                        ApplicationPaymentStateConfig $stateConfig): ?ApplicationPayment;
 
     /**
      * Used when a payment gate notifies us about payment state change.

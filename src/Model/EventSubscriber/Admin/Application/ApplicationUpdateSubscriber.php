@@ -25,12 +25,19 @@ class ApplicationUpdateSubscriber
         $this->dataTransfer = $dataTransfer;
     }
 
-    #[AsEventListener(event: ApplicationUpdateEvent::NAME, priority: 300)]
+    #[AsEventListener(event: ApplicationUpdateEvent::NAME, priority: 400)]
     public function onUpdateFillEntity(ApplicationUpdateEvent $event): void
     {
         $data = $event->getApplicationData();
         $entity = $event->getApplication();
         $this->dataTransfer->fillEntity($data, $entity);
+    }
+
+    #[AsEventListener(event: ApplicationUpdateEvent::NAME, priority: 300)]
+    public function onUpdateCachePrices(ApplicationUpdateEvent $event): void
+    {
+        $entity = $event->getApplication();
+        $entity->cacheAllFullPrices();
     }
 
     #[AsEventListener(event: ApplicationUpdateEvent::NAME, priority: 200)]

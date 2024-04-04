@@ -29,10 +29,10 @@ class ApplicationStepTwoUpdateSubscriber
     }
 
     #[AsEventListener(event: ApplicationStepTwoUpdateEvent::NAME, priority: 200)]
-    public function onUpdateCacheFullPrice(ApplicationStepTwoUpdateEvent $event): void
+    public function onUpdateCacheAllPrices(ApplicationStepTwoUpdateEvent $event): void
     {
         $application = $event->getApplication();
-        $application->cacheFullPrice();
+        $application->cacheAllFullPrices();
     }
 
     #[AsEventListener(event: ApplicationStepTwoUpdateEvent::NAME, priority: 100)]

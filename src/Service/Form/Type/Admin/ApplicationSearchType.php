@@ -40,10 +40,10 @@ class ApplicationSearchType extends AbstractType
                 'placeholder' => 'form.common.choice.irrelevant',
                 'required'    => false,
                 'choices'     => [
-                    'form.admin.application_search.is_online_payment_method.options.yes' => true,
-                    'form.admin.application_search.is_online_payment_method.options.no'  => false,
+                    'form.common.choice.yes' => true,
+                    'form.common.choice.no'  => false,
                 ],
-                'label' => 'form.admin.application_search.is_online_payment_method.label',
+                'label' => 'form.admin.application_search.is_online_payment_method',
             ])
             ->add('isAccepted', ApplicationAcceptedStateType::class, [
                 'label'       => 'form.admin.application_search.is_accepted',

@@ -83,7 +83,7 @@ payment_state:
     paid: 'Zaplacena'
     cancelled: 'Zrušena'
     refunded: 'Vrácena'
-    pending: 'Rozpracovaná'
+    pending: 'Rozpracována'
 
 online_payment_gate_mock:
     pay: 'Simulovat platbu'
@@ -113,6 +113,11 @@ attachment_config_required_type:
     optional: 'Volitelný'
     required: 'Povinný'
     required_later: 'Povinný později'
+
+application_payment_type:
+    full: 'Platba celé přihlášky'
+    deposit: 'Záloha'
+    rest: 'Doplatek'
 
 form_field_type:
     text: 'Text'
@@ -488,7 +493,6 @@ crud:
             update_password_not_set: 'Tento uživatel nemá nastavené heslo. Kliknutím na následující tlačítko přejdete do nastavení hesla.'
 
     confirmation:
-        simple_id: 'Opravdu si přejete odstranit přihlášku s kódem "{simple_id}"?'
         contact_delete: 'Opravdu si přejete odstranit kontakt "{full_name}"?'
         camper_delete: 'Opravdu si přejete odstranit táborníka "{full_name}"?'
         role_delete: 'Opravdu si přejete odstranit roli "{label}"?'
@@ -508,6 +512,8 @@ crud:
         application_delete: 'Opravdu si přejete odstranit přihlášku "{simple_id}"?'
         application_contact_delete: 'Opravdu si přejete odstranit kontakt "{name}"?'
         application_camper_delete: 'Opravdu si přejete odstranit táborníka "{name}"?'
+        application_payment_delete: 'Opravdu si přejete odstranit platbu?'
+        application_payment_refund: 'Opravdu si přejete vrátit platbu?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
@@ -523,6 +529,9 @@ crud:
             delete: 'Odstranit'
             upload: 'Nahrát'
             duplicate: 'Duplikovat'
+
+        application_payment:
+            refund: 'Vrátit'
 
         user:
             update_password: 'Nastavit heslo'
@@ -544,6 +553,12 @@ crud:
             create: 'Táborník vytvořen!'
             update: 'Táborník uložen!'
             delete: 'Táborník odstraněn!'
+
+        application_payment:
+            create: 'Platba vytvořena!'
+            update: 'Platba uložena!'
+            delete: 'Platba odstraněna!'
+            refund: 'Platba vrácena!'
 
         application_attachment:
             upload_later: 'Soubory uloženy!'
@@ -842,6 +857,7 @@ entity_attribute:
         user: 'Uživatel'
         payment_method: 'Platení metoda'
         are_attachments_uploaded: 'Přílohy nahrány'
+        is_awaiting_attachments_required_later: 'Očekává přílohy'
         is_awaiting_payment: 'Očekává platbu'
         is_awaiting_payment_deposit: 'Očekává platbu zálohy'
         is_awaiting_payment_rest: 'Očekává platbu doplatku'
@@ -1873,12 +1889,7 @@ form:
                     completed_at_desc: 'Od naposledy dokončených'
                     completed_at_asc: 'Od nejdříve dokončených'
 
-            is_online_payment_method:
-                label: 'On-line platba'
-                options:
-                    yes: 'Ano'
-                    no: 'Ne'
-
+            is_online_payment_method: 'On-line platba'
             is_accepted: 'Stav'
 
         application:
@@ -1930,6 +1941,34 @@ form:
             label_individual: 'Volitelné položky'
             label_global: 'Volitelné položky (celá přihláška)'
             button: 'Uložit'
+
+        application_payment_search:
+            type: 'Typ platby'
+            is_online: 'On-line'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od naposledy vytvořených'
+                    created_at_asc: 'Od nejdéle vytvořených'
+                    amount_asc: 'Od nejmenší částky'
+                    amount_desc: 'Od největší částky'
+
+            button: 'Hledat'
+
+        application_payment:
+            amount:
+                label: 'Částka'
+                help: 'Záloha přihlášky je {deposit}. Doplatek přihlášky je {rest}. Celá cena přihlášky je {full}.'
+
+            type: 'Typ'
+            state: 'Stav'
+            button: 'Uložit'
+
+        application_payment_delete:
+            button: 'Odstranit'
+
+        application_payment_refund:
+            button: 'Vrátit'
 
     user:
         application_step_one:
@@ -2194,9 +2233,11 @@ route:
     admin_application_camper_delete: 'Odstranění táborníka'
 
     admin_application_payment_list: 'Platby'
+    admin_application_payment_create: 'Vytvoření platby'
     admin_application_payment_read: 'Zobrazení platby'
     admin_application_payment_update: 'Editace platby'
     admin_application_payment_delete: 'Odstranění platby'
+    admin_application_payment_refund: 'Vrácení platby'
 
     admin_application_purchasable_items_update: 'Volitelné platby'
 

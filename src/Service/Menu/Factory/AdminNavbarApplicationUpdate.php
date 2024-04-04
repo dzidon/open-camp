@@ -115,7 +115,7 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
             ;
 
             $text = $this->translator->trans('route.admin_application_payment_list');
-            $url = '#' /*$this->urlGenerator->generate('admin_application_payment_list', ['id' => $applicationId])*/;
+            $url = $this->urlGenerator->generate('admin_application_payment_list', ['id' => $applicationId]);
             $itemApplicationPayments = new MenuType('admin_application_payment_list', 'navbar_admin_horizontal_update_item', $text, $url);
             $menu->addChild($itemApplicationPayments);
             $itemApplicationPayments->setActive($active);

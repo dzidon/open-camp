@@ -4,9 +4,9 @@ namespace App\Model\Service\ApplicatonPayment\Online;
 
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationPayment;
+use App\Model\Entity\ApplicationPaymentStateConfig;
 use App\Model\Enum\Entity\ApplicationPaymentTypeEnum;
 use App\Model\Repository\ApplicationPaymentRepositoryInterface;
-use App\Model\Repository\ApplicationPaymentStateConfigRepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\Uuid;
@@ -18,53 +18,62 @@ class ApplicationPaymentMockOnlineGate implements ApplicationPaymentOnlineGateIn
     const STATE_REFUNDED = 'REFUNDED';
     const STATE_PENDING = 'PENDING';
 
-    const STATES = [self::STATE_PAID, self::STATE_CANCELLED, self::STATE_REFUNDED, self::STATE_PENDING];
-    const PAID_STATES = [self::STATE_PAID];
-    const CANCELLED_STATES = [self::STATE_CANCELLED];
-    const REFUNDED_STATES = [self::STATE_REFUNDED];
-    const PENDING_STATES = [self::STATE_PENDING];
-    const VALID_STATE_CHANGES = [
-        self::STATE_PENDING => [self::STATE_PAID, self::STATE_CANCELLED],
-        self::STATE_PAID    => [self::STATE_REFUNDED],
-    ];
-
     private ApplicationPaymentRepositoryInterface $applicationPaymentRepository;
-
-    private ApplicationPaymentStateConfigRepositoryInterface $applicationPaymentStateConfigRepository;
 
     private UrlGeneratorInterface $urlGenerator;
 
-    public function __construct(ApplicationPaymentRepositoryInterface            $applicationPaymentRepository,
-                                ApplicationPaymentStateConfigRepositoryInterface $applicationPaymentStateConfigRepository,
-                                UrlGeneratorInterface                            $urlGenerator)
+    public function __construct(ApplicationPaymentRepositoryInterface $applicationPaymentRepository,
+                                UrlGeneratorInterface                 $urlGenerator)
     {
         $this->applicationPaymentRepository = $applicationPaymentRepository;
-        $this->applicationPaymentStateConfigRepository = $applicationPaymentStateConfigRepository;
         $this->urlGenerator = $urlGenerator;
     }
 
-    public function createOnlinePayment(ApplicationPaymentTypeEnum $type, Application $application): ?ApplicationPayment
+    public function getStates(): array
+    {
+        return [self::STATE_PAID, self::STATE_CANCELLED, self::STATE_REFUNDED, self::STATE_PENDING];
+    }
+
+    public function getPaidStates(): array
+    {
+        return [self::STATE_PAID];
+    }
+
+    public function getCancelledStates(): array
+    {
+        return [self::STATE_CANCELLED];
+    }
+
+    public function getRefundedStates(): array
+    {
+        return [self::STATE_REFUNDED];
+    }
+
+    public function getPendingStates(): array
+    {
+        return [self::STATE_PENDING];
+    }
+
+    public function getValidStateChanges(): array
+    {
+        return [
+            self::STATE_PENDING => [self::STATE_PAID, self::STATE_CANCELLED],
+            self::STATE_PAID    => [self::STATE_REFUNDED],
+        ];
+    }
+
+    public function createOnlinePayment(ApplicationPaymentTypeEnum    $type,
+                                        Application                   $application,
+                                        ApplicationPaymentStateConfig $stateConfig): ?ApplicationPayment
     {
         $amount = match ($type)
         {
             ApplicationPaymentTypeEnum::DEPOSIT => $application->getFullDeposit(),
-            ApplicationPaymentTypeEnum::REST    => $application->getFullPriceWithoutDeposit(),
+            ApplicationPaymentTypeEnum::REST    => $application->getFullRest(),
             ApplicationPaymentTypeEnum::FULL    => $application->getFullPrice(),
         };
 
-        $stateConfig = $this->applicationPaymentStateConfigRepository->findOneByConfigurationOrCreateNew(
-            self::STATES,
-            self::PAID_STATES,
-            self::CANCELLED_STATES,
-            self::REFUNDED_STATES,
-            self::PENDING_STATES,
-            self::VALID_STATE_CHANGES,
-        );
-
-        $externalIdString = Uuid::v4()
-            ->toRfc4122()
-        ;
-
+        $externalIdString = (Uuid::v4())->toRfc4122();
         $externalUrl = $this->urlGenerator->generate('user_application_payment_simulate', [
             'externalId' => $externalIdString,
         ]);

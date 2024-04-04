@@ -59,7 +59,7 @@
                                     <th>{{ 'entity_attribute.application.full_price'|trans }}</th>
                                     <th>{{ 'entity_attribute.application.completed_at'|trans }}</th>
                                     <th>{{ 'entity_attribute.application.is_payment_method_online'|trans }}</th>
-                                    <th>{{ 'entity_attribute.application.are_attachments_uploaded'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application.is_awaiting_attachments_required_later'|trans }}</th>
                                     <th>{{ 'entity_attribute.application.is_awaiting_payment'|trans }}</th>
                                     <th>{{ 'entity_attribute.application.is_accepted'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
@@ -122,13 +122,13 @@
                                         </td>
 
                                         <td class="align-middle">
-                                            {% if application.areAttachmentsRequiredLaterMissing %}
+                                            {% if application.isAwaitingUploadOfAttachmentsRequiredLater %}
                                                 <span class="badge badge-danger">
-                                                    {{ 'bool.no'|trans }}
+                                                    {{ 'bool.yes'|trans }}
                                                 </span>
                                             {% else %}
                                                 <span class="badge badge-success">
-                                                    {{ 'bool.yes'|trans }}
+                                                    {{ 'bool.no'|trans }}
                                                 </span>
                                             {% endif %}
                                         </td>

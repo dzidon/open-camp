@@ -80,6 +80,7 @@ class ApplicationAttachmentFileValidator extends ConstraintValidator
             $this->context
                 ->buildViolation($message)
                 ->atPath($constraint->fileProperty)
+                ->disableTranslation()
                 ->addViolation()
             ;
         }

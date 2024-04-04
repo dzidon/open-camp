@@ -1,0 +1,92 @@
+{% extends 'admin/application/base_update.html.twig' %}
+
+{% block application_update_content %}
+    {% set application_currency = application_payment.application.currency %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application_payment.amount'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ application_payment.amount|format_currency(application_currency) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application_payment.type'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ ('application_payment_type.' ~ application_payment.type.value)|trans }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application_payment.state'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {% set state_lower = application_payment.state|lower %}
+
+                                {{ ('payment_state.' ~ state_lower)|trans }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.application_payment.is_online'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {% if application_payment.isOnline %}
+                                    {{ 'bool.yes'|trans }}
+                                {% else %}
+                                    {{ 'bool.no'|trans }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                {% set show_refund = application_payment.isOnline and application_payment.paid %}
+                {% set show_update_and_remove = not application_payment.isOnline %}
+
+                {% if show_refund or show_update_and_remove %}
+                    <div class="card-footer">
+                        {% if show_refund %}
+                            <a href="{{ path('admin_application_payment_refund', {id: application_payment.id}) }}"
+                               class="btn btn-warning"
+                            >
+                                {{ 'crud.action.application_payment.refund'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if show_update_and_remove %}
+                            <a href="{{ path('admin_application_payment_update', {id: application_payment.id}) }}"
+                               class="btn btn-primary mr-2"
+                            >
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
+
+                            <a href="{{ path('admin_application_payment_delete', {id: application_payment.id}) }}"
+                               class="btn btn-danger"
+                            >
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

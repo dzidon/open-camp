@@ -33,12 +33,12 @@ interface ApplicationPaymentStateConfigRepositoryInterface
      * @param array $refundedStates
      * @param array $pendingStates
      * @param array $validStateChanges
-     * @return ApplicationPaymentStateConfig
+     * @return null|ApplicationPaymentStateConfig
      */
-    public function findOneByConfigurationOrCreateNew(array $states,
-                                                      array $paidStates,
-                                                      array $cancelledStates,
-                                                      array $refundedStates,
-                                                      array $pendingStates,
-                                                      array $validStateChanges): ApplicationPaymentStateConfig;
+    public function findOneByConfiguration(array $states,
+                                           array $paidStates,
+                                           array $cancelledStates,
+                                           array $refundedStates,
+                                           array $pendingStates,
+                                           array $validStateChanges): ?ApplicationPaymentStateConfig;
 }

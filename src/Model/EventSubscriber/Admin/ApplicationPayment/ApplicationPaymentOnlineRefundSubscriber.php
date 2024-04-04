@@ -2,12 +2,12 @@
 
 namespace App\Model\EventSubscriber\Admin\ApplicationPayment;
 
-use App\Model\Event\Admin\ApplicationPayment\ApplicationPaymentRefundEvent;
+use App\Model\Event\Admin\ApplicationPayment\ApplicationPaymentOnlineRefundEvent;
 use App\Model\Repository\ApplicationPaymentRepositoryInterface;
 use App\Model\Service\ApplicatonPayment\Online\ApplicationPaymentOnlineGateInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
-class ApplicationPaymentRefundSubscriber
+class ApplicationPaymentOnlineRefundSubscriber
 {
     private ApplicationPaymentRepositoryInterface $applicationPaymentRepository;
 
@@ -20,15 +20,15 @@ class ApplicationPaymentRefundSubscriber
         $this->applicationPaymentOnlineGate = $applicationPaymentOnlineGate;
     }
 
-    #[AsEventListener(event: ApplicationPaymentRefundEvent::NAME, priority: 200)]
-    public function onRefundUsePaymentGate(ApplicationPaymentRefundEvent $event): void
+    #[AsEventListener(event: ApplicationPaymentOnlineRefundEvent::NAME, priority: 200)]
+    public function onRefundUsePaymentGate(ApplicationPaymentOnlineRefundEvent $event): void
     {
         $entity = $event->getApplicationPayment();
         $this->applicationPaymentOnlineGate->refundPayment($entity);
     }
 
-    #[AsEventListener(event: ApplicationPaymentRefundEvent::NAME, priority: 100)]
-    public function onRefundSaveEntity(ApplicationPaymentRefundEvent $event): void
+    #[AsEventListener(event: ApplicationPaymentOnlineRefundEvent::NAME, priority: 100)]
+    public function onRefundSaveEntity(ApplicationPaymentOnlineRefundEvent $event): void
     {
         $entity = $event->getApplicationPayment();
         $flush = $event->isFlush();

@@ -3,7 +3,7 @@
 namespace App\Model\EventSubscriber\Admin\Application;
 
 use App\Model\Event\Admin\Application\ApplicationDeleteEvent;
-use App\Model\Event\Admin\ApplicationPayment\ApplicationPaymentRefundEvent;
+use App\Model\Event\Admin\ApplicationPayment\ApplicationPaymentOnlineRefundEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Service\Application\ApplicationInvoiceFilesystemInterface;
 use App\Model\Service\ApplicationAttachment\ApplicationAttachmentFilesystemInterface;
@@ -41,7 +41,7 @@ class ApplicationDeleteSubscriber
         {
             if ($applicationPayment->isOnline() && $applicationPayment->isPaid())
             {
-                $event = new ApplicationPaymentRefundEvent($applicationPayment);
+                $event = new ApplicationPaymentOnlineRefundEvent($applicationPayment);
                 $event->setIsFlush(false);
                 $this->eventDispatcher->dispatch($event, $event::NAME);
             }

@@ -125,19 +125,16 @@ services:
         tags:
             - { name: 'monolog.processor', channel: 'model' }
 
-    App\Model\Service\Application\ApplicationToUserImporter:
-        arguments:
-            $isEuBusinessDataEnabled: '%app.eu_business_data%'
-            $isEmailMandatory: '%app.contact_email_mandatory%'
-            $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
-            $isNationalIdentifierEnabled: '%app.national_identifier%'
-
     App\Model\EventSubscriber\User\Application\ApplicationStepThreeUpdateSubscriber:
         arguments:
             $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
 
     App\Model\EventSubscriber\User\Application\ApplicationToUserImportSubscriber:
         arguments:
+            $isEuBusinessDataEnabled: '%app.eu_business_data%'
+            $isEmailMandatory: '%app.contact_email_mandatory%'
+            $isPhoneNumberMandatory: '%app.contact_phone_number_mandatory%'
+            $isNationalIdentifierEnabled: '%app.national_identifier%'
             $lastCompletedApplicationIdSessionKey: '%app.last_completed_application_id_session_key%'
 
     App\Model\Service\UserRegistration\UserRegistrationFactory:

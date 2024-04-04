@@ -4,19 +4,23 @@ namespace App\Model\Event\User\ApplicationPayment;
 
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationPayment;
+use App\Model\Enum\Entity\ApplicationPaymentTypeEnum;
 use App\Model\Event\AbstractModelEvent;
 
-class ApplicationPaymentOfflineDepositCreateEvent extends AbstractModelEvent
+class ApplicationPaymentOfflineCreateEvent extends AbstractModelEvent
 {
     public const NAME = 'model.user.application_payment.offline_deposit_create';
 
     private Application $application;
 
+    private ApplicationPaymentTypeEnum $type;
+
     private ?ApplicationPayment $applicationPayment = null;
 
-    public function __construct(Application $application)
+    public function __construct(Application $application, ApplicationPaymentTypeEnum $type)
     {
         $this->application = $application;
+        $this->type = $type;
     }
 
     public function getApplication(): Application
@@ -27,6 +31,18 @@ class ApplicationPaymentOfflineDepositCreateEvent extends AbstractModelEvent
     public function setApplication(Application $application): self
     {
         $this->application = $application;
+
+        return $this;
+    }
+
+    public function getType(): ApplicationPaymentTypeEnum
+    {
+        return $this->type;
+    }
+
+    public function setType(ApplicationPaymentTypeEnum $type): self
+    {
+        $this->type = $type;
 
         return $this;
     }

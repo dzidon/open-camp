@@ -3,9 +3,9 @@
 namespace App\Model\EventSubscriber\User\Application;
 
 use App\Model\Entity\User;
+use App\Model\Enum\Entity\ApplicationPaymentTypeEnum;
 use App\Model\Event\User\Application\ApplicationStepThreeUpdateEvent;
-use App\Model\Event\User\ApplicationPayment\ApplicationPaymentOfflineDepositCreateEvent;
-use App\Model\Event\User\ApplicationPayment\ApplicationPaymentOfflineRestCreateEvent;
+use App\Model\Event\User\ApplicationPayment\ApplicationPaymentOfflineCreateEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Service\Application\ApplicationCompletedMailerInterface;
 use App\Model\Service\Application\ApplicationCompleterInterface;
@@ -73,24 +73,24 @@ class ApplicationStepThreeUpdateSubscriber
 
         if ($application->canCreateNewDepositPayment())
         {
-            $event = new ApplicationPaymentOfflineDepositCreateEvent($application);
+            $event = new ApplicationPaymentOfflineCreateEvent($application, ApplicationPaymentTypeEnum::DEPOSIT);
             $event->setIsFlush(false);
             $this->eventDispatcher->dispatch($event, $event::NAME);
         }
 
         if ($application->canCreateNewRestPayment())
         {
-            $event = new ApplicationPaymentOfflineRestCreateEvent($application);
+            $event = new ApplicationPaymentOfflineCreateEvent($application, ApplicationPaymentTypeEnum::REST);
             $event->setIsFlush(false);
             $this->eventDispatcher->dispatch($event, $event::NAME);
         }
     }
 
     #[AsEventListener(event: ApplicationStepThreeUpdateEvent::NAME, priority: 500)]
-    public function onUpdateCacheFullPrice(ApplicationStepThreeUpdateEvent $event): void
+    public function onCompleteCacheAllFullPrices(ApplicationStepThreeUpdateEvent $event): void
     {
         $application = $event->getApplication();
-        $application->cacheFullPrice();
+        $application->cacheAllFullPrices();
     }
 
     #[AsEventListener(event: ApplicationStepThreeUpdateEvent::NAME, priority: 400)]

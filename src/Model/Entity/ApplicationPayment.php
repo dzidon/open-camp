@@ -89,9 +89,23 @@ class ApplicationPayment
         return $this->amount;
     }
 
+    public function setAmount(float $amount): self
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
     public function getType(): ApplicationPaymentTypeEnum
     {
         return ApplicationPaymentTypeEnum::tryFrom($this->type);
+    }
+
+    public function setType(ApplicationPaymentTypeEnum $type): self
+    {
+        $this->type = $type->value;
+
+        return $this;
     }
 
     public function isPaid(): bool

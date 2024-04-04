@@ -75,10 +75,10 @@ class ApplicationStepOneCreateSubscriber
     }
 
     #[AsEventListener(event: ApplicationStepOneCreateEvent::NAME, priority: 200)]
-    public function onCreateCacheFullPrice(ApplicationStepOneCreateEvent $event): void
+    public function onCreateCacheAllFullPrices(ApplicationStepOneCreateEvent $event): void
     {
         $application = $event->getApplication();
-        $application->cacheFullPrice();
+        $application->cacheAllFullPrices();
     }
 
     #[AsEventListener(event: ApplicationStepOneCreateEvent::NAME, priority: 100)]

@@ -3,11 +3,12 @@
 namespace App\Model\EventSubscriber\User\Application;
 
 use App\Model\Event\User\Application\ApplicationStepOneUpdateEvent;
+use App\Model\Event\User\ApplicationPurchasableItemInstance\ApplicationPurchasableItemInstanceDeleteEvent;
 use App\Model\Repository\ApplicationCamperRepositoryInterface;
 use App\Model\Repository\ApplicationRepositoryInterface;
-use App\Model\Service\Application\ApplicationOverflownPurchasableItemsRemoverInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ApplicationStepOneUpdateSubscriber
 {
@@ -15,19 +16,19 @@ class ApplicationStepOneUpdateSubscriber
 
     private ApplicationCamperRepositoryInterface $applicationCamperRepository;
 
-    private ApplicationOverflownPurchasableItemsRemoverInterface $applicationOverflownPurchasableItemsRemover;
-
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(ApplicationRepositoryInterface                       $applicationRepository,
-                                ApplicationCamperRepositoryInterface                 $applicationCamperRepository,
-                                ApplicationOverflownPurchasableItemsRemoverInterface $applicationOverflownPurchasableItemsRemover,
-                                DataTransferRegistryInterface                        $dataTransfer)
+    private EventDispatcherInterface $eventDispatcher;
+
+    public function __construct(ApplicationRepositoryInterface       $applicationRepository,
+                                ApplicationCamperRepositoryInterface $applicationCamperRepository,
+                                DataTransferRegistryInterface        $dataTransfer,
+                                EventDispatcherInterface             $eventDispatcher)
     {
         $this->applicationRepository = $applicationRepository;
         $this->applicationCamperRepository = $applicationCamperRepository;
-        $this->applicationOverflownPurchasableItemsRemover = $applicationOverflownPurchasableItemsRemover;
         $this->dataTransfer = $dataTransfer;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 600)]
@@ -42,7 +43,17 @@ class ApplicationStepOneUpdateSubscriber
     public function onUpdateFixOverflownPurchasableItems(ApplicationStepOneUpdateEvent $event): void
     {
         $application = $event->getApplication();
-        $this->applicationOverflownPurchasableItemsRemover->removeOverflownPurchasableItems($application);
+        $overflownPurchasableItems = $application->getOverflownPurchasableItems();
+
+        foreach ($overflownPurchasableItems as $overflownPurchasableItem)
+        {
+            foreach ($overflownPurchasableItem->getApplicationPurchasableItemInstances() as $instance)
+            {
+                $instanceDeleteEvent = new ApplicationPurchasableItemInstanceDeleteEvent($instance);
+                $instanceDeleteEvent->setIsFlush(false);
+                $this->eventDispatcher->dispatch($instanceDeleteEvent, $instanceDeleteEvent::NAME);
+            }
+        }
     }
 
     #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 400)]
@@ -66,10 +77,10 @@ class ApplicationStepOneUpdateSubscriber
     }
 
     #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 200)]
-    public function onUpdateCacheFullPrice(ApplicationStepOneUpdateEvent $event): void
+    public function onUpdateCacheAllFullPrices(ApplicationStepOneUpdateEvent $event): void
     {
         $application = $event->getApplication();
-        $application->cacheFullPrice();
+        $application->cacheAllFullPrices();
     }
 
     #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 100)]

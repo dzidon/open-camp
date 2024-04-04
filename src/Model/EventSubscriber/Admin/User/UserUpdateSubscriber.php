@@ -13,8 +13,8 @@ class UserUpdateSubscriber
 
     private DataTransferRegistryInterface $dataTransfer;
 
-    public function __construct(UserRepositoryInterface $repository,
-                                DataTransferRegistryInterface       $dataTransfer)
+    public function __construct(UserRepositoryInterface       $repository,
+                                DataTransferRegistryInterface $dataTransfer)
     {
         $this->repository = $repository;
         $this->dataTransfer = $dataTransfer;

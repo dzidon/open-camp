@@ -550,6 +550,29 @@
     </button>
 {% endblock %}
 
+{# Application payment search #}
+{% block admin_application_payment_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-4">
+            {{ form_row(form.type) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.isOnline) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.application_payment_search.button'|trans }}
+    </button>
+{% endblock %}
+
 {# Application camper search #}
 {% block admin_application_camper_search_widget %}
     {{ form_errors(form) }}

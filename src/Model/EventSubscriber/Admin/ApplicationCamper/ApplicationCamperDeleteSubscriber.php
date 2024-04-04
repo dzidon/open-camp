@@ -20,7 +20,7 @@ class ApplicationCamperDeleteSubscriber
         $this->applicationAttachmentFilesystem = $applicationAttachmentFilesystem;
     }
 
-    #[AsEventListener(event: ApplicationCamperDeleteEvent::NAME, priority: 600)]
+    #[AsEventListener(event: ApplicationCamperDeleteEvent::NAME, priority: 700)]
     public function onDeleteRemoveAttachments(ApplicationCamperDeleteEvent $event): void
     {
         $applicationCamper = $event->getApplicationCamper();
@@ -32,19 +32,19 @@ class ApplicationCamperDeleteSubscriber
         }
     }
 
-    #[AsEventListener(event: ApplicationCamperDeleteEvent::NAME, priority: 500)]
-    public function onDeleteRemoveEntity(ApplicationCamperDeleteEvent $event): void
-    {
-        $entity = $event->getApplicationCamper();
-        $isFlush = $event->isFlush();
-        $this->repository->removeApplicationCamper($entity, $isFlush);
-    }
-
-    #[AsEventListener(event: ApplicationCamperDeleteEvent::NAME, priority: 100)]
+    #[AsEventListener(event: ApplicationCamperDeleteEvent::NAME, priority: 300)]
     public function onDeleteRemoveFromApplicationCollection(ApplicationCamperDeleteEvent $event): void
     {
         $entity = $event->getApplicationCamper();
         $application = $entity->getApplication();
         $application->removeApplicationCamper($entity);
+    }
+
+    #[AsEventListener(event: ApplicationCamperDeleteEvent::NAME, priority: 100)]
+    public function onDeleteRemoveEntity(ApplicationCamperDeleteEvent $event): void
+    {
+        $entity = $event->getApplicationCamper();
+        $isFlush = $event->isFlush();
+        $this->repository->removeApplicationCamper($entity, $isFlush);
     }
 }

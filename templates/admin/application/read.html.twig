@@ -37,17 +37,17 @@
 
                     <div class="row mb-3">
                         <div class="col-12 col-sm-3">
-                            <strong>{{ 'entity_attribute.application.are_attachments_uploaded'|trans }}:</strong>
+                            <strong>{{ 'entity_attribute.application.is_awaiting_attachments_required_later'|trans }}:</strong>
                         </div>
 
                         <div class="col-12 col-sm-9">
-                            {% if application.areAttachmentsRequiredLaterMissing %}
+                            {% if application.isAwaitingUploadOfAttachmentsRequiredLater %}
                                 <span class="badge badge-danger">
-                                    {{ 'bool.no'|trans }}
+                                    {{ 'bool.yes'|trans }}
                                 </span>
                             {% else %}
                                 <span class="badge badge-success">
-                                    {{ 'bool.yes'|trans }}
+                                    {{ 'bool.no'|trans }}
                                 </span>
                             {% endif %}
                         </div>
@@ -80,7 +80,7 @@
                         <div class="col-12 col-sm-3">
                             <strong>
                                 {{ 'entity_attribute.application.is_awaiting_payment_rest'|trans }}
-                                ({{ application.fullPriceWithoutDeposit|format_currency(application.currency) }}):
+                                ({{ application.fullRest|format_currency(application.currency) }}):
                             </strong>
                         </div>
 

@@ -1,0 +1,21 @@
+{% extends "admin/application/base_update.html.twig" %}
+
+{% block application_update_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-8 col-xl-5">
+                            <p>
+                                {{ 'crud.confirmation.application_payment_refund'|trans }}
+                            </p>
+
+                            {{ form(form_refund) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

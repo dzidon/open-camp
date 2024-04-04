@@ -61,7 +61,7 @@
                                             <div>
                                                 <a href="{{ payment_url_rest }}" class="btn btn-primary">
                                                     {{ 'application.completed_screen.payment.button_online_pay_rest'|trans({
-                                                        price: application.fullPriceWithoutDeposit|format_currency(application.currency)
+                                                        price: application.fullRest|format_currency(application.currency)
                                                     }) }}
                                                 </a>
                                             </div>

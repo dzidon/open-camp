@@ -97,6 +97,12 @@ class Application
     private ?DateTimeImmutable $depositUntil;
 
     #[ORM\Column(type: Types::FLOAT)]
+    private float $fullDepositCached = 0.0;
+
+    #[ORM\Column(type: Types::FLOAT)]
+    private float $fullRestCached = 0.0;
+
+    #[ORM\Column(type: Types::FLOAT)]
     private float $fullPriceCached = 0.0;
 
     #[ORM\Column(length: 3)]
@@ -603,7 +609,7 @@ class Application
         return $fullDeposit;
     }
 
-    public function getFullPriceWithoutDeposit(): float
+    public function getFullRest(): float
     {
         return $this->getFullPrice() - $this->getFullDeposit();
     }
@@ -638,6 +644,30 @@ class Application
         return $this->depositUntil;
     }
 
+    public function getFullDepositCached(): float
+    {
+        return $this->fullDepositCached;
+    }
+
+    public function cacheFullDeposit(): self
+    {
+        $this->fullDepositCached = $this->getFullDeposit();
+
+        return $this;
+    }
+
+    public function getFullRestCached(): float
+    {
+        return $this->fullRestCached;
+    }
+
+    public function cacheFullRest(): self
+    {
+        $this->fullRestCached = $this->getFullRest();
+
+        return $this;
+    }
+    
     public function getFullPriceCached(): float
     {
         return $this->fullPriceCached;
@@ -646,6 +676,15 @@ class Application
     public function cacheFullPrice(): self
     {
         $this->fullPriceCached = $this->getFullPrice();
+
+        return $this;
+    }
+
+    public function cacheAllFullPrices(): self
+    {
+        $this->cacheFullDeposit();
+        $this->cacheFullRest();
+        $this->cacheFullPrice();
 
         return $this;
     }
@@ -949,6 +988,44 @@ class Application
         return $this;
     }
 
+    public function getPurchasableItemInstancesTotalAmount(): int
+    {
+        $totalAmount = 0.0;
+
+        foreach ($this->applicationPurchasableItems as $applicationPurchasableItem)
+        {
+            $totalAmount += $applicationPurchasableItem->getInstancesTotalAmount();
+        }
+
+        return $totalAmount;
+    }
+
+    /**
+     * @return ApplicationPurchasableItem[]
+     */
+    public function getOverflownPurchasableItems(): array
+    {
+        $overflownApplicationPurchasableItem = [];
+
+        foreach ($this->applicationPurchasableItems as $applicationPurchasableItem)
+        {
+            if ($applicationPurchasableItem->isGlobal())
+            {
+                continue;
+            }
+
+            $calculatedMaxAmount = $applicationPurchasableItem->getCalculatedMaxAmount();
+            $totalAmount = $applicationPurchasableItem->getInstancesTotalAmount();
+
+            if ($totalAmount > $calculatedMaxAmount)
+            {
+                $overflownApplicationPurchasableItem[] = $applicationPurchasableItem;
+            }
+        }
+
+        return $overflownApplicationPurchasableItem;
+    }
+
     /**
      * @return ApplicationPayment[]
      */
@@ -987,18 +1064,6 @@ class Application
         $this->applicationPayments->removeElement($applicationPayment);
 
         return $this;
-    }
-
-    public function getPurchasableItemInstancesTotalAmount(): int
-    {
-        $totalAmount = 0.0;
-
-        foreach ($this->applicationPurchasableItems as $applicationPurchasableItem)
-        {
-            $totalAmount += $applicationPurchasableItem->getInstancesTotalAmount();
-        }
-
-        return $totalAmount;
     }
 
     public function isCompleted(): bool
@@ -1148,7 +1213,7 @@ class Application
 
     public function getPendingRestApplicationPayment(): ?ApplicationPayment
     {
-        $restAmount = $this->getFullPriceWithoutDeposit();
+        $restAmount = $this->getFullRest();
 
         foreach ($this->applicationPayments as $applicationPayment)
         {
@@ -1180,7 +1245,7 @@ class Application
 
     public function canCreateNewRestPayment(): bool
     {
-        if ($this->getFullPriceWithoutDeposit() <= 0.0)
+        if ($this->getFullRest() <= 0.0)
         {
             return false;
         }
@@ -1200,7 +1265,7 @@ class Application
 
     public function isRestPaid(): bool
     {
-        $restAmount = $this->getFullPriceWithoutDeposit();
+        $restAmount = $this->getFullRest();
 
         foreach ($this->applicationPayments as $applicationPayment)
         {
@@ -1315,7 +1380,7 @@ class Application
         }
         else if ($type === ApplicationPaymentTypeEnum::REST)
         {
-            if ($this->getFullPriceWithoutDeposit() <= 0.0)
+            if ($this->getFullRest() <= 0.0)
             {
                 return false;
             }

@@ -1,0 +1,154 @@
+{% extends "admin/application/base_update.html.twig" %}
+
+{% block application_update_content %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <a data-toggle="collapse" href="#search-content" role="button">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-search mr-2"></i>
+                            {{ 'search.label'|trans }}
+                        </h3>
+                    </div>
+                </a>
+
+                <div class="card-body collapse {% if is_search_invalid %} show {% endif %}" id="search-content">
+                    {{ form(form_search) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if is_search_invalid %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-outline card-danger">
+                    <div class="card-header">
+                        <span>
+                            {{ 'search.error.invalid_filter'|trans }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header d-flex w-100 align-items-center">
+                    <h3 class="card-title">
+                        {% if paginator.totalItems > 0 %}
+                            {{ 'search.results'|trans }} ({{ 'search.total'|trans }} {{ paginator.totalItems }})
+                        {% else %}
+                            {{ 'search.error.no_results'|trans }}
+                        {% endif %}
+                    </h3>
+
+                    <a href="{{ path('admin_application_payment_create', {id: application.id}) }}"
+                       class="btn btn-success ml-3"
+                    >
+                        {{ 'crud.action.common.create'|trans }}
+                    </a>
+                </div>
+
+                {% if paginator.totalItems > 0 %}
+                    <div class="card-body table-responsive p-0">
+                        <table class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'entity_attribute.application_payment.type'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application_payment.is_online'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application_payment.amount'|trans }}</th>
+                                    <th>{{ 'entity_attribute.application_payment.state'|trans }}</th>
+                                    <th class="cell-25">{{ 'search.item_action'|trans }}</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% for application_payment in paginator.currentPageItems %}
+                                    {% set application_currency = application_payment.application.currency %}
+
+                                    <tr class="align-items-center">
+                                        <td class="align-middle">
+                                            <span>
+                                                {{ ('application_payment_type.' ~ application_payment.type.value)|trans }}
+                                            </span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if application_payment.isOnline %}
+                                                {{ 'bool.yes'|trans }}
+                                            {% else %}
+                                                {{ 'bool.no'|trans }}
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {{ application_payment.amount|format_currency(application_currency) }}
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if application_payment.isPaid %}
+                                                <span class="badge badge-success">
+                                                    {{ 'payment_state.paid'|trans }}
+                                                </span>
+                                            {% elseif application_payment.isCancelled %}
+                                                <span class="badge badge-danger">
+                                                    {{ 'payment_state.cancelled'|trans }}
+                                                </span>
+                                            {% elseif application_payment.isRefunded %}
+                                                <span class="badge badge-secondary">
+                                                    {{ 'payment_state.refunded'|trans }}
+                                                </span>
+                                            {% else %}
+                                                <span class="badge badge-warning">
+                                                    {{ 'payment_state.pending'|trans }}
+                                                </span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="align-middle cell-25">
+                                            <a href="{{ path('admin_application_payment_read', {id: application_payment.id}) }}"
+                                               class="btn btn-secondary"
+                                            >
+                                                {{ 'crud.action.common.read'|trans }}
+                                            </a>
+
+                                            {% if application_payment.isOnline and application_payment.paid %}
+                                                <a href="{{ path('admin_application_payment_refund', {id: application_payment.id}) }}"
+                                                   class="btn btn-warning"
+                                                >
+                                                    {{ 'crud.action.application_payment.refund'|trans }}
+                                                </a>
+                                            {% endif %}
+
+                                            {% if not application_payment.isOnline %}
+                                                <a href="{{ path('admin_application_payment_update', {id: application_payment.id}) }}"
+                                                   class="btn btn-primary"
+                                                >
+                                                    {{ 'crud.action.common.update'|trans }}
+                                                </a>
+
+                                                <a href="{{ path('admin_application_payment_delete', {id: application_payment.id}) }}"
+                                                   class="btn btn-danger"
+                                                >
+                                                    {{ 'crud.action.common.delete'|trans }}
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-footer clearfix">
+                        {{ menu(pagination_menu) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

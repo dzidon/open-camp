@@ -2,7 +2,6 @@
 
 namespace App\Model\Service\Application;
 
-use App\Library\Data\User\ApplicationImportToUserData;
 use App\Model\Entity\Application;
 use App\Model\Entity\User;
 
@@ -19,12 +18,4 @@ interface ApplicationToUserImporterInterface
      * @return bool
      */
     public function canImportApplicationToUser(Application $application, User $user): bool;
-
-    /**
-     * Imports data from an application to a user.
-     *
-     * @param ApplicationImportToUserData $data
-     * @return void
-     */
-    public function importApplicationDataToUser(ApplicationImportToUserData $data): void;
 }

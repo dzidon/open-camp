@@ -46,11 +46,10 @@ class ApplicationContactRepository extends AbstractRepository implements Applica
     public function findOneById(UuidV4 $id): ?ApplicationContact
     {
         return $this->createQueryBuilder('applicationContact')
-            ->select('applicationContact, application, applicationContactOther')
+            ->select('applicationContact, application, campDate, camp')
             ->leftJoin('applicationContact.application', 'application')
             ->leftJoin('application.campDate', 'campDate')
             ->leftJoin('campDate.camp', 'camp')
-            ->leftJoin('application.applicationContacts', 'applicationContactOther')
             ->andWhere('applicationContact.id = :id')
             ->setParameter('id', $id, UuidType::NAME)
             ->getQuery()
