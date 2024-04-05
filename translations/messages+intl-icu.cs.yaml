@@ -189,6 +189,10 @@ application:
 
     admin:
         number_of_pending: 'Nevyřízených přihlášek'
+        number_of_accepted_applications: 'Počet schválených přihlášek'
+        number_of_accepted_application_campers: 'Počet schválených táborníků'
+        total_revenue: 'Celkový příjem'
+        accepted_campers: 'Schválení táborníci'
         show_all_applications: 'Procházet všechny přihlášky'
         view_invoice: 'Zobrazit fakturu'
         attachment_not_uploaded: 'Nenahráno'
@@ -200,12 +204,6 @@ application:
             attachments_uploaded: 'Přílohy nahrány'
             paid: 'Zaplacena'
             settled: 'Vypořádána'
-
-        summary:
-            total_revenue: 'Celkový příjem'
-            number_of_accepted_applications: 'Počet schválených přihlášek'
-            number_of_accepted_application_campers: 'Počet schválených táborníků'
-            accepted_campers: 'Schválení táborníci'
 
     summary:
         item_instance_for_camper: 'pro'

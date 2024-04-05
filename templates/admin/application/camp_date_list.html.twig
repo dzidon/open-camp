@@ -56,6 +56,7 @@
                                 <tr>
                                     <th>{{ 'entity_attribute.camp_date.start_at'|trans }}</th>
                                     <th>{{ 'entity_attribute.camp_date.end_at'|trans }}</th>
+                                    <th>{{ 'application.admin.number_of_accepted_application_campers'|trans }}</th>
                                     <th>{{ 'application.admin.number_of_pending'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
                                 </tr>
@@ -71,6 +72,7 @@
 
                                 {% for camp_date in paginator.currentPageItems %}
                                     {% set number_of_pending_applications = search_result.numberOfPendingApplications(camp_date) %}
+                                    {% set number_of_accepted_application_campers = search_result.numberOfAcceptedApplicationCampers(camp_date) %}
                                     {% set pending_badge_color = "badge-secondary" %}
 
                                     {% if number_of_pending_applications > 0 %}
@@ -87,6 +89,12 @@
                                         <td class="align-middle">
                                             <span>
                                                 {{ camp_date.endAt|date(date_time_format) }}
+                                            </span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <span>
+                                                {{ number_of_accepted_application_campers }} / {{ camp_date.capacity }}
                                             </span>
                                         </td>
 

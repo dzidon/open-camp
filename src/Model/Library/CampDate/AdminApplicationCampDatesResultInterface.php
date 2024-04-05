@@ -20,4 +20,10 @@ interface AdminApplicationCampDatesResultInterface
      * @return int|null If null is returned, the number of pending applications is not known for the given camp date.
      */
     public function getNumberOfPendingApplications(string|CampDate $campDate): ?int;
+
+    /**
+     * @param string|CampDate $campDate
+     * @return int|null If null is returned, the number of accepted application campers is not known for the given camp date.
+     */
+    public function getNumberOfAcceptedApplicationCampers(string|CampDate $campDate): ?int;
 }

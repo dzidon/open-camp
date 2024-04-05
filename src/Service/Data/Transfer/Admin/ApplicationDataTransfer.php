@@ -57,6 +57,7 @@ class ApplicationDataTransfer implements DataTransferInterface
         $applicationData->setNote($application->getNote());
         $applicationData->setCustomerChannel($application->getCustomerChannel());
         $applicationData->setCustomerChannelOther($application->getCustomerChannelOther());
+        $applicationData->setIsAccepted($application->isAccepted());
 
         $billingData = $applicationData->getBillingData();
         $this->dataTransfer->fillData($billingData, $application);

@@ -420,7 +420,36 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
             $numbersOfPendingApplications[$campDateIdString] = $data['numberOfPendingApplications'];
         }
 
-        return new AdminApplicationCampDatesResult($paginator, $numbersOfPendingApplications);
+        // number of accepted application campers
+
+        $queryResult = $this->createQueryBuilder('campDate')
+            ->select('campDate.id, COUNT(applicationCamper.id) AS numberOfAcceptedApplicationCampers')
+            ->leftJoin(Application::class, 'application', 'WITH', '
+                campDate.id = application.campDate AND
+                application.isDraft = FALSE AND
+                application.isAccepted = TRUE
+            ')
+            ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', '
+                application.id = applicationCamper.application
+            ')
+            ->andWhere('campDate.id IN (:ids)')
+            ->setParameter('ids', $campDateBinaryIds)
+            ->groupBy('campDate.id')
+            ->getQuery()
+            ->getArrayResult()
+        ;
+
+        $numberOfAcceptedApplicationCampers = [];
+
+        foreach ($queryResult as $data)
+        {
+            /** @var UuidV4 $campDateId */
+            $campDateId = $data['id'];
+            $campDateIdString = $campDateId->toRfc4122();
+            $numberOfAcceptedApplicationCampers[$campDateIdString] = $data['numberOfAcceptedApplicationCampers'];
+        }
+
+        return new AdminApplicationCampDatesResult($paginator, $numbersOfPendingApplications, $numberOfAcceptedApplicationCampers);
     }
 
     private function loadCampDateFormFields(null|array|CampDate $campDates): void

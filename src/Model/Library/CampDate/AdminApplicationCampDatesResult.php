@@ -15,7 +15,9 @@ class AdminApplicationCampDatesResult implements AdminApplicationCampDatesResult
 
     private array $numbersOfPendingApplications = [];
 
-    public function __construct(PaginatorInterface $paginator, array $numbersOfPendingApplications)
+    private array $numbersOfAcceptedApplicationCampers = [];
+
+    public function __construct(PaginatorInterface $paginator, array $numbersOfPendingApplications = [], array $numbersOfAcceptedApplicationCampers = [])
     {
         $campDateIdStrings = [];
 
@@ -60,6 +62,27 @@ class AdminApplicationCampDatesResult implements AdminApplicationCampDatesResult
 
             $this->numbersOfPendingApplications[$campDateIdString] = $numberOfPendingApplications;
         }
+
+        // numbers of accepted application campers
+
+        foreach ($numbersOfAcceptedApplicationCampers as $campDateIdString => $numberOfAcceptedApplicationCampers)
+        {
+            if (!array_key_exists($campDateIdString, $campDateIdStrings))
+            {
+                throw new LogicException(
+                    sprintf('Number of accepted application campers for camp date ID "%s" passed to "%s" is not valid, there is no camp date with the given ID in the paginator result.', $campDateIdString, $this::class)
+                );
+            }
+
+            if (!is_int($numberOfAcceptedApplicationCampers))
+            {
+                throw new LogicException(
+                    sprintf('Number of accepted application campers for camp date ID "%s" passed to "%s" is not valid, the value must be an integer.', $campDateIdString, $this::class)
+                );
+            }
+
+            $this->numbersOfAcceptedApplicationCampers[$campDateIdString] = $numberOfAcceptedApplicationCampers;
+        }
     }
 
     /**
@@ -91,5 +114,28 @@ class AdminApplicationCampDatesResult implements AdminApplicationCampDatesResult
         }
 
         return $this->numbersOfPendingApplications[$campDateIdString];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getNumberOfAcceptedApplicationCampers(string|CampDate $campDate): ?int
+    {
+        $campDateIdString = $campDate;
+
+        if (!is_string($campDateIdString))
+        {
+            $campDateIdString = $campDate
+                ->getId()
+                ->toRfc4122()
+            ;
+        }
+
+        if (!array_key_exists($campDateIdString, $this->numbersOfAcceptedApplicationCampers))
+        {
+            return null;
+        }
+
+        return $this->numbersOfAcceptedApplicationCampers[$campDateIdString];
     }
 }
