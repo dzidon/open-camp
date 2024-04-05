@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ApplicationCampersCount]
 class ApplicationStepOneData
 {
-    private ?CampDate $campDate;
+    private CampDate $campDate;
 
     private bool $isEuBusinessDataEnabled;
 
@@ -50,11 +50,11 @@ class ApplicationStepOneData
     #[Assert\Valid]
     private array $applicationFormFieldValuesData = [];
 
-    public function __construct(bool      $isEuBusinessDataEnabled,
-                                bool      $isNationalIdentifierEnabled,
-                                string    $currency,
-                                float     $tax,
-                                ?CampDate $campDate = null)
+    public function __construct(bool     $isEuBusinessDataEnabled,
+                                bool     $isNationalIdentifierEnabled,
+                                string   $currency,
+                                float    $tax,
+                                CampDate $campDate)
     {
         $this->billingData = new BillingData(true, $isEuBusinessDataEnabled);
         $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
@@ -64,7 +64,7 @@ class ApplicationStepOneData
         $this->campDate = $campDate;
     }
 
-    public function getCampDate(): ?CampDate
+    public function getCampDate(): CampDate
     {
         return $this->campDate;
     }

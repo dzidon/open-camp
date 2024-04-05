@@ -69,6 +69,15 @@ interface CampDateRepositoryInterface
     public function isCampDateOpenForApplications(CampDate $campDate): bool;
 
     /**
+     * Tests if the given number of new campers exceeds capacity of the given camp date.
+     *
+     * @param CampDate $campDate
+     * @param int $numberOfNewCampers
+     * @return int How many more campers than capacity?
+     */
+    public function willNumberOfNewCampersExceedCampDateCapacity(CampDate $campDate, int $numberOfNewCampers): int;
+
+    /**
      * Returns admin camp search paginator.
      *
      * @param CampDateSearchData $data

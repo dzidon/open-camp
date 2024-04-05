@@ -17,7 +17,7 @@ invalid_file_extension: 'Tento formát není povolen. Povolené formáty: {exten
 file_too_large: 'Soubor je příliš velký. Maximální povolená velikost je {limit} {suffix}.'
 application_purchasable_item_amount: 'Maximální množství této položky je {max_amount}, ale nyní se snažíte koupit celkem {current_amount}.'
 discount_sibling_interval_not_in_config: 'Musíte vybrat platnou slevu.'
-application_campers_count: 'Omlouváme se, ale vámi zadaný počet táborníků převyšuje kapacitu o {capacity_exceeded_over}.'
+application_campers_count: 'Omlouváme se, ale vámi zadaný počet táborníků převyšuje kapacitu termínu o {capacity_exceeded_by}.'
 
 unique_elements_in_array: 'Tato kolekce by měla obsahovat unikátní prvky.'
 unique_user_email: 'Už existuje uživatel s tímto e-mailem.'

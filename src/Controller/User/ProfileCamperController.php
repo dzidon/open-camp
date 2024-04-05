@@ -80,9 +80,7 @@ class ProfileCamperController extends AbstractController
         $isNationalIdentifierEnabled = $this->getParameter('app.national_identifier');
         $camperData = new CamperData($isNationalIdentifierEnabled);
 
-        $form = $this->createForm(CamperType::class, $camperData, [
-            'is_national_identifier_enabled' => $isNationalIdentifierEnabled,
-        ]);
+        $form = $this->createForm(CamperType::class, $camperData);
         $form->add('submit', SubmitType::class, ['label' => 'form.common.camper.button']);
         $form->handleRequest($request);
 
@@ -128,9 +126,7 @@ class ProfileCamperController extends AbstractController
         $camperData = new CamperData($isNationalIdentifierEnabled);
         $dataTransfer->fillData($camperData, $camper);
 
-        $form = $this->createForm(CamperType::class, $camperData, [
-            'is_national_identifier_enabled' => $isNationalIdentifierEnabled,
-        ]);
+        $form = $this->createForm(CamperType::class, $camperData);
         $form->add('submit', SubmitType::class, ['label' => 'form.common.camper.button']);
         $form->handleRequest($request);
 

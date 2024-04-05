@@ -13,12 +13,10 @@ use Symfony\Component\Validator\Constraint;
 class ApplicationCampersCount extends Constraint
 {
     public string $message = 'application_campers_count';
-    public string $applicationCamperIdProperty = 'applicationCamperId';
     public string $applicationCampersDataProperty = 'applicationCampersData';
     public string $campDateProperty = 'campDate';
 
     public function __construct(string $message = null,
-                                string $applicationCamperIdProperty = null,
                                 string $campDateProperty = null,
                                 string $applicationCampersDataProperty = null,
                                 array  $groups = null,
@@ -27,7 +25,6 @@ class ApplicationCampersCount extends Constraint
         parent::__construct([], $groups, $payload);
 
         $this->message = $message ?? $this->message;
-        $this->applicationCamperIdProperty = $applicationCamperIdProperty ?? $this->applicationCamperIdProperty;
         $this->campDateProperty = $campDateProperty ?? $this->campDateProperty;
         $this->applicationCampersDataProperty = $applicationCampersDataProperty ?? $this->applicationCampersDataProperty;
     }

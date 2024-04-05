@@ -241,7 +241,7 @@ class ApplicationController extends AbstractController
         $applicationPurchasableItemsData = new ApplicationStepTwoData(
             $application->getCurrency(),
             $application->getDiscountSiblingsConfig(),
-            count($application->getApplicationCampers())
+            count($application->getApplicationCampers()),
         );
         $dataTransfer->fillData($applicationPurchasableItemsData, $application);
 
@@ -281,7 +281,9 @@ class ApplicationController extends AbstractController
     }
 
     #[Route('/application/{applicationId}/step-three', name: 'user_application_step_three')]
-    public function stepThree(UuidV4 $applicationId, Request $request): Response
+    public function stepThree(CampDateRepositoryInterface $campDateRepository,
+                              UuidV4                      $applicationId,
+                              Request                     $request): Response
     {
         $application = $this->findApplicationOrThrow404($applicationId);
         $this->assertApplicationDraftAvailability($application);
@@ -297,7 +299,20 @@ class ApplicationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid())
         {
-            if ($application->canBeCompleted())
+            $numberOfNewApplicationCampers = count($application->getApplicationCampers());
+            $capacityExceededBy = $campDateRepository->willNumberOfNewCampersExceedCampDateCapacity($campDate, $numberOfNewApplicationCampers);
+
+            if (!$application->canBeCompleted())
+            {
+                $this->addTransFlash('failure', 'application.cannot_be_completed');
+            }
+            else if ($capacityExceededBy > 0)
+            {
+                $this->addTransFlash('failure', 'application_campers_count', [
+                    'capacity_exceeded_by' => $capacityExceededBy,
+                ], 'validators');
+            }
+            else
             {
                 $response = $this->redirectToRoute('user_application_completed', [
                     'applicationId' => $applicationId,
@@ -312,10 +327,6 @@ class ApplicationController extends AbstractController
                 $this->addTransFlash('success', 'application.completed');
 
                 return $response;
-            }
-            else
-            {
-                $this->addTransFlash('failure', 'application.cannot_be_completed');
             }
         }
 

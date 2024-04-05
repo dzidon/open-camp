@@ -180,6 +180,38 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
     /**
      * @inheritDoc
      */
+    public function willNumberOfNewCampersExceedCampDateCapacity(CampDate $campDate, int $numberOfNewCampers): int
+    {
+        if ($campDate->isOpenAboveCapacity())
+        {
+            return 0;
+        }
+
+        $numberOfCampersThatOccupySpace = $this->createQueryBuilder('campDate')
+            ->select('COUNT(applicationCamper.id)')
+            ->leftJoin(Application::class, 'application', 'WITH', '
+                campDate.id = application.campDate
+            ')
+            ->leftJoin(ApplicationCamper::class, 'applicationCamper', 'WITH', '
+                application.id = applicationCamper.application
+            ')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('(application.isAccepted IS NULL OR application.isAccepted = TRUE)')
+            ->andWhere('campDate.id = :campDateId')
+            ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        $capacity = $campDate->getCapacity();
+        $willExceedBy = ($numberOfCampersThatOccupySpace + $numberOfNewCampers) - $capacity;
+
+        return max(0, $willExceedBy);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findThoseThatCollideWithInterval(?Camp $camp, DateTimeInterface $startAt, DateTimeInterface $endAt): array
     {
         $queryBuilder = $this->createQueryBuilder('campDate')

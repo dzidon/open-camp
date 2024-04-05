@@ -194,12 +194,12 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
             ->select('application.id')
             ->leftJoin('application.campDate', 'campDate')
             ->leftJoin(Application::class, 'otherApplication', 'WITH', '
-                campDate.id = otherApplication.campDate AND 
+                campDate.id = otherApplication.campDate AND
                 otherApplication.isDraft = FALSE AND
                 (otherApplication.isAccepted IS NULL OR otherApplication.isAccepted = TRUE)
             ')
             ->leftJoin(ApplicationCamper::class, 'otherApplicationCamper', 'WITH', '
-                application.id = otherApplicationCamper.application
+                otherApplication.id = otherApplicationCamper.application
             ')
             ->andWhere('application.campDate IS NOT NULL')
             ->andWhere('application.isDraft = TRUE')
