@@ -13,7 +13,7 @@ runtime:
 variables:
     env:
         APP_ENV: 'prod'
-        APP_DEBUG: 0
+        APP_DEBUG: 1
 
     php:
         opcache.preload: config/preload.php
