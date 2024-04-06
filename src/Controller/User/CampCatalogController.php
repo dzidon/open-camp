@@ -144,7 +144,7 @@ class CampCatalogController extends AbstractController
 
     private function userCanViewHiddenCamps(): bool
     {
-        return $this->isGranted('camp_create') || $this->isGranted('camp_update');
+        return $this->isGranted('camp_read') || $this->isGranted('camp_create') || $this->isGranted('camp_update');
     }
 
     private function findCampCategoryOrThrow404(string $path, bool $showHiddenCamps): CampCategory

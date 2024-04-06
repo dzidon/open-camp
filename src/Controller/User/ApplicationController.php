@@ -405,7 +405,7 @@ class ApplicationController extends AbstractController
 
         if ($camp->isHidden() || $campDate->isHidden())
         {
-            if ($this->isGranted('camp_create') || $this->isGranted('camp_update'))
+            if ($this->userCanViewHiddenCamps())
             {
                 $this->addTransFlash('warning', 'camp_catalog.hidden_camp_date_shown_for_admin');
             }
@@ -440,7 +440,7 @@ class ApplicationController extends AbstractController
 
         if ($camp->isHidden() || $campDate->isHidden())
         {
-            if ($this->isGranted('camp_create') || $this->isGranted('camp_update'))
+            if ($this->userCanViewHiddenCamps())
             {
                 $this->addTransFlash('warning', 'camp_catalog.hidden_camp_date_shown_for_admin');
             }
@@ -458,6 +458,11 @@ class ApplicationController extends AbstractController
         {
             throw $this->createNotFoundException();
         }
+    }
+
+    private function userCanViewHiddenCamps(): bool
+    {
+        return $this->isGranted('camp_read') || $this->isGranted('camp_create') || $this->isGranted('camp_update');
     }
 
     private function createCampDetailRedirectException(Camp $camp): HttpException

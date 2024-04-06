@@ -210,8 +210,8 @@ application:
         item_instance_for_camper: 'pro'
         discount_recurring_camper: 'Sleva pro vracejícího se táborníka'
         discount_siblings: 'Sleva pro sourozence'
-        this_is_where_i_get_on: 'zde nasednu'
-        this_is_where_i_get_off: 'zde vysednu'
+        this_is_where_i_get_on: 'doprava na tábor'
+        this_is_where_i_get_off: 'doprava z tábora'
         camper_total_price: 'Celkem za táborníka'
         purchasable_item_total_price: 'Celkem za položky'
         total_price: 'Celkem'
@@ -276,8 +276,8 @@ application:
             instance_for_camper: 'pro'
 
         trip_location:
-            this_is_where_i_get_on: 'zde nasednu'
-            this_is_where_i_get_off: 'zde vysednu'
+            this_is_where_i_get_on: 'doprava na tábor'
+            this_is_where_i_get_off: 'doprava z tábora'
 
         discount:
             recurring_camper: 'Sleva za vracejícího se táborníka'
