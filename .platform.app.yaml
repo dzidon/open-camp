@@ -56,7 +56,7 @@ mounts:
     "/var": { source: local, source_path: var }
     "/public/files/dynamic": "shared:files/public/files/dynamic"
     "/private/files/dynamic": "shared:files/private/files/dynamic"
-    "/vendor/mpdf/mpdf/src/Config/../../tmp/mpdf": { source: tmp }
+    "/vendor/mpdf/mpdf/tmp/mpdf": { source: tmp }
 
 hooks:
     build: |
