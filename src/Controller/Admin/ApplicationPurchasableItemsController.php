@@ -38,9 +38,14 @@ class ApplicationPurchasableItemsController extends AbstractController
         $application = $this->findApplicationOrThrow404($id);
         $this->assertIsGrantedAccess($application);
 
-        $emptyData = $applicationPurchasableItemInstanceDataFactory->getDataCallableArrayForAdminModule($application);
+        if (empty($application->getApplicationPurchasableItems()))
+        {
+            throw $this->createNotFoundException();
+        }
+
         $applicationPurchasableItemsData = new ApplicationPurchasableItemsData();
         $dataTransfer->fillData($applicationPurchasableItemsData, $application);
+        $emptyData = $applicationPurchasableItemInstanceDataFactory->getDataCallableArrayForAdminModule($application);
 
         $form = $this->createForm(ApplicationPurchasableItemsType::class, $applicationPurchasableItemsData, [
             'instances_empty_data' => $emptyData,

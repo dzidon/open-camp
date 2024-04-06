@@ -182,19 +182,10 @@
                                                     </a>
                                                 {% endif %}
 
-                                                {% if granted_update_or_state_update_or_guide %}
-                                                    <a href="{{ path('admin_application_update', {id: application.id}) }}"
-                                                       class="btn btn-primary"
-                                                    >
-                                                        {{ 'crud.action.common.update'|trans }}
-                                                    </a>
-                                                {% elseif granted_payments_or_guide %}
-                                                    <a href=""
-                                                       class="btn btn-primary"
-                                                    >
-                                                        {{ 'entity.application_payment.plural'|trans }}
-                                                    </a>
-                                                {% endif %}
+                                                {{ include('_fragment/_application/_admin_application_edit_button.html.twig', {
+                                                    granted_update_or_state_update: granted_update_or_state_update_or_guide,
+                                                    granted_payments: granted_payments_or_guide
+                                                }) }}
 
                                                 {% if granted_delete %}
                                                     <a href="{{ path('admin_application_delete', {id: application.id}) }}"

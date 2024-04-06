@@ -11,19 +11,21 @@
                     }) }}
                 </div>
 
-                <div class="card-footer">
-                    <a href="{{ path('admin_application_camper_update', {id: application_camper.id}) }}"
-                       class="btn btn-primary mr-2"
-                    >
-                        {{ 'crud.action.common.update'|trans }}
-                    </a>
+                {% if is_granted('application_update') or is_granted('guide_access_update', application) %}
+                    <div class="card-footer">
+                        <a href="{{ path('admin_application_camper_update', {id: application_camper.id}) }}"
+                           class="btn btn-primary mr-2"
+                        >
+                            {{ 'crud.action.common.update'|trans }}
+                        </a>
 
-                    <a href="{{ path('admin_application_camper_delete', {id: application_camper.id}) }}"
-                       class="btn btn-danger"
-                    >
-                        {{ 'crud.action.common.delete'|trans }}
-                    </a>
-                </div>
+                        <a href="{{ path('admin_application_camper_delete', {id: application_camper.id}) }}"
+                           class="btn btn-danger"
+                        >
+                            {{ 'crud.action.common.delete'|trans }}
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

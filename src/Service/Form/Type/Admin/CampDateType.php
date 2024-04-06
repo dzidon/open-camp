@@ -215,6 +215,7 @@ class CampDateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'                  => CampDateData::class,
+            'block_prefix'                => 'admin_camp_date',
             'choices_discount_configs'    => [],
             'choices_trip_location_paths' => [],
             'choices_form_fields'         => [],

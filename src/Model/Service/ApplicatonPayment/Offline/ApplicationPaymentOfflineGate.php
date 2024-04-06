@@ -22,7 +22,7 @@ class ApplicationPaymentOfflineGate implements ApplicationPaymentOfflineGateInte
      */
     public function getInitialState(): string
     {
-        return self::STATE_PAID;
+        return self::STATE_PENDING;
     }
 
     /**

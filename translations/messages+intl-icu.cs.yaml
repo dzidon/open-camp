@@ -199,6 +199,7 @@ application:
         discount_recurring_camper: 'Sleva pro vracejícího se táborníka'
         discount_siblings: 'Sleva pro sourozence'
         item_instance_for_camper: 'pro'
+        no_purchasable_items_found: 'Tato přihláška nemá žádné volitelné položky.'
 
         list:
             attachments_uploaded: 'Přílohy nahrány'
@@ -1151,8 +1152,8 @@ entity_attribute:
         camp: 'Tábor'
         users: 'Vedoucí'
         discount_config: 'Konfigurace slev'
-        trip_location_path_there: 'Cesta pro vyzvedávání (tam)'
-        trip_location_path_back: 'Cesta pro vyzvedávání (zpět)'
+        trip_location_path_there: 'Trasa, na které nasedají táborníci'
+        trip_location_path_back: 'Trasa, na které vysedají táborníci'
         form_fields: 'Formulářová pole'
         attachment_configs: 'Konfigurace příloh'
         purchasable_items: 'Volitelné platby'
@@ -1604,8 +1605,8 @@ form:
             add_purchasable_item: 'Přidat volitelnou platbu'
             users: 'Vedoucí'
             add_user: 'Přidat vedoucího'
-            trip_location_path_there: 'Cesta pro vyzvedávání (tam)'
-            trip_location_path_back: 'Cesta pro vyzvedávání (zpět)'
+            trip_location_path_there: 'Trasa, na které nasedají táborníci'
+            trip_location_path_back: 'Trasa, na které vysedají táborníci'
             button: 'Uložit'
 
         camp_date_search:
@@ -2214,7 +2215,7 @@ route:
     admin_application_camp_summary: 'Souhrn za tábor'
     admin_application_camp_date_list: 'Termíny'
     admin_application_camp_date_summary: 'Souhrn za termín'
-    admin_application_list: 'Přihlášky'
+    admin_application_list: 'Seznam přihlášek'
     admin_application_read: 'Zobrazení přihlášky'
     admin_application_update: 'Editace přihlášky'
     admin_application_delete: 'Odstranění přihlášky'

@@ -1,0 +1,13 @@
+{% set application_update_url = null %}
+
+{% if granted_update_or_state_update %}
+    {% set application_update_url = path('admin_application_update', {id: application.id}) %}
+{% elseif granted_payments %}
+    {% set application_update_url = path('admin_application_payment_list', {id: application.id}) %}
+{% endif %}
+
+{% if application_update_url is not null %}
+    <a href="{{ application_update_url }}" class="btn btn-primary">
+        {{ 'crud.action.common.update'|trans }}
+    </a>
+{% endif %}

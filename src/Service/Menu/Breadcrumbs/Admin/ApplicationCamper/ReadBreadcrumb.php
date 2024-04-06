@@ -17,6 +17,14 @@ class ReadBreadcrumb extends AbstractBreadcrumb implements BreadcrumbInterface
 
     public function getPreviousRoute(array $options): ?string
     {
+        /** @var bool $isParentCampDateList */
+        $isParentCampDateList = $options['is_parent_camp_date_list'];
+
+        if ($isParentCampDateList)
+        {
+            return 'admin_camp_date_application_camper_list';
+        }
+
         return 'admin_application_camper_list';
     }
 
@@ -35,5 +43,10 @@ class ReadBreadcrumb extends AbstractBreadcrumb implements BreadcrumbInterface
         $resolver->setDefined('application_camper');
         $resolver->setAllowedTypes('application_camper', ApplicationCamper::class);
         $resolver->setRequired('application_camper');
+
+        $resolver->setDefined('is_parent_camp_date_list');
+        $resolver->setAllowedTypes('is_parent_camp_date_list', 'bool');
+        $resolver->setRequired('is_parent_camp_date_list');
+        $resolver->setDefault('is_parent_camp_date_list', false);
     }
 }

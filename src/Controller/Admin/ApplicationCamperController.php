@@ -53,7 +53,7 @@ class ApplicationCamperController extends AbstractController
                                     UuidV4                           $campDateId): Response
     {
         $campDate = $this->findCampDateOrThrow404($campDateId);
-        $this->assertIsGrantedCampDateRead($campDate);
+        $this->assertIsGrantedRead($campDate);
 
         $page = (int) $request->query->get('page', 1);
         $searchData = new ApplicationCamperSearchData(true);
@@ -97,7 +97,7 @@ class ApplicationCamperController extends AbstractController
                                        UuidV4                           $id): Response
     {
         $application = $this->findApplicationOrThrow404($id);
-        $this->assertIsGrantedApplicationUpdate($application);
+        $this->assertIsGrantedUpdate($application);
 
         $page = (int) $request->query->get('page', 1);
         $searchData = new ApplicationCamperSearchData(false);
@@ -144,7 +144,7 @@ class ApplicationCamperController extends AbstractController
                            UuidV4                                $id): Response
     {
         $application = $this->findApplicationOrThrow404($id);
-        $this->assertIsGrantedApplicationUpdate($application);
+        $this->assertIsGrantedUpdate($application);
 
         $applicationCamperData = $applicationCamperDataFactory->createFromApplicationForAdminModule($application);
         $form = $this->createForm(ApplicationCamperType::class, $applicationCamperData);
@@ -181,7 +181,7 @@ class ApplicationCamperController extends AbstractController
     {
         $applicationCamper = $this->findApplicationCamperOrThrow404($id);
         $application = $applicationCamper->getApplication();
-        $this->assertIsGrantedApplicationUpdate($application);
+        $this->assertIsGrantedRead($application);
 
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
@@ -190,10 +190,11 @@ class ApplicationCamperController extends AbstractController
             'application'        => $application,
             'application_camper' => $applicationCamper,
             'breadcrumbs'        => $this->createBreadcrumbs([
-                'application_camper' => $applicationCamper,
-                'application'        => $application,
-                'camp_date'          => $campDate,
-                'camp'               => $camp,
+                'is_parent_camp_date_list' => !$this->isGrantedUpdate($application),
+                'application_camper'       => $applicationCamper,
+                'application'              => $application,
+                'camp_date'                => $campDate,
+                'camp'                     => $camp,
             ]),
         ]);
     }
@@ -207,7 +208,7 @@ class ApplicationCamperController extends AbstractController
     {
         $applicationCamper = $this->findApplicationCamperOrThrow404($id);
         $application = $applicationCamper->getApplication();
-        $this->assertIsGrantedApplicationUpdate($application);
+        $this->assertIsGrantedUpdate($application);
 
         $applicationCamperData = $applicationCamperDataFactory->createFromApplicationCamperForAdminModule($applicationCamper);
         $dataTransfer->fillData($applicationCamperData, $applicationCamper);
@@ -248,7 +249,7 @@ class ApplicationCamperController extends AbstractController
     {
         $applicationCamper = $this->findApplicationCamperOrThrow404($id);
         $application = $applicationCamper->getApplication();
-        $this->assertIsGrantedApplicationUpdate($application);
+        $this->assertIsGrantedUpdate($application);
 
         if (count($application->getApplicationCampers()) <= 1)
         {
@@ -293,17 +294,22 @@ class ApplicationCamperController extends AbstractController
         ]);
     }
 
-    private function assertIsGrantedApplicationUpdate(Application $application): void
+    private function isGrantedUpdate(Application|CampDate $subject): bool
     {
-        if (!$this->isGranted('application_update') && !$this->isGranted('guide_access_update', $application))
+        return $this->isGranted('application_update') || $this->isGranted('guide_access_update', $subject);
+    }
+
+    private function assertIsGrantedUpdate(Application|CampDate $subject): void
+    {
+        if (!$this->isGrantedUpdate($subject))
         {
             throw $this->createAccessDeniedException();
         }
     }
 
-    private function assertIsGrantedCampDateRead(CampDate $campDate): void
+    private function assertIsGrantedRead(Application|CampDate $subject): void
     {
-        if (!$this->isGranted('application_read') && !$this->isGranted('guide_access_read', $campDate))
+        if (!$this->isGranted('application_read') && !$this->isGranted('guide_access_read', $subject))
         {
             throw $this->createAccessDeniedException();
         }

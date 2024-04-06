@@ -128,6 +128,55 @@
     </button>
 {% endblock %}
 
+{# Camp date edit #}
+{% block admin_camp_date_widget %}
+    {{ form_errors(form) }}
+
+    {{ form_row(form.startAt) }}
+    {{ form_row(form.endAt) }}
+    {{ form_row(form.deposit) }}
+    {{ form_row(form.depositUntil) }}
+    {{ form_row(form.priceWithoutDeposit) }}
+    {{ form_row(form.capacity) }}
+    {{ form_row(form.isOpenAboveCapacity) }}
+    {{ form_row(form.isClosed) }}
+    {{ form_row(form.isHidden) }}
+    {{ form_row(form.description) }}
+    {{ form_row(form.discountConfig) }}
+    {{ form_row(form.tripLocationPathThere) }}
+    {{ form_row(form.tripLocationPathBack) }}
+
+    <h3 class="mb-3">
+        {{ form.campDateUsersData.vars.label|trans }}
+    </h3>
+
+    {{ form_row(form.campDateUsersData, {label: false}) }}
+    {{ form_row(form.addCampDateUserData) }}
+
+    <h3 class="mb-3">
+        {{ form.campDateFormFieldsData.vars.label|trans }}
+    </h3>
+
+    {{ form_row(form.campDateFormFieldsData, {label: false}) }}
+    {{ form_row(form.addCampDateFormFieldData) }}
+
+    <h3 class="mb-3">
+        {{ form.campDateAttachmentConfigsData.vars.label|trans }}
+    </h3>
+
+    {{ form_row(form.campDateAttachmentConfigsData, {label: false}) }}
+    {{ form_row(form.addCampDateAttachmentConfigData) }}
+
+    <h3 class="mb-3">
+        {{ form.campDatePurchasableItemsData.vars.label|trans }}
+    </h3>
+
+    {{ form_row(form.campDatePurchasableItemsData, {label: false}) }}
+    {{ form_row(form.addCampDatePurchasableItemData) }}
+
+    {{ form_rest(form) }}
+{% endblock %}
+
 {# Camp date search #}
 {% block admin_camp_date_search_widget %}
     {{ form_errors(form) }}

@@ -61,6 +61,7 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
             $this->security->isGranted('guide_access_state', $application))
         {
             // application update
+
             $text = $this->translator->trans('route.admin_application_update');
             $url = $this->urlGenerator->generate('admin_application_update', ['id' => $applicationId]);
             $itemApplicationUpdate = new MenuType('admin_application_update', 'navbar_admin_horizontal_update_item', $text, $url);
@@ -71,6 +72,7 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
         if ($this->security->isGranted('application_update') || $this->security->isGranted('guide_access_update', $application))
         {
             // application campers
+
             $active =
                 $route === 'admin_application_camper_list' || $route === 'admin_application_camper_create' ||
                 $route === 'admin_application_camper_read' || $route === 'admin_application_camper_update' ||
@@ -84,6 +86,7 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
             $itemApplicationCampers->setActive($active);
 
             // application contacts
+
             $active =
                 $route === 'admin_application_contact_list' || $route === 'admin_application_contact_create' ||
                 $route === 'admin_application_contact_read' || $route === 'admin_application_contact_update' ||
@@ -97,17 +100,22 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
             $itemApplicationContacts->setActive($active);
 
             // application purchasable items
-            $text = $this->translator->trans('route.admin_application_purchasable_items_update');
-            $url = $this->urlGenerator->generate('admin_application_purchasable_items_update', ['id' => $applicationId]);
-            $itemApplicationPurchasableItemsUpdate = new MenuType('admin_application_purchasable_items_update', 'navbar_admin_horizontal_update_item', $text, $url);
-            $menu->addChild($itemApplicationPurchasableItemsUpdate);
-            $itemApplicationPurchasableItemsUpdate->setActive($route === 'admin_application_purchasable_items_update');
+
+            if (!empty($application->getApplicationPurchasableItems()))
+            {
+                $text = $this->translator->trans('route.admin_application_purchasable_items_update');
+                $url = $this->urlGenerator->generate('admin_application_purchasable_items_update', ['id' => $applicationId]);
+                $itemApplicationPurchasableItemsUpdate = new MenuType('admin_application_purchasable_items_update', 'navbar_admin_horizontal_update_item', $text, $url);
+                $menu->addChild($itemApplicationPurchasableItemsUpdate);
+                $itemApplicationPurchasableItemsUpdate->setActive($route === 'admin_application_purchasable_items_update');
+            }
         }
 
         if ($this->security->isGranted('application_payment', 'any_admin_permission') ||
             $this->security->isGranted('guide_access_payments', $application))
         {
             // application payments
+
             $active =
                 $route === 'admin_application_payment_list'   || $route === 'admin_application_payment_create' ||
                 $route === 'admin_application_payment_read'   || $route === 'admin_application_payment_update' ||
@@ -119,6 +127,24 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
             $itemApplicationPayments = new MenuType('admin_application_payment_list', 'navbar_admin_horizontal_update_item', $text, $url);
             $menu->addChild($itemApplicationPayments);
             $itemApplicationPayments->setActive($active);
+        }
+
+        $hasActiveItem = false;
+        $numberOfItems = 0;
+
+        foreach ($menu->getChildren() as $item)
+        {
+            $numberOfItems++;
+
+            if ($item->isActive())
+            {
+                $hasActiveItem = true;
+            }
+        }
+
+        if (!$hasActiveItem || $numberOfItems === 1)
+        {
+            $menu = new MenuType(self::getMenuIdentifier(), 'navbar_admin_horizontal_update_root');
         }
 
         return $menu;

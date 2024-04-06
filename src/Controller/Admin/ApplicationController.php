@@ -175,7 +175,10 @@ class ApplicationController extends AbstractController
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
 
-        if (!$this->isGranted('application_update') && !$this->isGranted('guide_access_update', $application))
+        if (!$this->isGranted('application_update')                &&
+            !$this->isGranted('application_state_update')          &&
+            !$this->isGranted('guide_access_update', $application) &&
+            !$this->isGranted('guide_access_state', $application))
         {
             throw $this->createAccessDeniedException();
         }
