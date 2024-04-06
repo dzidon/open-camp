@@ -197,10 +197,13 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
                 return $id->toBinary();
             }, $openCampIds);
 
-            $queryBuilder
-                ->andWhere('camp.id NOT IN (:openCampIds)')
-                ->setParameter('openCampIds', $openCampIdsBinary)
-            ;
+            if (!empty($openCampIdsBinary))
+            {
+                $queryBuilder
+                    ->andWhere('camp.id NOT IN (:openCampIds)')
+                    ->setParameter('openCampIds', $openCampIdsBinary)
+                ;
+            }
         }
 
         if ($isFeatured !== null)

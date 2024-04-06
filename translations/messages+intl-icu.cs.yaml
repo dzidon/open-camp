@@ -1592,7 +1592,7 @@ form:
             price_without_deposit: 'Cena (bez zálohy)'
             capacity: 'Kapacita'
             is_open_above_capacity: 'Přijímat přihlášky nad kapacitou'
-            is_closed: 'Zablokovat přihlášení'
+            is_closed: 'Zablokovat přihlášky'
             is_hidden: 'Skrytý'
             description: 'Informace k termínu'
             guides: 'Vedoucí'

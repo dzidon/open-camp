@@ -353,10 +353,13 @@ class CampDateRepository extends AbstractRepository implements CampDateRepositor
                 return $id->toBinary();
             }, $openCampDateIds);
 
-            $queryBuilder
-                ->andWhere('campDate.id NOT IN (:openCampDateIds)')
-                ->setParameter('openCampDateIds', $openCampDateIdsBinary)
-            ;
+            if (!empty($openCampDateIdsBinary))
+            {
+                $queryBuilder
+                    ->andWhere('campDate.id NOT IN (:openCampDateIds)')
+                    ->setParameter('openCampDateIds', $openCampDateIdsBinary)
+                ;
+            }
         }
 
         $query = $queryBuilder->getQuery();
