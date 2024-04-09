@@ -444,6 +444,26 @@
                             {% endfor %}
                         {% endif %}
                     {% endfor %}
+
+                    {% if application.applicationAdminAttachments is not empty %}
+                        <div class="row mb-2 mt-5">
+                            <div class="col-12">
+                                <h4>
+                                    {{ 'entity_attribute.application.application_admin_attachments'|trans }}
+                                </h4>
+                            </div>
+                        </div>
+
+                        {% for application_admin_attachment in application.applicationAdminAttachments%}
+                            <div class="row mb-3">
+                                <div class="col-12 col-sm-3">
+                                    <a href="{{ path('admin_application_admin_attachment_read', {id: application_admin_attachment.id}) }}">
+                                        {{ application_admin_attachment.label }} ({{ application_admin_attachment.extension }})
+                                    </a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
                 </div>
 
                 {% set granted_update_or_state_update_or_guide =

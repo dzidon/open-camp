@@ -90,6 +90,10 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                 $route === 'admin_application_payment_create' || $route === 'admin_application_payment_read'   ||
                 $route === 'admin_application_payment_update' || $route === 'admin_application_payment_delete' ||
 
+                $route === 'admin_application_admin_attachment_list'   || $route === 'admin_application_admin_attachment_create' ||
+                $route === 'admin_application_admin_attachment_read'   || $route === 'admin_application_admin_attachment_update' ||
+                $route === 'admin_application_admin_attachment_delete' ||
+
                 $route === 'admin_application_purchasable_items_update'
             ;
 

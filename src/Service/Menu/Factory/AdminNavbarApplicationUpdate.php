@@ -109,6 +109,20 @@ class AdminNavbarApplicationUpdate extends AbstractMenuTypeFactory
                 $menu->addChild($itemApplicationPurchasableItemsUpdate);
                 $itemApplicationPurchasableItemsUpdate->setActive($route === 'admin_application_purchasable_items_update');
             }
+
+            // application admin attachments
+
+            $active =
+                $route === 'admin_application_admin_attachment_list' || $route === 'admin_application_admin_attachment_create' ||
+                $route === 'admin_application_admin_attachment_read' || $route === 'admin_application_admin_attachment_update' ||
+                $route === 'admin_application_admin_attachment_delete'
+            ;
+
+            $text = $this->translator->trans('route.admin_application_admin_attachment_list');
+            $url = $this->urlGenerator->generate('admin_application_admin_attachment_list', ['id' => $applicationId]);
+            $itemApplicationAdminAttachments = new MenuType('admin_application_admin_attachment_list', 'navbar_admin_horizontal_update_item', $text, $url);
+            $menu->addChild($itemApplicationAdminAttachments);
+            $itemApplicationAdminAttachments->setActive($active);
         }
 
         if ($this->security->isGranted('application_payment', 'any_admin_permission') ||

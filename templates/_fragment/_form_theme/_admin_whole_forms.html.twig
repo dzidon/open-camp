@@ -700,3 +700,25 @@
 
     {{ form_rest(form) }}
 {% endblock %}
+
+{% block admin_application_admin_attachment_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.extensions) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.application_admin_attachment_search.button'|trans }}
+    </button>
+{% endblock %}

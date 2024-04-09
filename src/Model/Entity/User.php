@@ -353,6 +353,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getImageFileName(): ?string
+    {
+        if ($this->imageExtension === null)
+        {
+            return null;
+        }
+
+        return $this->id->toRfc4122() . '.' . $this->imageExtension;
+    }
+
     public function getImageExtension(): ?string
     {
         return $this->imageExtension;

@@ -35,7 +35,7 @@ class CampImageFilesystem implements CampImageFilesystemInterface
      */
     public function getImageLastModified(CampImage $campImage): ?int
     {
-        $fileName = $this->getCampImageName($campImage);
+        $fileName = $campImage->getFileName();
 
         if (!$this->campImageStorage->has($fileName))
         {
@@ -65,14 +65,12 @@ class CampImageFilesystem implements CampImageFilesystemInterface
             return $noImageUrl;
         }
 
-        $fileName = $this->getCampImageName($campImage);
+        $fileName = $campImage->getFileName();
 
         if (!$this->campImageStorage->has($fileName))
         {
             return $noImageUrl;
         }
-
-        $fileName = $this->getCampImageName($campImage);
 
         return $this->campImagePublicPathPrefix . $this->campImageDirectory . '/' . $fileName;
     }
@@ -82,15 +80,8 @@ class CampImageFilesystem implements CampImageFilesystemInterface
      */
     public function removeFile(CampImage $campImage): void
     {
-        $fileName = $this->getCampImageName($campImage);
+        $fileName = $campImage->getFileName();
         $this->campImageStorage->delete($fileName);
-    }
-
-    private function getCampImageName(CampImage $campImage): string
-    {
-        $campImageId = $campImage->getId();
-
-        return $campImageId->toRfc4122() . '.' . $campImage->getExtension();
     }
 
     private function getNoImageUrl(): string

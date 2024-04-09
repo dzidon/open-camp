@@ -26,6 +26,11 @@ flysystem:
             options:
                 directory: '%kernel.project_dir%/private/%app.application_invoice_directory%'
 
+        application_admin_attachment.storage:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/private/%app.application_admin_attachment_directory%'
+
 when@test:
     flysystem:
         storages:

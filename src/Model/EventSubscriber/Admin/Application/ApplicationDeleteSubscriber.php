@@ -6,6 +6,7 @@ use App\Model\Event\Admin\Application\ApplicationDeleteEvent;
 use App\Model\Event\Admin\ApplicationPayment\ApplicationPaymentOnlineRefundEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Service\Application\ApplicationInvoiceFilesystemInterface;
+use App\Model\Service\ApplicationAdminAttachment\ApplicationAdminAttachmentFilesystemInterface;
 use App\Model\Service\ApplicationAttachment\ApplicationAttachmentFilesystemInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -16,22 +17,26 @@ class ApplicationDeleteSubscriber
 
     private ApplicationAttachmentFilesystemInterface $applicationAttachmentFilesystem;
 
+    private ApplicationAdminAttachmentFilesystemInterface $applicationAdminAttachmentFilesystem;
+
     private ApplicationInvoiceFilesystemInterface $applicationInvoiceFilesystem;
 
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(ApplicationRepositoryInterface           $applicationRepository,
-                                ApplicationAttachmentFilesystemInterface $applicationAttachmentFilesystem,
-                                ApplicationInvoiceFilesystemInterface    $applicationInvoiceFilesystem,
-                                EventDispatcherInterface                 $eventDispatcher)
+    public function __construct(ApplicationRepositoryInterface                $applicationRepository,
+                                ApplicationAttachmentFilesystemInterface      $applicationAttachmentFilesystem,
+                                ApplicationAdminAttachmentFilesystemInterface $applicationAdminAttachmentFilesystem,
+                                ApplicationInvoiceFilesystemInterface         $applicationInvoiceFilesystem,
+                                EventDispatcherInterface                      $eventDispatcher)
     {
         $this->applicationRepository = $applicationRepository;
         $this->applicationAttachmentFilesystem = $applicationAttachmentFilesystem;
+        $this->applicationAdminAttachmentFilesystem = $applicationAdminAttachmentFilesystem;
         $this->applicationInvoiceFilesystem = $applicationInvoiceFilesystem;
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    #[AsEventListener(event: ApplicationDeleteEvent::NAME, priority: 400)]
+    #[AsEventListener(event: ApplicationDeleteEvent::NAME, priority: 500)]
     public function onDeleteRefundOnlinePayments(ApplicationDeleteEvent $event): void
     {
         $application = $event->getApplication();
@@ -48,14 +53,14 @@ class ApplicationDeleteSubscriber
         }
     }
 
-    #[AsEventListener(event: ApplicationDeleteEvent::NAME, priority: 300)]
+    #[AsEventListener(event: ApplicationDeleteEvent::NAME, priority: 400)]
     public function onDeleteRemoveInvoice(ApplicationDeleteEvent $event): void
     {
         $application = $event->getApplication();
         $this->applicationInvoiceFilesystem->removeInvoiceFile($application);
     }
 
-    #[AsEventListener(event: ApplicationDeleteEvent::NAME, priority: 200)]
+    #[AsEventListener(event: ApplicationDeleteEvent::NAME, priority: 300)]
     public function onDeleteRemoveUserAttachments(ApplicationDeleteEvent $event): void
     {
         $application = $event->getApplication();
@@ -76,6 +81,18 @@ class ApplicationDeleteSubscriber
             {
                 $this->applicationAttachmentFilesystem->removeFile($applicationCamperAttachment);
             }
+        }
+    }
+
+    #[AsEventListener(event: ApplicationDeleteEvent::NAME, priority: 200)]
+    public function onDeleteRemoveAdminAttachments(ApplicationDeleteEvent $event): void
+    {
+        $application = $event->getApplication();
+        $applicationAdminAttachments = $application->getApplicationAdminAttachments();
+
+        foreach ($applicationAdminAttachments as $applicationAdminAttachment)
+        {
+            $this->applicationAdminAttachmentFilesystem->removeFile($applicationAdminAttachment);
         }
     }
 

@@ -36,19 +36,14 @@ class UserImageFilesystem implements UserImageFilesystemInterface
      */
     public function getImageLastModified(User $user): ?int
     {
-        if ($user->getImageExtension() === null)
+        $imageFileName = $user->getImageFileName();
+
+        if ($imageFileName === null || !$this->userImageStorage->has($imageFileName))
         {
             return null;
         }
 
-        $fileName = $this->getUserImageName($user);
-
-        if (!$this->userImageStorage->has($fileName))
-        {
-            return null;
-        }
-
-        return $this->userImageStorage->lastModified($fileName);
+        return $this->userImageStorage->lastModified($imageFileName);
     }
 
     /**
@@ -65,22 +60,14 @@ class UserImageFilesystem implements UserImageFilesystemInterface
     public function getImagePublicUrl(User $user): string
     {
         $noImageUrl = $this->getNoImageUrl();
+        $imageFileName = $user->getImageFileName();
 
-        if ($user->getImageExtension() === null)
+        if ($imageFileName === null || !$this->userImageStorage->has($imageFileName))
         {
             return $noImageUrl;
         }
 
-        $fileName = $this->getUserImageName($user);
-
-        if (!$this->userImageStorage->has($fileName))
-        {
-            return $noImageUrl;
-        }
-
-        $fileName = $this->getUserImageName($user);
-
-        return $this->userImagePublicPathPrefix . $this->userImageDirectory . '/' . $fileName;
+        return $this->userImagePublicPathPrefix . $this->userImageDirectory . '/' . $imageFileName;
     }
 
     /**
@@ -107,21 +94,15 @@ class UserImageFilesystem implements UserImageFilesystemInterface
      */
     public function removeImageFile(User $user): void
     {
-        if ($user->getImageExtension() === null)
+        $imageFileName = $user->getImageFileName();
+
+        if ($imageFileName === null)
         {
             return;
         }
 
-        $fileName = $this->getUserImageName($user);
-        $this->userImageStorage->delete($fileName);
+        $this->userImageStorage->delete($imageFileName);
         $user->setImageExtension(null);
-    }
-
-    private function getUserImageName(User $user): string
-    {
-        $userId = $user->getId();
-
-        return $userId->toRfc4122() . '.' . $user->getImageExtension();
     }
 
     private function getNoImageUrl(): string

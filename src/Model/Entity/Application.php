@@ -183,6 +183,10 @@ class Application
     #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationPayment::class)]
     private Collection $applicationPayments;
 
+    /** @var Collection<ApplicationAdminAttachment> */
+    #[ORM\OneToMany(mappedBy: 'application', targetEntity: ApplicationAdminAttachment::class)]
+    private Collection $applicationAdminAttachments;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
@@ -235,6 +239,7 @@ class Application
         $this->applicationAttachments = new ArrayCollection();
         $this->applicationPurchasableItems = new ArrayCollection();
         $this->applicationPayments = new ArrayCollection();
+        $this->applicationAdminAttachments = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable('now');
 
         $this->campDate = $campDate;
@@ -1064,6 +1069,62 @@ class Application
         $this->applicationPayments->removeElement($applicationPayment);
 
         return $this;
+    }
+
+    /**
+     * @return ApplicationAdminAttachment[]
+     */
+    public function getApplicationAdminAttachments(): array
+    {
+        return $this->applicationAdminAttachments->toArray();
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param ApplicationAdminAttachment $applicationAdminAttachment
+     * @return $this
+     */
+    public function addApplicationAdminAttachment(ApplicationAdminAttachment $applicationAdminAttachment): self
+    {
+        if ($applicationAdminAttachment->getApplication() !== $this)
+        {
+            return $this;
+        }
+
+        if (!$this->applicationAdminAttachments->contains($applicationAdminAttachment))
+        {
+            $this->applicationAdminAttachments->add($applicationAdminAttachment);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @internal Inverse side.
+     * @param ApplicationAdminAttachment $applicationAdminAttachment
+     * @return $this
+     */
+    public function removeApplicationAdminAttachment(ApplicationAdminAttachment $applicationAdminAttachment): self
+    {
+        $this->applicationAdminAttachments->removeElement($applicationAdminAttachment);
+
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getApplicationAdminAttachmentExtensions(): array
+    {
+        $extensions = [];
+
+        foreach ($this->applicationAdminAttachments as $applicationAdminAttachment)
+        {
+            $extension = $applicationAdminAttachment->getExtension();
+            $extensions[$extension] = $extension;
+        }
+
+        return $extensions;
     }
 
     public function isCompleted(): bool

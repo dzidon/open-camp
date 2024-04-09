@@ -115,6 +115,16 @@ class ApplicationAttachment
         return $this->extension !== null;
     }
 
+    public function getFileName(): ?string
+    {
+        if ($this->extension === null)
+        {
+            return null;
+        }
+
+        return $this->id->toRfc4122() . '.' . $this->extension;
+    }
+
     public function getExtension(): ?string
     {
         return $this->extension;

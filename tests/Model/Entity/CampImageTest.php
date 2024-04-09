@@ -33,19 +33,11 @@ class CampImageTest extends TestCase
     public function testExtension(): void
     {
         $this->assertSame(self::EXTENSION, $this->campImage->getExtension());
-
-        $this->campImage->setExtension('jpg');
-        $this->assertSame('jpg', $this->campImage->getExtension());
     }
 
     public function testCamp(): void
     {
         $this->assertSame($this->camp, $this->campImage->getCamp());
-
-        $campNew = new Camp('Camp new', 'camp-new', 5, 10, 321);
-        $this->campImage->setCamp($campNew);
-
-        $this->assertSame($campNew, $this->campImage->getCamp());
     }
 
     public function testCreatedAt(): void

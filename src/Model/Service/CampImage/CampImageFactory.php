@@ -26,13 +26,9 @@ class CampImageFactory implements CampImageFactoryInterface
     {
         $extension = $file->guessExtension();
         $campImage = new CampImage($priority, $extension, $camp);
-        $idString = $campImage
-            ->getId()
-            ->toRfc4122()
-        ;
-
-        $newFileName = $idString . '.' . $extension;
+        $newFileName = $campImage->getFileName();
         $contents = $file->getContent();
+
         $this->campImageStorage->write($newFileName, $contents);
 
         return $campImage;

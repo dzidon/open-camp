@@ -513,6 +513,7 @@ crud:
         application_camper_delete: 'Opravdu si přejete odstranit táborníka "{name}"?'
         application_payment_delete: 'Opravdu si přejete odstranit platbu?'
         application_payment_refund: 'Opravdu si přejete vrátit platbu?'
+        application_admin_attachment_delete: 'Opravdu si přejete odstranit administrátorskou přílohu "{label}"?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
@@ -526,6 +527,7 @@ crud:
             create: 'Vytvořit'
             update: 'Upravit'
             delete: 'Odstranit'
+            download: 'Stáhnout'
             upload: 'Nahrát'
             duplicate: 'Duplikovat'
 
@@ -564,6 +566,11 @@ crud:
 
         application_purchasable_item:
             bulk_update: 'Volitelné položky uloženy!'
+
+        application_admin_attachment:
+            create: 'Příloha vytvořena!'
+            update: 'Příloha uložena!'
+            delete: 'Příloha odstraněna!'
 
         contact:
             create: 'Kontakt vytvořen!'
@@ -870,6 +877,7 @@ entity_attribute:
         application_attachments: 'Přílohy'
         application_purchasable_items: 'Volitelné platby'
         application_payments: 'Platby'
+        application_admin_attachments: 'Administrátorské přílohy'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -884,6 +892,14 @@ entity_attribute:
         priority: 'Priorita'
         application: 'Přihláška'
         application_camper: 'Táborník'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    application_admin_attachment:
+        id: 'ID'
+        label: 'Název'
+        extension: 'Přípona'
+        application: 'Přihláška'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -1971,6 +1987,31 @@ form:
         application_payment_refund:
             button: 'Vrátit'
 
+        application_admin_attachment_search:
+            phrase: 'Hledat podle názvu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od naposledy vytvořených'
+                    created_at_asc: 'Od nejdéle vytvořených'
+                    label_asc: 'Název (A-Z)'
+                    label_desc: 'Název (Z-A)'
+
+            extensions: 'Přípony'
+            button: 'Hledat'
+
+        application_admin_attachment_create:
+            label: 'Název'
+            file: 'Soubor'
+            button: 'Uložit'
+
+        application_admin_attachment_update:
+            label: 'Název'
+            button: 'Uložit'
+
+        application_admin_attachment_delete:
+            button: 'Odstranit'
+
     user:
         application_step_one:
             email:
@@ -2239,6 +2280,12 @@ route:
     admin_application_payment_update: 'Editace platby'
     admin_application_payment_delete: 'Odstranění platby'
     admin_application_payment_refund: 'Vrácení platby'
+    
+    admin_application_admin_attachment_list: 'Administrátorské přílohy'
+    admin_application_admin_attachment_create: 'Nahrání přílohy'
+    admin_application_admin_attachment_read: 'Zobrazení přílohy'
+    admin_application_admin_attachment_update: 'Editace přílohy'
+    admin_application_admin_attachment_delete: 'Odstranění přílohy'
 
     admin_application_purchasable_items_update: 'Volitelné platby'
 

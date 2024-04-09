@@ -34,6 +34,7 @@ parameters:
     app.no_user_image_path: 'files/static/user_placeholder.png'
     app.application_attachment_directory: 'files/dynamic/application-attachment'
     app.application_invoice_directory: 'files/dynamic/application-invoice'
+    app.application_admin_attachment_directory: 'files/dynamic/application-admin-attachment'
 
     # Mailer
     app.email: 'contact.us@camp.com'

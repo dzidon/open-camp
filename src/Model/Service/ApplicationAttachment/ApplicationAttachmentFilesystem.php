@@ -23,9 +23,9 @@ class ApplicationAttachmentFilesystem implements ApplicationAttachmentFilesystem
      */
     public function getFileContents(ApplicationAttachment $applicationAttachment): ?string
     {
-        $fileName = $this->getApplicationAttachmentName($applicationAttachment);
+        $fileName = $applicationAttachment->getFileName();
 
-        if (!$this->applicationAttachmentStorage->has($fileName))
+        if ($fileName === null || !$this->applicationAttachmentStorage->has($fileName))
         {
             return null;
         }
@@ -57,20 +57,14 @@ class ApplicationAttachmentFilesystem implements ApplicationAttachmentFilesystem
      */
     public function removeFile(ApplicationAttachment $applicationAttachment): void
     {
-        if ($applicationAttachment->getExtension() === null)
+        $fileName = $applicationAttachment->getFileName();
+
+        if ($fileName === null)
         {
             return;
         }
 
-        $fileName = $this->getApplicationAttachmentName($applicationAttachment);
         $this->applicationAttachmentStorage->delete($fileName);
         $applicationAttachment->setExtension(null);
-    }
-
-    private function getApplicationAttachmentName(ApplicationAttachment $applicationAttachment): string
-    {
-        $applicationAttachmentId = $applicationAttachment->getId();
-
-        return $applicationAttachmentId->toRfc4122() . '.' . $applicationAttachment->getExtension();
     }
 }

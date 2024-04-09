@@ -36,19 +36,14 @@ class PurchasableItemImageFilesystem implements PurchasableItemImageFilesystemIn
      */
     public function getImageLastModified(PurchasableItem $purchasableItem): ?int
     {
-        if ($purchasableItem->getImageExtension() === null)
+        $imageFileName = $purchasableItem->getImageFileName();
+
+        if ($imageFileName === null || !$this->purchasableItemImageStorage->has($imageFileName))
         {
             return null;
         }
 
-        $fileName = $this->getPurchasableItemImageName($purchasableItem);
-
-        if (!$this->purchasableItemImageStorage->has($fileName))
-        {
-            return null;
-        }
-
-        return $this->purchasableItemImageStorage->lastModified($fileName);
+        return $this->purchasableItemImageStorage->lastModified($imageFileName);
     }
 
     /**
@@ -65,22 +60,14 @@ class PurchasableItemImageFilesystem implements PurchasableItemImageFilesystemIn
     public function getImagePublicUrl(PurchasableItem $purchasableItem): string
     {
         $noImageUrl = $this->getNoImageUrl();
+        $imageFileName = $purchasableItem->getImageFileName();
 
-        if ($purchasableItem->getImageExtension() === null)
+        if ($imageFileName === null || !$this->purchasableItemImageStorage->has($imageFileName))
         {
             return $noImageUrl;
         }
 
-        $fileName = $this->getPurchasableItemImageName($purchasableItem);
-
-        if (!$this->purchasableItemImageStorage->has($fileName))
-        {
-            return $noImageUrl;
-        }
-
-        $fileName = $this->getPurchasableItemImageName($purchasableItem);
-
-        return $this->purchasableItemImagePublicPathPrefix . $this->purchasableItemImageDirectory . '/' . $fileName;
+        return $this->purchasableItemImagePublicPathPrefix . $this->purchasableItemImageDirectory . '/' . $imageFileName;
     }
 
     /**
@@ -107,21 +94,15 @@ class PurchasableItemImageFilesystem implements PurchasableItemImageFilesystemIn
      */
     public function removeImageFile(PurchasableItem $purchasableItem): void
     {
-        if ($purchasableItem->getImageExtension() === null)
+        $imageFileName = $purchasableItem->getImageFileName();
+
+        if ($imageFileName === null)
         {
             return;
         }
 
-        $fileName = $this->getPurchasableItemImageName($purchasableItem);
-        $this->purchasableItemImageStorage->delete($fileName);
+        $this->purchasableItemImageStorage->delete($imageFileName);
         $purchasableItem->setImageExtension(null);
-    }
-
-    private function getPurchasableItemImageName(PurchasableItem $purchasableItem): string
-    {
-        $purchasableItemImageId = $purchasableItem->getId();
-
-        return $purchasableItemImageId->toRfc4122() . '.' . $purchasableItem->getImageExtension();
     }
 
     private function getNoImageUrl(): string

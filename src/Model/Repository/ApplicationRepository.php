@@ -90,6 +90,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationFormFieldValues($application);
         $this->loadApplicationPayments($application);
         $this->loadApplicationPurchasableItems($application);
+        $this->loadApplicationAdminAttachments($application);
 
         return $application;
     }
@@ -137,6 +138,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationFormFieldValues($application);
         $this->loadApplicationPayments($application);
         $this->loadApplicationPurchasableItems($application);
+        $this->loadApplicationAdminAttachments($application);
 
         return $application;
     }
@@ -254,6 +256,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationFormFieldValues($applications);
         $this->loadApplicationPayments($applications);
         $this->loadApplicationPurchasableItems($applications);
+        $this->loadApplicationAdminAttachments($applications);
 
         return $paginator;
     }
@@ -345,6 +348,7 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationFormFieldValues($applications);
         $this->loadApplicationPayments($applications);
         $this->loadApplicationPurchasableItems($applications);
+        $this->loadApplicationAdminAttachments($applications);
 
         return $paginator;
     }
@@ -560,6 +564,26 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         }
 
         $this->loadApplicationPurchasableItemInstances($applicationPurchasableItems);
+    }
+
+    private function loadApplicationAdminAttachments(null|array|Application $applications): void
+    {
+        if (empty($applications))
+        {
+            return;
+        }
+
+        $applicationIds = $this->getApplicationIds($applications);
+
+        $this->createQueryBuilder('application')
+            ->select('application, applicationAdminAttachment')
+            ->leftJoin('application.applicationAdminAttachments', 'applicationAdminAttachment')
+            ->andWhere('application.id IN (:ids)')
+            ->setParameter('ids', $applicationIds)
+            ->orderBy('applicationAdminAttachment.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     private function loadApplicationPurchasableItemInstances(null|array|ApplicationPurchasableItem $applicationPurchasableItems): void
