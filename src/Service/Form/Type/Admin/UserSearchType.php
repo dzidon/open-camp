@@ -67,6 +67,15 @@ class UserSearchType extends AbstractType
                 'label'                     => 'form.admin.user_search.role',
                 'choice_translation_domain' => false,
             ])
+            ->add('isFeaturedGuide', ChoiceType::class, [
+                'placeholder' => 'form.common.choice.irrelevant',
+                'choices'     => [
+                    'form.common.choice.yes' => true,
+                    'form.common.choice.no'  => false,
+                ],
+                'required' => false,
+                'label'    => 'form.admin.user_search.is_featured_guide',
+            ])
         ;
     }
 

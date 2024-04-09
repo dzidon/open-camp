@@ -53,7 +53,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $text = $this->translator->trans('route.user_home');
         $url = $this->urlGenerator->generate('user_home');
         $itemHome = new MenuType('user_home', 'navbar_user_item', $text, $url);
-        $itemHome->setActive($route === 'user_home' || $route === 'user_guide_detail');
+        $itemHome->setActive($route === 'user_home');
         $menu->addChild($itemHome);
 
         // camp catalog
@@ -70,6 +70,13 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $itemCampCatalog = new MenuType('user_camp_catalog', 'navbar_user_item', $text, $url);
         $itemCampCatalog->setActive($active);
         $menu->addChild($itemCampCatalog);
+
+        // guides
+        $text = $this->translator->trans('route.user_guide_list');
+        $url = $this->urlGenerator->generate('user_guide_list');
+        $itemGuides = new MenuType('user_guide_list', 'navbar_user_item', $text, $url);
+        $itemGuides->setActive($route === 'user_guide_list' || $route === 'user_guide_detail');
+        $menu->addChild($itemGuides);
 
         // admin
         if ($this->security->isGranted('admin_access'))

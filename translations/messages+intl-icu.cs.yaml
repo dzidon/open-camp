@@ -1087,6 +1087,7 @@ entity_attribute:
         born_at: 'Datum narození'
         bio: 'O mně'
         age: 'Věk'
+        is_featured_guide: 'Doporučený vedoucí'
         guide_priority: 'Priorita v seznamu vedoucích'
         image: 'Obrázek'
         image_extension: 'Formát obrázku'
@@ -1497,6 +1498,7 @@ form:
         user:
             email: 'E-mail'
             role: 'Role'
+            is_featured_guide: 'Doporučený vedoucí'
             url_name: 'Název vedoucího v odkazu'
             born_at: 'Datum narození'
             bio: 'O mně'
@@ -1519,6 +1521,7 @@ form:
                     last_active_at_desc: 'Od naposledy přihlášeného'
 
             role: 'Role'
+            is_featured_guide: 'Doporučený vedoucí'
             button: 'Hledat'
 
         user_delete:
@@ -2298,6 +2301,7 @@ route:
     user_password_change_complete: 'Nové heslo'
     user_camp_catalog: 'Katalog táborů'
     user_camp_detail: 'Tábor'
+    user_guide_list: 'Naši vedoucí'
     user_guide_detail: 'Vedoucí'
     user_application_import: 'Uložení údajů z přihlášky'
 

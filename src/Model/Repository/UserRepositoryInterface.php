@@ -86,6 +86,15 @@ interface UserRepositoryInterface
     public function findByCampDates(array $campDates, bool $withUrlNameOnly = false): array;
 
     /**
+     * Returns user guide search paginator.
+     *
+     * @param int $currentPage
+     * @param int $pageSize
+     * @return PaginatorInterface
+     */
+    public function getUserGuidePaginator(int $currentPage, int $pageSize): PaginatorInterface;
+
+    /**
      * Returns admin user search paginator.
      *
      * @param UserSearchData $data

@@ -28,6 +28,8 @@ class UserData
     #[Assert\Valid]
     private BillingData $billingData;
 
+    private bool $isFeaturedGuide = false;
+
     #[Assert\Length(max: 255)]
     #[SlugRequirements]
     private ?string $urlName = null;
@@ -84,6 +86,18 @@ class UserData
     public function getBillingData(): BillingData
     {
         return $this->billingData;
+    }
+
+    public function isFeaturedGuide(): bool
+    {
+        return $this->isFeaturedGuide;
+    }
+
+    public function setIsFeaturedGuide(bool $isFeaturedGuide): self
+    {
+        $this->isFeaturedGuide = $isFeaturedGuide;
+
+        return $this;
     }
 
     public function getUrlName(): ?string

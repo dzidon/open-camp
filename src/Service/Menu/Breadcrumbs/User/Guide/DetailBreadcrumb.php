@@ -8,7 +8,7 @@ use App\Service\Menu\Breadcrumbs\AbstractBreadcrumb;
 use App\Service\Menu\Breadcrumbs\BreadcrumbInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class GuideBreadcrumb extends AbstractBreadcrumb implements BreadcrumbInterface
+class DetailBreadcrumb extends AbstractBreadcrumb implements BreadcrumbInterface
 {
     public function getSupportedRoute(): string
     {
@@ -17,7 +17,7 @@ class GuideBreadcrumb extends AbstractBreadcrumb implements BreadcrumbInterface
 
     public function getPreviousRoute(array $options): ?string
     {
-        return 'user_home';
+        return 'user_guide_list';
     }
 
     public function buildBreadcrumb(MenuTypeInterface $breadcrumbs, array $options): void

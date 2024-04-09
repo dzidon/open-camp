@@ -5,7 +5,9 @@ namespace App\Controller\User;
 use App\Controller\AbstractController;
 use App\Model\Entity\User;
 use App\Model\Repository\UserRepositoryInterface;
+use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use App\Service\Routing\RouteNamerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -16,6 +18,26 @@ class GuideController extends AbstractController
     public function __construct(UserRepositoryInterface $userRepository)
     {
         $this->userRepository = $userRepository;
+    }
+
+    #[Route('/guides', name: 'user_guide_list')]
+    public function list(MenuTypeFactoryRegistryInterface $menuFactory, Request $request): Response
+    {
+        $page = (int) $request->query->get('page', 1);
+        $paginator = $this->userRepository->getUserGuidePaginator($page, 24);
+
+        if ($paginator->isCurrentPageOutOfBounds())
+        {
+            throw $this->createNotFoundException();
+        }
+
+        $paginationMenu = $menuFactory->buildMenuType('pagination', ['paginator' => $paginator]);
+
+        return $this->render('user/guide/list.html.twig', [
+            'pagination_menu' => $paginationMenu,
+            'paginator'       => $paginator,
+            'breadcrumbs'     => $this->createBreadcrumbs(),
+        ]);
     }
 
     #[Route('/guide/{urlName}', name: 'user_guide_detail', requirements: ['urlName' => '([a-zA-Z0-9-])+'])]
@@ -35,8 +57,8 @@ class GuideController extends AbstractController
         }
 
         return $this->render('user/guide/detail.html.twig', [
-            'guide'        => $guide,
-            'breadcrumbs'  => $this->createBreadcrumbs([
+            'guide'       => $guide,
+            'breadcrumbs' => $this->createBreadcrumbs([
                 'guide' => $guide,
             ]),
         ]);

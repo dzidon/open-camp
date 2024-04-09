@@ -75,6 +75,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::INTEGER)]
     private int $guidePriority = 0;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isFeaturedGuide = false;
+
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $lastActiveAt = null;
 
@@ -395,6 +398,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setGuidePriority(int $guidePriority): self
     {
         $this->guidePriority = $guidePriority;
+
+        return $this;
+    }
+
+    public function isFeaturedGuide(): bool
+    {
+        return $this->isFeaturedGuide;
+    }
+
+    public function setIsFeaturedGuide(bool $isFeaturedGuide): self
+    {
+        $this->isFeaturedGuide = $isFeaturedGuide;
 
         return $this;
     }

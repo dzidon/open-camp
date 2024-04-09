@@ -13,6 +13,8 @@ class UserSearchData
 
     private null|false|Role $role = null;
 
+    private ?bool $isFeaturedGuide = null;
+
     public function getPhrase(): string
     {
         return $this->phrase;
@@ -50,6 +52,18 @@ class UserSearchData
     public function setRole(null|false|Role $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function isFeaturedGuide(): ?bool
+    {
+        return $this->isFeaturedGuide;
+    }
+
+    public function setIsFeaturedGuide(?bool $isFeaturedGuide): self
+    {
+        $this->isFeaturedGuide = $isFeaturedGuide;
 
         return $this;
     }

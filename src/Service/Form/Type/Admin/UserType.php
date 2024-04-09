@@ -43,10 +43,15 @@ class UserType extends AbstractType
                         'autofocus' => 'autofocus'
                     ],
                     'label'    => 'form.admin.user.email',
-                    'priority' => 5000,
+                    'priority' => 5100,
                 ])
                 ->add('billingData', BillingType::class, [
                     'label'    => false,
+                    'priority' => 5000,
+                ])
+                ->add('isFeaturedGuide', CheckboxType::class, [
+                    'required' => false,
+                    'label'    => 'form.admin.user.is_featured_guide',
                     'priority' => 4900,
                 ])
                 ->add('urlName', TextType::class, [

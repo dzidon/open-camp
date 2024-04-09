@@ -59,8 +59,9 @@
                                 <tr>
                                     <th>{{ 'entity_attribute.user.email'|trans }}</th>
                                     <th>{{ 'entity_attribute.user.name_first'|trans }} & {{ 'entity_attribute.user.name_last'|trans }}</th>
-                                    <th>{{ 'entity_attribute.user.url_name'|trans }}</th>
                                     <th>{{ 'entity_attribute.user.role'|trans }}</th>
+                                    <th>{{ 'entity_attribute.user.url_name'|trans }}</th>
+                                    <th>{{ 'entity_attribute.user.is_featured_guide'|trans }}</th>
                                     <th>{{ 'entity_attribute.user.last_active_at'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
                                 </tr>
@@ -86,6 +87,14 @@
                                         </td>
 
                                         <td class="align-middle">
+                                            {% if user.role is null %}
+                                                <em>{{ 'search.item_no_reference.female'|trans }}</em>
+                                            {% else %}
+                                                <span>{{ user.role.label }}</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="align-middle">
                                             {% if user.urlName %}
                                                 <span>{{ user.urlName }}</span>
                                             {% else %}
@@ -94,11 +103,13 @@
                                         </td>
 
                                         <td class="align-middle">
-                                            {% if user.role is null %}
-                                                <em>{{ 'search.item_no_reference.female'|trans }}</em>
-                                            {% else %}
-                                                <span>{{ user.role.label }}</span>
-                                            {% endif %}
+                                            <span>
+                                                {% if user.featuredGuide %}
+                                                    {{ 'bool.yes'|trans }}
+                                                {% else %}
+                                                    {{ 'bool.no'|trans }}
+                                                {% endif %}
+                                            </span>
                                         </td>
 
                                         <td class="align-middle">

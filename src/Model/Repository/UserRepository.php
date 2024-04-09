@@ -184,11 +184,26 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     /**
      * @inheritDoc
      */
+    public function getUserGuidePaginator(int $currentPage, int $pageSize): DqlPaginator
+    {
+        $query = $this->createQueryBuilder('user')
+            ->andWhere('user.urlName IS NOT NULL')
+            ->orderBy('user.guidePriority', 'DESC')
+            ->getQuery()
+        ;
+
+        return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getAdminPaginator(UserSearchData $data, int $currentPage, int $pageSize): DqlPaginator
     {
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();
         $role = $data->getRole();
+        $isFeaturedGuide = $data->isFeaturedGuide();
 
         $queryBuilder = $this->createQueryBuilder('user')
             ->select('user, userRole')
@@ -211,6 +226,14 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
             $queryBuilder
                 ->andWhere('user.role = :roleId')
                 ->setParameter('roleId', $role->getId(), UuidType::NAME)
+            ;
+        }
+
+        if ($isFeaturedGuide !== null)
+        {
+            $queryBuilder
+                ->andWhere('user.isFeaturedGuide = :isFeaturedGuide')
+                ->setParameter('isFeaturedGuide', $isFeaturedGuide)
             ;
         }
 
