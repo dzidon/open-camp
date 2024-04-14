@@ -62,6 +62,7 @@ parameters:
     # Cookies
     app.cookie_lifespan_application_draft: '1 year'
     app.cookie_prefix_application_draft: 'application_draft_'
+    app.cookie_name_visitor_id: 'visitor_id'
 
     # Session
     app.last_completed_application_id_session_key: 'last_completed_application_id'

@@ -3,6 +3,7 @@
 namespace App\Service\Form\Type\Admin;
 
 use App\Library\Data\Admin\ProfileData;
+use DateTimeImmutable;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -21,6 +22,8 @@ class ProfileType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $bornAtMax = (new DateTimeImmutable('-1 day'))->format('Y-m-d');
+
         $builder
             ->add('nameFirst', TextType::class, [
                 'attr' => [
@@ -34,6 +37,9 @@ class ProfileType extends AbstractType
                 'label'    => 'form.admin.profile.name_last',
             ])
             ->add('bornAt', DateType::class, [
+                'attr' => [
+                    'max' => $bornAtMax,
+                ],
                 'required' => false,
                 'widget'   => 'single_text',
                 'input'    => 'datetime_immutable',

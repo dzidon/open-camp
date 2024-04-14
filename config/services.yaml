@@ -70,6 +70,7 @@ parameters:
     # Cookies
     app.cookie_lifespan_application_draft: '1 year'
     app.cookie_prefix_application_draft: 'application_draft_'
+    app.cookie_name_visitor_id: 'visitor_id'
 
     # Session
     app.last_completed_application_id_session_key: 'last_completed_application_id'
@@ -303,3 +304,11 @@ services:
     App\Service\Validator\EuVatIdValidator:
         arguments:
             $euVatIdRegex: '%app.eu_vat_id_regex%'
+
+    App\Service\Visitor\VisitorIdProvider:
+        arguments:
+            $visitorIdCookieName: '%app.cookie_name_visitor_id%'
+
+    App\Service\EventSubscriber\VisitorIdCookieSubscriber:
+        arguments:
+            $visitorIdCookieName: '%app.cookie_name_visitor_id%'

@@ -8,13 +8,20 @@ import '../scripts/bootstrap';
 
 $(document).ready(function ()
 {
+    scrollToTop();
     scrollToFirstError();
     openCollapsedContainers();
 });
 
+function scrollToTop()
+{
+    window.scrollTo(0, 0);
+}
+
 function scrollToFirstError()
 {
     const firstError = document.getElementsByClassName('form-error-message')[0];
+
     if (firstError)
     {
         setTimeout(() => {
@@ -23,30 +30,36 @@ function scrollToFirstError()
                 block: 'center',
                 inline: 'center'
             });
-        }, 250);
+        }, 100);
     }
 }
 
 function openCollapsedContainers()
 {
-    let sizingData = {
-        xs: {
+    let sizingData =
+    {
+        xs:
+        {
             containers: $('.show-collapsed'),
             minWidth: 0,
         },
-        sm: {
+        sm:
+        {
             containers: $('.show-collapsed-sm'),
             minWidth: 576,
         },
-        md: {
+        md:
+        {
             containers: $('.show-collapsed-md'),
             minWidth: 768,
         },
-        lg: {
+        lg:
+        {
             containers: $('.show-collapsed-lg'),
             minWidth: 992,
         },
-        xl: {
+        xl:
+        {
             containers: $('.show-collapsed-xl'),
             minWidth: 1200,
         },

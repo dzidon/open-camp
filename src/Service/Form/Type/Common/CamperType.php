@@ -3,6 +3,7 @@
 namespace App\Service\Form\Type\Common;
 
 use App\Library\Data\Common\CamperData;
+use DateTimeImmutable;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -63,6 +64,8 @@ class CamperType extends AbstractType
             ;
         });
 
+        $bornAtMax = (new DateTimeImmutable('-1 day'))->format('Y-m-d');
+
         $builder
             ->add('nameFirst', TextType::class, [
                 'attr' => [
@@ -76,6 +79,9 @@ class CamperType extends AbstractType
                 'priority' => 800,
             ])
             ->add('bornAt', DateType::class, [
+                'attr' => [
+                    'max' => $bornAtMax,
+                ],
                 'widget'   => 'single_text',
                 'input'    => 'datetime_immutable',
                 'label'    => 'form.common.camper.born_at',

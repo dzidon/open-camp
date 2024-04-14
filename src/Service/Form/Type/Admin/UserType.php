@@ -6,6 +6,7 @@ use App\Library\Data\Admin\ProfileData;
 use App\Library\Data\Admin\UserData;
 use App\Model\Entity\Role;
 use App\Service\Form\Type\Common\BillingType;
+use DateTimeImmutable;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\AbstractType;
@@ -37,6 +38,8 @@ class UserType extends AbstractType
     {
         if ($this->security->isGranted('user_update'))
         {
+            $bornAtMax = (new DateTimeImmutable('-1 day'))->format('Y-m-d');
+
             $builder
                 ->add('email', EmailType::class, [
                     'attr' => [
@@ -64,6 +67,9 @@ class UserType extends AbstractType
                     'priority' => 4700,
                 ])
                 ->add('bornAt', DateType::class, [
+                    'attr' => [
+                        'max' => $bornAtMax,
+                    ],
                     'required' => false,
                     'widget'   => 'single_text',
                     'input'    => 'datetime_immutable',

@@ -84,6 +84,24 @@
     <button type="submit" class="btn btn-primary">{{ 'form.user.contact_search.button'|trans }}</button>
 {% endblock %}
 
+{% block user_blog_post_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        {{ 'form.user.blog_post_search.button'|trans }}
+    </button>
+{% endblock %}
+
 {# Application to user import #}
 {% block user_application_import_widget %}
     {{ form_errors(form) }}

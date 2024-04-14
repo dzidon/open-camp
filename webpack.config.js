@@ -24,6 +24,10 @@ Encore
         to: 'tinymce/models/[path]/[name].[ext]'
     })
     .copyFiles({
+        from: 'node_modules/tinymce/plugins',
+        to: 'tinymce/plugins/[path]/[name].[ext]'
+    })
+    .copyFiles({
         from: 'node_modules/tinymce-i18n/langs',
         to: 'tinymce/langs/[path]/[name].[ext]'
     })

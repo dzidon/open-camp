@@ -1,0 +1,88 @@
+{% extends "user/base.html.twig" %}
+
+{% block main %}
+    <div class="row mb-5">
+        <div class="col">
+            {{ form(form_search) }}
+        </div>
+    </div>
+
+    {% if is_search_invalid %}
+        <div class="row mb-4">
+            <div class="col">
+                <div class="alert alert-danger" role="alert">
+                    {{ 'search.error.invalid_filter'|trans }}
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row mb-3">
+        <div class="col">
+            <h4>
+                {% if paginator.totalItems > 0 %}
+                    {{ 'search.results'|trans }} ({{ 'search.total'|trans }} {{ paginator.totalItems }})
+                {% else %}
+                    {{ 'search.error.no_results'|trans }}
+                {% endif %}
+            </h4>
+        </div>
+    </div>
+
+    {% if paginator.totalItems > 0 %}
+        <div class="row">
+            {% for blog_post in paginator.currentPageItems %}
+                <div class="col-sm-12 col-md-6 d-flex">
+                    <div class="card mb-4 flex-fill">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {% if blog_post.isPinned %}
+                                    <i class="fas fa-thumbtack text-primary"></i>
+                                {% endif %}
+
+                                {% if blog_post.isHidden %}
+                                    <span class="badge badge-warning">
+                                        {{ 'blog.hidden_post'|trans }}
+                                    </span>
+                                {% endif %}
+
+                                {{ blog_post.title }}
+                            </h5>
+
+                            <div>
+                                <small>
+                                    {{ blog_post.createdAt|date(date_time_format) }}
+
+                                    {% if blog_post.updatedAt is not null %}
+                                        ({{ 'entity_attribute.blog_post.updated_at'|trans }}:
+                                        {{ blog_post.updatedAt|date(date_time_format) }})
+                                    {% endif %}
+                                </small>
+                            </div>
+
+                            {% if blog_post.description is not null %}
+                                <div class="mt-3">
+                                    {{ blog_post.description }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="card-footer">
+                            <a href="{{ path('user_blog_post_read', {urlName: blog_post.urlName}) }}"
+                               class="stretched-link card-link"
+                            >
+                                {{ 'crud.action.common.read'|trans }}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="row">
+            <div class="col">
+                {{ menu(pagination_menu) }}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

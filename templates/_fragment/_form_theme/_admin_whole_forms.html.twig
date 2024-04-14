@@ -727,3 +727,33 @@
         {{ 'form.admin.application_admin_attachment_search.button'|trans }}
     </button>
 {% endblock %}
+
+{% block admin_blog_post_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.isHidden) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.isPinned) }}
+        </div>
+
+        <div class="form-group col-md-4">
+            {{ form_row(form.author) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.blog_post_search.button'|trans }}
+    </button>
+{% endblock %}

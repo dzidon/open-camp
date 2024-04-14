@@ -7,6 +7,12 @@ use App\Model\Entity\CampDateAttachmentConfig;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 
+/**
+ * @method CampDateAttachmentConfig|null find($id, $lockMode = null, $lockVersion = null)
+ * @method CampDateAttachmentConfig|null findOneBy(array $criteria, array $orderBy = null)
+ * @method CampDateAttachmentConfig[]    findAll()
+ * @method CampDateAttachmentConfig[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
 class CampDateAttachmentConfigRepository extends AbstractRepository implements CampDateAttachmentConfigRepositoryInterface
 {
     public function __construct(ManagerRegistry $registry)

@@ -1,0 +1,161 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <a data-toggle="collapse" href="#search-content" role="button">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            <i class="fas fa-search mr-2"></i>
+                            {{ 'search.label'|trans }}
+                        </h3>
+                    </div>
+                </a>
+
+                <div class="card-body collapse {% if is_search_invalid %} show {% endif %}" id="search-content">
+                    {{ form(form_search) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if is_search_invalid %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-outline card-danger">
+                    <div class="card-header">
+                        <span>
+                            {{ 'search.error.invalid_filter'|trans }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header d-flex w-100 align-items-center">
+                    <h3 class="card-title">
+                        {% if result.paginator.totalItems > 0 %}
+                            {{ 'search.results'|trans }} ({{ 'search.total'|trans }} {{ result.paginator.totalItems }})
+                        {% else %}
+                            {{ 'search.error.no_results'|trans }}
+                        {% endif %}
+                    </h3>
+
+                    {% set granted_create = is_granted('blog_post_create') %}
+                    {% if granted_create %}
+                        <a href="{{ path('admin_blog_post_create') }}" class="btn btn-success ml-3">
+                            {{ 'crud.action.common.create'|trans }}
+                        </a>
+                    {% endif %}
+                </div>
+
+                {% if result.paginator.totalItems > 0 %}
+                    <div class="card-body table-responsive p-0">
+                        <table class="table text-nowrap">
+                            <thead>
+                                <tr>
+                                    <th>{{ 'entity_attribute.blog_post.title'|trans }}</th>
+                                    <th>{{ 'entity_attribute.blog_post.url_name'|trans }}</th>
+                                    <th>{{ 'entity_attribute.blog_post.is_hidden'|trans }}</th>
+                                    <th>{{ 'entity_attribute.blog_post.is_pinned'|trans }}</th>
+                                    <th>{{ 'entity_attribute.blog_post.author'|trans }}</th>
+                                    <th>{{ 'entity_attribute.blog_post.view_count'|trans }}</th>
+                                    <th class="cell-25">{{ 'search.item_action'|trans }}</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                {% set granted_read = is_granted('blog_post_read') %}
+                                {% set granted_update = is_granted('blog_post_update') %}
+                                {% set granted_delete = is_granted('blog_post_delete') %}
+
+                                {% for blog_post in result.paginator.currentPageItems %}
+                                    <tr class="align-items-center">
+                                        <td class="align-middle">
+                                            <span>{{ blog_post.title }}</span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <span>{{ blog_post.urlName }}</span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <span>
+                                                {% if blog_post.hidden %}
+                                                    {{ 'bool.yes'|trans }}
+                                                {% else %}
+                                                    {{ 'bool.no'|trans }}
+                                                {% endif %}
+                                            </span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            <span>
+                                                {% if blog_post.pinned %}
+                                                    {{ 'bool.yes'|trans }}
+                                                {% else %}
+                                                    {{ 'bool.no'|trans }}
+                                                {% endif %}
+                                            </span>
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {% if blog_post.author is null %}
+                                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                                            {% else %}
+                                                <span>{{ blog_post.author.email }}</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="align-middle">
+                                            {{ result.viewCount(blog_post) }}
+                                        </td>
+
+                                        <td class="align-middle cell-25">
+                                            {% if granted_read or granted_update or granted_delete %}
+                                                {% if granted_read %}
+                                                    <a href="{{ path('admin_blog_post_read', {id: blog_post.id.toRfc4122}) }}"
+                                                       class="btn btn-secondary"
+                                                    >
+                                                        {{ 'crud.action.common.read'|trans }}
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if granted_update %}
+                                                    <a href="{{ path('admin_blog_post_update', {id: blog_post.id.toRfc4122}) }}"
+                                                       class="btn btn-primary"
+                                                    >
+                                                        {{ 'crud.action.common.update'|trans }}
+                                                    </a>
+                                                {% endif %}
+
+                                                {% if granted_delete %}
+                                                    <a href="{{ path('admin_blog_post_delete', {id: blog_post.id.toRfc4122}) }}"
+                                                       class="btn btn-danger"
+                                                    >
+                                                        {{ 'crud.action.common.delete'|trans }}
+                                                    </a>
+                                                {% endif %}
+                                            {% else %}
+                                                <span>-</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="card-footer clearfix">
+                        {{ menu(pagination_menu) }}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

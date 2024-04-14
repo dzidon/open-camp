@@ -71,6 +71,13 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $itemCampCatalog->setActive($active);
         $menu->addChild($itemCampCatalog);
 
+        // blog
+        $text = $this->translator->trans('route.user_blog_post_list');
+        $url = $this->urlGenerator->generate('user_blog_post_list');
+        $itemBlog = new MenuType('user_blog_post_list', 'navbar_user_item', $text, $url);
+        $itemBlog->setActive($route === 'user_blog_post_list' || $route === 'user_blog_post_read');
+        $menu->addChild($itemBlog);
+
         // guides
         $text = $this->translator->trans('route.user_guide_list');
         $url = $this->urlGenerator->generate('user_guide_list');

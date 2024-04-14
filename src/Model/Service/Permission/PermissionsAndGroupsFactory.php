@@ -81,6 +81,7 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
      */
     private function createPermissionGroups(): array
     {
+        $groups['blog_post'] = new PermissionGroup('blog_post', 'permission_group.blog_post', 1200);
         $groups['application'] = new PermissionGroup('application', 'permission_group.application', 1100);
         $groups['application_payment'] = new PermissionGroup('application_payment', 'permission_group.application_payment', 1000);
         $groups['user'] = new PermissionGroup('user', 'permission_group.user', 900);
@@ -104,6 +105,11 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
      */
     private function createPermissions(array $groups): array
     {
+        $permissions['blog_post_create'] = new Permission('blog_post_create', 'permission.blog_post_create', 400, $groups['blog_post']);
+        $permissions['blog_post_read'] = new Permission('blog_post_read', 'permission.blog_post_read', 300, $groups['blog_post']);
+        $permissions['blog_post_update'] = new Permission('blog_post_update', 'permission.blog_post_update', 200, $groups['blog_post']);
+        $permissions['blog_post_delete'] = new Permission('blog_post_delete', 'permission.blog_post_delete', 100, $groups['blog_post']);
+        
         $permissions['application_summary_read'] = new Permission('application_summary_read', 'permission.application_summary_read', 500, $groups['application']);
         $permissions['application_read'] = new Permission('application_read', 'permission.application_read', 400, $groups['application']);
         $permissions['application_state_update'] = new Permission('application_state_update', 'permission.application_state_update', 300, $groups['application']);

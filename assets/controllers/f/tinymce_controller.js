@@ -18,6 +18,11 @@ export default class TinymceController extends Controller
             base_url: '/build/tinymce',
             branding: false,
             promotion: false,
+            plugins: ['image', 'link', 'emoticons', 'table'],
+            block_formats: 'Paragraph=p;Heading 2=h2;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6;Preformatted=pre',
+            image_class_list: [
+                {title: 'img-fluid', value: 'img-fluid'},
+            ],
         });
     }
 }

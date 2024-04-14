@@ -34,6 +34,7 @@ unique_purchasable_item_variant: 'V rámci volitelné platby už existuje varian
 unique_purchasable_item_variant_value: 'V rámci editované varianty už existuje hodnota s tímto názvem.'
 unique_purchasable_item_variant_values: 'V rámci editované varianty se nesmí opakovat hodnoty se stejnými názvy.'
 unique_form_field: 'Už existuje formulářové pole s tímto názvem.'
+unique_blog_post: 'Už existuje příspěvek s tímto názvem v odkazu.'
 camp_date_user_unique: 'Vedoucího "{user}" můžete přiřadit pouze jednou.'
 camp_date_interval: 'Tábor už má v tomto intervalu jiný termín.'
 discount_config_integer_intervals: 'Tento interval se překrývá s jiným.'

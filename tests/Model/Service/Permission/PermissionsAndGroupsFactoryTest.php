@@ -46,8 +46,14 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Groups
          */
-        $this->assertCount(11, $groupsSerialized);
+        $this->assertCount(12, $groupsSerialized);
 
+        $this->assertContains([
+            'name'     => 'blog_post',
+            'priority' => 1200,
+            'label'    => 'permission_group.blog_post',
+        ], $groupsSerialized);
+        
         $this->assertContains([
             'name'     => 'application',
             'priority' => 1100,
@@ -117,8 +123,37 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Permissions
          */
-        $this->assertCount(46, $permissionsSerialized);
+        $this->assertCount(50, $permissionsSerialized);
 
+        // blog post
+        $this->assertContains([
+            'name'             => 'blog_post_create',
+            'priority'         => 400,
+            'label'            => 'permission.blog_post_create',
+            'permission_group' => 'blog_post',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'blog_post_read',
+            'priority'         => 300,
+            'label'            => 'permission.blog_post_read',
+            'permission_group' => 'blog_post',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'blog_post_update',
+            'priority'         => 200,
+            'label'            => 'permission.blog_post_update',
+            'permission_group' => 'blog_post',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'blog_post_delete',
+            'priority'         => 100,
+            'label'            => 'permission.blog_post_delete',
+            'permission_group' => 'blog_post',
+        ], $permissionsSerialized);
+        
         // application
         $this->assertContains([
             'name'             => 'application_summary_read',

@@ -31,7 +31,11 @@ class UserAutocompleteType extends AbstractType
             },
             'security' => function(Security $security): bool
             {
-                return $security->isGranted('camp_create') || $security->isGranted('camp_update');
+                return
+                    $security->isGranted('camp_create') ||
+                    $security->isGranted('camp_update') ||
+                    $security->isGranted('blog_post', 'any_admin_permission')
+                ;
             },
             'choice_label' => function (User $user): string
             {

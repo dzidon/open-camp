@@ -122,7 +122,8 @@ class ApplicationController extends AbstractController
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
         $camp = $campDate->getCamp();
-        $this->setRouteName();
+        $campCategory = $camp->getCampCategory();
+        $this->setRouteNameToApplicationModule();
 
         return $this->render('user/application/step_one.html.twig', [
             'camp_date'                       => $campDate,
@@ -137,10 +138,11 @@ class ApplicationController extends AbstractController
             'tax'                             => $this->getParameter('app.tax'),
             'form_application_step_one'       => $form->createView(),
             'breadcrumbs'                     => $this->createBreadcrumbs([
-                'camp'      => $camp,
-                'camp_date' => $campDate,
+                'camp'          => $camp,
+                'camp_date'     => $campDate,
+                'camp_category' => $campCategory,
             ]),
-            'application_back_url'            => $this->generateUrl('user_camp_detail', [
+            'application_back_url' => $this->generateUrl('user_camp_detail', [
                 'urlName' => $camp->getUrlName(),
             ]),
         ]);
@@ -200,7 +202,7 @@ class ApplicationController extends AbstractController
 
         $backRoute = $camp === null ? 'user_camp_catalog' : 'user_camp_detail';
         $backUrlParameters = $camp === null ? [] : ['urlName' => $camp->getUrlName()];
-        $this->setRouteName();
+        $this->setRouteNameToApplicationModule();
 
         return $this->render('user/application/step_one.html.twig', [
             'application'                     => $application,
@@ -264,7 +266,7 @@ class ApplicationController extends AbstractController
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
-        $this->setRouteName();
+        $this->setRouteNameToApplicationModule();
 
         return $this->render('user/application/step_two.html.twig', [
             'form_application_step_two' => $form->createView(),
@@ -332,7 +334,7 @@ class ApplicationController extends AbstractController
 
         // load all camp categories so that the camp category path does not trigger additional queries
         $this->campCategoryRepository->findAll();
-        $this->setRouteName();
+        $this->setRouteNameToApplicationModule();
 
         $applicationBackUrl = $this->generateUrl('user_application_step_two', [
             'applicationId' => $applicationId,
@@ -496,7 +498,7 @@ class ApplicationController extends AbstractController
         return $application;
     }
 
-    private function setRouteName(): void
+    private function setRouteNameToApplicationModule(): void
     {
         $routeName = $this->trans('entity.application.singular');
         $this->routeNamer->setCurrentRouteName($routeName);

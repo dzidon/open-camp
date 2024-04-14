@@ -297,6 +297,27 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
             }
         }
 
+        // blog
+        $isGrantedBlog =
+            $this->security->isGranted('blog_post_create') || $this->security->isGranted('blog_post_read') ||
+            $this->security->isGranted('blog_post_update') || $this->security->isGranted('blog_post_delete')
+        ;
+        
+        if ($isGrantedBlog)
+        {
+            $active =
+                $route === 'admin_blog_post_list' || $route === 'admin_blog_post_create' ||
+                $route === 'admin_blog_post_read' || $route === 'admin_blog_post_update' ||
+                $route === 'admin_blog_post_delete'
+            ;
+
+            $text = $this->translator->trans('route.admin_blog_post_list');
+            $url = $this->urlGenerator->generate('admin_blog_post_list');
+            $itemBlog = new MenuIconType('admin_blog_post_list', 'navbar_admin_vertical_item', $text, $url, 'fas fa-newspaper');
+            $menu->addChild($itemBlog);
+            $itemBlog->setActive($active, $active);
+        }
+
         return $menu;
     }
 }

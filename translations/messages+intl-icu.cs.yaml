@@ -314,6 +314,10 @@ camp_catalog:
         available: 'Volno'
         unavailable: 'Obsazeno'
 
+blog:
+    hidden_post: 'Skrytý'
+    hidden_blog_post_shown_for_admin: 'Zobrazujete si skrytý příspěvek jako administrátor.'
+
 auth:
     no_account_yet: 'Ještě u nás nemáte účet?'
     no_account_yet_link: 'Zaregistrovat se'
@@ -426,6 +430,7 @@ permission_group:
     purchasable_item: 'Volitelné platby'
     form_field: 'Formulářová pole'
     discount_config: 'Konfigurace slev'
+    blog_post: 'Blog'
 
 permission:
     application_summary_read: 'Zobrazení souhrnů přihlášek za tábory a termíny'
@@ -438,6 +443,11 @@ permission:
     application_payment_create: 'Tvorba platby'
     application_payment_update: 'Editace platby'
     application_payment_delete: 'Odstranění platby'
+
+    blog_post_read: 'Zobrazení příspěvku'
+    blog_post_create: 'Tvorba příspěvku'
+    blog_post_update: 'Editace příspěvku'
+    blog_post_delete: 'Odstranění příspěvku'
 
     user_read: 'Zobrazení uživatele'
     user_create: 'Tvorba uživatele'
@@ -508,6 +518,7 @@ crud:
         purchasable_item_variant_value_delete: 'Opravdu si přejete odstranit hodnotu "{name}"?'
         form_field_delete: 'Opravdu si přejete odstranit formulářové pole "{name}"?'
         discount_config_delete: 'Opravdu si přejete odstranit konfiguraci slev "{name}"?'
+        blog_post_delete: 'Opravdu si přejete odstranit příspěvek "{title}"?'
         application_delete: 'Opravdu si přejete odstranit přihlášku "{simple_id}"?'
         application_contact_delete: 'Opravdu si přejete odstranit kontakt "{name}"?'
         application_camper_delete: 'Opravdu si přejete odstranit táborníka "{name}"?'
@@ -571,6 +582,11 @@ crud:
             create: 'Příloha vytvořena!'
             update: 'Příloha uložena!'
             delete: 'Příloha odstraněna!'
+
+        blog_post:
+            create: 'Příspěvek vytvořen!'
+            update: 'Příspěvek uložen!'
+            delete: 'Příspěvek odstraněn!'
 
         contact:
             create: 'Kontakt vytvořen!'
@@ -660,6 +676,14 @@ crud:
             delete: 'Konfigurace slev odstraněna!'
 
 entity:
+    blog_post:
+        singular: 'Příspěvek'
+        plural: 'Příspěvky'
+
+    blog_post_view:
+        singular: 'Zhlédnutí příspěvku'
+        plural: 'Zhlédnutí příspěvků'
+
     contact:
         singular: 'Kontakt'
         plural: 'Kontakty'
@@ -1317,6 +1341,25 @@ entity_attribute:
         help: 'Pomocný text'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
+
+    blog_post:
+        id: 'ID'
+        title: 'Nadpis'
+        url_name: 'Název v odkazu'
+        description: 'Krátký popis'
+        content: 'Obsah'
+        is_hidden: 'Skrytý'
+        is_pinned: 'Připnutý'
+        author: 'Autor'
+        view_count: 'Počet zobrazení'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    blog_post_view:
+        id: 'ID'
+        blog_post: 'Příspěvek'
+        visitor_id: 'ID návštěvníka'
+        created_at: 'Datum vytvoření'
 
 form:
     common:
@@ -2015,6 +2058,33 @@ form:
         application_admin_attachment_delete:
             button: 'Odstranit'
 
+        blog_post:
+            title: 'Nadpis'
+            url_name: 'Název v odkazu'
+            description: 'Krátký popis'
+            content: 'Obsah'
+            is_hidden: 'Skrytý'
+            is_pinned: 'Připnutý'
+            button: 'Uložit'
+
+        blog_post_search:
+            phrase: 'Hledat podle nadpisu nebo názvu v odkazu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovějších'
+                    created_at_asc: 'Od nejstarších'
+                    view_count_desc: 'Od největšího počtu zobrazení'
+                    view_count_asc: 'Od nejmenšího počtu zobrazení'
+
+            is_hidden: 'Skrytý'
+            is_pinned: 'Připnutý'
+            author: 'Autor'
+            button: 'Hledat'
+
+        blog_post_delete:
+            button: 'Odstranit'
+
     user:
         application_step_one:
             email:
@@ -2083,6 +2153,16 @@ form:
             do_nothing: 'Neukládat tohoto táborníka'
             create_new: 'Uložit jako nového táborníka na můj profil'
             update_existing: 'Aktualizovat táborníka {camper}'
+
+        blog_post_search:
+            phrase: 'Hledat příspěvek podle nadpisu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovějších'
+                    created_at_asc: 'Od nejstarších'
+
+            button: 'Hledat'
 
         registration:
             email: 'E-mail'
@@ -2255,6 +2335,12 @@ route:
     admin_discount_config_update: 'Editace konfigurace slev'
     admin_discount_config_delete: 'Odstranění konfigurace slev'
 
+    admin_blog_post_list: 'Blog'
+    admin_blog_post_create: 'Nový příspěvek'
+    admin_blog_post_read: 'Zobrazení příspěvku'
+    admin_blog_post_update: 'Editace příspěvku'
+    admin_blog_post_delete: 'Odstranění příspěvku'
+
     admin_application_camp_list: 'Přihlášky'
     admin_application_camp_summary: 'Souhrn za tábor'
     admin_application_camp_date_list: 'Termíny'
@@ -2304,6 +2390,9 @@ route:
     user_guide_list: 'Naši vedoucí'
     user_guide_detail: 'Vedoucí'
     user_application_import: 'Uložení údajů z přihlášky'
+
+    user_blog_post_list: 'Blog'
+    user_blog_post_read: 'Příspěvek'
 
     user_profile_billing: 'Fakturační údaje'
     user_profile_contact_list: 'Kontakty'
