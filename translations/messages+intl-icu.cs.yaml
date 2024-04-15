@@ -41,8 +41,8 @@ gender:
     f: 'Žena'
 
 gender_childish:
-    m: 'Kluk'
-    f: 'Holka'
+    m: 'Chlapec'
+    f: 'Dívka'
 
 price:
     free: 'Zdarma'
