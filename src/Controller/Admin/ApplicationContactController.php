@@ -196,15 +196,6 @@ class ApplicationContactController extends AbstractController
         $application = $applicationContact->getApplication();
         $this->assertIsGrantedAccess($application);
 
-        if (count($application->getApplicationContacts()) <= 1)
-        {
-            $this->addTransFlash('failure', 'crud.error.application_contact_delete');
-
-            return $this->redirectToRoute('admin_application_contact_list', [
-                'id' => $application->getId(),
-            ]);
-        }
-
         $form = $this->createForm(HiddenTrueType::class);
         $form->add('submit', SubmitType::class, [
             'label' => 'form.admin.application_contact_delete.button',

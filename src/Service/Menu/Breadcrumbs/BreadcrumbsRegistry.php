@@ -6,7 +6,6 @@ use App\Library\Menu\MenuType;
 use App\Library\Menu\MenuTypeInterface;
 use LogicException;
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
-use Symfony\Component\OptionsResolver\Exception\InvalidArgumentException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**

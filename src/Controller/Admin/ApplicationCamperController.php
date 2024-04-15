@@ -7,6 +7,7 @@ use App\Library\Data\Admin\ApplicationCamperSearchData;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\User;
 use App\Model\Event\Admin\ApplicationCamper\ApplicationCamperCreateEvent;
 use App\Model\Event\Admin\ApplicationCamper\ApplicationCamperDeleteEvent;
 use App\Model\Event\Admin\ApplicationCamper\ApplicationCamperUpdateEvent;
@@ -35,38 +36,71 @@ class ApplicationCamperController extends AbstractController
 
     private ApplicationRepositoryInterface $applicationRepository;
 
-    private CampDateRepositoryInterface $campDateRepository;
-
     public function __construct(ApplicationCamperRepositoryInterface $applicationCamperRepository,
-                                ApplicationRepositoryInterface       $applicationRepository,
-                                CampDateRepositoryInterface          $campDateRepository)
+                                ApplicationRepositoryInterface       $applicationRepository)
     {
         $this->applicationCamperRepository = $applicationCamperRepository;
         $this->applicationRepository = $applicationRepository;
-        $this->campDateRepository = $campDateRepository;
     }
 
     #[Route('/admin/application-campers/{campDateId}', name: 'admin_camp_date_application_camper_list')]
-    public function listPerCampDate(MenuTypeFactoryRegistryInterface $menuFactory,
+    public function listPerCampDate(CampDateRepositoryInterface      $campDateRepository,
+                                    MenuTypeFactoryRegistryInterface $menuFactory,
                                     FormFactoryInterface             $formFactory,
                                     Request                          $request,
-                                    UuidV4                           $campDateId): Response
+                                    ?UuidV4                          $campDateId = null): Response
     {
-        $campDate = $this->findCampDateOrThrow404($campDateId);
-        $this->assertIsGrantedRead($campDate);
+        $campDate = null;
+        $searchByGuideOrCampDate = null;
+        $isAdmin = $this->isGranted('application_read') || $this->isGranted('application_update');
+
+        if ($campDateId === null)
+        {
+            $isGuide = $this->isGranted('guide_access_read');
+
+            if (!$isGuide && !$isAdmin)
+            {
+                throw $this->createAccessDeniedException();
+            }
+
+            if ($isGuide && !$isAdmin)
+            {
+                /** @var User $searchByGuideOrCampDate */
+                $searchByGuideOrCampDate = $this->getUser();
+            }
+        }
+        else
+        {
+            $campDate = $campDateRepository->findOneById($campDateId);
+
+            if ($campDate === null)
+            {
+                throw $this->createNotFoundException();
+            }
+
+            $isGuide = $this->isGranted('guide_access_read', $campDate);
+
+            if (!$isAdmin && !$isGuide)
+            {
+                throw $this->createAccessDeniedException();
+            }
+
+            $searchByGuideOrCampDate = $campDate;
+        }
 
         $page = (int) $request->query->get('page', 1);
         $searchData = new ApplicationCamperSearchData(true);
         $form = $formFactory->createNamed('', ApplicationCamperSearchType::class, $searchData);
         $form->handleRequest($request);
-
         $isSearchInvalid = $form->isSubmitted() && !$form->isValid();
+
         if ($isSearchInvalid)
         {
             $searchData = new ApplicationCamperSearchData(true);
         }
 
-        $paginator = $this->applicationCamperRepository->getAdminPaginator($searchData, $campDate, $page, 20);
+        $paginator = $this->applicationCamperRepository->getAdminPaginator($searchData, $searchByGuideOrCampDate, $page, 20);
+
         if ($paginator->isCurrentPageOutOfBounds())
         {
             throw $this->createNotFoundException();
@@ -76,7 +110,7 @@ class ApplicationCamperController extends AbstractController
             'paginator' => $paginator,
         ]);
 
-        $camp = $campDate->getCamp();
+        $camp = $campDate?->getCamp();
 
         return $this->render('admin/application/camper/list.html.twig', [
             'form_search'       => $form->createView(),
@@ -103,14 +137,15 @@ class ApplicationCamperController extends AbstractController
         $searchData = new ApplicationCamperSearchData(false);
         $form = $formFactory->createNamed('', ApplicationCamperSearchType::class, $searchData);
         $form->handleRequest($request);
-
         $isSearchInvalid = $form->isSubmitted() && !$form->isValid();
+
         if ($isSearchInvalid)
         {
             $searchData = new ApplicationCamperSearchData(false);
         }
 
         $paginator = $this->applicationCamperRepository->getAdminPaginator($searchData, $application, $page, 20);
+
         if ($paginator->isCurrentPageOutOfBounds())
         {
             throw $this->createNotFoundException();
@@ -251,15 +286,6 @@ class ApplicationCamperController extends AbstractController
         $application = $applicationCamper->getApplication();
         $this->assertIsGrantedUpdate($application);
 
-        if (count($application->getApplicationCampers()) <= 1)
-        {
-            $this->addTransFlash('failure', 'crud.error.application_camper_delete');
-
-            return $this->redirectToRoute('admin_application_camper_list', [
-                'id' => $application->getId(),
-            ]);
-        }
-
         $form = $this->createForm(HiddenTrueType::class);
         $form->add('submit', SubmitType::class, [
             'label' => 'form.admin.application_camper_delete.button',
@@ -337,17 +363,5 @@ class ApplicationCamperController extends AbstractController
         }
 
         return $application;
-    }
-
-    private function findCampDateOrThrow404(UuidV4 $id): CampDate
-    {
-        $campDate = $this->campDateRepository->findOneById($id);
-
-        if ($campDate === null)
-        {
-            throw $this->createNotFoundException();
-        }
-
-        return $campDate;
     }
 }

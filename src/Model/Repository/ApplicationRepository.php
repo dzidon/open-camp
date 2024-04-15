@@ -285,8 +285,8 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
             ->leftJoin('application.paymentMethod', 'paymentMethod')
             ->andWhere('application.isDraft = FALSE')
             ->andWhere('(
-                application.simpleId      LIKE :phrase      OR
-                application.email         LIKE :phrase      OR
+                application.simpleId      LIKE :phrase        OR
+                application.email         LIKE :phrase        OR
                 application.invoiceNumber =    :invoiceNumber
             )')
             ->setParameter('phrase', '%' . $phrase . '%')

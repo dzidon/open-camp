@@ -77,7 +77,9 @@ class ApplicationController extends AbstractController
                 throw $this->createNotFoundException();
             }
 
-            if (!$isAdmin && !$this->isGranted('guide_access_read', $campDate))
+            $isGuide = $this->isGranted('guide_access_read', $campDate);
+
+            if (!$isAdmin && !$isGuide)
             {
                 throw $this->createAccessDeniedException();
             }

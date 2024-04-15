@@ -115,7 +115,8 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
         $permissions['application_state_update'] = new Permission('application_state_update', 'permission.application_state_update', 300, $groups['application']);
         $permissions['application_update'] = new Permission('application_update', 'permission.application_update', 200, $groups['application']);
         $permissions['application_delete'] = new Permission('application_delete', 'permission.application_delete', 100, $groups['application']);
-        
+
+        $permissions['application_payment_refund'] = new Permission('application_payment_refund', 'permission.application_payment_refund', 500, $groups['application_payment']);
         $permissions['application_payment_create'] = new Permission('application_payment_create', 'permission.application_payment_create', 400, $groups['application_payment']);
         $permissions['application_payment_read'] = new Permission('application_payment_read', 'permission.application_payment_read', 300, $groups['application_payment']);
         $permissions['application_payment_update'] = new Permission('application_payment_update', 'permission.application_payment_update', 200, $groups['application_payment']);

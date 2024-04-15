@@ -15,16 +15,17 @@ class CampCatalogBreadcrumbsTest extends KernelTestCase
 
     public function testListWithEmptyCampCategories(): void
     {
-        $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_camp_catalog');
+        $menu = $this->breadcrumbsRegistry->getBreadcrumbs('user_camp_catalog');
+        $menuItemIdentifiers = $this->getTreeNodeChildrenIdentifiers($menu);
 
-        $this->assertSame('breadcrumbs', $breadcrumbsMenu->getIdentifier());
-        $this->assertSame(['user_home', 'user_camp_catalog'], $this->getTreeNodeChildrenIdentifiers($breadcrumbsMenu));
+        $this->assertSame('breadcrumbs', $menu->getIdentifier());
+        $this->assertSame(['user_home', 'user_camp_catalog'], $menuItemIdentifiers);
 
-        $button = $breadcrumbsMenu->getChild('user_home');
+        $button = $menu->getChild('user_home');
         $this->assertSame(false, $button->isActive());
         $this->assertSame('/', $button->getUrl());
 
-        $button = $breadcrumbsMenu->getChild('user_camp_catalog');
+        $button = $menu->getChild('user_camp_catalog');
         $this->assertSame(true, $button->isActive());
         $this->assertSame('/catalog', $button->getUrl());
     }

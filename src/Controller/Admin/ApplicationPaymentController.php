@@ -49,7 +49,12 @@ class ApplicationPaymentController extends AbstractController
                          UuidV4                           $id): Response
     {
         $application = $this->findApplicationOrThrow404($id);
-        $this->assertIsGrantedAccess($application);
+
+        if (!$this->isGranted('application_payment', 'any_admin_permission') &&
+            !$this->isGranted('guide_access_payments', $application))
+        {
+            throw $this->createAccessDeniedException();
+        }
 
         $page = (int) $request->query->get('page', 1);
         $searchData = new ApplicationPaymentSearchData();
@@ -96,7 +101,11 @@ class ApplicationPaymentController extends AbstractController
                            UuidV4                                 $id): Response
     {
         $application = $this->findApplicationOrThrow404($id);
-        $this->assertIsGrantedAccess($application);
+
+        if (!$this->isGranted('application_payment_create') && !$this->isGranted('guide_access_payments', $application))
+        {
+            throw $this->createAccessDeniedException();
+        }
 
         $states = $offlinePaymentGate->getStates();
         $applicationPaymentData = new ApplicationPaymentData($states);
@@ -136,7 +145,11 @@ class ApplicationPaymentController extends AbstractController
     {
         $applicationPayment = $this->findApplicationPaymentOrThrow404($id);
         $application = $applicationPayment->getApplication();
-        $this->assertIsGrantedAccess($application);
+
+        if (!$this->isGranted('application_payment_read') && !$this->isGranted('guide_access_payments', $application))
+        {
+            throw $this->createAccessDeniedException();
+        }
 
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
@@ -167,7 +180,11 @@ class ApplicationPaymentController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $this->assertIsGrantedAccess($application);
+        if (!$this->isGranted('application_payment_update') && !$this->isGranted('guide_access_payments', $application))
+        {
+            throw $this->createAccessDeniedException();
+        }
+
         $applicationPaymentData = new ApplicationPaymentData($applicationPayment->getCurrentValidStateChanges());
         $dataTransfer->fillData($applicationPaymentData, $applicationPayment);
 
@@ -215,7 +232,11 @@ class ApplicationPaymentController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $this->assertIsGrantedAccess($application);
+        if (!$this->isGranted('application_payment_delete') && !$this->isGranted('guide_access_payments', $application))
+        {
+            throw $this->createAccessDeniedException();
+        }
+
         $form = $this->createForm(HiddenTrueType::class);
         $form->add('submit', SubmitType::class, [
             'label' => 'form.admin.application_payment_delete.button',
@@ -261,7 +282,11 @@ class ApplicationPaymentController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $this->assertIsGrantedAccess($application);
+        if (!$this->isGranted('application_payment_refund') && !$this->isGranted('guide_access_payments', $application))
+        {
+            throw $this->createAccessDeniedException();
+        }
+
         $form = $this->createForm(HiddenTrueType::class);
         $form->add('submit', SubmitType::class, [
             'label' => 'form.admin.application_payment_refund.button',
@@ -294,14 +319,6 @@ class ApplicationPaymentController extends AbstractController
                 'camp'                => $camp,
             ]),
         ]);
-    }
-
-    private function assertIsGrantedAccess(Application $application): void
-    {
-        if (!$this->isGranted('application_payment_update') && !$this->isGranted('guide_access_payments', $application))
-        {
-            throw $this->createAccessDeniedException();
-        }
     }
 
     private function findApplicationPaymentOrThrow404(UuidV4 $id): ApplicationPayment

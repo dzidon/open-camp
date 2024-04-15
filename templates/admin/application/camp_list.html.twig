@@ -6,7 +6,7 @@
             <div class="card card-outline card-primary">
                 <div class="card-header">
                     <a href="{{ path('admin_application_list') }}" class="stretched-link">
-                        <i class="fas fa-list mr-2"></i>
+                        <i class="fas fa-sticky-note mr-2"></i>
 
                         {{ 'application.admin.show_all_applications'|trans }}
                     </a>
@@ -14,6 +14,22 @@
             </div>
         </div>
     </div>
+
+    {% if is_granted('application_read') or is_granted('application_update') or is_granted('guide_access_read') %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-outline card-primary">
+                    <div class="card-header">
+                        <a href="{{ path('admin_camp_date_application_camper_list') }}" class="stretched-link">
+                            <i class="fas fa-user-alt mr-2"></i>
+
+                            {{ 'application.admin.show_all_application_campers'|trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
 
     <div class="row">
         <div class="col-12">

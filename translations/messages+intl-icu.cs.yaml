@@ -194,6 +194,7 @@ application:
         total_revenue: 'Celkový příjem'
         accepted_campers: 'Schválení táborníci'
         show_all_applications: 'Procházet všechny přihlášky'
+        show_all_application_campers: 'Procházet všechny táborníky'
         view_invoice: 'Zobrazit fakturu'
         attachment_not_uploaded: 'Nenahráno'
         discount_recurring_camper: 'Sleva pro vracejícího se táborníka'
@@ -439,6 +440,7 @@ permission:
     application_state_update: 'Vypořádání přihlášky'
     application_delete: 'Odstranění přihlášky'
 
+    application_payment_refund: 'Vrácení platby'
     application_payment_read: 'Zobrazení platby'
     application_payment_create: 'Tvorba platby'
     application_payment_update: 'Editace platby'
@@ -529,8 +531,6 @@ crud:
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
         purchasable_item_variant_value_delete: 'Tuto hodnotu nejde smazat, protože by pak varianta byla prázdná.'
-        application_contact_delete: 'Tento kontakt nejde smazat, protože nejde mít přihlášku bez kontaktů.'
-        application_camper_delete: 'Tohoto táborníka nejde smazat, protože nejde mít přihlášku bez táborníků.'
 
     action:
         common:
@@ -545,11 +545,14 @@ crud:
         application_payment:
             refund: 'Vrátit'
 
-        user:
-            update_password: 'Nastavit heslo'
+        blog_post:
+            show_in_catalog: 'Zobrazit v katalogu'
 
         camp:
             show_in_catalog: 'Zobrazit v katalogu'
+
+        user:
+            update_password: 'Nastavit heslo'
 
     action_performed:
         application:

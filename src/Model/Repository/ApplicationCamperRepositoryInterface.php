@@ -7,6 +7,7 @@ use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\User;
 use Symfony\Component\Uid\UuidV4;
 
 interface ApplicationCamperRepositoryInterface
@@ -71,13 +72,13 @@ interface ApplicationCamperRepositoryInterface
      * Returns admin application camper search paginator.
      *
      * @param ApplicationCamperSearchData $data
-     * @param Application|CampDate $applicationOrCampDate
+     * @param Application|CampDate|User|null $applicationOrCampDateOrGuide
      * @param int $currentPage
      * @param int $pageSize
      * @return PaginatorInterface
      */
-    public function getAdminPaginator(ApplicationCamperSearchData $data,
-                                      Application|CampDate        $applicationOrCampDate,
-                                      int                         $currentPage,
-                                      int                         $pageSize): PaginatorInterface;
+    public function getAdminPaginator(ApplicationCamperSearchData    $data,
+                                      null|Application|CampDate|User $applicationOrCampDateOrGuide,
+                                      int                            $currentPage,
+                                      int                            $pageSize): PaginatorInterface;
 }

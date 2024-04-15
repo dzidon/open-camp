@@ -8,6 +8,7 @@ use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\CampDate;
+use App\Model\Entity\User;
 use DateTimeImmutable;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -184,10 +185,10 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
     /**
      * @inheritDoc
      */
-    public function getAdminPaginator(ApplicationCamperSearchData $data,
-                                      Application|CampDate        $applicationOrCampDate,
-                                      int                         $currentPage,
-                                      int                         $pageSize): DqlPaginator
+    public function getAdminPaginator(ApplicationCamperSearchData    $data,
+                                      null|Application|CampDate|User $applicationOrCampDateOrGuide,
+                                      int                            $currentPage,
+                                      int                            $pageSize): DqlPaginator
     {
         $phrase = $data->getPhrase();
         $sortBy = $data->getSortBy();
@@ -204,24 +205,36 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
             ->andWhere('CONCAT(applicationCamper.nameFirst, \' \', applicationCamper.nameLast) LIKE :phrase')
             ->setParameter('phrase', '%' . $phrase . '%')
             ->orderBy($sortBy->property(), $sortBy->order())
+            ->groupBy('applicationCamper.id')
         ;
 
-        if ($applicationOrCampDate instanceof Application)
+        if ($applicationOrCampDateOrGuide instanceof Application)
         {
-            $application = $applicationOrCampDate;
+            $application = $applicationOrCampDateOrGuide;
 
             $queryBuilder
                 ->andWhere('application.id = :applicationId')
                 ->setParameter('applicationId', $application->getId(), UuidType::NAME)
             ;
         }
-        else
+        else if ($applicationOrCampDateOrGuide instanceof CampDate)
         {
-            $campDate = $applicationOrCampDate;
+            $campDate = $applicationOrCampDateOrGuide;
 
             $queryBuilder
                 ->andWhere('application.campDate = :campDateId')
                 ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ;
+        }
+        else if ($applicationOrCampDateOrGuide instanceof User)
+        {
+            $guide = $applicationOrCampDateOrGuide;
+
+            $queryBuilder
+                ->leftJoin('application.campDate', 'campDate')
+                ->leftJoin('campDate.campDateUsers', 'campDateUser')
+                ->andWhere('campDateUser.user = :guideId')
+                ->setParameter('guideId', $guide->getId(), UuidType::NAME)
             ;
         }
 
