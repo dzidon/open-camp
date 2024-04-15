@@ -58,7 +58,11 @@ class ApplicationInvoiceFilesystem implements ApplicationInvoiceFilesystemInterf
     public function createInvoiceFile(Application $application): void
     {
         $newFileName = $this->getApplicationInvoiceFileName($application);
-        $pdf = new Mpdf(['mode' => 'utf-8']);
+        $pdf = new Mpdf([
+            'mode'         => 'utf-8',
+            'default_font' => 'calibri',
+        ]);
+
         $pdf->curlAllowUnsafeSslRequests = true;
         $pdf->SetBasePath($this->publicFilePathPrefix);
 

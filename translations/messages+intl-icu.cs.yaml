@@ -145,6 +145,7 @@ application:
     cannot_be_completed: 'Je nám líto, ale vaše přihláška ještě nemá všechny náležitosti. Ujistěte se, že zadávate alespoň 1 kontakt, 1 táborníka a že máte zvolenou platební metodu.'
     no_longer_editable: 'Je nám líto, ale tuto přihlášku už není možné upravovat.'
     completed: 'Přihláška úspěšně vytvořena!'
+    other_application_data: 'Další údaje k přihlášce'
     is_accepted_state:
         user:
             accepted: 'Přihláška schválena'
@@ -576,7 +577,7 @@ crud:
             refund: 'Platba vrácena!'
 
         application_attachment:
-            upload_later: 'Soubory uloženy!'
+            upload_later: 'Soubory nahrány!'
 
         application_purchasable_item:
             bulk_update: 'Volitelné položky uloženy!'

@@ -477,6 +477,13 @@
 
     {{ form_row(form.email) }}
     {{ form_row(form.billingData) }}
+
+    {% if form.applicationFormFieldValuesData.children is not empty or form.applicationAttachmentsData.children is not empty %}
+        <h3 class="mb-3">
+            {{ 'application.other_application_data'|trans }}
+        </h3>
+    {% endif %}
+
     {{ form_row(form.applicationFormFieldValuesData) }}
     {{ form_row(form.applicationAttachmentsData) }}
 

@@ -2,8 +2,10 @@
 
 namespace App\Library\Data\User;
 
+use App\Library\Constraint\ApplicationAttachmentsUploadLaterNotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
 
+#[ApplicationAttachmentsUploadLaterNotBlank]
 class ApplicationAttachmentsUploadLaterData
 {
     /** @var ApplicationAttachmentsData[] */
