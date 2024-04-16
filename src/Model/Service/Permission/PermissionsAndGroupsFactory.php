@@ -109,8 +109,7 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
         $permissions['blog_post_read'] = new Permission('blog_post_read', 'permission.blog_post_read', 300, $groups['blog_post']);
         $permissions['blog_post_update'] = new Permission('blog_post_update', 'permission.blog_post_update', 200, $groups['blog_post']);
         $permissions['blog_post_delete'] = new Permission('blog_post_delete', 'permission.blog_post_delete', 100, $groups['blog_post']);
-        
-        $permissions['application_summary_read'] = new Permission('application_summary_read', 'permission.application_summary_read', 500, $groups['application']);
+
         $permissions['application_read'] = new Permission('application_read', 'permission.application_read', 400, $groups['application']);
         $permissions['application_state_update'] = new Permission('application_state_update', 'permission.application_state_update', 300, $groups['application']);
         $permissions['application_update'] = new Permission('application_update', 'permission.application_update', 200, $groups['application']);

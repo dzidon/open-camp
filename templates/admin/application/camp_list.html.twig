@@ -92,7 +92,7 @@
                             </thead>
 
                             <tbody>
-                                {% set granted_summary = is_granted('application_summary_read') %}
+                                {% set granted_read = is_granted('application_read') %}
                                 {% set granted_update =
                                     is_granted('application', 'any_admin_permission')         or
                                     is_granted('application_payment', 'any_admin_permission') or
@@ -129,8 +129,8 @@
                                         </td>
 
                                         <td class="align-middle cell-25">
-                                            {% if granted_summary or granted_update %}
-                                                {% if granted_summary %}
+                                            {% if granted_read or granted_update %}
+                                                {% if granted_read %}
                                                     <a href="{{ path('admin_application_camp_summary', {campId: camp.id}) }}"
                                                        class="btn btn-secondary"
                                                     >

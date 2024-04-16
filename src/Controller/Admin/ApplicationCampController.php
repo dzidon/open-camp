@@ -86,7 +86,7 @@ class ApplicationCampController extends AbstractController
         ]);
     }
 
-    #[IsGranted('application_summary_read')]
+    #[IsGranted('application_read')]
     #[Route('/admin/application-camp/{campId}/summary', name: 'admin_application_camp_summary')]
     public function summary(ApplicationRepositoryInterface $applicationRepository, UuidV4 $campId): Response
     {

@@ -93,13 +93,18 @@ class ApplicationCampDateController extends AbstractController
         ]);
     }
 
-    #[IsGranted('application_summary_read')]
     #[Route('/admin/application-camp-date/{campDateId}/summary', name: 'admin_application_camp_date_summary')]
     public function summary(ApplicationRepositoryInterface       $applicationRepository,
                             ApplicationCamperRepositoryInterface $applicationCamperRepository,
                             UuidV4                               $campDateId): Response
     {
         $campDate = $this->findCampDateOrThrow404($campDateId);
+
+        if (!$this->isGranted('application_read') && !$this->isGranted('guide_access_read', $campDate))
+        {
+            throw $this->createAccessDeniedException();
+        }
+
         $camp = $campDate->getCamp();
         $totalRevenueResult = $applicationRepository->getTotalRevenueForCampDateResult($campDate);
         $numberOfAcceptedApplications = $applicationRepository->getNumberOfAcceptedApplicationsForCampDate($campDate);

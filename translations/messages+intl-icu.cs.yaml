@@ -435,7 +435,6 @@ permission_group:
     blog_post: 'Blog'
 
 permission:
-    application_summary_read: 'Zobrazení souhrnů přihlášek za tábory a termíny'
     application_read: 'Zobrazení přihlášky'
     application_update: 'Editace přihlášky'
     application_state_update: 'Vypořádání přihlášky'

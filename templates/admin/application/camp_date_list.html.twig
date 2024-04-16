@@ -63,11 +63,10 @@
                             </thead>
 
                             <tbody>
-                                {% set granted_summary = is_granted('application_summary_read') %}
-                                {% set granted_update =
-                                    is_granted('application', 'any_admin_permission')         or
-                                    is_granted('application_payment', 'any_admin_permission') or
-                                    is_granted('guide_access_read')
+                                {% set granted_read = is_granted('application_read') %}
+                                {% set granted_browse =
+                                    is_granted('application', 'any_admin_permission') or
+                                    is_granted('application_payment', 'any_admin_permission')
                                 %}
 
                                 {% for camp_date in paginator.currentPageItems %}
@@ -105,7 +104,24 @@
                                         </td>
 
                                         <td class="align-middle cell-25">
-                                            {% if granted_summary or granted_update %}
+                                            {% set granted_summary =
+                                                is_granted('application_read') or
+                                                is_granted('guide_access_read', camp_date)
+                                            %}
+
+                                            {% set granted_applications =
+                                                is_granted('application', 'any_admin_permission')         or
+                                                is_granted('application_payment', 'any_admin_permission') or
+                                                is_granted('guide_access_read', camp_date)
+                                            %}
+
+                                            {% set granted_campers =
+                                                is_granted('application_read')             or
+                                                is_granted('application_update')           or
+                                                is_granted('guide_access_read', camp_date)
+                                            %}
+
+                                            {% if granted_summary or granted_applications or granted_campers %}
                                                 {% if granted_summary %}
                                                     <a href="{{ path('admin_application_camp_date_summary', {campDateId: camp_date.id}) }}"
                                                        class="btn btn-secondary"
@@ -114,13 +130,15 @@
                                                     </a>
                                                 {% endif %}
 
-                                                {% if granted_update %}
+                                                {% if granted_applications %}
                                                     <a href="{{ path('admin_application_list', {campDateId: camp_date.id}) }}"
                                                        class="btn btn-primary"
                                                     >
                                                         {{ 'route.admin_application_list'|trans }}
                                                     </a>
+                                                {% endif %}
 
+                                                {% if granted_campers %}
                                                     <a href="{{ path('admin_camp_date_application_camper_list', {campDateId: camp_date.id}) }}"
                                                        class="btn btn-primary"
                                                     >

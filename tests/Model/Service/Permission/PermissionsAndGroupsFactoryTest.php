@@ -123,7 +123,7 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Permissions
          */
-        $this->assertCount(51, $permissionsSerialized);
+        $this->assertCount(50, $permissionsSerialized);
 
         // blog post
         $this->assertContains([
@@ -155,13 +155,6 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         ], $permissionsSerialized);
         
         // application
-        $this->assertContains([
-            'name'             => 'application_summary_read',
-            'priority'         => 500,
-            'label'            => 'permission.application_summary_read',
-            'permission_group' => 'application',
-        ], $permissionsSerialized);
-
         $this->assertContains([
             'name'             => 'application_read',
             'priority'         => 400,
