@@ -39,10 +39,11 @@ class CamperType extends AbstractType
 
             $form
                 ->add('nationalIdentifier', TextType::class, [
-                    'label'      => 'form.common.camper.national_identifier',
+                    'label'      => 'form.common.camper.national_identifier.label',
                     'label_attr' => [
                         'class' => 'required'
                     ],
+                    'help'     => 'form.common.camper.national_identifier.help',
                     'row_attr' => [
                         'class'                                   => 'national-id-visibility',
                         'data-controller'                         => 'cv--content',

@@ -69,7 +69,9 @@ class BillingType extends AbstractType
                     ])
                     ->add('zip', TextType::class, [
                         'required' => $isRequired,
-                        'label'    => 'form.common.billing.zip',
+                        'label'    => 'form.common.billing.zip.label',
+                        'help'     => 'form.common.billing.zip.help',
+
                     ])
                     ->add('country', CountryType::class, [
                         'placeholder' => 'form.common.choice.none.female',

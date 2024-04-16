@@ -145,7 +145,7 @@ application:
     cannot_be_completed: 'Je nám líto, ale vaše přihláška ještě nemá všechny náležitosti. Ujistěte se, že zadávate alespoň 1 kontakt, 1 táborníka a že máte zvolenou platební metodu.'
     no_longer_editable: 'Je nám líto, ale tuto přihlášku už není možné upravovat.'
     completed: 'Přihláška úspěšně vytvořena!'
-    other_application_data: 'Další údaje k přihlášce'
+    other_application_data: 'Další údaje přihlášky'
     is_accepted_state:
         user:
             accepted: 'Přihláška schválena'
@@ -1425,7 +1425,10 @@ form:
             name_last: 'Příjmení'
             street: 'Ulice a číslo popisné'
             town: 'Obec'
-            zip: 'PSČ'
+            zip:
+                label: 'PSČ'
+                help: 'Může, ale nemusí obsahovat mezeru, například: 277 11.'
+
             country: 'Země'
             is_company: 'Nakupuji na firmu'
             business_name: 'Obchodní název'
@@ -1445,7 +1448,10 @@ form:
             name_first: 'Jméno'
             name_last: 'Příjmení'
             gender: 'Pohlaví'
-            national_identifier: 'Rodné číslo'
+            national_identifier:
+                label: 'Rodné číslo'
+                help: 'Může, ale nemusí obsahovat lomítko, například: 850126/1158.'
+
             is_national_identifier_absent: 'Nemám české/slovenské rodné číslo'
             born_at: 'Datum narození'
             health_insurance_company: 'Zdravotní pojišťovna'
