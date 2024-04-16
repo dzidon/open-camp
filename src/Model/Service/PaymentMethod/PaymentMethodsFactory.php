@@ -50,9 +50,9 @@ class PaymentMethodsFactory implements PaymentMethodsFactoryInterface
      */
     private function instantiatePaymentMethods(): array
     {
-        $paymentMethods['card'] = new PaymentMethod('card', 'payment_method.card', true, 300);
-        $paymentMethods['transfer'] = new PaymentMethod('transfer', 'payment_method.transfer', true, 200);
-        $paymentMethods['invoice'] = new PaymentMethod('invoice', 'payment_method.invoice', false, 100);
+        $paymentMethods['card'] = new PaymentMethod('card', 'payment_method.card', true, false, 300);
+        $paymentMethods['transfer'] = new PaymentMethod('transfer', 'payment_method.transfer', true, false, 200);
+        $paymentMethods['invoice'] = new PaymentMethod('invoice', 'payment_method.invoice', false, true, 100);
 
         return $paymentMethods;
     }

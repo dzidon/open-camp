@@ -361,6 +361,16 @@ class Application
         return $this;
     }
 
+    public function isBuyerBusiness(): bool
+    {
+        if ($this->isEuBusinessDataEnabled && $this->businessCin !== null && $this->businessVatId !== null)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public function getBusinessName(): ?string
     {
         return $this->businessName;

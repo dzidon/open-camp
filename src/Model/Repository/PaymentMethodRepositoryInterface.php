@@ -27,7 +27,9 @@ interface PaymentMethodRepositoryInterface
     /**
      * Finds all available payment methods.
      *
-     * @return PaymentMethod[]
+     * @param bool $enabledOnly
+     * @param bool $includeBusinessMethods
+     * @return array
      */
-    public function findAll(bool $enabledOnly = false): array;
+    public function findAll(bool $enabledOnly = false, bool $includeBusinessMethods = true): array;
 }

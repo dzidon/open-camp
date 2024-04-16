@@ -161,8 +161,8 @@ class ApplicationController extends AbstractController
         $user = $this->getUser();
         $application = $this->findApplicationOrThrow404($applicationId);
         $this->assertApplicationDraftAvailability($application);
-        $campDate = $application->getCampDate();
 
+        $campDate = $application->getCampDate();
         $isEmailMandatory = $application->isEmailMandatory();
         $isPhoneNumberMandatory = $application->isPhoneNumberMandatory();
         $contactDataCallable = $contactDataFactory->getCreateContactDataCallable($isEmailMandatory, $isPhoneNumberMandatory);
@@ -227,7 +227,7 @@ class ApplicationController extends AbstractController
     }
 
     #[Route('/application/{applicationId}/step-two', name: 'user_application_step_two')]
-    public function stepTwo(ApplicationPurchasableItemInstanceDataFactoryInterface $applicationPurchasableItemInstanceDataFactory,
+    public function stepTwo(ApplicationPurchasableItemInstanceDataFactoryInterface $dataFactory,
                             PaymentMethodRepositoryInterface                       $paymentMethodRepository,
                             DataTransferRegistryInterface                          $dataTransfer,
                             Request                                                $request,
@@ -235,10 +235,14 @@ class ApplicationController extends AbstractController
     {
         $application = $this->findApplicationOrThrow404($applicationId);
         $this->assertApplicationDraftAvailability($application);
+
+        $isBuyerBusiness = $application->isBuyerBusiness();
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
         $campCategory = $camp?->getCampCategory();
         $applicationId = $application->getId();
+        $itemInstancesEmptyData = $dataFactory->getDataCallableArrayForUserModule($application);
+        $paymentMethodChoices = $paymentMethodRepository->findAll(true, $isBuyerBusiness);
 
         $applicationPurchasableItemsData = new ApplicationStepTwoData(
             $application->getCurrency(),
@@ -248,8 +252,8 @@ class ApplicationController extends AbstractController
         $dataTransfer->fillData($applicationPurchasableItemsData, $application);
 
         $form = $this->createForm(ApplicationStepTwoType::class, $applicationPurchasableItemsData, [
-            'instances_empty_data'    => $applicationPurchasableItemInstanceDataFactory->getDataCallableArrayForUserModule($application),
-            'choices_payment_methods' => $paymentMethodRepository->findAll(),
+            'item_instances_empty_data' => $itemInstancesEmptyData,
+            'choices_payment_methods'   => $paymentMethodChoices,
         ]);
         $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_two.button']);
         $form->handleRequest($request);
@@ -289,6 +293,7 @@ class ApplicationController extends AbstractController
     {
         $application = $this->findApplicationOrThrow404($applicationId);
         $this->assertApplicationDraftAvailability($application);
+
         $campDate = $application->getCampDate();
         $camp = $campDate?->getCamp();
         $campCategory = $camp?->getCampCategory();

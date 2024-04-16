@@ -31,7 +31,7 @@ class ApplicationStepOneUpdateSubscriber
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 600)]
+    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 700)]
     public function onUpdateFillEntity(ApplicationStepOneUpdateEvent $event): void
     {
         $data = $event->getApplicationStepOneData();
@@ -39,7 +39,7 @@ class ApplicationStepOneUpdateSubscriber
         $this->dataTransfer->fillEntity($data, $entity);
     }
 
-    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 500)]
+    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 600)]
     public function onUpdateFixOverflownPurchasableItems(ApplicationStepOneUpdateEvent $event): void
     {
         $application = $event->getApplication();
@@ -56,7 +56,7 @@ class ApplicationStepOneUpdateSubscriber
         }
     }
 
-    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 400)]
+    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 500)]
     public function onUpdateSetApplicationCampersTripsInThePast(ApplicationStepOneUpdateEvent $event): void
     {
         $application = $event->getApplication();
@@ -64,16 +64,31 @@ class ApplicationStepOneUpdateSubscriber
 
         foreach ($applicationCampers as $applicationCamper)
         {
-            $numberOfOtherCompleteAcceptedApplications = $this->applicationCamperRepository->getNumberOfOtherCompleteAcceptedApplications($applicationCamper);
+            $numberOfOtherCompleteAcceptedApplications = $this->applicationCamperRepository
+                ->getNumberOfOtherCompleteAcceptedApplications($applicationCamper)
+            ;
+
             $applicationCamper->setTripsInThePast($numberOfOtherCompleteAcceptedApplications);
         }
     }
 
-    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 300)]
+    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 400)]
     public function onUpdateResetSiblingsDiscountIfInvalid(ApplicationStepOneUpdateEvent $event): void
     {
         $application = $event->getApplication();
         $application->resetSiblingsDiscountIfIntervalNotEligibleForNumberOfCampers();
+    }
+
+    #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 300)]
+    public function onUpdateResetPaymentMethodIfInvalid(ApplicationStepOneUpdateEvent $event): void
+    {
+        $application = $event->getApplication();
+        $paymentMethod = $application->getPaymentMethod();
+
+        if ($paymentMethod !== null && $paymentMethod->isForBusinessesOnly() && !$application->isBuyerBusiness())
+        {
+            $application->setPaymentMethod(null);
+        }
     }
 
     #[AsEventListener(event: ApplicationStepOneUpdateEvent::NAME, priority: 200)]

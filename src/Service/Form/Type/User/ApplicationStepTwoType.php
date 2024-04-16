@@ -33,16 +33,16 @@ class ApplicationStepTwoType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $instancesEmptyData = $options['instances_empty_data'];
+        $itemInstancesEmptyData = $options['item_instances_empty_data'];
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($instancesEmptyData): void
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) use ($itemInstancesEmptyData): void
         {
             /** @var ApplicationStepTwoData $data */
             $data = $event->getData();
             $form = $event->getForm();
 
-            $this->addCamperApplicationPurchasableItemsData($data, $form, $instancesEmptyData);
-            $this->addApplicationPurchasableItemsData($data, $form, $instancesEmptyData);
+            $this->addCamperApplicationPurchasableItemsData($data, $form, $itemInstancesEmptyData);
+            $this->addApplicationPurchasableItemsData($data, $form, $itemInstancesEmptyData);
         });
 
         $builder
@@ -112,14 +112,14 @@ class ApplicationStepTwoType extends AbstractType
 
         $resolver->setAllowedTypes('choices_payment_methods', ['array']);
 
-        $resolver->setDefined('instances_empty_data');
-        $resolver->setAllowedTypes('instances_empty_data', 'callable[]');
-        $resolver->setRequired('instances_empty_data');
+        $resolver->setDefined('item_instances_empty_data');
+        $resolver->setAllowedTypes('item_instances_empty_data', 'callable[]');
+        $resolver->setRequired('item_instances_empty_data');
     }
 
     private function addCamperApplicationPurchasableItemsData(ApplicationStepTwoData $data,
                                                               FormInterface          $form,
-                                                              array                  $instancesEmptyData): void
+                                                              array                  $itemInstancesEmptyData): void
     {
         $applicationCamperPurchasableItemsData = $data->getApplicationCamperPurchasableItemsData();
 
@@ -134,7 +134,7 @@ class ApplicationStepTwoType extends AbstractType
                 'label'         => false,
                 'entry_options' => [
                     'data_class'           => ApplicationCamperPurchasableItemsData::class,
-                    'instances_empty_data' => $instancesEmptyData,
+                    'instances_empty_data' => $itemInstancesEmptyData,
                     'row_attr'             => [
                         'class' => 'mb-0',
                     ],
@@ -146,7 +146,7 @@ class ApplicationStepTwoType extends AbstractType
 
     private function addApplicationPurchasableItemsData(ApplicationStepTwoData $data,
                                                         FormInterface          $form,
-                                                        array                  $instancesEmptyData): void
+                                                        array                  $itemInstancesEmptyData): void
     {
         $applicationPurchasableItemsData = $data->getApplicationPurchasableItemsData();
 
@@ -168,7 +168,7 @@ class ApplicationStepTwoType extends AbstractType
                 'entry_type'    => ApplicationPurchasableItemType::class,
                 'entry_options' => [
                     'data_class'           => ApplicationPurchasableItemData::class,
-                    'instances_empty_data' => $instancesEmptyData,
+                    'instances_empty_data' => $itemInstancesEmptyData,
                     'row_attr'             => [
                         'class' => 'm-0',
                     ],

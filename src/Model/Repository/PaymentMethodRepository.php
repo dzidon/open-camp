@@ -40,7 +40,7 @@ class PaymentMethodRepository extends AbstractRepository implements PaymentMetho
     /**
      * @inheritDoc
      */
-    public function findAll(bool $enabledOnly = false): array
+    public function findAll(bool $enabledOnly = false, bool $includeBusinessMethods = true): array
     {
         $queryBuilder = $this->createQueryBuilder('paymentMethod')
             ->orderBy('paymentMethod.priority', 'DESC')
@@ -52,6 +52,11 @@ class PaymentMethodRepository extends AbstractRepository implements PaymentMetho
                 ->andWhere('paymentMethod.name IN (:names)')
                 ->setParameter('names', $this->enabledPaymentMethods)
             ;
+        }
+
+        if (!$includeBusinessMethods)
+        {
+            $queryBuilder->andWhere('paymentMethod.isForBusinessesOnly = FALSE');
         }
 
         return $queryBuilder

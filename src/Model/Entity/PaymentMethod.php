@@ -26,18 +26,22 @@ class PaymentMethod
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isOnline;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isForBusinessesOnly;
+
     #[ORM\Column(type: Types::INTEGER)]
     private int $priority;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private DateTimeImmutable $createdAt;
 
-    public function __construct(string $name, string $label, bool $isOnline, int $priority)
+    public function __construct(string $name, string $label, bool $isOnline, bool $isForBusinessesOnly, int $priority)
     {
         $this->id = Uuid::v4();
         $this->name = $name;
         $this->label = $label;
         $this->isOnline = $isOnline;
+        $this->isForBusinessesOnly = $isForBusinessesOnly;
         $this->priority = $priority;
         $this->createdAt = new DateTimeImmutable('now');
     }
@@ -60,6 +64,11 @@ class PaymentMethod
     public function isOnline(): bool
     {
         return $this->isOnline;
+    }
+
+    public function isForBusinessesOnly(): bool
+    {
+        return $this->isForBusinessesOnly;
     }
 
     public function getPriority(): int
