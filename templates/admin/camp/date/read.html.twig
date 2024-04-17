@@ -53,8 +53,26 @@
                         <div class="col-12 col-sm-9">
                             {% if camp_date.depositUntil is null %}
                                 <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% elseif camp_date.depositUntilRelative %}
+                                <span>{{ camp_date.depositUntil }}d</span>
                             {% else %}
                                 <span>{{ camp_date.depositUntil|date(date_time_format) }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.camp_date.price_without_deposit_until'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if camp_date.priceWithoutDepositUntil is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% elseif camp_date.priceWithoutDepositUntilRelative %}
+                                <span>{{ camp_date.priceWithoutDepositUntil }}d</span>
+                            {% else %}
+                                <span>{{ camp_date.priceWithoutDepositUntil|date(date_time_format) }}</span>
                             {% endif %}
                         </div>
                     </div>

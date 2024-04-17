@@ -8,7 +8,6 @@ use App\Model\Event\User\Application\ApplicationStepThreeUpdateEvent;
 use App\Model\Event\User\ApplicationPayment\ApplicationPaymentOfflineCreateEvent;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Service\Application\ApplicationCompletedMailerInterface;
-use App\Model\Service\Application\ApplicationCompleterInterface;
 use App\Model\Service\Application\ApplicationInvoiceFilesystemInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -18,8 +17,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class ApplicationStepThreeUpdateSubscriber
 {
     private ApplicationRepositoryInterface $applicationRepository;
-
-    private ApplicationCompleterInterface $applicationCompleter;
 
     private ApplicationInvoiceFilesystemInterface $applicationInvoiceFilesystem;
 
@@ -34,7 +31,6 @@ class ApplicationStepThreeUpdateSubscriber
     private string $lastCompletedApplicationIdSessionKey;
 
     public function __construct(ApplicationRepositoryInterface        $applicationRepository,
-                                ApplicationCompleterInterface         $applicationCompleter,
                                 ApplicationInvoiceFilesystemInterface $applicationInvoiceFilesystem,
                                 ApplicationCompletedMailerInterface   $applicationCompletedMailer,
                                 EventDispatcherInterface              $eventDispatcher,
@@ -43,7 +39,6 @@ class ApplicationStepThreeUpdateSubscriber
                                 string                                $lastCompletedApplicationIdSessionKey)
     {
         $this->applicationRepository = $applicationRepository;
-        $this->applicationCompleter = $applicationCompleter;
         $this->applicationInvoiceFilesystem = $applicationInvoiceFilesystem;
         $this->applicationCompletedMailer = $applicationCompletedMailer;
         $this->eventDispatcher = $eventDispatcher;
@@ -58,7 +53,15 @@ class ApplicationStepThreeUpdateSubscriber
         /** @var User|null $user */
         $user = $this->security->getUser();
         $application = $event->getApplication();
-        $this->applicationCompleter->completeApplication($application, $user);
+
+        if ($user !== null)
+        {
+            $application->setUser($user);
+        }
+
+        $application->setIsDraft(false);
+        $application->setDepositUntilUsingCampDate();
+        $application->setPriceWithoutDepositUntilUsingCampDate();
     }
 
     #[AsEventListener(event: ApplicationStepThreeUpdateEvent::NAME, priority: 600)]

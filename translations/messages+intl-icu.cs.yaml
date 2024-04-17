@@ -68,7 +68,7 @@ payment_method:
     invoice: 'Na fakturu'
 
 offline_payment_method_instructions:
-    general: 'Zvolili jste offline platební metodu. Po provedení platby musíme platbu zkontrolovat, schválení přihlášky tak může chvíli trvat, prosíme o trpělivost.'
+    general: 'Zvolili jste offline platební metodu. Po provedení platby musíme platbu zkontrolovat, schválení přihlášky tak může chvíli trvat. Prosíme o trpělivost.'
     invoice:
         fully_unpaid_call_to_action: 'Proveďte prosím platbu převodem na náš bankovní účet. Můžete zatím buď zaplatit pouze zálohu, nebo můžete rovnou zaplatit celou přihlášku.'
         deposit_unpaid_call_to_action: 'Doplatek máte zaplacený, zaplaťte prosím zálohu převodem na náš účet.'
@@ -272,7 +272,8 @@ application:
         dates:
             title: 'Datumy'
             completed_at: 'Datum vystavení'
-            payment_deadline_at: 'Datum splatnosti'
+            deposit_deadline_at: 'Zálohu je nutné zaplatit do'
+            full_price_deadline_at: 'Celou přihlášku je nutné zaplatit do'
 
         purchasable_item:
             instance_for_camper: 'pro'
@@ -866,9 +867,11 @@ entity_attribute:
         is_accepted: 'Vypořádána'
         camp_name: 'Tábor'
         deposit: 'Záloha'
-        deposit_until: 'Zálohu nutno zaplatit do'
+        deposit_until: 'Zálohu zaplaťte do'
         price_without_deposit: 'Doplatek'
+        price_without_deposit_until: 'Doplatek zaplaťte do'
         full_price: 'Celková cena'
+        full_price_until: 'Přihlášku zaplaťte do'
         full_price_without_tax: 'Celková cena bez DPH'
         full_deposit_cached: 'Celková záloha'
         full_rest_cached: 'Celkový doplatek'
@@ -1185,9 +1188,10 @@ entity_attribute:
         id: 'ID'
         start_at: 'Datum odjezdu'
         end_at: 'Datum návratu'
-        deposit: 'Cena (záloha)'
+        deposit: 'Záloha'
         deposit_until: 'Zálohu je nutné zaplatit do'
-        price_without_deposit: 'Cena (bez zálohy)'
+        price_without_deposit: 'Doplatek'
+        price_without_deposit_until: 'Doplatek je nutné zaplatit do'
         capacity: 'Kapacita'
         is_open_above_capacity: 'Přijímá přihlášky nad kapacitou'
         is_closed: 'Přihlášování zablokováno'
@@ -1658,9 +1662,14 @@ form:
         camp_date:
             start_at: 'Datum od'
             end_at: 'Datum do'
-            deposit: 'Cena (záloha)'
-            deposit_until: 'Zálohu je nutné zaplatit do'
-            price_without_deposit: 'Cena (bez zálohy)'
+            deposit: 'Záloha'
+            is_deposit_until_relative: 'Zálohu je nutné zaplatit do několika dnů od dokončení přihlášky'
+            deposit_until: 'Datum, do kterého je nutné zaplatit zálohu'
+            deposit_until_relative: 'Počet dnů na zaplacení zálohy od dokončení přihlášky'
+            price_without_deposit: 'Doplatek'
+            is_price_without_deposit_until_relative: 'Doplatek je nutné zaplatit do několika dnů od dokončení přihlášky'
+            price_without_deposit_until: 'Datum, do kterého je nutné zaplatit doplatek'
+            price_without_deposit_until_relative: 'Počet dnů na zaplacení doplatku od dokončení přihlášky'
             capacity: 'Kapacita'
             is_open_above_capacity: 'Přijímat přihlášky nad kapacitou'
             is_closed: 'Zablokovat přihlášky'

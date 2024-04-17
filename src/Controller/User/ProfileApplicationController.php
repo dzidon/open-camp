@@ -121,6 +121,7 @@ class ProfileApplicationController extends AbstractController
         $application = $this->findCompletedApplicationOrThrow404($id);
         $this->denyAccessUnlessGranted('application_read', $application);
 
+        $applicationInvoiceFilesystem->createInvoiceFile($application);
         $invoiceContents = $applicationInvoiceFilesystem->getInvoiceContents($application);
 
         if ($invoiceContents === null)

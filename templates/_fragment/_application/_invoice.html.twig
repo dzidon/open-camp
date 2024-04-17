@@ -204,13 +204,25 @@
                     </strong>
                 </div>
 
-                <div>
-                    {{ 'application.invoice.dates.payment_deadline_at'|trans }}:
+                {% if application.depositUntil is not null %}
+                    <div>
+                        {{ 'application.invoice.dates.deposit_deadline_at'|trans }}:
 
-                    <strong>
-                        {{ application.campDateStartAt|date(date_format) }}
-                    </strong>
-                </div>
+                        <strong>
+                            {{ application.depositUntil|date(date_format) }}
+                        </strong>
+                    </div>
+                {% endif %}
+
+                {% if application.priceWithoutDepositUntil is not null %}
+                    <div>
+                        {{ 'application.invoice.dates.full_price_deadline_at'|trans }}:
+
+                        <strong>
+                            {{ application.priceWithoutDepositUntil|date(date_format) }}
+                        </strong>
+                    </div>
+                {% endif %}
             </td>
         </tr>
     </tbody>

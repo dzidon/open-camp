@@ -32,6 +32,15 @@ class CampDate
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $depositUntil = null;
 
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $depositUntilRelative = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $priceWithoutDepositUntil = null;
+
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    private ?int $priceWithoutDepositUntilRelative = null;
+
     #[ORM\Column(type: Types::FLOAT)]
     private float $deposit;
 
@@ -138,14 +147,82 @@ class CampDate
         return $this;
     }
 
-    public function getDepositUntil(): ?DateTimeImmutable
+    public function isDepositUntilRelative(): bool
     {
-        return $this->depositUntil;
+        return is_int($this->getDepositUntil());
     }
 
-    public function setDepositUntil(?DateTimeImmutable $depositUntil): self
+    public function getDepositUntil(): null|int|DateTimeImmutable
     {
-        $this->depositUntil = $depositUntil;
+        if ($this->depositUntil !== null)
+        {
+            return $this->depositUntil;
+        }
+        else if ($this->depositUntilRelative !== null)
+        {
+            return $this->depositUntilRelative;
+        }
+        
+        return null;
+    }
+
+    public function setDepositUntil(null|int|DateTimeImmutable $depositUntil): self
+    {
+        if ($depositUntil instanceof DateTimeImmutable)
+        {
+            $this->depositUntil = $depositUntil;
+            $this->depositUntilRelative = null;
+        }
+        else if (is_int($depositUntil))
+        {
+            $this->depositUntil = null;
+            $this->depositUntilRelative = $depositUntil;
+        }
+        else
+        {
+            $this->depositUntil = null;
+            $this->depositUntilRelative = null;
+        }
+
+        return $this;
+    }
+
+    public function isPriceWithoutDepositUntilRelative(): bool
+    {
+        return is_int($this->getPriceWithoutDepositUntil());
+    }
+
+    public function getPriceWithoutDepositUntil(): null|int|DateTimeImmutable
+    {
+        if ($this->priceWithoutDepositUntil !== null)
+        {
+            return $this->priceWithoutDepositUntil;
+        }
+        else if ($this->priceWithoutDepositUntilRelative !== null)
+        {
+            return $this->priceWithoutDepositUntilRelative;
+        }
+
+        return null;
+    }
+
+    public function setPriceWithoutDepositUntil(null|int|DateTimeImmutable $priceWithoutDepositUntil): self
+    {
+        if ($priceWithoutDepositUntil instanceof DateTimeImmutable)
+        {
+            $this->priceWithoutDepositUntil = $priceWithoutDepositUntil;
+            $this->priceWithoutDepositUntilRelative = null;
+        }
+        else if (is_int($priceWithoutDepositUntil))
+        {
+            $this->priceWithoutDepositUntil = null;
+            $this->priceWithoutDepositUntilRelative = $priceWithoutDepositUntil;
+        }
+        else
+        {
+            $this->priceWithoutDepositUntil = null;
+            $this->priceWithoutDepositUntilRelative = null;
+        }
 
         return $this;
     }

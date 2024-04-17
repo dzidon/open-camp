@@ -22,6 +22,7 @@ use App\Model\Event\Admin\CampDateUser\CampDateUserDeleteEvent;
 use App\Model\Event\Admin\CampDateUser\CampDateUserUpdateEvent;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Data\Transfer\DataTransferInterface;
+use DateTimeImmutable;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -60,7 +61,6 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDateData->setStartAt($campDate->getStartAt());
         $campDateData->setEndAt($campDate->getEndAt());
         $campDateData->setDeposit($campDate->getDeposit());
-        $campDateData->setDepositUntil($campDate->getDepositUntil());
         $campDateData->setPriceWithoutDeposit($campDate->getPriceWithoutDeposit());
         $campDateData->setCapacity($campDate->getCapacity());
         $campDateData->setIsOpenAboveCapacity($campDate->isOpenAboveCapacity());
@@ -71,6 +71,51 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDateData->setTripLocationPathThere($campDate->getTripLocationPathThere());
         $campDateData->setTripLocationPathBack($campDate->getTripLocationPathBack());
 
+        // deposit until
+        $depositUntil = $campDate->getDepositUntil();
+
+        if (is_int($depositUntil))
+        {
+            $campDateData->setIsDepositUntilRelative(true);
+            $campDateData->setDepositUntil(null);
+            $campDateData->setDepositUntilRelative($depositUntil);
+        }
+        else if ($depositUntil instanceof DateTimeImmutable)
+        {
+            $campDateData->setIsDepositUntilRelative(false);
+            $campDateData->setDepositUntil($depositUntil);
+            $campDateData->setDepositUntilRelative(null);
+        }
+        else
+        {
+            $campDateData->setIsDepositUntilRelative(false);
+            $campDateData->setDepositUntil(null);
+            $campDateData->setDepositUntilRelative(null);
+        }
+
+        // price without deposit until
+        $priceWithoutDepositUntil = $campDate->getPriceWithoutDepositUntil();
+
+        if (is_int($priceWithoutDepositUntil))
+        {
+            $campDateData->setIsPriceWithoutDepositUntilRelative(true);
+            $campDateData->setPriceWithoutDepositUntil(null);
+            $campDateData->setPriceWithoutDepositUntilRelative($priceWithoutDepositUntil);
+        }
+        else if ($priceWithoutDepositUntil instanceof DateTimeImmutable)
+        {
+            $campDateData->setIsPriceWithoutDepositUntilRelative(false);
+            $campDateData->setPriceWithoutDepositUntil($priceWithoutDepositUntil);
+            $campDateData->setPriceWithoutDepositUntilRelative(null);
+        }
+        else
+        {
+            $campDateData->setIsPriceWithoutDepositUntilRelative(false);
+            $campDateData->setPriceWithoutDepositUntil(null);
+            $campDateData->setPriceWithoutDepositUntilRelative(null);
+        }
+
+        // collections
         foreach ($campDate->getCampDateFormFields() as $campDateFormField)
         {
             $campDateFormFieldData = new CampDateFormFieldData();
@@ -113,7 +158,6 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDate->setStartAt($campDateData->getStartAt());
         $campDate->setEndAt($campDateData->getEndAt());
         $campDate->setDeposit($campDateData->getDeposit());
-        $campDate->setDepositUntil($campDateData->getDepositUntil());
         $campDate->setPriceWithoutDeposit($campDateData->getPriceWithoutDeposit());
         $campDate->setCapacity($campDateData->getCapacity());
         $campDate->setIsOpenAboveCapacity($campDateData->isOpenAboveCapacity());
@@ -124,6 +168,27 @@ class CampDateDataTransfer implements DataTransferInterface
         $campDate->setTripLocationPathThere($campDateData->getTripLocationPathThere());
         $campDate->setTripLocationPathBack($campDateData->getTripLocationPathBack());
 
+        // deposit until
+        if ($campDateData->isDepositUntilRelative())
+        {
+            $campDate->setDepositUntil($campDateData->getDepositUntilRelative());
+        }
+        else
+        {
+            $campDate->setDepositUntil($campDateData->getDepositUntil());
+        }
+
+        // price without deposit until
+        if ($campDateData->isPriceWithoutDepositUntilRelative())
+        {
+            $campDate->setPriceWithoutDepositUntil($campDateData->getPriceWithoutDepositUntilRelative());
+        }
+        else
+        {
+            $campDate->setPriceWithoutDepositUntil($campDateData->getPriceWithoutDepositUntil());
+        }
+
+        // collections
         $campDateFormFieldsData = $campDateData->getCampDateFormFieldsData();
         $this->fillEntityCampDateFormFields($campDateFormFieldsData, $campDate);
 

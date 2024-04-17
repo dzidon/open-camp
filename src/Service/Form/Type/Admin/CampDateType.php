@@ -60,11 +60,40 @@ class CampDateType extends AbstractType
                     'tax' => $this->tax,
                 ],
             ])
+            ->add('isDepositUntilRelative', CheckboxType::class, [
+                'required' => false,
+                'label'    => 'form.admin.camp_date.is_deposit_until_relative',
+                'attr'     => [
+                    'data-controller'                      => 'cv--checkbox',
+                    'data-action'                          => 'cv--checkbox#updateVisibility',
+                    'data-cv--checkbox-cv--content-outlet' => '.deposit-until-visibility',
+                ],
+            ])
             ->add('depositUntil', DateTimeType::class, [
-                'widget'     => 'single_text',
-                'input'      => 'datetime_immutable',
-                'label'      => 'form.admin.camp_date.deposit_until',
-                'required'   => false,
+                'widget'   => 'single_text',
+                'input'    => 'datetime_immutable',
+                'label'    => 'form.admin.camp_date.deposit_until',
+                'required' => false,
+                'row_attr' => [
+                    'class'                                   => 'deposit-until-visibility',
+                    'data-controller'                         => 'cv--content',
+                    'data-cv--content-show-when-chosen-value' => '0',
+                ],
+                'label_attr' => [
+                    'class' => 'required-conditional',
+                ],
+            ])
+            ->add('depositUntilRelative', IntegerType::class, [
+                'label'    => 'form.admin.camp_date.deposit_until_relative',
+                'required' => false,
+                'attr'     => [
+                    'min' => 1,
+                ],
+                'row_attr' => [
+                    'class'                                   => 'deposit-until-visibility',
+                    'data-controller'                         => 'cv--content',
+                    'data-cv--content-show-when-chosen-value' => '1',
+                ],
                 'label_attr' => [
                     'class' => 'required-conditional',
                 ],
@@ -78,6 +107,44 @@ class CampDateType extends AbstractType
                 'help'                        => $this->tax > 0.0 ? 'price_includes_tax' : null,
                 'help_translation_parameters' => [
                     'tax' => $this->tax,
+                ],
+            ])
+            ->add('isPriceWithoutDepositUntilRelative', CheckboxType::class, [
+                'required' => false,
+                'label'    => 'form.admin.camp_date.is_price_without_deposit_until_relative',
+                'attr'     => [
+                    'data-controller'                      => 'cv--checkbox',
+                    'data-action'                          => 'cv--checkbox#updateVisibility',
+                    'data-cv--checkbox-cv--content-outlet' => '.price-without-deposit-until-visibility',
+                ],
+            ])
+            ->add('priceWithoutDepositUntil', DateTimeType::class, [
+                'widget'   => 'single_text',
+                'input'    => 'datetime_immutable',
+                'label'    => 'form.admin.camp_date.price_without_deposit_until',
+                'required' => false,
+                'row_attr' => [
+                    'class'                                   => 'price-without-deposit-until-visibility',
+                    'data-controller'                         => 'cv--content',
+                    'data-cv--content-show-when-chosen-value' => '0',
+                ],
+                'label_attr' => [
+                    'class' => 'required-conditional',
+                ],
+            ])
+            ->add('priceWithoutDepositUntilRelative', IntegerType::class, [
+                'label'    => 'form.admin.camp_date.price_without_deposit_until_relative',
+                'required' => false,
+                'attr'     => [
+                    'min' => 1,
+                ],
+                'row_attr' => [
+                    'class'                                   => 'price-without-deposit-until-visibility',
+                    'data-controller'                         => 'cv--content',
+                    'data-cv--content-show-when-chosen-value' => '1',
+                ],
+                'label_attr' => [
+                    'class' => 'required-conditional',
                 ],
             ])
             ->add('capacity', IntegerType::class, [

@@ -23,28 +23,28 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="row">
-            <div class="col-5">
+        <div class="row mb-3 mb-sm-0">
+            <div class="col-12 col-sm-6">
                 <strong>
                     {{ 'offline_payment_method_instructions.invoice.bank_account'|trans }}
                 </strong>
             </div>
 
-            <div class="col-7">
+            <div class="col-12 col-sm-6">
                 <span>
                     {{ company_bank_account }}
                 </span>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-5">
+        <div class="row mb-3 mb-sm-0">
+            <div class="col-12 col-sm-6">
                 <strong>
                     {{ 'offline_payment_method_instructions.invoice.invoice_number'|trans }}
                 </strong>
             </div>
 
-            <div class="col-7">
+            <div class="col-12 col-sm-6">
                 <span>
                     {{ invoice_number }}
                 </span>
@@ -52,14 +52,14 @@
         </div>
 
         {% set deposit_row %}
-            <div class="row">
-                <div class="col-5">
+            <div class="row mb-3 mb-sm-0">
+                <div class="col-12 col-sm-6">
                     <strong>
                         {{ 'offline_payment_method_instructions.invoice.deposit'|trans }}
                     </strong>
                 </div>
 
-                <div class="col-7">
+                <div class="col-12 col-sm-6">
                     <span>
                         {{ application.fullDeposit|format_currency(application.currency) }}
                     </span>
@@ -68,14 +68,14 @@
         {% endset %}
 
         {% if is_application_deposit_paid and not is_application_rest_paid %}
-            <div class="row">
-                <div class="col-5">
+            <div class="row mb-3 mb-sm-0">
+                <div class="col-12 col-sm-6">
                     <strong>
                         {{ 'offline_payment_method_instructions.invoice.rest'|trans }}
                     </strong>
                 </div>
 
-                <div class="col-7">
+                <div class="col-12 col-sm-6">
                     <span>
                         {{ application.fullRest|format_currency(application.currency) }}
                     </span>
@@ -86,14 +86,14 @@
         {% else %}
             {{ deposit_row }}
 
-            <div class="row">
-                <div class="col-5">
+            <div class="row mb-3 mb-sm-0">
+                <div class="col-12 col-sm-6">
                     <strong>
                         {{ 'offline_payment_method_instructions.invoice.full_price'|trans }}
                     </strong>
                 </div>
 
-                <div class="col-7">
+                <div class="col-12 col-sm-6">
                     <span>
                         {{ application.fullPrice|format_currency(application.currency) }}
                     </span>

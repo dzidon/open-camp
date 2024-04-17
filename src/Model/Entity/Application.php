@@ -94,7 +94,10 @@ class Application
     private float $priceWithoutDeposit;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?DateTimeImmutable $depositUntil;
+    private ?DateTimeImmutable $depositUntil = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?DateTimeImmutable $priceWithoutDepositUntil = null;
 
     #[ORM\Column(type: Types::FLOAT)]
     private float $fullDepositCached = 0.0;
@@ -247,10 +250,8 @@ class Application
         $this->campName = $camp->getName();
         $this->campDateStartAt = $this->campDate->getStartAt();
         $this->campDateEndAt = $this->campDate->getEndAt();
-
         $this->deposit = $this->campDate->getDeposit();
         $this->priceWithoutDeposit = $this->campDate->getPriceWithoutDeposit();
-        $this->depositUntil = $this->campDate->getDepositUntil();
         $this->campDateDescription = $this->campDate->getDescription();
 
         DiscountConfigArrayValidator::assertRecurringCampersConfig($this->discountRecurringCampersConfig);
@@ -657,6 +658,47 @@ class Application
     public function getDepositUntil(): ?DateTimeImmutable
     {
         return $this->depositUntil;
+    }
+
+    public function setDepositUntilUsingCampDate(): void
+    {
+        $depositUntil = $this->campDate?->getDepositUntil();
+
+        if (is_int($depositUntil))
+        {
+            $this->depositUntil = new DateTimeImmutable(sprintf('+%s days', $depositUntil));
+        }
+        else if ($depositUntil instanceof DateTimeImmutable)
+        {
+            $this->depositUntil = $depositUntil;
+        }
+        else
+        {
+            $this->depositUntil = null;
+        }
+    }
+
+    public function getPriceWithoutDepositUntil(): ?DateTimeImmutable
+    {
+        return $this->priceWithoutDepositUntil;
+    }
+
+    public function setPriceWithoutDepositUntilUsingCampDate(): void
+    {
+        $priceWithoutDepositUntil = $this->campDate?->getPriceWithoutDepositUntil();
+
+        if (is_int($priceWithoutDepositUntil))
+        {
+            $this->priceWithoutDepositUntil = new DateTimeImmutable(sprintf('+%s days', $priceWithoutDepositUntil));
+        }
+        else if ($priceWithoutDepositUntil instanceof DateTimeImmutable)
+        {
+            $this->priceWithoutDepositUntil = $priceWithoutDepositUntil;
+        }
+        else
+        {
+            $this->priceWithoutDepositUntil = null;
+        }
     }
 
     public function getFullDepositCached(): float

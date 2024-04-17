@@ -46,20 +46,6 @@
 
                 <div class="row mb-3">
                     <div class="col-12 col-sm-6">
-                        <strong>{{ 'entity_attribute.camp_date.deposit_until'|trans }}:</strong>
-                    </div>
-
-                    <div class="col-12 col-sm-6">
-                        {% if camp_date_deposit_until is null %}
-                            <span>?</span>
-                        {% else %}
-                            <span>{{ camp_date_deposit_until|date(date_time_format) }}</span>
-                        {% endif %}
-                    </div>
-                </div>
-
-                <div class="row mb-3">
-                    <div class="col-12 col-sm-6">
                         <strong>{{ 'camp_catalog.price_without_deposit_per_camper'|trans }}:</strong>
                     </div>
 

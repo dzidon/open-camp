@@ -132,6 +132,7 @@ class ApplicationController extends AbstractController
             throw $this->createAccessDeniedException();
         }
 
+        $applicationInvoiceFilesystem->createInvoiceFile($application);
         $invoiceContents = $applicationInvoiceFilesystem->getInvoiceContents($application);
 
         if ($invoiceContents === null)

@@ -1,0 +1,52 @@
+{% set is_application_deposit_paid = application.isDepositPaid %}
+{% set is_application_rest_paid = application.isRestPaid %}
+
+{% set price_without_deposit_until_snippet %}
+    {% if application.priceWithoutDepositUntil is not null %}
+        <div class="row mb-3 mb-sm-0">
+            <div class="col-12 col-sm-6">
+                <strong>
+                    {{ 'entity_attribute.application.price_without_deposit_until'|trans }}:
+                </strong>
+            </div>
+
+            <div class="col-12 col-sm-6">
+                <span>
+                    {{ application.priceWithoutDepositUntil|date(date_time_format) }}
+                </span>
+            </div>
+        </div>
+    {% endif %}
+{% endset %}
+
+{% set deposit_until_snippet %}
+    {% if application.depositUntil is not null %}
+        <div class="row mb-3 mb-sm-0">
+            <div class="col-12 col-sm-6">
+                <strong>
+                    {{ 'entity_attribute.application.deposit_until'|trans }}:
+                </strong>
+            </div>
+
+            <div class="col-12 col-sm-6">
+                <span>
+                    {{ application.depositUntil|date(date_time_format) }}
+                </span>
+            </div>
+        </div>
+    {% endif %}
+{% endset %}
+
+{% if application.fullDeposit > 0.0 %}
+    {% if is_application_deposit_paid %}
+        {{ price_without_deposit_until_snippet }}
+    {% else %}
+        {{ deposit_until_snippet }}
+
+        {% if not is_application_rest_paid %}
+            {{ price_without_deposit_until_snippet }}
+        {% endif %}
+    {% endif %}
+{% elseif application.fullPrice > 0.0 %}
+    {{ price_without_deposit_until_snippet }}
+{% endif %}

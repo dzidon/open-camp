@@ -30,17 +30,71 @@ class CampDateData
     #[Assert\NotBlank]
     private ?float $deposit = null;
 
+    private bool $isDepositUntilRelative = false;
+
     #[Assert\When(
-        expression: 'this.getDeposit() !== null && this.getDeposit() > 0.0',
+        expression: 'this.getDeposit() !== null && this.getDeposit() > 0.0 && !this.isDepositUntilRelative()',
         constraints: [
             new Assert\NotBlank(),
         ],
     )]
+    #[Assert\When(
+        expression: 'this.getDeposit() !== null && this.getDeposit() <= 0.0 && !this.isDepositUntilRelative()',
+        constraints: [
+            new Assert\Blank(),
+        ],
+    )]
     private ?DateTimeImmutable $depositUntil = null;
+
+    #[Assert\GreaterThanOrEqual(1)]
+    #[Assert\When(
+        expression: 'this.getDeposit() !== null && this.getDeposit() > 0.0 && this.isDepositUntilRelative()',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
+    #[Assert\When(
+        expression: 'this.getDeposit() !== null && this.getDeposit() <= 0.0 && this.isDepositUntilRelative()',
+        constraints: [
+            new Assert\Blank(),
+        ],
+    )]
+    private ?int $depositUntilRelative = null;
 
     #[Assert\GreaterThanOrEqual(0.0)]
     #[Assert\NotBlank]
     private ?float $priceWithoutDeposit = null;
+
+    private bool $isPriceWithoutDepositUntilRelative = false;
+
+    #[Assert\When(
+        expression: 'this.getPriceWithoutDeposit() !== null && this.getPriceWithoutDeposit() > 0.0 && !this.isPriceWithoutDepositUntilRelative()',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
+    #[Assert\When(
+        expression: 'this.getPriceWithoutDeposit() !== null && this.getPriceWithoutDeposit() <= 0.0 && !this.isPriceWithoutDepositUntilRelative()',
+        constraints: [
+            new Assert\Blank(),
+        ],
+    )]
+    private ?DateTimeImmutable $priceWithoutDepositUntil = null;
+
+    #[Assert\GreaterThanOrEqual(1)]
+    #[Assert\When(
+        expression: 'this.getPriceWithoutDeposit() !== null && this.getPriceWithoutDeposit() > 0.0 && this.isPriceWithoutDepositUntilRelative()',
+        constraints: [
+            new Assert\NotBlank(),
+        ],
+    )]
+    #[Assert\When(
+        expression: 'this.getPriceWithoutDeposit() !== null && this.getPriceWithoutDeposit() <= 0.0 && this.isPriceWithoutDepositUntilRelative()',
+        constraints: [
+            new Assert\Blank(),
+        ],
+    )]
+    private ?int $priceWithoutDepositUntilRelative = null;
 
     #[Assert\GreaterThanOrEqual(1)]
     #[Assert\NotBlank]
@@ -150,6 +204,30 @@ class CampDateData
         return $this;
     }
 
+    public function isDepositUntilRelative(): bool
+    {
+        return $this->isDepositUntilRelative;
+    }
+
+    public function setIsDepositUntilRelative(bool $isDepositUntilRelative): self
+    {
+        $this->isDepositUntilRelative = $isDepositUntilRelative;
+
+        return $this;
+    }
+
+    public function getDepositUntilRelative(): ?int
+    {
+        return $this->depositUntilRelative;
+    }
+
+    public function setDepositUntilRelative(?int $depositUntilRelative): self
+    {
+        $this->depositUntilRelative = $depositUntilRelative;
+
+        return $this;
+    }
+
     public function getPriceWithoutDeposit(): ?float
     {
         return $this->priceWithoutDeposit;
@@ -158,6 +236,41 @@ class CampDateData
     public function setPriceWithoutDeposit(?float $priceWithoutDeposit): self
     {
         $this->priceWithoutDeposit = $priceWithoutDeposit;
+
+        return $this;
+    }
+
+    public function isPriceWithoutDepositUntilRelative(): bool
+    {
+        return $this->isPriceWithoutDepositUntilRelative;
+    }
+
+    public function setIsPriceWithoutDepositUntilRelative(bool $isPriceWithoutDepositUntilRelative): self
+    {
+        $this->isPriceWithoutDepositUntilRelative = $isPriceWithoutDepositUntilRelative;
+
+        return $this;
+    }
+
+    public function getPriceWithoutDepositUntil(): ?DateTimeImmutable
+    {
+        return $this->priceWithoutDepositUntil;
+    }
+
+    public function setPriceWithoutDepositUntil(?DateTimeImmutable $priceWithoutDepositUntil): self
+    {
+        $this->priceWithoutDepositUntil = $priceWithoutDepositUntil;
+
+        return $this;
+    }
+
+    public function getPriceWithoutDepositUntilRelative(): ?int
+    {
+        return $this->priceWithoutDepositUntilRelative;
+    }
+    public function setPriceWithoutDepositUntilRelative(?int $priceWithoutDepositUntilRelative): self
+    {
+        $this->priceWithoutDepositUntilRelative = $priceWithoutDepositUntilRelative;
 
         return $this;
     }
