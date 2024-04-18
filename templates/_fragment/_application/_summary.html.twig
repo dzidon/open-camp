@@ -54,9 +54,7 @@
                                 {% if application.isPaymentMethodOnline %}
                                     <div class="mb-3">
                                         {{ 'application.completed_screen.payment.online_call_to_action'|trans }}
-                                    </div>
 
-                                    <div class="mb-3">
                                         {{ include('_fragment/_application/_payment_deadlines.html.twig', {
                                             application: application
                                         }) }}
@@ -102,10 +100,6 @@
                                 {% else %}
                                     <div class="mb-3">
                                         {{ application_offline_payment_instructions(application)|raw }}
-
-                                        {{ include('_fragment/_application/_payment_deadlines.html.twig', {
-                                            application: application
-                                        }) }}
                                     </div>
 
                                     <div>

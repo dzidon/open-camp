@@ -2,24 +2,22 @@
 {% set is_application_rest_paid = application.isRestPaid %}
 
 {% if is_application_deposit_paid and not is_application_rest_paid %}
-    <div class="row mb-3">
-        <div class="col-12">
-            {{ 'offline_payment_method_instructions.invoice.rest_unpaid_call_to_action'|trans }}
-        </div>
-    </div>
+    {% set call_to_action = 'offline_payment_method_instructions.invoice.rest_unpaid_call_to_action'|trans %}
 {% elseif not is_application_deposit_paid and is_application_rest_paid %}
-    <div class="row mb-3">
-        <div class="col-12">
-            {{ 'offline_payment_method_instructions.invoice.deposit_unpaid_call_to_action'|trans }}
-        </div>
-    </div>
+    {% set call_to_action = 'offline_payment_method_instructions.invoice.deposit_unpaid_call_to_action'|trans %}
 {% else %}
-    <div class="row mb-3">
-        <div class="col-12">
-            {{ 'offline_payment_method_instructions.invoice.fully_unpaid_call_to_action'|trans }}
-        </div>
-    </div>
+    {% set call_to_action = 'offline_payment_method_instructions.invoice.fully_unpaid_call_to_action'|trans %}
 {% endif %}
+
+<div class="row mb-3">
+    <div class="col-12">
+        {{ call_to_action }}
+
+        {{ include('_fragment/_application/_payment_deadlines.html.twig', {
+            application: application
+        }) }}
+    </div>
+</div>
 
 <div class="row">
     <div class="col-12">

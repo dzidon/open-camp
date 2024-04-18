@@ -229,6 +229,8 @@ application:
 
         payment:
             heading: 'Platba'
+            deposit_deadline_at: 'Zálohu je nutné zaplatit do {date}.'
+            full_price_deadline_at: 'Celou přihlášku je nutné zaplatit do {date}.'
             online_call_to_action: 'Proveďte prosím on-line platbu přihlášky.'
             button_online_pay_deposit: 'Zaplatit zálohu ({price})'
             button_online_pay_full: 'Zaplatit celou přihlášku ({price})'
@@ -885,11 +887,11 @@ entity_attribute:
         is_accepted: 'Vypořádána'
         camp_name: 'Tábor'
         deposit: 'Záloha'
-        deposit_until: 'Zálohu zaplaťte do'
+        deposit_until: 'Zálohu je nutné zaplatit do'
         price_without_deposit: 'Doplatek'
-        price_without_deposit_until: 'Doplatek zaplaťte do'
+        price_without_deposit_until: 'Doplatek je nutné zaplatit do'
         full_price: 'Celková cena'
-        full_price_until: 'Přihlášku zaplaťte do'
+        full_price_until: 'Přihlášku je nutné zaplatit do'
         full_price_without_tax: 'Celková cena bez DPH'
         full_deposit_cached: 'Celková záloha'
         full_rest_cached: 'Celkový doplatek'

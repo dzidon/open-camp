@@ -3,37 +3,17 @@
 
 {% set price_without_deposit_until_snippet %}
     {% if application.priceWithoutDepositUntil is not null %}
-        <div class="row mb-3 mb-sm-0">
-            <div class="col-12 col-sm-6">
-                <strong>
-                    {{ 'entity_attribute.application.price_without_deposit_until'|trans }}:
-                </strong>
-            </div>
-
-            <div class="col-12 col-sm-6">
-                <span>
-                    {{ application.priceWithoutDepositUntil|date(date_time_format) }}
-                </span>
-            </div>
-        </div>
+        {{ 'application.completed_screen.payment.full_price_deadline_at'|trans({
+            date: application.priceWithoutDepositUntil|date(date_time_format)
+        }) }}
     {% endif %}
 {% endset %}
 
 {% set deposit_until_snippet %}
     {% if application.depositUntil is not null %}
-        <div class="row mb-3 mb-sm-0">
-            <div class="col-12 col-sm-6">
-                <strong>
-                    {{ 'entity_attribute.application.deposit_until'|trans }}:
-                </strong>
-            </div>
-
-            <div class="col-12 col-sm-6">
-                <span>
-                    {{ application.depositUntil|date(date_time_format) }}
-                </span>
-            </div>
-        </div>
+        {{ 'application.completed_screen.payment.deposit_deadline_at'|trans({
+            date: application.depositUntil|date(date_time_format)
+        }) }}
     {% endif %}
 {% endset %}
 
