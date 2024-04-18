@@ -1,0 +1,23 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12 col-md-8 col-xl-5">
+                            <p>
+                                {{ 'crud.confirmation.gallery_image_category_delete'|trans({
+                                    'name': gallery_image_category.name
+                                }) }}
+                            </p>
+
+                            {{ form(form_delete) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

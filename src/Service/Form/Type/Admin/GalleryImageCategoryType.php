@@ -2,8 +2,8 @@
 
 namespace App\Service\Form\Type\Admin;
 
-use App\Library\Data\Admin\CampCategoryData;
-use App\Model\Entity\CampCategory;
+use App\Library\Data\Admin\GalleryImageCategoryData;
+use App\Model\Entity\GalleryImageCategory;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -11,9 +11,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Admin camp category editing.
+ * Admin gallery image category editing.
  */
-class CampCategoryType extends AbstractType
+class GalleryImageCategoryType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -22,21 +22,21 @@ class CampCategoryType extends AbstractType
                 'attr' => [
                     'autofocus' => 'autofocus'
                 ],
-                'label' => 'form.admin.camp_category.name',
+                'label' => 'form.admin.gallery_image_category.name',
             ])
             ->add('urlName', TextType::class, [
-                'label' => 'form.admin.camp_category.url_name',
+                'label' => 'form.admin.gallery_image_category.url_name',
             ])
             ->add('parent', EntityType::class, [
-                'class'        => CampCategory::class,
-                'choice_label' => function (CampCategory $campCategory): string
+                'class'        => GalleryImageCategory::class,
+                'choice_label' => function (GalleryImageCategory $galleryImageCategory): string
                 {
-                    return $campCategory->getPath();
+                    return $galleryImageCategory->getPath();
                 },
-                'choices'     => $options['choices_camp_categories'],
+                'choices'     => $options['choices_gallery_image_categories'],
                 'placeholder' => 'form.common.choice.none.female',
                 'required'    => false,
-                'label'       => 'form.admin.camp_category.parent',
+                'label'       => 'form.admin.gallery_image_category.parent',
             ])
         ;
     }
@@ -44,10 +44,10 @@ class CampCategoryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class'              => CampCategoryData::class,
-            'choices_camp_categories' => [],
+            'data_class'                       => GalleryImageCategoryData::class,
+            'choices_gallery_image_categories' => [],
         ]);
 
-        $resolver->setAllowedTypes('choices_camp_categories', CampCategory::class . '[]');
+        $resolver->setAllowedTypes('choices_gallery_image_categories', GalleryImageCategory::class . '[]');
     }
 }

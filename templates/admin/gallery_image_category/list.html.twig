@@ -1,0 +1,92 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-header d-flex w-100 align-items-center">
+                    {% set granted_create = is_granted('gallery_image_category_create') %}
+                    {% if granted_create %}
+                        <a href="{{ path('admin_gallery_image_category_create') }}" class="btn btn-success">
+                            {{ 'crud.action.common.create'|trans }}
+                        </a>
+                    {% endif %}
+                </div>
+
+                <div class="card-body {% if root_categories is not empty %} table-responsive p-0 {% endif %}">
+                    {% if root_categories is empty %}
+                        {{ 'search.error.no_results'|trans }}
+                    {% else %}
+                        {% set granted_read = is_granted('gallery_image_category_read') %}
+                        {% set granted_update = is_granted('gallery_image_category_update') %}
+                        {% set granted_delete = is_granted('gallery_image_category_delete') %}
+
+                        {% for gallery_image_category in root_categories %}
+                            {% with {'gallery_image_category': gallery_image_category} %}
+                                {{ block('gallery_image_category_table') }}
+                            {% endwith %}
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block gallery_image_category_table %}
+    <table class="table text-nowrap table-hover">
+        <tbody>
+            <tr {% if gallery_image_category.children is not empty %} data-widget="expandable-table" aria-expanded="false" {% endif %}>
+                <td class="d-flex w-100 justify-content-between align-items-center">
+                    <span>
+                        {% if gallery_image_category.children is not empty %}
+                            <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                        {% endif %}
+
+                        {{ gallery_image_category.name }}
+                    </span>
+
+                    <span class="pl-3">
+                        {% if granted_read %}
+                            <a href="{{ path('admin_gallery_image_category_read', {id: gallery_image_category.id.toRfc4122}) }}"
+                               class="btn btn-secondary"
+                            >
+                                {{ 'crud.action.common.read'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if granted_update %}
+                            <a href="{{ path('admin_gallery_image_category_update', {id: gallery_image_category.id.toRfc4122}) }}"
+                               class="btn btn-primary"
+                            >
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if granted_delete %}
+                            <a href="{{ path('admin_gallery_image_category_delete', {id: gallery_image_category.id.toRfc4122}) }}"
+                               class="btn btn-danger"
+                            >
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </span>
+                </td>
+            </tr>
+
+            {% if gallery_image_category.children is not empty %}
+                <tr class="expandable-body">
+                    <td>
+                        <div class="p-0">
+                            {% for gallery_image_category_child in gallery_image_category.children %}
+                                {% with {'gallery_image_category': gallery_image_category_child} %}
+                                    {{ block('gallery_image_category_table') }}
+                                {% endwith %}
+                            {% endfor %}
+                        </div>
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}

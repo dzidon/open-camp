@@ -81,6 +81,8 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
      */
     private function createPermissionGroups(): array
     {
+        $groups['gallery_image_category'] = new PermissionGroup('gallery_image_category', 'permission_group.gallery_image_category', 1400);
+        $groups['gallery_image'] = new PermissionGroup('gallery_image', 'permission_group.gallery_image', 1300);
         $groups['blog_post'] = new PermissionGroup('blog_post', 'permission_group.blog_post', 1200);
         $groups['application'] = new PermissionGroup('application', 'permission_group.application', 1100);
         $groups['application_payment'] = new PermissionGroup('application_payment', 'permission_group.application_payment', 1000);
@@ -105,6 +107,16 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
      */
     private function createPermissions(array $groups): array
     {
+        $permissions['gallery_image_category_create'] = new Permission('gallery_image_category_create', 'permission.gallery_image_category_create', 400, $groups['gallery_image_category']);
+        $permissions['gallery_image_category_read'] = new Permission('gallery_image_category_read', 'permission.gallery_image_category_read', 300, $groups['gallery_image_category']);
+        $permissions['gallery_image_category_update'] = new Permission('gallery_image_category_update', 'permission.gallery_image_category_update', 200, $groups['gallery_image_category']);
+        $permissions['gallery_image_category_delete'] = new Permission('gallery_image_category_delete', 'permission.gallery_image_category_delete', 100, $groups['gallery_image_category']);
+
+        $permissions['gallery_image_create'] = new Permission('gallery_image_create', 'permission.gallery_image_create', 400, $groups['gallery_image']);
+        $permissions['gallery_image_read'] = new Permission('gallery_image_read', 'permission.gallery_image_read', 300, $groups['gallery_image']);
+        $permissions['gallery_image_update'] = new Permission('gallery_image_update', 'permission.gallery_image_update', 200, $groups['gallery_image']);
+        $permissions['gallery_image_delete'] = new Permission('gallery_image_delete', 'permission.gallery_image_delete', 100, $groups['gallery_image']);
+        
         $permissions['blog_post_create'] = new Permission('blog_post_create', 'permission.blog_post_create', 400, $groups['blog_post']);
         $permissions['blog_post_read'] = new Permission('blog_post_read', 'permission.blog_post_read', 300, $groups['blog_post']);
         $permissions['blog_post_update'] = new Permission('blog_post_update', 'permission.blog_post_update', 200, $groups['blog_post']);

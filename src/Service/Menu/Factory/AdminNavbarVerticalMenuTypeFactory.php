@@ -297,6 +297,48 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
             }
         }
 
+        // gallery
+        $isGrantedGalleryImageCategory =
+            $this->security->isGranted('gallery_image_category_create') || 
+            $this->security->isGranted('gallery_image_category_read')   ||
+            $this->security->isGranted('gallery_image_category_update') || 
+            $this->security->isGranted('gallery_image_category_delete')
+        ;
+
+        $isGrantedGalleryImage =
+            $this->security->isGranted('gallery_image_create') || $this->security->isGranted('gallery_image_read') ||
+            $this->security->isGranted('gallery_image_update') || $this->security->isGranted('gallery_image_delete')
+        ;
+
+        if ($isGrantedGalleryImageCategory || $isGrantedGalleryImage)
+        {
+            $text = $this->translator->trans('route.admin_gallery_image_list');
+            $itemGalleryParent = new MenuIconType('parent_gallery', 'navbar_admin_vertical_item', $text, '#', 'fas fa-image');
+            $menu->addChild($itemGalleryParent);
+
+            /*
+            if ($isGrantedGalleryImage)
+            {
+                
+            }
+            */
+            
+            if ($isGrantedGalleryImageCategory)
+            {
+                $active =
+                    $route === 'admin_gallery_image_category_list'   || $route === 'admin_gallery_image_category_create' ||
+                    $route === 'admin_gallery_image_category_read'   || $route === 'admin_gallery_image_category_update' ||
+                    $route === 'admin_gallery_image_category_delete'
+                ;
+
+                $text = $this->translator->trans('route.admin_gallery_image_category_list');
+                $url = $this->urlGenerator->generate('admin_gallery_image_category_list');
+                $itemGalleryImageCategories = new MenuIconType('admin_gallery_image_category_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
+                $itemGalleryParent->addChild($itemGalleryImageCategories);
+                $itemGalleryImageCategories->setActive($active, $active);
+            }
+        }
+        
         // blog
         $isGrantedBlog =
             $this->security->isGranted('blog_post_create') || $this->security->isGranted('blog_post_read') ||

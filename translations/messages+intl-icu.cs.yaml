@@ -434,8 +434,20 @@ permission_group:
     form_field: 'Formulářová pole'
     discount_config: 'Konfigurace slev'
     blog_post: 'Blog'
+    gallery_image_category: 'Kategorie obrázků'
+    gallery_image: 'Obrázky'
 
 permission:
+    gallery_image_category_read: 'Zobrazení kategorie obrázků'
+    gallery_image_category_create: 'Tvorba kategorie obrázků'
+    gallery_image_category_update: 'Editace kategorie obrázků'
+    gallery_image_category_delete: 'Odstranění kategorie obrázků'
+
+    gallery_image_read: 'Zobrazení obrázku'
+    gallery_image_create: 'Nahrání obrázku'
+    gallery_image_update: 'Editace obrázku'
+    gallery_image_delete: 'Odstranění obrázku'
+    
     application_read: 'Zobrazení přihlášky'
     application_update: 'Editace přihlášky'
     application_state_update: 'Vypořádání přihlášky'
@@ -528,6 +540,7 @@ crud:
         application_payment_delete: 'Opravdu si přejete odstranit platbu?'
         application_payment_refund: 'Opravdu si přejete vrátit platbu?'
         application_admin_attachment_delete: 'Opravdu si přejete odstranit administrátorskou přílohu "{label}"?'
+        gallery_image_category_delete: 'Opravdu si přejete odstranit kategorii obrázků "{name}"?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
@@ -586,6 +599,11 @@ crud:
             create: 'Příloha vytvořena!'
             update: 'Příloha uložena!'
             delete: 'Příloha odstraněna!'
+
+        gallery_image_category:
+            create: 'Kategorie obrázků vytvořena!'
+            update: 'Kategorie obrázků uložena!'
+            delete: 'Kategorie obrázků odstraněna!'
 
         blog_post:
             create: 'Příspěvek vytvořen!'
@@ -1042,6 +1060,15 @@ entity_attribute:
         locations: 'Lokace'
         location: 'Lokace'
         application_camper: 'Táborník'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    gallery_image_category:
+        id: 'ID'
+        name: 'Název'
+        url_name: 'Název v odkazu'
+        parent: 'Nadřazená kategorie'
+        children: 'Podřazené kategorie'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -2103,6 +2130,15 @@ form:
         blog_post_delete:
             button: 'Odstranit'
 
+        gallery_image_category:
+            name: 'Název'
+            url_name: 'Název v odkazu'
+            parent: 'Nadřazená kategorie'
+            button: 'Uložit'
+
+        gallery_image_category_delete:
+            button: 'Odstranit'
+
     user:
         application_step_one:
             email:
@@ -2358,6 +2394,18 @@ route:
     admin_blog_post_read: 'Zobrazení příspěvku'
     admin_blog_post_update: 'Editace příspěvku'
     admin_blog_post_delete: 'Odstranění příspěvku'
+
+    admin_gallery_image_list: 'Galerie'
+    admin_gallery_image_create: 'Nový obrázek'
+    admin_gallery_image_read: 'Zobrazení obrázku'
+    admin_gallery_image_update: 'Editace obrázku'
+    admin_gallery_image_delete: 'Odstranění obrázku'
+
+    admin_gallery_image_category_list: 'Kategorie obrázků'
+    admin_gallery_image_category_create: 'Nová kategorie obrázků'
+    admin_gallery_image_category_read: 'Zobrazení kategorie obrázků'
+    admin_gallery_image_category_update: 'Editace kategorie obrázků'
+    admin_gallery_image_category_delete: 'Odstranění kategorie obrázků'
 
     admin_application_camp_list: 'Přihlášky'
     admin_application_camp_summary: 'Souhrn za tábor'

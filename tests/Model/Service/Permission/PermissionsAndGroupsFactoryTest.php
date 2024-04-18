@@ -46,7 +46,19 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Groups
          */
-        $this->assertCount(12, $groupsSerialized);
+        $this->assertCount(14, $groupsSerialized);
+
+        $this->assertContains([
+            'name'     => 'gallery_image_category',
+            'priority' => 1400,
+            'label'    => 'permission_group.gallery_image_category',
+        ], $groupsSerialized);
+
+        $this->assertContains([
+            'name'     => 'gallery_image',
+            'priority' => 1300,
+            'label'    => 'permission_group.gallery_image',
+        ], $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'blog_post',
@@ -123,8 +135,66 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Permissions
          */
-        $this->assertCount(50, $permissionsSerialized);
+        $this->assertCount(58, $permissionsSerialized);
 
+        // gallery image category
+        $this->assertContains([
+            'name'             => 'gallery_image_category_create',
+            'priority'         => 400,
+            'label'            => 'permission.gallery_image_category_create',
+            'permission_group' => 'gallery_image_category',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'gallery_image_category_read',
+            'priority'         => 300,
+            'label'            => 'permission.gallery_image_category_read',
+            'permission_group' => 'gallery_image_category',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'gallery_image_category_update',
+            'priority'         => 200,
+            'label'            => 'permission.gallery_image_category_update',
+            'permission_group' => 'gallery_image_category',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'gallery_image_category_delete',
+            'priority'         => 100,
+            'label'            => 'permission.gallery_image_category_delete',
+            'permission_group' => 'gallery_image_category',
+        ], $permissionsSerialized);
+        
+        // gallery image
+        $this->assertContains([
+            'name'             => 'gallery_image_create',
+            'priority'         => 400,
+            'label'            => 'permission.gallery_image_create',
+            'permission_group' => 'gallery_image',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'gallery_image_read',
+            'priority'         => 300,
+            'label'            => 'permission.gallery_image_read',
+            'permission_group' => 'gallery_image',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'gallery_image_update',
+            'priority'         => 200,
+            'label'            => 'permission.gallery_image_update',
+            'permission_group' => 'gallery_image',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'gallery_image_delete',
+            'priority'         => 100,
+            'label'            => 'permission.gallery_image_delete',
+            'permission_group' => 'gallery_image',
+        ], $permissionsSerialized);
+        
         // blog post
         $this->assertContains([
             'name'             => 'blog_post_create',
