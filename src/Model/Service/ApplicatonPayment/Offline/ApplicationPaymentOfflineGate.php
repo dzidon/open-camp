@@ -2,6 +2,13 @@
 
 namespace App\Model\Service\ApplicatonPayment\Offline;
 
+use App\Model\Entity\Application;
+use App\Model\Entity\ApplicationPayment;
+use App\Model\Enum\Entity\ApplicationPaymentTypeEnum;
+
+/**
+ * @inheritDoc
+ */
 class ApplicationPaymentOfflineGate implements ApplicationPaymentOfflineGateInterface
 {
     const STATE_PAID = 'PAID';
@@ -20,55 +27,39 @@ class ApplicationPaymentOfflineGate implements ApplicationPaymentOfflineGateInte
     /**
      * @inheritDoc
      */
-    public function getInitialState(): string
+    public function createOfflinePayment(ApplicationPaymentTypeEnum $type, Application $application): ?ApplicationPayment
     {
-        return self::STATE_PENDING;
-    }
+        $amount = match ($type)
+        {
+            ApplicationPaymentTypeEnum::DEPOSIT => $application->getFullDeposit(),
+            ApplicationPaymentTypeEnum::REST    => $application->getFullRest(),
+            ApplicationPaymentTypeEnum::FULL    => $application->getFullPrice(),
+        };
 
-    /**
-     * @inheritDoc
-     */
-    public function getPaidStates(): array
-    {
-        return [self::STATE_PAID];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getCancelledStates(): array
-    {
-        return [self::STATE_CANCELLED];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getRefundedStates(): array
-    {
-        return [self::STATE_REFUNDED];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPendingStates(): array
-    {
-        return [self::STATE_PENDING];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getValidStateChanges(): array
-    {
         $states = $this->getStates();
-
-        return [
+        $statesPaid = [self::STATE_PAID];
+        $statesCancelled = [self::STATE_CANCELLED];
+        $statesRefunded = [self::STATE_REFUNDED];
+        $statesPending = [self::STATE_PENDING];
+        $validStateChanges = [
             self::STATE_PAID      => $states,
             self::STATE_CANCELLED => $states,
             self::STATE_REFUNDED  => $states,
             self::STATE_PENDING   => $states,
         ];
+
+        return new ApplicationPayment(
+            $amount,
+            $type,
+            self::STATE_PENDING,
+            false,
+            $application,
+            $states,
+            $statesPaid,
+            $statesCancelled,
+            $statesRefunded,
+            $statesPending,
+            $validStateChanges,
+        );
     }
 }

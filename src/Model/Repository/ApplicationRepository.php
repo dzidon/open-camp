@@ -521,9 +521,8 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $applicationIds = $this->getApplicationIds($applications);
 
         $this->createQueryBuilder('application')
-            ->select('application, applicationPayment, applicationPaymentStateConfig')
+            ->select('application, applicationPayment')
             ->leftJoin('application.applicationPayments', 'applicationPayment')
-            ->leftJoin('applicationPayment.applicationPaymentStateConfig', 'applicationPaymentStateConfig')
             ->andWhere('application.id IN (:ids)')
             ->setParameter('ids', $applicationIds)
             ->orderBy('applicationPayment.createdAt', 'ASC')

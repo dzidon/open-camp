@@ -3,32 +3,21 @@
 namespace App\Model\EventSubscriber\User\ApplicationPayment;
 
 use App\Model\Event\User\ApplicationPayment\ApplicationPaymentOnlineCreateEvent;
-use App\Model\Event\User\ApplicationPaymentStateConfig\ApplicationPaymentStateConfigCreateEvent;
 use App\Model\Repository\ApplicationPaymentRepositoryInterface;
-use App\Model\Repository\ApplicationPaymentStateConfigRepositoryInterface;
 use App\Model\Service\ApplicatonPayment\Online\ApplicationPaymentOnlineGateInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class ApplicationPaymentOnlineCreateSubscriber
 {
     private ApplicationPaymentRepositoryInterface $applicationPaymentRepository;
 
-    private ApplicationPaymentStateConfigRepositoryInterface $applicationPaymentStateConfigRepository;
-
     private ApplicationPaymentOnlineGateInterface $applicationPaymentOnlineGate;
 
-    private EventDispatcherInterface $eventDispatcher;
-
-    public function __construct(ApplicationPaymentRepositoryInterface            $applicationPaymentRepository,
-                                ApplicationPaymentStateConfigRepositoryInterface $applicationPaymentStateConfigRepository,
-                                ApplicationPaymentOnlineGateInterface            $applicationPaymentOnlineGate,
-                                EventDispatcherInterface                         $eventDispatcher)
+    public function __construct(ApplicationPaymentRepositoryInterface $applicationPaymentRepository,
+                                ApplicationPaymentOnlineGateInterface $applicationPaymentOnlineGate)
     {
         $this->applicationPaymentRepository = $applicationPaymentRepository;
-        $this->applicationPaymentStateConfigRepository = $applicationPaymentStateConfigRepository;
         $this->applicationPaymentOnlineGate = $applicationPaymentOnlineGate;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     #[AsEventListener(event: ApplicationPaymentOnlineCreateEvent::NAME, priority: 200)]
@@ -36,45 +25,7 @@ class ApplicationPaymentOnlineCreateSubscriber
     {
         $application = $event->getApplication();
         $type = $event->getType();
-
-        $states = $this->applicationPaymentOnlineGate->getStates();
-        $paidStates = $this->applicationPaymentOnlineGate->getPaidStates();
-        $cancelledStates = $this->applicationPaymentOnlineGate->getCancelledStates();
-        $refundedStates = $this->applicationPaymentOnlineGate->getRefundedStates();
-        $pendingStates = $this->applicationPaymentOnlineGate->getPendingStates();
-        $validStateChanges = $this->applicationPaymentOnlineGate->getValidStateChanges();
-
-        $applicationPaymentStateConfig = $this->applicationPaymentStateConfigRepository->findOneByConfiguration(
-            $states,
-            $paidStates,
-            $cancelledStates,
-            $refundedStates,
-            $pendingStates,
-            $validStateChanges,
-        );
-
-        if ($applicationPaymentStateConfig === null)
-        {
-            $stateConfigEvent = new ApplicationPaymentStateConfigCreateEvent(
-                $states,
-                $paidStates,
-                $cancelledStates,
-                $refundedStates,
-                $pendingStates,
-                $validStateChanges,
-            );
-
-            $stateConfigEvent->setIsFlush(false);
-            $this->eventDispatcher->dispatch($stateConfigEvent, $stateConfigEvent::NAME);
-            $applicationPaymentStateConfig = $stateConfigEvent->getApplicationPaymentStateConfig();
-        }
-
-        $applicationPayment = $this->applicationPaymentOnlineGate->createOnlinePayment(
-            $type,
-            $application,
-            $applicationPaymentStateConfig
-        );
-
+        $applicationPayment = $this->applicationPaymentOnlineGate->createOnlinePayment($type, $application);
         $event->setApplicationPayment($applicationPayment);
     }
 

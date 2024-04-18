@@ -46,8 +46,7 @@ class ApplicationPaymentRepository extends AbstractRepository implements Applica
     public function findOneById(UuidV4 $id): ?ApplicationPayment
     {
         return $this->createQueryBuilder('applicationPayment')
-            ->select('applicationPayment, applicationPaymentStateConfig, application, campDate, camp')
-            ->leftJoin('applicationPayment.applicationPaymentStateConfig', 'applicationPaymentStateConfig')
+            ->select('applicationPayment, application, campDate, camp')
             ->leftJoin('applicationPayment.application', 'application')
             ->leftJoin('application.campDate', 'campDate')
             ->leftJoin('campDate.camp', 'camp')
@@ -64,8 +63,10 @@ class ApplicationPaymentRepository extends AbstractRepository implements Applica
     public function findOneByExternalId(string $externalId): ?ApplicationPayment
     {
         return $this->createQueryBuilder('applicationPayment')
-            ->select('applicationPayment, applicationPaymentStateConfig')
-            ->leftJoin('applicationPayment.applicationPaymentStateConfig', 'applicationPaymentStateConfig')
+            ->select('applicationPayment, application, campDate, camp')
+            ->leftJoin('applicationPayment.application', 'application')
+            ->leftJoin('application.campDate', 'campDate')
+            ->leftJoin('campDate.camp', 'camp')
             ->andWhere('applicationPayment.externalId = :externalId')
             ->setParameter('externalId', $externalId)
             ->getQuery()
@@ -86,8 +87,10 @@ class ApplicationPaymentRepository extends AbstractRepository implements Applica
         $sortBy = $data->getSortBy();
 
         $queryBuilder = $this->createQueryBuilder('applicationPayment')
-            ->select('applicationPayment, applicationPaymentStateConfig')
-            ->leftJoin('applicationPayment.applicationPaymentStateConfig', 'applicationPaymentStateConfig')
+            ->select('applicationPayment, application, campDate, camp')
+            ->leftJoin('applicationPayment.application', 'application')
+            ->leftJoin('application.campDate', 'campDate')
+            ->leftJoin('campDate.camp', 'camp')
             ->andWhere('applicationPayment.application = :applicationId')
             ->setParameter('applicationId', $application->getId(), UuidType::NAME)
             ->orderBy($sortBy->property(), $sortBy->order())
