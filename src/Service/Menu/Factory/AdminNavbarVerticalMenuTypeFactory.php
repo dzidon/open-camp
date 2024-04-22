@@ -315,13 +315,21 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
             $text = $this->translator->trans('route.admin_gallery_image_list');
             $itemGalleryParent = new MenuIconType('parent_gallery', 'navbar_admin_vertical_item', $text, '#', 'fas fa-image');
             $menu->addChild($itemGalleryParent);
-
-            /*
+            
             if ($isGrantedGalleryImage)
             {
-                
+                $active =
+                    $route === 'admin_gallery_image_list'   || $route === 'admin_gallery_image_create' ||
+                    $route === 'admin_gallery_image_read'   || $route === 'admin_gallery_image_update' ||
+                    $route === 'admin_gallery_image_delete'
+                ;
+
+                $text = $this->translator->trans('menu.navbar_admin_vertical.browse');
+                $url = $this->urlGenerator->generate('admin_gallery_image_list');
+                $itemGalleryImages = new MenuIconType('admin_gallery_image_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
+                $itemGalleryParent->addChild($itemGalleryImages);
+                $itemGalleryImages->setActive($active, $active);
             }
-            */
             
             if ($isGrantedGalleryImageCategory)
             {

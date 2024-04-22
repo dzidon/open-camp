@@ -73,19 +73,19 @@ class ApplicationPaymentOnlineController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $newState = $applicationPaymentOnlineGate->getNewStateFromExternalRequest($request);
+        $externalState = $applicationPaymentOnlineGate->getStateFromExternalRequest($request);
 
-        if ($newState === null)
+        if ($externalState === null)
         {
             return new Response('Could not retrieve new state', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        if (!$applicationPayment->canChangeToState($newState))
+        if (!$applicationPayment->canChangeToState($externalState))
         {
             return new Response('Unable to change to this state', Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $event = new ApplicationPaymentOnlineUpdateEvent($applicationPayment, $newState);
+        $event = new ApplicationPaymentOnlineUpdateEvent($applicationPayment, $externalState);
         $this->eventDispatcher->dispatch($event, $event::NAME);
 
         return new Response('State updated', Response::HTTP_OK);
@@ -101,11 +101,11 @@ class ApplicationPaymentOnlineController extends AbstractController
             throw $this->createNotFoundException();
         }
 
-        $newState = $applicationPaymentOnlineGate->getNewStateFromExternalRequest($request);
+        $externalState = $applicationPaymentOnlineGate->getStateFromExternalRequest($request);
 
-        if ($newState !== null && $applicationPayment->canChangeToState($newState))
+        if ($externalState !== null && $applicationPayment->canChangeToState($externalState))
         {
-            $event = new ApplicationPaymentOnlineUpdateEvent($applicationPayment, $newState);
+            $event = new ApplicationPaymentOnlineUpdateEvent($applicationPayment, $externalState);
             $this->eventDispatcher->dispatch($event, $event::NAME);
         }
 

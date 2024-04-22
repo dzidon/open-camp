@@ -191,6 +191,7 @@ class GalleryImageCategoryRepository extends AbstractRepository implements Galle
         $count = $this->_em->createQueryBuilder()
             ->select('count(galleryImage.id)')
             ->from(GalleryImage::class, 'galleryImage')
+            ->andWhere('galleryImage.isHiddenInGallery = FALSE')
             ->andWhere('galleryImage.galleryImageCategory IN (:ids)')
             ->setParameter('ids', $subTreeGalleryImageCategoryIds)
             ->getQuery()

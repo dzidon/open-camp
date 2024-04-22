@@ -79,6 +79,33 @@
     {{ form_rest(form) }}
 {% endblock %}
 
+{# Gallery image search #}
+{% block admin_gallery_image_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.galleryImageCategory) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="form-group col-md-6">
+            {{ form_row(form.isHiddenInGallery) }}
+        </div>
+
+        <div class="form-group col-md-6">
+            {{ form_row(form.isInCarousel) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.gallery_image_search.button'|trans }}
+    </button>
+{% endblock %}
+
 {# Attachment config search #}
 {% block admin_attachment_config_search_widget %}
     {{ form_errors(form) }}

@@ -1,0 +1,56 @@
+{% extends "user/base.html.twig" %}
+
+{% block main %}
+    {% if gallery_image_category_children is not empty %}
+        <div class="row">
+            <div class="col-12 d-flex flex-wrap pb-3">
+                {% for gallery_image_category_child in gallery_image_category_children %}
+                    <a href="{{ path('user_gallery_image_list', {path: gallery_image_category_child.path}) }}"
+                       class="mr-2"
+                    >
+                        <h5>
+                            <span class="badge badge-pill badge-primary">
+                                {{ gallery_image_category_child.name }}
+                            </span>
+                        </h5>
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12">
+            {% if paginator.totalItems > 0 %}
+                <div class="row">
+                    {% for gallery_image in paginator.currentPageItems %}
+                        {% set image_url = gallery_image_url(gallery_image) %}
+
+                        <div class="mb-3 col-6 col-sm-4 col-md-3 col-xl-2">
+                            <div class="bg-black">
+                                <a href="{{ image_url }}">
+                                    <img class="image-cover-1-1 img-thumbnail"
+                                         src="{{ image_url }}"
+                                         alt="{{ 'entity.gallery_image.singular'|trans }}"
+                                    >
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        {{ menu(pagination_menu) }}
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-12">
+                        {{ 'search.error.no_results'|trans }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

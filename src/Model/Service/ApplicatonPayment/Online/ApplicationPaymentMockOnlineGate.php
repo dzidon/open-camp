@@ -94,7 +94,7 @@ class ApplicationPaymentMockOnlineGate implements ApplicationPaymentOnlineGateIn
     /**
      * @inheritDoc
      */
-    public function getNewStateFromExternalRequest(Request $request): ?string
+    public function getStateFromExternalRequest(Request $request): ?string
     {
         $newState = $request->query->get('newState');
 

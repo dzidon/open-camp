@@ -11,7 +11,7 @@
         </div>
 
         <div id="camp-category-children" class="collapse show-collapsed-lg">
-            <div class="d-flex pb-3">
+            <div class="d-flex flex-wrap pb-3">
                 {% for camp_category_child in camp_category_children %}
                     <a class="mr-2" href="{{ path('user_camp_catalog', {path: camp_category_child.path}) }}">
                         <h5>

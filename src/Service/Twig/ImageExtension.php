@@ -3,9 +3,11 @@
 namespace App\Service\Twig;
 
 use App\Model\Entity\CampImage;
+use App\Model\Entity\GalleryImage;
 use App\Model\Entity\PurchasableItem;
 use App\Model\Entity\User;
 use App\Model\Service\CampImage\CampImageFilesystemInterface;
+use App\Model\Service\GalleryImage\GalleryImageFilesystemInterface;
 use App\Model\Service\PurchasableItem\PurchasableItemImageFilesystemInterface;
 use App\Model\Service\User\UserImageFilesystemInterface;
 use Twig\Extension\AbstractExtension;
@@ -22,6 +24,8 @@ class ImageExtension extends AbstractExtension
 
     private UserImageFilesystemInterface $userImageFilesystem;
 
+    private GalleryImageFilesystemInterface $galleryImageFilesystem;
+
     private string $publicFilePathPrefix;
 
     private string $companyLogoPath;
@@ -29,12 +33,14 @@ class ImageExtension extends AbstractExtension
     public function __construct(CampImageFilesystemInterface            $campImageFilesystem,
                                 PurchasableItemImageFilesystemInterface $purchasableItemImageFilesystem,
                                 UserImageFilesystemInterface            $userImageFilesystem,
+                                GalleryImageFilesystemInterface         $galleryImageFilesystem,
                                 string                                  $publicFilePathPrefix,
                                 string                                  $companyLogoPath)
     {
         $this->campImageFilesystem = $campImageFilesystem;
         $this->purchasableItemImageFilesystem = $purchasableItemImageFilesystem;
         $this->userImageFilesystem = $userImageFilesystem;
+        $this->galleryImageFilesystem = $galleryImageFilesystem;
         $this->publicFilePathPrefix = $publicFilePathPrefix;
         $this->companyLogoPath = $companyLogoPath;
     }
@@ -50,11 +56,13 @@ class ImageExtension extends AbstractExtension
             new TwigFunction('camp_image_url', [$this, 'getCampImageUrl']),
             new TwigFunction('purchasable_item_image_url', [$this, 'getPurchasableItemImageUrl']),
             new TwigFunction('user_image_url', [$this, 'getUserImageUrl']),
+            new TwigFunction('gallery_image_url', [$this, 'getGalleryImageUrl']),
 
             // checking if urls are placeholders
             new TwigFunction('is_camp_image_url_placeholder', [$this->campImageFilesystem, 'isUrlPlaceholder']),
             new TwigFunction('is_purchasable_item_image_url_placeholder', [$this->purchasableItemImageFilesystem, 'isUrlPlaceholder']),
             new TwigFunction('is_user_image_url_placeholder', [$this->userImageFilesystem, 'isUrlPlaceholder']),
+            new TwigFunction('is_gallery_image_url_placeholder', [$this->galleryImageFilesystem, 'isUrlPlaceholder']),
         ];
     }
 
@@ -97,6 +105,14 @@ class ImageExtension extends AbstractExtension
     {
         $path = $this->userImageFilesystem->getImagePublicUrl($user);
         $time = $this->userImageFilesystem->getImageLastModified($user);
+
+        return $this->getUrlWithTime($path, $time);
+    }
+
+    public function getGalleryImageUrl(GalleryImage $galleryImage): string
+    {
+        $path = $this->galleryImageFilesystem->getImagePublicUrl($galleryImage);
+        $time = $this->galleryImageFilesystem->getImageLastModified($galleryImage);
 
         return $this->getUrlWithTime($path, $time);
     }

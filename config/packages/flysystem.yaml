@@ -16,6 +16,11 @@ flysystem:
             options:
                 directory: '%kernel.project_dir%/public/%app.purchasable_item_image_directory%'
 
+        gallery_image.storage:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/public/%app.gallery_image_directory%'
+
         application_attachment.storage:
             adapter: 'local'
             options:
@@ -43,8 +48,14 @@ when@test:
             purchasable_item_image.storage:
                 adapter: 'memory'
 
+            gallery_image.storage:
+                adapter: 'memory'
+
             application_attachment.storage:
                 adapter: 'memory'
 
             application_invoice.storage:
+                adapter: 'memory'
+
+            application_admin_attachment.storage:
                 adapter: 'memory'

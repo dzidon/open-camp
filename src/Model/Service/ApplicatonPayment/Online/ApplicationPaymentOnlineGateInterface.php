@@ -35,7 +35,7 @@ interface ApplicationPaymentOnlineGateInterface
      * @param Request $request
      * @return string|null
      */
-    public function getNewStateFromExternalRequest(Request $request): ?string;
+    public function getStateFromExternalRequest(Request $request): ?string;
 
     /**
      * Tells the online payment gate to refund the given payment.

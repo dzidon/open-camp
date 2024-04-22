@@ -543,6 +543,7 @@ crud:
         application_payment_refund: 'Opravdu si přejete vrátit platbu?'
         application_admin_attachment_delete: 'Opravdu si přejete odstranit administrátorskou přílohu "{label}"?'
         gallery_image_category_delete: 'Opravdu si přejete odstranit kategorii obrázků "{name}"?'
+        gallery_image_delete: 'Opravdu si přejete odstranit tento obrázek?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
@@ -606,6 +607,12 @@ crud:
             create: 'Kategorie obrázků vytvořena!'
             update: 'Kategorie obrázků uložena!'
             delete: 'Kategorie obrázků odstraněna!'
+
+        gallery_image:
+            create: 'Obrázek vytvořen!'
+            update: 'Obrázek uložen!'
+            delete: 'Obrázek odstraněn!'
+            upload: 'Nahrávání dokončeno!'
 
         blog_post:
             create: 'Příspěvek vytvořen!'
@@ -707,6 +714,14 @@ entity:
     blog_post_view:
         singular: 'Zhlédnutí příspěvku'
         plural: 'Zhlédnutí příspěvků'
+
+    gallery_image:
+        singular: 'Obrázek'
+        plural: 'Obrázky'
+
+    gallery_image_category:
+        singular: 'Kategorie obrázků'
+        plural: 'Kategorie obrázků'
 
     contact:
         singular: 'Kontakt'
@@ -1071,6 +1086,16 @@ entity_attribute:
         url_name: 'Název v odkazu'
         parent: 'Nadřazená kategorie'
         children: 'Podřazené kategorie'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    gallery_image:
+        id: 'ID'
+        extension: 'Přípona'
+        is_hidden_in_gallery: 'Skrytý v galerii'
+        is_in_carousel: 'Je v carouselu'
+        carousel_priority: 'Priorita v carouselu'
+        gallery_image_category: 'Kategorie'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -2141,6 +2166,35 @@ form:
         gallery_image_category_delete:
             button: 'Odstranit'
 
+        gallery_image_search:
+            gallery_image_category: 'Kategorie'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovějších'
+                    created_at_asc: 'Od nejstarších'
+
+            is_hidden_in_gallery: 'Skrytý v galerii'
+            is_in_carousel: 'Je v carouselu'
+            button: 'Hledat'
+
+        gallery_image:
+            gallery_image_category: 'Kategorie'
+            is_hidden_in_gallery: 'Skrytý v galerii'
+            is_in_carousel: 'Je v carouselu'
+            carousel_priority: 'Priorita v carouselu'
+            button: 'Hledat'
+
+        gallery_images_upload:
+            images: 'Obrázky'
+            gallery_image_category: 'Kategorie'
+            is_hidden_in_gallery: 'Skrytý v galerii'
+            is_in_carousel: 'Je v carouselu'
+            button: 'Hledat'
+
+        gallery_image_delete:
+            button: 'Odstranit'
+
     user:
         application_step_one:
             email:
@@ -2398,7 +2452,7 @@ route:
     admin_blog_post_delete: 'Odstranění příspěvku'
 
     admin_gallery_image_list: 'Galerie'
-    admin_gallery_image_create: 'Nový obrázek'
+    admin_gallery_image_create: 'Nahrát obrázky'
     admin_gallery_image_read: 'Zobrazení obrázku'
     admin_gallery_image_update: 'Editace obrázku'
     admin_gallery_image_delete: 'Odstranění obrázku'
@@ -2461,6 +2515,8 @@ route:
 
     user_blog_post_list: 'Blog'
     user_blog_post_read: 'Příspěvek'
+
+    user_gallery_image_list: 'Galerie'
 
     user_profile_billing: 'Fakturační údaje'
     user_profile_contact_list: 'Kontakty'

@@ -32,6 +32,9 @@ parameters:
     app.user_image_public_path_prefix: '%app.public_file_path_prefix%'
     app.user_image_directory: 'files/dynamic/user'
     app.no_user_image_path: 'files/static/user_placeholder.png'
+    app.gallery_image_public_path_prefix: '%app.public_file_path_prefix%'
+    app.gallery_image_directory: 'files/dynamic/gallery-image'
+    app.no_gallery_image_path: 'files/static/placeholder.jpg'
     app.application_attachment_directory: 'files/dynamic/application-attachment'
     app.application_invoice_directory: 'files/dynamic/application-invoice'
     app.application_admin_attachment_directory: 'files/dynamic/application-admin-attachment'
@@ -166,6 +169,12 @@ services:
             $userImagePublicPathPrefix: '%app.user_image_public_path_prefix%'
             $noImagePath: '%app.no_user_image_path%'
             $userImageDirectory: '%app.user_image_directory%'
+    
+    App\Model\Service\GalleryImage\GalleryImageFilesystem:
+        arguments:
+            $galleryImagePublicPathPrefix: '%app.gallery_image_public_path_prefix%'
+            $noImagePath: '%app.no_gallery_image_path%'
+            $galleryImageDirectory: '%app.gallery_image_directory%'
 
     App\Model\Service\Application\ApplicationDraftCookieStorage:
         arguments:

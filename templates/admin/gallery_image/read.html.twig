@@ -1,0 +1,125 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-9">
+                            {% set image_url = gallery_image_url(gallery_image) %}
+
+                            {% if is_gallery_image_url_placeholder(image_url) %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <div class="row">
+                                    <div class="col-6 col-md-4 col-xl-2">
+                                        <div class="bg-black">
+                                            <a href="{{ image_url }}">
+                                                <img class="image-cover-16-9"
+                                                     src="{{ image_url }}"
+                                                     alt="{{ 'entity.gallery_image.singular'|trans }}"
+                                                >
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.gallery_image.extension'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ gallery_image.extension }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.gallery_image.is_hidden_in_gallery'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {% if gallery_image.isHiddenInGallery %}
+                                    {{ 'bool.yes'|trans }}
+                                {% else %}
+                                    {{ 'bool.no'|trans }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.gallery_image.is_in_carousel'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {% if gallery_image.isInCarousel %}
+                                    {{ 'bool.yes'|trans }}
+                                {% else %}
+                                    {{ 'bool.no'|trans }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    {% if gallery_image.isInCarousel %}
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3">
+                                <strong>{{ 'entity_attribute.gallery_image.carousel_priority'|trans }}:</strong>
+                            </div>
+
+                            <div class="col-12 col-sm-9">
+                                <span>{{ gallery_image.carouselPriority }}</span>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.gallery_image.gallery_image_category'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if gallery_image.galleryImageCategory is null %}
+                                <em>{{ 'search.item_no_reference.female'|trans }}</em>
+                            {% else %}
+                                <span>{{ gallery_image.galleryImageCategory.path }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% set granted_update = is_granted('gallery_image_update') %}
+                {% set granted_delete = is_granted('gallery_image_delete') %}
+
+                {% if granted_update or granted_delete %}
+                    <div class="card-footer">
+                        {% if granted_update %}
+                            <a href="{{ path('admin_gallery_image_update', {id: gallery_image.id.toRfc4122}) }}"
+                               class="btn btn-primary mr-2"
+                            >
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if granted_delete %}
+                            <a href="{{ path('admin_gallery_image_delete', {id: gallery_image.id.toRfc4122}) }}"
+                               class="btn btn-danger"
+                            >
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
