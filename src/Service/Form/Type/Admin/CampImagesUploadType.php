@@ -9,7 +9,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Admin camp creation.
+ * Admin camp images upload.
  */
 class CampImagesUploadType extends AbstractType
 {
