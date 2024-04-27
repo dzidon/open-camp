@@ -24,7 +24,7 @@ class GuideController extends AbstractController
     public function list(MenuTypeFactoryRegistryInterface $menuFactory, Request $request): Response
     {
         $page = (int) $request->query->get('page', 1);
-        $paginator = $this->userRepository->getUserGuidePaginator($page, 24);
+        $paginator = $this->userRepository->getUserGuidePaginator(false, $page, 24);
 
         if ($paginator->isCurrentPageOutOfBounds())
         {

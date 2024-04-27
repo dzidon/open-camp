@@ -184,13 +184,19 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     /**
      * @inheritDoc
      */
-    public function getUserGuidePaginator(int $currentPage, int $pageSize): DqlPaginator
+    public function getUserGuidePaginator(bool $isFeaturedOnly, int $currentPage, int $pageSize): DqlPaginator
     {
-        $query = $this->createQueryBuilder('user')
+        $queryBuilder = $this->createQueryBuilder('user')
             ->andWhere('user.urlName IS NOT NULL')
             ->orderBy('user.guidePriority', 'DESC')
-            ->getQuery()
         ;
+
+        if ($isFeaturedOnly)
+        {
+            $queryBuilder->andWhere('user.isFeaturedGuide = TRUE');
+        }
+
+        $query = $queryBuilder->getQuery();
 
         return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
     }

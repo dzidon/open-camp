@@ -63,6 +63,19 @@ class GalleryImageRepository extends AbstractRepository implements GalleryImageR
     /**
      * @inheritDoc
      */
+    public function findForCarousel(): array
+    {
+        return $this->createQueryBuilder('galleryImage')
+            ->andWhere('galleryImage.isInCarousel = TRUE')
+            ->orderBy('galleryImage.carouselPriority', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getAdminPaginator(GalleryImageSearchData $galleryImageSearchData,
                                       int                    $currentPage,
                                       int                    $pageSize): DqlPaginator

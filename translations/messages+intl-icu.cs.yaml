@@ -111,9 +111,6 @@ form_field_type:
     number: 'Číslo'
     choice: 'Volba'
 
-admin_dashboard:
-    welcome: 'Jste přihlášeni jako {user}.'
-
 module:
     user: 'Uživatelský web'
     profile: 'Profil'
@@ -122,6 +119,18 @@ module:
 guide:
     unnamed: 'Nepojmenovaný vedoucí'
     bio_undisclosed: 'Tento vedoucí nemá žádný popis.'
+
+admin_dashboard:
+    welcome: 'Jste přihlášeni jako {user}.'
+
+home_page:
+    apply: 'Podat přihlášku'
+    camps: 'Naše nabídka táborů'
+    view_all_camps: 'Zobrazit všechny tábory'
+    latest_blog_posts: 'Poslední příspěvky na blogu'
+    view_all_blog_posts: 'Zobrazit všechny příspěvky'
+    guides: 'Naši vedoucí'
+    view_all_guides: 'Zobrazit všechny vedoucí'
 
 application:
     apply: 'Přihláška'
@@ -2562,9 +2571,9 @@ route:
     user_registration_complete: 'Dokončení registrace'
     user_password_change: 'Změna hesla'
     user_password_change_complete: 'Nové heslo'
-    user_camp_catalog: 'Katalog táborů'
+    user_camp_catalog: 'Tábory'
     user_camp_detail: 'Tábor'
-    user_guide_list: 'Naši vedoucí'
+    user_guide_list: 'Vedoucí'
     user_guide_detail: 'Vedoucí'
     user_application_import: 'Uložení údajů z přihlášky'
 

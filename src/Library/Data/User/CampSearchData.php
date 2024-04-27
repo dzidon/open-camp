@@ -7,6 +7,8 @@ use DateTimeImmutable;
 
 class CampSearchData
 {
+    private bool $isFeaturedOnly;
+
     private CampSortEnum $sortBy = CampSortEnum::PRIORITY_DESC;
 
     private string $phrase = '';
@@ -18,6 +20,16 @@ class CampSearchData
     private ?DateTimeImmutable $to = null;
 
     private bool $isOpenOnly = false;
+
+    public function __construct(bool $isFeaturedOnly = false)
+    {
+        $this->isFeaturedOnly = $isFeaturedOnly;
+    }
+
+    public function isFeaturedOnly(): bool
+    {
+        return $this->isFeaturedOnly;
+    }
 
     public function getSortBy(): CampSortEnum
     {

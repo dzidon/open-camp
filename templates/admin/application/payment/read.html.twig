@@ -41,7 +41,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    <div class="row">
                         <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.application_payment.is_online'|trans }}:</strong>
                         </div>
@@ -58,10 +58,24 @@
                     </div>
                 </div>
 
-                {% set show_refund = application_payment.isOnline and application_payment.paid %}
-                {% set show_update_and_remove = not application_payment.isOnline %}
+                {% set is_granted_guide_payments = is_granted('guide_access_payments', application) %}
+                {% set show_refund =
+                    (is_granted('application_payment_refund') or is_granted_guide_payments) and
+                    application_payment.isOnline and
+                    application_payment.paid
+                %}
 
-                {% if show_refund or show_update_and_remove %}
+                {% set show_update =
+                    (is_granted('application_payment_update') or is_granted_guide_payments) and
+                    not application_payment.isOnline
+                %}
+
+                {% set show_delete =
+                    (is_granted('application_payment_delete') or is_granted_guide_payments) and
+                    not application_payment.isOnline
+                %}
+
+                {% if show_refund or show_update or show_delete %}
                     <div class="card-footer">
                         {% if show_refund %}
                             <a href="{{ path('admin_application_payment_refund', {id: application_payment.id}) }}"
@@ -71,13 +85,15 @@
                             </a>
                         {% endif %}
 
-                        {% if show_update_and_remove %}
+                        {% if show_update %}
                             <a href="{{ path('admin_application_payment_update', {id: application_payment.id}) }}"
                                class="btn btn-primary mr-2"
                             >
                                 {{ 'crud.action.common.update'|trans }}
                             </a>
+                        {% endif %}
 
+                        {% if show_delete %}
                             <a href="{{ path('admin_application_payment_delete', {id: application_payment.id}) }}"
                                class="btn btn-danger"
                             >

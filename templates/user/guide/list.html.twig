@@ -6,7 +6,9 @@
             {% if paginator.totalItems > 0 %}
                 <div class="row">
                     {% for guide in paginator.currentPageItems %}
-                        {{ include('_fragment/_guide/_guide_link.html.twig', {guide: guide}) }}
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex">
+                            {{ include('_fragment/_guide/_card.html.twig', {guide: guide}) }}
+                        </div>
                     {% endfor %}
                 </div>
 

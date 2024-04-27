@@ -236,6 +236,7 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
                                              int                $currentPage,
                                              int                $pageSize): UserCampCatalogResult
     {
+        $isFeaturedOnly = $data->isFeaturedOnly();
         $sortBy = $data->getSortBy();
         $phrase = $data->getPhrase();
         $age = $data->getAge();
@@ -272,6 +273,12 @@ class CampRepository extends AbstractRepository implements CampRepositoryInterfa
         }
 
         $queryBuilder->addOrderBy($sortBy->property(), $sortBy->order());
+
+        // featured only
+        if ($isFeaturedOnly)
+        {
+            $queryBuilder->andWhere('camp.isFeatured = TRUE');
+        }
 
         // filter
         if (!$showHidden)

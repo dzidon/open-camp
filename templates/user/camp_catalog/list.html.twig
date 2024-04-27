@@ -4,7 +4,12 @@
     {% if camp_category_children is not empty %}
         <div class="row mb-3">
             <div class="col">
-                <a data-toggle="collapse" href="#camp-category-children" role="button" aria-expanded="false" aria-controls="camp-category-children">
+                <a data-toggle="collapse"
+                   href="#camp-category-children"
+                   role="button"
+                   aria-expanded="false"
+                   aria-controls="camp-category-children"
+                >
                     <i class="fas fa-bars mr-1"></i> {{ 'entity.camp_category.plural'|trans }}
                 </a>
             </div>
@@ -26,7 +31,12 @@
     <div class="row">
         <div class="col-12 col-lg-3">
             <div class="mb-3">
-                <a data-toggle="collapse" href="#camp-category-filter" role="button" aria-expanded="false" aria-controls="camp-category-filter">
+                <a data-toggle="collapse"
+                   href="#camp-category-filter"
+                   role="button"
+                   aria-expanded="false"
+                   aria-controls="camp-category-filter"
+                >
                     <i class="fas fa-search mr-1"></i> {{ 'search.label'|trans }}
                 </a>
             </div>
@@ -62,80 +72,11 @@
             {% if catalog_result.paginator.totalItems > 0 %}
                 <div class="row">
                     {% for camp in catalog_result.paginator.currentPageItems %}
-                        {% set camp_image = catalog_result.getCampImage(camp) %}
-                        {% set camp_dates = catalog_result.getCampDates(camp) %}
-                        {% set camp_lowest_full_price = catalog_result.getCampLowestFullPrice(camp) %}
-
                         <div class="col-12 col-sm-6 col-lg-4 mb-4 d-flex">
-                            <div class="card flex-fill">
-                                <img src="{{ camp_image_url(camp_image) }}"
-                                     alt="{{ 'entity.camp_image.singular'|trans }} - {{ camp.name }}"
-                                     class="card-img-top"
-                                >
-
-                                <div class="card-body">
-                                    <h5 class="card-title">
-                                        {% if camp.isHidden %}
-                                            <span class="badge badge-warning">
-                                                {{ 'camp_catalog.hidden_camp'|trans }}
-                                            </span>
-                                        {% endif %}
-
-                                        {{ camp.name }}
-                                    </h5>
-
-                                    <p class="card-text">
-                                        {% if camp_lowest_full_price is not null %}
-                                            {{ 'camp_catalog.from'|trans }}
-                                            <strong class="text-primary">
-                                                {{ camp_lowest_full_price|format_currency(currency) }}
-                                            </strong>
-
-                                            <br>
-                                        {% endif %}
-
-                                        {{ 'entity_attribute.camp.age'|trans }}:
-
-                                        {% if camp.ageMin is same as(camp.ageMax) %}
-                                            {{ camp.ageMin }}
-                                        {% else %}
-                                            {{ camp.ageMin }} - {{ camp.ageMax }}
-                                        {% endif %}
-                                    </p>
-
-                                    {% if camp_dates is empty %}
-                                        <div>
-                                            <span class="badge badge-danger">
-                                                {{ 'camp_catalog.no_upcoming_camp_dates'|trans }}
-                                            </span>
-                                        </div>
-                                    {% else %}
-                                        {% for camp_date in camp_dates %}
-                                            {% set badge_color %}
-                                                {% if camp_date.hidden %}
-                                                    badge-warning
-                                                {% elseif catalog_result.isCampDateOpen(camp_date) %}
-                                                    badge-success
-                                                {% else %}
-                                                    badge-danger
-                                                {% endif %}
-                                            {% endset %}
-
-                                            <div>
-                                                <span class="badge {{ badge_color }}">
-                                                    {{ camp_date.startAt|date(date_format) }} - {{ camp_date.endAt|date(date_format) }}
-                                                </span>
-                                            </div>
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
-
-                                <div class="card-footer clearfix">
-                                    <a href="{{ path('user_camp_detail', {urlName: camp.urlName}) }}" class="card-link stretched-link">
-                                        {{ 'crud.action.common.read'|trans }}
-                                    </a>
-                                </div>
-                            </div>
+                            {{ include('_fragment/_camp/_card.html.twig', {
+                                camp: camp,
+                                catalog_result: catalog_result,
+                            }) }}
                         </div>
                     {% endfor %}
                 </div>

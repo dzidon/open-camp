@@ -87,6 +87,11 @@ parameters:
     app.application_simple_id_characters: '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     app.enabled_payment_methods: [ 'card', 'transfer', 'invoice' ]
 
+    # Home page
+    app.home_max_number_of_featured_guides: 64
+    app.home_max_number_of_featured_camps: 64
+    app.home_number_of_blog_posts: 4
+
     # Validation
     app.national_identifier_regex: '#^(\d\d)(\d\d)(\d\d)( |/)?(\d\d\d)(\d?)$#'
     app.eu_cin_regex: '#^\d{8}$#'

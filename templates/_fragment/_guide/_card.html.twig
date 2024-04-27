@@ -1,0 +1,34 @@
+{% set image_url = user_image_url(guide) %}
+
+<div class="card flex-fill">
+    <img class="card-img-top image-cover-1-1"
+         src="{{ image_url }}"
+         alt="{{ 'camp_catalog.guide_image'|trans }}"
+    >
+
+    <div class="card-body">
+        <h5 class="card-title">
+            {% if guide.nameFull is null %}
+                {{ 'guide.unnamed'|trans }}
+            {% else %}
+                {{ guide.nameFull }}
+            {% endif %}
+        </h5>
+
+        {% if guide.age is not null %}
+            <div>
+                {{ 'entity_attribute.user.age'|trans }}:
+
+                {{ guide.age }}
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="card-footer clearfix">
+        <a class="stretched-link card-link"
+           href="{{ path('user_guide_detail', {urlName: guide.urlName}) }}"
+        >
+            {{ 'crud.action.common.read'|trans }}
+        </a>
+    </div>
+</div>

@@ -88,11 +88,12 @@ interface UserRepositoryInterface
     /**
      * Returns user guide search paginator.
      *
+     * @param bool $isFeaturedOnly
      * @param int $currentPage
      * @param int $pageSize
      * @return PaginatorInterface
      */
-    public function getUserGuidePaginator(int $currentPage, int $pageSize): PaginatorInterface;
+    public function getUserGuidePaginator(bool $isFeaturedOnly, int $currentPage, int $pageSize): PaginatorInterface;
 
     /**
      * Returns admin user search paginator.

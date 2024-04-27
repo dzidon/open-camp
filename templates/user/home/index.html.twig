@@ -1,20 +1,141 @@
 {% extends "user/base.html.twig" %}
 
 {% block main %}
-    <div class="row">
-        <div class="col">
-            {# This will be removed after user testing #}
-            <h1 class="mb-3">Vítejte!</h1>
+    <div class="row mb-3">
+        <div class="col-12 mb-3">
+            <div id="carousel" class="carousel slide carousel-fade" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    {% set indicator_index = 0 %}
 
-            <p class="lead mb-4">
-                Toto je rozpracovaná verze nové webové aplikace pro dětské tábory.
-                <br>
-                Už teď ale potřebujeme Vaší pomoc při testování přihlášek!
-            </p>
+                    {% for carousel_image in carousel_images %}
+                        <li data-target="#carousel" data-slide-to="{{ indicator_index }}"
+                            {% if loop.first %} class="active" {% endif %}
+                        ></li>
 
-            <a href="{{ path('user_camp_catalog') }}" class="btn btn-primary">
-                Podat testovací přihlášku
-            </a>
+                        {% set indicator_index = indicator_index + 1 %}
+                    {% endfor %}
+                </ol>
+
+                <div class="carousel-inner">
+                    {% set caption %}
+                        <div class="carousel-caption carousel-caption-centered">
+                            <h1 class="mb-2">{{ company_name }}</h1>
+
+                            <h5 class="mb-4">Přihlášky na nadcházející léto spuštěny!</h5>
+
+                            <a href="{{ path('user_camp_catalog') }}" class="btn btn-primary">
+                                {{ 'home_page.apply'|trans }}
+                            </a>
+                        </div>
+                    {% endset %}
+
+                    {% if carousel_images is empty %}
+                        <div class="carousel-item carousel-item-darkened-bg active">
+                            <img class="d-none d-md-block w-100 image-cover-21-9"
+                                 src="{{ gallery_image_url(null) }}"
+                                 alt="{{ 'image_carousel.no_image'|trans }}"
+                            >
+
+                            {{ caption }}
+                        </div>
+                    {% else %}
+                        {% for carousel_image in carousel_images %}
+                            {% set image_url = gallery_image_url(carousel_image) %}
+
+                            <div class="carousel-item carousel-item-darkened-bg {% if loop.first %} active {% endif %}">
+                                <img class="d-none d-md-block w-100 image-cover-21-9"
+                                     src="{{ image_url }}"
+                                     alt="{{ 'entity.gallery_image.singular'|trans }}"
+                                >
+
+                                <img class="d-block d-md-none w-100 image-cover-16-9"
+                                     src="{{ image_url }}"
+                                     alt="{{ 'entity.gallery_image.singular'|trans }}"
+                                >
+
+                                {{ caption }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                {% if carousel_images|length >= 2 %}
+                    <button class="carousel-control-prev" type="button" data-target="#carousel" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">{{ 'image_carousel.previous'|trans }}</span>
+                    </button>
+
+                    <button class="carousel-control-next" type="button" data-target="#carousel" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">{{ 'image_carousel.next'|trans }}</span>
+                    </button>
+                {% endif %}
+            </div>
         </div>
     </div>
+
+    {% set camps = camp_catalog_result.paginator.currentPageItems %}
+
+    {% if camps is not empty %}
+        <div class="row mb-3">
+            <div class="col-12 mb-3">
+                <h2>
+                    {{ 'home_page.camps'|trans }}
+                </h2>
+
+                <a href="{{ path('user_camp_catalog') }}">
+                    {{ 'home_page.view_all_camps'|trans }}
+                </a>
+            </div>
+
+            {% for camp in camps %}
+                <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex">
+                    {{ include('_fragment/_camp/_card.html.twig', {
+                        camp: camp,
+                        catalog_result: camp_catalog_result,
+                    }) }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if blog_posts is not empty %}
+        <div class="row mb-3">
+            <div class="col-12 mb-3">
+                <h2>
+                    {{ 'home_page.latest_blog_posts'|trans }}
+                </h2>
+
+                <a href="{{ path('user_blog_post_list') }}">
+                    {{ 'home_page.view_all_blog_posts'|trans }}
+                </a>
+            </div>
+
+            {% for blog_post in blog_posts %}
+                <div class="col-sm-12 col-md-6 d-flex">
+                    {{ include('_fragment/_blog_post/_card.html.twig', {blog_post: blog_post}) }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if guides is not empty %}
+        <div class="row mb-3">
+            <div class="col-12 mb-3">
+                <h2>
+                    {{ 'home_page.guides'|trans }}
+                </h2>
+
+                <a href="{{ path('user_guide_list') }}">
+                    {{ 'home_page.view_all_guides'|trans }}
+                </a>
+            </div>
+
+            {% for guide in guides %}
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
+                    {{ include('_fragment/_guide/_card.html.twig', {guide: guide}) }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}

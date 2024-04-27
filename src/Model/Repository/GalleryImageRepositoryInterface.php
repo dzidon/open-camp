@@ -37,6 +37,13 @@ interface GalleryImageRepositoryInterface
     public function findOneById(UuidV4 $id): ?GalleryImage;
 
     /**
+     * Finds all gallery images to be shown in carousel.
+     *
+     * @return GalleryImage[]
+     */
+    public function findForCarousel(): array;
+
+    /**
      * Returns admin gallery search paginator.
      *
      * @param GalleryImageSearchData $galleryImageSearchData

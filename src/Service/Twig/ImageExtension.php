@@ -109,10 +109,15 @@ class ImageExtension extends AbstractExtension
         return $this->getUrlWithTime($path, $time);
     }
 
-    public function getGalleryImageUrl(GalleryImage $galleryImage): string
+    public function getGalleryImageUrl(?GalleryImage $galleryImage): string
     {
         $path = $this->galleryImageFilesystem->getImagePublicUrl($galleryImage);
-        $time = $this->galleryImageFilesystem->getImageLastModified($galleryImage);
+        $time = null;
+
+        if ($galleryImage !== null)
+        {
+            $time = $this->galleryImageFilesystem->getImageLastModified($galleryImage);
+        }
 
         return $this->getUrlWithTime($path, $time);
     }
