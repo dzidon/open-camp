@@ -18,32 +18,34 @@ class ApplicationAttachmentType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void
-        {
-            /** @var null|ApplicationAttachmentData $applicationAttachmentData */
-            $applicationAttachmentData = $event->getData();
-            $form = $event->getForm();
-
-            if ($applicationAttachmentData === null)
+        $builder->addEventListener(FormEvents::PRE_SET_DATA,
+            function (FormEvent $event): void
             {
-                return;
+                /** @var null|ApplicationAttachmentData $applicationAttachmentData */
+                $applicationAttachmentData = $event->getData();
+                $form = $event->getForm();
+
+                if ($applicationAttachmentData === null)
+                {
+                    return;
+                }
+
+                $requiredType = $applicationAttachmentData->getRequiredType();
+                $isAlreadyUploaded = $applicationAttachmentData->isAlreadyUploaded();
+                $isRequired = $requiredType === AttachmentConfigRequiredTypeEnum::REQUIRED && !$isAlreadyUploaded;
+                $label = $applicationAttachmentData->getLabel();
+
+                $form
+                    ->add('file', FileType::class, [
+                        'block_prefix'       => 'common_application_attachment_file',
+                        'multiple'           => false,
+                        'required'           => $isRequired,
+                        'label'              => $label,
+                        'translation_domain' => false,
+                    ])
+                ;
             }
-
-            $requiredType = $applicationAttachmentData->getRequiredType();
-            $isAlreadyUploaded = $applicationAttachmentData->isAlreadyUploaded();
-            $isRequired = $requiredType === AttachmentConfigRequiredTypeEnum::REQUIRED && !$isAlreadyUploaded;
-            $label = $applicationAttachmentData->getLabel();
-
-            $form
-                ->add('file', FileType::class, [
-                    'block_prefix'       => 'common_application_attachment_file',
-                    'multiple'           => false,
-                    'required'           => $isRequired,
-                    'label'              => $label,
-                    'translation_domain' => false,
-                ])
-            ;
-        });
+        );
     }
 
     public function configureOptions(OptionsResolver $resolver): void

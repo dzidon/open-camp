@@ -60,7 +60,6 @@ class GalleryImageType extends AbstractType
                     'data-cv--checkbox-cv--content-outlet' => '.carousel-field-visibility',
                 ],
                 'priority' => 200,
-
             ])
             ->add('carouselPriority', IntegerType::class, [
                 'required' => false,

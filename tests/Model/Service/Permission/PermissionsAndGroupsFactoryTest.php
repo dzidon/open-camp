@@ -46,7 +46,13 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Groups
          */
-        $this->assertCount(14, $groupsSerialized);
+        $this->assertCount(15, $groupsSerialized);
+
+        $this->assertContains([
+            'name'     => 'page',
+            'priority' => 1500,
+            'label'    => 'permission_group.page',
+        ], $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'gallery_image_category',
@@ -135,7 +141,36 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Permissions
          */
-        $this->assertCount(58, $permissionsSerialized);
+        $this->assertCount(62, $permissionsSerialized);
+
+        // page
+        $this->assertContains([
+            'name'             => 'page_create',
+            'priority'         => 400,
+            'label'            => 'permission.page_create',
+            'permission_group' => 'page',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'page_read',
+            'priority'         => 300,
+            'label'            => 'permission.page_read',
+            'permission_group' => 'page',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'page_update',
+            'priority'         => 200,
+            'label'            => 'permission.page_update',
+            'permission_group' => 'page',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'page_delete',
+            'priority'         => 100,
+            'label'            => 'permission.page_delete',
+            'permission_group' => 'page',
+        ], $permissionsSerialized);
 
         // gallery image category
         $this->assertContains([

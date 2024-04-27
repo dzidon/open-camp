@@ -1,17 +1,3 @@
-company:
-    name: 'Tábor'
-    structure: 's.r.o.'
-    cin: '12345678'
-    vat_id: 'CZ12345678'
-    extra_business_info: 'Zapsáno v OR u MS v Praze'
-    bank_account: '000000-1234567890/0600'
-    phone_number: '+420 123 456 789'
-    address:
-        street: 'Dlouhá 123'
-        town: 'Praha 1'
-        zip: '100 00'
-        country: 'Česko'
-
 site_error:
     title: 'Chyba'
     go_back_home: 'Zpět na domovskou stránku'
@@ -323,6 +309,9 @@ blog:
     hidden_post: 'Skrytý'
     hidden_blog_post_shown_for_admin: 'Zobrazujete si skrytý příspěvek jako administrátor.'
 
+custom_content:
+    hidden_page_shown_for_admin: 'Zobrazujete si skrytou stránku jako administrátor.'
+
 auth:
     no_account_yet: 'Ještě u nás nemáte účet?'
     no_account_yet_link: 'Zaregistrovat se'
@@ -418,10 +407,20 @@ modal:
         warning: 'Změny se projeví až po odeslání formuláře.'
         button_remove: 'Odstranit'
 
-menu:
+menu_item:
     navbar_admin_vertical:
         components: 'Komponenty'
         browse: 'Procházet'
+
+menu:
+    navbar_admin_application_update: 'Menu pro editaci přihlášky v administraci'
+    navbar_admin_camp_update: 'Menu pro editaci tábora v administraci'
+    navbar_admin_horizontal: 'Horizontální menu v administraci'
+    navbar_admin_vertical: 'Vertikální menu v administraci'
+    application: 'Indikátor kroků přihlášky'
+    pagination: 'Stránkování'
+    navbar_user: 'Hlavní menu na uživatelském webu'
+    navbar_user_profile: 'Menu na profilu uživatele'
 
 permission_group:
     application: 'Přihlášky'
@@ -438,6 +437,7 @@ permission_group:
     blog_post: 'Blog'
     gallery_image_category: 'Kategorie obrázků'
     gallery_image: 'Obrázky'
+    page: 'Stránky'
 
 permission:
     gallery_image_category_read: 'Zobrazení kategorie obrázků'
@@ -465,6 +465,11 @@ permission:
     blog_post_create: 'Tvorba příspěvku'
     blog_post_update: 'Editace příspěvku'
     blog_post_delete: 'Odstranění příspěvku'
+    
+    page_read: 'Zobrazení stránky'
+    page_create: 'Tvorba stránky'
+    page_update: 'Editace stránky'
+    page_delete: 'Odstranění stránky'
 
     user_read: 'Zobrazení uživatele'
     user_create: 'Tvorba uživatele'
@@ -544,6 +549,7 @@ crud:
         application_admin_attachment_delete: 'Opravdu si přejete odstranit administrátorskou přílohu "{label}"?'
         gallery_image_category_delete: 'Opravdu si přejete odstranit kategorii obrázků "{name}"?'
         gallery_image_delete: 'Opravdu si přejete odstranit tento obrázek?'
+        page_delete: 'Opravdu si přejete odstranit stránku "{title}"?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
@@ -618,6 +624,11 @@ crud:
             create: 'Příspěvek vytvořen!'
             update: 'Příspěvek uložen!'
             delete: 'Příspěvek odstraněn!'
+
+        page:
+            create: 'Stránka vytvořena!'
+            update: 'Stránka uložena!'
+            delete: 'Stránka odstraněna!'
 
         contact:
             create: 'Kontakt vytvořen!'
@@ -707,6 +718,10 @@ crud:
             delete: 'Konfigurace slev odstraněna!'
 
 entity:
+    page:
+        singular: 'Stránka'
+        plural: 'Stránky'
+
     blog_post:
         singular: 'Příspěvek'
         plural: 'Příspěvky'
@@ -1421,6 +1436,17 @@ entity_attribute:
         blog_post: 'Příspěvek'
         visitor_id: 'ID návštěvníka'
         created_at: 'Datum vytvoření'
+
+    page:
+        id: 'ID'
+        title: 'Nadpis'
+        url_name: 'Název v odkazu'
+        content: 'Obsah'
+        is_hidden: 'Skrytá'
+        menu_priorities: 'Priority v menu'
+        menu_identifiers: 'Menu'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
 
 form:
     common:
@@ -2183,16 +2209,39 @@ form:
             is_hidden_in_gallery: 'Skrytý v galerii'
             is_in_carousel: 'Je v carouselu'
             carousel_priority: 'Priorita v carouselu'
-            button: 'Hledat'
+            button: 'Uložit'
 
         gallery_images_upload:
             images: 'Obrázky'
             gallery_image_category: 'Kategorie'
             is_hidden_in_gallery: 'Skrytý v galerii'
             is_in_carousel: 'Je v carouselu'
-            button: 'Hledat'
+            button: 'Nahrát'
 
         gallery_image_delete:
+            button: 'Odstranit'
+
+        page_search:
+            phrase: 'Hledat podle nadpisu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovějších'
+                    created_at_asc: 'Od nejstarších'
+
+            is_hidden: 'Skrytá'
+            button: 'Hledat'
+
+        page:
+            title: 'Nadpis'
+            url_name: 'Název v odkazu'
+            content: 'Obsah'
+            is_hidden: 'Skrytá'
+            is_in_menu: 'Zobrazovat v menu'
+            menu_priority: 'Priorita v menu'
+            button: 'Uložit'
+
+        page_delete:
             button: 'Odstranit'
 
     user:
@@ -2462,6 +2511,12 @@ route:
     admin_gallery_image_category_read: 'Zobrazení kategorie obrázků'
     admin_gallery_image_category_update: 'Editace kategorie obrázků'
     admin_gallery_image_category_delete: 'Odstranění kategorie obrázků'
+    
+    admin_page_list: 'Stránky'
+    admin_page_create: 'Nová stránka'
+    admin_page_read: 'Zobrazení stránky'
+    admin_page_update: 'Editace stránky'
+    admin_page_delete: 'Odstranění stránky'
 
     admin_application_camp_list: 'Přihlášky'
     admin_application_camp_summary: 'Souhrn za tábor'
@@ -2517,6 +2572,8 @@ route:
     user_blog_post_read: 'Příspěvek'
 
     user_gallery_image_list: 'Galerie'
+
+    user_page_read: 'Stránka'
 
     user_profile_billing: 'Fakturační údaje'
     user_profile_contact_list: 'Kontakty'

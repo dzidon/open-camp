@@ -4,6 +4,7 @@ namespace App\Service\Menu\Factory;
 
 use App\Library\Menu\MenuType;
 use App\Model\Entity\User;
+use App\Model\Repository\PageRepositoryInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -15,17 +16,24 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
 {
     private TranslatorInterface $translator;
+
     private UrlGeneratorInterface $urlGenerator;
+
+    private PageRepositoryInterface $pageRepository;
+
     private RequestStack $requestStack;
+
     private Security $security;
 
-    public function __construct(TranslatorInterface   $translator,
-                                UrlGeneratorInterface $urlGenerator,
-                                RequestStack          $requestStack,
-                                Security              $security)
+    public function __construct(TranslatorInterface     $translator,
+                                UrlGeneratorInterface   $urlGenerator,
+                                PageRepositoryInterface $pageRepository,
+                                RequestStack            $requestStack,
+                                Security                $security)
     {
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
+        $this->pageRepository = $pageRepository;
         $this->requestStack = $requestStack;
         $this->security = $security;
     }
@@ -54,6 +62,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_home');
         $itemHome = new MenuType('user_home', 'navbar_user_item', $text, $url);
         $itemHome->setActive($route === 'user_home');
+        $itemHome->setPriority(800);
         $menu->addChild($itemHome);
 
         // camp catalog
@@ -69,6 +78,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_camp_catalog');
         $itemCampCatalog = new MenuType('user_camp_catalog', 'navbar_user_item', $text, $url);
         $itemCampCatalog->setActive($active);
+        $itemCampCatalog->setPriority(700);
         $menu->addChild($itemCampCatalog);
 
         // blog
@@ -76,6 +86,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_blog_post_list');
         $itemBlog = new MenuType('user_blog_post_list', 'navbar_user_item', $text, $url);
         $itemBlog->setActive($route === 'user_blog_post_list' || $route === 'user_blog_post_read');
+        $itemBlog->setPriority(600);
         $menu->addChild($itemBlog);
 
         // gallery
@@ -83,6 +94,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_gallery_image_list');
         $itemGallery = new MenuType('user_gallery_image_list', 'navbar_user_item', $text, $url);
         $itemGallery->setActive($route === 'user_gallery_image_list');
+        $itemGallery->setPriority(500);
         $menu->addChild($itemGallery);
 
         // guides
@@ -90,6 +102,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_guide_list');
         $itemGuides = new MenuType('user_guide_list', 'navbar_user_item', $text, $url);
         $itemGuides->setActive($route === 'user_guide_list' || $route === 'user_guide_detail');
+        $itemGuides->setPriority(400);
         $menu->addChild($itemGuides);
 
         // admin
@@ -98,6 +111,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
             $text = $this->translator->trans('module.admin');
             $url = $this->urlGenerator->generate('admin_home');
             $itemAdmin = new MenuType('admin_home', 'navbar_user_item', $text, $url);
+            $itemAdmin->setPriority(300);
             $menu->addChild($itemAdmin);
         }
 
@@ -110,6 +124,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
             // profile - parent
             $text = $user->getEmail();
             $itemProfileParent = new MenuType('parent_profile', 'navbar_user_item', $text, '#');
+            $itemProfileParent->setPriority(200);
             $menu->addChild($itemProfileParent);
 
             // profile - billing
@@ -180,6 +195,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
             $text = $this->translator->trans('route.user_logout');
             $url = $this->urlGenerator->generate('user_logout');
             $itemLogout = new MenuType('user_logout', 'navbar_user_item', $text, $url);
+            $itemLogout->setPriority(100);
             $menu->addChild($itemLogout);
         }
         // login
@@ -194,9 +210,59 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
             $url = $this->urlGenerator->generate('user_login');
             $itemLogin = new MenuType('user_login', 'navbar_user_item', $text, $url);
             $itemLogin->setActive($active);
+            $itemLogin->setPriority(100);
             $menu->addChild($itemLogin);
         }
 
+        // custom pages
+        $userCanViewHiddenPages = $this->userCanViewHiddenPages();
+        $pages = $this->pageRepository->findAll();
+
+        foreach ($pages as $page)
+        {
+            $menuPriorities = $page->getMenuPriorities();
+
+            if (!array_key_exists(self::getMenuIdentifier(), $menuPriorities))
+            {
+                continue;
+            }
+
+            if ($page->isHidden() && !$userCanViewHiddenPages)
+            {
+                continue;
+            }
+
+            $menuPriority = $page->getMenuPriority(self::getMenuIdentifier());
+
+            if ($menuPriority === null)
+            {
+                $menuPriority = 0;
+            }
+
+            $urlName = $page->getUrlName();
+            $currentUrlName = ltrim($request->getPathInfo(), '/');
+            $active = $route === 'user_page_read' && $urlName === $currentUrlName;
+
+            $title = $page->getTitle();
+            $itemIdentifier = 'custom_' . $urlName;
+            $url = $this->urlGenerator->generate('user_page_read', ['urlName' => $urlName]);
+            $itemCustomPage = new MenuType($itemIdentifier, 'navbar_user_item', $title, $url);
+            $itemCustomPage->setPriority($menuPriority);
+            $itemCustomPage->setActive($active);
+            $menu->addChild($itemCustomPage);
+        }
+
+        $menu->sortChildren();
+
         return $menu;
+    }
+
+    private function userCanViewHiddenPages(): bool
+    {
+        return
+            $this->security->isGranted('page_read')   ||
+            $this->security->isGranted('page_create') ||
+            $this->security->isGranted('page_update')
+        ;
     }
 }

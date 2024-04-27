@@ -1,0 +1,96 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.page.title'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ page.title }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.page.url_name'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ page.urlName }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.page.is_hidden'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>
+                                {% if page.hidden %}
+                                    {{ 'bool.yes'|trans }}
+                                {% else %}
+                                    {{ 'bool.no'|trans }}
+                                {% endif %}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.page.menu_identifiers'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% set menu_identifiers = page.menuIdentifiers %}
+
+                            {% if menu_identifiers is empty %}
+                                <div>
+                                    <em>
+                                        {{ 'search.error.no_results'|trans }}
+                                    </em>
+                                </div>
+                            {% else %}
+                                {% for menu_identifier in menu_identifiers %}
+                                    <div>
+                                        <span>
+                                            {{ ('menu.' ~ menu_identifier)|trans }}
+                                        </span>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% set granted_update = is_granted('page_update') %}
+                {% set granted_delete = is_granted('page_delete') %}
+
+                {% if granted_update or granted_delete %}
+                    <div class="card-footer">
+                        {% if granted_update %}
+                            <a href="{{ path('admin_page_update', {id: page.id.toRfc4122}) }}" 
+                               class="btn btn-primary mr-2"
+                            >
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if granted_delete %}
+                            <a href="{{ path('admin_page_delete', {id: page.id.toRfc4122}) }}" 
+                               class="btn btn-danger"
+                            >
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

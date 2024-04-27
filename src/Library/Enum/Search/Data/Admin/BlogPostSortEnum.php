@@ -5,7 +5,7 @@ namespace App\Library\Enum\Search\Data\Admin;
 use App\Library\Enum\Search\Data\SortEnumTrait;
 
 /**
- * Admin role sort cases.
+ * Admin blog post sort cases.
  */
 enum BlogPostSortEnum: string
 {

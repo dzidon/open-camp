@@ -113,7 +113,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
 
         if ($isGrantedFormField || $isGrantedAttachmentConfig || $isGrantedTripLocationPath || $isGrantedPurchasableItem || $isGrantedDiscountConfig)
         {
-            $text = $this->translator->trans('menu.navbar_admin_vertical.components');
+            $text = $this->translator->trans('menu_item.navbar_admin_vertical.components');
             $itemComponentsParent = new MenuIconType('parent_applications', 'navbar_admin_vertical_item', $text, '#', 'fas fa-puzzle-piece');
             $menu->addChild($itemComponentsParent);
 
@@ -228,7 +228,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                     $route === 'admin_camp_date_delete'
                 ;
 
-                $text = $this->translator->trans('menu.navbar_admin_vertical.browse');
+                $text = $this->translator->trans('menu_item.navbar_admin_vertical.browse');
                 $url = $this->urlGenerator->generate('admin_camp_list');
                 $itemCamps = new MenuIconType('admin_camp_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
                 $itemCampsParent->addChild($itemCamps);
@@ -275,7 +275,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                     $route === 'admin_user_update' || $route === 'admin_user_update_password' || $route === 'admin_user_delete'
                 ;
 
-                $text = $this->translator->trans('menu.navbar_admin_vertical.browse');
+                $text = $this->translator->trans('menu_item.navbar_admin_vertical.browse');
                 $url = $this->urlGenerator->generate('admin_user_list');
                 $itemUsers = new MenuIconType('admin_user_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
                 $itemUsersParent->addChild($itemUsers);
@@ -324,7 +324,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                     $route === 'admin_gallery_image_delete'
                 ;
 
-                $text = $this->translator->trans('menu.navbar_admin_vertical.browse');
+                $text = $this->translator->trans('menu_item.navbar_admin_vertical.browse');
                 $url = $this->urlGenerator->generate('admin_gallery_image_list');
                 $itemGalleryImages = new MenuIconType('admin_gallery_image_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
                 $itemGalleryParent->addChild($itemGalleryImages);
@@ -366,6 +366,27 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
             $itemBlog = new MenuIconType('admin_blog_post_list', 'navbar_admin_vertical_item', $text, $url, 'fas fa-newspaper');
             $menu->addChild($itemBlog);
             $itemBlog->setActive($active, $active);
+        }
+
+        // pages
+        $isGrantedPages =
+            $this->security->isGranted('page_create') || $this->security->isGranted('page_read') ||
+            $this->security->isGranted('page_update') || $this->security->isGranted('page_delete')
+        ;
+
+        if ($isGrantedPages)
+        {
+            $active =
+                $route === 'admin_page_list' || $route === 'admin_page_create' ||
+                $route === 'admin_page_read' || $route === 'admin_page_update' ||
+                $route === 'admin_page_delete'
+            ;
+
+            $text = $this->translator->trans('route.admin_page_list');
+            $url = $this->urlGenerator->generate('admin_page_list');
+            $itemPages = new MenuIconType('admin_page_list', 'navbar_admin_vertical_item', $text, $url, 'fas fa-globe');
+            $menu->addChild($itemPages);
+            $itemPages->setActive($active, $active);
         }
 
         return $menu;

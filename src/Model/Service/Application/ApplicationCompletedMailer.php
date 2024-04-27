@@ -6,7 +6,6 @@ use App\Model\Entity\Application;
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -36,7 +35,6 @@ class ApplicationCompletedMailer implements ApplicationCompletedMailerInterface
         $this->applicationInvoiceFilesystem = $applicationInvoiceFilesystem;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
-
         $this->emailFrom = $emailFrom;
     }
 
@@ -57,23 +55,28 @@ class ApplicationCompletedMailer implements ApplicationCompletedMailerInterface
         ]);
 
         $emailTo = $application->getEmail();
-        $invoiceAttachmentContents = $this->applicationInvoiceFilesystem->getInvoiceContents($application);
-        $invoiceFileName = $this->translator->trans('mail.application_completed.invoice_attachment_name');
-
-        $mimeTypeDetector = new FinfoMimeTypeDetector();
-        $mimeType = $mimeTypeDetector->detectMimeTypeFromBuffer($invoiceAttachmentContents);
 
         $email = (new TemplatedEmail())
             ->from($this->emailFrom)
-            ->to(new Address($emailTo))
+            ->to($emailTo)
             ->subject($subject)
             ->htmlTemplate('_fragment/_email/_application_completed.html.twig')
             ->context([
                 'application_url' => $applicationUrl,
                 'application'     => $application,
             ])
-            ->addPart(new DataPart($invoiceAttachmentContents, $invoiceFileName, $mimeType))
         ;
+
+        $invoiceAttachmentContents = $this->applicationInvoiceFilesystem->getInvoiceContents($application);
+
+        if ($invoiceAttachmentContents !== null)
+        {
+            $invoiceFileName = $this->translator->trans('mail.application_completed.invoice_attachment_name');
+            $mimeTypeDetector = new FinfoMimeTypeDetector();
+            $mimeType = $mimeTypeDetector->detectMimeTypeFromBuffer($invoiceAttachmentContents);
+            $attachment = new DataPart($invoiceAttachmentContents, $invoiceFileName, $mimeType);
+            $email->addPart($attachment);
+        }
 
         $this->mailer->send($email);
     }

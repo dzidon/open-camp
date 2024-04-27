@@ -81,6 +81,7 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
      */
     private function createPermissionGroups(): array
     {
+        $groups['page'] = new PermissionGroup('page', 'permission_group.page', 1500);
         $groups['gallery_image_category'] = new PermissionGroup('gallery_image_category', 'permission_group.gallery_image_category', 1400);
         $groups['gallery_image'] = new PermissionGroup('gallery_image', 'permission_group.gallery_image', 1300);
         $groups['blog_post'] = new PermissionGroup('blog_post', 'permission_group.blog_post', 1200);
@@ -107,6 +108,11 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
      */
     private function createPermissions(array $groups): array
     {
+        $permissions['page_create'] = new Permission('page_create', 'permission.page_create', 400, $groups['page']);
+        $permissions['page_read'] = new Permission('page_read', 'permission.page_read', 300, $groups['page']);
+        $permissions['page_update'] = new Permission('page_update', 'permission.page_update', 200, $groups['page']);
+        $permissions['page_delete'] = new Permission('page_delete', 'permission.page_delete', 100, $groups['page']);
+        
         $permissions['gallery_image_category_create'] = new Permission('gallery_image_category_create', 'permission.gallery_image_category_create', 400, $groups['gallery_image_category']);
         $permissions['gallery_image_category_read'] = new Permission('gallery_image_category_read', 'permission.gallery_image_category_read', 300, $groups['gallery_image_category']);
         $permissions['gallery_image_category_update'] = new Permission('gallery_image_category_update', 'permission.gallery_image_category_update', 200, $groups['gallery_image_category']);
