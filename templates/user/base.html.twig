@@ -64,6 +64,93 @@
 
             {% block main %}{% endblock %}
         </div>
+
+        {% if is_granted('text_content_update') %}
+            {% set text_content_update_url = path('admin_text_content_update') %}
+
+            <div class="modal fade"
+                 id="text-content-modal"
+                 tabindex="-1"
+                 aria-labelledby="text-content-modal-label"
+                 aria-hidden="true"
+                 {{ stimulus_controller('tc--modal', {
+                     'identifier': '',
+                     'html': false,
+                     'url': text_content_update_url,
+                 }) }}
+            >
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="text-content-modal-label">
+                                {{ 'entity.text_content.singular'|trans }}
+                            </h5>
+
+                            <button type="button"
+                                    class="close"
+                                    data-dismiss="modal"
+                                    aria-label="{{ 'modal.button.close'|trans }}"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="alert alert-danger" role="alert" {{ stimulus_target('tc--modal', 'error') }}>
+                            </div>
+
+                            <form>
+                                <div class="form-group" {{ stimulus_target('tc--modal', 'textAreaNoHtmlWrapper') }}>
+                                    <label for="text-content-modal-textarea-no-html" class="required">
+                                        {{ 'entity_attribute.text_content.content'|trans }}
+                                    </label>
+
+                                    <textarea class="form-control"
+                                              id="text-content-modal-textarea-no-html"
+                                              rows="5"
+                                              required
+                                              {{ stimulus_target('tc--modal', 'textAreaNoHtml') }}
+                                    ></textarea>
+                                </div>
+
+                                <div class="form-group" {{ stimulus_target('tc--modal', 'textAreaHtmlWrapper') }}>
+                                    <label for="text-content-modal-textarea-html" class="required">
+                                        {{ 'entity_attribute.text_content.content'|trans }}
+                                    </label>
+
+                                    <textarea class="form-control"
+                                              id="text-content-modal-textarea-html"
+                                              rows="5"
+                                              required
+                                              {{ stimulus_controller('f--tinymce') }}
+                                              {{ stimulus_target('tc--modal', 'textAreaHtml') }}
+                                    ></textarea>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                                {{ 'modal.button.close'|trans }}
+                            </button>
+
+                            <button type="button"
+                                    class="btn btn-primary"
+                                    {{ stimulus_target('tc--modal', 'submitButton') }}
+                                    {{ stimulus_action('tc--modal', 'submit') }}
+                            >
+                                <div class="spinner-border spinner-border-sm"
+                                     role="status"
+                                     {{ stimulus_target('tc--modal', 'spinner') }}
+                                ></div>
+
+                                {{ 'modal.button.save'|trans }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
     </main>
 
     <footer class="footer mt-auto py-3 bg-light">

@@ -34,7 +34,7 @@ class FormTypeController extends AbstractController
         }
         catch (InvalidArgumentException)
         {
-            $errorMessage = $this->trans('api.fragment.form.form_field_options');
+            $errorMessage = $this->trans('api.fragment.form.error.invalid_form_field_options');
             return new JsonResponse(['message' => $errorMessage], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 

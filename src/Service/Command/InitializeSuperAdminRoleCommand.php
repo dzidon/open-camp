@@ -42,8 +42,6 @@ class InitializeSuperAdminRoleCommand extends Command
      */
     protected function configure(): void
     {
-        $this
-            ->setHelp('Initializes a super admin role with all permissions.')
-        ;
+        $this->setHelp('Initializes a super admin role with all permissions.');
     }
 }

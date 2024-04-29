@@ -102,7 +102,7 @@
                             <button type="button"
                                     class="close"
                                     data-dismiss="modal"
-                                    aria-label="{{ 'modal.button_close'|trans }}"
+                                    aria-label="{{ 'modal.button.close'|trans }}"
                             >
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -144,7 +144,7 @@
                                     data-dismiss="modal"
                                     {{ stimulus_target('mod--camper-load', 'buttonClose') }}
                             >
-                                {{ 'modal.button_close'|trans }}
+                                {{ 'modal.button.close'|trans }}
                             </button>
 
                             <button type="button"
@@ -221,7 +221,7 @@
                                     <button type="button"
                                             class="close"
                                             data-dismiss="modal"
-                                            aria-label="{{ 'modal.button_close'|trans }}"
+                                            aria-label="{{ 'modal.button.close'|trans }}"
                                     >
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -233,7 +233,7 @@
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                                        {{ 'modal.button_close'|trans }}
+                                        {{ 'modal.button.close'|trans }}
                                     </button>
                                 </div>
                             </div>
@@ -344,14 +344,14 @@
 
             <div id="contact-load-modal-{{ name }}"
                  class="modal fade" tabindex="-1"
-                    {{ stimulus_controller('mod--contact-load', {
+                 {{ stimulus_controller('mod--contact-load', {
                         nameFirstId: form.nameFirst.vars.id,
                         nameLastId: form.nameLast.vars.id,
                         emailId: form.email.vars.id,
                         phoneNumberId: form.phoneNumber.vars.id,
                         roleId: form.role.vars.id,
                         roleOtherId: form.roleOther.vars.id,
-                    }) }}
+                 }) }}
             >
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -361,7 +361,7 @@
                             <button type="button"
                                     class="close"
                                     data-dismiss="modal"
-                                    aria-label="{{ 'modal.button_close'|trans }}"
+                                    aria-label="{{ 'modal.button.close'|trans }}"
                             >
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -406,7 +406,7 @@
                                     data-dismiss="modal"
                                     {{ stimulus_target('mod--contact-load', 'buttonClose') }}
                             >
-                                {{ 'modal.button_close'|trans }}
+                                {{ 'modal.button.close'|trans }}
                             </button>
 
                             <button type="button"

@@ -2,7 +2,7 @@
 
 namespace App\Service\Command;
 
-use App\Model\Event\Admin\PaymentMethod\PaymentMethodsCreateEvent;
+use App\Model\Event\Admin\TextContent\TextContentsCreateEvent;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -10,10 +10,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Creates payment methods.
+ * Creates text contents.
  */
-#[AsCommand(name: 'app:create-payment-methods')]
-class CreatePaymentMethodsCommand extends Command
+#[AsCommand(name: 'app:create-text-contents')]
+class CreateTextContentsCommand extends Command
 {
     private EventDispatcherInterface $eventDispatcher;
 
@@ -29,10 +29,10 @@ class CreatePaymentMethodsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $event = new PaymentMethodsCreateEvent();
+        $event = new TextContentsCreateEvent();
         $this->eventDispatcher->dispatch($event, $event::NAME);
 
-        $output->writeln('Payment methods created.');
+        $output->writeln('Text contents created.');
 
         return Command::SUCCESS;
     }
@@ -42,6 +42,6 @@ class CreatePaymentMethodsCommand extends Command
      */
     protected function configure(): void
     {
-        $this->setHelp('Creates payment methods used in the application.');
+        $this->setHelp('Creates editable text contents in the application.');
     }
 }

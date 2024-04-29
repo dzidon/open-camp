@@ -138,3 +138,20 @@ legend {
 [data-controller="fc--add"] {
     margin-bottom: 1rem;
 }
+
+.text-content-edit-button {
+    display: none !important;
+    position: absolute;
+    right: -16px;
+    top: -16px;
+}
+
+.text-content-edit-button:hover,
+.text-content:hover + .text-content-edit-button
+{
+    display: inline !important;
+}
+
+.text-content-container {
+    position: relative;
+}

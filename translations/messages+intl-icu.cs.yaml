@@ -9,7 +9,14 @@ site_error:
 api:
     fragment:
         form:
-            form_field_options: 'Byly zadány neplatné volby editovatelného formálářového pole.'
+            error:
+                invalid_form_field_options: 'Byly zadány neplatné volby editovatelného formálářového pole.'
+
+    text_content:
+        update:
+            error:
+                text_content_not_found: 'Textový obsah nebyl nalezen.'
+
 
 back: 'Zpět'
 loading: 'Načítání'
@@ -410,7 +417,10 @@ flash_message:
 
 modal:
     title: 'Varování'
-    button_close: 'Zavřít'
+    button:
+        close: 'Zavřít'
+        save: 'Uložit'
+
     form_collection_remove:
         question: 'Opravdu chcete odstranit tuto položku?'
         warning: 'Změny se projeví až po odeslání formuláře.'
@@ -447,6 +457,7 @@ permission_group:
     gallery_image_category: 'Kategorie obrázků'
     gallery_image: 'Obrázky'
     page: 'Stránky'
+    text_content: 'Textový obsah'
 
 permission:
     gallery_image_category_read: 'Zobrazení kategorie obrázků'
@@ -525,6 +536,8 @@ permission:
     discount_config_create: 'Tvorba konfigurace slev'
     discount_config_update: 'Editace konfigurace slev'
     discount_config_delete: 'Odstranění konfigurace slev'
+
+    text_content_update: 'Editace textového obsahu'
 
 crud:
     instruction:
@@ -727,6 +740,10 @@ crud:
             delete: 'Konfigurace slev odstraněna!'
 
 entity:
+    text_content:
+        singular: 'Textový obsah'
+        plural: 'Textový obsah'
+
     page:
         singular: 'Stránka'
         plural: 'Stránky'
@@ -1454,6 +1471,14 @@ entity_attribute:
         is_hidden: 'Skrytá'
         menu_priorities: 'Priority v menu'
         menu_identifiers: 'Menu'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    text_content:
+        id: 'ID'
+        identifier: 'Identifikátor'
+        is_html_enabled: 'Je povoleno HTML'
+        content: 'Obsah'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 

@@ -31,9 +31,14 @@ class HomeController extends AbstractController
         $campSearchData = new CampSearchData(true);
         $showHiddenCamps = $this->userCanViewHiddenCamps();
         $numberOfCamps = $this->getParameter('app.home_max_number_of_featured_camps');
-        $campCatalogResult = $campRepository
-            ->getUserCampCatalogResult($campSearchData, null, $showHiddenCamps, 1, $numberOfCamps)
-        ;
+        $campCatalogResult = null;
+
+        if ($numberOfCamps > 0)
+        {
+            $campCatalogResult = $campRepository
+                ->getUserCampCatalogResult($campSearchData, null, $showHiddenCamps, 1, $numberOfCamps)
+            ;
+        }
 
         // blog posts
         $blogPostSearchData = new BlogPostSearchData();

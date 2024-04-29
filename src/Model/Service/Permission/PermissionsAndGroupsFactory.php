@@ -81,6 +81,7 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
      */
     private function createPermissionGroups(): array
     {
+        $groups['text_content'] = new PermissionGroup('text_content', 'permission_group.text_content', 1600);
         $groups['page'] = new PermissionGroup('page', 'permission_group.page', 1500);
         $groups['gallery_image_category'] = new PermissionGroup('gallery_image_category', 'permission_group.gallery_image_category', 1400);
         $groups['gallery_image'] = new PermissionGroup('gallery_image', 'permission_group.gallery_image', 1300);
@@ -108,6 +109,8 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
      */
     private function createPermissions(array $groups): array
     {
+        $permissions['text_content_update'] = new Permission('text_content_update', 'permission.text_content_update', 100, $groups['text_content']);
+
         $permissions['page_create'] = new Permission('page_create', 'permission.page_create', 400, $groups['page']);
         $permissions['page_read'] = new Permission('page_read', 'permission.page_read', 300, $groups['page']);
         $permissions['page_update'] = new Permission('page_update', 'permission.page_update', 200, $groups['page']);

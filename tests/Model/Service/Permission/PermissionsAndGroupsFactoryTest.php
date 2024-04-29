@@ -46,7 +46,13 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Groups
          */
-        $this->assertCount(15, $groupsSerialized);
+        $this->assertCount(16, $groupsSerialized);
+
+        $this->assertContains([
+            'name'     => 'text_content',
+            'priority' => 1600,
+            'label'    => 'permission_group.text_content',
+        ], $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'page',
@@ -141,7 +147,15 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Permissions
          */
-        $this->assertCount(62, $permissionsSerialized);
+        $this->assertCount(63, $permissionsSerialized);
+
+        // text content
+        $this->assertContains([
+            'name'             => 'text_content_update',
+            'priority'         => 100,
+            'label'            => 'permission.text_content_update',
+            'permission_group' => 'text_content',
+        ], $permissionsSerialized);
 
         // page
         $this->assertContains([

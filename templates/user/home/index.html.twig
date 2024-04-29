@@ -21,7 +21,11 @@
                         <div class="carousel-caption carousel-caption-centered">
                             <h1 class="mb-2">{{ company_name }}</h1>
 
-                            <h5 class="mb-4">Přihlášky na nadcházející léto spuštěny!</h5>
+                            <h5 class="mb-4">
+                                {{ include('_fragment/_text_content/_display.html.twig', {
+                                    text_content_identifier: 'home_page_welcome',
+                                }) }}
+                            </h5>
 
                             <a href="{{ path('user_camp_catalog') }}" class="btn btn-primary">
                                 {{ 'home_page.apply'|trans }}
@@ -74,29 +78,31 @@
         </div>
     </div>
 
-    {% set camps = camp_catalog_result.paginator.currentPageItems %}
+    {% if camp_catalog_result is not null %}
+        {% set camps = camp_catalog_result.paginator.currentPageItems %}
 
-    {% if camps is not empty %}
-        <div class="row mb-3">
-            <div class="col-12 mb-3">
-                <h2>
-                    {{ 'home_page.camps'|trans }}
-                </h2>
+        {% if camps is not empty %}
+            <div class="row mb-3">
+                <div class="col-12 mb-3">
+                    <h2>
+                        {{ 'home_page.camps'|trans }}
+                    </h2>
 
-                <a href="{{ path('user_camp_catalog') }}">
-                    {{ 'home_page.view_all_camps'|trans }}
-                </a>
-            </div>
-
-            {% for camp in camps %}
-                <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex">
-                    {{ include('_fragment/_camp/_card.html.twig', {
-                        camp: camp,
-                        catalog_result: camp_catalog_result,
-                    }) }}
+                    <a href="{{ path('user_camp_catalog') }}">
+                        {{ 'home_page.view_all_camps'|trans }}
+                    </a>
                 </div>
-            {% endfor %}
-        </div>
+
+                {% for camp in camps %}
+                    <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex">
+                        {{ include('_fragment/_camp/_card.html.twig', {
+                            camp: camp,
+                            catalog_result: camp_catalog_result,
+                        }) }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endif %}
 
     {% if blog_posts is not empty %}

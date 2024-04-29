@@ -42,8 +42,6 @@ class CreatePermissionsCommand extends Command
      */
     protected function configure(): void
     {
-        $this
-            ->setHelp('Creates permissions and permission groups used in the application.')
-        ;
+        $this->setHelp('Creates permissions and permission groups used in the application.');
     }
 }
