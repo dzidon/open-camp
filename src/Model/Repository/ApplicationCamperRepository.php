@@ -130,14 +130,6 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
     {
         $application = $applicationCamper->getApplication();
         $applicationId = $application->getId();
-        $user = $application->getUser();
-
-        if ($user === null)
-        {
-            return 0;
-        }
-
-        $userId = $user->getId();
         $nameFirst = $applicationCamper->getNameFirst();
         $nameLast = $applicationCamper->getNameLast();
         $bornAt = $applicationCamper->getBornAt();
@@ -150,8 +142,6 @@ class ApplicationCamperRepository extends AbstractRepository implements Applicat
             ->andWhere('application.isAccepted = TRUE')
             ->andWhere('application.id != :applicationId')
             ->setParameter('applicationId', $applicationId, UuidType::NAME)
-            ->andWhere('application.user = :userId')
-            ->setParameter('userId', $userId, UuidType::NAME)
             ->andWhere('applicationCamper.nameFirst = :nameFirst')
             ->setParameter('nameFirst', $nameFirst)
             ->andWhere('applicationCamper.nameLast = :nameLast')
