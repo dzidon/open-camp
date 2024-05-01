@@ -1,0 +1,11 @@
+{% extends "user/base.html.twig" %}
+
+{% block main %}
+    <div class="row mb-3">
+        <div class="col-12 col-lg-8">
+            {{ include('_fragment/_text_content/_display.html.twig', {
+                text_content_identifier: 'terms_of_use',
+            }) }}
+        </div>
+    </div>
+{% endblock %}

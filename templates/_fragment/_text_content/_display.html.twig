@@ -18,7 +18,7 @@
     </div>
 
     {% if text_content is not null and is_granted('text_content_update') %}
-        <a href="#"
+        <a href="javascript:void(0);"
            class="btn btn-sm btn-primary rounded-circle text-content-edit-button"
            {{ stimulus_action('tc--container', 'openEditModal') }}
         >

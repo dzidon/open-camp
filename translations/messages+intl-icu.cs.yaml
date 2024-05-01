@@ -2634,4 +2634,7 @@ route:
     user_application_payment_online_status: 'Stav platby'
     user_application_payment_simulate: 'Simulace platební brány'
 
+    user_privacy: 'Zásady ochrany soukromí'
+    user_terms_of_use: 'Podmínky používání'
+
     _preview_error: 'Chyba'
