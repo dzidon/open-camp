@@ -31,6 +31,7 @@ class CampCategoryDataTransfer implements DataTransferInterface
 
         $campCategoryData->setName($campCategory->getName());
         $campCategoryData->setUrlName($campCategory->getUrlName());
+        $campCategoryData->setPriority($campCategory->getPriority());
         $campCategoryData->setParent($campCategory->getParent());
     }
 
@@ -46,6 +47,7 @@ class CampCategoryDataTransfer implements DataTransferInterface
 
         $campCategory->setName($campCategoryData->getName());
         $campCategory->setUrlName($campCategoryData->getUrlName());
+        $campCategory->setPriority($campCategoryData->getPriority());
         $campCategory->setParent($campCategoryData->getParent());
     }
 }

@@ -26,7 +26,7 @@ class CampCategoryCreateEventTest extends TestCase
     {
         $this->assertNull($this->event->getCampCategory());
 
-        $newEntity = new CampCategory('Category new', 'category-new');
+        $newEntity = new CampCategory('Category new', 'category-new', 100);
         $this->event->setCampCategory($newEntity);
         $this->assertSame($newEntity, $this->event->getCampCategory());
     }

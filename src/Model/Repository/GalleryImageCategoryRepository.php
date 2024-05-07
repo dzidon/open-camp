@@ -52,6 +52,7 @@ class GalleryImageCategoryRepository extends AbstractRepository implements Galle
             ->leftJoin('galleryImageCategory.children', 'galleryImageCategoryChild')
             ->andWhere('galleryImageCategory.id = :id')
             ->setParameter('id', $id, UuidType::NAME)
+            ->orderBy('galleryImageCategoryChild.priority', 'DESC')
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -60,35 +61,57 @@ class GalleryImageCategoryRepository extends AbstractRepository implements Galle
     /**
      * @inheritDoc
      */
-    public function findAll(): array
+    public function findAll(bool $sortByPriority = false): array
     {
-        $galleryImageCategories = $this->createQueryBuilder('galleryImageCategory')
+        $queryBuilder = $this->createQueryBuilder('galleryImageCategory')
             ->select('galleryImageCategory, galleryImageCategoryParent, galleryImageCategoryChild')
             ->leftJoin('galleryImageCategory.parent', 'galleryImageCategoryParent')
             ->leftJoin('galleryImageCategory.children', 'galleryImageCategoryChild')
+        ;
+
+        if ($sortByPriority)
+        {
+            $queryBuilder->orderBy('galleryImageCategory.priority', 'DESC');
+        }
+
+        /** @var GalleryImageCategory[] $galleryImageCategories */
+        $galleryImageCategories = $queryBuilder
             ->getQuery()
             ->getResult()
         ;
 
-        $galleryImageCategoryPaths = [];
-
-        foreach ($galleryImageCategories as $galleryImageCategory)
+        if ($sortByPriority)
         {
-            $path = $galleryImageCategory->getPath();
-            $galleryImageCategoryId = $galleryImageCategory->getId();
-            $galleryImageCategoryPaths[$galleryImageCategoryId->toRfc4122()] = $path;
+            foreach ($galleryImageCategories as $galleryImageCategory)
+            {
+                if ($galleryImageCategory->getParent() === null)
+                {
+                    $this->treeSearch->sortChildrenRecursively($galleryImageCategory);
+                }
+            }
         }
-
-        usort($galleryImageCategories, function (
-            GalleryImageCategory $galleryImageCategoryA,
-            GalleryImageCategory $galleryImageCategoryB
-        ) use ($galleryImageCategoryPaths)
+        else
         {
-            $idA = $galleryImageCategoryA->getId();
-            $idB = $galleryImageCategoryB->getId();
+            $galleryImageCategoryPaths = [];
 
-            return $galleryImageCategoryPaths[$idA->toRfc4122()] <=> $galleryImageCategoryPaths[$idB->toRfc4122()];
-        });
+            foreach ($galleryImageCategories as $galleryImageCategory)
+            {
+                $path = $galleryImageCategory->getPath();
+                $galleryImageCategoryId = $galleryImageCategory->getId();
+                $galleryImageCategoryPaths[$galleryImageCategoryId->toRfc4122()] = $path;
+            }
+
+            usort($galleryImageCategories, function (
+                GalleryImageCategory $galleryImageCategoryA,
+                GalleryImageCategory $galleryImageCategoryB
+            ) use ($galleryImageCategoryPaths)
+            {
+                $idA = $galleryImageCategoryA->getId();
+                $idB = $galleryImageCategoryB->getId();
+
+                return $galleryImageCategoryPaths[$idA->toRfc4122()] <=> $galleryImageCategoryPaths[$idB->toRfc4122()];
+            });
+        }
 
         return $galleryImageCategories;
     }
@@ -96,9 +119,9 @@ class GalleryImageCategoryRepository extends AbstractRepository implements Galle
     /**
      * @inheritDoc
      */
-    public function findRoots(): array
+    public function findRoots(bool $sortByPriority = false): array
     {
-        return array_filter($this->findAll(), function (GalleryImageCategory $galleryImageCategory) {
+        return array_filter($this->findAll($sortByPriority), function (GalleryImageCategory $galleryImageCategory) {
             return $galleryImageCategory->getParent() === null;
         });
     }
@@ -120,8 +143,7 @@ class GalleryImageCategoryRepository extends AbstractRepository implements Galle
         $urlNameFirst = $urlNames[$urlNameKeyFirst];
         unset($urlNames[$urlNameKeyFirst]);
         $relativePath = implode('/', $urlNames);
-
-        $roots = $this->findRoots();
+        $roots = $this->findRoots(true);
 
         foreach ($roots as $root)
         {
@@ -145,7 +167,6 @@ class GalleryImageCategoryRepository extends AbstractRepository implements Galle
     public function findPossibleParents(GalleryImageCategory $category): array
     {
         $possibleParents = $this->findAll();
-
         $illegalParents = $this->treeSearch->getDescendentsOfNode($category);
         $illegalParents[] = $category;
 
@@ -171,6 +192,7 @@ class GalleryImageCategoryRepository extends AbstractRepository implements Galle
             ->leftJoin('galleryImageCategory.children', 'galleryImageCategoryChild')
             ->andWhere('galleryImageCategory.urlName = :urlName')
             ->setParameter('urlName', $urlName)
+            ->orderBy('galleryImageCategoryChild.priority', 'DESC')
             ->getQuery()
             ->getResult()
         ;

@@ -36,16 +36,18 @@ interface CampCategoryRepositoryInterface
     /**
      * Finds all camp categories.
      *
+     * @param bool $sortByPriority
      * @return CampCategory[]
      */
-    public function findAll(): array;
+    public function findAll(bool $sortByPriority = false): array;
 
     /**
      * Finds camp categories that have no parent.
      *
+     * @param bool $sortByPriority
      * @return CampCategory[]
      */
-    public function findRoots(): array;
+    public function findRoots(bool $sortByPriority = false): array;
 
     /**
      * Finds camp categories that can be set as parents of the given camp category.

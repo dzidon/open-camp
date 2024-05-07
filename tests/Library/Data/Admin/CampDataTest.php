@@ -569,7 +569,7 @@ class CampDataTest extends KernelTestCase
         $data = new CampData();
         $this->assertNull($data->getCampCategory());
 
-        $campCategory = new CampCategory('Name', 'name');
+        $campCategory = new CampCategory('Name', 'name', 100);
         $data->setCampCategory($campCategory);
         $this->assertSame($campCategory, $data->getCampCategory());
 

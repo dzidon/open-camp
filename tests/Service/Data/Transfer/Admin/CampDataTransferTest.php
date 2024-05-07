@@ -25,7 +25,7 @@ class CampDataTransferTest extends KernelTestCase
         $expectedDescriptionShort = 'short';
         $expectedDescriptionLong = 'long';
         $expectedFeaturedPriority = 123;
-        $expectedCampCategory = new CampCategory('Parent', 'parent');
+        $expectedCampCategory = new CampCategory('Parent', 'parent', 100);
 
         $camp = new Camp($expectedName, $expectedUrlName, $expectedAgeMin, $expectedAgeMax, $expectedFeaturedPriority);
         $camp->setDescriptionShort($expectedDescriptionShort);
@@ -72,7 +72,7 @@ class CampDataTransferTest extends KernelTestCase
         $expectedDescriptionShort = 'short';
         $expectedDescriptionLong = 'long';
         $expectedFeaturedPriority = 123;
-        $expectedCampCategory = new CampCategory('Parent', 'parent');
+        $expectedCampCategory = new CampCategory('Parent', 'parent', 100);
 
         $data = new CampData();
         $data->setName($expectedName);

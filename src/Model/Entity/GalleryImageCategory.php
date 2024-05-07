@@ -2,6 +2,7 @@
 
 namespace App\Model\Entity;
 
+use App\Library\DataStructure\SortableTreeNodeInterface;
 use App\Library\DataStructure\TreeNodeInterface;
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\GalleryImageCategoryRepository;
@@ -19,7 +20,7 @@ use Symfony\Component\Uid\UuidV4;
  * Gallery image category.
  */
 #[ORM\Entity(repositoryClass: GalleryImageCategoryRepository::class)]
-class GalleryImageCategory implements TreeNodeInterface
+class GalleryImageCategory implements SortableTreeNodeInterface
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
@@ -30,6 +31,9 @@ class GalleryImageCategory implements TreeNodeInterface
 
     #[ORM\Column(length: 255)]
     private string $urlName;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $priority;
 
     #[ORM\ManyToOne(targetEntity: GalleryImageCategory::class, inversedBy: 'children')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
@@ -45,11 +49,12 @@ class GalleryImageCategory implements TreeNodeInterface
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $name, string $urlName)
+    public function __construct(string $name, string $urlName, int $priority)
     {
         $this->id = Uuid::v4();
         $this->name = $name;
         $this->urlName = $urlName;
+        $this->priority = $priority;
         $this->children = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable('now');
     }
@@ -79,6 +84,18 @@ class GalleryImageCategory implements TreeNodeInterface
     public function setUrlName(string $urlName): self
     {
         $this->urlName = $urlName;
+
+        return $this;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(int $priority): self
+    {
+        $this->priority = $priority;
 
         return $this;
     }
@@ -243,6 +260,31 @@ class GalleryImageCategory implements TreeNodeInterface
         }
 
         return true;
+    }
+
+    public function sortChildren(): self
+    {
+        $children = $this->children->toArray();
+
+        if (!empty($children))
+        {
+            foreach ($children as $child)
+            {
+                $this->children->removeElement($child);
+            }
+
+            usort($children, function (GalleryImageCategory $a, GalleryImageCategory $b)
+            {
+                return $b->getPriority() <=> $a->getPriority();
+            });
+
+            foreach ($children as $child)
+            {
+                $this->children->add($child);
+            }
+        }
+
+        return $this;
     }
 
     public function getCreatedAt(): DateTimeImmutable

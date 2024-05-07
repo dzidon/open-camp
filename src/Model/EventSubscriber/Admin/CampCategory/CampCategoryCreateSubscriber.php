@@ -24,7 +24,7 @@ class CampCategoryCreateSubscriber
     public function onCreateFillEntity(CampCategoryCreateEvent $event): void
     {
         $data = $event->getCampCategoryData();
-        $entity = new CampCategory($data->getName(), $data->getUrlName());
+        $entity = new CampCategory($data->getName(), $data->getUrlName(), $data->getPriority());
         $this->dataTransfer->fillEntity($data, $entity);
         $event->setCampCategory($entity);
     }

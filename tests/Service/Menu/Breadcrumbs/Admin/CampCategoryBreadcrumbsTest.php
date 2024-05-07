@@ -123,7 +123,7 @@ class CampCategoryBreadcrumbsTest extends KernelTestCase
     {
         $container = static::getContainer();
 
-        $this->campCategory = new CampCategory('Name', 'name');
+        $this->campCategory = new CampCategory('Name', 'name', 100);
         $reflectionClass = new ReflectionClass($this->campCategory);
         $property = $reflectionClass->getProperty('id');
         $property->setValue($this->campCategory, UuidV4::fromString('e37a04ae-2d35-4a1f-adc5-a6ab7b8e428b'));

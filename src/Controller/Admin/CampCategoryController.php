@@ -35,7 +35,7 @@ class CampCategoryController extends AbstractController
     #[Route('/admin/camp-categories', name: 'admin_camp_category_list')]
     public function list(): Response
     {
-        $rootCategories = $this->campCategoryRepository->findRoots();
+        $rootCategories = $this->campCategoryRepository->findRoots(true);
 
         return $this->render('admin/camp_category/list.html.twig', [
             'root_categories' => $rootCategories,

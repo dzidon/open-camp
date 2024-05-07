@@ -21,6 +21,9 @@ class CampCategoryData
     #[Assert\NotBlank]
     private ?string $urlName = null;
 
+    #[Assert\NotBlank]
+    private ?int $priority = 0;
+
     private ?CampCategory $parent = null;
 
     public function __construct(?CampCategory $campCategory = null)
@@ -53,6 +56,18 @@ class CampCategoryData
     public function setUrlName(?string $urlName): self
     {
         $this->urlName = $urlName;
+
+        return $this;
+    }
+
+    public function getPriority(): ?int
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(?int $priority): self
+    {
+        $this->priority = $priority;
 
         return $this;
     }

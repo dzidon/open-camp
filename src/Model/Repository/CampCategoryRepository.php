@@ -52,6 +52,7 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
             ->leftJoin('campCategory.children', 'campCategoryChild')
             ->andWhere('campCategory.id = :id')
             ->setParameter('id', $id, UuidType::NAME)
+            ->orderBy('campCategoryChild.priority', 'DESC')
             ->getQuery()
             ->getOneOrNullResult()
         ;
@@ -60,32 +61,54 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
     /**
      * @inheritDoc
      */
-    public function findAll(): array
+    public function findAll(bool $sortByPriority = false): array
     {
-        $campCategories = $this->createQueryBuilder('campCategory')
+        $queryBuilder = $this->createQueryBuilder('campCategory')
             ->select('campCategory, campCategoryParent, campCategoryChild')
             ->leftJoin('campCategory.parent', 'campCategoryParent')
             ->leftJoin('campCategory.children', 'campCategoryChild')
+        ;
+
+        if ($sortByPriority)
+        {
+            $queryBuilder->orderBy('campCategory.priority', 'DESC');
+        }
+
+        /** @var CampCategory[] $campCategories */
+        $campCategories = $queryBuilder
             ->getQuery()
             ->getResult()
         ;
 
-        $campCategoryPaths = [];
-
-        foreach ($campCategories as $campCategory)
+        if ($sortByPriority)
         {
-            $path = $campCategory->getPath();
-            $campCategoryId = $campCategory->getId();
-            $campCategoryPaths[$campCategoryId->toRfc4122()] = $path;
+            foreach ($campCategories as $campCategory)
+            {
+                if ($campCategory->getParent() === null)
+                {
+                    $this->treeSearch->sortChildrenRecursively($campCategory);
+                }
+            }
         }
-
-        usort($campCategories, function (CampCategory $campCategoryA, CampCategory $campCategoryB) use ($campCategoryPaths)
+        else
         {
-            $idA = $campCategoryA->getId();
-            $idB = $campCategoryB->getId();
+            $campCategoryPaths = [];
 
-            return $campCategoryPaths[$idA->toRfc4122()] <=> $campCategoryPaths[$idB->toRfc4122()];
-        });
+            foreach ($campCategories as $campCategory)
+            {
+                $path = $campCategory->getPath();
+                $campCategoryId = $campCategory->getId();
+                $campCategoryPaths[$campCategoryId->toRfc4122()] = $path;
+            }
+
+            usort($campCategories, function (CampCategory $campCategoryA, CampCategory $campCategoryB) use ($campCategoryPaths)
+            {
+                $idA = $campCategoryA->getId();
+                $idB = $campCategoryB->getId();
+
+                return $campCategoryPaths[$idA->toRfc4122()] <=> $campCategoryPaths[$idB->toRfc4122()];
+            });
+        }
 
         return $campCategories;
     }
@@ -93,9 +116,9 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
     /**
      * @inheritDoc
      */
-    public function findRoots(): array
+    public function findRoots(bool $sortByPriority = false): array
     {
-        return array_filter($this->findAll(), function (CampCategory $campCategory) {
+        return array_filter($this->findAll($sortByPriority), function (CampCategory $campCategory) {
             return $campCategory->getParent() === null;
         });
     }
@@ -106,6 +129,7 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
     public function findOneByPath(string $path): ?CampCategory
     {
         $path = trim($path, '/');
+
         if ($path === '')
         {
             return null;
@@ -116,8 +140,7 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
         $urlNameFirst = $urlNames[$urlNameKeyFirst];
         unset($urlNames[$urlNameKeyFirst]);
         $relativePath = implode('/', $urlNames);
-
-        $roots = $this->findRoots();
+        $roots = $this->findRoots(true);
 
         foreach ($roots as $root)
         {
@@ -141,7 +164,6 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
     public function findPossibleParents(CampCategory $category): array
     {
         $possibleParents = $this->findAll();
-
         $illegalParents = $this->treeSearch->getDescendentsOfNode($category);
         $illegalParents[] = $category;
 
@@ -167,6 +189,7 @@ class CampCategoryRepository extends AbstractRepository implements CampCategoryR
             ->leftJoin('campCategory.children', 'campCategoryChild')
             ->andWhere('campCategory.urlName = :urlName')
             ->setParameter('urlName', $urlName)
+            ->orderBy('campCategoryChild.priority', 'DESC')
             ->getQuery()
             ->getResult()
         ;

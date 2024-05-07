@@ -47,7 +47,7 @@ class CampCatalogController extends AbstractController
 
         if ($path === null || $path === '')
         {
-            $campCategoryChildren = $this->campCategoryRepository->findRoots();
+            $campCategoryChildren = $this->campCategoryRepository->findRoots(true);
         }
         else
         {

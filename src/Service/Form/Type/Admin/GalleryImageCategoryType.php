@@ -6,6 +6,7 @@ use App\Library\Data\Admin\GalleryImageCategoryData;
 use App\Model\Entity\GalleryImageCategory;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -26,6 +27,9 @@ class GalleryImageCategoryType extends AbstractType
             ])
             ->add('urlName', TextType::class, [
                 'label' => 'form.admin.gallery_image_category.url_name',
+            ])
+            ->add('priority', IntegerType::class, [
+                'label' => 'form.admin.gallery_image_category.priority',
             ])
             ->add('parent', EntityType::class, [
                 'class'        => GalleryImageCategory::class,

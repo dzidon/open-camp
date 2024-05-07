@@ -13,7 +13,7 @@ class CampCategoryRepositoryTest extends KernelTestCase
     {
         $campCategoryRepository = $this->getCampCategoryRepository();
 
-        $campCategory = new CampCategory('Category', 'category');
+        $campCategory = new CampCategory('Category', 'category', 100);
         $campCategoryRepository->saveCampCategory($campCategory, true);
         $id = $campCategory->getId();
 

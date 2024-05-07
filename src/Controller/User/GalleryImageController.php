@@ -36,7 +36,7 @@ class GalleryImageController extends AbstractController
 
         if ($path === null || $path === '')
         {
-            $galleryImageCategoryChildren = $this->galleryImageCategoryRepository->findRoots();
+            $galleryImageCategoryChildren = $this->galleryImageCategoryRepository->findRoots(true);
         }
         else
         {

@@ -32,8 +32,8 @@ class CampCatalogBreadcrumbsTest extends KernelTestCase
 
     public function testListWithCampCategories(): void
     {
-        $campCategoryA = new CampCategory('A', 'a');
-        $campCategoryB = new CampCategory('B', 'b');
+        $campCategoryA = new CampCategory('A', 'a', 100);
+        $campCategoryB = new CampCategory('B', 'b', 100);
         $campCategoryB->setParent($campCategoryA);
 
         $breadcrumbsMenu = $this->breadcrumbsRegistry->getBreadcrumbs('user_camp_catalog', [

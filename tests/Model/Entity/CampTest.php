@@ -158,7 +158,7 @@ class CampTest extends TestCase
     {
         $this->assertNull($this->camp->getCampCategory());
 
-        $campCategory = new CampCategory('Category', 'category');
+        $campCategory = new CampCategory('Category', 'category', 100);
         $this->camp->setCampCategory($campCategory);
 
         $this->assertSame($campCategory, $this->camp->getCampCategory());

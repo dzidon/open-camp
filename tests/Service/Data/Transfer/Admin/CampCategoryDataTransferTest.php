@@ -15,9 +15,9 @@ class CampCategoryDataTransferTest extends KernelTestCase
 
         $expectedName = 'Name';
         $expectedUrlName = 'name';
-        $expectedParent = new CampCategory('Parent', 'parent');
+        $expectedParent = new CampCategory('Parent', 'parent', 100);
 
-        $campCategory = new CampCategory($expectedName, $expectedUrlName);
+        $campCategory = new CampCategory($expectedName, $expectedUrlName, 100);
         $campCategory->setParent($expectedParent);
 
         $data = new CampCategoryData();
@@ -34,14 +34,14 @@ class CampCategoryDataTransferTest extends KernelTestCase
 
         $expectedName = 'Name';
         $expectedUrlName = 'name';
-        $expectedParent = new CampCategory('Parent', 'parent');
+        $expectedParent = new CampCategory('Parent', 'parent', 100);
 
         $data = new CampCategoryData();
         $data->setName($expectedName);
         $data->setUrlName($expectedUrlName);
         $data->setParent($expectedParent);
 
-        $campCategory = new CampCategory($expectedName, $expectedUrlName);
+        $campCategory = new CampCategory($expectedName, $expectedUrlName, 100);
         $dataTransfer->fillEntity($data, $campCategory);
 
         $this->assertSame($expectedName, $campCategory->getName());

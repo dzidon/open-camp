@@ -21,6 +21,9 @@ class GalleryImageCategoryData
     #[Assert\NotBlank]
     private ?string $urlName = null;
 
+    #[Assert\NotBlank]
+    private ?int $priority = 0;
+
     private ?GalleryImageCategory $parent = null;
 
     public function __construct(?GalleryImageCategory $galleryImageCategory = null)
@@ -53,6 +56,18 @@ class GalleryImageCategoryData
     public function setUrlName(?string $urlName): self
     {
         $this->urlName = $urlName;
+
+        return $this;
+    }
+
+    public function getPriority(): ?int
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(?int $priority): self
+    {
+        $this->priority = $priority;
 
         return $this;
     }

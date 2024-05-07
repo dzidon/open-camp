@@ -36,16 +36,18 @@ interface GalleryImageCategoryRepositoryInterface
     /**
      * Finds all gallery image categories.
      *
+     * @param bool $sortByPriority
      * @return GalleryImageCategory[]
      */
-    public function findAll(): array;
+    public function findAll(bool $sortByPriority = false): array;
 
     /**
      * Finds gallery image categories that have no parent.
      *
+     * @param bool $sortByPriority
      * @return GalleryImageCategory[]
      */
-    public function findRoots(): array;
+    public function findRoots(bool $sortByPriority = false): array;
 
     /**
      * Finds gallery image categories that can be set as parents of the given gallery image category.

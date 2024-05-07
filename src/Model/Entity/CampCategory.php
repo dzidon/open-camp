@@ -2,6 +2,7 @@
 
 namespace App\Model\Entity;
 
+use App\Library\DataStructure\SortableTreeNodeInterface;
 use App\Library\DataStructure\TreeNodeInterface;
 use App\Model\Attribute\UpdatedAtProperty;
 use App\Model\Repository\CampCategoryRepository;
@@ -19,7 +20,7 @@ use Symfony\Component\Uid\UuidV4;
  * Camp category.
  */
 #[ORM\Entity(repositoryClass: CampCategoryRepository::class)]
-class CampCategory implements TreeNodeInterface
+class CampCategory implements SortableTreeNodeInterface
 {
     #[ORM\Id]
     #[ORM\Column(type: UuidType::NAME, unique: true)]
@@ -30,6 +31,9 @@ class CampCategory implements TreeNodeInterface
 
     #[ORM\Column(length: 255)]
     private string $urlName;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $priority;
 
     #[ORM\ManyToOne(targetEntity: CampCategory::class, inversedBy: 'children')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
@@ -45,11 +49,12 @@ class CampCategory implements TreeNodeInterface
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $name, string $urlName)
+    public function __construct(string $name, string $urlName, int $priority)
     {
         $this->id = Uuid::v4();
         $this->name = $name;
         $this->urlName = $urlName;
+        $this->priority = $priority;
         $this->children = new ArrayCollection();
         $this->createdAt = new DateTimeImmutable('now');
     }
@@ -79,6 +84,18 @@ class CampCategory implements TreeNodeInterface
     public function setUrlName(string $urlName): self
     {
         $this->urlName = $urlName;
+
+        return $this;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
+
+    public function setPriority(int $priority): self
+    {
+        $this->priority = $priority;
 
         return $this;
     }
@@ -237,12 +254,38 @@ class CampCategory implements TreeNodeInterface
     public function hasChild(string $identifier): bool
     {
         $child = $this->getChild($identifier);
+
         if ($child === null)
         {
             return false;
         }
 
         return true;
+    }
+
+    public function sortChildren(): self
+    {
+        $children = $this->children->toArray();
+
+        if (!empty($children))
+        {
+            foreach ($children as $child)
+            {
+                $this->children->removeElement($child);
+            }
+
+            usort($children, function (CampCategory $a, CampCategory $b)
+            {
+                return $b->getPriority() <=> $a->getPriority();
+            });
+
+            foreach ($children as $child)
+            {
+                $this->children->add($child);
+            }
+        }
+
+        return $this;
     }
 
     public function getCreatedAt(): DateTimeImmutable

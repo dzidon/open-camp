@@ -14,6 +14,7 @@ class CampCategoryTest extends TestCase
 {
     private const NAME = 'Name';
     private const URL_NAME = 'url-name';
+    private const PRIORITY = 100;
 
     private CampCategory $campCategory;
 
@@ -50,7 +51,7 @@ class CampCategoryTest extends TestCase
     {
         $this->assertNull($this->campCategory->getParent());
 
-        $parent = new CampCategory('Parent', 'parent');
+        $parent = new CampCategory('Parent', 'parent', 100);
         $this->campCategory->setParent($parent);
 
         $this->assertSame($parent, $this->campCategory->getParent());
@@ -65,7 +66,7 @@ class CampCategoryTest extends TestCase
     {
         $this->assertEmpty($this->campCategory->getChildren());
 
-        $child = new CampCategory('Child', 'child');
+        $child = new CampCategory('Child', 'child', 100);
         $idString = $child->getIdentifier()->toRfc4122();
         $this->campCategory->addChild($child);
 
@@ -84,10 +85,10 @@ class CampCategoryTest extends TestCase
 
     public function testParentRewriting(): void
     {
-        $child = new CampCategory('Child', 'child');
+        $child = new CampCategory('Child', 'child', 100);
         $child->setParent($this->campCategory);
 
-        $childNew = new CampCategory('Child New', 'child-new');
+        $childNew = new CampCategory('Child New', 'child-new', 100);
         $this->setId($childNew, $child->getId());
         $childNew->setParent($this->campCategory);
 
@@ -99,10 +100,10 @@ class CampCategoryTest extends TestCase
 
     public function testChildRewriting(): void
     {
-        $child = new CampCategory('Child', 'child');
+        $child = new CampCategory('Child', 'child', 100);
         $this->campCategory->addChild($child);
 
-        $childNew = new CampCategory('Child New', 'child-new');
+        $childNew = new CampCategory('Child New', 'child-new', 100);
         $this->setId($childNew, $child->getId());
         $this->campCategory->addChild($childNew);
 
@@ -124,10 +125,10 @@ class CampCategoryTest extends TestCase
 
     public function testAncestors(): void
     {
-        $child1 = new CampCategory('Child', 'child');
+        $child1 = new CampCategory('Child', 'child', 100);
         $child1->setParent($this->campCategory);
 
-        $child2 = new CampCategory('Child 2', 'child-2');
+        $child2 = new CampCategory('Child 2', 'child-2', 100);
         $child2->setParent($child1);
 
         $ancestors = $child2->getAncestors();
@@ -137,7 +138,7 @@ class CampCategoryTest extends TestCase
 
     public function testPathWithUrlNames(): void
     {
-        $child = new CampCategory('Child', 'child');
+        $child = new CampCategory('Child', 'child', 100);
         $child->setParent($this->campCategory);
 
         $this->assertSame('url-name/child', $child->getPath());
@@ -145,7 +146,7 @@ class CampCategoryTest extends TestCase
 
     public function testPathWithHumanNames(): void
     {
-        $child = new CampCategory('Child', 'child');
+        $child = new CampCategory('Child', 'child', 100);
         $child->setParent($this->campCategory);
 
         $this->assertSame('Name/Child', $child->getPath(true));
@@ -174,6 +175,6 @@ class CampCategoryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->campCategory = new CampCategory(self::NAME, self::URL_NAME);
+        $this->campCategory = new CampCategory(self::NAME, self::URL_NAME, self::PRIORITY);
     }
 }

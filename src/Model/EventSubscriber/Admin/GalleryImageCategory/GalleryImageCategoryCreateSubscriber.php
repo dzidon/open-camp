@@ -24,7 +24,7 @@ class GalleryImageCategoryCreateSubscriber
     public function onCreateFillEntity(GalleryImageCategoryCreateEvent $event): void
     {
         $data = $event->getGalleryImageCategoryData();
-        $entity = new GalleryImageCategory($data->getName(), $data->getUrlName());
+        $entity = new GalleryImageCategory($data->getName(), $data->getUrlName(), $data->getPriority());
         $this->dataTransfer->fillEntity($data, $entity);
         $event->setGalleryImageCategory($entity);
     }

@@ -1125,6 +1125,7 @@ entity_attribute:
         id: 'ID'
         name: 'Název'
         url_name: 'Název v odkazu'
+        priority: 'Priorita'
         parent: 'Nadřazená kategorie'
         children: 'Podřazené kategorie'
         created_at: 'Datum vytvoření'
@@ -1245,6 +1246,7 @@ entity_attribute:
         id: 'ID'
         name: 'Název'
         url_name: 'Název v odkazu'
+        priority: 'Priorita'
         parent: 'Nadřazená kategorie'
         children: 'Podřazené kategorie'
         created_at: 'Datum vytvoření'
@@ -1710,6 +1712,7 @@ form:
         camp_category:
             name: 'Název'
             url_name: 'Název v odkazu'
+            priority: 'Priorita'
             parent: 'Nadřazená kategorie'
             button: 'Uložit'
 
@@ -2223,6 +2226,7 @@ form:
         gallery_image_category:
             name: 'Název'
             url_name: 'Název v odkazu'
+            priority: 'Priorita'
             parent: 'Nadřazená kategorie'
             button: 'Uložit'
 

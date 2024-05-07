@@ -35,7 +35,7 @@ class GalleryImageCategoryController extends AbstractController
     #[Route('/admin/gallery-image-categories', name: 'admin_gallery_image_category_list')]
     public function list(): Response
     {
-        $rootCategories = $this->galleryImageCategoryRepository->findRoots();
+        $rootCategories = $this->galleryImageCategoryRepository->findRoots(true);
 
         return $this->render('admin/gallery_image_category/list.html.twig', [
             'root_categories' => $rootCategories,

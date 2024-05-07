@@ -31,6 +31,7 @@ class GalleryImageCategoryDataTransfer implements DataTransferInterface
 
         $galleryImageCategoryData->setName($galleryImageCategory->getName());
         $galleryImageCategoryData->setUrlName($galleryImageCategory->getUrlName());
+        $galleryImageCategoryData->setPriority($galleryImageCategory->getPriority());
         $galleryImageCategoryData->setParent($galleryImageCategory->getParent());
     }
 
@@ -46,6 +47,7 @@ class GalleryImageCategoryDataTransfer implements DataTransferInterface
 
         $galleryImageCategory->setName($galleryImageCategoryData->getName());
         $galleryImageCategory->setUrlName($galleryImageCategoryData->getUrlName());
+        $galleryImageCategory->setPriority($galleryImageCategoryData->getPriority());
         $galleryImageCategory->setParent($galleryImageCategoryData->getParent());
     }
 }
