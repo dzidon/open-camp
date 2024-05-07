@@ -22,6 +22,12 @@
                 {{ guide.age }}
             </div>
         {% endif %}
+
+        {% if guide.bioShort is not null %}
+            <div class="mt-2">
+                {{ guide.bioShort }}
+            </div>
+        {% endif %}
     </div>
 
     <div class="card-footer clearfix">

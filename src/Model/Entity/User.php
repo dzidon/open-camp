@@ -63,6 +63,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?DateTimeImmutable $bornAt = null;
 
+    #[ORM\Column(length: 64, nullable: true)]
+    private ?string $bioShort = null;
+
     #[ORM\Column(length: 2000, nullable: true)]
     private ?string $bio = null;
 
@@ -340,6 +343,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setBornAt(?DateTimeImmutable $bornAt): self
     {
         $this->bornAt = $bornAt;
+
+        return $this;
+    }
+
+    public function getBioShort(): ?string
+    {
+        return $this->bioShort;
+    }
+
+    public function setBioShort(?string $bioShort): self
+    {
+        $this->bioShort = $bioShort;
 
         return $this;
     }

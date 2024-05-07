@@ -32,6 +32,9 @@ class ProfileData
     #[Assert\LessThan('today', message: 'date_in_past')]
     private ?DateTimeImmutable $bornAt = null;
 
+    #[Assert\Length(max: 64)]
+    private ?string $bioShort = null;
+
     #[Assert\Length(max: 2000)]
     private ?string $bio = null;
 
@@ -82,6 +85,18 @@ class ProfileData
     public function setBornAt(?DateTimeImmutable $bornAt): self
     {
         $this->bornAt = $bornAt;
+
+        return $this;
+    }
+
+    public function getBioShort(): ?string
+    {
+        return $this->bioShort;
+    }
+
+    public function setBioShort(?string $bioShort): self
+    {
+        $this->bioShort = $bioShort;
 
         return $this;
     }

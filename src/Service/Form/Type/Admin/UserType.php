@@ -76,10 +76,15 @@ class UserType extends AbstractType
                     'label'    => 'form.admin.user.born_at',
                     'priority' => 4600,
                 ])
+                ->add('bioShort', TextType::class, [
+                    'required' => false,
+                    'label'    => 'form.admin.user.bio_short',
+                    'priority' => 4500,
+                ])
                 ->add('bio', TextareaType::class, [
                     'required' => false,
                     'label'    => 'form.admin.user.bio',
-                    'priority' => 4500,
+                    'priority' => 4400,
                 ])
                 ->add('image', FileType::class, [
                     'required' => false,
@@ -90,7 +95,7 @@ class UserType extends AbstractType
                         'data-controller'                         => 'cv--content',
                         'data-cv--content-show-when-chosen-value' => '0',
                     ],
-                    'priority' => 4400,
+                    'priority' => 4300,
                 ])
             ;
 
@@ -116,7 +121,7 @@ class UserType extends AbstractType
                                 'data-action'                          => 'cv--checkbox#updateVisibility',
                                 'data-cv--checkbox-cv--content-outlet' => '.user-image',
                             ],
-                            'priority' => 4300,
+                            'priority' => 4200,
                         ])
                     ;
                 }
@@ -133,7 +138,7 @@ class UserType extends AbstractType
                     'placeholder'  => 'form.common.choice.none.female',
                     'required'     => false,
                     'label'        => 'form.admin.user.role',
-                    'priority'     => 4200,
+                    'priority'     => 4100,
                 ])
             ;
         }

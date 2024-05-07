@@ -45,6 +45,10 @@ class ProfileType extends AbstractType
                 'input'    => 'datetime_immutable',
                 'label'    => 'form.admin.profile.born_at',
             ])
+            ->add('bioShort', TextType::class, [
+                'required' => false,
+                'label'    => 'form.admin.profile.bio_short',
+            ])
             ->add('bio', TextareaType::class, [
                 'required' => false,
                 'label'    => 'form.admin.profile.bio',

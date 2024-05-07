@@ -46,6 +46,7 @@ class UserDataTransfer implements DataTransferInterface
         $userData->setIsFeaturedGuide($user->isFeaturedGuide());
         $userData->setGuidePriority($user->getGuidePriority());
         $userData->setBornAt($user->getBornAt());
+        $userData->setBioShort($user->getBioShort());
         $userData->setBio($user->getBio());
 
         $billingData = $userData->getBillingData();
@@ -69,6 +70,7 @@ class UserDataTransfer implements DataTransferInterface
             $user->setIsFeaturedGuide($userData->isFeaturedGuide());
             $user->setGuidePriority($userData->getGuidePriority());
             $user->setBornAt($userData->getBornAt());
+            $user->setBioShort($userData->getBioShort());
             $user->setBio($userData->getBio());
 
             $billingData = $userData->getBillingData();

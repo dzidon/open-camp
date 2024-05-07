@@ -26,6 +26,7 @@ class ProfileDataTransfer implements DataTransferInterface
         $profileData->setNameFirst($user->getNameFirst());
         $profileData->setNameLast($user->getNameLast());
         $profileData->setBornAt($user->getBornAt());
+        $profileData->setBioShort($user->getBioShort());
         $profileData->setBio($user->getBio());
     }
 
@@ -39,6 +40,7 @@ class ProfileDataTransfer implements DataTransferInterface
         $user->setNameFirst($profileData->getNameFirst());
         $user->setNameLast($profileData->getNameLast());
         $user->setBornAt($profileData->getBornAt());
+        $user->setBioShort($profileData->getBioShort());
         $user->setBio($profileData->getBio());
     }
 }
