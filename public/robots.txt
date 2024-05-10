@@ -1,0 +1,11 @@
+User-Agent: *
+Disallow: /admin/
+Disallow: /profile/
+Disallow: /application/
+Disallow: /application-payment-online-update/
+Disallow: /application-payment-online-status/
+Disallow: /payment-simulate/
+Disallow: /application-to-user-import/
+Disallow: /application-to-user-import-skip/
+Disallow: /password-change/complete/
+Disallow: /registration/complete/
