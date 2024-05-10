@@ -4,17 +4,19 @@
     <div class="row mb-3">
         <div class="col-12 mb-3">
             <div id="carousel" class="carousel slide carousel-fade" data-ride="carousel">
-                <ol class="carousel-indicators">
-                    {% set indicator_index = 0 %}
+                {% if carousel_images|length > 1 %}
+                    <ol class="carousel-indicators">
+                        {% set indicator_index = 0 %}
 
-                    {% for carousel_image in carousel_images %}
-                        <li data-target="#carousel" data-slide-to="{{ indicator_index }}"
-                            {% if loop.first %} class="active" {% endif %}
-                        ></li>
+                        {% for carousel_image in carousel_images %}
+                            <li data-target="#carousel" data-slide-to="{{ indicator_index }}"
+                                {% if loop.first %} class="active" {% endif %}
+                            ></li>
 
-                        {% set indicator_index = indicator_index + 1 %}
-                    {% endfor %}
-                </ol>
+                            {% set indicator_index = indicator_index + 1 %}
+                        {% endfor %}
+                    </ol>
+                {% endif %}
 
                 <div class="carousel-inner">
                     {% set caption %}

@@ -20,6 +20,7 @@
                         {% set granted_read = is_granted('gallery_image_category_read') %}
                         {% set granted_update = is_granted('gallery_image_category_update') %}
                         {% set granted_delete = is_granted('gallery_image_category_delete') %}
+                        {% set granted_truncate = is_granted('gallery_image_delete') %}
 
                         {% for gallery_image_category in root_categories %}
                             {% with {'gallery_image_category': gallery_image_category} %}
@@ -48,7 +49,7 @@
 
                     <span class="pl-3">
                         {% if granted_read %}
-                            <a href="{{ path('admin_gallery_image_category_read', {id: gallery_image_category.id.toRfc4122}) }}"
+                            <a href="{{ path('admin_gallery_image_category_read', {id: gallery_image_category.id}) }}"
                                class="btn btn-secondary"
                             >
                                 {{ 'crud.action.common.read'|trans }}
@@ -56,15 +57,23 @@
                         {% endif %}
 
                         {% if granted_update %}
-                            <a href="{{ path('admin_gallery_image_category_update', {id: gallery_image_category.id.toRfc4122}) }}"
+                            <a href="{{ path('admin_gallery_image_category_update', {id: gallery_image_category.id}) }}"
                                class="btn btn-primary"
                             >
                                 {{ 'crud.action.common.update'|trans }}
                             </a>
                         {% endif %}
 
+                        {% if granted_truncate %}
+                            <a href="{{ path('admin_gallery_image_category_truncate', {id: gallery_image_category.id}) }}"
+                               class="btn btn-danger"
+                            >
+                                {{ 'crud.action.common.truncate'|trans }}
+                            </a>
+                        {% endif %}
+
                         {% if granted_delete %}
-                            <a href="{{ path('admin_gallery_image_category_delete', {id: gallery_image_category.id.toRfc4122}) }}"
+                            <a href="{{ path('admin_gallery_image_category_delete', {id: gallery_image_category.id}) }}"
                                class="btn btn-danger"
                             >
                                 {{ 'crud.action.common.delete'|trans }}

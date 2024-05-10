@@ -4,12 +4,16 @@ namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
 use App\Library\Data\Admin\GalleryImageCategoryData;
+use App\Library\Data\Admin\GalleryImageCategoryTruncateData;
 use App\Model\Entity\GalleryImageCategory;
 use App\Model\Event\Admin\GalleryImageCategory\GalleryImageCategoryCreateEvent;
 use App\Model\Event\Admin\GalleryImageCategory\GalleryImageCategoryDeleteEvent;
+use App\Model\Event\Admin\GalleryImageCategory\GalleryImageCategoryTruncateEvent;
 use App\Model\Event\Admin\GalleryImageCategory\GalleryImageCategoryUpdateEvent;
 use App\Model\Repository\GalleryImageCategoryRepositoryInterface;
+use App\Model\Repository\GalleryImageRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
+use App\Service\Form\Type\Admin\GalleryImageCategoryTruncateType;
 use App\Service\Form\Type\Admin\GalleryImageCategoryType;
 use App\Service\Form\Type\Common\HiddenTrueType;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -87,7 +91,10 @@ class GalleryImageCategoryController extends AbstractController
 
     #[IsGranted('gallery_image_category_update')]
     #[Route('/admin/gallery-image-category/{id}/update', name: 'admin_gallery_image_category_update')]
-    public function update(EventDispatcherInterface $eventDispatcher, DataTransferRegistryInterface $dataTransfer, Request $request, UuidV4 $id): Response
+    public function update(EventDispatcherInterface      $eventDispatcher,
+                           DataTransferRegistryInterface $dataTransfer,
+                           Request                       $request,
+                           UuidV4                        $id): Response
     {
         $galleryImageCategory = $this->findGalleryImageCategoryOrThrow404($id);
         $parentChoices = $this->galleryImageCategoryRepository->findPossibleParents($galleryImageCategory);
@@ -119,6 +126,41 @@ class GalleryImageCategoryController extends AbstractController
         ]);
     }
 
+    #[IsGranted('gallery_image_delete')]
+    #[Route('/admin/gallery-image-category/{id}/truncate', name: 'admin_gallery_image_category_truncate')]
+    public function truncate(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
+    {
+        $galleryImageCategory = $this->findGalleryImageCategoryOrThrow404($id);
+        $data = new GalleryImageCategoryTruncateData();
+
+        // load all gallery image categories so that traversing offsprings does not trigger additional queries
+        $this->galleryImageCategoryRepository->findAll();
+
+        $form = $this->createForm(GalleryImageCategoryTruncateType::class, $data);
+        $form->add('submit', SubmitType::class, [
+            'label' => 'form.admin.gallery_image_category_truncate.button',
+            'attr'  => ['class' => 'btn-danger'],
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid())
+        {
+            $event = new GalleryImageCategoryTruncateEvent($data, $galleryImageCategory);
+            $eventDispatcher->dispatch($event, $event::NAME);
+            $this->addTransFlash('success', 'crud.action_performed.gallery_image_category.truncate');
+
+            return $this->redirectToRoute('admin_gallery_image_category_list');
+        }
+
+        return $this->render('admin/gallery_image_category/truncate.html.twig', [
+            'gallery_image_category' => $galleryImageCategory,
+            'form_truncate'          => $form->createView(),
+            'breadcrumbs'            => $this->createBreadcrumbs([
+                'gallery_image_category' => $galleryImageCategory,
+            ]),
+        ]);
+    }
+
     #[IsGranted('gallery_image_category_delete')]
     #[Route('/admin/gallery-image-category/{id}/delete', name: 'admin_gallery_image_category_delete')]
     public function delete(EventDispatcherInterface $eventDispatcher, Request $request, UuidV4 $id): Response
@@ -143,8 +185,8 @@ class GalleryImageCategoryController extends AbstractController
 
         return $this->render('admin/gallery_image_category/delete.html.twig', [
             'gallery_image_category' => $galleryImageCategory,
-            'form_delete' => $form->createView(),
-            'breadcrumbs' => $this->createBreadcrumbs([
+            'form_delete'            => $form->createView(),
+            'breadcrumbs'            => $this->createBreadcrumbs([
                 'gallery_image_category' => $galleryImageCategory,
             ]),
         ]);

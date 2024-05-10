@@ -586,6 +586,7 @@ crud:
             download: 'Stáhnout'
             upload: 'Nahrát'
             duplicate: 'Duplikovat'
+            truncate: 'Vyprázdnit'
 
         application_payment:
             refund: 'Vrátit'
@@ -635,6 +636,7 @@ crud:
             create: 'Kategorie obrázků vytvořena!'
             update: 'Kategorie obrázků uložena!'
             delete: 'Kategorie obrázků odstraněna!'
+            truncate: 'Kategorie obrázků vyprázdněna!'
 
         gallery_image:
             create: 'Obrázek vytvořen!'
@@ -2230,6 +2232,10 @@ form:
             parent: 'Nadřazená kategorie'
             button: 'Uložit'
 
+        gallery_image_category_truncate:
+            offsprings_too: 'Vyprázdnit také podřazené kategorie'
+            button: 'Vyprázdnit'
+
         gallery_image_category_delete:
             button: 'Odstranit'
 
@@ -2552,6 +2558,7 @@ route:
     admin_gallery_image_category_read: 'Zobrazení kategorie obrázků'
     admin_gallery_image_category_update: 'Editace kategorie obrázků'
     admin_gallery_image_category_delete: 'Odstranění kategorie obrázků'
+    admin_gallery_image_category_truncate: 'Vyprázdnění kategorie obrázků'
     
     admin_page_list: 'Stránky'
     admin_page_create: 'Nová stránka'

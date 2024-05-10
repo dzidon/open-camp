@@ -44,6 +44,16 @@ interface GalleryImageRepositoryInterface
     public function findForCarousel(): array;
 
     /**
+     * Finds images by the given category.
+     *
+     * @param GalleryImageCategory $galleryImageCategory
+     * @param bool $offspringCategories
+     * @return GalleryImage[]
+     */
+    public function findByGalleryImageCategory(GalleryImageCategory $galleryImageCategory,
+                                               bool                 $offspringCategories = false): array;
+
+    /**
      * Returns admin gallery search paginator.
      *
      * @param GalleryImageSearchData $galleryImageSearchData

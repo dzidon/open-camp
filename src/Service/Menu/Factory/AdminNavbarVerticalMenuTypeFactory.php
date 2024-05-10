@@ -336,7 +336,7 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
                 $active =
                     $route === 'admin_gallery_image_category_list'   || $route === 'admin_gallery_image_category_create' ||
                     $route === 'admin_gallery_image_category_read'   || $route === 'admin_gallery_image_category_update' ||
-                    $route === 'admin_gallery_image_category_delete'
+                    $route === 'admin_gallery_image_category_delete' || $route === 'admin_gallery_image_category_truncate'
                 ;
 
                 $text = $this->translator->trans('route.admin_gallery_image_category_list');

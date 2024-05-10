@@ -76,6 +76,45 @@ class GalleryImageRepository extends AbstractRepository implements GalleryImageR
     /**
      * @inheritDoc
      */
+    public function findByGalleryImageCategory(GalleryImageCategory $galleryImageCategory,
+                                               bool                 $offspringCategories = false): array
+    {
+        $queryBuilder = $this->createQueryBuilder('galleryImage')
+            ->select('galleryImage, galleryImageCategory')
+            ->leftJoin('galleryImage.galleryImageCategory', 'galleryImageCategory')
+        ;
+
+        if ($offspringCategories)
+        {
+            $galleryImageCategories = $this->treeSearch->getDescendentsOfNode($galleryImageCategory);
+            $galleryImageCategories[] = $galleryImageCategory;
+
+            $galleryImageCategoryIds = array_map(function (GalleryImageCategory $galleryImageCategory) {
+                return $galleryImageCategory->getId()->toBinary();
+            }, $galleryImageCategories);
+
+            $queryBuilder
+                ->andWhere('galleryImage.galleryImageCategory IN (:galleryImageCategoryIds)')
+                ->setParameter('galleryImageCategoryIds', $galleryImageCategoryIds)
+            ;
+        }
+        else
+        {
+            $queryBuilder
+                ->andWhere('galleryImage.galleryImageCategory = :galleryImageCategoryId')
+                ->setParameter('galleryImageCategoryId', $galleryImageCategory->getId(), UuidType::NAME)
+            ;
+        }
+
+        return $queryBuilder
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getAdminPaginator(GalleryImageSearchData $galleryImageSearchData,
                                       int                    $currentPage,
                                       int                    $pageSize): DqlPaginator
