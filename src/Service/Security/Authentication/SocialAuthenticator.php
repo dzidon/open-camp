@@ -11,6 +11,7 @@ use App\Model\Repository\UserRepositoryInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -39,14 +40,17 @@ class SocialAuthenticator extends OAuth2Authenticator
     private EventDispatcherInterface $eventDispatcher;
     private Security $security;
 
-    public function __construct(ClientRegistry           $clientRegistry,
-                                UserRepositoryInterface  $userRepository,
-                                TranslatorInterface      $translator,
-                                UrlGeneratorInterface    $urlGenerator,
-                                EventDispatcherInterface $eventDispatcher,
-                                Security                 $security,
-                                array                    $services)
-    {
+    public function __construct(
+        ClientRegistry           $clientRegistry,
+        UserRepositoryInterface  $userRepository,
+        TranslatorInterface      $translator,
+        UrlGeneratorInterface    $urlGenerator,
+        EventDispatcherInterface $eventDispatcher,
+        Security                 $security,
+
+        #[Autowire('%app.social_login_services%')]
+        array $services
+    ) {
         $this->clientRegistry = $clientRegistry;
         $this->userRepository = $userRepository;
         $this->translator = $translator;

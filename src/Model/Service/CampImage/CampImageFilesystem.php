@@ -4,6 +4,7 @@ namespace App\Model\Service\CampImage;
 
 use App\Model\Entity\CampImage;
 use League\Flysystem\FilesystemOperator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @inheritDoc
@@ -18,11 +19,18 @@ class CampImageFilesystem implements CampImageFilesystemInterface
 
     private string $noImagePath;
 
-    public function __construct(FilesystemOperator $campImageStorage,
-                                string             $campImagePublicPathPrefix,
-                                string             $campImageDirectory,
-                                string             $noImagePath)
-    {
+    public function __construct(
+        FilesystemOperator $campImageStorage,
+
+        #[Autowire('%app.camp_image_public_path_prefix%')]
+        string $campImagePublicPathPrefix,
+
+        #[Autowire('%app.camp_image_directory%')]
+        string $campImageDirectory,
+
+        #[Autowire('%app.no_camp_image_path%')]
+        string $noImagePath
+    ) {
         $this->campImageStorage = $campImageStorage;
 
         $this->campImagePublicPathPrefix = $campImagePublicPathPrefix;

@@ -6,6 +6,7 @@ use App\Library\Data\Common\ContactData;
 use App\Model\Entity\Contact;
 use libphonenumber\PhoneNumberUtil;
 use Misd\PhoneNumberBundle\Form\Type\PhoneNumberType;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -26,8 +27,10 @@ class ContactType extends AbstractType
 
     private string $phoneNumberFormat;
 
-    public function __construct(string $phoneNumberFormat)
-    {
+    public function __construct(
+        #[Autowire('%app.phone_number_format%')]
+        string $phoneNumberFormat
+    ) {
         $this->phoneNumberUtil = PhoneNumberUtil::getInstance();
         $this->phoneNumberFormat = $phoneNumberFormat;
     }

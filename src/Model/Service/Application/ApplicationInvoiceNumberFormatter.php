@@ -3,6 +3,7 @@
 namespace App\Model\Service\Application;
 
 use App\Model\Entity\Application;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @inheritDoc
@@ -11,8 +12,10 @@ class ApplicationInvoiceNumberFormatter implements ApplicationInvoiceNumberForma
 {
     private int $invoiceNumberLength;
 
-    public function __construct(int $invoiceNumberLength)
-    {
+    public function __construct(
+        #[Autowire('%app.application_invoice_number_length%')]
+        int $invoiceNumberLength
+    ) {
         $this->invoiceNumberLength = $invoiceNumberLength;
     }
 

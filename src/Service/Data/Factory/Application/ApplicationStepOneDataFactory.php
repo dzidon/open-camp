@@ -10,6 +10,7 @@ use App\Library\Data\User\ApplicationStepOneData;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @inheritDoc
@@ -26,12 +27,21 @@ class ApplicationStepOneDataFactory implements ApplicationStepOneDataFactoryInte
 
     private float $tax;
 
-    public function __construct(DataTransferRegistryInterface $dataTransferRegistry,
-                                bool                          $isEuBusinessDataEnabled,
-                                bool                          $isNationalIdentifierEnabled,
-                                string                        $currency,
-                                float                         $tax)
-    {
+    public function __construct(
+        DataTransferRegistryInterface $dataTransferRegistry,
+
+        #[Autowire('%app.eu_business_data%')]
+        bool $isEuBusinessDataEnabled,
+
+        #[Autowire('%app.national_identifier%')]
+        bool $isNationalIdentifierEnabled,
+
+        #[Autowire('%app.currency%')]
+        string $currency,
+
+        #[Autowire('%app.tax%')]
+        float $tax
+    ) {
         $this->dataTransferRegistry = $dataTransferRegistry;
         $this->isEuBusinessDataEnabled = $isEuBusinessDataEnabled;
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;

@@ -3,6 +3,7 @@
 namespace App\Service\Form\Type\Admin;
 
 use App\Library\Data\Admin\PurchasableItemData;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -22,8 +23,10 @@ class PurchasableItemType extends AbstractType
 {
     private string $tax;
 
-    public function __construct(string $tax)
-    {
+    public function __construct(
+        #[Autowire('%app.tax%')]
+        string $tax
+    ) {
         $this->tax = $tax;
     }
 

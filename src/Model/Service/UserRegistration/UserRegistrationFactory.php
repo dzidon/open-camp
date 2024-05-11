@@ -9,6 +9,7 @@ use App\Model\Repository\UserRepositoryInterface;
 use App\Service\Security\Hasher\UserRegistrationVerifierHasherInterface;
 use App\Service\Security\Token\TokenSplitterInterface;
 use DateTimeImmutable;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @inheritDoc
@@ -24,13 +25,18 @@ class UserRegistrationFactory implements UserRegistrationFactoryInterface
     private UserRegistrationVerifierHasherInterface $verifierHasher;
     private UserRepositoryInterface $userRepository;
 
-    public function __construct(TokenSplitterInterface                  $tokenSplitter,
-                                UserRegistrationRepositoryInterface     $userRegistrationRepository,
-                                UserRegistrationVerifierHasherInterface $verifierHasher,
-                                UserRepositoryInterface                 $userRepository,
-                                int                                     $maxActiveRegistrationsPerEmail,
-                                string                                  $registrationLifespan)
-    {
+    public function __construct(
+        TokenSplitterInterface                  $tokenSplitter,
+        UserRegistrationRepositoryInterface     $userRegistrationRepository,
+        UserRegistrationVerifierHasherInterface $verifierHasher,
+        UserRepositoryInterface                 $userRepository,
+
+        #[Autowire('%app.max_active_registrations_per_email%')]
+        int $maxActiveRegistrationsPerEmail,
+
+        #[Autowire('%app.registration_lifespan%')]
+        string $registrationLifespan
+    ) {
         $this->tokenSplitter = $tokenSplitter;
         $this->userRegistrationRepository = $userRegistrationRepository;
         $this->verifierHasher = $verifierHasher;

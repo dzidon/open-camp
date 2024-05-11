@@ -14,6 +14,7 @@ use App\Model\Entity\PurchasableItem;
 use App\Model\Entity\TripLocationPath;
 use App\Service\Form\Type\Common\CollectionAddItemButtonType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -31,8 +32,10 @@ class CampDateType extends AbstractType
 {
     private string $tax;
 
-    public function __construct(string $tax)
-    {
+    public function __construct(
+        #[Autowire('%app.tax%')]
+        string $tax
+    ) {
         $this->tax = $tax;
     }
 

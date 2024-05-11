@@ -10,6 +10,7 @@ use App\Model\Entity\Application;
 use App\Model\Entity\ApplicationCamper;
 use App\Model\Entity\CampDate;
 use App\Model\Repository\TripLocationRepositoryInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @inheritDoc
@@ -22,10 +23,15 @@ class ApplicationCamperDataFactory implements ApplicationCamperDataFactoryInterf
 
     private string $currency;
 
-    public function __construct(TripLocationRepositoryInterface $tripLocationRepository,
-                                bool                            $isNationalIdentifierEnabled,
-                                string                          $currency)
-    {
+    public function __construct(
+        TripLocationRepositoryInterface $tripLocationRepository,
+
+        #[Autowire('%app.national_identifier%')]
+        bool $isNationalIdentifierEnabled,
+
+        #[Autowire('%app.currency%')]
+        string $currency
+    ) {
         $this->tripLocationRepository = $tripLocationRepository;
         $this->isNationalIdentifierEnabled = $isNationalIdentifierEnabled;
         $this->currency = $currency;

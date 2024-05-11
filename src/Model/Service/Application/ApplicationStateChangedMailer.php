@@ -4,6 +4,7 @@ namespace App\Model\Service\Application;
 
 use App\Model\Entity\Application;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -22,15 +23,17 @@ class ApplicationStateChangedMailer implements ApplicationStateChangedMailerInte
 
     private string $emailFrom;
 
-    public function __construct(MailerInterface       $mailer,
-                                UrlGeneratorInterface $urlGenerator,
-                                TranslatorInterface   $translator,
-                                string                $emailFrom)
-    {
+    public function __construct(
+        MailerInterface       $mailer,
+        UrlGeneratorInterface $urlGenerator,
+        TranslatorInterface   $translator,
+
+        #[Autowire('%app.email_no_reply%')]
+        string $emailFrom
+    ) {
         $this->mailer = $mailer;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
-
         $this->emailFrom = $emailFrom;
     }
 

@@ -4,6 +4,7 @@ namespace App\Model\Service\GalleryImage;
 
 use App\Model\Entity\GalleryImage;
 use League\Flysystem\FilesystemOperator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @inheritDoc
@@ -18,13 +19,19 @@ class GalleryImageFilesystem implements GalleryImageFilesystemInterface
 
     private string $noImagePath;
 
-    public function __construct(FilesystemOperator $galleryImageStorage,
-                                string             $galleryImagePublicPathPrefix,
-                                string             $galleryImageDirectory,
-                                string             $noImagePath)
-    {
-        $this->galleryImageStorage = $galleryImageStorage;
+    public function __construct(
+        FilesystemOperator $galleryImageStorage,
 
+        #[Autowire('%app.gallery_image_public_path_prefix%')]
+        string $galleryImagePublicPathPrefix,
+
+        #[Autowire('%app.gallery_image_directory%')]
+        string $galleryImageDirectory,
+
+        #[Autowire('%app.no_gallery_image_path%')]
+        string $noImagePath
+    ) {
+        $this->galleryImageStorage = $galleryImageStorage;
         $this->galleryImagePublicPathPrefix = $galleryImagePublicPathPrefix;
         $this->galleryImageDirectory = $galleryImageDirectory;
         $this->noImagePath = $noImagePath;

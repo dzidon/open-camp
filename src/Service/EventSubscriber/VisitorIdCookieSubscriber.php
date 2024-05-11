@@ -3,6 +3,7 @@
 namespace App\Service\EventSubscriber;
 
 use App\Service\Visitor\VisitorIdProviderInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -17,8 +18,12 @@ class VisitorIdCookieSubscriber
 
     private string $visitorIdCookieName;
 
-    public function __construct(VisitorIdProviderInterface $visitorIdProvider, string $visitorIdCookieName)
-    {
+    public function __construct(
+        VisitorIdProviderInterface $visitorIdProvider,
+
+        #[Autowire('%app.cookie_name_visitor_id%')]
+        string $visitorIdCookieName
+    ) {
         $this->visitorIdProvider = $visitorIdProvider;
         $this->visitorIdCookieName = $visitorIdCookieName;
     }

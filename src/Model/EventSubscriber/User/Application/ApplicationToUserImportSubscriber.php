@@ -14,6 +14,7 @@ use App\Model\Event\User\Contact\ContactUpdateEvent;
 use App\Model\Event\User\User\UserBillingUpdateEvent;
 use App\Model\Repository\UserRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -38,16 +39,27 @@ class ApplicationToUserImportSubscriber
 
     private string $lastCompletedApplicationIdSessionKey;
 
-    public function __construct(UserRepositoryInterface            $userRepository,
-                                DataTransferRegistryInterface      $dataTransferRegistry,
-                                EventDispatcherInterface           $eventDispatcher,
-                                RequestStack                       $requestStack,
-                                bool                               $isEuBusinessDataEnabled,
-                                bool                               $isEmailMandatory,
-                                bool                               $isPhoneNumberMandatory,
-                                bool                               $isNationalIdentifierEnabled,
-                                string                             $lastCompletedApplicationIdSessionKey)
-    {
+    public function __construct(
+        UserRepositoryInterface       $userRepository,
+        DataTransferRegistryInterface $dataTransferRegistry,
+        EventDispatcherInterface      $eventDispatcher,
+        RequestStack                  $requestStack,
+
+        #[Autowire('%app.eu_business_data%')]
+        bool $isEuBusinessDataEnabled,
+
+        #[Autowire('%app.contact_email_mandatory%')]
+        bool $isEmailMandatory,
+
+        #[Autowire('%app.contact_phone_number_mandatory%')]
+        bool $isPhoneNumberMandatory,
+
+        #[Autowire('%app.national_identifier%')]
+        bool $isNationalIdentifierEnabled,
+
+        #[Autowire('%app.last_completed_application_id_session_key%')]
+        string $lastCompletedApplicationIdSessionKey
+    ) {
         $this->userRepository = $userRepository;
         $this->dataTransferRegistry = $dataTransferRegistry;
         $this->eventDispatcher = $eventDispatcher;

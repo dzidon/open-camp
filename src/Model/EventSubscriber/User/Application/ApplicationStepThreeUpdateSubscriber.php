@@ -10,6 +10,7 @@ use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Service\Application\ApplicationCompletedMailerInterface;
 use App\Model\Service\Application\ApplicationInvoiceFilesystemInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -30,14 +31,17 @@ class ApplicationStepThreeUpdateSubscriber
 
     private string $lastCompletedApplicationIdSessionKey;
 
-    public function __construct(ApplicationRepositoryInterface        $applicationRepository,
-                                ApplicationInvoiceFilesystemInterface $applicationInvoiceFilesystem,
-                                ApplicationCompletedMailerInterface   $applicationCompletedMailer,
-                                EventDispatcherInterface              $eventDispatcher,
-                                RequestStack                          $requestStack,
-                                Security                              $security,
-                                string                                $lastCompletedApplicationIdSessionKey)
-    {
+    public function __construct(
+        ApplicationRepositoryInterface        $applicationRepository,
+        ApplicationInvoiceFilesystemInterface $applicationInvoiceFilesystem,
+        ApplicationCompletedMailerInterface   $applicationCompletedMailer,
+        EventDispatcherInterface              $eventDispatcher,
+        RequestStack                          $requestStack,
+        Security                              $security,
+
+        #[Autowire('%app.last_completed_application_id_session_key%')]
+        string $lastCompletedApplicationIdSessionKey
+    ) {
         $this->applicationRepository = $applicationRepository;
         $this->applicationInvoiceFilesystem = $applicationInvoiceFilesystem;
         $this->applicationCompletedMailer = $applicationCompletedMailer;

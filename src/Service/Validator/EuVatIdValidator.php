@@ -3,6 +3,7 @@
 namespace App\Service\Validator;
 
 use App\Library\Constraint\EuVatId;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -14,8 +15,10 @@ class EuVatIdValidator extends ConstraintValidator
 {
     private ?string $euVatIdRegex;
 
-    public function __construct(?string $euVatIdRegex)
-    {
+    public function __construct(
+        #[Autowire('%app.eu_vat_id_regex%')]
+        ?string $euVatIdRegex
+    ) {
         $this->euVatIdRegex = $euVatIdRegex;
     }
 

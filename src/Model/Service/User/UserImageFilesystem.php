@@ -4,6 +4,7 @@ namespace App\Model\Service\User;
 
 use App\Model\Entity\User;
 use League\Flysystem\FilesystemOperator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -19,13 +20,19 @@ class UserImageFilesystem implements UserImageFilesystemInterface
 
     private string $noImagePath;
 
-    public function __construct(FilesystemOperator $userImageStorage,
-                                string             $userImagePublicPathPrefix,
-                                string             $userImageDirectory,
-                                string             $noImagePath)
-    {
-        $this->userImageStorage = $userImageStorage;
+    public function __construct(
+        FilesystemOperator $userImageStorage,
 
+        #[Autowire('%app.user_image_public_path_prefix%')]
+        string $userImagePublicPathPrefix,
+
+        #[Autowire('%app.user_image_directory%')]
+        string $userImageDirectory,
+
+        #[Autowire('%app.no_user_image_path%')]
+        string $noImagePath
+    ) {
+        $this->userImageStorage = $userImageStorage;
         $this->userImagePublicPathPrefix = $userImagePublicPathPrefix;
         $this->userImageDirectory = $userImageDirectory;
         $this->noImagePath = $noImagePath;

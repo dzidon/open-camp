@@ -3,10 +3,10 @@
 namespace App\Service\Validator;
 
 use App\Library\Constraint\NationalIdentifier;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Validates national identifiers.
@@ -15,8 +15,10 @@ class NationalIdentifierValidator extends ConstraintValidator
 {
     private ?string $nationalIdentifierRegex;
 
-    public function __construct(?string $nationalIdentifierRegex)
-    {
+    public function __construct(
+        #[Autowire('%app.national_identifier_regex%')]
+        ?string $nationalIdentifierRegex
+    ) {
         $this->nationalIdentifierRegex = $nationalIdentifierRegex;
     }
 

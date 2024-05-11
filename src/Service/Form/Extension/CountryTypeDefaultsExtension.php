@@ -2,6 +2,7 @@
 
 namespace App\Service\Form\Extension;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,8 +14,10 @@ class CountryTypeDefaultsExtension extends AbstractTypeExtension
 {
     private array $preferredCountries;
 
-    public function __construct(array $preferredCountries)
-    {
+    public function __construct(
+        #[Autowire('%app.preferred_country_choices%')]
+        array $preferredCountries
+    ) {
         $this->preferredCountries = $preferredCountries;
     }
 

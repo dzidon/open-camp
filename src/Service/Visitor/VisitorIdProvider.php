@@ -2,6 +2,7 @@
 
 namespace App\Service\Visitor;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
@@ -17,8 +18,12 @@ class VisitorIdProvider implements VisitorIdProviderInterface
 
     private string $visitorIdCookieName;
 
-    public function __construct(RequestStack $requestStack, string $visitorIdCookieName)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+
+        #[Autowire('%app.cookie_name_visitor_id%')]
+        string $visitorIdCookieName
+    ) {
         $this->requestStack = $requestStack;
         $this->newVisitorId = new UuidV4();
         $this->visitorIdCookieName = $visitorIdCookieName;

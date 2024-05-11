@@ -4,6 +4,7 @@ namespace App\Service\Twig;
 
 use App\Model\Entity\Application;
 use App\Model\Service\Application\ApplicationToUserImporterInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Uid\UuidV4;
 use Twig\Extension\AbstractExtension;
@@ -20,10 +21,13 @@ class ApplicationToUserImportExtension extends AbstractExtension
 
     private string $lastCompletedApplicationIdSessionKey;
 
-    public function __construct(ApplicationToUserImporterInterface $applicationToUserImporter,
-                                RequestStack                       $requestStack,
-                                string                             $lastCompletedApplicationIdSessionKey)
-    {
+    public function __construct(
+        ApplicationToUserImporterInterface $applicationToUserImporter,
+        RequestStack                       $requestStack,
+
+        #[Autowire('%app.last_completed_application_id_session_key%')]
+        string $lastCompletedApplicationIdSessionKey
+    ) {
         $this->applicationToUserImporter = $applicationToUserImporter;
         $this->requestStack = $requestStack;
         $this->lastCompletedApplicationIdSessionKey = $lastCompletedApplicationIdSessionKey;

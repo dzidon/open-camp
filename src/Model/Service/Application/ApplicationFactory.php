@@ -7,6 +7,7 @@ use App\Model\Entity\Application;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
 use App\Model\Repository\ApplicationRepositoryInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @inheritDoc
@@ -25,11 +26,18 @@ class ApplicationFactory implements ApplicationFactoryInterface
 
     private int $highestInvoiceNumber = 0;
 
-    public function __construct(ApplicationRepositoryInterface $applicationRepository,
-                                bool                           $isPurchasableItemsIndividualMode,
-                                string                         $simpleIdCharacters,
-                                int                            $simpleIdLength)
-    {
+    public function __construct(
+        ApplicationRepositoryInterface $applicationRepository,
+
+        #[Autowire('%app.application_purchasable_items_individual%')]
+        bool $isPurchasableItemsIndividualMode,
+
+        #[Autowire('%app.application_simple_id_characters%')]
+        string $simpleIdCharacters,
+
+        #[Autowire('%app.application_simple_id_length%')]
+        int $simpleIdLength
+    ) {
         $this->applicationRepository = $applicationRepository;
         $this->isPurchasableItemsIndividualMode = $isPurchasableItemsIndividualMode;
         $this->simpleIdCharacters = $simpleIdCharacters;

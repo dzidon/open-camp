@@ -18,6 +18,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Uid\UuidV4;
@@ -36,11 +37,16 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
 
     private string $lastCompletedApplicationIdSessionKey;
 
-    public function __construct(ManagerRegistry $registry,
-                                RequestStack    $requestStack,
-                                string          $currency,
-                                string          $lastCompletedApplicationIdSessionKey)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        RequestStack    $requestStack,
+
+        #[Autowire('%app.currency%')]
+        string $currency,
+
+        #[Autowire('%app.last_completed_application_id_session_key%')]
+        string $lastCompletedApplicationIdSessionKey
+    ) {
         parent::__construct($registry, Application::class);
 
         $this->requestStack = $requestStack;

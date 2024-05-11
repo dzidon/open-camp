@@ -2,6 +2,7 @@
 
 namespace App\Service\Form\Extension;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,8 +14,10 @@ class MoneyTypeDefaultsExtension extends AbstractTypeExtension
 {
     private string $currency;
 
-    public function __construct(string $currency)
-    {
+    public function __construct(
+        #[Autowire('%app.currency%')]
+        string $currency
+    ) {
         $this->currency = $currency;
     }
 

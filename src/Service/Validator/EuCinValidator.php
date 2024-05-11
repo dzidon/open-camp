@@ -3,6 +3,7 @@
 namespace App\Service\Validator;
 
 use App\Library\Constraint\EuCin;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -14,8 +15,10 @@ class EuCinValidator extends ConstraintValidator
 {
     private ?string $euCinRegex;
 
-    public function __construct(?string $euCinRegex)
-    {
+    public function __construct(
+        #[Autowire('%app.eu_cin_regex%')]
+        ?string $euCinRegex
+    ) {
         $this->euCinRegex = $euCinRegex;
     }
 

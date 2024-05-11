@@ -9,6 +9,7 @@ use App\Model\Repository\UserRepositoryInterface;
 use App\Service\Security\Hasher\UserPasswordChangeVerifierHasherInterface;
 use App\Service\Security\Token\TokenSplitterInterface;
 use DateTimeImmutable;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @inheritDoc
@@ -24,13 +25,18 @@ class UserPasswordChangeFactory implements UserPasswordChangeFactoryInterface
     private UserPasswordChangeVerifierHasherInterface $verifierHasher;
     private UserRepositoryInterface $userRepository;
 
-    public function __construct(TokenSplitterInterface                    $tokenSplitter,
-                                UserPasswordChangeRepositoryInterface     $userPasswordChangeRepository,
-                                UserPasswordChangeVerifierHasherInterface $verifierHasher,
-                                UserRepositoryInterface                   $userRepository,
-                                int                                       $maxActivePasswordChangesPerUser,
-                                string                                    $passwordChangeLifespan)
-    {
+    public function __construct(
+        TokenSplitterInterface                    $tokenSplitter,
+        UserPasswordChangeRepositoryInterface     $userPasswordChangeRepository,
+        UserPasswordChangeVerifierHasherInterface $verifierHasher,
+        UserRepositoryInterface                   $userRepository,
+
+        #[Autowire('%app.max_active_password_changes_per_user%')]
+        int $maxActivePasswordChangesPerUser,
+
+        #[Autowire('%app.password_change_lifespan%')]
+        string $passwordChangeLifespan
+    ) {
         $this->tokenSplitter = $tokenSplitter;
         $this->userPasswordChangeRepository = $userPasswordChangeRepository;
         $this->verifierHasher = $verifierHasher;

@@ -2,6 +2,7 @@
 
 namespace App\Service\Routing;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -18,8 +19,13 @@ class RouteNamer implements RouteNamerInterface
 
     private TranslatorInterface $translator;
 
-    public function __construct(RequestStack $requestStack, TranslatorInterface $translator, string $companyName)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+        TranslatorInterface $translator,
+
+        #[Autowire('%app.company_name%')]
+        string $companyName
+    ) {
         $this->requestStack = $requestStack;
         $this->translator = $translator;
         $this->companyName = $companyName;

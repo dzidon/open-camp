@@ -4,6 +4,7 @@ namespace App\Service\Form\Type\User;
 
 use App\Library\Data\User\ApplicationImportToUserCamperData;
 use App\Model\Entity\Camper;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -19,8 +20,12 @@ class ApplicationImportToUserCamperType extends AbstractType
 
     private string $dateFormat;
 
-    public function __construct(TranslatorInterface $translator, string $dateFormat)
-    {
+    public function __construct(
+        TranslatorInterface $translator,
+
+        #[Autowire('%app.date_format%')]
+        string $dateFormat
+    ) {
         $this->translator = $translator;
         $this->dateFormat = $dateFormat;
     }

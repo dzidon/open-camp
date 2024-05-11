@@ -4,6 +4,7 @@ namespace App\Model\Repository;
 
 use App\Model\Entity\PaymentMethod;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
 /**
  * @method PaymentMethod|null find($id, $lockMode = null, $lockVersion = null)
@@ -14,8 +15,12 @@ class PaymentMethodRepository extends AbstractRepository implements PaymentMetho
 {
     private array $enabledPaymentMethods;
 
-    public function __construct(ManagerRegistry $registry, array $enabledPaymentMethods)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+
+        #[Autowire('%app.enabled_payment_methods%')]
+        array $enabledPaymentMethods
+    ) {
         parent::__construct($registry, PaymentMethod::class);
 
         $this->enabledPaymentMethods = $enabledPaymentMethods;

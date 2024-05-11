@@ -6,6 +6,7 @@ use App\Model\Entity\Application;
 use League\Flysystem\FilesystemOperator;
 use Mpdf\Mpdf;
 use Mpdf\Output\Destination;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
@@ -24,12 +25,15 @@ class ApplicationInvoiceFilesystem implements ApplicationInvoiceFilesystemInterf
 
     private string $publicFilePathPrefix;
 
-    public function __construct(TranslatorInterface                        $translator,
-                                FilesystemOperator                         $applicationInvoiceStorage,
-                                ApplicationInvoiceNumberFormatterInterface $invoiceNumberFormatter,
-                                Environment                                $twig,
-                                string                                     $publicFilePathPrefix)
-    {
+    public function __construct(
+        TranslatorInterface                        $translator,
+        FilesystemOperator                         $applicationInvoiceStorage,
+        ApplicationInvoiceNumberFormatterInterface $invoiceNumberFormatter,
+        Environment                                $twig,
+
+        #[Autowire('%app.public_file_path_prefix%')]
+        string $publicFilePathPrefix
+    ) {
         $this->translator = $translator;
         $this->applicationInvoiceStorage = $applicationInvoiceStorage;
         $this->invoiceNumberFormatter = $invoiceNumberFormatter;

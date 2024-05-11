@@ -5,6 +5,7 @@ namespace App\Model\Service\Application;
 use App\Model\Entity\Application;
 use App\Model\Entity\CampDate;
 use DateTimeImmutable;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -22,10 +23,15 @@ class ApplicationDraftCookieStorage implements ApplicationDraftHttpStorageInterf
 
     private RequestStack $requestStack;
 
-    public function __construct(RequestStack $requestStack,
-                                string       $cookieKeyPrefix,
-                                string       $cookieLifespan)
-    {
+    public function __construct(
+        RequestStack $requestStack,
+
+        #[Autowire('%app.cookie_prefix_application_draft%')]
+        string $cookieKeyPrefix,
+
+        #[Autowire('%app.cookie_lifespan_application_draft%')]
+        string $cookieLifespan
+    ) {
         $this->requestStack = $requestStack;
         $this->cookieKeyPrefix = $cookieKeyPrefix;
         $this->cookieLifespan = $cookieLifespan;

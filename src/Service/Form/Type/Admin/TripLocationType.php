@@ -4,6 +4,7 @@ namespace App\Service\Form\Type\Admin;
 
 use App\Library\Data\Admin\TripLocationData;
 use App\Service\Form\Type\Common\CollectionItemType;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -18,8 +19,10 @@ class TripLocationType extends AbstractType
 {
     private string $tax;
 
-    public function __construct(string $tax)
-    {
+    public function __construct(
+        #[Autowire('%app.tax%')]
+        string $tax
+    ) {
         $this->tax = $tax;
     }
 

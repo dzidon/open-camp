@@ -4,6 +4,7 @@ namespace App\Model\Service\PurchasableItem;
 
 use App\Model\Entity\PurchasableItem;
 use League\Flysystem\FilesystemOperator;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\File;
 
 /**
@@ -19,13 +20,19 @@ class PurchasableItemImageFilesystem implements PurchasableItemImageFilesystemIn
 
     private string $noImagePath;
 
-    public function __construct(FilesystemOperator $purchasableItemImageStorage,
-                                string             $purchasableItemImagePublicPathPrefix,
-                                string             $purchasableItemImageDirectory,
-                                string             $noImagePath)
-    {
-        $this->purchasableItemImageStorage = $purchasableItemImageStorage;
+    public function __construct(
+        FilesystemOperator $purchasableItemImageStorage,
 
+        #[Autowire('%app.purchasable_item_image_public_path_prefix%')]
+        string $purchasableItemImagePublicPathPrefix,
+
+        #[Autowire('%app.purchasable_item_image_directory%')]
+        string $purchasableItemImageDirectory,
+
+        #[Autowire('%app.no_purchasable_item_image_path%')]
+        string $noImagePath
+    ) {
+        $this->purchasableItemImageStorage = $purchasableItemImageStorage;
         $this->purchasableItemImagePublicPathPrefix = $purchasableItemImagePublicPathPrefix;
         $this->purchasableItemImageDirectory = $purchasableItemImageDirectory;
         $this->noImagePath = $noImagePath;

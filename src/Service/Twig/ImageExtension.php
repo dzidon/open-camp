@@ -10,6 +10,7 @@ use App\Model\Service\CampImage\CampImageFilesystemInterface;
 use App\Model\Service\GalleryImage\GalleryImageFilesystemInterface;
 use App\Model\Service\PurchasableItem\PurchasableItemImageFilesystemInterface;
 use App\Model\Service\User\UserImageFilesystemInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 
@@ -30,13 +31,18 @@ class ImageExtension extends AbstractExtension
 
     private string $companyLogoPath;
 
-    public function __construct(CampImageFilesystemInterface            $campImageFilesystem,
-                                PurchasableItemImageFilesystemInterface $purchasableItemImageFilesystem,
-                                UserImageFilesystemInterface            $userImageFilesystem,
-                                GalleryImageFilesystemInterface         $galleryImageFilesystem,
-                                string                                  $publicFilePathPrefix,
-                                string                                  $companyLogoPath)
-    {
+    public function __construct(
+        CampImageFilesystemInterface            $campImageFilesystem,
+        PurchasableItemImageFilesystemInterface $purchasableItemImageFilesystem,
+        UserImageFilesystemInterface            $userImageFilesystem,
+        GalleryImageFilesystemInterface         $galleryImageFilesystem,
+
+        #[Autowire('%app.public_file_path_prefix%')]
+        string $publicFilePathPrefix,
+
+        #[Autowire('%app.company_logo_path%')]
+        string $companyLogoPath
+    ) {
         $this->campImageFilesystem = $campImageFilesystem;
         $this->purchasableItemImageFilesystem = $purchasableItemImageFilesystem;
         $this->userImageFilesystem = $userImageFilesystem;
