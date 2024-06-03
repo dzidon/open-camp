@@ -14,6 +14,21 @@ parameters:
     app.company_address_town: 'Praha 1'
     app.company_address_zip: '100 00'
     app.company_address_country: 'Česko'
+    app.company_social_media:
+        facebook:
+            name: 'Facebook'
+            icon: 'fab fa-facebook-f'
+            link: 'https://facebook.com'
+
+        instagram:
+            name: 'Instagram'
+            icon: 'fab fa-instagram'
+            link: 'https://instagram.com'
+
+        tiktok:
+            name: 'TikTok'
+            icon: 'fab fa-tiktok'
+            link: 'https://tiktok.com'
 
     # Directories & paths
     app.public_file_path_prefix: '/'

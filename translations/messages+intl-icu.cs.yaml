@@ -139,6 +139,12 @@ home_page:
     guides: 'Naši vedoucí'
     view_all_guides: 'Zobrazit všechny vedoucí'
 
+contact_us:
+    email: 'Napište nám e-mail'
+    phone_number: 'Zavolejte nám'
+    social_media: 'Sociální sítě'
+    leave_us_a_message: 'Pošlete nám zprávu'
+
 application:
     apply: 'Přihláška'
     buyer_details: 'Údaje o objednávajícím'
@@ -372,6 +378,12 @@ mail:
         body1: 'Pro nastevení nového hesla k Vašemu účtu klikněte '
         link_text: 'ZDE'
         body2: 'Odkaz vyprší {date}.'
+
+    user_contact_message:
+        subject: 'Zpráva od {sender}'
+        sender_name: 'Jméno odesílatele'
+        sender_email: 'E-mail odesílatele'
+        sender_phone_number: 'Telefonní číslo odesílatele'
 
     application_completed:
         invoice_attachment_name: 'Faktura'
@@ -740,6 +752,9 @@ crud:
             create: 'Konfigurace slev vytvořena!'
             update: 'Konfigurace slev uložena!'
             delete: 'Konfigurace slev odstraněna!'
+
+        contact_us:
+            sent: 'Zpráva odeslána! Brzy vás budeme kontaktovat.'
 
 entity:
     text_content:
@@ -2394,6 +2409,13 @@ form:
             remember_me: 'Zůstat přihlášen'
             button: 'Přihlásit se'
 
+        contact_us:
+            name: 'Celé jméno'
+            email: 'E-mail'
+            phone_number: 'Telefonní číslo'
+            message: 'Zpráva'
+            button: 'Odeslat'
+
         camp_search:
             sort_by:
                 label: 'Řazení'
@@ -2459,113 +2481,94 @@ form:
 route:
     admin_home: 'Přehled'
     admin_profile: 'Profil'
-
     admin_role_list: 'Role'
     admin_role_create: 'Nová role'
     admin_role_read: 'Zobrazení role'
     admin_role_update: 'Editace role'
     admin_role_delete: 'Odstranění role'
-
     admin_user_list: 'Uživatelé'
     admin_user_create: 'Nový uživatel'
     admin_user_read: 'Zobrazení uživatele'
     admin_user_update: 'Editace uživatele'
     admin_user_update_password: 'Nastavení hesla uživatele'
     admin_user_delete: 'Odstranění uživatele'
-
     admin_camp_list: 'Tábory'
     admin_camp_create: 'Nový tábor'
     admin_camp_read: 'Zobrazení tábora'
     admin_camp_update: 'Editace tábora'
     admin_camp_delete: 'Odstranění tábora'
-
     admin_camp_category_list: 'Kategorie tábora'
     admin_camp_category_create: 'Nová kategorie tábora'
     admin_camp_category_read: 'Zobrazení kategorie tábora'
     admin_camp_category_update: 'Editace kategorie tábora'
     admin_camp_category_delete: 'Odstranění kategorie tábora'
-
     admin_camp_image_list: 'Obrázky tábora'
     admin_camp_image_upload: 'Nahrání obrázků tábora'
     admin_camp_image_update: 'Editace obrázku tábora'
     admin_camp_image_delete: 'Odstranění obrázku tábora'
-
     admin_camp_date_list: 'Termíny tábora'
     admin_camp_date_create: 'Nový termín tábora'
     admin_camp_date_read: 'Zobrazení termínu tábora'
     admin_camp_date_update: 'Editace termínu tábora'
     admin_camp_date_delete: 'Odstranění termínu tábora'
-
     admin_trip_location_path_list: 'Trasy'
     admin_trip_location_path_create: 'Nová trasa'
     admin_trip_location_path_read: 'Zobrazení trasy'
     admin_trip_location_path_update: 'Editace trasy'
     admin_trip_location_path_delete: 'Odstranění trasy'
-
     admin_trip_location_create: 'Nová lokace'
     admin_trip_location_read: 'Zobrazení lokace'
     admin_trip_location_update: 'Editace lokace'
     admin_trip_location_delete: 'Odstranění lokace'
-
     admin_attachment_config_list: 'Konfigurace příloh'
     admin_attachment_config_create: 'Nová konfigurace přílohy'
     admin_attachment_config_read: 'Zobrazení konfigurace přílohy'
     admin_attachment_config_update: 'Editace konfigurace přílohy'
     admin_attachment_config_delete: 'Odstranění konfigurace přílohy'
-
     admin_purchasable_item_list: 'Volitelné platby'
     admin_purchasable_item_create: 'Nová volitelná platba'
     admin_purchasable_item_read: 'Zobrazení volitelné platby'
     admin_purchasable_item_update: 'Editace volitelné platby'
     admin_purchasable_item_delete: 'Odstranění volitelné platby'
-
     admin_purchasable_item_variant_create: 'Nová varianta'
     admin_purchasable_item_variant_read: 'Zobrazení varianty'
     admin_purchasable_item_variant_update: 'Editace varianty'
     admin_purchasable_item_variant_delete: 'Odstranění varianty'
-
     admin_purchasable_item_variant_value_create: 'Nová hodnota'
     admin_purchasable_item_variant_value_read: 'Zobrazení hodnoty'
     admin_purchasable_item_variant_value_update: 'Editace hodnoty'
     admin_purchasable_item_variant_value_delete: 'Odstranění hodnoty'
-
     admin_form_field_list: 'Formulářová pole'
     admin_form_field_create: 'Nové formulářové pole'
     admin_form_field_read: 'Zobrazení formulářového pole'
     admin_form_field_update: 'Editace formulářového pole'
     admin_form_field_delete: 'Odstranění formulářového pole'
-    
     admin_discount_config_list: 'Konfigurace slev'
     admin_discount_config_create: 'Nová konfigurace slev'
     admin_discount_config_read: 'Zobrazení konfigurace slev'
     admin_discount_config_update: 'Editace konfigurace slev'
     admin_discount_config_delete: 'Odstranění konfigurace slev'
-
     admin_blog_post_list: 'Blog'
     admin_blog_post_create: 'Nový příspěvek'
     admin_blog_post_read: 'Zobrazení příspěvku'
     admin_blog_post_update: 'Editace příspěvku'
     admin_blog_post_delete: 'Odstranění příspěvku'
-
     admin_gallery_image_list: 'Galerie'
     admin_gallery_image_create: 'Nahrát obrázky'
     admin_gallery_image_read: 'Zobrazení obrázku'
     admin_gallery_image_update: 'Editace obrázku'
     admin_gallery_image_delete: 'Odstranění obrázku'
-
     admin_gallery_image_category_list: 'Kategorie obrázků'
     admin_gallery_image_category_create: 'Nová kategorie obrázků'
     admin_gallery_image_category_read: 'Zobrazení kategorie obrázků'
     admin_gallery_image_category_update: 'Editace kategorie obrázků'
     admin_gallery_image_category_delete: 'Odstranění kategorie obrázků'
     admin_gallery_image_category_truncate: 'Vyprázdnění kategorie obrázků'
-    
     admin_page_list: 'Stránky'
     admin_page_create: 'Nová stránka'
     admin_page_read: 'Zobrazení stránky'
     admin_page_update: 'Editace stránky'
     admin_page_delete: 'Odstranění stránky'
-
     admin_application_camp_list: 'Přihlášky'
     admin_application_camp_summary: 'Souhrn za tábor'
     admin_application_camp_date_list: 'Termíny'
@@ -2574,33 +2577,28 @@ route:
     admin_application_read: 'Zobrazení přihlášky'
     admin_application_update: 'Editace přihlášky'
     admin_application_delete: 'Odstranění přihlášky'
-    
     admin_application_contact_list: 'Kontakty'
     admin_application_contact_create: 'Vytvoření kontaktu'
     admin_application_contact_read: 'Zobrazení kontaktu'
     admin_application_contact_update: 'Editace kontaktu'
     admin_application_contact_delete: 'Odstranění kontaktu'
-    
     admin_application_camper_list: 'Táborníci'
     admin_camp_date_application_camper_list: 'Táborníci'
     admin_application_camper_create: 'Vytvoření táborníka'
     admin_application_camper_read: 'Zobrazení táborníka'
     admin_application_camper_update: 'Editace táborníka'
     admin_application_camper_delete: 'Odstranění táborníka'
-
     admin_application_payment_list: 'Platby'
     admin_application_payment_create: 'Vytvoření platby'
     admin_application_payment_read: 'Zobrazení platby'
     admin_application_payment_update: 'Editace platby'
     admin_application_payment_delete: 'Odstranění platby'
     admin_application_payment_refund: 'Vrácení platby'
-    
     admin_application_admin_attachment_list: 'Administrátorské přílohy'
     admin_application_admin_attachment_create: 'Nahrání přílohy'
     admin_application_admin_attachment_read: 'Zobrazení přílohy'
     admin_application_admin_attachment_update: 'Editace přílohy'
     admin_application_admin_attachment_delete: 'Odstranění přílohy'
-
     admin_application_purchasable_items_update: 'Volitelné platby'
 
     user_home: 'Domů'
@@ -2615,14 +2613,10 @@ route:
     user_guide_list: 'Vedoucí'
     user_guide_detail: 'Vedoucí'
     user_application_import: 'Uložení údajů z přihlášky'
-
     user_blog_post_list: 'Blog'
     user_blog_post_read: 'Příspěvek'
-
     user_gallery_image_list: 'Galerie'
-
     user_page_read: 'Stránka'
-
     user_profile_billing: 'Fakturační údaje'
     user_profile_contact_list: 'Kontakty'
     user_profile_contact_create: 'Nový kontakt'
@@ -2638,17 +2632,15 @@ route:
     user_profile_password_change_create: 'Nastavení hesla'
     user_profile_application_list: 'Přihlášky'
     user_profile_application_read: 'Přihláška'
-
     user_application_step_one_create: 'Údaje'
     user_application_step_one_update: 'Údaje'
     user_application_step_two: 'Finance'
     user_application_step_three: 'Souhrn'
     user_application_completed: 'Přihláška vytvořena'
-
     user_application_payment_online_status: 'Stav platby'
     user_application_payment_simulate: 'Simulace platební brány'
-
     user_privacy: 'Zásady ochrany soukromí'
     user_terms_of_use: 'Podmínky používání'
+    user_contact_us: 'Kontakt'
 
     _preview_error: 'Chyba'

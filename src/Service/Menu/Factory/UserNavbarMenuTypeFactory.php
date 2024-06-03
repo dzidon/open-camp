@@ -62,7 +62,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_home');
         $itemHome = new MenuType('user_home', 'navbar_user_item', $text, $url);
         $itemHome->setActive($route === 'user_home');
-        $itemHome->setPriority(800);
+        $itemHome->setPriority(900);
         $menu->addChild($itemHome);
 
         // camp catalog
@@ -78,8 +78,16 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_camp_catalog');
         $itemCampCatalog = new MenuType('user_camp_catalog', 'navbar_user_item', $text, $url);
         $itemCampCatalog->setActive($active);
-        $itemCampCatalog->setPriority(700);
+        $itemCampCatalog->setPriority(800);
         $menu->addChild($itemCampCatalog);
+
+        // contact us
+        $text = $this->translator->trans('route.user_contact_us');
+        $url = $this->urlGenerator->generate('user_contact_us');
+        $itemContactUs = new MenuType('user_contact_us', 'navbar_user_item', $text, $url);
+        $itemContactUs->setActive($route === 'user_contact_us');
+        $itemContactUs->setPriority(700);
+        $menu->addChild($itemContactUs);
 
         // blog
         $text = $this->translator->trans('route.user_blog_post_list');

@@ -1,0 +1,59 @@
+{% extends "user/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12 col-md-6">
+            <div class="row">
+                <div class="col-12">
+                    <h4>{{ 'contact_us.email'|trans }}</h4>
+
+                    <p>
+                        <a href="mailto:{{ company_email }}">
+                            <i class="fas fa-envelope"></i>
+                            {{ company_email }}
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <h4>{{ 'contact_us.phone_number'|trans }}</h4>
+
+                    <p>
+                        <a href="tel:{{ company_phone_number }}">
+                            <i class="fas fa-phone"></i>
+                            {{ company_phone_number }}
+                        </a>
+                    </p>
+                </div>
+            </div>
+
+            {% if company_social_media is not empty %}
+                <div class="row">
+                    <div class="col-12">
+                        <h4>{{ 'contact_us.social_media'|trans }}</h4>
+
+                        <p>
+                            {% for social in company_social_media %}
+                                <a href="{{ social.link }}" class="btn btn-primary mr-1">
+                                    <i class="{{ social.icon }}"></i>
+                                </a>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="col-12 col-md-6">
+            <div class="row">
+                <div class="col-12">
+                    <h4>{{ 'contact_us.leave_us_a_message'|trans }}</h4>
+
+                    <p>{{ form(form_contact_us) }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

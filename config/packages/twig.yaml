@@ -21,6 +21,7 @@ twig:
         company_address_town: '%app.company_address_town%'
         company_address_zip: '%app.company_address_zip%'
         company_address_country: '%app.company_address_country%'
+        company_social_media: '%app.company_social_media%'
 
         tax: '%app.tax%'
         currency: '%app.currency%'
