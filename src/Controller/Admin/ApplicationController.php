@@ -258,7 +258,7 @@ class ApplicationController extends AbstractController
     {
         $application = $this->applicationRepository->findOneById($id);
 
-        if ($application === null || !$application->isCompleted())
+        if ($application === null || $application->isDraft())
         {
             throw $this->createNotFoundException();
         }

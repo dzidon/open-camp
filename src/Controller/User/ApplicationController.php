@@ -459,7 +459,7 @@ class ApplicationController extends AbstractController
 
     private function assertApplicationCompletedAvailability(Application $application): void
     {
-        if (!$application->isCompleted())
+        if ($application->isDraft())
         {
             throw $this->createNotFoundException();
         }

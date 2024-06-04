@@ -1179,31 +1179,6 @@ class Application
         return $extensions;
     }
 
-    public function isCompleted(): bool
-    {
-        if ($this->isDraft)
-        {
-            return false;
-        }
-
-        if (count($this->applicationContacts) < 1)
-        {
-            return false;
-        }
-
-        if (count($this->applicationCampers)  < 1)
-        {
-            return false;
-        }
-
-        if ($this->paymentMethod === null)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
     public function areAttachmentsRequiredLaterMissing(): bool
     {
         foreach ($this->applicationAttachments as $applicationAttachment)
@@ -1230,7 +1205,7 @@ class Application
 
     public function isAwaitingUploadOfAttachmentsRequiredLater(): bool
     {
-        if (!$this->isCompleted())
+        if ($this->isDraft())
         {
             return false;
         }
@@ -1469,7 +1444,7 @@ class Application
 
     public function isAwaitingPayment(?ApplicationPaymentTypeEnum $type = null): bool
     {
-        if (!$this->isCompleted())
+        if ($this->isDraft())
         {
             return false;
         }
@@ -1533,7 +1508,7 @@ class Application
 
     public function isAwaitingAcceptOrDecline(): bool
     {
-        if (!$this->isCompleted())
+        if ($this->isDraft())
         {
             return false;
         }
