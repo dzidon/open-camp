@@ -442,6 +442,7 @@ menu_item:
     navbar_admin_vertical:
         components: 'Komponenty'
         browse: 'Procházet'
+        content: 'Obsah'
 
 menu:
     navbar_admin_application_update: 'Menu pro editaci přihlášky v administraci'
@@ -470,8 +471,14 @@ permission_group:
     gallery_image: 'Obrázky'
     page: 'Stránky'
     text_content: 'Textový obsah'
+    downloadable_file: 'Soubory ke stažení'
 
 permission:
+    downloadable_file_read: 'Zobrazení souboru ke stažení'
+    downloadable_file_create: 'Tvorba souboru ke stažení'
+    downloadable_file_update: 'Editace souboru ke stažení'
+    downloadable_file_delete: 'Odstranění souboru ke stažení'
+
     gallery_image_category_read: 'Zobrazení kategorie obrázků'
     gallery_image_category_create: 'Tvorba kategorie obrázků'
     gallery_image_category_update: 'Editace kategorie obrázků'
@@ -584,6 +591,7 @@ crud:
         gallery_image_category_delete: 'Opravdu si přejete odstranit kategorii obrázků "{name}"?'
         gallery_image_delete: 'Opravdu si přejete odstranit tento obrázek?'
         page_delete: 'Opravdu si přejete odstranit stránku "{title}"?'
+        downloadable_file_delete: 'Opravdu si přejete odstranit soubor "{title}"?'
 
     error:
         trip_location_delete: 'Tuto lokaci nejde smazat, protože by pak trasa byla prázdná.'
@@ -752,6 +760,11 @@ crud:
             create: 'Konfigurace slev vytvořena!'
             update: 'Konfigurace slev uložena!'
             delete: 'Konfigurace slev odstraněna!'
+
+        downloadable_file:
+            create: 'Soubor ke stažení vytvořen!'
+            update: 'Soubor ke stažení uložen!'
+            delete: 'Soubor ke stažení odstraněn!'
 
         contact_us:
             sent: 'Zpráva odeslána! Brzy vás budeme kontaktovat.'
@@ -1499,6 +1512,15 @@ entity_attribute:
         identifier: 'Identifikátor'
         is_html_enabled: 'Je povoleno HTML'
         content: 'Obsah'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    downloadable_file:
+        id: 'ID'
+        title: 'Název'
+        description: 'Popis'
+        extension: 'Přípona'
+        priority: 'Priorita'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -2306,6 +2328,37 @@ form:
         page_delete:
             button: 'Odstranit'
 
+        downloadable_file_create:
+            title: 'Název'
+            description: 'Popis'
+            priority: 'Priorita'
+            file: 'Soubor'
+            button: 'Uložit'
+
+        downloadable_file_update:
+            title: 'Název'
+            description: 'Popis'
+            priority: 'Priorita'
+            button: 'Uložit'
+
+        downloadable_file_delete:
+            button: 'Odstranit'
+
+        downloadable_file_search:
+            phrase: 'Hledat podle názvu'
+            sort_by:
+                label: 'Řazení'
+                options:
+                    created_at_desc: 'Od nejnovějších'
+                    created_at_asc: 'Od nejstarších'
+                    title_asc: 'Název (A-Z)'
+                    title_desc: 'Název (Z-A)'
+                    priority_desc: 'Priorita (od nejvyšší)'
+                    priority_asc: 'Priorita (od nejnižší)'
+
+            extensions: 'Formáty'
+            button: 'Hledat'
+
     user:
         application_step_one:
             email:
@@ -2600,6 +2653,11 @@ route:
     admin_application_admin_attachment_update: 'Editace přílohy'
     admin_application_admin_attachment_delete: 'Odstranění přílohy'
     admin_application_purchasable_items_update: 'Volitelné platby'
+    admin_downloadable_file_list: 'Soubory ke stažení'
+    admin_downloadable_file_create: 'Nový soubor ke stažení'
+    admin_downloadable_file_read: 'Zobrazení souboru ke stažení'
+    admin_downloadable_file_update: 'Editace souboru ke stažení'
+    admin_downloadable_file_delete: 'Odstranění souboru ke stažení'
 
     user_home: 'Domů'
     user_login: 'Přihlášení'
@@ -2642,5 +2700,6 @@ route:
     user_privacy: 'Zásady ochrany soukromí'
     user_terms_of_use: 'Podmínky používání'
     user_contact_us: 'Kontakt'
+    user_downloadable_file_list: 'Ke stažení'
 
     _preview_error: 'Chyba'

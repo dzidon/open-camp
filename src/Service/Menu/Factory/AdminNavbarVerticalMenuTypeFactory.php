@@ -347,46 +347,72 @@ class AdminNavbarVerticalMenuTypeFactory extends AbstractMenuTypeFactory
             }
         }
         
-        // blog
+        // content
         $isGrantedBlog =
             $this->security->isGranted('blog_post_create') || $this->security->isGranted('blog_post_read') ||
             $this->security->isGranted('blog_post_update') || $this->security->isGranted('blog_post_delete')
         ;
-        
-        if ($isGrantedBlog)
-        {
-            $active =
-                $route === 'admin_blog_post_list' || $route === 'admin_blog_post_create' ||
-                $route === 'admin_blog_post_read' || $route === 'admin_blog_post_update' ||
-                $route === 'admin_blog_post_delete'
-            ;
 
-            $text = $this->translator->trans('route.admin_blog_post_list');
-            $url = $this->urlGenerator->generate('admin_blog_post_list');
-            $itemBlog = new MenuIconType('admin_blog_post_list', 'navbar_admin_vertical_item', $text, $url, 'fas fa-newspaper');
-            $menu->addChild($itemBlog);
-            $itemBlog->setActive($active, $active);
-        }
-
-        // pages
         $isGrantedPages =
             $this->security->isGranted('page_create') || $this->security->isGranted('page_read') ||
             $this->security->isGranted('page_update') || $this->security->isGranted('page_delete')
         ;
 
-        if ($isGrantedPages)
-        {
-            $active =
-                $route === 'admin_page_list' || $route === 'admin_page_create' ||
-                $route === 'admin_page_read' || $route === 'admin_page_update' ||
-                $route === 'admin_page_delete'
-            ;
+        $isGrantedDownloadableFiles =
+            $this->security->isGranted('downloadable_file_create') || $this->security->isGranted('downloadable_file_read') ||
+            $this->security->isGranted('downloadable_file_update') || $this->security->isGranted('downloadable_file_delete')
+        ;
 
-            $text = $this->translator->trans('route.admin_page_list');
-            $url = $this->urlGenerator->generate('admin_page_list');
-            $itemPages = new MenuIconType('admin_page_list', 'navbar_admin_vertical_item', $text, $url, 'fas fa-globe');
-            $menu->addChild($itemPages);
-            $itemPages->setActive($active, $active);
+        if ($isGrantedBlog || $isGrantedPages || $isGrantedDownloadableFiles)
+        {
+            $text = $this->translator->trans('menu_item.navbar_admin_vertical.content');
+            $itemContentParent = new MenuIconType('parent_content', 'navbar_admin_vertical_item', $text, '#', 'fas fa-newspaper');
+            $menu->addChild($itemContentParent);
+
+            if ($isGrantedBlog)
+            {
+                $active =
+                    $route === 'admin_blog_post_list' || $route === 'admin_blog_post_create' ||
+                    $route === 'admin_blog_post_read' || $route === 'admin_blog_post_update' ||
+                    $route === 'admin_blog_post_delete'
+                ;
+
+                $text = $this->translator->trans('route.admin_blog_post_list');
+                $url = $this->urlGenerator->generate('admin_blog_post_list');
+                $itemBlog = new MenuIconType('admin_blog_post_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
+                $itemContentParent->addChild($itemBlog);
+                $itemBlog->setActive($active, $active);
+            }
+
+            if ($isGrantedPages)
+            {
+                $active =
+                    $route === 'admin_page_list' || $route === 'admin_page_create' ||
+                    $route === 'admin_page_read' || $route === 'admin_page_update' ||
+                    $route === 'admin_page_delete'
+                ;
+
+                $text = $this->translator->trans('route.admin_page_list');
+                $url = $this->urlGenerator->generate('admin_page_list');
+                $itemPages = new MenuIconType('admin_page_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
+                $itemContentParent->addChild($itemPages);
+                $itemPages->setActive($active, $active);
+            }
+
+            if ($isGrantedDownloadableFiles)
+            {
+                $active =
+                    $route === 'admin_downloadable_file_list' || $route === 'admin_downloadable_file_create' ||
+                    $route === 'admin_downloadable_file_read' || $route === 'admin_downloadable_file_update' ||
+                    $route === 'admin_downloadable_file_delete'
+                ;
+
+                $text = $this->translator->trans('route.admin_downloadable_file_list');
+                $url = $this->urlGenerator->generate('admin_downloadable_file_list');
+                $itemDownloadableFiles = new MenuIconType('admin_downloadable_file_list', 'navbar_admin_vertical_item', $text, $url, 'far fa-circle');
+                $itemContentParent->addChild($itemDownloadableFiles);
+                $itemDownloadableFiles->setActive($active, $active);
+            }
         }
 
         return $menu;

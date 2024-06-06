@@ -1,0 +1,82 @@
+{% extends "admin/base.html.twig" %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-outline card-primary">
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.downloadable_file.title'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ downloadable_file.title }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.downloadable_file.description'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            {% if downloadable_file.description is null %}
+                                <em>{{ 'entity_attribute.common.unset'|trans }}</em>
+                            {% else %}
+                                <span>{{ downloadable_file.description }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.downloadable_file.extension'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ downloadable_file.extension }}</span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 col-sm-3">
+                            <strong>{{ 'entity_attribute.downloadable_file.priority'|trans }}:</strong>
+                        </div>
+
+                        <div class="col-12 col-sm-9">
+                            <span>{{ downloadable_file.priority }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                {% set granted_update = is_granted('downloadable_file_update') %}
+                {% set granted_delete = is_granted('downloadable_file_delete') %}
+
+                <div class="card-footer">
+                    <a href="{{ path('user_downloadable_file_download', {id: downloadable_file.id.toRfc4122}) }}"
+                       class="btn btn-secondary mr-2"
+                    >
+                        {{ 'crud.action.common.download'|trans }}
+                    </a>
+
+                    {% if granted_update %}
+                        <a href="{{ path('admin_downloadable_file_update', {id: downloadable_file.id.toRfc4122}) }}"
+                           class="btn btn-primary mr-2"
+                        >
+                            {{ 'crud.action.common.update'|trans }}
+                        </a>
+                    {% endif %}
+
+                    {% if granted_delete %}
+                        <a href="{{ path('admin_downloadable_file_delete', {id: downloadable_file.id.toRfc4122}) }}"
+                           class="btn btn-danger"
+                        >
+                            {{ 'crud.action.common.delete'|trans }}
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

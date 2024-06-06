@@ -46,7 +46,13 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Groups
          */
-        $this->assertCount(16, $groupsSerialized);
+        $this->assertCount(17, $groupsSerialized);
+
+        $this->assertContains([
+            'name'     => 'downloadable_file',
+            'priority' => 1700,
+            'label'    => 'permission_group.downloadable_file',
+        ], $groupsSerialized);
 
         $this->assertContains([
             'name'     => 'text_content',
@@ -147,8 +153,37 @@ class PermissionsAndGroupsFactoryTest extends KernelTestCase
         /*
          * Permissions
          */
-        $this->assertCount(63, $permissionsSerialized);
+        $this->assertCount(67, $permissionsSerialized);
 
+        // downloadable file
+        $this->assertContains([
+            'name'             => 'downloadable_file_create',
+            'priority'         => 400,
+            'label'            => 'permission.downloadable_file_create',
+            'permission_group' => 'downloadable_file',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'downloadable_file_read',
+            'priority'         => 300,
+            'label'            => 'permission.downloadable_file_read',
+            'permission_group' => 'downloadable_file',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'downloadable_file_update',
+            'priority'         => 200,
+            'label'            => 'permission.downloadable_file_update',
+            'permission_group' => 'downloadable_file',
+        ], $permissionsSerialized);
+
+        $this->assertContains([
+            'name'             => 'downloadable_file_delete',
+            'priority'         => 100,
+            'label'            => 'permission.downloadable_file_delete',
+            'permission_group' => 'downloadable_file',
+        ], $permissionsSerialized);
+        
         // text content
         $this->assertContains([
             'name'             => 'text_content_update',

@@ -1,0 +1,56 @@
+{% extends 'user/base.html.twig' %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-12">
+            {% if paginator.totalItems > 0 %}
+                <div class="row">
+                    {% for downloadable_file in paginator.currentPageItems %}
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4 d-flex">
+                            <div class="card flex-fill">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        {{ downloadable_file.title }}
+                                    </h5>
+
+                                    <div class="mb-2">
+                                        <span class="badge badge-primary">
+                                            {{ 'entity_attribute.downloadable_file.extension'|trans }}:
+                                            {{ downloadable_file.extension }}
+                                        </span>
+                                    </div>
+
+                                    {% if downloadable_file.description is not null %}
+                                        <div>
+                                            {{ downloadable_file.description }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="card-footer clearfix">
+                                    <a class="stretched-link card-link"
+                                       href="{{ path('user_downloadable_file_download', {id: downloadable_file.id}) }}"
+                                    >
+                                        {{ 'crud.action.common.download'|trans }}
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        {{ menu(pagination_menu) }}
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div class="col-12">
+                        {{ 'search.error.no_results'|trans }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

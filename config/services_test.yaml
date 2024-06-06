@@ -33,13 +33,15 @@ parameters:
     app.application_attachment_directory: 'files/dynamic/application-attachment'
     app.application_invoice_directory: 'files/dynamic/application-invoice'
     app.application_admin_attachment_directory: 'files/dynamic/application-admin-attachment'
+    app.downloadable_file_public_path_prefix: '%app.public_file_path_prefix%'
+    app.downloadable_file_directory: 'files/dynamic/downloadable-file'
 
     # Mailer
     app.email: 'contact.us@camp.com'
     app.email_no_reply: 'noreply@camp.com'
 
     # Internationalization
-    app.date_format: 'd. m. Y'
+    app.date_format: 'd.m.Y'
     app.date_time_format: 'd.m.Y H:i'
     app.currency: 'CZK'
     app.phone_number_default_locale: 'CZ'

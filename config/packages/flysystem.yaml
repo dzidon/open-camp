@@ -21,6 +21,11 @@ flysystem:
             options:
                 directory: '%kernel.project_dir%/public/%app.gallery_image_directory%'
 
+        downloadable_file.storage:
+            adapter: 'local'
+            options:
+                directory: '%kernel.project_dir%/public/%app.downloadable_file_directory%'
+
         application_attachment.storage:
             adapter: 'local'
             options:
@@ -49,6 +54,9 @@ when@test:
                 adapter: 'memory'
 
             gallery_image.storage:
+                adapter: 'memory'
+
+            downloadable_file.storage:
                 adapter: 'memory'
 
             application_attachment.storage:

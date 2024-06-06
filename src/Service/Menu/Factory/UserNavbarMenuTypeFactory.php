@@ -62,7 +62,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_home');
         $itemHome = new MenuType('user_home', 'navbar_user_item', $text, $url);
         $itemHome->setActive($route === 'user_home');
-        $itemHome->setPriority(900);
+        $itemHome->setPriority(1000);
         $menu->addChild($itemHome);
 
         // camp catalog
@@ -78,7 +78,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_camp_catalog');
         $itemCampCatalog = new MenuType('user_camp_catalog', 'navbar_user_item', $text, $url);
         $itemCampCatalog->setActive($active);
-        $itemCampCatalog->setPriority(800);
+        $itemCampCatalog->setPriority(900);
         $menu->addChild($itemCampCatalog);
 
         // contact us
@@ -86,7 +86,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_contact_us');
         $itemContactUs = new MenuType('user_contact_us', 'navbar_user_item', $text, $url);
         $itemContactUs->setActive($route === 'user_contact_us');
-        $itemContactUs->setPriority(700);
+        $itemContactUs->setPriority(800);
         $menu->addChild($itemContactUs);
 
         // blog
@@ -94,7 +94,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_blog_post_list');
         $itemBlog = new MenuType('user_blog_post_list', 'navbar_user_item', $text, $url);
         $itemBlog->setActive($route === 'user_blog_post_list' || $route === 'user_blog_post_read');
-        $itemBlog->setPriority(600);
+        $itemBlog->setPriority(700);
         $menu->addChild($itemBlog);
 
         // gallery
@@ -102,7 +102,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_gallery_image_list');
         $itemGallery = new MenuType('user_gallery_image_list', 'navbar_user_item', $text, $url);
         $itemGallery->setActive($route === 'user_gallery_image_list');
-        $itemGallery->setPriority(500);
+        $itemGallery->setPriority(600);
         $menu->addChild($itemGallery);
 
         // guides
@@ -110,8 +110,16 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $url = $this->urlGenerator->generate('user_guide_list');
         $itemGuides = new MenuType('user_guide_list', 'navbar_user_item', $text, $url);
         $itemGuides->setActive($route === 'user_guide_list' || $route === 'user_guide_detail');
-        $itemGuides->setPriority(400);
+        $itemGuides->setPriority(500);
         $menu->addChild($itemGuides);
+
+        // downloadable files
+        $text = $this->translator->trans('route.user_downloadable_file_list');
+        $url = $this->urlGenerator->generate('user_downloadable_file_list');
+        $itemDownloadableFiles = new MenuType('user_downloadable_file_list', 'navbar_user_item', $text, $url);
+        $itemDownloadableFiles->setActive($route === 'user_downloadable_file_list');
+        $itemDownloadableFiles->setPriority(400);
+        $menu->addChild($itemDownloadableFiles);
 
         // admin
         if ($this->security->isGranted('admin_access'))

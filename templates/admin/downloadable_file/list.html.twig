@@ -46,9 +46,13 @@
                         {% endif %}
                     </h3>
 
-                    {% set granted_create = is_granted('form_field_create') %}
+                    {% set granted_create = is_granted('downloadable_file_create') %}
                     {% if granted_create %}
-                        <a href="{{ path('admin_form_field_create') }}" class="btn btn-success ml-3">{{ 'crud.action.common.create'|trans }}</a>
+                        <a href="{{ path('admin_downloadable_file_create') }}" 
+                           class="btn btn-success ml-3"
+                        >
+                            {{ 'crud.action.common.create'|trans }}
+                        </a>
                     {% endif %}
                 </div>
 
@@ -57,49 +61,36 @@
                         <table class="table text-nowrap">
                             <thead>
                                 <tr>
-                                    <th>{{ 'entity_attribute.form_field.name'|trans }}</th>
-                                    <th>{{ 'entity_attribute.form_field.type'|trans }}</th>
-                                    <th>{{ 'entity_attribute.form_field.is_required'|trans }}</th>
-                                    <th>{{ 'entity_attribute.form_field.is_global'|trans }}</th>
+                                    <th>{{ 'entity_attribute.downloadable_file.title'|trans }}</th>
+                                    <th>{{ 'entity_attribute.downloadable_file.extension'|trans }}</th>
+                                    <th>{{ 'entity_attribute.downloadable_file.priority'|trans }}</th>
                                     <th class="cell-25">{{ 'search.item_action'|trans }}</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {% set granted_read = is_granted('form_field_read') %}
-                                {% set granted_update = is_granted('form_field_update') %}
-                                {% set granted_delete = is_granted('form_field_delete') %}
+                                {% set granted_read = is_granted('downloadable_file_read') %}
+                                {% set granted_update = is_granted('downloadable_file_update') %}
+                                {% set granted_delete = is_granted('downloadable_file_delete') %}
 
-                                {% for form_field in paginator.currentPageItems %}
+                                {% for downloadable_file in paginator.currentPageItems %}
                                     <tr class="align-items-center">
                                         <td class="align-middle">
-                                            <span>{{ form_field.name }}</span>
+                                            <span>{{ downloadable_file.title }}</span>
                                         </td>
 
                                         <td class="align-middle">
-                                            <span>{{ ('form_field_type.' ~ form_field.type.value)|trans }}</span>
+                                            <span>{{ downloadable_file.extension }}</span>
                                         </td>
 
                                         <td class="align-middle">
-                                            {% if form_field.isRequired %}
-                                                <span>{{ 'bool.yes'|trans }}</span>
-                                            {% else %}
-                                                <span>{{ 'bool.no'|trans }}</span>
-                                            {% endif %}
-                                        </td>
-
-                                        <td class="align-middle">
-                                            {% if form_field.isGlobal %}
-                                                <span>{{ 'bool.yes'|trans }}</span>
-                                            {% else %}
-                                                <span>{{ 'bool.no'|trans }}</span>
-                                            {% endif %}
+                                            <span>{{ downloadable_file.priority }}</span>
                                         </td>
 
                                         <td class="align-middle cell-25">
                                             {% if granted_read or granted_update or granted_delete %}
                                                 {% if granted_read %}
-                                                    <a href="{{ path('admin_form_field_read', {id: form_field.id.toRfc4122}) }}"
+                                                    <a href="{{ path('admin_downloadable_file_read', {id: downloadable_file.id.toRfc4122}) }}"
                                                        class="btn btn-secondary"
                                                     >
                                                         {{ 'crud.action.common.read'|trans }}
@@ -107,7 +98,7 @@
                                                 {% endif %}
 
                                                 {% if granted_update %}
-                                                    <a href="{{ path('admin_form_field_update', {id: form_field.id.toRfc4122}) }}"
+                                                    <a href="{{ path('admin_downloadable_file_update', {id: downloadable_file.id.toRfc4122}) }}"
                                                        class="btn btn-primary"
                                                     >
                                                         {{ 'crud.action.common.update'|trans }}
@@ -115,7 +106,7 @@
                                                 {% endif %}
 
                                                 {% if granted_delete %}
-                                                    <a href="{{ path('admin_form_field_delete', {id: form_field.id.toRfc4122}) }}"
+                                                    <a href="{{ path('admin_downloadable_file_delete', {id: downloadable_file.id.toRfc4122}) }}"
                                                        class="btn btn-danger"
                                                     >
                                                         {{ 'crud.action.common.delete'|trans }}

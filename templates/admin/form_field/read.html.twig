@@ -106,15 +106,28 @@
                     {% endfor %}
                 </div>
 
-                <div class="card-footer">
-                    <a href="{{ path('admin_form_field_update', {id: form_field.id.toRfc4122}) }}" class="btn btn-primary mr-2">
-                        {{ 'crud.action.common.update'|trans }}
-                    </a>
+                {% set granted_update = is_granted('form_field_update') %}
+                {% set granted_delete = is_granted('form_field_delete') %}
 
-                    <a href="{{ path('admin_form_field_delete', {id: form_field.id.toRfc4122}) }}" class="btn btn-danger">
-                        {{ 'crud.action.common.delete'|trans }}
-                    </a>
-                </div>
+                {% if granted_update or granted_delete %}
+                    <div class="card-footer">
+                        {% if granted_update %}
+                            <a href="{{ path('admin_form_field_update', {id: form_field.id.toRfc4122}) }}"
+                               class="btn btn-primary mr-2"
+                            >
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
+                        {% endif %}
+
+                        {% if granted_delete %}
+                            <a href="{{ path('admin_form_field_delete', {id: form_field.id.toRfc4122}) }}"
+                               class="btn btn-danger"
+                            >
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

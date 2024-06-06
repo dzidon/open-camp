@@ -2,21 +2,19 @@
 
 namespace App\Library\Data\Admin;
 
-use App\Library\Enum\Search\Data\Admin\ApplicationAdminAttachmentSortEnum;
+use App\Library\Enum\Search\Data\Admin\DownloadableFileSortEnum;
 use LogicException;
-use Symfony\Component\Validator\Constraints as Assert;
 
-class ApplicationAdminAttachmentSearchData
+class DownloadableFileSearchData
 {
     /** @var string[] */
     private array $validExtensions;
 
     private string $phrase = '';
 
-    private ApplicationAdminAttachmentSortEnum $sortBy = ApplicationAdminAttachmentSortEnum::CREATED_AT_DESC;
+    private DownloadableFileSortEnum $sortBy = DownloadableFileSortEnum::CREATED_AT_DESC;
 
     /** @var string[] */
-    #[Assert\Choice(callback: 'getValidExtensions', multiple: true)]
     private array $extensions = [];
 
     public function __construct(array $validExtensions)
@@ -51,16 +49,16 @@ class ApplicationAdminAttachmentSearchData
         return $this;
     }
 
-    public function getSortBy(): ApplicationAdminAttachmentSortEnum
+    public function getSortBy(): DownloadableFileSortEnum
     {
         return $this->sortBy;
     }
 
-    public function setSortBy(?ApplicationAdminAttachmentSortEnum $sortBy): self
+    public function setSortBy(?DownloadableFileSortEnum $sortBy): self
     {
         if ($sortBy === null)
         {
-            $sortBy = ApplicationAdminAttachmentSortEnum::CREATED_AT_DESC;
+            $sortBy = DownloadableFileSortEnum::CREATED_AT_DESC;
         }
 
         $this->sortBy = $sortBy;

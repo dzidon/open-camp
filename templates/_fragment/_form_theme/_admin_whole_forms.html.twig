@@ -762,6 +762,28 @@
     </button>
 {% endblock %}
 
+{% block admin_downloadable_file_search_widget %}
+    {{ form_errors(form) }}
+
+    <div class="form-row">
+        <div class="form-group col-md-9">
+            {{ form_row(form.phrase) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.sortBy) }}
+        </div>
+
+        <div class="form-group col-md-3">
+            {{ form_row(form.extensions) }}
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mb-2">
+        {{ 'form.admin.downloadable_file_search.button'|trans }}
+    </button>
+{% endblock %}
+
 {% block admin_blog_post_search_widget %}
     {{ form_errors(form) }}
 
