@@ -85,6 +85,14 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="card-footer">
+                    <a href="{{ path('admin_application_camp_date_summary_export', {campDateId: camp_date.id}) }}"
+                       class="btn btn-secondary"
+                    >
+                        {{ 'route.admin_application_camp_date_summary_export'|trans }}
+                    </a>
+                </div>
             </div>
         </div>
     </div>

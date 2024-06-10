@@ -126,12 +126,12 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
     {
         /** @var Application|null $application */
         $application = $this->createQueryBuilder('application')
-            ->select('application, campDate, user, paymentMethod, camp, leader')
+            ->select('application, campDate, user, paymentMethod, camp, campDateUser')
             ->leftJoin('application.campDate', 'campDate')
             ->leftJoin('application.user', 'user')
             ->leftJoin('application.paymentMethod', 'paymentMethod')
             ->leftJoin('campDate.camp', 'camp')
-            ->leftJoin('campDate.leaders', 'leader')
+            ->leftJoin('campDate.campDateUsers', 'campDateUser')
             ->andWhere('application.simpleId = :simpleId')
             ->setParameter('simpleId', $simpleId)
             ->getQuery()
@@ -147,6 +147,39 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
         $this->loadApplicationAdminAttachments($application);
 
         return $application;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAcceptedByCampDate(CampDate $campDate): array
+    {
+        /** @var Application[] $applications */
+        $applications = $this->createQueryBuilder('application')
+            ->select('application, campDate, user, paymentMethod, camp, campDateUser')
+            ->leftJoin('application.campDate', 'campDate')
+            ->leftJoin('application.user', 'user')
+            ->leftJoin('application.paymentMethod', 'paymentMethod')
+            ->leftJoin('campDate.camp', 'camp')
+            ->leftJoin('campDate.campDateUsers', 'campDateUser')
+            ->andWhere('application.isDraft = FALSE')
+            ->andWhere('application.isAccepted = TRUE')
+            ->andWhere('application.campDate = :campDateId')
+            ->setParameter('campDateId', $campDate->getId(), UuidType::NAME)
+            ->addOrderBy('application.completedAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $this->loadApplicationContacts($applications);
+        $this->loadApplicationCampers($applications);
+        $this->loadApplicationAttachments($applications);
+        $this->loadApplicationFormFieldValues($applications);
+        $this->loadApplicationPayments($applications);
+        $this->loadApplicationPurchasableItems($applications);
+        $this->loadApplicationAdminAttachments($applications);
+
+        return $applications;
     }
 
     /**

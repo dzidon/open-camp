@@ -57,6 +57,14 @@ interface ApplicationRepositoryInterface
     public function findOneBySimpleId(string $simpleId): ?Application;
 
     /**
+     * Finds accepted applications assigned the given camp date.
+     *
+     * @param CampDate $campDate
+     * @return Application[]
+     */
+    public function findAcceptedByCampDate(CampDate $campDate): array;
+
+    /**
      * Returns true if there is an application with the given simple id.
      *
      * @param string $simpleId

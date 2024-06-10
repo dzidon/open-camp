@@ -145,6 +145,15 @@ contact_us:
     social_media: 'Sociální sítě'
     leave_us_a_message: 'Pošlete nám zprávu'
 
+spreadsheet:
+    link: 'Odkaz'
+
+    camp_date_applications:
+        title_applications: 'Přihlášky'
+        title_application_campers: 'Táborníci'
+        title_contacts: 'Kontakty'
+        title_purchasable_items: 'Volitelné položky'
+
 application:
     apply: 'Přihláška'
     buyer_details: 'Údaje o objednávajícím'
@@ -2388,7 +2397,7 @@ form:
             purchasable_items_global: 'Volitelné položky (celá přihláška)'
             note: 'Poznámka'
             customer_channel: 'Jak jste se o nás dozvěděli?'
-            customer_channel_other: 'Upřesnění'
+            customer_channel_other: 'Upřesněte, jak jste se o nás dozvěděli'
             button: 'Pokračovat'
 
         application_step_three:
@@ -2626,6 +2635,7 @@ route:
     admin_application_camp_summary: 'Souhrn za tábor'
     admin_application_camp_date_list: 'Termíny'
     admin_application_camp_date_summary: 'Souhrn za termín'
+    admin_application_camp_date_summary_export: 'Stáhnout souhrn'
     admin_application_list: 'Seznam přihlášek'
     admin_application_read: 'Zobrazení přihlášky'
     admin_application_update: 'Editace přihlášky'

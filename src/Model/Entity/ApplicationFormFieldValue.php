@@ -140,6 +140,23 @@ class ApplicationFormFieldValue
         return $this->priority;
     }
 
+    public function getValueAsString(): string
+    {
+        $value = $this->getValue();
+
+        if ($value === null)
+        {
+            return '';
+        }
+
+        if (is_array($value))
+        {
+            return implode(', ', $value);
+        }
+
+        return $value;
+    }
+
     public function getValue(): null|array|string
     {
         if ($this->value === null)

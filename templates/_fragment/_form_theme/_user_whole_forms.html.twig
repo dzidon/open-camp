@@ -117,11 +117,11 @@
             <div class="col-12 d-flex">
                 <div class="card mb-3 flex-fill">
                     <div class="card-body">
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-12 col-sm-6">
-                                <span>
+                                <strong>
                                     {{ 'entity_attribute.application.name_full'|trans }}:
-                                </span>
+                                </strong>
                             </div>
 
                             <div class="col-12 col-sm-6">
@@ -131,11 +131,11 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-12 col-sm-6">
-                                <span>
+                                <strong>
                                     {{ 'entity_attribute.application.street'|trans }}:
-                                </span>
+                                </strong>
                             </div>
 
                             <div class="col-12 col-sm-6">
@@ -145,11 +145,11 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-12 col-sm-6">
-                                <span>
+                                <strong>
                                     {{ 'entity_attribute.application.town'|trans }}:
-                                </span>
+                                </strong>
                             </div>
 
                             <div class="col-12 col-sm-6">
@@ -159,11 +159,11 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-12 col-sm-6">
-                                <span>
+                                <strong>
                                     {{ 'entity_attribute.application.zip'|trans }}:
-                                </span>
+                                </strong>
                             </div>
 
                             <div class="col-12 col-sm-6">
@@ -173,11 +173,11 @@
                             </div>
                         </div>
 
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-12 col-sm-6">
-                                <span>
+                                <strong>
                                     {{ 'entity_attribute.application.country'|trans }}:
-                                </span>
+                                </strong>
                             </div>
 
                             <div class="col-12 col-sm-6">
@@ -188,11 +188,11 @@
                         </div>
 
                         {% if data.businessName is not null and data.businessCin is not null and data.businessVatId is not null %}
-                            <div class="row mt-3">
+                            <div class="row mb-1 mt-3">
                                 <div class="col-12 col-sm-6">
-                                    <span>
+                                    <strong>
                                         {{ 'entity_attribute.application.business_name'|trans }}:
-                                    </span>
+                                    </strong>
                                 </div>
 
                                 <div class="col-12 col-sm-6">
@@ -202,11 +202,11 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mb-1">
                                 <div class="col-12 col-sm-6">
-                                    <span>
+                                    <strong>
                                         {{ 'entity_attribute.application.business_cin'|trans }}:
-                                    </span>
+                                    </strong>
                                 </div>
 
                                 <div class="col-12 col-sm-6">
@@ -216,11 +216,11 @@
                                 </div>
                             </div>
 
-                            <div class="row">
+                            <div class="row mb-1">
                                 <div class="col-12 col-sm-6">
-                                    <span>
+                                    <strong>
                                         {{ 'entity_attribute.application.business_vat_id'|trans }}:
-                                    </span>
+                                    </strong>
                                 </div>
 
                                 <div class="col-12 col-sm-6">
@@ -290,11 +290,11 @@
                     </h5>
 
                     {% if contact.email is not null %}
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-12 col-sm-6">
-                                <span>
+                                <strong>
                                     {{ 'entity_attribute.application_contact.email'|trans }}:
-                                </span>
+                                </strong>
                             </div>
 
                             <div class="col-12 col-sm-6">
@@ -306,11 +306,11 @@
                     {% endif %}
 
                     {% if contact.phoneNumber is not null %}
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-12 col-sm-6">
-                                <span>
+                                <strong>
                                     {{ 'entity_attribute.application_contact.phone_number'|trans }}:
-                                </span>
+                                </strong>
                             </div>
 
                             <div class="col-12 col-sm-6">
@@ -321,11 +321,11 @@
                         </div>
                     {% endif %}
 
-                    <div class="row">
+                    <div class="row mb-1">
                         <div class="col-12 col-sm-6">
-                            <span>
+                            <strong>
                                 {{ 'entity_attribute.application_contact.role'|trans }}:
-                            </span>
+                            </strong>
                         </div>
 
                         <div class="col-12 col-sm-6">
@@ -364,11 +364,11 @@
                         {{ camper.nameFull }}
                     </h5>
 
-                    <div class="row">
+                    <div class="row mb-1">
                         <div class="col-12 col-sm-6">
-                            <span>
+                            <strong>
                                 {{ 'entity_attribute.camper.gender'|trans }}:
-                            </span>
+                            </strong>
                         </div>
 
                         <div class="col-12 col-sm-6">
@@ -379,11 +379,11 @@
                     </div>
 
                     {% if national_identifier_enabled and camper.nationalIdentifier is not null %}
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-12 col-sm-6">
-                                <span>
+                                <strong>
                                     {{ 'entity_attribute.camper.national_identifier'|trans }}:
-                                </span>
+                                </strong>
                             </div>
 
                             <div class="col-12 col-sm-6">
@@ -394,11 +394,11 @@
                         </div>
                     {% endif %}
 
-                    <div class="row">
+                    <div class="row mb-1">
                         <div class="col-12 col-sm-6">
-                            <span>
+                            <strong>
                                 {{ 'entity_attribute.camper.born_at'|trans }}:
-                            </span>
+                            </strong>
                         </div>
 
                         <div class="col-12 col-sm-6">
@@ -409,11 +409,11 @@
                     </div>
 
                     {% if camper.dietaryRestrictions is not null %}
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-12 col-sm-6">
-                                <span>
+                                <strong>
                                     {{ 'entity_attribute.camper.dietary_restrictions'|trans }}:
-                                </span>
+                                </strong>
                             </div>
 
                             <div class="col-12 col-sm-6">
@@ -425,11 +425,11 @@
                     {% endif %}
 
                     {% if camper.healthRestrictions is not null %}
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-12 col-sm-6">
-                                <span>
+                                <strong>
                                     {{ 'entity_attribute.camper.health_restrictions'|trans }}:
-                                </span>
+                                </strong>
                             </div>
 
                             <div class="col-12 col-sm-6">
@@ -441,11 +441,11 @@
                     {% endif %}
 
                     {% if camper.medication is not null %}
-                        <div class="row">
+                        <div class="row mb-1">
                             <div class="col-12 col-sm-6">
-                                <span>
+                                <strong>
                                     {{ 'entity_attribute.camper.medication'|trans }}:
-                                </span>
+                                </strong>
                             </div>
 
                             <div class="col-12 col-sm-6">

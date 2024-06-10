@@ -4,12 +4,14 @@ namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
 use App\Library\Data\Admin\ApplicationCampDateSearchData;
+use App\Library\Http\Response\FileDownloadResponse;
 use App\Model\Entity\CampDate;
 use App\Model\Entity\User;
 use App\Model\Repository\ApplicationCamperRepositoryInterface;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Repository\CampDateRepositoryInterface;
 use App\Model\Repository\CampRepositoryInterface;
+use App\Model\Service\CampDate\CampDateApplicationSummaryExporterInterface;
 use App\Service\Form\Type\Admin\ApplicationCampDateSearchType;
 use App\Service\Menu\Registry\MenuTypeFactoryRegistryInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -122,6 +124,30 @@ class ApplicationCampDateController extends AbstractController
                 'camp_date' => $campDate,
             ]),
         ]);
+    }
+
+    #[Route('/admin/application-camp-date/{campDateId}/summary-export', name: 'admin_application_camp_date_summary_export')]
+    public function summaryExport(CampDateApplicationSummaryExporterInterface $campDateApplicationSummaryExporter,
+                                  UuidV4                                      $campDateId): Response
+    {
+        $campDate = $this->findCampDateOrThrow404($campDateId);
+        $camp = $campDate->getCamp();
+
+        if (!$this->isGranted('application_read') && !$this->isGranted('guide_access_read', $campDate))
+        {
+            throw $this->createAccessDeniedException();
+        }
+
+        $fileContents = $campDateApplicationSummaryExporter->exportSummary($campDate);
+        $fileExtension = $campDateApplicationSummaryExporter::getFileExtension();
+        $dateFormat = $this->getParameter('app.date_format');
+        $fileName = sprintf('%s (%s - %s)',
+            $camp->getName(),
+            $campDate->getStartAt()->format($dateFormat),
+            $campDate->getEndAt()->format($dateFormat),
+        );
+
+        return new FileDownloadResponse($fileName, $fileExtension, $fileContents);
     }
 
     private function findCampDateOrThrow404(UuidV4 $id): CampDate
