@@ -70,7 +70,21 @@ class DownloadableFileRepository extends AbstractRepository implements Downloada
     /**
      * @inheritDoc
      */
-    public function getUserGuidePaginator(int $currentPage, int $pageSize): DqlPaginator
+    public function existsAtLeastOne(): bool
+    {
+        $count = $this->createQueryBuilder('downloadableFile')
+            ->select('COUNT(downloadableFile.id)')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUserPaginator(int $currentPage, int $pageSize): DqlPaginator
     {
         $query = $this->createQueryBuilder('downloadableFile')
             ->orderBy('downloadableFile.priority', 'DESC')

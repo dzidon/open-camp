@@ -4,7 +4,6 @@ namespace App\Model\Repository;
 
 use App\Library\Data\Admin\UserSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
-use App\Model\Entity\CampDate;
 use App\Model\Entity\Role;
 use App\Model\Entity\User;
 use Symfony\Component\Uid\UuidV4;
@@ -84,6 +83,13 @@ interface UserRepositoryInterface
      * @return array
      */
     public function findByCampDates(array $campDates, bool $withUrlNameOnly = false): array;
+
+    /**
+     * Returns true if there is at least one guide with a url name.
+     *
+     * @return bool
+     */
+    public function existsAtLeastOneGuideWithUrlName(): bool;
 
     /**
      * Returns user guide search paginator.

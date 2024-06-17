@@ -1528,7 +1528,7 @@ entity_attribute:
         id: 'ID'
         title: 'Název'
         description: 'Popis'
-        extension: 'Přípona'
+        extension: 'Formát'
         priority: 'Priorita'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'

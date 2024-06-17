@@ -54,6 +54,13 @@ interface GalleryImageRepositoryInterface
                                                bool                 $offspringCategories = false): array;
 
     /**
+     * Returns true if there is at least one image shown in the gallery.
+     *
+     * @return bool
+     */
+    public function existsAtLeastOneImageInGallery(): bool;
+
+    /**
      * Returns admin gallery search paginator.
      *
      * @param GalleryImageSearchData $galleryImageSearchData

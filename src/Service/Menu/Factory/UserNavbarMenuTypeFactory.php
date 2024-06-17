@@ -4,7 +4,11 @@ namespace App\Service\Menu\Factory;
 
 use App\Library\Menu\MenuType;
 use App\Model\Entity\User;
+use App\Model\Repository\BlogPostRepositoryInterface;
+use App\Model\Repository\DownloadableFileRepositoryInterface;
+use App\Model\Repository\GalleryImageRepositoryInterface;
 use App\Model\Repository\PageRepositoryInterface;
+use App\Model\Repository\UserRepositoryInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -15,6 +19,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
 {
+    private BlogPostRepositoryInterface $blogPostRepository;
+
+    private GalleryImageRepositoryInterface $galleryImageRepository;
+
+    private UserRepositoryInterface $userRepository;
+
+    private DownloadableFileRepositoryInterface $downloadableFileRepository;
+
     private TranslatorInterface $translator;
 
     private UrlGeneratorInterface $urlGenerator;
@@ -25,12 +37,20 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
 
     private Security $security;
 
-    public function __construct(TranslatorInterface     $translator,
-                                UrlGeneratorInterface   $urlGenerator,
-                                PageRepositoryInterface $pageRepository,
-                                RequestStack            $requestStack,
-                                Security                $security)
+    public function __construct(BlogPostRepositoryInterface         $blogPostRepository,
+                                GalleryImageRepositoryInterface     $galleryImageRepository,
+                                UserRepositoryInterface             $userRepository,
+                                DownloadableFileRepositoryInterface $downloadableFileRepository,
+                                TranslatorInterface                 $translator,
+                                UrlGeneratorInterface               $urlGenerator,
+                                PageRepositoryInterface             $pageRepository,
+                                RequestStack                        $requestStack,
+                                Security                            $security)
     {
+        $this->blogPostRepository = $blogPostRepository;
+        $this->galleryImageRepository = $galleryImageRepository;
+        $this->userRepository = $userRepository;
+        $this->downloadableFileRepository = $downloadableFileRepository;
         $this->translator = $translator;
         $this->urlGenerator = $urlGenerator;
         $this->pageRepository = $pageRepository;
@@ -90,36 +110,50 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
         $menu->addChild($itemContactUs);
 
         // blog
-        $text = $this->translator->trans('route.user_blog_post_list');
-        $url = $this->urlGenerator->generate('user_blog_post_list');
-        $itemBlog = new MenuType('user_blog_post_list', 'navbar_user_item', $text, $url);
-        $itemBlog->setActive($route === 'user_blog_post_list' || $route === 'user_blog_post_read');
-        $itemBlog->setPriority(700);
-        $menu->addChild($itemBlog);
+        $includeHiddenBlogPosts = $this->userCanViewHiddenBlogPosts();
+
+        if ($this->blogPostRepository->existsAtLeastOneBlogPost($includeHiddenBlogPosts))
+        {
+            $text = $this->translator->trans('route.user_blog_post_list');
+            $url = $this->urlGenerator->generate('user_blog_post_list');
+            $itemBlog = new MenuType('user_blog_post_list', 'navbar_user_item', $text, $url);
+            $itemBlog->setActive($route === 'user_blog_post_list' || $route === 'user_blog_post_read');
+            $itemBlog->setPriority(700);
+            $menu->addChild($itemBlog);
+        }
 
         // gallery
-        $text = $this->translator->trans('route.user_gallery_image_list');
-        $url = $this->urlGenerator->generate('user_gallery_image_list');
-        $itemGallery = new MenuType('user_gallery_image_list', 'navbar_user_item', $text, $url);
-        $itemGallery->setActive($route === 'user_gallery_image_list');
-        $itemGallery->setPriority(600);
-        $menu->addChild($itemGallery);
+        if ($this->galleryImageRepository->existsAtLeastOneImageInGallery())
+        {
+            $text = $this->translator->trans('route.user_gallery_image_list');
+            $url = $this->urlGenerator->generate('user_gallery_image_list');
+            $itemGallery = new MenuType('user_gallery_image_list', 'navbar_user_item', $text, $url);
+            $itemGallery->setActive($route === 'user_gallery_image_list');
+            $itemGallery->setPriority(600);
+            $menu->addChild($itemGallery);
+        }
 
         // guides
-        $text = $this->translator->trans('route.user_guide_list');
-        $url = $this->urlGenerator->generate('user_guide_list');
-        $itemGuides = new MenuType('user_guide_list', 'navbar_user_item', $text, $url);
-        $itemGuides->setActive($route === 'user_guide_list' || $route === 'user_guide_detail');
-        $itemGuides->setPriority(500);
-        $menu->addChild($itemGuides);
+        if ($this->userRepository->existsAtLeastOneGuideWithUrlName())
+        {
+            $text = $this->translator->trans('route.user_guide_list');
+            $url = $this->urlGenerator->generate('user_guide_list');
+            $itemGuides = new MenuType('user_guide_list', 'navbar_user_item', $text, $url);
+            $itemGuides->setActive($route === 'user_guide_list' || $route === 'user_guide_detail');
+            $itemGuides->setPriority(500);
+            $menu->addChild($itemGuides);
+        }
 
         // downloadable files
-        $text = $this->translator->trans('route.user_downloadable_file_list');
-        $url = $this->urlGenerator->generate('user_downloadable_file_list');
-        $itemDownloadableFiles = new MenuType('user_downloadable_file_list', 'navbar_user_item', $text, $url);
-        $itemDownloadableFiles->setActive($route === 'user_downloadable_file_list');
-        $itemDownloadableFiles->setPriority(400);
-        $menu->addChild($itemDownloadableFiles);
+        if ($this->downloadableFileRepository->existsAtLeastOne())
+        {
+            $text = $this->translator->trans('route.user_downloadable_file_list');
+            $url = $this->urlGenerator->generate('user_downloadable_file_list');
+            $itemDownloadableFiles = new MenuType('user_downloadable_file_list', 'navbar_user_item', $text, $url);
+            $itemDownloadableFiles->setActive($route === 'user_downloadable_file_list');
+            $itemDownloadableFiles->setPriority(400);
+            $menu->addChild($itemDownloadableFiles);
+        }
 
         // admin
         if ($this->security->isGranted('admin_access'))
@@ -279,6 +313,15 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
             $this->security->isGranted('page_read')   ||
             $this->security->isGranted('page_create') ||
             $this->security->isGranted('page_update')
+        ;
+    }
+
+    private function userCanViewHiddenBlogPosts(): bool
+    {
+        return
+            $this->security->isGranted('blog_post_read')   ||
+            $this->security->isGranted('blog_post_create') ||
+            $this->security->isGranted('blog_post_update')
         ;
     }
 }

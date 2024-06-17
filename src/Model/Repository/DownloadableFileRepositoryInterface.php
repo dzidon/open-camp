@@ -43,13 +43,20 @@ interface DownloadableFileRepositoryInterface
     public function findUsedExtensions(): array;
 
     /**
+     * Returns true if there is at least one downloadable file.
+     *
+     * @return bool
+     */
+    public function existsAtLeastOne(): bool;
+
+    /**
      * Returns user downloadable file search paginator.
      *
      * @param int $currentPage
      * @param int $pageSize
      * @return PaginatorInterface
      */
-    public function getUserGuidePaginator(int $currentPage, int $pageSize): PaginatorInterface;
+    public function getUserPaginator(int $currentPage, int $pageSize): PaginatorInterface;
 
     /**
      * Returns admin downloadable file search paginator.

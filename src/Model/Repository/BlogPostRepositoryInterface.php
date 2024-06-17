@@ -46,6 +46,14 @@ interface BlogPostRepositoryInterface
     public function findOneByUrlName(string $urlName): ?BlogPost;
 
     /**
+     * Returns true if there is at least one blog post.
+     *
+     * @param bool $includeHidden
+     * @return bool
+     */
+    public function existsAtLeastOneBlogPost(bool $includeHidden): bool;
+
+    /**
      * Returns admin blog post search result.
      *
      * @param AdminBlogPostSearchData $data

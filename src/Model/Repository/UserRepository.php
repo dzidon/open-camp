@@ -184,6 +184,21 @@ class UserRepository extends AbstractRepository implements UserRepositoryInterfa
     /**
      * @inheritDoc
      */
+    public function existsAtLeastOneGuideWithUrlName(): bool
+    {
+        $count = $this->createQueryBuilder('user')
+            ->select('COUNT(user.id)')
+            ->andWhere('user.urlName IS NOT NULL')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getUserGuidePaginator(bool $isFeaturedOnly, int $currentPage, int $pageSize): DqlPaginator
     {
         $queryBuilder = $this->createQueryBuilder('user')

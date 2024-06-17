@@ -11,7 +11,6 @@ use App\Model\Event\Admin\GalleryImageCategory\GalleryImageCategoryDeleteEvent;
 use App\Model\Event\Admin\GalleryImageCategory\GalleryImageCategoryTruncateEvent;
 use App\Model\Event\Admin\GalleryImageCategory\GalleryImageCategoryUpdateEvent;
 use App\Model\Repository\GalleryImageCategoryRepositoryInterface;
-use App\Model\Repository\GalleryImageRepositoryInterface;
 use App\Service\Data\Registry\DataTransferRegistryInterface;
 use App\Service\Form\Type\Admin\GalleryImageCategoryTruncateType;
 use App\Service\Form\Type\Admin\GalleryImageCategoryType;

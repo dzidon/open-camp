@@ -9,6 +9,7 @@ use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\BlogPost;
 use App\Model\Entity\BlogPostView;
 use App\Model\Library\BlogPost\BlogPostResult;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Types\UuidType;
@@ -71,6 +72,27 @@ class BlogPostRepository extends AbstractRepository implements BlogPostRepositor
             ->getQuery()
             ->getOneOrNullResult()
         ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function existsAtLeastOneBlogPost(bool $includeHidden): bool
+    {
+        $queryBuilder = $this->createQueryBuilder('blogPost')
+            ->select('COUNT(blogPost.id)')
+        ;
+
+        if (!$includeHidden)
+        {
+            $queryBuilder->andWhere('blogPost.isHidden = FALSE');
+        }
+
+        $result = (int) $queryBuilder->getQuery()
+            ->getOneOrNullResult(AbstractQuery::HYDRATE_SINGLE_SCALAR)
+        ;
+
+        return $result > 0;
     }
 
     /**

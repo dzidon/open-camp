@@ -115,6 +115,21 @@ class GalleryImageRepository extends AbstractRepository implements GalleryImageR
     /**
      * @inheritDoc
      */
+    public function existsAtLeastOneImageInGallery(): bool
+    {
+        $count = $this->createQueryBuilder('galleryImage')
+            ->select('COUNT(galleryImage.id)')
+            ->andWhere('galleryImage.isHiddenInGallery = FALSE')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+
+        return $count > 0;
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function getAdminPaginator(GalleryImageSearchData $galleryImageSearchData,
                                       int                    $currentPage,
                                       int                    $pageSize): DqlPaginator
