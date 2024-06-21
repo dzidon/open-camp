@@ -37,10 +37,6 @@ class GalleryImageDataTransfer implements DataTransferInterface
         {
             $galleryImageData->setCarouselPriority($galleryImage->getCarouselPriority());
         }
-        else
-        {
-            $galleryImageData->setCarouselPriority(null);
-        }
     }
 
     /**

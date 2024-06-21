@@ -112,14 +112,14 @@
                 {% if granted_update or granted_delete %}
                     <div class="card-footer">
                         <a href="{{ path('user_blog_post_read', {urlName: blog_post.urlName}) }}"
-                           class="btn btn-secondary mr-2"
+                           class="btn btn-secondary me-2"
                         >
-                            {{ 'crud.action.blog_post.show_in_catalog'|trans }}
+                            {{ 'crud.action.blog_post.show_in_user_web'|trans }}
                         </a>
 
                         {% if granted_update %}
                             <a href="{{ path('admin_blog_post_update', {id: blog_post.id.toRfc4122}) }}"
-                               class="btn btn-primary mr-2"
+                               class="btn btn-primary me-2"
                             >
                                 {{ 'crud.action.common.update'|trans }}
                             </a>

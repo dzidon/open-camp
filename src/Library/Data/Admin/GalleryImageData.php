@@ -26,7 +26,7 @@ class GalleryImageData
             new Assert\NotBlank(),
         ],
     )]
-    private ?int $carouselPriority = null;
+    private ?int $carouselPriority = 0;
 
     public function __construct(array $galleryImageCategories = [])
     {

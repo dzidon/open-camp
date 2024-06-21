@@ -47,7 +47,7 @@ class PageType extends AbstractType
             ->add('menuPriority', IntegerType::class, [
                 'required' => false,
                 'row_attr' => [
-                    'class'                                   => 'menu-field-visibility',
+                    'class'                                   => 'mb-3 menu-field-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '1',
                 ],

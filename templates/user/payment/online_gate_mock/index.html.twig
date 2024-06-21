@@ -18,16 +18,16 @@
             <div class="row d-flex justify-content-around">
                 <div class="col-12 col-sm-9 col-md-7 col-lg-5 col-xl-4">
                     <a href="{{ path('user_application_completed', {applicationId: application.id}) }}">
-                        <i class="fas fa-long-arrow-alt-left mr-2"></i>
+                        <i class="fas fa-long-arrow-alt-left me-2"></i>
                         {{ 'online_payment_gate_mock.back_to_application'|trans }}
                     </a>
 
-                    <div class="text-center mt-3">
+                    <div class="mt-3">
                         <h2 class="mb-3">
                             {{ route_name() }}
                         </h2>
 
-                        <div class="card mb-3">
+                        <div class="card text-center mb-3">
                             <div class="card-body">
                                 <a href="{{ url_pay }}" class="stretched-link">
                                     {{ 'online_payment_gate_mock.pay'|trans }}
@@ -35,7 +35,7 @@
                             </div>
                         </div>
 
-                        <div class="card mb-3">
+                        <div class="card text-center mb-3">
                             <div class="card-body">
                                 <a href="{{ url_cancel }}" class="stretched-link">
                                     {{ 'online_payment_gate_mock.cancel'|trans }}

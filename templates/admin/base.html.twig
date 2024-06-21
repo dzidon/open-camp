@@ -9,42 +9,41 @@
 {% endblock %}
 
 {% block body_class %}
-    hold-transition sidebar-mini
+    layout-fixed sidebar-expand-lg bg-body-tertiary
 {% endblock %}
 
 {% block body %}
-    <div class="wrapper">
+    <div class="app-wrapper">
         <!-- Top navbar -->
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <!-- Left aligned items -->
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button">
-                        <i class="fa-solid fa-bars"></i>
-                    </a>
-                </li>
-            </ul>
+        <nav class="app-header navbar navbar-expand bg-body">
+            <div class="container-fluid">
+                <!-- Left aligned items -->
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" data-lte-toggle="sidebar" href="#" role="button">
+                            <i class="fa-solid fa-bars"></i>
+                        </a>
+                    </li>
+                </ul>
 
-            <!-- Right aligned items -->
-            {% set navbar_admin_horizontal = build_menu('navbar_admin_horizontal') %}
-            {{ menu(navbar_admin_horizontal) }}
+                <!-- Right aligned items -->
+                {% set navbar_admin_horizontal = build_menu('navbar_admin_horizontal') %}
+                {{ menu(navbar_admin_horizontal) }}
+            </div>
         </nav>
 
         <!-- Left navbar -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
             <!-- Logo -->
-            <a href="{{ path('admin_home') }}" class="brand-link">
-                <img src="{{ company_logo_url() }}"
-                     alt="{{ company_name }}"
-                     class="brand-image elevation-3"
-                     style="opacity: 0.8;"
-                >
-
-                <span class="brand-text font-weight-light">{{ company_name }}</span>
-            </a>
+            <div class="sidebar-brand">
+                <a class="brand-link" href="{{ path('admin_home') }}">
+                    <img src="{{ company_logo_url() }}" alt="{{ company_name }}" class="brand-image opacity-75 shadow">
+                    <span class="brand-text fw-light">{{ company_name }}</span>
+                </a>
+            </div>
 
             <!-- Sidebar -->
-            <div class="sidebar">
+            <div class="sidebar-wrapper">
                 <!-- Sidebar menu -->
                 <nav class="mt-2">
                     {% set navbar_admin_vertical = build_menu('navbar_admin_vertical') %}
@@ -54,21 +53,21 @@
         </aside>
 
         <!-- Content -->
-        <div class="content-wrapper">
-            <div class="content-header">
+        <main class="app-main">
+            <div class="app-content-header">
                 <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-xl-4">
                             <!-- Heading -->
                             {% block h1 %}
                                 {% if is_route_name_set() %}
-                                    <h1 class="m-0">{{ route_name() }}</h1>
+                                    <h3 class="m-0">{{ route_name() }}</h3>
                                 {% endif %}
                             {% endblock %}
                         </div>
 
-                        <div class="col-sm-6">
-                            <div class="float-sm-right">
+                        <div class="col-xl-8">
+                            <div class="float-xl-end">
                                 {% if breadcrumbs is defined %}
                                     {{ menu(breadcrumbs) }}
                                 {% endif %}
@@ -78,7 +77,7 @@
                 </div>
             </div>
 
-            <section class="content">
+            <div class="app-content">
                 <div class="container-fluid">
                     <!-- Flash messages -->
                     {% block flash %}
@@ -87,11 +86,11 @@
 
                     {% block main %}{% endblock %}
                 </div>
-            </section>
-        </div>
+            </div>
+        </main>
 
         <!-- Footer -->
-        <footer class="main-footer">
+        <footer class="app-footer">
             <strong>&copy; {{ 'now' | date('Y') }}, {{ company_name }}</strong>
         </footer>
     </div>

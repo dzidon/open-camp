@@ -2,6 +2,7 @@
 
 namespace App\Service\Menu\Factory;
 
+use App\Library\Menu\MenuIconType;
 use App\Library\Menu\MenuType;
 use App\Model\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -52,13 +53,13 @@ class AdminNavbarHorizontalMenuTypeFactory extends AbstractMenuTypeFactory
         // profile
         $text = $this->translator->trans('route.admin_profile');
         $url = $this->urlGenerator->generate('admin_profile');
-        $itemProfile = new MenuType('admin_profile', 'navbar_admin_horizontal_item', $text, $url);
+        $itemProfile = new MenuIconType('admin_profile', 'navbar_admin_horizontal_item_deep', $text, $url, 'fas fa-user-alt');
         $itemParentProfile->addChild($itemProfile);
 
         // logout
         $text = $this->translator->trans('route.user_logout');
         $url = $this->urlGenerator->generate('user_logout');
-        $itemLogout = new MenuType('user_logout', 'navbar_admin_horizontal_item', $text, $url);
+        $itemLogout = new MenuIconType('user_logout', 'navbar_admin_horizontal_item_deep', $text, $url, 'fas fa-sign-out-alt');
         $itemParentProfile->addChild($itemLogout);
 
         return $menu;

@@ -9,7 +9,7 @@ export default class FormFieldTypeController extends Controller
     static values = {
         spinner: String,
         url: String
-    }
+    };
 
     connect()
     {

@@ -27,7 +27,7 @@ class CampCatalogBreadcrumbsTest extends KernelTestCase
 
         $button = $menu->getChild('user_camp_catalog');
         $this->assertSame(true, $button->isActive());
-        $this->assertSame('/catalog', $button->getUrl());
+        $this->assertSame('/camps', $button->getUrl());
     }
 
     public function testListWithCampCategories(): void
@@ -49,15 +49,15 @@ class CampCatalogBreadcrumbsTest extends KernelTestCase
 
         $button = $breadcrumbsMenu->getChild('user_camp_catalog');
         $this->assertSame(false, $button->isActive());
-        $this->assertSame('/catalog', $button->getUrl());
+        $this->assertSame('/camps', $button->getUrl());
 
         $button = $breadcrumbsMenu->getChild('user_camp_catalog_0');
         $this->assertSame(false, $button->isActive());
-        $this->assertSame('/catalog/a', $button->getUrl());
+        $this->assertSame('/camps/a', $button->getUrl());
 
         $button = $breadcrumbsMenu->getChild('user_camp_catalog_1');
         $this->assertSame(true, $button->isActive());
-        $this->assertSame('/catalog/a/b', $button->getUrl());
+        $this->assertSame('/camps/a/b', $button->getUrl());
     }
 
     protected function setUp(): void

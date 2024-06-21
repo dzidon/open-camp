@@ -46,7 +46,7 @@
                 {% if granted_update or granted_delete %}
                     <div class="card-footer">
                         {% if granted_update %}
-                            <a href="{{ path('admin_camp_category_update', {id: camp_category.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                            <a href="{{ path('admin_camp_category_update', {id: camp_category.id.toRfc4122}) }}" class="btn btn-primary me-2">
                                 {{ 'crud.action.common.update'|trans }}
                             </a>
                         {% endif %}

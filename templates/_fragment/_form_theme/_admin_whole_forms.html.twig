@@ -2,7 +2,7 @@
 {% block admin_profile_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
+    <div class="row">
         <div class="col-md-6">
             {{ form_row(form.nameFirst) }}
         </div>
@@ -85,20 +85,20 @@
 {% block admin_gallery_image_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.galleryImageCategory) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="col-md-6">
             {{ form_row(form.isHiddenInGallery) }}
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="col-md-6">
             {{ form_row(form.isInCarousel) }}
         </div>
     </div>
@@ -112,24 +112,24 @@
 {% block admin_attachment_config_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.fileExtensions) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.requiredType) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isGlobal) }}
         </div>
     </div>
@@ -143,12 +143,12 @@
 {% block admin_discount_config_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
     </div>
@@ -216,28 +216,28 @@
 {% block admin_camp_date_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-4">
+    <div class="row">
+        <div class="col-md-4">
             {{ form_row(form.from) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.to) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isHistorical) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isHidden) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isOpenOnly) }}
         </div>
     </div>
@@ -251,40 +251,40 @@
 {% block admin_camp_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-4">
+    <div class="row">
+        <div class="col-md-4">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.campCategory) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.from) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.to) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.age) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isFeatured) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isHidden) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isOpenOnly) }}
         </div>
     </div>
@@ -298,24 +298,24 @@
 {% block admin_form_field_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.type) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isRequired) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isGlobal) }}
         </div>
     </div>
@@ -329,16 +329,16 @@
 {% block admin_purchasable_item_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.isGlobal) }}
         </div>
     </div>
@@ -389,12 +389,12 @@
 {% block admin_purchasable_item_variant_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
     </div>
@@ -408,12 +408,12 @@
 {% block admin_purchasable_item_variant_value_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
     </div>
@@ -427,12 +427,12 @@
 {% block admin_role_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
     </div>
@@ -446,20 +446,20 @@
 {% block admin_user_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="col-md-6">
             {{ form_row(form.role) }}
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="col-md-6">
             {{ form_row(form.isFeaturedGuide) }}
         </div>
     </div>
@@ -473,12 +473,12 @@
 {% block admin_trip_location_path_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
     </div>
@@ -492,12 +492,12 @@
 {% block admin_trip_location_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
     </div>
@@ -511,12 +511,12 @@
 {% block admin_application_camp_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
     </div>
@@ -530,16 +530,16 @@
 {% block admin_application_camp_date_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-4">
+    <div class="row">
+        <div class="col-md-4">
             {{ form_row(form.from) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.to) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.sortBy) }}
         </div>
     </div>
@@ -553,20 +553,20 @@
 {% block admin_application_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="col-md-6">
             {{ form_row(form.isOnlinePaymentMethod) }}
         </div>
 
-        <div class="form-group col-md-6">
+        <div class="col-md-6">
             {{ form_row(form.isAccepted) }}
         </div>
     </div>
@@ -623,12 +623,12 @@
 {% block admin_application_contact_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
     </div>
@@ -642,16 +642,16 @@
 {% block admin_application_payment_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-4">
+    <div class="row">
+        <div class="col-md-4">
             {{ form_row(form.type) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isOnline) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.sortBy) }}
         </div>
     </div>
@@ -665,41 +665,41 @@
 {% block admin_application_camper_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
 
         {% if form.isApplicationAccepted is defined %}
-            <div class="form-group col-md-6">
+            <div class="col-md-6">
                 {{ form_row(form.ageMin) }}
             </div>
 
-            <div class="form-group col-md-6">
+            <div class="col-md-6">
                 {{ form_row(form.ageMax) }}
             </div>
 
-            <div class="form-group col-md-6">
+            <div class="col-md-6">
                 {{ form_row(form.gender) }}
             </div>
 
-            <div class="form-group col-md-6">
+            <div class="col-md-6">
                 {{ form_row(form.isApplicationAccepted) }}
             </div>
         {% else %}
-            <div class="form-group col-md-4">
+            <div class="col-md-4">
                 {{ form_row(form.ageMin) }}
             </div>
 
-            <div class="form-group col-md-4">
+            <div class="col-md-4">
                 {{ form_row(form.ageMax) }}
             </div>
 
-            <div class="form-group col-md-4">
+            <div class="col-md-4">
                 {{ form_row(form.gender) }}
             </div>
         {% endif %}
@@ -710,6 +710,7 @@
     </button>
 {% endblock %}
 
+{# Application purchasable items #}
 {% block admin_application_purchasable_items_widget %}
     {{ form_errors(form) }}
 
@@ -740,19 +741,20 @@
     {{ form_rest(form) }}
 {% endblock %}
 
+{# Application admin attachment search #}
 {% block admin_application_admin_attachment_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.extensions) }}
         </div>
     </div>
@@ -762,19 +764,20 @@
     </button>
 {% endblock %}
 
+{# Downloadable file search #}
 {% block admin_downloadable_file_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.extensions) }}
         </div>
     </div>
@@ -784,27 +787,28 @@
     </button>
 {% endblock %}
 
+{# Blog post search #}
 {% block admin_blog_post_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isHidden) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.isPinned) }}
         </div>
 
-        <div class="form-group col-md-4">
+        <div class="col-md-4">
             {{ form_row(form.author) }}
         </div>
     </div>
@@ -814,19 +818,20 @@
     </button>
 {% endblock %}
 
+{# Page search #}
 {% block admin_page_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
-        <div class="form-group col-md-9">
+    <div class="row">
+        <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.sortBy) }}
         </div>
 
-        <div class="form-group col-md-3">
+        <div class="col-md-3">
             {{ form_row(form.isHidden) }}
         </div>
     </div>
@@ -834,4 +839,27 @@
     <button type="submit" class="btn btn-primary mb-2">
         {{ 'form.admin.page_search.button'|trans }}
     </button>
+{% endblock %}
+
+{# Discount config #}
+{% block admin_discount_config_widget %}
+    {{ form_errors(form) }}
+
+    {{ form_row(form.name) }}
+
+    <h3 class="mb-3">
+        {{ form.discountRecurringCamperConfigsData.vars.label|trans }}
+    </h3>
+
+    {{ form_row(form.discountRecurringCamperConfigsData, {label: false}) }}
+    {{ form_row(form.addDiscountRecurringCamperConfigData) }}
+
+    <h3 class="mb-3">
+        {{ form.discountSiblingConfigsData.vars.label|trans }}
+    </h3>
+    
+    {{ form_row(form.discountSiblingConfigsData, {label: false}) }}
+    {{ form_row(form.addDiscountSiblingConfigData) }}
+
+    {{ form_rest(form) }}
 {% endblock %}

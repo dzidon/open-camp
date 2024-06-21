@@ -28,8 +28,8 @@
         </div>
     </div>
 
-    <button type="submit" class="btn btn-primary btn-block mt-2">
-        <i class="fas fa-search mr-2"></i> {{ 'form.user.camp_search.button'|trans }}
+    <button type="submit" class="btn btn-primary w-100 mt-2">
+        <i class="fas fa-search me-2"></i> {{ 'form.user.camp_search.button'|trans }}
     </button>
 {% endblock %}
 
@@ -37,7 +37,7 @@
 {% block user_camper_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
+    <div class="row">
         <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
@@ -54,7 +54,7 @@
 {% block user_application_profile_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
+    <div class="row">
         <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
@@ -71,7 +71,7 @@
 {% block user_contact_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
+    <div class="row">
         <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
@@ -87,7 +87,7 @@
 {% block user_blog_post_search_widget %}
     {{ form_errors(form) }}
 
-    <div class="form-row">
+    <div class="row">
         <div class="col-md-9">
             {{ form_row(form.phrase) }}
         </div>
@@ -580,7 +580,7 @@
             </div>
         {% endif %}
 
-        <div class="{% if application_back_url is defined %} col-6 {% else %} col-12 {% endif %} text-right">
+        <div class="{% if application_back_url is defined %} col-6 {% else %} col-12 {% endif %} text-end">
             {{ form_row(form.submit) }}
         </div>
     </div>

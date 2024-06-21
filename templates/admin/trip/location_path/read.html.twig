@@ -50,7 +50,7 @@
                 {% if granted_update or granted_delete %}
                     <div class="card-footer">
                         {% if granted_update %}
-                            <a href="{{ path('admin_trip_location_path_update', {id: trip_location_path.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                            <a href="{{ path('admin_trip_location_path_update', {id: trip_location_path.id.toRfc4122}) }}" class="btn btn-primary me-2">
                                 {{ 'crud.action.common.update'|trans }}
                             </a>
                         {% endif %}

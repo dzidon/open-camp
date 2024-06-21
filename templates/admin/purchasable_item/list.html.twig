@@ -4,10 +4,10 @@
     <div class="row">
         <div class="col-12">
             <div class="card card-outline card-primary">
-                <a data-toggle="collapse" href="#search-content" role="button">
+                <a data-bs-toggle="collapse" href="#search-content" role="button">
                     <div class="card-header">
                         <h3 class="card-title">
-                            <i class="fas fa-search mr-2"></i>
+                            <i class="fas fa-search me-2"></i>
                             {{ 'search.label'|trans }}
                         </h3>
                     </div>
@@ -21,17 +21,7 @@
     </div>
 
     {% if is_search_invalid %}
-        <div class="row">
-            <div class="col-12">
-                <div class="card card-outline card-danger">
-                    <div class="card-header">
-                        <span>
-                            {{ 'search.error.invalid_filter'|trans }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {{ include('_fragment/_form/_admin_invalid_search_row.html.twig') }}
     {% endif %}
 
     <div class="row">
@@ -48,7 +38,7 @@
 
                     {% set granted_create = is_granted('purchasable_item_create') %}
                     {% if granted_create %}
-                        <a href="{{ path('admin_purchasable_item_create') }}" class="btn btn-success ml-3">
+                        <a href="{{ path('admin_purchasable_item_create') }}" class="btn btn-success ms-3">
                             {{ 'crud.action.common.create'|trans }}
                         </a>
                     {% endif %}

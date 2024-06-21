@@ -279,12 +279,12 @@
                 </div>
 
                 <div class="card-footer">
-                    <a href="{{ path('admin_camp_date_update', {id: camp_date.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                    <a href="{{ path('admin_camp_date_update', {id: camp_date.id.toRfc4122}) }}" class="btn btn-primary me-2">
                         {{ 'crud.action.common.update'|trans }}
                     </a>
 
                     <a href="{{ path('admin_camp_date_create', {id: camp.id.toRfc4122, duplicateCampDateId: camp_date.id.toRfc4122}) }}"
-                       class="btn btn-primary mr-2"
+                       class="btn btn-primary me-2"
                     >
                         {{ 'crud.action.common.duplicate'|trans }}
                     </a>

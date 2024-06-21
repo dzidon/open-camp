@@ -12,20 +12,20 @@
                         <div class="card-body">
                             <h5 class="mb-0">
                                 {% if application.isAccepted is same as(true) %}
-                                    <i class="fas fa-check-circle text-success mr-2"></i>
+                                    <i class="fas fa-check-circle text-success me-2"></i>
 
                                     {{ 'application.is_accepted_state.user.accepted'|trans }}
                                 {% elseif application.isAccepted is same as(false) %}
-                                    <i class="fas fas fa-times-circle text-danger mr-2"></i>
+                                    <i class="fas fas fa-times-circle text-danger me-2"></i>
 
                                     {{ 'application.is_accepted_state.user.declined'|trans }}
                                 {% elseif application.isAccepted is same as(null) %}
                                     {% if form_attachments_upload_later is null and not is_application_awaiting_payment %}
-                                        <i class="fas fa-check-circle text-primary mr-2"></i>
+                                        <i class="fas fa-check-circle text-primary me-2"></i>
 
                                         {{ 'application.is_accepted_state.user.null_and_working_on_it'|trans }}
                                     {% else %}
-                                        <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
+                                        <i class="fas fa-exclamation-triangle text-warning me-2"></i>
 
                                         {{ 'application.is_accepted_state.user.null_and_not_ready'|trans }}
                                     {% endif %}
@@ -36,7 +36,7 @@
                 </div>
             </div>
 
-            {% if is_application_awaiting_payment %}
+            {% if is_application_awaiting_payment and application.paymentMethod is not null %}
                 {% set payment_url_deposit = path('user_application_online_pay', {applicationId: application.id, type: 'deposit'}) %}
                 {% set payment_url_rest = path('user_application_online_pay', {applicationId: application.id, type: 'rest'}) %}
                 {% set payment_url_full = path('user_application_online_pay', {applicationId: application.id, type: 'full'}) %}
@@ -46,7 +46,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="mb-3">
-                                    <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
+                                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
 
                                     {{ 'application.completed_screen.payment.heading'|trans }}
                                 </h5>
@@ -120,7 +120,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="mb-3">
-                                    <i class="fas fa-exclamation-triangle text-warning mr-2"></i>
+                                    <i class="fas fa-exclamation-triangle text-warning me-2"></i>
 
                                     {{ 'application.completed_screen.form_attachments_upload_later'|trans }}
                                 </h5>
@@ -143,7 +143,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="mb-3">
-                                        <i class="fas fa-info-circle text-secondary mr-2"></i>
+                                        <i class="fas fa-info-circle text-secondary me-2"></i>
 
                                         {{ 'application.completed_screen.import_to_user.heading'|trans }}
                                     </h5>
@@ -165,7 +165,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="mb-3">
-                                        <i class="fas fa-info-circle text-secondary mr-2"></i>
+                                        <i class="fas fa-info-circle text-secondary me-2"></i>
 
                                         {{ 'application.completed_screen.import_to_user.heading'|trans }}
                                     </h5>
@@ -192,7 +192,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="mb-3">
-                                    <i class="fas fa-file-invoice text-secondary mr-2"></i>
+                                    <i class="fas fa-file-invoice text-secondary me-2"></i>
 
                                     {{ 'application.completed_screen.invoice.title'|trans }}
                                 </h5>
@@ -223,7 +223,7 @@
                 </div>
 
                 <div class="col-6">
-                    <span class="float-right">
+                    <span class="float-end">
                         {{ application.simpleId }}
                     </span>
                 </div>
@@ -238,7 +238,7 @@
                     </div>
 
                     <div class="col-6">
-                        <span class="float-right">
+                        <span class="float-end">
                             {{ application.completedAt|date(date_time_format) }}
                         </span>
                     </div>
@@ -253,7 +253,7 @@
                 </div>
 
                 <div class="col-6">
-                    <span class="float-right">
+                    <span class="float-end">
                         {{ application.campName }}
                     </span>
                 </div>
@@ -267,7 +267,7 @@
                 </div>
 
                 <div class="col-6">
-                    <span class="float-right">
+                    <span class="float-end">
                         {{ application.campDateStartAt|date(date_time_format) }}
                     </span>
                 </div>
@@ -281,7 +281,7 @@
                 </div>
 
                 <div class="col-6">
-                    <span class="float-right">
+                    <span class="float-end">
                         {{ application.campDateEndAt|date(date_time_format) }}
                     </span>
                 </div>
@@ -327,7 +327,7 @@
                                 </strong>
                             </div>
 
-                            <div class="col-4 text-right">
+                            <div class="col-4 text-end">
                                 <span>
                                     {{ application.getPricePerCamper|format_currency(application.currency) }}
                                 </span>
@@ -353,7 +353,7 @@
                                         </span>
                                     </div>
 
-                                    <div class="col-4 text-right">
+                                    <div class="col-4 text-end">
                                         <span>
                                             +{{ application_trip_location_path.price|format_currency(application.currency) }}
                                         </span>
@@ -372,7 +372,7 @@
                                     </span>
                                 </div>
 
-                                <div class="col-4 text-right">
+                                <div class="col-4 text-end">
                                     <span>
                                         -{{ application_camper.discountRecurringCamper|format_currency(application.currency) }}
                                     </span>
@@ -390,7 +390,7 @@
                                     </span>
                                 </div>
 
-                                <div class="col-4 text-right">
+                                <div class="col-4 text-end">
                                     <span>
                                         -{{ application_camper.discountSiblings|format_currency(application.currency) }}
                                     </span>
@@ -406,7 +406,7 @@
                                     </u>
                                 </div>
 
-                                <div class="col-4 text-right">
+                                <div class="col-4 text-end">
                                     <u>
                                         {{ application_camper.fullPrice|format_currency(application.currency) }}
                                     </u>
@@ -447,7 +447,7 @@
                                 </div>
 
                                 {% if not is_expanded_view %}
-                                    <div class="col-4 text-right">
+                                    <div class="col-4 text-end">
                                         <span>
                                             {{ application_purchasable_item.fullPrice|format_currency(application.currency) }}
                                         </span>
@@ -462,7 +462,7 @@
 
                                         <div class="row d-flex align-items-end">
                                             <div class="col-8 d-flex">
-                                                <div class="flex-shrink-0 mr-1">
+                                                <div class="flex-shrink-0 me-1">
                                                     &#8627;
                                                 </div>
 
@@ -484,7 +484,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-4 text-right">
+                                            <div class="col-4 text-end">
                                                 <span>
                                                     {{ instance.price|format_currency(application.currency) }}
                                                 </span>
@@ -502,7 +502,7 @@
                                         </u>
                                     </div>
 
-                                    <div class="col-4 text-right">
+                                    <div class="col-4 text-end">
                                         <u>
                                             {{ application_purchasable_item.fullPrice|format_currency(application.currency) }}
                                         </u>
@@ -517,7 +517,7 @@
     </div>
 {% endif %}
 
-<div class="row mb-4">
+<div class="row mb-3">
     <div class="col-md-8 col-lg-6 col-xl-5">
         {% if application.paymentMethod is not null %}
             <div class="row d-flex align-items-end mb-3">
@@ -527,7 +527,7 @@
                     </strong>
                 </div>
 
-                <div class="col-6 text-right">
+                <div class="col-6 text-end">
                     <span>
                         {{ application.paymentMethod.label|trans }}
                     </span>
@@ -543,7 +543,7 @@
                     </strong>
                 </div>
 
-                <div class="col-6 text-right">
+                <div class="col-6 text-end">
                     <span>
                         {{ application.fullPriceWithoutTax|format_currency(application.currency) }}
                     </span>
@@ -553,15 +553,15 @@
 
         <div class="row d-flex align-items-end">
             <div class="col-6">
-                <h3>
+                <h3 class="mb-0">
                     <strong>
                         {{ 'application.summary.total_price'|trans }}
                     </strong>
                 </h3>
             </div>
 
-            <div class="col-6 text-right">
-                <h3>
+            <div class="col-6 text-end">
+                <h3 class="mb-0">
                     <strong>
                         {{ application.fullPrice|format_currency(application.currency) }}
                     </strong>

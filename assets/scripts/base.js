@@ -20,7 +20,7 @@ function scrollToTop()
 
 function scrollToFirstError()
 {
-    const firstError = document.getElementsByClassName('form-error-message')[0];
+    const firstError = document.getElementsByClassName('invalid-feedback')[0];
 
     if (firstError)
     {
@@ -30,7 +30,7 @@ function scrollToFirstError()
                 block: 'center',
                 inline: 'center'
             });
-        }, 100);
+        }, 200);
     }
 }
 

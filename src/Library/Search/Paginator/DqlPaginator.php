@@ -19,6 +19,7 @@ class DqlPaginator implements PaginatorInterface
     {
         $this->pageSize = $pageSize;
         $this->currentPage = $currentPage;
+
         if ($this->currentPage < 1)
         {
             $this->currentPage = 1;
@@ -65,6 +66,36 @@ class DqlPaginator implements PaginatorInterface
     public function getCurrentPage(): int
     {
         return $this->currentPage;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPreviousPage(): ?int
+    {
+        $previousPage = $this->currentPage - 1;
+
+        if ($this->isPageOutOfBounds($previousPage))
+        {
+            return null;
+        }
+
+        return $previousPage;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getNextPage(): ?int
+    {
+        $nextPage = $this->currentPage + 1;
+
+        if ($this->isPageOutOfBounds($nextPage))
+        {
+            return null;
+        }
+
+        return $nextPage;
     }
 
     /**

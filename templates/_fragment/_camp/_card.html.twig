@@ -41,7 +41,7 @@
 
         {% if camp_dates is empty %}
             <div>
-                <span class="badge badge-danger">
+                <span class="badge bg-danger">
                     {{ 'camp_catalog.no_upcoming_camp_dates'|trans }}
                 </span>
             </div>
@@ -49,11 +49,11 @@
             {% for camp_date in camp_dates %}
                 {% set badge_color %}
                     {% if camp_date.hidden %}
-                        badge-warning
+                        bg-warning text-dark
                     {% elseif catalog_result.isCampDateOpen(camp_date) %}
-                        badge-success
+                        bg-success
                     {% else %}
-                        badge-danger
+                        bg-danger
                     {% endif %}
                 {% endset %}
 

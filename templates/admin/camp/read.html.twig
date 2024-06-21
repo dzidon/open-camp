@@ -249,12 +249,12 @@
                 {% set granted_delete = is_granted('camp_delete') %}
 
                 <div class="card-footer">
-                    <a href="{{ path('user_camp_detail', {urlName: camp.urlName}) }}" class="btn btn-secondary mr-2">
+                    <a href="{{ path('user_camp_detail', {urlName: camp.urlName}) }}" class="btn btn-secondary me-2">
                         {{ 'crud.action.camp.show_in_catalog'|trans }}
                     </a>
 
                     {% if granted_update %}
-                        <a href="{{ path('admin_camp_update', {id: camp.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                        <a href="{{ path('admin_camp_update', {id: camp.id.toRfc4122}) }}" class="btn btn-primary me-2">
                             {{ 'crud.action.common.update'|trans }}
                         </a>
                     {% endif %}

@@ -45,7 +45,7 @@ class CamperType extends AbstractType
                     ],
                     'help'     => 'form.common.camper.national_identifier.help',
                     'row_attr' => [
-                        'class'                                   => 'national-id-visibility',
+                        'class'                                   => 'mb-3 national-id-visibility',
                         'data-controller'                         => 'cv--content',
                         'data-cv--content-show-when-chosen-value' => '0',
                     ],

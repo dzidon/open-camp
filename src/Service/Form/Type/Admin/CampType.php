@@ -90,7 +90,7 @@ class CampType extends AbstractType
                     'class' => 'required'
                 ],
                 'row_attr' => [
-                    'class'                                   => 'address-field-visibility',
+                    'class'                                   => 'mb-3 address-field-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '1',
                 ],
@@ -102,7 +102,7 @@ class CampType extends AbstractType
                     'class' => 'required'
                 ],
                 'row_attr' => [
-                    'class'                                   => 'address-field-visibility',
+                    'class'                                   => 'mb-3 address-field-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '1',
                 ],
@@ -114,7 +114,7 @@ class CampType extends AbstractType
                     'class' => 'required'
                 ],
                 'row_attr' => [
-                    'class'                                   => 'address-field-visibility',
+                    'class'                                   => 'mb-3 address-field-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '1',
                 ],
@@ -126,7 +126,7 @@ class CampType extends AbstractType
                     'class' => 'required'
                 ],
                 'row_attr' => [
-                    'class'                                   => 'address-field-visibility',
+                    'class'                                   => 'mb-3 address-field-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '1',
                 ],

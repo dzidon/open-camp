@@ -50,7 +50,7 @@ class ApplicationPurchasableItemVariantType extends AbstractType
                 'choice_translation_domain' => false,
                 'placeholder'               => $this->translator->trans('form.common.choice.choose'),
                 'row_attr'                  => [
-                    'class'                                   => 'value-visibility',
+                    'class'                                   => 'mb-3 value-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '1',
                 ],

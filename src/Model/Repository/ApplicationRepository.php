@@ -334,12 +334,13 @@ class ApplicationRepository extends AbstractRepository implements ApplicationRep
             ->groupBy('application.id')
         ;
 
-        if ($isOnlinePaymentMethod !== null)
+        if ($isOnlinePaymentMethod === true)
         {
-            $queryBuilder
-                ->andWhere('paymentMethod.isOnline = :isOnline')
-                ->setParameter('isOnline', $isOnlinePaymentMethod)
-            ;
+            $queryBuilder->andWhere('paymentMethod.isOnline = true');
+        }
+        else if ($isOnlinePaymentMethod === false)
+        {
+            $queryBuilder->andWhere('application.paymentMethod IS NULL OR paymentMethod.isOnline = false');
         }
 
         if ($isAccepted === ApplicationAcceptedStateEnum::ACCEPTED)

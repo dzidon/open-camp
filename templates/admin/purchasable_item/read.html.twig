@@ -115,7 +115,7 @@
                 {% if granted_update or granted_delete %}
                     <div class="card-footer">
                         {% if granted_update %}
-                            <a href="{{ path('admin_purchasable_item_update', {id: purchasable_item.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                            <a href="{{ path('admin_purchasable_item_update', {id: purchasable_item.id.toRfc4122}) }}" class="btn btn-primary me-2">
                                 {{ 'crud.action.common.update'|trans }}
                             </a>
                         {% endif %}

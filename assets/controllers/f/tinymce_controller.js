@@ -8,11 +8,14 @@ import 'tinymce/icons/default';
  */
 export default class TinymceController extends Controller
 {
+    static values = {
+        dark: Boolean
+    };
+
     connect()
     {
         const selector = '#' + $(this.element).attr('id');
-
-        tinymce.init({
+        const options = {
             selector: selector,
             language: document.documentElement.lang,
             base_url: '/build/tinymce',
@@ -23,6 +26,14 @@ export default class TinymceController extends Controller
             image_class_list: [
                 {title: 'img-fluid', value: 'img-fluid'},
             ],
-        });
+        };
+
+        if (this.darkValue)
+        {
+            options.skin = 'oxide-dark';
+            options.content_css = 'dark';
+        }
+
+        tinymce.init(options);
     }
 }

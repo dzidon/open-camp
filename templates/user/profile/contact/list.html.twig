@@ -1,20 +1,14 @@
 {% extends "user/profile/base.html.twig" %}
 
 {% block profile_content %}
-    <div class="row mb-5">
+    <div class="row mb-4">
         <div class="col">
             {{ form(form_search) }}
         </div>
     </div>
 
     {% if is_search_invalid %}
-        <div class="row mb-4">
-            <div class="col">
-                <div class="alert alert-danger" role="alert">
-                    {{ 'search.error.invalid_filter'|trans }}
-                </div>
-            </div>
-        </div>
+        {{ include('_fragment/_form/_user_invalid_search_row.html.twig') }}
     {% endif %}
 
     <div class="row mb-3">

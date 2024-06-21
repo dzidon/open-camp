@@ -6,10 +6,10 @@
             <div class="col-12 d-flex flex-wrap pb-3">
                 {% for gallery_image_category_child in gallery_image_category_children %}
                     <a href="{{ path('user_gallery_image_list', {path: gallery_image_category_child.path}) }}"
-                       class="mr-2"
+                       class="me-2"
                     >
                         <h5>
-                            <span class="badge badge-pill badge-primary">
+                            <span class="badge rounded-pill bg-primary">
                                 {{ gallery_image_category_child.name }}
                             </span>
                         </h5>
@@ -27,14 +27,12 @@
                         {% set image_url = gallery_image_url(gallery_image) %}
 
                         <div class="mb-3 col-6 col-sm-4 col-md-3 col-xl-2">
-                            <div class="bg-black">
-                                <a href="{{ image_url }}">
-                                    <img class="image-cover-1-1 img-thumbnail"
-                                         src="{{ image_url }}"
-                                         alt="{{ 'entity.gallery_image.singular'|trans }}"
-                                    >
-                                </a>
-                            </div>
+                            <a href="{{ image_url }}">
+                                <img class="image-cover-1-1 img-thumbnail"
+                                     src="{{ image_url }}"
+                                     alt="{{ 'entity.gallery_image.singular'|trans }}"
+                                >
+                            </a>
                         </div>
                     {% endfor %}
                 </div>

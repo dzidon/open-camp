@@ -55,14 +55,14 @@
 
                 <div class="card-footer">
                     <a href="{{ path('user_downloadable_file_download', {id: downloadable_file.id.toRfc4122}) }}"
-                       class="btn btn-secondary mr-2"
+                       class="btn btn-secondary me-2"
                     >
                         {{ 'crud.action.common.download'|trans }}
                     </a>
 
                     {% if granted_update %}
                         <a href="{{ path('admin_downloadable_file_update', {id: downloadable_file.id.toRfc4122}) }}"
-                           class="btn btn-primary mr-2"
+                           class="btn btn-primary me-2"
                         >
                             {{ 'crud.action.common.update'|trans }}
                         </a>

@@ -8,11 +8,11 @@
         {% endfor %}
     {% endset %}
 
-    <div class="list-group list-group-horizontal d-none d-md-flex">
+    <ul class="nav nav-pills nav-fill d-none d-md-flex">
         {{ application_menu_links }}
-    </div>
+    </ul>
 
-    <div class="list-group list-group d-md-none">
+    <div class="nav nav-pills flex-column d-md-none">
         {{ application_menu_links }}
     </div>
 {% endblock %}
@@ -20,14 +20,18 @@
 {% block application_item %}
     {% set application_item_disabled = menu_type.url == '#' %}
 
-    <a {% if not application_item_disabled %} href="{{ menu_type.url }}" {% endif %} class="list-group-item w-100 {% if menu_type.active %} active {% endif %} {% if application_item_disabled %} disabled {% endif %}">
-        {{ menu_type.text }}
-    </a>
+    <li class="nav-item">
+        <a {% if not application_item_disabled %} href="{{ menu_type.url }}" {% endif %}
+           class="nav-link border rounded-0 text-start w-100 {% if menu_type.active %} active {% endif %} {% if application_item_disabled %} disabled {% endif %}"
+        >
+            {{ menu_type.text }}
+        </a>
+    </li>
 {% endblock %}
 
 {# User navigation #}
 {% block navbar_user %}
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ms-auto">
         {% for menu_child in menu_type.children %}
             {% with {'menu_type': menu_child} %}
                 {{ block(menu_child.templateBlock, menu_theme) }}
@@ -39,8 +43,14 @@
 {% block navbar_user_item %}
     {% set _has_children = menu_type.children is not empty %}
 
-    <li class="nav-item {% if menu_type.active %} active {% endif %} {% if _has_children %} dropdown {% endif %}">
-        <a class="nav-link {% if _has_children %} dropdown-toggle {% endif %}" href="{{ menu_type.url }}" {% if _has_children %} data-toggle="dropdown" aria-expanded="false" {% endif %}>
+    <li class="nav-item {% if _has_children %} dropdown {% endif %}">
+        <a class="nav-link {% if menu_type.active %} active {% endif %} {% if _has_children %} dropdown-toggle {% endif %}"
+           href="{{ menu_type.url }}"
+           {% if _has_children %}
+               data-bs-toggle="dropdown"
+               aria-expanded="false"
+           {% endif %}
+        >
             {{ menu_type.text }}
         </a>
 
@@ -57,7 +67,9 @@
 {% endblock %}
 
 {% block navbar_user_dropdown_item %}
-    <a class="dropdown-item {% if menu_type.active %} active {% endif %}" href="{{ menu_type.url }}">{{ menu_type.text }}</a>
+    <a class="dropdown-item {% if menu_type.active %} active {% endif %}" href="{{ menu_type.url }}">
+        {{ menu_type.text }}
+    </a>
 {% endblock %}
 
 {# Profile navigation #}
@@ -92,11 +104,11 @@
 
 {% block pagination_item %}
     {% if menu_type.identifier starts with 'divider' %}
-        <li class="page-item disabled p-1">
+        <li class="page-item disabled p-2">
             ...
         </li>
     {% else %}
-        <li class="page-item{% if menu_type.active %} active{% endif %}">
+        <li class="page-item {% if menu_type.active %} active {% endif %} {% if menu_type.url == '#' %} disabled {% endif %}">
             <a class="page-link" href="{{ menu_type.url }}">
                 {{ menu_type.text }}
             </a>
@@ -116,7 +128,7 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item{% if menu_type.active %} active{% endif %}">
+    <li class="breadcrumb-item{% if menu_type.active %} active{% endif %}" {% if menu_type.active %} aria-current="page" {% endif %}>
         {% if menu_type.active %}
             {{ menu_type.text }}
         {% else %}
@@ -156,7 +168,7 @@
 
 {# Admin vertical navigation #}
 {% block navbar_admin_vertical_root %}
-    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+    <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
         {% for menu_child in menu_type.children %}
             {% with {'menu_type': menu_child} %}
                 {{ block(menu_child.templateBlock, menu_theme) }}
@@ -174,8 +186,9 @@
 
             <p>
                 {{ menu_type.text }}
+
                 {% if menu_type.children is not empty %}
-                    <i class="right fas fa-angle-left"></i>
+                    <i class="nav-arrow fas fa-angle-right"></i>
                 {% endif %}
             </p>
         </a>
@@ -194,7 +207,7 @@
 
 {# Admin horizontal navigation #}
 {% block navbar_admin_horizontal_root %}
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ms-auto">
         {% for menu_child in menu_type.children %}
             {% with {'menu_type': menu_child} %}
                 {{ block(menu_child.templateBlock, menu_theme) }}
@@ -206,21 +219,35 @@
 {% block navbar_admin_horizontal_item %}
     {% set _has_children = menu_type.children is not empty %}
 
-    <li class="nav-item {% if _has_children %}dropdown{% endif %}">
-        <a class="nav-link {% if _has_children %}dropdown-toggle{% endif %}" href="{{ menu_type.url }}" {% if _has_children %}data-toggle="dropdown" aria-expanded="false"{% endif %}>
+    <li class="nav-item {% if _has_children %} dropdown {% endif %}">
+        <a class="nav-link text-nowrap" {% if _has_children %} data-bs-toggle="dropdown" {% endif %} href="{{ menu_type.url }}">
             {{ menu_type.text }}
+
+            {% if _has_children %}
+                <i class="ms-1 fas fa-caret-down"></i>
+            {% endif %}
         </a>
 
         {% if _has_children %}
-            <ul class="dropdown-menu border-0 shadow">
+            <div class="dropdown-menu">
                 {% for menu_child in menu_type.children %}
                     {% with {'menu_type': menu_child} %}
                         {{ block(menu_child.templateBlock, menu_theme) }}
                     {% endwith %}
                 {% endfor %}
-            </ul>
+            </div>
         {% endif %}
     </li>
+{% endblock %}
+
+{% block navbar_admin_horizontal_item_deep %}
+    <a class="dropdown-item" href="{{ menu_type.url }}">
+        {% if menu_type.icon is not null %}
+            <i class="nav-icon me-2 {{ menu_type.icon }}"></i>
+        {% endif %}
+
+        {{ menu_type.text }}
+    </a>
 {% endblock %}
 
 {# Admin navbar horizontal update #}
@@ -236,9 +263,9 @@
 
 {% block navbar_admin_horizontal_update_item %}
     <li class="nav-item">
-        <a class="nav-link {% if menu_type.active %}active{% endif %}"
+        <a class="nav-link {% if menu_type.active %} active {% endif %}"
            href="{{ menu_type.url }}" role="tab"
-           aria-selected="{% if menu_type.active %}true{% else %}false{% endif %}"
+           aria-selected="{% if menu_type.active %} true {% else %} false {% endif %}"
         >
             {{ menu_type.text }}
         </a>

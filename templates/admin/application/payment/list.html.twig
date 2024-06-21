@@ -4,10 +4,10 @@
     <div class="row">
         <div class="col-12">
             <div class="card card-outline card-primary">
-                <a data-toggle="collapse" href="#search-content" role="button">
+                <a data-bs-toggle="collapse" href="#search-content" role="button">
                     <div class="card-header">
                         <h3 class="card-title">
-                            <i class="fas fa-search mr-2"></i>
+                            <i class="fas fa-search me-2"></i>
                             {{ 'search.label'|trans }}
                         </h3>
                     </div>
@@ -21,17 +21,7 @@
     </div>
 
     {% if is_search_invalid %}
-        <div class="row">
-            <div class="col-12">
-                <div class="card card-outline card-danger">
-                    <div class="card-header">
-                        <span>
-                            {{ 'search.error.invalid_filter'|trans }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {{ include('_fragment/_form/_admin_invalid_search_row.html.twig') }}
     {% endif %}
 
     {% set is_granted_guide_payments = is_granted('guide_access_payments', application) %}
@@ -50,7 +40,7 @@
 
                     {% if is_granted('application_payment_create') or is_granted_guide_payments %}
                         <a href="{{ path('admin_application_payment_create', {id: application.id}) }}"
-                           class="btn btn-success ml-3"
+                           class="btn btn-success ms-3"
                         >
                             {{ 'crud.action.common.create'|trans }}
                         </a>
@@ -95,19 +85,19 @@
 
                                         <td class="align-middle">
                                             {% if application_payment.isPaid %}
-                                                <span class="badge badge-success">
+                                                <span class="badge bg-success">
                                                     {{ 'payment_state.paid'|trans }}
                                                 </span>
                                             {% elseif application_payment.isCancelled %}
-                                                <span class="badge badge-danger">
+                                                <span class="badge bg-danger">
                                                     {{ 'payment_state.cancelled'|trans }}
                                                 </span>
                                             {% elseif application_payment.isRefunded %}
-                                                <span class="badge badge-secondary">
+                                                <span class="badge bg-secondary">
                                                     {{ 'payment_state.refunded'|trans }}
                                                 </span>
                                             {% else %}
-                                                <span class="badge badge-warning">
+                                                <span class="badge bg-warning text-dark">
                                                     {{ 'payment_state.pending'|trans }}
                                                 </span>
                                             {% endif %}

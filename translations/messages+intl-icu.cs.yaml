@@ -453,6 +453,12 @@ menu_item:
         browse: 'Procházet'
         content: 'Obsah'
 
+    pagination:
+        next: 'Další'
+        previous: 'Předchozí'
+
+
+
 menu:
     navbar_admin_application_update: 'Menu pro editaci přihlášky v administraci'
     navbar_admin_camp_update: 'Menu pro editaci tábora v administraci'
@@ -621,7 +627,7 @@ crud:
             refund: 'Vrátit'
 
         blog_post:
-            show_in_catalog: 'Zobrazit v katalogu'
+            show_in_user_web: 'Zobrazit jako uživatel'
 
         camp:
             show_in_catalog: 'Zobrazit v katalogu'

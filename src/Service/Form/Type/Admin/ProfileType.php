@@ -58,7 +58,7 @@ class ProfileType extends AbstractType
                 'multiple' => false,
                 'label'    => 'form.admin.profile.image',
                 'row_attr' => [
-                    'class'                                   => 'user-image',
+                    'class'                                   => 'mb-3 user-image',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '0',
                 ],

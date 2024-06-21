@@ -25,10 +25,10 @@
 
                             {% if invoice_found %}
                                 <a href="{{ path('admin_application_invoice', {id: application.id}) }}"
-                                   class="ml-3"
+                                   class="ms-3"
                                    target="_blank"
                                 >
-                                    <i class="fas fa-file-invoice mr-1"></i>
+                                    <i class="fas fa-file-invoice me-1"></i>
                                     {{ 'application.admin.view_invoice'|trans }}
                                 </a>
                             {% endif %}
@@ -42,11 +42,11 @@
 
                         <div class="col-12 col-sm-9">
                             {% if application.isAwaitingUploadOfAttachmentsRequiredLater %}
-                                <span class="badge badge-danger">
+                                <span class="badge bg-danger">
                                     {{ 'bool.yes'|trans }}
                                 </span>
                             {% else %}
-                                <span class="badge badge-success">
+                                <span class="badge bg-success">
                                     {{ 'bool.no'|trans }}
                                 </span>
                             {% endif %}
@@ -65,11 +65,11 @@
                             {% set deposit_type = constant('App\\Model\\Enum\\Entity\\ApplicationPaymentTypeEnum::DEPOSIT') %}
 
                             {% if application.isAwaitingPayment(deposit_type) %}
-                                <span class="badge badge-danger">
+                                <span class="badge bg-danger">
                                     {{ 'bool.yes'|trans }}
                                 </span>
                             {% else %}
-                                <span class="badge badge-success">
+                                <span class="badge bg-success">
                                     {{ 'bool.no'|trans }}
                                 </span>
                             {% endif %}
@@ -88,11 +88,11 @@
                             {% set deposit_type = constant('App\\Model\\Enum\\Entity\\ApplicationPaymentTypeEnum::REST') %}
 
                             {% if application.isAwaitingPayment(deposit_type) %}
-                                <span class="badge badge-danger">
+                                <span class="badge bg-danger">
                                     {{ 'bool.yes'|trans }}
                                 </span>
                             {% else %}
-                                <span class="badge badge-success">
+                                <span class="badge bg-success">
                                     {{ 'bool.no'|trans }}
                                 </span>
                             {% endif %}
@@ -106,15 +106,15 @@
 
                         <div class="col-12 col-sm-9">
                             {% if application.isAccepted is same as(true) %}
-                                <span class="badge badge-success">
+                                <span class="badge bg-success">
                                     {{ 'application.is_accepted_state.admin.accepted'|trans }}
                                 </span>
                             {% elseif application.isAccepted is same as(false) %}
-                                <span class="badge badge-danger">
+                                <span class="badge bg-danger">
                                     {{ 'application.is_accepted_state.admin.declined'|trans }}
                                 </span>
                             {% elseif application.isAccepted is same as(null) %}
-                                <span class="badge badge-warning">
+                                <span class="badge bg-warning text-dark">
                                     {{ 'application.is_accepted_state.admin.unsettled'|trans }}
                                 </span>
                             {% endif %}

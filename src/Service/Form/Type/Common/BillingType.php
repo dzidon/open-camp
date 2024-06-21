@@ -95,7 +95,7 @@ class BillingType extends AbstractType
                         ->add('businessName', TextType::class, [
                             'label'      => 'form.common.billing.business_name',
                             'row_attr' => [
-                                'class'                                   => 'company-fields-visibility',
+                                'class'                                   => 'mb-3 company-fields-visibility',
                                 'data-controller'                         => 'cv--content',
                                 'data-cv--content-show-when-chosen-value' => '1',
                             ],
@@ -107,7 +107,7 @@ class BillingType extends AbstractType
                                 'class' => 'required'
                             ],
                             'row_attr' => [
-                                'class'                                   => 'company-fields-visibility',
+                                'class'                                   => 'mb-3 company-fields-visibility',
                                 'data-controller'                         => 'cv--content',
                                 'data-cv--content-show-when-chosen-value' => '1',
                             ],
@@ -119,7 +119,7 @@ class BillingType extends AbstractType
                                 'class' => 'required'
                             ],
                             'row_attr' => [
-                                'class'                                   => 'company-fields-visibility',
+                                'class'                                   => 'mb-3 company-fields-visibility',
                                 'data-controller'                         => 'cv--content',
                                 'data-cv--content-show-when-chosen-value' => '1',
                             ],

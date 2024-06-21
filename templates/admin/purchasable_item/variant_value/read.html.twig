@@ -25,7 +25,7 @@
                         </div>
                     </div>
 
-                    <div class="row mb-3">
+                    <div class="row">
                         <div class="col-12 col-sm-3">
                             <strong>{{ 'entity_attribute.purchasable_item_variant_value.purchasable_item_variant'|trans }}:</strong>
                         </div>
@@ -37,7 +37,7 @@
                 </div>
 
                 <div class="card-footer">
-                    <a href="{{ path('admin_purchasable_item_variant_value_update', {id: purchasable_item_variant_value.id.toRfc4122}) }}" class="btn btn-primary mr-2">
+                    <a href="{{ path('admin_purchasable_item_variant_value_update', {id: purchasable_item_variant_value.id.toRfc4122}) }}" class="btn btn-primary me-2">
                         {{ 'crud.action.common.update'|trans }}
                     </a>
 

@@ -1,26 +1,31 @@
 {% extends "user/base.html.twig" %}
 
 {% block main %}
-    <div class="row mb-3">
-        <div class="col-12 mb-3">
-            <div id="carousel" class="carousel slide carousel-fade" data-ride="carousel">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div id="carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
                 {% if carousel_images|length > 1 %}
-                    <ol class="carousel-indicators">
+                    <div class="carousel-indicators">
                         {% set indicator_index = 0 %}
 
                         {% for carousel_image in carousel_images %}
-                            <li data-target="#carousel" data-slide-to="{{ indicator_index }}"
-                                {% if loop.first %} class="active" {% endif %}
-                            ></li>
+                            <button type="button"
+                                    data-bs-target="#carousel"
+                                    data-bs-slide-to="{{ indicator_index }}"
+                                    class="bg-white {% if loop.first %} active {% endif %}"
+                                    {% if loop.first %}
+                                        aria-current="true"
+                                    {% endif %}
+                            ></button>
 
                             {% set indicator_index = indicator_index + 1 %}
                         {% endfor %}
-                    </ol>
+                    </div>
                 {% endif %}
 
                 <div class="carousel-inner">
                     {% set caption %}
-                        <div class="carousel-caption carousel-caption-centered">
+                        <div class="carousel-caption carousel-caption-centered text-white">
                             <h1 class="mb-2">{{ company_name }}</h1>
 
                             <h5 class="mb-4">
@@ -36,8 +41,8 @@
                     {% endset %}
 
                     {% if carousel_images is empty %}
-                        <div class="carousel-item carousel-item-darkened-bg active">
-                            <img class="d-none d-md-block w-100 image-cover-21-9"
+                        <div class="carousel-item active">
+                            <img class="d-none d-md-block w-100 image-cover-21-9 carousel-darkened-img"
                                  src="{{ gallery_image_url(null) }}"
                                  alt="{{ 'image_carousel.no_image'|trans }}"
                             >
@@ -48,13 +53,13 @@
                         {% for carousel_image in carousel_images %}
                             {% set image_url = gallery_image_url(carousel_image) %}
 
-                            <div class="carousel-item carousel-item-darkened-bg {% if loop.first %} active {% endif %}">
-                                <img class="d-none d-md-block w-100 image-cover-21-9"
+                            <div class="carousel-item {% if loop.first %} active {% endif %}">
+                                <img class="d-none d-md-block w-100 image-cover-21-9 carousel-darkened-img"
                                      src="{{ image_url }}"
                                      alt="{{ 'entity.gallery_image.singular'|trans }}"
                                 >
 
-                                <img class="d-block d-md-none w-100 image-cover-16-9"
+                                <img class="d-block d-md-none w-100 image-cover-16-9 carousel-darkened-img"
                                      src="{{ image_url }}"
                                      alt="{{ 'entity.gallery_image.singular'|trans }}"
                                 >
@@ -66,14 +71,14 @@
                 </div>
 
                 {% if carousel_images|length >= 2 %}
-                    <button class="carousel-control-prev" type="button" data-target="#carousel" data-slide="prev">
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">{{ 'image_carousel.previous'|trans }}</span>
+                        <span class="visually-hidden">{{ 'image_carousel.previous'|trans }}</span>
                     </button>
 
-                    <button class="carousel-control-next" type="button" data-target="#carousel" data-slide="next">
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">{{ 'image_carousel.next'|trans }}</span>
+                        <span class="visually-hidden">{{ 'image_carousel.next'|trans }}</span>
                     </button>
                 {% endif %}
             </div>
@@ -84,7 +89,7 @@
         {% set camps = camp_catalog_result.paginator.currentPageItems %}
 
         {% if camps is not empty %}
-            <div class="row mb-3">
+            <div class="row">
                 <div class="col-12 mb-3">
                     <h2>
                         {{ 'home_page.camps'|trans }}
@@ -108,7 +113,7 @@
     {% endif %}
 
     {% if blog_posts is not empty %}
-        <div class="row mb-3">
+        <div class="row">
             <div class="col-12 mb-3">
                 <h2>
                     {{ 'home_page.latest_blog_posts'|trans }}
@@ -128,7 +133,7 @@
     {% endif %}
 
     {% if guides is not empty %}
-        <div class="row mb-3">
+        <div class="row">
             <div class="col-12 mb-3">
                 <h2>
                     {{ 'home_page.guides'|trans }}

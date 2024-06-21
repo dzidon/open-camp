@@ -64,7 +64,7 @@ class GalleryImageType extends AbstractType
             ->add('carouselPriority', IntegerType::class, [
                 'required' => false,
                 'row_attr' => [
-                    'class'                                   => 'carousel-field-visibility',
+                    'class'                                   => 'mb-3 carousel-field-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '1',
                 ],

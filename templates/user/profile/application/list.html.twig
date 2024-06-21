@@ -1,20 +1,14 @@
 {% extends "user/profile/base.html.twig" %}
 
 {% block profile_content %}
-    <div class="row mb-5">
+    <div class="row mb-4">
         <div class="col">
             {{ form(form_search) }}
         </div>
     </div>
 
     {% if is_search_invalid %}
-        <div class="row mb-4">
-            <div class="col">
-                <div class="alert alert-danger" role="alert">
-                    {{ 'search.error.invalid_filter'|trans }}
-                </div>
-            </div>
-        </div>
+        {{ include('_fragment/_form/_user_invalid_search_row.html.twig') }}
     {% endif %}
 
     <div class="row mb-3">
@@ -41,20 +35,20 @@
 
                             <div class="mb-2">
                                 {% if application.isAccepted is same as(true) %}
-                                    <span class="badge badge-success">
+                                    <span class="badge bg-success">
                                         {{ 'application.is_accepted_state.user.accepted'|trans }}
                                     </span>
                                 {% elseif application.isAccepted is same as(false) %}
-                                    <span class="badge badge-danger">
+                                    <span class="badge bg-danger">
                                         {{ 'application.is_accepted_state.user.declined'|trans }}
                                     </span>
                                 {% elseif application.isAccepted is same as(null) %}
                                     {% if application.isAwaitingAcceptOrDecline %}
-                                        <span class="badge badge-primary">
+                                        <span class="badge bg-primary">
                                             {{ 'application.is_accepted_state.user.null_and_working_on_it'|trans }}
                                         </span>
                                     {% else %}
-                                        <span class="badge badge-warning">
+                                        <span class="badge bg-warning text-dark">
                                             {{ 'application.is_accepted_state.user.null_and_not_ready'|trans }}
                                         </span>
                                     {% endif %}

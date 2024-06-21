@@ -51,6 +51,9 @@ class UserType extends AbstractType
                 ->add('billingData', BillingType::class, [
                     'label'    => false,
                     'priority' => 5000,
+                    'row_attr' => [
+                        'class' => 'mb-0'
+                    ],
                 ])
                 ->add('isFeaturedGuide', CheckboxType::class, [
                     'required' => false,
@@ -91,7 +94,7 @@ class UserType extends AbstractType
                     'multiple' => false,
                     'label'    => 'form.admin.user.image',
                     'row_attr' => [
-                        'class'                                   => 'user-image',
+                        'class'                                   => 'mb-3 user-image',
                         'data-controller'                         => 'cv--content',
                         'data-cv--content-show-when-chosen-value' => '0',
                     ],

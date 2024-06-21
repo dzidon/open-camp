@@ -36,7 +36,7 @@ class CampCatalogController extends AbstractController
         $this->routeNamer = $routeNamer;
     }
 
-    #[Route('/catalog/{path}', name: 'user_camp_catalog', requirements: ['path' => '.+'])]
+    #[Route('/camps/{path}', name: 'user_camp_catalog', requirements: ['path' => '.+'])]
     public function list(MenuTypeFactoryRegistryInterface $menuFactory,
                          FormFactoryInterface             $formFactory,
                          Request                          $request,

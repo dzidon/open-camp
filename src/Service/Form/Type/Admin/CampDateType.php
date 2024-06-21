@@ -78,7 +78,7 @@ class CampDateType extends AbstractType
                 'label'    => 'form.admin.camp_date.deposit_until',
                 'required' => false,
                 'row_attr' => [
-                    'class'                                   => 'deposit-until-visibility',
+                    'class'                                   => 'mb-3 deposit-until-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '0',
                 ],
@@ -93,7 +93,7 @@ class CampDateType extends AbstractType
                     'min' => 1,
                 ],
                 'row_attr' => [
-                    'class'                                   => 'deposit-until-visibility',
+                    'class'                                   => 'mb-3 deposit-until-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '1',
                 ],
@@ -127,7 +127,7 @@ class CampDateType extends AbstractType
                 'label'    => 'form.admin.camp_date.price_without_deposit_until',
                 'required' => false,
                 'row_attr' => [
-                    'class'                                   => 'price-without-deposit-until-visibility',
+                    'class'                                   => 'mb-3 price-without-deposit-until-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '0',
                 ],
@@ -142,7 +142,7 @@ class CampDateType extends AbstractType
                     'min' => 1,
                 ],
                 'row_attr' => [
-                    'class'                                   => 'price-without-deposit-until-visibility',
+                    'class'                                   => 'mb-3 price-without-deposit-until-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '1',
                 ],

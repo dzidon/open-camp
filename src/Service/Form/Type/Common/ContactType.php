@@ -163,7 +163,7 @@ class ContactType extends AbstractType
                     'class' => 'required'
                 ],
                 'row_attr' => [
-                    'class'                                   => 'role-other-field-visibility',
+                    'class'                                   => 'mb-3 role-other-field-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '1',
                 ],

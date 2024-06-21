@@ -7,6 +7,7 @@ use App\Library\Search\Paginator\PaginatorInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Creates a basic pagination menu.
@@ -17,11 +18,17 @@ class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
     private const VIEW_INNER_CENTER = 3;
 
     private UrlGeneratorInterface $urlGenerator;
+
+    private TranslatorInterface $translator;
+
     private RequestStack $requestStack;
 
-    public function __construct(UrlGeneratorInterface $urlGenerator, RequestStack $requestStack)
+    public function __construct(UrlGeneratorInterface $urlGenerator,
+                                TranslatorInterface $translator,
+                                RequestStack $requestStack)
     {
         $this->urlGenerator = $urlGenerator;
+        $this->translator = $translator;
         $this->requestStack = $requestStack;
     }
 
@@ -46,6 +53,7 @@ class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
 
         $menu = new MenuType(self::getMenuIdentifier(), $templateBlockRoot);
         $request = $this->requestStack->getCurrentRequest();
+
         if ($request === null)
         {
             return $menu;
@@ -61,18 +69,19 @@ class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
         $requestParametersAll = $requestParameters->all();
         $route = $requestAttributes->get('_route');
         $routeParams = $requestAttributes->get('_route_params', []);
-
         $queryParameters = array_merge($requestParametersAll, $routeParams);
 
         // distance calculations used for building the menu
         $maxSlotsSurroundingCenter = self::VIEW_INNER_PAGES - self::VIEW_INNER_CENTER; // 2
         $slotsLeftToCenter = $currentPage - 1;
+
         if ($slotsLeftToCenter > $maxSlotsSurroundingCenter)
         {
             $slotsLeftToCenter = $maxSlotsSurroundingCenter;
         }
 
         $slotsRightToCenter = $pagesCount - $currentPage;
+
         if ($slotsRightToCenter > $maxSlotsSurroundingCenter)
         {
             $slotsRightToCenter = $maxSlotsSurroundingCenter;
@@ -101,7 +110,8 @@ class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
 
         while (count($menu->getChildren()) < self::VIEW_INNER_PAGES && $direction !== $directions['stop'])
         {
-            $this->addMenuPage($menu, $visitedPage === $currentPage, $templateBlockItem, $visitedPage, $pageParameterName, $route, $queryParameters);
+            $active = $visitedPage === $currentPage;
+            $this->addMenuPage($menu, $active, $templateBlockItem, $visitedPage, $pageParameterName, $route, $queryParameters);
 
             // update lowest and highest page
             if ($lowestPage === null || $visitedPage < $lowestPage)
@@ -116,8 +126,8 @@ class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
 
             // update iterator
             $nextPage = $visitedPage + $direction['offset'];
-            if ($paginator->isPageOutOfBounds($nextPage) ||
-                abs($currentPage - $visitedPage) >= $direction['allowedDistance'])
+
+            if ($paginator->isPageOutOfBounds($nextPage) || abs($currentPage - $visitedPage) >= $direction['allowedDistance'])
             {
                 $direction = $directions[$direction['next']];
                 $visitedPage = $currentPage;
@@ -132,6 +142,7 @@ class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
         if ($lowestPage !== null)
         {
             $difference = $lowestPage - 1;
+
             if ($difference >= 1)
             {
                 $this->addMenuPage($menu, false, $templateBlockItem, 1, $pageParameterName, $route, $queryParameters);
@@ -151,6 +162,7 @@ class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
         if ($highestPage !== null)
         {
             $difference = $pagesCount - $highestPage;
+
             if ($difference >= 1)
             {
                 $this->addMenuPage($menu, false, $templateBlockItem, $pagesCount, $pageParameterName, $route, $queryParameters);
@@ -165,6 +177,12 @@ class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
                 $this->addMenuDivider($menu, $templateBlockItem, $pagesCount - 1);
             }
         }
+
+        $previousPage = $paginator->getPreviousPage();
+        $this->addPreviousPage($menu, $templateBlockItem, $previousPage, $pageParameterName, $route, $queryParameters);
+
+        $nextPage = $paginator->getNextPage();
+        $this->addNextPage($menu, $templateBlockItem, $nextPage, $pagesCount, $pageParameterName, $route, $queryParameters);
 
         $menu->sortChildren();
 
@@ -211,14 +229,14 @@ class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
                                  int $page,
                                  string $pageParameterName,
                                  string $route,
-                                 array $queryParameters = []): void
+                                 array $queryParameters): void
     {
         $pageId = sprintf('page_%s', $page);
+
         if (!$menu->hasChild($pageId))
         {
             $queryParameters[$pageParameterName] = $page;
             $url = $this->urlGenerator->generate($route, $queryParameters);
-
             $pageButton = new MenuType($pageId, $templateBlockItem, (string) $page, $url);
             $pageButton
                 ->setActive($active)
@@ -240,11 +258,91 @@ class PaginatorMenuTypeFactory extends AbstractMenuTypeFactory
     private function addMenuDivider(MenuType $menu, string $templateBlockItem, int $asPage): void
     {
         $dividerId = sprintf('divider_%s', $asPage);
+
         if (!$menu->hasChild($dividerId))
         {
             $divider = new MenuType($dividerId, $templateBlockItem, '...', '#');
             $divider->setPriority(-$asPage);
+            $menu->addChild($divider);
+        }
+    }
 
+    /**
+     * Adds previous page button.
+     *
+     * @param MenuType $menu
+     * @param string $templateBlockItem
+     * @param int|null $page
+     * @param string $pageParameterName
+     * @param string $route
+     * @param array $queryParameters
+     * @return void
+     */
+    private function addPreviousPage(MenuType $menu,
+                                     string   $templateBlockItem,
+                                     ?int     $page,
+                                     string   $pageParameterName,
+                                     string   $route,
+                                     array    $queryParameters): void
+    {
+        $previousId = 'previous';
+
+        if (!$menu->hasChild($previousId))
+        {
+            if ($page === null)
+            {
+                $url = '#';
+            }
+            else
+            {
+                $queryParameters[$pageParameterName] = $page;
+                $url = $this->urlGenerator->generate($route, $queryParameters);
+            }
+
+            $text = $this->translator->trans('menu_item.pagination.previous');
+            $divider = new MenuType($previousId, $templateBlockItem, $text, $url);
+            $divider->setPriority(0);
+            $menu->addChild($divider);
+        }
+    }
+
+    /**
+     * Adds next page button.
+     *
+     * @param MenuType $menu
+     * @param string $templateBlockItem
+     * @param int|null $page
+     * @param int $pagesCount
+     * @param string $pageParameterName
+     * @param string $route
+     * @param array $queryParameters
+     * @return void
+     */
+    private function addNextPage(MenuType $menu,
+                                 string   $templateBlockItem,
+                                 ?int     $page,
+                                 int      $pagesCount,
+                                 string   $pageParameterName,
+                                 string   $route,
+                                 array    $queryParameters): void
+    {
+        $nextId = 'next';
+
+        if (!$menu->hasChild($nextId))
+        {
+            if ($page === null)
+            {
+                $url = '#';
+            }
+            else
+            {
+                $queryParameters[$pageParameterName] = $page;
+                $url = $this->urlGenerator->generate($route, $queryParameters);
+            }
+
+            $text = $this->translator->trans('menu_item.pagination.next');
+            $divider = new MenuType($nextId, $templateBlockItem, $text, $url);
+            $divider->setPriority(-$pagesCount);
             $menu->addChild($divider);
         }
     }

@@ -15,7 +15,8 @@ class TinymceTextareaType extends AbstractType
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         $view->vars['attr'] = array_merge([
-            'data-controller' => 'f--tinymce',
+            'data-controller'            => 'f--tinymce',
+            'data-f--tinymce-dark-value' => false,
         ], $view->vars['attr']);
     }
 

@@ -3,7 +3,7 @@
 {% block main %}
     <div class="row">
         <div class="col-12 col-md-6">
-            <div class="row">
+            <div class="row mb-1">
                 <div class="col-12">
                     <h4>{{ 'contact_us.email'|trans }}</h4>
 
@@ -16,7 +16,7 @@
                 </div>
             </div>
 
-            <div class="row">
+            <div class="row mb-1">
                 <div class="col-12">
                     <h4>{{ 'contact_us.phone_number'|trans }}</h4>
 
@@ -30,13 +30,13 @@
             </div>
 
             {% if company_social_media is not empty %}
-                <div class="row">
+                <div class="row mb-1">
                     <div class="col-12">
                         <h4>{{ 'contact_us.social_media'|trans }}</h4>
 
                         <p>
                             {% for social in company_social_media %}
-                                <a href="{{ social.link }}" class="btn btn-primary mr-1">
+                                <a href="{{ social.link }}" class="btn btn-primary me-1">
                                     <i class="{{ social.icon }}"></i>
                                 </a>
                             {% endfor %}

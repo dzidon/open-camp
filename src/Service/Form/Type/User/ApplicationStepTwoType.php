@@ -88,7 +88,7 @@ class ApplicationStepTwoType extends AbstractType
                     'class' => 'required'
                 ],
                 'row_attr' => [
-                    'class'                                   => 'channel-other-field-visibility',
+                    'class'                                   => 'mb-3 channel-other-field-visibility',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '1',
                 ],

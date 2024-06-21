@@ -108,6 +108,10 @@ class PaginatorMenuFactoryTest extends KernelTestCase
             'template_block_item' => 'pagination_item',
         ]);
 
+        $previousPage = $menu->getChild('previous');
+        $this->assertNotNull($previousPage);
+        $this->assertSame(false, $previousPage->isActive());
+
         $itemPage1 = $menu->getChild('page_1');
         $this->assertNotNull($itemPage1);
         $this->assertSame(false, $itemPage1->isActive());
@@ -119,6 +123,10 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         $itemPage3 = $menu->getChild('page_3');
         $this->assertNotNull($itemPage3);
         $this->assertSame(false, $itemPage3->isActive());
+
+        $nextPage = $menu->getChild('next');
+        $this->assertNotNull($nextPage);
+        $this->assertSame(false, $nextPage->isActive());
     }
 
     /**
@@ -140,7 +148,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         ]);
         $identifiers = $this->getTreeNodeChildrenIdentifiers($menu);
 
-        $this->assertSame(['page_1', 'page_2', 'page_3', 'page_4', 'page_5'], $identifiers);
+        $this->assertSame(['previous', 'page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'next'], $identifiers);
     }
 
     /**
@@ -161,13 +169,20 @@ class PaginatorMenuFactoryTest extends KernelTestCase
             'template_block_item' => 'pagination_item',
         ]);
 
+        $previousPage = $menu->getChild('previous');
         $itemPage1 = $menu->getChild('page_1');
         $itemPage2 = $menu->getChild('page_2');
+        $nextPage = $menu->getChild('next');
+
+        $this->assertNotNull($previousPage);
         $this->assertNotNull($itemPage1);
         $this->assertNotNull($itemPage2);
+        $this->assertNotNull($nextPage);
 
+        $this->assertSame('#', $previousPage->getUrl());
         $this->assertSame('/route/mock?page=1', $itemPage1->getUrl());
         $this->assertSame('/route/mock?page=2', $itemPage2->getUrl());
+        $this->assertSame('/route/mock?page=2', $nextPage->getUrl());
     }
 
     /**
@@ -178,7 +193,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
      */
     public function testUrlsWithParameters(): void
     {
-        $paginator = $this->createPaginator(2, 1);
+        $paginator = $this->createPaginator(2, 2);
         $request = $this->createRequest(
             ['_route' => self::ROUTE],
             ['abc' => '123', 'xyz' => '456'],
@@ -192,13 +207,20 @@ class PaginatorMenuFactoryTest extends KernelTestCase
             'template_block_item' => 'pagination_item',
         ]);
 
+        $previousPage = $menu->getChild('previous');
         $itemPage1 = $menu->getChild('page_1');
         $itemPage2 = $menu->getChild('page_2');
+        $nextPage = $menu->getChild('next');
+
+        $this->assertNotNull($previousPage);
         $this->assertNotNull($itemPage1);
         $this->assertNotNull($itemPage2);
+        $this->assertNotNull($nextPage);
 
+        $this->assertSame('/route/mock?aaa=bbb&ccc=ddd&abc=123&xyz=456&page=1', $previousPage->getUrl());
         $this->assertSame('/route/mock?aaa=bbb&ccc=ddd&abc=123&xyz=456&page=1', $itemPage1->getUrl());
         $this->assertSame('/route/mock?aaa=bbb&ccc=ddd&abc=123&xyz=456&page=2', $itemPage2->getUrl());
+        $this->assertSame('#', $nextPage->getUrl());
     }
 
     /**
@@ -214,13 +236,13 @@ class PaginatorMenuFactoryTest extends KernelTestCase
 
         // Small
         $expectedSequences = [
-            1 => ['page_1'],
-            2 => ['page_1', 'page_2'],
-            3 => ['page_1', 'page_2', 'page_3'],
-            4 => ['page_1', 'page_2', 'page_3', 'page_4'],
-            5 => ['page_1', 'page_2', 'page_3', 'page_4', 'page_5'],
-            6 => ['page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6'],
-            7 => ['page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'page_7'],
+            1 => ['previous', 'page_1', 'next'],
+            2 => ['previous', 'page_1', 'page_2', 'next'],
+            3 => ['previous', 'page_1', 'page_2', 'page_3', 'next'],
+            4 => ['previous', 'page_1', 'page_2', 'page_3', 'page_4', 'next'],
+            5 => ['previous', 'page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'next'],
+            6 => ['previous', 'page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'next'],
+            7 => ['previous', 'page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'page_7', 'next'],
         ];
 
         foreach ($expectedSequences as $pagesCount => $expectedSequence)
@@ -228,7 +250,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
             // first page is active
             $paginator = $this->createPaginator($pagesCount, 1);
             $menu = $menuFactory->buildMenuType([
-                'paginator' => $paginator,
+                'paginator'           => $paginator,
                 'page_parameter_name' => 'page',
                 'template_block_root' => 'pagination_root',
                 'template_block_item' => 'pagination_item',
@@ -238,9 +260,9 @@ class PaginatorMenuFactoryTest extends KernelTestCase
             $this->assertSame($expectedSequence, $identifiers);
 
             // last page is active
-            $paginator = $this->createPaginator($pagesCount, array_key_last($expectedSequence) + 1);
+            $paginator = $this->createPaginator($pagesCount, $pagesCount);
             $menu = $menuFactory->buildMenuType([
-                'paginator' => $paginator,
+                'paginator'           => $paginator,
                 'page_parameter_name' => 'page',
                 'template_block_root' => 'pagination_root',
                 'template_block_item' => 'pagination_item',
@@ -252,17 +274,17 @@ class PaginatorMenuFactoryTest extends KernelTestCase
 
         // Large
         $expectedSequences = [
-            1 => ['page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'divider_10', 'page_11'],
-            2 => ['page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'divider_10', 'page_11'],
-            3 => ['page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'divider_10', 'page_11'],
-            4 => ['page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'divider_10', 'page_11'],
-            5 => ['page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'page_7', 'divider_10', 'page_11'],
-            6 => ['page_1', 'divider_2', 'page_4', 'page_5', 'page_6', 'page_7', 'page_8', 'divider_10', 'page_11'],
-            7 => ['page_1', 'divider_2', 'page_5', 'page_6', 'page_7', 'page_8', 'page_9', 'page_10', 'page_11'],
-            8 => ['page_1', 'divider_2', 'page_6', 'page_7', 'page_8', 'page_9', 'page_10', 'page_11'],
-            9 => ['page_1', 'divider_2', 'page_7', 'page_8', 'page_9', 'page_10', 'page_11'],
-            10 => ['page_1', 'divider_2', 'page_7', 'page_8', 'page_9', 'page_10', 'page_11'],
-            11 => ['page_1', 'divider_2', 'page_7', 'page_8', 'page_9', 'page_10', 'page_11'],
+            1 => ['previous', 'page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'divider_10', 'page_11', 'next'],
+            2 => ['previous', 'page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'divider_10', 'page_11', 'next'],
+            3 => ['previous', 'page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'divider_10', 'page_11', 'next'],
+            4 => ['previous', 'page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'divider_10', 'page_11', 'next'],
+            5 => ['previous', 'page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'page_7', 'divider_10', 'page_11', 'next'],
+            6 => ['previous', 'page_1', 'divider_2', 'page_4', 'page_5', 'page_6', 'page_7', 'page_8', 'divider_10', 'page_11', 'next'],
+            7 => ['previous', 'page_1', 'divider_2', 'page_5', 'page_6', 'page_7', 'page_8', 'page_9', 'page_10', 'page_11', 'next'],
+            8 => ['previous', 'page_1', 'divider_2', 'page_6', 'page_7', 'page_8', 'page_9', 'page_10', 'page_11', 'next'],
+            9 => ['previous', 'page_1', 'divider_2', 'page_7', 'page_8', 'page_9', 'page_10', 'page_11', 'next'],
+            10 => ['previous', 'page_1', 'divider_2', 'page_7', 'page_8', 'page_9', 'page_10', 'page_11', 'next'],
+            11 => ['previous', 'page_1', 'divider_2', 'page_7', 'page_8', 'page_9', 'page_10', 'page_11', 'next'],
         ];
 
         foreach ($expectedSequences as $currentPage => $expectedSequence)
@@ -290,7 +312,7 @@ class PaginatorMenuFactoryTest extends KernelTestCase
         ]);
         $identifiers = $this->getTreeNodeChildrenIdentifiers($menu);
 
-        $this->assertSame(['page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'page_7', 'page_8', 'page_9'], $identifiers);
+        $this->assertSame(['previous', 'page_1', 'page_2', 'page_3', 'page_4', 'page_5', 'page_6', 'page_7', 'page_8', 'page_9', 'next'], $identifiers);
     }
 
     /**
@@ -318,6 +340,13 @@ class PaginatorMenuFactoryTest extends KernelTestCase
      */
     private function createPaginator(int $pagesCount, int $currentPage): PaginatorInterface
     {
+        $isOutOfBoundsCallable = function (int $page) use ($pagesCount) {
+            return (($page > $pagesCount && $page !== 1) || $page < 1);
+        };
+
+        $previousPage = $isOutOfBoundsCallable($currentPage - 1) ? null : $currentPage - 1;
+        $nextPage = $isOutOfBoundsCallable($currentPage + 1) ? null : $currentPage + 1;
+
         /** @var PaginatorInterface|MockObject $paginatorMock */
         $paginatorMock = $this->getMockBuilder(PaginatorInterface::class)
             ->disableOriginalConstructor()
@@ -338,10 +367,20 @@ class PaginatorMenuFactoryTest extends KernelTestCase
 
         $paginatorMock
             ->expects($this->any())
+            ->method('getPreviousPage')
+            ->willReturn($previousPage)
+        ;
+
+        $paginatorMock
+            ->expects($this->any())
+            ->method('getNextPage')
+            ->willReturn($nextPage)
+        ;
+
+        $paginatorMock
+            ->expects($this->any())
             ->method('isPageOutOfBounds')
-            ->willReturnCallback(function (int $page) use ($pagesCount) {
-                return (($page > $pagesCount && $page !== 1) || $page < 1);
-            })
+            ->willReturnCallback($isOutOfBoundsCallable)
         ;
 
         return $paginatorMock;

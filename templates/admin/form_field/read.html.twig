@@ -97,6 +97,8 @@
                                         {{ 'bool.yes'|trans }}
                                     {% elseif option_value is same as(false) %}
                                         {{ 'bool.no'|trans }}
+                                    {% elseif option_value is same as(null) %}
+                                        <em>{{ 'entity_attribute.common.unset'|trans }}</em>
                                     {% else %}
                                         {{ option_value }}
                                     {% endif %}
@@ -113,7 +115,7 @@
                     <div class="card-footer">
                         {% if granted_update %}
                             <a href="{{ path('admin_form_field_update', {id: form_field.id.toRfc4122}) }}"
-                               class="btn btn-primary mr-2"
+                               class="btn btn-primary me-2"
                             >
                                 {{ 'crud.action.common.update'|trans }}
                             </a>

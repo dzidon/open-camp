@@ -36,6 +36,20 @@ interface PaginatorInterface
     public function getCurrentPage(): int;
 
     /**
+     * Returns the previous page number.
+     *
+     * @return int|null
+     */
+    public function getPreviousPage(): ?int;
+
+    /**
+     * Returns the next page number.
+     *
+     * @return int|null
+     */
+    public function getNextPage(): ?int;
+
+    /**
      * Returns total number of pages.
      *
      * @return int

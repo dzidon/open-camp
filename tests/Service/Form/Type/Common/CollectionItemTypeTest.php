@@ -52,8 +52,8 @@ class CollectionItemTypeTest extends TypeTestCase
         $attributes = $buttonConfig->getOption('attr');
         $expectedAttributes = [
             'class'                    => 'btn btn-danger',
-            'data-toggle'           => 'modal',
-            'data-target'           => '#fc-removal-modal',
+            'data-bs-toggle'           => 'modal',
+            'data-bs-target'           => '#fc-removal-modal',
             'data-controller'          => 'fc--rem-prep',
             'data-fc--rem-prep-target' => 'button',
             'data-action'              => 'fc--rem-prep#prepareItemForRemoval',

@@ -22,7 +22,7 @@
                         {% set granted_delete = is_granted('camp_category_delete') %}
 
                         {% for camp_category in root_categories %}
-                            {% with {'camp_category': camp_category} %}
+                            {% with {'camp_category': camp_category, 'depth': 0} %}
                                 {{ block('camp_category_table') }}
                             {% endwith %}
                         {% endfor %}
@@ -34,40 +34,73 @@
 {% endblock %}
 
 {% block camp_category_table %}
-    <table class="table text-nowrap table-hover">
+    {% set collapse_id = 'camp-category-collapse-' ~ camp_category.id.toRfc4122 %}
+
+    <table class="table table-borderless text-nowrap table-hover m-0">
         <tbody>
-            <tr {% if camp_category.children is not empty %} data-widget="expandable-table" aria-expanded="false" {% endif %}>
+            <tr>
                 <td class="d-flex w-100 justify-content-between align-items-center">
                     <span>
-                        {% if camp_category.children is not empty %}
-                            <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                        {% for d in 0..depth %}
+                            {% if d > 0 %}
+                                &emsp;
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if depth > 0 %}
+                            <span class="me-1">
+                                &#8627;
+                            </span>
                         {% endif %}
 
-                        {{ camp_category.name }}
+                        {% if camp_category.children is not empty %}
+                            <a data-bs-toggle="collapse"
+                               href="#{{ collapse_id }}"
+                               role="button"
+                               aria-expanded="false"
+                               aria-controls="{{ collapse_id }}"
+                            >
+                                {{ camp_category.name }} <i class="fas fa-chevron-down"></i>
+                            </a>
+                        {% else %}
+                            {{ camp_category.name }}
+                        {% endif %}
                     </span>
 
-                    <span class="pl-3">
+                    <span class="ps-4">
                         {% if granted_read %}
-                            <a href="{{ path('admin_camp_category_read', {id: camp_category.id.toRfc4122}) }}" class="btn btn-secondary">{{ 'crud.action.common.read'|trans }}</a>
+                            <a href="{{ path('admin_camp_category_read', {id: camp_category.id.toRfc4122}) }}"
+                               class="btn btn-secondary"
+                            >
+                                {{ 'crud.action.common.read'|trans }}
+                            </a>
                         {% endif %}
 
                         {% if granted_update %}
-                            <a href="{{ path('admin_camp_category_update', {id: camp_category.id.toRfc4122}) }}" class="btn btn-primary">{{ 'crud.action.common.update'|trans }}</a>
+                            <a href="{{ path('admin_camp_category_update', {id: camp_category.id.toRfc4122}) }}"
+                               class="btn btn-primary"
+                            >
+                                {{ 'crud.action.common.update'|trans }}
+                            </a>
                         {% endif %}
 
                         {% if granted_delete %}
-                            <a href="{{ path('admin_camp_category_delete', {id: camp_category.id.toRfc4122}) }}" class="btn btn-danger">{{ 'crud.action.common.delete'|trans }}</a>
+                            <a href="{{ path('admin_camp_category_delete', {id: camp_category.id.toRfc4122}) }}"
+                               class="btn btn-danger"
+                            >
+                                {{ 'crud.action.common.delete'|trans }}
+                            </a>
                         {% endif %}
                     </span>
                 </td>
             </tr>
 
             {% if camp_category.children is not empty %}
-                <tr class="expandable-body">
-                    <td>
-                        <div class="p-0">
+                <tr>
+                    <td class="p-0">
+                        <div class="collapse" id="{{ collapse_id }}">
                             {% for camp_category_child in camp_category.children %}
-                                {% with {'camp_category': camp_category_child} %}
+                                {% with {'camp_category': camp_category_child, 'depth': depth + 1} %}
                                     {{ block('camp_category_table') }}
                                 {% endwith %}
                             {% endfor %}

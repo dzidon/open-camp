@@ -74,7 +74,7 @@ class PurchasableItemType extends AbstractType
                 'multiple' => false,
                 'label'    => 'form.admin.purchasable_item.image',
                 'row_attr' => [
-                    'class'                                   => 'purchasable-item-image',
+                    'class'                                   => 'mb-3 purchasable-item-image',
                     'data-controller'                         => 'cv--content',
                     'data-cv--content-show-when-chosen-value' => '0',
                 ],

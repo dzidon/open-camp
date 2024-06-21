@@ -71,7 +71,8 @@ class DiscountConfigType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => DiscountConfigData::class,
+            'data_class'   => DiscountConfigData::class,
+            'block_prefix' => 'admin_discount_config',
         ]);
     }
 }

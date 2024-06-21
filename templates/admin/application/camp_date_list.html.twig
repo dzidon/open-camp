@@ -4,10 +4,10 @@
     <div class="row">
         <div class="col-12">
             <div class="card card-outline card-primary">
-                <a data-toggle="collapse" href="#search-content" role="button">
+                <a data-bs-toggle="collapse" href="#search-content" role="button">
                     <div class="card-header">
                         <h3 class="card-title">
-                            <i class="fas fa-search mr-2"></i>
+                            <i class="fas fa-search me-2"></i>
                             {{ 'search.label'|trans }}
                         </h3>
                     </div>
@@ -21,17 +21,7 @@
     </div>
 
     {% if is_search_invalid %}
-        <div class="row">
-            <div class="col-12">
-                <div class="card card-outline card-danger">
-                    <div class="card-header">
-                        <span>
-                            {{ 'search.error.invalid_filter'|trans }}
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        {{ include('_fragment/_form/_admin_invalid_search_row.html.twig') }}
     {% endif %}
 
     {% set paginator = search_result.paginator %}
@@ -72,10 +62,12 @@
                                 {% for camp_date in paginator.currentPageItems %}
                                     {% set number_of_pending_applications = search_result.numberOfPendingApplications(camp_date) %}
                                     {% set number_of_accepted_application_campers = search_result.numberOfAcceptedApplicationCampers(camp_date) %}
-                                    {% set pending_badge_color = "badge-secondary" %}
+                                    {% set pending_badge_color = "bg-secondary" %}
+                                    {% set pending_badge_text_color = "text-light" %}
 
                                     {% if number_of_pending_applications > 0 %}
-                                        {% set pending_badge_color = "badge-warning" %}
+                                        {% set pending_badge_color = "bg-warning" %}
+                                        {% set pending_badge_text_color = "text-dark" %}
                                     {% endif %}
 
                                     <tr class="align-items-center">
@@ -98,7 +90,7 @@
                                         </td>
 
                                         <td class="align-middle">
-                                            <span class="badge badge-pill {{ pending_badge_color }}">
+                                            <span class="badge rounded-pill {{ pending_badge_color }} {{ pending_badge_text_color }}">
                                                 {{ number_of_pending_applications }}
                                             </span>
                                         </td>
