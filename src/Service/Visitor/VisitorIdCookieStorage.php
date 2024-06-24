@@ -3,14 +3,16 @@
 namespace App\Service\Visitor;
 
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Uid\UuidV4;
 
 /**
  * @inheritDoc
  */
-class VisitorIdProvider implements VisitorIdProviderInterface
+class VisitorIdCookieStorage implements VisitorIdHttpStorageInterface
 {
     private RequestStack $requestStack;
 
@@ -51,5 +53,15 @@ class VisitorIdProvider implements VisitorIdProviderInterface
     public function getNewVisitorId(): UuidV4
     {
         return $this->newVisitorId;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setVisitorId(UuidV4 $visitorId, Response $response): void
+    {
+        $visitorIdString = $visitorId->toRfc4122();
+        $cookie = new Cookie($this->visitorIdCookieName, $visitorIdString);
+        $response->headers->setCookie($cookie);
     }
 }

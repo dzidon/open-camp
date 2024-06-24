@@ -457,7 +457,9 @@ menu_item:
         next: 'Další'
         previous: 'Předchozí'
 
-
+    theme:
+        light: 'Světlý režim'
+        dark: 'Tmavý režim'
 
 menu:
     navbar_admin_application_update: 'Menu pro editaci přihlášky v administraci'
@@ -468,6 +470,7 @@ menu:
     pagination: 'Stránkování'
     navbar_user: 'Hlavní menu na uživatelském webu'
     navbar_user_profile: 'Menu na profilu uživatele'
+    theme: 'Barevný režim'
 
 permission_group:
     application: 'Přihlášky'

@@ -91,7 +91,20 @@
 
         <!-- Footer -->
         <footer class="app-footer">
-            <strong>&copy; {{ 'now' | date('Y') }}, {{ company_name }}</strong>
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <strong>&copy; {{ 'now' | date('Y') }}, {{ company_name }}</strong>
+                </div>
+
+                <div class="col-6">
+                    {% if themes is not empty %}
+                        <div class="float-end">
+                            {% set theme_picker = build_menu('theme_picker') %}
+                            {{ menu(theme_picker) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </footer>
     </div>
 {% endblock %}

@@ -1,5 +1,7 @@
+{% set theme = get_theme() %}
+
 <!DOCTYPE html>
-<html lang="{{ app.request.locale }}" class="h-100" data-bs-theme="light">
+<html lang="{{ app.request.locale }}" class="h-100" {% if theme is not null %} data-bs-theme="{{ theme }}" {% endif %}>
     <head>
         {% block meta %}
             <meta charset="UTF-8">

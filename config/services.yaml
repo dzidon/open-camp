@@ -82,10 +82,15 @@ parameters:
             - 'https://www.googleapis.com/auth/userinfo.profile'
             - 'https://www.googleapis.com/auth/userinfo.email'
 
+    # GET parameters
+    app.get_parameter_name_set_theme: '_set_theme'
+
     # Cookies
     app.cookie_lifespan_application_draft: '1 year'
     app.cookie_prefix_application_draft: 'application_draft_'
     app.cookie_name_visitor_id: 'visitor_id'
+    app.cookie_lifespan_theme: '1 year'
+    app.cookie_name_theme: 'theme'
 
     # Session
     app.last_completed_application_id_session_key: 'last_completed_application_id'
@@ -108,6 +113,9 @@ parameters:
     app.national_identifier_regex: '#^(\d\d)(\d\d)(\d\d)( |/)?(\d\d\d)(\d?)$#'
     app.eu_cin_regex: '#^\d{8}$#'
     app.eu_vat_id_regex: '#^(((CZ)[0-9]{8,10})|((SK)[0-9]{10}))$#'
+
+    # UI
+    app.themes: [ 'light', 'dark' ]
 
 services:
     # default configuration for services in *this* file

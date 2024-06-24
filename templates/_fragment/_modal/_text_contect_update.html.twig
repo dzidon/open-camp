@@ -45,11 +45,13 @@
                             {{ 'entity_attribute.text_content.content'|trans }}
                         </label>
 
+                        {% set is_dark_theme = get_theme() is same as('dark') %}
+
                         <textarea class="form-control"
                                   id="text-content-modal-textarea-html"
                                   rows="5"
                                   required
-                                  {{ stimulus_controller('f--tinymce', {'dark': false}) }}
+                                  {{ stimulus_controller('f--tinymce', {'dark': is_dark_theme}) }}
                                   {{ stimulus_target('tc--modal', 'textAreaHtml') }}
                         ></textarea>
                     </div>

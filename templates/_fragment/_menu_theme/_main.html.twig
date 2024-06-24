@@ -137,32 +137,28 @@
     </li>
 {% endblock %}
 
-{# Locale switch #}
-{% block locale_switch_root %}
-    <ul>
-        {% for menu_child in menu_type.children %}
-            {% with {'menu_type': menu_child} %}
-                {{ block(menu_child.templateBlock, menu_theme) }}
-            {% endwith %}
-        {% endfor %}
-    </ul>
+{# Theme picker #}
+{% block theme_picker_root %}
+    <div class="btn-group dropup">
+        <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-adjust"></i>
+        </button>
+
+        <ul class="dropdown-menu">
+            {% for menu_child in menu_type.children %}
+                {% with {'menu_type': menu_child} %}
+                    {{ block(menu_child.templateBlock, menu_theme) }}
+                {% endwith %}
+            {% endfor %}
+        </ul>
+    </div>
 {% endblock %}
 
-{% block locale_switch_item %}
+{% block theme_picker_item %}
     <li>
-        <a href="{{ menu_type.url }}"{% if menu_type.active %} class="active"{% endif %}>
+        <a class="dropdown-item {% if menu_type.active %} active {% endif %}" href="{{ menu_type.url }}">
             {{ menu_type.text }}
         </a>
-
-        {% if menu_type.children is not empty %}
-            <ul>
-                {% for menu_child in menu_type.children %}
-                    {% with {'menu_type': menu_child} %}
-                        {{ block(menu_child.templateBlock, menu_theme) }}
-                    {% endwith %}
-                {% endfor %}
-            </ul>
-        {% endif %}
     </li>
 {% endblock %}
 

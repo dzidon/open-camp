@@ -5,23 +5,23 @@ namespace App\Model\EventSubscriber\User\BlogPost;
 use App\Model\Event\User\BlogPost\BlogPostReadEvent;
 use App\Model\Event\User\BlogPostView\BlogPostViewCreateEvent;
 use App\Model\Repository\BlogPostViewRepositoryInterface;
-use App\Service\Visitor\VisitorIdProviderInterface;
+use App\Service\Visitor\VisitorIdHttpStorageInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class BlogPostReadSubscriber
 {
-    private VisitorIdProviderInterface $visitorIdProvider;
+    private VisitorIdHttpStorageInterface $visitorIdHttpStorage;
 
     private BlogPostViewRepositoryInterface $blogPostViewRepository;
 
     private EventDispatcherInterface $eventDispatcher;
 
-    public function __construct(VisitorIdProviderInterface      $visitorIdProvider,
+    public function __construct(VisitorIdHttpStorageInterface   $visitorIdProvider,
                                 BlogPostViewRepositoryInterface $blogPostViewRepository,
                                 EventDispatcherInterface        $eventDispatcher)
     {
-        $this->visitorIdProvider = $visitorIdProvider;
+        $this->visitorIdHttpStorage = $visitorIdProvider;
         $this->blogPostViewRepository = $blogPostViewRepository;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -30,11 +30,11 @@ class BlogPostReadSubscriber
     public function onReadIncrementViewCount(BlogPostReadEvent $event): void
     {
         $blogPost = $event->getBlogPost();
-        $visitorId = $this->visitorIdProvider->getCurrentVisitorId();
+        $visitorId = $this->visitorIdHttpStorage->getCurrentVisitorId();
 
         if ($visitorId === null)
         {
-            $visitorId = $this->visitorIdProvider->getNewVisitorId();
+            $visitorId = $this->visitorIdHttpStorage->getNewVisitorId();
         }
 
         if (!$this->blogPostViewRepository->hasVisitorSeenBlogPost($blogPost, $visitorId))

@@ -78,7 +78,20 @@
 
     <footer class="footer mt-auto py-3 bg-body-secondary">
         <div class="container">
-            <span class="text-muted">Footer</span>
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <span class="text-muted">Footer</span>
+                </div>
+
+                <div class="col-6">
+                    {% if themes is not empty %}
+                        <div class="float-end">
+                            {% set theme_picker = build_menu('theme_picker') %}
+                            {{ menu(theme_picker) }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
     </footer>
 {% endblock %}

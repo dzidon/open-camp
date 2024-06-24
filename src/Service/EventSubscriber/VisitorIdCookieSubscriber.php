@@ -2,10 +2,8 @@
 
 namespace App\Service\EventSubscriber;
 
-use App\Service\Visitor\VisitorIdProviderInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use App\Service\Visitor\VisitorIdHttpStorageInterface;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
@@ -14,32 +12,23 @@ use Symfony\Component\HttpKernel\KernelEvents;
  */
 class VisitorIdCookieSubscriber
 {
-    private VisitorIdProviderInterface $visitorIdProvider;
+    private VisitorIdHttpStorageInterface $visitorIdHttpStorage;
 
-    private string $visitorIdCookieName;
-
-    public function __construct(
-        VisitorIdProviderInterface $visitorIdProvider,
-
-        #[Autowire('%app.cookie_name_visitor_id%')]
-        string $visitorIdCookieName
-    ) {
-        $this->visitorIdProvider = $visitorIdProvider;
-        $this->visitorIdCookieName = $visitorIdCookieName;
+    public function __construct(VisitorIdHttpStorageInterface $visitorIdHttpStorage)
+    {
+        $this->visitorIdHttpStorage = $visitorIdHttpStorage;
     }
 
     #[AsEventListener(event: KernelEvents::RESPONSE)]
     public function onKernelController(ResponseEvent $event): void
     {
-        $currentVisitorId = $this->visitorIdProvider->getCurrentVisitorId();
+        $currentVisitorId = $this->visitorIdHttpStorage->getCurrentVisitorId();
 
         if ($currentVisitorId === null)
         {
-            $newVisitorId = $this->visitorIdProvider->getNewVisitorId();
-            $newVisitorIdString = $newVisitorId->toRfc4122();
-            $cookie = new Cookie($this->visitorIdCookieName, $newVisitorIdString);
             $response = $event->getResponse();
-            $response->headers->setCookie($cookie);
+            $newVisitorId = $this->visitorIdHttpStorage->getNewVisitorId();
+            $this->visitorIdHttpStorage->setVisitorId($newVisitorId, $response);
         }
     }
 }
