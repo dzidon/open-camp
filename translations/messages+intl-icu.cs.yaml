@@ -55,6 +55,31 @@ image_carousel:
     previous: 'Předchozí'
     no_image: 'Obrázek není k dispozici'
 
+cookie_type:
+    technical:
+        title: 'Nezbytné údaje'
+        description: 'Nezbytné technické údaje pro správné fungování webu.'
+
+    analytics:
+        title: 'Analytické údaje'
+        description: 'Používají se k pochopení vaší interakce s webem. Poskytují informace o metrikách jako počet návštěvníků, míra okamžitého opuštění, zdroj provozu atd.'
+
+    personalization:
+        title: 'Preferenční údaje'
+        description: 'Povolují ukládat informace, které mění způsob, jakým se webová stránka zobrazuje nebo chová.'
+
+    marketing:
+        title: 'Marketingové údaje'
+        description: 'Tato data se používají k analýze účinnosti reklamní kampaně.'
+
+    crm:
+        title: 'CRM údaje'
+        description: 'Povolují sdílení vašich dat pro reklamní účely.'
+
+    remarketing:
+        title: 'Remarketingové údaje'
+        description: 'Používají se k zobrazování reklam přizpůsobených na základě stránek, které jste navštívili dříve.'
+
 payment_method:
     card: 'Platební karta'
     transfer: 'Převod na bankovní účet'
@@ -443,9 +468,36 @@ modal:
         save: 'Uložit'
 
     form_collection_remove:
-        question: 'Opravdu chcete odstranit tuto položku?'
-        warning: 'Změny se projeví až po odeslání formuláře.'
-        button_remove: 'Odstranit'
+        content:
+            question: 'Opravdu chcete odstranit tuto položku?'
+            warning: 'Změny se projeví až po odeslání formuláře.'
+
+        button:
+            remove: 'Odstranit'
+
+    cookie_consent:
+        title: 'Souhlas se zpracováním údajů'
+        content:
+            text: 'Průběžné ukládání vašich údajů nám pomáhá zjednodušit prohlížení stránek, zobrazovat obsah na míru a analyzovat návštěvnost stránek. Kliknutím na "Přijmout vše" vyjadřujete souhlas s tím, jak s vašimi údaji nakládáme.'
+
+        button:
+            deny_all: 'Odmítnout vše'
+            preferences: 'Podrobné nastavení'
+            accept_all: 'Přijmout vše'
+
+    cookie_consent_preferences:
+        title:
+            main: 'Podrobné nastavení'
+            settings: 'Nastavení zpracování údajů'
+
+        content:
+            text: 'Zde si můžete nastavit, které údaje si přejete ukládat a které nikoliv. Nastavení můžete kdykoliv změnit v zásadách ochrany soukromí. Odkaz na zásady ochrany soukromí naleznete mimojiné v patičce webu.'
+            link_more: 'Zásady ochrany soukromí'
+            mandatory: 'Nezbytné'
+
+        button:
+            accept_all: 'Přijmout vše'
+            confirm: 'Potvrdit nastavení'
 
 menu_item:
     navbar_admin_vertical:
@@ -471,6 +523,7 @@ menu:
     navbar_user: 'Hlavní menu na uživatelském webu'
     navbar_user_profile: 'Menu na profilu uživatele'
     theme: 'Barevný režim'
+    cookie_consent_preferences: 'Nastavení soukromí'
 
 permission_group:
     application: 'Přihlášky'

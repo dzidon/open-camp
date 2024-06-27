@@ -10,7 +10,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 /**
  * Sets the visitor id cookie if it's not set or if the current value is invalid.
  */
-class VisitorIdCookieSubscriber
+class VisitorIdHttpStorageSubscriber
 {
     private VisitorIdHttpStorageInterface $visitorIdHttpStorage;
 

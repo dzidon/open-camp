@@ -17,21 +17,6 @@ interface ThemeHttpStorageInterface
     public function getCurrentTheme(): ?string;
 
     /**
-     * Returns the default theme or null if no themes are supported.
-     *
-     * @return string|null
-     */
-    public function getDefaultTheme(): ?string;
-
-    /**
-     * Returns true if the given theme is supported in the app.
-     *
-     * @param string $theme
-     * @return bool
-     */
-    public function isValidTheme(string $theme): bool;
-
-    /**
      * Sets the UI theme. Throws a LogicException if the given theme is unsupported.
      *
      * @param string $theme

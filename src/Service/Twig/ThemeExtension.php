@@ -2,6 +2,7 @@
 
 namespace App\Service\Twig;
 
+use App\Service\Theme\ThemeConfigHelperInterface;
 use App\Service\Theme\ThemeHttpStorageInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
@@ -11,10 +12,14 @@ use Twig\TwigFunction;
  */
 class ThemeExtension extends AbstractExtension
 {
+    private ThemeConfigHelperInterface $themeConfigHelper;
+
     private ThemeHttpStorageInterface $themeHttpStorage;
 
-    public function __construct(ThemeHttpStorageInterface $themeHttpStorage)
+    public function __construct(ThemeConfigHelperInterface $themeConfigHelper,
+                                ThemeHttpStorageInterface  $themeHttpStorage)
     {
+        $this->themeConfigHelper = $themeConfigHelper;
         $this->themeHttpStorage = $themeHttpStorage;
     }
 
@@ -34,7 +39,7 @@ class ThemeExtension extends AbstractExtension
 
         if ($theme === null)
         {
-            $theme = $this->themeHttpStorage->getDefaultTheme();
+            $theme = $this->themeConfigHelper->getDefaultTheme();
         }
 
         return $theme;

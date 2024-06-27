@@ -2,6 +2,7 @@
 
 namespace App\Service\Form\Type\Common;
 
+use App\Service\Theme\ThemeConfigHelperInterface;
 use App\Service\Theme\ThemeHttpStorageInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -13,10 +14,14 @@ use Symfony\Component\Form\FormView;
  */
 class TinymceTextareaType extends AbstractType
 {
+    private ThemeConfigHelperInterface $themeConfigHelper;
+
     private ThemeHttpStorageInterface $themeHttpStorage;
 
-    public function __construct(ThemeHttpStorageInterface $themeHttpStorage)
+    public function __construct(ThemeConfigHelperInterface $themeConfigHelper,
+                                ThemeHttpStorageInterface  $themeHttpStorage)
     {
+        $this->themeConfigHelper = $themeConfigHelper;
         $this->themeHttpStorage = $themeHttpStorage;
     }
 
@@ -26,7 +31,7 @@ class TinymceTextareaType extends AbstractType
 
         if ($theme === null)
         {
-            $theme = $this->themeHttpStorage->getDefaultTheme();
+            $theme = $this->themeConfigHelper->getDefaultTheme();
         }
 
         $view->vars['attr'] = array_merge([

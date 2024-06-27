@@ -3,6 +3,7 @@
 namespace App\Service\Menu\Factory;
 
 use App\Library\Menu\MenuType;
+use App\Service\Theme\ThemeConfigHelperInterface;
 use App\Service\Theme\ThemeHttpStorageInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -15,6 +16,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ThemePickerMenuTypeFactory extends AbstractMenuTypeFactory
 {
+    private ThemeConfigHelperInterface $themeConfigHelper;
+
     private ThemeHttpStorageInterface $themeHttpStorage;
 
     private UrlGeneratorInterface $urlGenerator;
@@ -28,17 +31,19 @@ class ThemePickerMenuTypeFactory extends AbstractMenuTypeFactory
     private array $themes;
 
     public function __construct(
-        ThemeHttpStorageInterface $themeProvider,
-        UrlGeneratorInterface     $urlGenerator,
-        TranslatorInterface       $translator,
-        RequestStack              $requestStack,
+        ThemeConfigHelperInterface $themeConfigHelper,
+        ThemeHttpStorageInterface  $themeProvider,
+        UrlGeneratorInterface      $urlGenerator,
+        TranslatorInterface        $translator,
+        RequestStack               $requestStack,
 
-        #[Autowire('%app.get_parameter_name_set_theme%')]
+        #[Autowire('%app.get_param_set_theme%')]
         string $getParameterNameSetTheme,
 
         #[Autowire('%app.themes%')]
         array $themes
     ) {
+        $this->themeConfigHelper = $themeConfigHelper;
         $this->themeHttpStorage = $themeProvider;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
@@ -65,7 +70,7 @@ class ThemePickerMenuTypeFactory extends AbstractMenuTypeFactory
 
         if ($currentTheme === null)
         {
-            $currentTheme = $this->themeHttpStorage->getDefaultTheme();
+            $currentTheme = $this->themeConfigHelper->getDefaultTheme();
         }
 
         $request = $this->requestStack->getCurrentRequest();
@@ -81,7 +86,7 @@ class ThemePickerMenuTypeFactory extends AbstractMenuTypeFactory
             try
             {
                 $queryParameters[$this->getParameterNameSetTheme] = $theme;
-                $url = $this->urlGenerator->generate($route, $queryParameters);;
+                $url = $this->urlGenerator->generate($route, $queryParameters);
             }
             catch (RouteNotFoundException)
             {

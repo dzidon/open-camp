@@ -14,30 +14,28 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class ThemeCookieStorage implements ThemeHttpStorageInterface
 {
+    private ThemeConfigHelperInterface $themeConfigHelper;
+
     private RequestStack $requestStack;
 
     private string $themeCookieName;
 
     private string $themeCookieLifespan;
 
-    private array $themes;
-
     public function __construct(
-        RequestStack $requestStack,
+        ThemeConfigHelperInterface $themeConfigHelper,
+        RequestStack               $requestStack,
 
         #[Autowire('%app.cookie_name_theme%')]
         string $themeCookieName,
 
         #[Autowire('%app.cookie_lifespan_theme%')]
-        string $themeCookieLifespan,
-
-        #[Autowire('%app.themes%')]
-        array $themes
+        string $themeCookieLifespan
     ) {
+        $this->themeConfigHelper = $themeConfigHelper;
         $this->requestStack = $requestStack;
         $this->themeCookieName = $themeCookieName;
         $this->themeCookieLifespan = $themeCookieLifespan;
-        $this->themes = $themes;
     }
 
     /**
@@ -48,7 +46,7 @@ class ThemeCookieStorage implements ThemeHttpStorageInterface
         $request = $this->requestStack->getCurrentRequest();
         $theme = $request->cookies->get($this->themeCookieName);
 
-        if ($theme === null || !$this->isValidTheme($theme))
+        if ($theme === null || !$this->themeConfigHelper->isValidTheme($theme))
         {
             return null;
         }
@@ -59,30 +57,9 @@ class ThemeCookieStorage implements ThemeHttpStorageInterface
     /**
      * @inheritDoc
      */
-    public function getDefaultTheme(): ?string
-    {
-        if (empty($this->themes))
-        {
-            return null;
-        }
-
-        return $this->themes[array_key_first($this->themes)];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function isValidTheme(string $theme): bool
-    {
-        return in_array($theme, $this->themes);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function setTheme(string $theme, Response $response): void
     {
-        if (!$this->isValidTheme($theme))
+        if (!$this->themeConfigHelper->isValidTheme($theme))
         {
             throw new LogicException(
                 sprintf('Theme "%s" passed to "%s" is not supported. Include it in "app.themes".', $theme, __METHOD__)

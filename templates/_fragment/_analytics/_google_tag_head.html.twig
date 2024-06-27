@@ -1,0 +1,67 @@
+<!-- Google Tag Manager -->
+
+{% if is_cookie_consent_granted('analytics') %}
+    {% set analytics_verdict = 'granted' %}
+{% else %}
+    {% set analytics_verdict = 'denied' %}
+{% endif %}
+
+{% if is_cookie_consent_granted('personalization') %}
+    {% set personalization_verdict = 'granted' %}
+{% else %}
+    {% set personalization_verdict = 'denied' %}
+{% endif %}
+
+{% if is_cookie_consent_granted('marketing') %}
+    {% set marketing_verdict = 'granted' %}
+{% else %}
+    {% set marketing_verdict = 'denied' %}
+{% endif %}
+
+{% if is_cookie_consent_granted('crm') %}
+    {% set crm_verdict = 'granted' %}
+{% else %}
+    {% set crm_verdict = 'denied' %}
+{% endif %}
+
+{% if is_cookie_consent_granted('remarketing') %}
+    {% set remarketing_verdict = 'granted' %}
+{% else %}
+    {% set remarketing_verdict = 'denied' %}
+{% endif %}
+
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag()
+    {
+        dataLayer.push(arguments);
+    }
+
+    gtag('consent', 'default', {
+        functional_storage: 'granted',
+        analytics_storage: '{{ analytics_verdict }}',
+        personalization_storage: '{{ personalization_verdict }}',
+        ad_storage: '{{ marketing_verdict }}',
+        ad_user_data: '{{ crm_verdict }}',
+        ad_personalization: '{{ remarketing_verdict }}',
+    });
+</script>
+
+<script>
+    (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+            'gtm.start':
+                new Date().getTime(), event: 'gtm.js'
+        });
+        var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src =
+            'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', '{{ google_tag_manager_id }}');
+</script>
+
+<!-- End Google Tag Manager -->

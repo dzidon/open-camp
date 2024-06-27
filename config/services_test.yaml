@@ -65,7 +65,21 @@ parameters:
             - 'email'
 
     # GET parameters
-    app.get_parameter_name_set_theme: '_set_theme'
+    app.get_param_set_theme: '_set_theme'
+
+    # POST parameters
+    app.post_param_cookie_consent_grant_all: '_cookie_consent_grant_all'
+    app.post_param_cookie_consent_deny_all: '_cookie_consent_deny_all'
+    app.post_param_cookie_consent_grant_preferences: '_cookie_consent_grant_preferences'
+    app.post_param_cookie_consent_preferences: '_cookie_consent_preferences'
+
+    # Cookie consents
+    app.enabled_cookie_consents:
+        analytics: true
+        personalization: true
+        marketing: true
+        crm: true
+        remarketing: true
 
     # Cookies
     app.cookie_lifespan_application_draft: '1 year'
@@ -73,6 +87,8 @@ parameters:
     app.cookie_name_visitor_id: 'visitor_id'
     app.cookie_lifespan_theme: '1 year'
     app.cookie_name_theme: 'theme'
+    app.cookie_lifespan_consents: '6 months'
+    app.cookie_name_consents: 'cookie_consents'
 
     # Session
     app.last_completed_application_id_session_key: 'last_completed_application_id'

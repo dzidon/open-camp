@@ -30,6 +30,13 @@ twig:
         national_identifier_enabled: '%app.national_identifier%'
         social_login_services: '%app.social_login_services%'
         themes: '%app.themes%'
+        google_tag_manager_id: '%env(GOOGLE_TAG_MANAGER_ID)%'
+        enabled_cookie_consents: '%app.enabled_cookie_consents%'
+
+        post_param_cookie_consent_grant_all: '%app.post_param_cookie_consent_grant_all%'
+        post_param_cookie_consent_deny_all: '%app.post_param_cookie_consent_deny_all%'
+        post_param_cookie_consent_grant_preferences: '%app.post_param_cookie_consent_grant_preferences%'
+        post_param_cookie_consent_preferences: '%app.post_param_cookie_consent_preferences%'
 
 when@test:
     twig:

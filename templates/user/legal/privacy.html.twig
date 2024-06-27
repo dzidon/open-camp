@@ -3,6 +3,11 @@
 {% block main %}
     <div class="row mb-3">
         <div class="col-12 col-lg-8">
+            <a type="button" class="mb-2" data-bs-toggle="modal" href="#cookie-consent-modal">
+                <i class="fas fa-cookie-bite"></i>
+                {{ 'menu.cookie_consent_preferences'|trans }}
+            </a>
+
             {{ include('_fragment/_text_content/_display.html.twig', {
                 text_content_identifier: 'privacy',
             }) }}

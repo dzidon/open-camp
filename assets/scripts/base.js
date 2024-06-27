@@ -1,7 +1,8 @@
 // js
 const $ = require('jquery');
 
-import 'bootstrap';
+import * as bootstrap from 'bootstrap';
+window.bootstrap = bootstrap;
 
 // start the Stimulus application
 import '../scripts/bootstrap';
@@ -11,6 +12,7 @@ $(document).ready(function ()
     scrollToTop();
     scrollToFirstError();
     openCollapsedContainers();
+    openModals();
 });
 
 function scrollToTop()
@@ -76,4 +78,15 @@ function openCollapsedContainers()
 
         data.containers.addClass('show');
     });
+}
+
+function openModals()
+{
+    const modalToOpen = document.querySelector('.modal-open-on-page-load');
+
+    if (modalToOpen)
+    {
+        const modal = new bootstrap.Modal(modalToOpen);
+        modal.show();
+    }
 }

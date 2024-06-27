@@ -2,6 +2,7 @@
 
 namespace App\Service\EventSubscriber;
 
+use App\Service\Theme\ThemeConfigHelperInterface;
 use App\Service\Theme\ThemeHttpStorageInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -15,6 +16,8 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class ThemeHttpStorageSubscriber
 {
+    private ThemeConfigHelperInterface $themeConfigHelper;
+
     private ThemeHttpStorageInterface $themeHttpStorage;
 
     private UrlGeneratorInterface $urlGenerator;
@@ -22,12 +25,14 @@ class ThemeHttpStorageSubscriber
     private string $getParameterNameSetTheme;
 
     public function __construct(
-        ThemeHttpStorageInterface $themeHttpStorage,
-        UrlGeneratorInterface     $urlGenerator,
+        ThemeConfigHelperInterface $themeConfigHelper,
+        ThemeHttpStorageInterface  $themeHttpStorage,
+        UrlGeneratorInterface      $urlGenerator,
 
-        #[Autowire('%app.get_parameter_name_set_theme%')]
+        #[Autowire('%app.get_param_set_theme%')]
         string $getParameterNameSetTheme
     ) {
+        $this->themeConfigHelper = $themeConfigHelper;
         $this->themeHttpStorage = $themeHttpStorage;
         $this->urlGenerator = $urlGenerator;
         $this->getParameterNameSetTheme = $getParameterNameSetTheme;
@@ -37,7 +42,7 @@ class ThemeHttpStorageSubscriber
     public function onResponse(ResponseEvent $event): void
     {
         $currentTheme = $this->themeHttpStorage->getCurrentTheme();
-        $defaultTheme = $this->themeHttpStorage->getDefaultTheme();
+        $defaultTheme = $this->themeConfigHelper->getDefaultTheme();
 
         if ($currentTheme === null && $defaultTheme !== null)
         {
@@ -48,7 +53,7 @@ class ThemeHttpStorageSubscriber
         $request = $event->getRequest();
         $newTheme = $request->query->get($this->getParameterNameSetTheme, '');
 
-        if ($request->isMethod('GET') && $this->themeHttpStorage->isValidTheme($newTheme))
+        if ($request->isMethod('GET') && $this->themeConfigHelper->isValidTheme($newTheme))
         {
             $route = $request->attributes->get('_route');
             $routeParams = $request->attributes->get('_route_params', []);

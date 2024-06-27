@@ -1,22 +1,38 @@
-{% extends "_fragment/_modal/_base.html.twig" %}
+<div id="fc-removal-modal"
+     class="modal fade"
+     tabindex="-1"
+     aria-labelledby="fc-removal-modal-label"
+     aria-hidden="true"
+     data-controller="fc--rem-mod"
+>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="fc-removal-modal-label">
+                    {{ 'modal.title'|trans }}
+                </h5>
 
-{% block modal_id %}fc-removal-modal{% endblock %}
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'modal.button.close'|trans }}">
+                </button>
+            </div>
 
-{% block modal_attributes %}
-    data-controller="fc--rem-mod"
-{% endblock %}
+            <div class="modal-body">
+                {{ 'modal.form_collection_remove.content.question'|trans }}
+                <strong>{{ 'modal.form_collection_remove.content.warning'|trans }}</strong>
+            </div>
 
-{% block modal_body %}
-    {{ 'modal.form_collection_remove.question'|trans }} <strong>{{ 'modal.form_collection_remove.warning'|trans }}</strong>
-{% endblock %}
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {{ 'modal.button.close'|trans }}
+                </button>
 
-{% block modal_footer %}
-    {{ parent() }}
-
-    <button type="button"
-            class="btn btn-danger"
-            data-action="fc--rem-mod#removePreparedItem"
-    >
-        {{ 'modal.form_collection_remove.button_remove'|trans }}
-    </button>
-{% endblock %}
+                <button type="button"
+                        class="btn btn-danger"
+                        data-action="fc--rem-mod#removePreparedItem"
+                >
+                    {{ 'modal.form_collection_remove.button.remove'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

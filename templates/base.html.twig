@@ -1,8 +1,13 @@
 {% set theme = get_theme() %}
+{% set app_asks_for_cookie_consent = app_asks_for_cookie_consent() %}
 
 <!DOCTYPE html>
 <html lang="{{ app.request.locale }}" class="h-100" {% if theme is not null %} data-bs-theme="{{ theme }}" {% endif %}>
     <head>
+        {% if app_asks_for_cookie_consent %}
+            {{ include('_fragment/_analytics/_google_tag_head.html.twig') }}
+        {% endif %}
+
         {% block meta %}
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,8 +19,16 @@
     </head>
 
     <body class="{% block body_class %}{% endblock %}">
+        {% if app_asks_for_cookie_consent %}
+            {{ include('_fragment/_analytics/_google_tag_body.html.twig') }}
+        {% endif %}
+
         {% block body %}{% endblock %}
 
         {% block javascripts %}{% endblock %}
+
+        {% if app_asks_for_cookie_consent %}
+            {{ include('_fragment/_modal/_cookie_consent.html.twig') }}
+        {% endif %}
     </body>
 </html>
