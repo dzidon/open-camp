@@ -34,8 +34,8 @@ class CampImageFilesystemTest extends KernelTestCase
 
     public function testIsUrlPlaceholder(): void
     {
-        $this->assertTrue($this->campImageFilesystem->isUrlPlaceholder('/files/static/placeholder.jpg'));
-        $this->assertTrue($this->campImageFilesystem->isUrlPlaceholder('/files/static/placeholder.jpg?foo=bar&xyz=123'));
+        $this->assertTrue($this->campImageFilesystem->isUrlPlaceholder('/files/static/image/placeholder.jpg'));
+        $this->assertTrue($this->campImageFilesystem->isUrlPlaceholder('/files/static/image/placeholder.jpg?foo=bar&xyz=123'));
         $this->assertFalse($this->campImageFilesystem->isUrlPlaceholder('/a/b/c'));
     }
 
@@ -51,14 +51,14 @@ class CampImageFilesystemTest extends KernelTestCase
     {
         $actualUrl = $this->campImageFilesystem->getImagePublicUrl($this->campImageWithNonExistentFile);
 
-        $this->assertSame('/files/static/placeholder.jpg', $actualUrl);
+        $this->assertSame('/files/static/image/placeholder.jpg', $actualUrl);
     }
 
     public function testGetImagePublicUrlWithNullCampImage(): void
     {
         $actualUrl = $this->campImageFilesystem->getImagePublicUrl(null);
 
-        $this->assertSame('/files/static/placeholder.jpg', $actualUrl);
+        $this->assertSame('/files/static/image/placeholder.jpg', $actualUrl);
     }
 
     public function testRemoveFile(): void

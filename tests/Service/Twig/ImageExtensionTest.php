@@ -23,13 +23,13 @@ class ImageExtensionTest extends KernelTestCase
     public function testGetCompanyLogoUrlWithPrefix(): void
     {
         $urlWithPrefix = $this->extension->getCompanyLogoUrl();
-        $this->assertSame('/files/static/company_logo.png', $urlWithPrefix);
+        $this->assertSame('/files/static/image/company_logo.png', $urlWithPrefix);
     }
 
     public function testGetCompanyLogoUrlWithoutPrefix(): void
     {
         $urlWithPrefix = $this->extension->getCompanyLogoUrl(false);
-        $this->assertSame('files/static/company_logo.png', $urlWithPrefix);
+        $this->assertSame('files/static/image/company_logo.png', $urlWithPrefix);
     }
 
     public function testGetCampImageUrl(): void
@@ -37,7 +37,7 @@ class ImageExtensionTest extends KernelTestCase
         // null file
 
         $actualUrl = $this->extension->getCampImageUrl(null);
-        $this->assertSame('/files/static/placeholder.jpg', $actualUrl);
+        $this->assertSame('/files/static/image/placeholder.jpg', $actualUrl);
 
         // existing file
 
@@ -63,7 +63,7 @@ class ImageExtensionTest extends KernelTestCase
         $this->campImageStorage->delete($campImageFileName);
 
         $actualUrl = $this->extension->getCampImageUrl($campImage);
-        $this->assertSame('/files/static/placeholder.jpg', $actualUrl);
+        $this->assertSame('/files/static/image/placeholder.jpg', $actualUrl);
     }
 
     public function testGetPurchasableItemImageUrl(): void
@@ -74,13 +74,13 @@ class ImageExtensionTest extends KernelTestCase
         // null file
 
         $actualUrl = $this->extension->getPurchasableItemImageUrl($purchasableItem);
-        $this->assertSame('/files/static/placeholder.jpg', $actualUrl);
+        $this->assertSame('/files/static/image/placeholder.jpg', $actualUrl);
 
         // non-existent file
 
         $purchasableItem->setImageExtension('png');
         $actualUrl = $this->extension->getPurchasableItemImageUrl($purchasableItem);
-        $this->assertSame('/files/static/placeholder.jpg', $actualUrl);
+        $this->assertSame('/files/static/image/placeholder.jpg', $actualUrl);
 
         // existing file
 
@@ -108,13 +108,13 @@ class ImageExtensionTest extends KernelTestCase
         // null file
 
         $actualUrl = $this->extension->getUserImageUrl($user);
-        $this->assertSame('/files/static/user_placeholder.png', $actualUrl);
+        $this->assertSame('/files/static/image/user_placeholder.png', $actualUrl);
 
         // non-existent file
 
         $user->setImageExtension('png');
         $actualUrl = $this->extension->getUserImageUrl($user);
-        $this->assertSame('/files/static/user_placeholder.png', $actualUrl);
+        $this->assertSame('/files/static/image/user_placeholder.png', $actualUrl);
 
         // existing file
 

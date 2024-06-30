@@ -492,7 +492,7 @@ modal:
 
         content:
             text: 'Zde si můžete nastavit, které údaje si přejete ukládat a které nikoliv. Nastavení můžete kdykoliv změnit v zásadách ochrany soukromí. Odkaz na zásady ochrany soukromí naleznete mimojiné v patičce webu.'
-            link_more: 'Zásady ochrany soukromí'
+            link_more: 'Ochrana soukromí'
             mandatory: 'Nezbytné'
 
         button:
@@ -524,6 +524,14 @@ menu:
     navbar_user_profile: 'Menu na profilu uživatele'
     theme: 'Barevný režim'
     cookie_consent_preferences: 'Nastavení soukromí'
+
+footer:
+    header:
+        main: 'Hlavní stránky'
+        content: 'Obsah'
+        legal: 'Právní'
+        social: 'Sledujte nás'
+        payments_and_security: 'Platby & bezpečnost'
 
 permission_group:
     application: 'Přihlášky'
@@ -2769,7 +2777,7 @@ route:
     user_application_completed: 'Přihláška vytvořena'
     user_application_payment_online_status: 'Stav platby'
     user_application_payment_simulate: 'Simulace platební brány'
-    user_privacy: 'Zásady ochrany soukromí'
+    user_privacy: 'Ochrana soukromí'
     user_terms_of_use: 'Podmínky používání'
     user_contact_us: 'Kontakt'
     user_downloadable_file_list: 'Ke stažení'

@@ -30,21 +30,30 @@ parameters:
             icon: 'fab fa-tiktok'
             link: 'https://tiktok.com'
 
+    app.company_payments_and_security_icons:
+        mastercard:
+            name: 'Mastercard'
+            link: '%app.public_file_path_prefix%files/static/image/payment/mastercard.svg'
+
+        visa:
+            name: 'Visa'
+            link: '%app.public_file_path_prefix%files/static/image/payment/visa.svg'
+
     # Directories & paths
     app.public_file_path_prefix: '/'
-    app.company_logo_path: 'files/static/company_logo.png'
+    app.company_logo_path: 'files/static/image/company_logo.png'
     app.camp_image_public_path_prefix: '%app.public_file_path_prefix%'
     app.camp_image_directory: 'files/dynamic/camp'
-    app.no_camp_image_path: 'files/static/placeholder.jpg'
+    app.no_camp_image_path: 'files/static/image/placeholder.jpg'
     app.purchasable_item_image_public_path_prefix: '%app.public_file_path_prefix%'
     app.purchasable_item_image_directory: 'files/dynamic/purchasable-item'
-    app.no_purchasable_item_image_path: 'files/static/placeholder.jpg'
+    app.no_purchasable_item_image_path: 'files/static/image/placeholder.jpg'
     app.user_image_public_path_prefix: '%app.public_file_path_prefix%'
     app.user_image_directory: 'files/dynamic/user'
-    app.no_user_image_path: 'files/static/user_placeholder.png'
+    app.no_user_image_path: 'files/static/image/user_placeholder.png'
     app.gallery_image_public_path_prefix: '%app.public_file_path_prefix%'
     app.gallery_image_directory: 'files/dynamic/gallery-image'
-    app.no_gallery_image_path: 'files/static/placeholder.jpg'
+    app.no_gallery_image_path: 'files/static/image/placeholder.jpg'
     app.application_attachment_directory: 'files/dynamic/application-attachment'
     app.application_invoice_directory: 'files/dynamic/application-invoice'
     app.application_admin_attachment_directory: 'files/dynamic/application-admin-attachment'

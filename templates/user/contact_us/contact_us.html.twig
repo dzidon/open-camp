@@ -35,11 +35,7 @@
                         <h4>{{ 'contact_us.social_media'|trans }}</h4>
 
                         <p>
-                            {% for social in company_social_media %}
-                                <a href="{{ social.link }}" class="btn btn-primary me-1">
-                                    <i class="{{ social.icon }}"></i>
-                                </a>
-                            {% endfor %}
+                            {{ include('_fragment/_link/_social_media_links.html.twig') }}
                         </p>
                     </div>
                 </div>

@@ -33,8 +33,8 @@ class UserImageFilesystemTest extends KernelTestCase
 
     public function testIsUrlPlaceholder(): void
     {
-        $this->assertTrue($this->userImageFilesystem->isUrlPlaceholder('/files/static/user_placeholder.png'));
-        $this->assertTrue($this->userImageFilesystem->isUrlPlaceholder('/files/static/user_placeholder.png?foo=bar&xyz=123'));
+        $this->assertTrue($this->userImageFilesystem->isUrlPlaceholder('/files/static/image/user_placeholder.png'));
+        $this->assertTrue($this->userImageFilesystem->isUrlPlaceholder('/files/static/image/user_placeholder.png?foo=bar&xyz=123'));
         $this->assertFalse($this->userImageFilesystem->isUrlPlaceholder('/a/b/c'));
     }
 
@@ -52,7 +52,7 @@ class UserImageFilesystemTest extends KernelTestCase
         $this->user->setImageExtension('jpg');
         $actualUrl = $this->userImageFilesystem->getImagePublicUrl($this->user);
 
-        $this->assertSame('/files/static/user_placeholder.png', $actualUrl);
+        $this->assertSame('/files/static/image/user_placeholder.png', $actualUrl);
     }
 
     public function testGetImagePublicUrlWithNullCampImage(): void
@@ -60,7 +60,7 @@ class UserImageFilesystemTest extends KernelTestCase
         $this->user->setImageExtension(null);
         $actualUrl = $this->userImageFilesystem->getImagePublicUrl($this->user);
 
-        $this->assertSame('/files/static/user_placeholder.png', $actualUrl);
+        $this->assertSame('/files/static/image/user_placeholder.png', $actualUrl);
     }
 
     public function testUploadAndRemoveFile(): void

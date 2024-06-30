@@ -1,0 +1,5 @@
+{% for social in company_social_media %}
+    <a href="{{ social.link }}" class="btn btn-primary me-1">
+        <i class="{{ social.icon }}"></i>
+    </a>
+{% endfor %}

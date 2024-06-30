@@ -29,6 +29,23 @@
     </li>
 {% endblock %}
 
+{# User footer #}
+{% block navbar_user_footer_root %}
+    {% for menu_child in menu_type.children %}
+        {% with {'menu_type': menu_child, 'is_last': loop.last} %}
+            {{ block(menu_child.templateBlock, menu_theme) }}
+        {% endwith %}
+    {% endfor %}
+{% endblock %}
+
+{% block navbar_user_footer_item %}
+    <div {% if not is_last %} class="mb-1" {% endif %}>
+        <a href="{{ menu_type.url }}" class="text-white-50">
+            {{ menu_type.text }}
+        </a>
+    </div>
+{% endblock %}
+
 {# User navigation #}
 {% block navbar_user %}
     <ul class="navbar-nav ms-auto">
@@ -72,7 +89,7 @@
     </a>
 {% endblock %}
 
-{# Profile navigation #}
+{# User profile navigation #}
 {% block navbar_user_profile %}
     <ul class="nav nav-tabs">
         {% for menu_child in menu_type.children %}
@@ -140,7 +157,7 @@
 {# Theme picker #}
 {% block theme_picker_root %}
     <div class="btn-group dropup">
-        <button type="button" class="btn btn-sm btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+        <button type="button" class="btn btn-sm btn-outline-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fas fa-adjust"></i>
         </button>
 

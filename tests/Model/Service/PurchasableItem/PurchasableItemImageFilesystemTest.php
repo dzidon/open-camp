@@ -33,8 +33,8 @@ class PurchasableItemImageFilesystemTest extends KernelTestCase
 
     public function testIsUrlPlaceholder(): void
     {
-        $this->assertTrue($this->purchasableItemImageFilesystem->isUrlPlaceholder('/files/static/placeholder.jpg'));
-        $this->assertTrue($this->purchasableItemImageFilesystem->isUrlPlaceholder('/files/static/placeholder.jpg?foo=bar&xyz=123'));
+        $this->assertTrue($this->purchasableItemImageFilesystem->isUrlPlaceholder('/files/static/image/placeholder.jpg'));
+        $this->assertTrue($this->purchasableItemImageFilesystem->isUrlPlaceholder('/files/static/image/placeholder.jpg?foo=bar&xyz=123'));
         $this->assertFalse($this->purchasableItemImageFilesystem->isUrlPlaceholder('/a/b/c'));
     }
 
@@ -52,7 +52,7 @@ class PurchasableItemImageFilesystemTest extends KernelTestCase
         $this->purchasableItem->setImageExtension('jpg');
         $actualUrl = $this->purchasableItemImageFilesystem->getImagePublicUrl($this->purchasableItem);
 
-        $this->assertSame('/files/static/placeholder.jpg', $actualUrl);
+        $this->assertSame('/files/static/image/placeholder.jpg', $actualUrl);
     }
 
     public function testGetImagePublicUrlWithNullCampImage(): void
@@ -60,7 +60,7 @@ class PurchasableItemImageFilesystemTest extends KernelTestCase
         $this->purchasableItem->setImageExtension(null);
         $actualUrl = $this->purchasableItemImageFilesystem->getImagePublicUrl($this->purchasableItem);
 
-        $this->assertSame('/files/static/placeholder.jpg', $actualUrl);
+        $this->assertSame('/files/static/image/placeholder.jpg', $actualUrl);
     }
 
     public function testUploadAndRemoveFile(): void
