@@ -98,7 +98,6 @@ class ApplicationController extends AbstractController
             'loadable_contacts'             => $user === null ? [] : $contactRepository->findByUser($user),
             'loadable_campers'              => $user === null ? [] : $camperRepository->findByUser($user),
         ]);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_one.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
@@ -181,7 +180,6 @@ class ApplicationController extends AbstractController
             'loadable_contacts'             => $user === null ? [] : $contactRepository->findByUser($user),
             'loadable_campers'              => $user === null ? [] : $camperRepository->findByUser($user),
         ]);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_one.button',]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
@@ -253,7 +251,6 @@ class ApplicationController extends AbstractController
             'item_instances_empty_data' => $itemInstancesEmptyData,
             'choices_payment_methods'   => $paymentMethodChoices,
         ]);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_two.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())
@@ -299,7 +296,6 @@ class ApplicationController extends AbstractController
 
         $applicationStepThreeUpdateData = new ApplicationStepThreeData($this->getUser());
         $form = $this->createForm(ApplicationStepThreeType::class, $applicationStepThreeUpdateData);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.application_step_three.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())

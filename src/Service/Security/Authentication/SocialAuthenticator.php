@@ -31,7 +31,8 @@ class SocialAuthenticator extends OAuth2Authenticator
 {
     use TargetPathTrait;
 
-    private array $services;
+    private array $socialLoginServicesData;
+    private array $socialLoginServiceIds;
 
     private ClientRegistry $clientRegistry;
     private UserRepositoryInterface $userRepository;
@@ -49,7 +50,7 @@ class SocialAuthenticator extends OAuth2Authenticator
         Security                 $security,
 
         #[Autowire('%app.social_login_services%')]
-        array $services
+        array $socialLoginServicesData
     ) {
         $this->clientRegistry = $clientRegistry;
         $this->userRepository = $userRepository;
@@ -57,7 +58,8 @@ class SocialAuthenticator extends OAuth2Authenticator
         $this->urlGenerator = $urlGenerator;
         $this->eventDispatcher = $eventDispatcher;
         $this->security = $security;
-        $this->services = $services;
+        $this->socialLoginServicesData = $socialLoginServicesData;
+        $this->socialLoginServiceIds = array_keys($this->socialLoginServicesData);
     }
 
     /**
@@ -69,7 +71,7 @@ class SocialAuthenticator extends OAuth2Authenticator
 
         return
             $request->attributes->get('_route') === 'user_login_oauth_check' &&
-            in_array($service, $this->services)
+            in_array($service, $this->socialLoginServiceIds)
         ;
     }
 
@@ -145,10 +147,9 @@ class SocialAuthenticator extends OAuth2Authenticator
     {
         $session = $request->getSession();
         $flashBag = $session->getFlashBag();
-
         $message = $this->translator->trans('auth.social_login_failed');
-        $flashBag->add('failure', $message);
 
+        $flashBag->add('failure', $message);
         $url = $this->urlGenerator->generate('user_home');
 
         return new RedirectResponse($url);

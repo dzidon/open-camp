@@ -6,7 +6,7 @@
     {% set camp_images_length = camp_images|length %}
 
     <div class="row">
-        <div class="col-12 col-lg-5 col-xl-6 mb-4" {{ stimulus_controller('img--carousel') }}>
+        <div class="col-12 col-lg-5 col-xl-6 mb-5" {{ stimulus_controller('img--carousel') }}>
             <div id="camp-images-carousel"
                  class="carousel slide"
                  data-bs-interval="false"
@@ -54,7 +54,7 @@
                     {% for key, camp_image in camp_images %}
                         {% set image_url = camp_image_url(camp_image) %}
 
-                        <div class="col-4 col-md-3">
+                        <div class="col-4 col-md-3 mb-2">
                             <a href="#camp-images-carousel" data-bs-slide-to="{{ key }}">
                                 <img class="image-cover-16-9"
                                      src="{{ image_url }}"
@@ -68,7 +68,7 @@
             {% endif %}
         </div>
 
-        <div class="col-12 col-lg-7 col-xl-6 mb-4 ps-lg-5">
+        <div class="col-12 col-lg-7 col-xl-6 mb-5 ps-lg-5">
             {% if is_route_name_set() %}
                 <h1 class="mb-3">{{ route_name() }}</h1>
             {% endif %}
@@ -102,12 +102,12 @@
             {% endif %}
 
             {% if camp_dates_result.campDates is empty %}
-                <div class="alert alert-danger" role="alert">
+                <div class="alert alert-danger mb-0" role="alert">
                     {{ 'camp_catalog.no_upcoming_camp_dates'|trans }}
                 </div>
             {% else %}
                 <div class="table-responsive d-none d-md-block">
-                    <table class="table table-bordered table-hover">
+                    <table class="table table-bordered table-hover mb-0">
                         <thead>
                             <tr>
                                 <th scope="col">{{ 'entity.camp_date.singular'|trans }}</th>
@@ -164,12 +164,12 @@
                     </table>
                 </div>
 
-                <div class="row mb-3 d-md-none">
+                <div class="row d-md-none mt-5">
                     <div class="col-12">
-                        <h3>{{ 'entity.camp_date.plural'|trans }}</h3>
+                        <h3 class="mb-3">{{ 'entity.camp_date.plural'|trans }}</h3>
 
                         {% for camp_date in camp_dates_result.campDates %}
-                            <div class="row mt-3">
+                            <div class="row mb-2">
                                 <div class="col-12">
                                     <div class="card">
                                         <div class="card-body">
@@ -216,7 +216,7 @@
     </div>
 
     {% if camp.descriptionLong is not null %}
-        <div class="row mb-3">
+        <div class="row mb-5">
             <div class="col-12 col-lg-8">
                 <h3>{{ 'entity_attribute.camp.description_long'|trans }}</h3>
 
@@ -226,7 +226,7 @@
     {% endif %}
 
     {% if guides is not empty %}
-        <div class="row">
+        <div class="row mb-5">
             <div class="col-12">
                 <h3 class="mb-3">
                     {{ 'camp_catalog.guides'|trans }}
@@ -234,7 +234,7 @@
 
                 <div class="row">
                     {% for guide in guides %}
-                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex mb-3">
+                        <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex mb-4">
                             {{ include('_fragment/_guide/_card.html.twig', {guide: guide}) }}
                         </div>
                     {% endfor %}

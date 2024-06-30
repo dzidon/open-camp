@@ -11,18 +11,18 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
  */
 class SocialLoginRedirectResponseFactory implements SocialLoginRedirectResponseFactoryInterface
 {
-    private array $scopes;
-
     private ClientRegistry $clientRegistry;
+
+    private array $socialLoginServicesData;
 
     public function __construct(
         ClientRegistry $clientRegistry,
 
-        #[Autowire('%app.social_login_scopes%')]
-        array $scopes
+        #[Autowire('%app.social_login_services%')]
+        array $socialLoginServicesData
     ) {
         $this->clientRegistry = $clientRegistry;
-        $this->scopes = $scopes;
+        $this->socialLoginServicesData = $socialLoginServicesData;
     }
 
     /**
@@ -32,9 +32,10 @@ class SocialLoginRedirectResponseFactory implements SocialLoginRedirectResponseF
     {
         $scopesForService = [];
 
-        if (array_key_exists($service, $this->scopes))
+        if (array_key_exists($service, $this->socialLoginServicesData) &&
+            array_key_exists('scopes', $this->socialLoginServicesData[$service]))
         {
-            $scopesForService = $this->scopes[$service];
+            $scopesForService = $this->socialLoginServicesData[$service]['scopes'];
         }
 
         $client = $this->clientRegistry->getClient($service);

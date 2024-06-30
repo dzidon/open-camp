@@ -26,13 +26,13 @@
     {% if paginator.totalItems > 0 %}
         <div class="row">
             {% for blog_post in paginator.currentPageItems %}
-                <div class="col-sm-12 col-md-6 d-flex">
+                <div class="col-sm-12 col-md-6 d-flex mb-4">
                     {{ include('_fragment/_blog_post/_card.html.twig', {blog_post: blog_post}) }}
                 </div>
             {% endfor %}
         </div>
 
-        <div class="row">
+        <div class="row mb-5">
             <div class="col">
                 {{ menu(pagination_menu) }}
             </div>

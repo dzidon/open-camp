@@ -1,3 +1,25 @@
+{# Login #}
+{% block user_login_widget %}
+    {{ form_errors(form) }}
+
+    {{ form_rest(form) }}
+
+    <button type="submit" class="btn btn-primary">
+        {{ 'form.user.login.button'|trans }}
+    </button>
+{% endblock %}
+
+{# Registration #}
+{% block user_registration_widget %}
+    {{ form_errors(form) }}
+
+    {{ form_rest(form) }}
+
+    <button type="submit" class="btn btn-primary">
+        {{ 'form.user.registration.button'|trans }}
+    </button>
+{% endblock %}
+
 {# Camp catalog search #}
 {% block user_camp_search_widget %}
     {{ form_errors(form) }}
@@ -564,24 +586,41 @@
     {{ form_row(form.privacy) }}
     {{ form_row(form.terms) }}
 
-    {{ block('user_application_bottom') }}
+    {% with {'is_application_last_step': true} %}
+        {{ block('user_application_bottom') }}
+    {% endwith %}
 
     {{ form_rest(form) }}
 {% endblock %}
 
 {# Application bottom part #}
 {% block user_application_bottom %}
-    <div class="row mt-4">
+    {% if is_application_last_step is not defined %}
+        {% set is_application_last_step = false %}
+    {% endif %}
+
+    <div class="row">
         {% if application_back_url is defined %}
             <div class="col-6">
                 <a class="btn btn-secondary" href="{{ application_back_url }}" role="button">
-                    {{ 'back'|trans }}
+                    <i class="fas fa-arrow-left"></i>
+                    {{ 'form.user.application_bottom.button.back'|trans }}
                 </a>
             </div>
         {% endif %}
 
         <div class="{% if application_back_url is defined %} col-6 {% else %} col-12 {% endif %} text-end">
-            {{ form_row(form.submit) }}
+            {% if is_application_last_step %}
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-check"></i>
+                    {{ 'form.user.application_bottom.button.complete'|trans }}
+                </button>
+            {% else %}
+                <button type="submit" class="btn btn-primary">
+                    {{ 'form.user.application_bottom.button.continue'|trans }}
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

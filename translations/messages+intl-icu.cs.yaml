@@ -17,10 +17,7 @@ api:
             error:
                 text_content_not_found: 'Textový obsah nebyl nalezen.'
 
-
-back: 'Zpět'
 loading: 'Načítání'
-
 we_are_not_tax_payers: 'Nejsme plátci DPH.'
 price_includes_tax: 'Zahrnuje {tax}% DPH.'
 prices_include_tax: 'Ceny zahrnují {tax}% DPH.'
@@ -375,6 +372,7 @@ auth:
     already_have_account_link: 'Přihlásit se'
     forgot_password: 'Zapomněli jste heslo?'
     forgot_password_link: 'Obnovit'
+    social_login: 'Nebo pokračujte přes'
 
     already_logged_in: 'Už jste přihlášen, nejdříve se odhlašte.'
     social_login_failed: 'Přihlášení pomocí služby třetí strany selhalo.'
@@ -2439,6 +2437,12 @@ form:
             button: 'Hledat'
 
     user:
+        application_bottom:
+            button:
+                back: 'Zpět'
+                continue: 'Pokračovat'
+                complete: 'Dokončit'
+
         application_step_one:
             email:
                 label: 'E-mail'

@@ -81,15 +81,20 @@ parameters:
     app.registration_lifespan: '1 hour'
     app.max_active_password_changes_per_user: 5
     app.password_change_lifespan: '1 hour'
-    app.social_login_services: [ 'facebook', 'google' ]
-    app.social_login_scopes:
+    app.social_login_services:
         facebook:
-            - 'public_profile'
-            - 'email'
+            name: 'Facebook'
+            icon: 'fab fa-facebook-f'
+            scopes:
+                - 'public_profile'
+                - 'email'
 
         google:
-            - 'https://www.googleapis.com/auth/userinfo.profile'
-            - 'https://www.googleapis.com/auth/userinfo.email'
+            name: 'Google'
+            icon: 'fab fa-google'
+            scopes:
+                - 'https://www.googleapis.com/auth/userinfo.profile'
+                - 'https://www.googleapis.com/auth/userinfo.email'
 
     # GET parameters
     app.get_param_set_theme: '_set_theme'

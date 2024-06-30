@@ -29,7 +29,6 @@ class RegistrationController extends AbstractController
     {
         $registrationData = new RegistrationData();
         $form = $this->createForm(RegistrationType::class, $registrationData);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.registration.button']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid())

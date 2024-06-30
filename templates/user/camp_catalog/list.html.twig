@@ -43,12 +43,12 @@
                 </a>
             </div>
 
-            <div id="camp-category-filter" class="collapse show-collapsed-lg mb-3">
+            <div id="camp-category-filter" class="collapse show-collapsed-lg mb-5">
                 {{ form(form_search) }}
             </div>
         </div>
 
-        <div class="col-12 col-lg-9 ps-lg-4">
+        <div class="col-12 col-lg-9 ps-lg-4 mb-5">
             <div class="mb-3">
                 <strong>
                     {% if catalog_result.paginator.totalItems > 0 %}
@@ -74,7 +74,7 @@
             {% if catalog_result.paginator.totalItems > 0 %}
                 <div class="row">
                     {% for camp in catalog_result.paginator.currentPageItems %}
-                        <div class="col-12 col-sm-6 col-lg-4 mb-4 d-flex">
+                        <div class="col-12 col-sm-6 col-lg-4 d-flex mb-4">
                             {{ include('_fragment/_camp/_card.html.twig', {
                                 camp: camp,
                                 catalog_result: catalog_result,

@@ -1,42 +1,36 @@
 {% extends "user/base.html.twig" %}
 
 {% block main %}
-    <div class="row">
+    <div class="row mb-5">
         <div class="col-12 col-md-6">
-            <div class="row mb-1">
+            <div class="row mb-3">
                 <div class="col-12">
                     <h4>{{ 'contact_us.email'|trans }}</h4>
 
-                    <p>
-                        <a href="mailto:{{ company_email }}">
-                            <i class="fas fa-envelope"></i>
-                            {{ company_email }}
-                        </a>
-                    </p>
+                    <a href="mailto:{{ company_email }}">
+                        <i class="fas fa-envelope"></i>
+                        {{ company_email }}
+                    </a>
                 </div>
             </div>
 
-            <div class="row mb-1">
+            <div class="row mb-3">
                 <div class="col-12">
                     <h4>{{ 'contact_us.phone_number'|trans }}</h4>
 
-                    <p>
-                        <a href="tel:{{ company_phone_number }}">
-                            <i class="fas fa-phone"></i>
-                            {{ company_phone_number }}
-                        </a>
-                    </p>
+                    <a href="tel:{{ company_phone_number }}">
+                        <i class="fas fa-phone"></i>
+                        {{ company_phone_number }}
+                    </a>
                 </div>
             </div>
 
             {% if company_social_media is not empty %}
-                <div class="row mb-1">
+                <div class="row mb-3">
                     <div class="col-12">
                         <h4>{{ 'contact_us.social_media'|trans }}</h4>
 
-                        <p>
-                            {{ include('_fragment/_link/_social_media_links.html.twig') }}
-                        </p>
+                        {{ include('_fragment/_link/_social_media_links.html.twig') }}
                     </div>
                 </div>
             {% endif %}

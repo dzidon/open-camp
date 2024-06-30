@@ -46,11 +46,6 @@ class UserFooterLegalMenuTypeFactory extends AbstractMenuTypeFactory
         $itemTermsOfUse = new MenuType('user_terms_of_use', 'navbar_user_footer_item', $text, $url);
         $menu->addChild($itemTermsOfUse);
 
-        $text = $this->translator->trans('menu.cookie_consent_preferences');
-        $url = '#cookie-consent-modal';
-        $itemCookieConsents = new MenuType('cookie_consents', 'navbar_user_footer_item', $text, $url);
-        $menu->addChild($itemCookieConsents);
-
         return $menu;
     }
 }

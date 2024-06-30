@@ -7,7 +7,6 @@ use App\Library\Data\User\LoginData;
 use App\Service\Form\Type\User\LoginType;
 use App\Service\Security\Authentication\SocialLoginRedirectResponseFactoryInterface;
 use Symfony\Component\ExpressionLanguage\Expression;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +34,6 @@ class LoginController extends AbstractController
         $loginData = new LoginData();
         $loginData->setEmail($authenticationUtils->getLastUsername());
         $form = $formFactory->createNamed('', LoginType::class, $loginData);
-        $form->add('submit', SubmitType::class, ['label' => 'form.user.login.button']);
         $request->getSession()->remove(SecurityRequestAttributes::LAST_USERNAME);
 
         return $this->render('user/auth/login.html.twig', [
@@ -47,7 +45,10 @@ class LoginController extends AbstractController
     #[Route('/{service}', name: 'user_login_oauth')]
     public function loginSocial(SocialLoginRedirectResponseFactoryInterface $responseFactory, string $service): RedirectResponse
     {
-        if (!in_array($service, $this->getParameter('app.social_login_services')))
+        $socialLoginServicesData = $this->getParameter('app.social_login_services');
+        $validServiceIds = array_keys($socialLoginServicesData);
+
+        if (!in_array($service, $validServiceIds))
         {
             throw $this->createNotFoundException();
         }

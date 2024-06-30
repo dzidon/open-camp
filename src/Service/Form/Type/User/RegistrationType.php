@@ -34,7 +34,8 @@ class RegistrationType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => RegistrationData::class,
+            'data_class'   => RegistrationData::class,
+            'block_prefix' => 'user_registration',
         ]);
     }
 }

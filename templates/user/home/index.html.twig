@@ -1,8 +1,8 @@
 {% extends "user/base.html.twig" %}
 
 {% block main %}
-    <div class="row">
-        <div class="col-12 mb-4">
+    <div class="row mb-5">
+        <div class="col-12">
             <div id="carousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
                 {% if carousel_images|length > 1 %}
                     <div class="carousel-indicators">
@@ -95,7 +95,7 @@
         {% set camps = camp_catalog_result.paginator.currentPageItems %}
 
         {% if camps is not empty %}
-            <div class="row">
+            <div class="row mb-4">
                 <div class="col-12 mb-3">
                     <h2>
                         {{ 'home_page.camps'|trans }}
@@ -107,7 +107,7 @@
                 </div>
 
                 {% for camp in camps %}
-                    <div class="col-12 col-sm-6 col-lg-3 mb-4 d-flex">
+                    <div class="col-12 col-sm-6 col-lg-3 d-flex mb-4">
                         {{ include('_fragment/_camp/_card.html.twig', {
                             camp: camp,
                             catalog_result: camp_catalog_result,
@@ -119,7 +119,7 @@
     {% endif %}
 
     {% if blog_posts is not empty %}
-        <div class="row">
+        <div class="row mb-4">
             <div class="col-12 mb-3">
                 <h2>
                     {{ 'home_page.latest_blog_posts'|trans }}
@@ -131,7 +131,7 @@
             </div>
 
             {% for blog_post in blog_posts %}
-                <div class="col-sm-12 col-md-6 d-flex">
+                <div class="col-sm-12 col-md-6 d-flex mb-4">
                     {{ include('_fragment/_blog_post/_card.html.twig', {blog_post: blog_post}) }}
                 </div>
             {% endfor %}
@@ -139,7 +139,7 @@
     {% endif %}
 
     {% if guides is not empty %}
-        <div class="row">
+        <div class="row mb-4">
             <div class="col-12 mb-3">
                 <h2>
                     {{ 'home_page.guides'|trans }}
@@ -151,7 +151,7 @@
             </div>
 
             {% for guide in guides %}
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex mb-4">
                     {{ include('_fragment/_guide/_card.html.twig', {guide: guide}) }}
                 </div>
             {% endfor %}

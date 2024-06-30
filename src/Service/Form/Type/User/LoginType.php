@@ -23,7 +23,7 @@ class LoginType extends AbstractType
                 'attr'          => [
                     'autofocus' => 'autofocus'
                 ],
-                'label'         => 'form.user.login.email',
+                'label' => 'form.user.login.email',
             ])
             ->add('_password', PasswordType::class, [
                 'property_path' => 'password',
@@ -41,6 +41,7 @@ class LoginType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class'      => LoginData::class,
+            'block_prefix'    => 'user_login',
             'csrf_field_name' => '_csrf_token',
             'csrf_token_id'   => 'authenticate',
         ]);
