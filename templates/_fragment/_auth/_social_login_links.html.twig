@@ -1,7 +1,9 @@
 {% for service_id, service_data in social_login_services %}
-    <a href="{{ path('user_login_oauth', {service: service_id}) }}">
-        <i class="{{ service_data.icon }} w-24px"></i>
+    <div>
+        <a type="button" href="{{ path('user_login_oauth', {service: service_id}) }}">
+            <i class="{{ service_data.icon }} w-18px"></i>
 
-        {{ service_data.name }}
-    </a>
+            {{ service_data.name }}
+        </a>
+    </div>
 {% endfor %}

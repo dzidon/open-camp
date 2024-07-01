@@ -510,6 +510,21 @@ class Application
         return $this->campDateDescription;
     }
 
+    public function getCampDateStartAt(): DateTimeImmutable
+    {
+        return $this->campDateStartAt;
+    }
+
+    public function getCampDateEndAt(): DateTimeImmutable
+    {
+        return $this->campDateEndAt;
+    }
+
+    public function getCampDate(): ?CampDate
+    {
+        return $this->campDate;
+    }
+
     public function getCurrency(): string
     {
         return $this->currency;
@@ -744,21 +759,6 @@ class Application
         $this->cacheFullPrice();
 
         return $this;
-    }
-
-    public function getCampDateStartAt(): ?DateTimeImmutable
-    {
-        return $this->campDateStartAt;
-    }
-
-    public function getCampDateEndAt(): ?DateTimeImmutable
-    {
-        return $this->campDateEndAt;
-    }
-
-    public function getCampDate(): ?CampDate
-    {
-        return $this->campDate;
     }
 
     public function getUser(): ?User

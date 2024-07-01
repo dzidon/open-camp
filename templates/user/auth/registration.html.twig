@@ -19,11 +19,13 @@
 
     {% if social_login_services is not empty %}
         <div class="row mb-5">
-            <div class="mb-1">
-                {{ 'auth.social_login'|trans }}:
-            </div>
+            <div class="col-12">
+                <div class="mb-1">
+                    {{ 'auth.social_login'|trans }}:
+                </div>
 
-            {{ include('_fragment/_auth/_social_login_links.html.twig') }}
+                {{ include('_fragment/_auth/_social_login_links.html.twig') }}
+            </div>
         </div>
     {% endif %}
 {% endblock %}
