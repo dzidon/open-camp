@@ -1183,7 +1183,7 @@ class Application
     {
         foreach ($this->applicationAttachments as $applicationAttachment)
         {
-            if ($applicationAttachment->canBeUploadedLater())
+            if ($applicationAttachment->isExpectingLaterUpload())
             {
                 return true;
             }
@@ -1193,7 +1193,7 @@ class Application
         {
             foreach ($applicationCamper->getApplicationAttachments() as $applicationAttachment)
             {
-                if ($applicationAttachment->canBeUploadedLater())
+                if ($applicationAttachment->isExpectingLaterUpload())
                 {
                     return true;
                 }

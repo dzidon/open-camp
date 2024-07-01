@@ -157,7 +157,7 @@ class ApplicationAttachment
         return $this->applicationCamper;
     }
 
-    public function canBeUploadedLater(): bool
+    public function isExpectingLaterUpload(): bool
     {
         return !$this->isAlreadyUploaded() && $this->getRequiredType() === AttachmentConfigRequiredTypeEnum::REQUIRED_LATER;
     }

@@ -27,7 +27,7 @@ class ApplicationAttachmentsUploadLaterDataFactory implements ApplicationAttachm
 
         foreach ($applicationAttachments as $applicationAttachment)
         {
-            if (!$applicationAttachment->canBeUploadedLater())
+            if (!$applicationAttachment->isExpectingLaterUpload())
             {
                 continue;
             }
@@ -49,7 +49,7 @@ class ApplicationAttachmentsUploadLaterDataFactory implements ApplicationAttachm
 
             foreach ($applicationCamperAttachments as $applicationCamperAttachment)
             {
-                if (!$applicationCamperAttachment->canBeUploadedLater())
+                if (!$applicationCamperAttachment->isExpectingLaterUpload())
                 {
                     continue;
                 }

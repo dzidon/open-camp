@@ -237,6 +237,7 @@ application:
         show_all_application_campers: 'Procházet všechny táborníky'
         view_invoice: 'Zobrazit fakturu'
         attachment_not_uploaded: 'Nenahráno'
+        attachment_mandatory: 'Povinné'
         discount_recurring_camper: 'Sleva pro vracejícího se táborníka'
         discount_siblings: 'Sleva pro sourozence'
         item_instance_for_camper: 'pro'

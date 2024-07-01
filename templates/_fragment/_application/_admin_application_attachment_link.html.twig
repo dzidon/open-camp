@@ -1,0 +1,16 @@
+{% if application_attachment.alreadyUploaded %}
+    <a href="{{ path('admin_application_attachment', {id: application_attachment.id}) }}">
+        {{ application_attachment.label }} ({{ application_attachment.extension }})
+    </a>
+{% else %}
+    <em>
+        {{ application_attachment.label }}
+        ({{ 'application.admin.attachment_not_uploaded'|trans }})
+    </em>
+
+    {% if application_attachment.expectingLaterUpload %}
+        <span class="badge bg-warning text-dark">
+            {{ 'application.admin.attachment_mandatory'|trans }}
+        </span>
+    {% endif %}
+{% endif %}

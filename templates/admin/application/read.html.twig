@@ -232,15 +232,9 @@
                             <div class="col-12 col-sm-9">
                                 {% for application_attachment in application.applicationAttachments %}
                                     <div>
-                                        {% if application_attachment.extension is null %}
-                                            <em>
-                                                {{ application_attachment.label }} ({{ 'application.admin.attachment_not_uploaded'|trans }})
-                                            </em>
-                                        {% else %}
-                                            <a href="{{ path('admin_application_attachment', {id: application_attachment.id}) }}">
-                                                {{ application_attachment.label }} ({{ application_attachment.extension }})
-                                            </a>
-                                        {% endif %}
+                                        {{ include('_fragment/_application/_admin_application_attachment_link.html.twig', {
+                                            application_attachment: application_attachment
+                                        }) }}
                                     </div>
                                 {% endfor %}
                             </div>

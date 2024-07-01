@@ -121,15 +121,9 @@
         <div class="col-12 col-sm-9">
             {% for application_camper_attachment in application_camper.applicationAttachments %}
                 <div>
-                    {% if application_camper_attachment.extension is null %}
-                        <em>
-                            {{ application_camper_attachment.label }} ({{ 'application.admin.attachment_not_uploaded'|trans }})
-                        </em>
-                    {% else %}
-                        <a href="{{ path('admin_application_attachment', {id: application_camper_attachment.id}) }}">
-                            {{ application_camper_attachment.label }} ({{ application_camper_attachment.extension }})
-                        </a>
-                    {% endif %}
+                    {{ include('_fragment/_application/_admin_application_attachment_link.html.twig', {
+                        application_attachment: application_camper_attachment
+                    }) }}
                 </div>
             {% endfor %}
         </div>
