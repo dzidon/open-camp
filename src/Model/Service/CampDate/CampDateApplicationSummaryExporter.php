@@ -9,6 +9,7 @@ use App\Model\Enum\Entity\ContactRoleEnum;
 use App\Model\Repository\ApplicationRepositoryInterface;
 use App\Model\Service\Application\ApplicationInvoiceNumberFormatterInterface;
 use libphonenumber\PhoneNumberUtil;
+use NumberFormatter;
 use PhpOffice\PhpSpreadsheet\Cell\Hyperlink;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Color;
@@ -17,6 +18,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -34,6 +36,8 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
 
     private TranslatorInterface $translator;
 
+    private RequestStack $requestStack;
+
     private PhoneNumberUtil $phoneNumberUtil;
 
     private string $dateTimeFormat;
@@ -47,6 +51,7 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
         ApplicationInvoiceNumberFormatterInterface $invoiceNumberFormatter,
         UrlGeneratorInterface                      $urlGenerator,
         TranslatorInterface                        $translator,
+        RequestStack                               $requestStack,
         PhoneNumberUtil                            $phoneNumberUtil,
 
         #[Autowire('%app.date_time_format%')]
@@ -62,6 +67,7 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
         $this->invoiceNumberFormatter = $invoiceNumberFormatter;
         $this->urlGenerator = $urlGenerator;
         $this->translator = $translator;
+        $this->requestStack = $requestStack;
         $this->phoneNumberUtil = $phoneNumberUtil;
         $this->dateTimeFormat = $dateTimeFormat;
         $this->dateFormat = $dateFormat;
@@ -73,11 +79,15 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
      */
     public function exportSummary(CampDate $campDate): string
     {
+        $request = $this->requestStack->getCurrentRequest();
+        $locale = $request->getLocale();
+        $fmt = numfmt_create($locale, NumberFormatter::CURRENCY);
+
         $applications = $this->applicationRepository->findAcceptedByCampDate($campDate);
         $spreadsheet = new Spreadsheet();
 
-        $this->addApplicationsSheet($spreadsheet, $applications);
-        $this->addApplicationCampersSheet($spreadsheet, $applications);
+        $this->addApplicationsSheet($spreadsheet, $fmt, $applications);
+        $this->addApplicationCampersSheet($spreadsheet, $fmt, $applications);
         $this->addApplicationContactsSheet($spreadsheet, $applications);
         $this->addApplicationPurchasableItemsSheet($spreadsheet, $applications);
 
@@ -102,10 +112,11 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
 
     /**
      * @param Spreadsheet $spreadsheet
+     * @param NumberFormatter $fmt
      * @param Application[] $applications
      * @return void
      */
-    private function addApplicationsSheet(Spreadsheet $spreadsheet, array $applications): void
+    private function addApplicationsSheet(Spreadsheet $spreadsheet, NumberFormatter $fmt, array $applications): void
     {
         $applicationsSheet = $spreadsheet->getActiveSheet();
         $applicationsSheetTitle = $this->translator->trans('spreadsheet.camp_date_applications.title_applications');
@@ -200,6 +211,18 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
         {
             // static application columns
 
+            $currency = $application->getCurrency();
+            $fullPrice = $application->getFullPrice();
+            $fullDeposit = $application->getFullDeposit();
+            $fullRest = $application->getFullRest();
+            $fullPriceFormatted = numfmt_format_currency($fmt, $fullPrice, $currency);
+            $fullDepositFormatted = numfmt_format_currency($fmt, $fullDeposit, $currency);
+            $fullRestFormatted = numfmt_format_currency($fmt, $fullRest, $currency);
+            $fullPriceWithoutTaxFormatted = $application->getTax() > 0
+                ? numfmt_format_currency($fmt, $application->getFullPriceWithoutTax(), $currency)
+                : ''
+            ;
+
             $customerChannel = $application->getCustomerChannel();
             $customerChannelValue = '';
 
@@ -218,10 +241,10 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
             $applicationRow = [
                 $application->getSimpleId(),
                 $this->invoiceNumberFormatter->getFormattedInvoiceNumber($application),
-                $application->getFullDeposit(),
-                $application->getFullRest(),
-                $application->getTax() > 0 ? $application->getFullPriceWithoutTax() : '',
-                $application->getFullPrice(),
+                $fullDepositFormatted,
+                $fullRestFormatted,
+                $fullPriceWithoutTaxFormatted,
+                $fullPriceFormatted,
                 $application->getDepositUntil()?->format($this->dateTimeFormat),
                 $application->getPriceWithoutDepositUntil()?->format($this->dateTimeFormat),
                 $application->getCompletedAt()?->format($this->dateTimeFormat),
@@ -300,10 +323,11 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
 
     /**
      * @param Spreadsheet $spreadsheet
+     * @param NumberFormatter $fmt
      * @param Application[] $applications
      * @return void
      */
-    private function addApplicationCampersSheet(Spreadsheet $spreadsheet, array $applications): void
+    private function addApplicationCampersSheet(Spreadsheet $spreadsheet, NumberFormatter $fmt, array $applications): void
     {
         $applicationCampersSheet = $spreadsheet->createSheet();
         $applicationCampersSheetTitle = $this->translator->trans('spreadsheet.camp_date_applications.title_application_campers');
@@ -402,6 +426,10 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
                 $gender = $applicationCamper->getGender();
                 $genderString = $this->translator->trans('gender_childish.' . $gender->value);
 
+                $currency = $application->getCurrency();
+                $fullPrice = $applicationCamper->getFullPrice();
+                $fullPriceFormatted = numfmt_format_currency($fmt, $fullPrice, $currency);
+
                 $tripLocationThere = $applicationCamper->getApplicationTripLocationPathThere();
                 $tripLocationBack = $applicationCamper->getApplicationTripLocationPathBack();
 
@@ -416,7 +444,7 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
                     $applicationCamper->getHealthRestrictions(),
                     $applicationCamper->getMedication(),
                     $applicationCamper->getMedicalDiary(),
-                    $applicationCamper->getFullPrice(),
+                    $fullPriceFormatted,
                     $tripLocationThere?->getLocation(),
                     $tripLocationBack?->getLocation(),
                 ];
