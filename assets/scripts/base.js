@@ -7,12 +7,20 @@ window.bootstrap = bootstrap;
 // start the Stimulus application
 import '../scripts/bootstrap';
 
+// ready
 $(document).ready(function ()
 {
     scrollToTop();
     scrollToFirstError();
     openCollapsedContainers();
     openModals();
+});
+
+// fixes TinyMCE source code editor focus problem
+document.addEventListener('focusin', (e) => {
+    if (e.target.closest(".tox-tinymce-aux, .moxman-window, .tam-assetmanager-root") !== null) {
+        e.stopImmediatePropagation();
+    }
 });
 
 function scrollToTop()
