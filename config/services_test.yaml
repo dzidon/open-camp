@@ -141,6 +141,10 @@ parameters:
     # UI
     app.themes: [ 'light', 'dark' ]
 
+    # SEO
+    app.seo_description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Fusce suscipit libero eget elit. Mauris suscipit, ligula sit amet pharetra semper, nibh ante cur.'
+    app.seo_author: '%app.company_name%'
+
 services:
     # Interfaces
     Symfony\Contracts\Translation\TranslatorInterface:

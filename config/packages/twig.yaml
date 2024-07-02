@@ -39,6 +39,9 @@ twig:
         post_param_cookie_consent_grant_preferences: '%app.post_param_cookie_consent_grant_preferences%'
         post_param_cookie_consent_preferences: '%app.post_param_cookie_consent_preferences%'
 
+        seo_description: '%app.seo_description%'
+        seo_author: '%app.seo_author%'
+
 when@test:
     twig:
         strict_variables: true
