@@ -6,13 +6,13 @@ use App\Service\Security\Authentication\SocialLoginRedirectResponseFactory;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use KnpU\OAuth2ClientBundle\Client\OAuth2ClientInterface;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
  * Tests social login redirects.
  */
-class SocialLoginRedirectResponseFactoryTest extends TestCase
+class SocialLoginRedirectResponseFactoryTest extends KernelTestCase
 {
     /**
      * Tests that scopes of a valid service are passed into 'redirect'.
@@ -49,6 +49,8 @@ class SocialLoginRedirectResponseFactoryTest extends TestCase
      */
     private function createSocialLoginRedirectResponseFactory(): SocialLoginRedirectResponseFactory
     {
+        $container = static::getContainer();
+
         /** @var OAuth2ClientInterface|MockObject $clientMock */
         $clientMock = $this->getMockBuilder(OAuth2ClientInterface::class)
             ->disableOriginalConstructor()
@@ -86,8 +88,8 @@ class SocialLoginRedirectResponseFactoryTest extends TestCase
             })
         ;
 
-        return new SocialLoginRedirectResponseFactory($clientRegistryMock, [
-            'facebook' => ['public_profile', 'email'],
-        ]);
+        $socialLoginServicesData = $container->getParameter('app.social_login_services');
+
+        return new SocialLoginRedirectResponseFactory($clientRegistryMock, $socialLoginServicesData);
     }
 }

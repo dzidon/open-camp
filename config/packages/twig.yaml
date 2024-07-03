@@ -33,6 +33,7 @@ twig:
         themes: '%app.themes%'
         google_tag_manager_id: '%env(GOOGLE_TAG_MANAGER_ID)%'
         enabled_cookie_consents: '%app.enabled_cookie_consents%'
+        no_image_content_path: '%app.no_image_content_path%'
 
         post_param_cookie_consent_grant_all: '%app.post_param_cookie_consent_grant_all%'
         post_param_cookie_consent_deny_all: '%app.post_param_cookie_consent_deny_all%'

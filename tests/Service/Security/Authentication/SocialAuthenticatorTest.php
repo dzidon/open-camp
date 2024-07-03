@@ -400,6 +400,8 @@ class SocialAuthenticatorTest extends KernelTestCase
         /** @var EventDispatcherInterface $eventDispatcher */
         $eventDispatcher = $container->get(EventDispatcherInterface::class);
 
+        $socialLoginServicesData = $container->getParameter('app.social_login_services');
+
         return new SocialAuthenticator(
             $clientRegistry,
             $userRepository,
@@ -407,7 +409,7 @@ class SocialAuthenticatorTest extends KernelTestCase
             $urlGenerator,
             $eventDispatcher,
             $security,
-            ['facebook']
+            $socialLoginServicesData
         );
     }
 }

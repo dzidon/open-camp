@@ -7,12 +7,12 @@ export default class ContainerController extends Controller
 {
     static targets = ['content'];
 
-    static outlets = [ 'tc--modal' ];
+    static outlets = ['tc--modal'];
 
     static values = {
         identifier: String,
         html: Boolean,
-    }
+    };
 
     connect()
     {

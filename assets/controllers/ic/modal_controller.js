@@ -1,23 +1,20 @@
 import { Controller } from '@hotwired/stimulus';
-import tinymce from 'tinymce/tinymce';
 
 /**
- * Controller for editable text content modal.
+ * Controller for editable image content modal.
  */
 export default class ModalController extends Controller
 {
     static targets = [
-        'textAreaNoHtmlWrapper',
-        'textAreaNoHtml',
-        'textAreaHtmlWrapper',
-        'textAreaHtml',
+        'form',
+        'textInput',
+        'altInput',
         'spinner',
         'submitButton',
         'error'
     ];
 
     static values = {
-        html: Boolean,
         identifier: String,
         url: String,
     };
@@ -25,16 +22,20 @@ export default class ModalController extends Controller
     connect()
     {
         this.ajaxRequest = null;
-        this.textAreaNoHtmlWrapper = $(this.textAreaNoHtmlWrapperTarget);
-        this.textAreaNoHtml = $(this.textAreaNoHtmlTarget);
-        this.textAreaHtmlWrapper = $(this.textAreaHtmlWrapperTarget);
-        this.textAreaHtml = $(this.textAreaHtmlTarget);
+        this.form = $(this.formTarget);
+        this.textInput = $(this.textInputTarget);
+        this.altInput = $(this.altInputTarget);
         this.spinner = $(this.spinnerTarget);
         this.submitButton = $(this.submitButtonTarget);
         this.error = $(this.errorTarget);
 
         this.spinner.hide();
         this.error.hide();
+
+        this.form.on('submit', (event) => {
+            event.preventDefault();
+            this.submit();
+        });
 
         this.getModal().on('show.bs.modal', () => {
             this.error.hide();
@@ -48,37 +49,13 @@ export default class ModalController extends Controller
         return $(selector);
     }
 
-    getTinymceEditor()
-    {
-        return tinymce.get(this.textAreaHtml.attr('id'));
-    }
-
-    open(identifier, html, content)
+    open(identifier, url, alt)
     {
         this.identifierValue = identifier;
-        this.htmlValue = html;
+        this.textInput.val(url);
+        this.altInput.val(alt);
 
-        const tinymceEditor = this.getTinymceEditor();
-
-        if (this.htmlValue)
-        {
-            this.textAreaHtmlWrapper.show();
-            this.textAreaNoHtmlWrapper.hide();
-            this.textAreaHtml.val(content);
-            tinymceEditor.setContent(content);
-            this.textAreaNoHtml.val('');
-        }
-        else
-        {
-            this.textAreaHtmlWrapper.hide();
-            this.textAreaNoHtmlWrapper.show();
-            this.textAreaHtml.val('');
-            tinymceEditor.setContent('');
-            this.textAreaNoHtml.val(content);
-        }
-
-        const selector = '#' + $(this.element).attr('id');
-        $(selector).modal('show');
+        this.getModal().modal('show');
     }
 
     submit()
@@ -86,20 +63,16 @@ export default class ModalController extends Controller
         this.spinner.show();
         this.submitButton.prop('disabled', true);
 
-        let content = this.textAreaNoHtml.val();
-
-        if (this.htmlValue)
-        {
-            const tinymceEditor = this.getTinymceEditor();
-            content = tinymceEditor.getContent();
-        }
+        const url = this.textInput.val();
+        const alt = this.altInput.val();
 
         this.ajaxRequest = $.ajax({
             url: this.urlValue,
             type: 'POST',
             data: {
                 'identifier': this.identifierValue,
-                'content': content,
+                'url': url,
+                'alt': alt,
             },
             beforeSend: () => {
                 this.error.hide();

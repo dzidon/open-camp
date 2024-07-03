@@ -32,10 +32,11 @@ class TextContentsCreateSubscriber
     {
         $textContents = $event->getTextContents();
         $isFlush = $event->isFlush();
+        $keyLast = array_key_last($textContents);
 
         foreach ($textContents as $key => $textContent)
         {
-            $isLast = $key === array_key_last($textContents);
+            $isLast = $key === $keyLast;
             $this->textContentRepository->saveTextContent($textContent, $isFlush && $isLast);
         }
     }

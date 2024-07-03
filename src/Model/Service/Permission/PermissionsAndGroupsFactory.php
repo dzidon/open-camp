@@ -82,7 +82,7 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
     private function createPermissionGroups(): array
     {
         $groups['downloadable_file'] = new PermissionGroup('downloadable_file', 'permission_group.downloadable_file', 1700);
-        $groups['text_content'] = new PermissionGroup('text_content', 'permission_group.text_content', 1600);
+        $groups['content'] = new PermissionGroup('content', 'permission_group.content', 1600);
         $groups['page'] = new PermissionGroup('page', 'permission_group.page', 1500);
         $groups['gallery_image_category'] = new PermissionGroup('gallery_image_category', 'permission_group.gallery_image_category', 1400);
         $groups['gallery_image'] = new PermissionGroup('gallery_image', 'permission_group.gallery_image', 1300);
@@ -114,8 +114,9 @@ class PermissionsAndGroupsFactory implements PermissionsAndGroupsFactoryInterfac
         $permissions['downloadable_file_read'] = new Permission('downloadable_file_read', 'permission.downloadable_file_read', 300, $groups['downloadable_file']);
         $permissions['downloadable_file_update'] = new Permission('downloadable_file_update', 'permission.downloadable_file_update', 200, $groups['downloadable_file']);
         $permissions['downloadable_file_delete'] = new Permission('downloadable_file_delete', 'permission.downloadable_file_delete', 100, $groups['downloadable_file']);
-        
-        $permissions['text_content_update'] = new Permission('text_content_update', 'permission.text_content_update', 100, $groups['text_content']);
+
+        $permissions['image_content_update'] = new Permission('image_content_update', 'permission.image_content_update', 200, $groups['content']);
+        $permissions['text_content_update'] = new Permission('text_content_update', 'permission.text_content_update', 100, $groups['content']);
 
         $permissions['page_create'] = new Permission('page_create', 'permission.page_create', 400, $groups['page']);
         $permissions['page_read'] = new Permission('page_read', 'permission.page_read', 300, $groups['page']);

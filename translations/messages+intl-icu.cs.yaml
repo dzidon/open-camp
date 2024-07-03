@@ -15,7 +15,12 @@ api:
     text_content:
         update:
             error:
-                text_content_not_found: 'Textový obsah nebyl nalezen.'
+                not_found: 'Textový obsah nebyl nalezen.'
+
+    image_content:
+        update:
+            error:
+                not_found: 'Obrázkový obsah nebyl nalezen.'
 
 loading: 'Načítání'
 we_are_not_tax_payers: 'Nejsme plátci DPH.'
@@ -548,7 +553,7 @@ permission_group:
     gallery_image_category: 'Kategorie obrázků'
     gallery_image: 'Obrázky'
     page: 'Stránky'
-    text_content: 'Textový obsah'
+    content: 'Obsah'
     downloadable_file: 'Soubory ke stažení'
 
 permission:
@@ -635,6 +640,7 @@ permission:
     discount_config_delete: 'Odstranění konfigurace slev'
 
     text_content_update: 'Editace textového obsahu'
+    image_content_update: 'Editace obrázkového obsahu'
 
 crud:
     instruction:
@@ -851,6 +857,10 @@ entity:
     text_content:
         singular: 'Textový obsah'
         plural: 'Textový obsah'
+
+    image_content:
+        singular: 'Obrázkový obsah'
+        plural: 'Obrázkový obsah'
 
     page:
         singular: 'Stránka'
@@ -1590,6 +1600,14 @@ entity_attribute:
         identifier: 'Identifikátor'
         is_html_enabled: 'Je povoleno HTML'
         content: 'Obsah'
+        created_at: 'Datum vytvoření'
+        updated_at: 'Datum editace'
+
+    image_content:
+        id: 'ID'
+        identifier: 'Identifikátor'
+        url: 'Odkaz na obrázek'
+        alt: 'Popis pro roboty'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -2743,6 +2761,8 @@ route:
     admin_downloadable_file_read: 'Zobrazení souboru ke stažení'
     admin_downloadable_file_update: 'Editace souboru ke stažení'
     admin_downloadable_file_delete: 'Odstranění souboru ke stažení'
+    admin_text_content_update: 'Editace textového obsahu'
+    admin_image_content_update: 'Editace obrázkového obsahu'
 
     user_home: 'Domů'
     user_login: 'Přihlášení'

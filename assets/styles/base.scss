@@ -147,21 +147,21 @@ legend {
     margin-bottom: 1rem;
 }
 
-.text-content-edit-button {
+.editable-content-wrapper {
+    position: relative;
+}
+
+.editable-content-edit-button {
     display: none !important;
     position: absolute;
     right: -16px;
     top: -16px;
 }
 
-.text-content-edit-button:hover,
-.text-content:hover + .text-content-edit-button
+.editable-content-edit-button:hover,
+.editable-content-wrapper:hover .editable-content-edit-button
 {
     display: inline !important;
-}
-
-.text-content-container {
-    position: relative;
 }
 
 // Tom Select

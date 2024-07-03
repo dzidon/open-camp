@@ -1,0 +1,77 @@
+{% set image_content_update_url = path('admin_image_content_update') %}
+
+<div class="modal fade"
+     id="image-content-modal"
+     tabindex="-1"
+     aria-labelledby="image-content-modal-label"
+     aria-hidden="true"
+     {{ stimulus_controller('ic--modal', {
+         'identifier': '',
+         'url': image_content_update_url,
+     }) }}
+>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="image-content-modal-label">
+                    {{ 'entity.image_content.singular'|trans }}
+                </h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'modal.button.close'|trans }}">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="alert alert-danger" role="alert" {{ stimulus_target('ic--modal', 'error') }}>
+                </div>
+
+                <form {{ stimulus_target('ic--modal', 'form') }}>
+                    <div class="mb-3">
+                        <label for="image-content-modal-url" class="form-label">
+                            {{ 'entity_attribute.image_content.url'|trans }}
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="image-content-modal-url"
+                               {{ stimulus_target('ic--modal', 'textInput') }}
+                        >
+                    </div>
+
+                    <div>
+                        <label for="image-content-modal-alt" class="form-label">
+                            {{ 'entity_attribute.image_content.alt'|trans }}
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               id="image-content-modal-alt"
+                               {{ stimulus_target('ic--modal', 'altInput') }}
+                        >
+                    </div>
+
+                    <button type="submit" hidden></button>
+                </form>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {{ 'modal.button.close'|trans }}
+                </button>
+
+                <button type="button"
+                        class="btn btn-primary"
+                        {{ stimulus_target('ic--modal', 'submitButton') }}
+                        {{ stimulus_action('ic--modal', 'submit') }}
+                >
+                    <div class="spinner-border spinner-border-sm"
+                         role="status"
+                         {{ stimulus_target('ic--modal', 'spinner') }}
+                    ></div>
+
+                    {{ 'modal.button.save'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

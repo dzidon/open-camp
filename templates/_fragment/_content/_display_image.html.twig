@@ -1,0 +1,41 @@
+{% set image_content = get_image_content(image_content_identifier) %}
+
+{% if image_content is null %}
+    {% set image_content_url = null %}
+    {% set image_content_alt = null %}
+{% else %}
+    {% set image_content_url = image_content.url %}
+    {% set image_content_alt = image_content.alt %}
+{% endif %}
+
+{% set size_style %}
+    max-inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: {{ width }}/{{ height }};
+    object-fit: cover;
+{% endset %}
+
+<div class="editable-content-wrapper bg-black"
+     style="{{ size_style }}"
+     {{ stimulus_controller('ic--container', {
+         'identifier': image_content_identifier,
+         'url': image_content_url,
+         'alt': image_content_alt,
+     }) }}
+     data-ic--container-ic--modal-outlet=".modal"
+>
+    <img class="editable-content"
+         style="{{ size_style }}"
+         src="{{ image_content_url }}"
+         alt="{{ image_content_alt }}"
+    >
+
+    {% if image_content is not null and is_granted('image_content_update') %}
+        <a href="javascript:void(0);"
+           class="btn btn-sm btn-primary rounded-circle editable-content-edit-button"
+           {{ stimulus_action('ic--container', 'openEditModal') }}
+        >
+            <i class="fas fa-camera"></i>
+        </a>
+    {% endif %}
+</div>

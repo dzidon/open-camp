@@ -3,9 +3,9 @@
 namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
-use App\Library\Data\Admin\TextContentData;
-use App\Model\Event\Admin\TextContent\TextContentUpdateEvent;
-use App\Model\Repository\TextContentRepositoryInterface;
+use App\Library\Data\Admin\ImageContentData;
+use App\Model\Event\Admin\ImageContent\ImageContentUpdateEvent;
+use App\Model\Repository\ImageContentRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,34 +16,42 @@ use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[IsGranted('IS_AUTHENTICATED_REMEMBERED', statusCode: 403)]
-class TextContentController extends AbstractController
+class ImageContentController extends AbstractController
 {
-    private TextContentRepositoryInterface $textContentRepository;
+    private ImageContentRepositoryInterface $imageContentRepository;
 
-    public function __construct(TextContentRepositoryInterface $textContentRepository)
+    public function __construct(ImageContentRepositoryInterface $imageContentRepository)
     {
-        $this->textContentRepository = $textContentRepository;
+        $this->imageContentRepository = $imageContentRepository;
     }
 
-    #[IsGranted('text_content_update')]
-    #[Route('/admin/text-content/update', name: 'admin_text_content_update', methods: ['POST'])]
+    #[IsGranted('image_content_update')]
+    #[Route('/admin/image-content/update', name: 'admin_image_content_update', methods: ['POST'])]
     public function update(ValidatorInterface       $validator,
                            EventDispatcherInterface $eventDispatcher,
                            Request                  $request): JsonResponse
     {
         $identifier = (string) $request->request->get('identifier', '');
-        $content = (string) $request->request->get('content', '');
-        $textContent = $this->textContentRepository->findOneByIdentifier($identifier);
+        $imageContent = $this->imageContentRepository->findOneByIdentifier($identifier);
 
-        if ($textContent === null)
+        if ($imageContent === null)
         {
-            $errorMessage = $this->trans('api.text_content.update.error.not_found');
+            $errorMessage = $this->trans('api.image_content.update.error.not_found');
 
             return new JsonResponse(['message' => $errorMessage], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $data = new TextContentData();
-        $data->setContent($content);
+        $url = $request->request->get('url');
+        $alt = (string) $request->request->get('alt', '');
+
+        if (empty($url))
+        {
+            $url = null;
+        }
+
+        $data = new ImageContentData();
+        $data->setUrl($url);
+        $data->setAlt($alt);
         $violations = $validator->validate($data);
 
         /** @var ConstraintViolationInterface $violation */
@@ -54,12 +62,12 @@ class TextContentController extends AbstractController
             return new JsonResponse(['message' => $message], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $event = new TextContentUpdateEvent($data, $textContent);
+        $event = new ImageContentUpdateEvent($data, $imageContent);
         $eventDispatcher->dispatch($event, $event::NAME);
 
         return new JsonResponse([
-            'identifier' => $textContent->getIdentifier(),
-            'content'    => $textContent->getContent(),
+            'identifier' => $imageContent->getIdentifier(),
+            'content'    => $imageContent->getUrl(),
         ]);
     }
 }

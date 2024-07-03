@@ -40,3 +40,8 @@ unique_page: 'Už existuje stránka s tímto názvem v odkazu.'
 camp_date_user_unique: 'Vedoucího "{user}" můžete přiřadit pouze jednou.'
 camp_date_interval: 'Tábor už má v tomto intervalu jiný termín.'
 discount_config_integer_intervals: 'Tento interval se překrývá s jiným.'
+
+image_content_url_too_long: 'URL obrázku je příliš dlouhé.'
+image_content_url_invalid: 'URL obrázku je neplatné.'
+image_content_alt_too_long: 'Popis je příliš dlouhý.'
+image_content_alt_mandatory: 'Vyplňte popis.'

@@ -59,6 +59,7 @@ parameters:
     app.application_admin_attachment_directory: 'files/dynamic/application-admin-attachment'
     app.downloadable_file_public_path_prefix: '%app.public_file_path_prefix%'
     app.downloadable_file_directory: 'files/dynamic/downloadable-file'
+    app.no_image_content_path: 'files/static/image/placeholder.jpg'
 
     # Mailer
     app.email: 'contact.us@camp.com'

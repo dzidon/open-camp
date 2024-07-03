@@ -1,11 +1,11 @@
 {% set text_content = get_text_content(text_content_identifier) %}
 {% set is_html_enabled = text_content is not null and text_content.isHtmlEnabled %}
 
-<div class="text-content-container"
+<div class="editable-content-wrapper"
      {{ stimulus_controller('tc--container', {'identifier': text_content_identifier, 'html': is_html_enabled}) }}
      data-tc--container-tc--modal-outlet=".modal"
 >
-    <div class="text-content" {{ stimulus_target('tc--container', 'content') }}>
+    <div class="editable-content" {{ stimulus_target('tc--container', 'content') }}>
         {%- if text_content is null -%}
             {{ text_content_identifier }}
         {%- else -%}
@@ -19,7 +19,7 @@
 
     {% if text_content is not null and is_granted('text_content_update') %}
         <a href="javascript:void(0);"
-           class="btn btn-sm btn-primary rounded-circle text-content-edit-button"
+           class="btn btn-sm btn-primary rounded-circle editable-content-edit-button"
            {{ stimulus_action('tc--container', 'openEditModal') }}
         >
             <i class="fas fa-pen"></i>
