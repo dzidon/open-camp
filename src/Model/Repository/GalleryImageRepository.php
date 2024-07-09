@@ -6,6 +6,7 @@ use App\Library\Data\Admin\GalleryImageSearchData;
 use App\Library\Search\Paginator\DqlPaginator;
 use App\Model\Entity\GalleryImage;
 use App\Model\Entity\GalleryImageCategory;
+use App\Model\Library\GalleryImage\GalleryImageSurroundingsResult;
 use App\Service\Search\DataStructure\TreeSearchInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Doctrine\Persistence\ManagerRegistry;
@@ -187,7 +188,7 @@ class GalleryImageRepository extends AbstractRepository implements GalleryImageR
     {
         $queryBuilder = $this->createQueryBuilder('galleryImage')
             ->andWhere('galleryImage.isHiddenInGallery = FALSE')
-            ->orderBy('galleryImage.createdAt', 'DESC')
+            ->orderBy('galleryImage.priority', 'DESC')
         ;
 
         if ($galleryImageCategory !== null)
@@ -208,5 +209,96 @@ class GalleryImageRepository extends AbstractRepository implements GalleryImageR
         $query = $queryBuilder->getQuery();
 
         return new DqlPaginator(new DoctrinePaginator($query, false), $currentPage, $pageSize);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getHighestPriority(): ?int
+    {
+        return $this->createQueryBuilder('galleryImage')
+            ->select('max(galleryImage.priority)')
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getGalleryImageSurroundings(GalleryImage          $galleryImage,
+                                                ?GalleryImageCategory $fromGalleryImageCategory = null): ?GalleryImageSurroundingsResult
+    {
+        $galleryImageCategory = $galleryImage->getGalleryImageCategory();
+        $galleryImageCategories = null;
+        $galleryImageCategoryIds = null;
+
+        if ($galleryImageCategory !== null && $fromGalleryImageCategory !== null)
+        {
+            $galleryImageCategories = $this->treeSearch->getDescendentsOfNode($fromGalleryImageCategory);
+            $galleryImageCategories[] = $fromGalleryImageCategory;
+
+            if (!in_array($galleryImageCategory, $galleryImageCategories))
+            {
+                return null;
+            }
+        }
+
+        if ($galleryImageCategories !== null)
+        {
+            $galleryImageCategoryIds = array_map(function (GalleryImageCategory $galleryImageCategory) {
+                return $galleryImageCategory->getId()->toBinary();
+            }, $galleryImageCategories);
+        }
+
+        $priority = $galleryImage->getPriority();
+
+        // previous
+        $queryBuilder = $this->createQueryBuilder('galleryImage')
+            ->andWhere('galleryImage.isHiddenInGallery = FALSE')
+            ->andWhere('galleryImage.priority > :priority')
+            ->setParameter('priority', $priority)
+            ->orderBy('galleryImage.priority', 'ASC')
+            ->setMaxResults(1)
+        ;
+
+        if ($galleryImageCategoryIds !== null)
+        {
+            $queryBuilder
+                ->andWhere('galleryImage.galleryImageCategory IN (:galleryImageCategoryIds)')
+                ->setParameter('galleryImageCategoryIds', $galleryImageCategoryIds)
+            ;
+        }
+
+        /** @var GalleryImage|null $galleryImagePrevious */
+        $galleryImagePrevious = $queryBuilder
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        // next
+        $queryBuilder = $this->createQueryBuilder('galleryImage')
+            ->andWhere('galleryImage.isHiddenInGallery = FALSE')
+            ->andWhere('galleryImage.priority < :priority')
+            ->setParameter('priority', $priority)
+            ->orderBy('galleryImage.priority', 'DESC')
+            ->setMaxResults(1)
+        ;
+
+        if ($galleryImageCategoryIds !== null)
+        {
+            $queryBuilder
+                ->andWhere('galleryImage.galleryImageCategory IN (:galleryImageCategoryIds)')
+                ->setParameter('galleryImageCategoryIds', $galleryImageCategoryIds)
+            ;
+        }
+
+        /** @var GalleryImage|null $galleryImageNext */
+        $galleryImageNext = $queryBuilder
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+
+        return new GalleryImageSurroundingsResult($galleryImage, $galleryImagePrevious, $galleryImageNext);
     }
 }

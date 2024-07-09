@@ -9,7 +9,7 @@ class GalleryImageSearchData
 {
     private false|null|GalleryImageCategory $galleryImageCategory = null;
 
-    private GalleryImageSortEnum $sortBy = GalleryImageSortEnum::CREATED_AT_DESC;
+    private GalleryImageSortEnum $sortBy = GalleryImageSortEnum::PRIORITY_DESC;
 
     private ?bool $isHiddenInGallery = null;
 
@@ -36,7 +36,7 @@ class GalleryImageSearchData
     {
         if ($sortBy === null)
         {
-            $sortBy = GalleryImageSortEnum::CREATED_AT_DESC;
+            $sortBy = GalleryImageSortEnum::PRIORITY_DESC;
         }
 
         $this->sortBy = $sortBy;

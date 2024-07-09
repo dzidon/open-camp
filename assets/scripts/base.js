@@ -14,6 +14,7 @@ $(document).ready(function ()
     scrollToFirstError();
     openCollapsedContainers();
     openModals();
+    initializeTooltips();
 });
 
 // fixes TinyMCE source code editor focus problem
@@ -97,4 +98,14 @@ function openModals()
         const modal = new bootstrap.Modal(modalToOpen);
         modal.show();
     }
+}
+
+function initializeTooltips()
+{
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+
+    tooltipTriggerList.map(function (tooltipTriggerEl)
+    {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 }

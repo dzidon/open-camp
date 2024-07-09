@@ -11,6 +11,6 @@ enum GalleryImageSortEnum: string
 {
     use SortEnumTrait;
 
-    case CREATED_AT_DESC = 'galleryImage.createdAt DESC';
-    case CREATED_AT_ASC = 'galleryImage.createdAt ASC';
+    case PRIORITY_DESC = 'galleryImage.priority DESC';
+    case PRIORITY_ASC = 'galleryImage.priority ASC';
 }

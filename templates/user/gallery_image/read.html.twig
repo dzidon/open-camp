@@ -1,0 +1,96 @@
+{% extends 'user/base.html.twig' %}
+
+{% block main %}
+    {% set image_url = gallery_image_url(gallery_image) %}
+
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="carousel bg-black"
+                 data-bs-interval="false"
+                 {{ stimulus_target('img--carousel', 'carousel') }}
+            >
+                <img class="image-contain-16-9 w-100"
+                     src="{{ image_url }}"
+                     alt="{{ 'entity.gallery_image.singular'|trans }}"
+                >
+
+                {% set gallery_image_previous = gallery_image_surroundings.previousGalleryImage %}
+                {% set gallery_image_next = gallery_image_surroundings.nextGalleryImage %}
+                {% set from_gallery_image_category_id = null %}
+
+                {% if from_gallery_image_category is not null %}
+                    {% set from_gallery_image_category_id = from_gallery_image_category.id %}
+                {% endif %}
+
+                {% if gallery_image_previous is not null %}
+                    <a href="{{ path('user_gallery_image_read', {
+                        galleryImageId: gallery_image_previous.id,
+                        fromGalleryImageCategoryId: from_gallery_image_category_id,
+                       }) }}"
+                       class="carousel-control-prev"
+                       type="button"
+                    >
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">{{ 'image_carousel.previous'|trans }}</span>
+                    </a>
+                {% endif %}
+
+                {% if gallery_image_next is not null %}
+                    <a href="{{ path('user_gallery_image_read', {
+                        galleryImageId: gallery_image_next.id,
+                        fromGalleryImageCategoryId: from_gallery_image_category_id,
+                       }) }}"
+                       class="carousel-control-next"
+                       type="button"
+                    >
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">{{ 'image_carousel.next'|trans }}</span>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <div class="col-12">
+            <label for="gallery-image-url" class="form-label">
+                <i class="fas fa-link"></i>
+                {{ 'entity_attribute.gallery_image.url'|trans }}
+            </label>
+
+            <div {{ stimulus_controller('url--copy') }}>
+                <div class="input-group">
+                    <input id="gallery-image-url"
+                           class="form-control"
+                           type="text"
+                           readonly
+                           disabled
+                           value="{{ absolute_url(image_url) }}"
+                           {{ stimulus_target('url--copy', 'urlInput') }}
+                    >
+
+                    <div class="input-group-text position-relative">
+                        <a href="javascript:void(0);"
+                           class="stretched-link"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="top"
+                           title="{{ 'clipboard.copy'|trans }}"
+                           {{ stimulus_target('url--copy', 'copyButton') }}
+                           {{ stimulus_action('url--copy', 'copyUrlToClipboard') }}
+                        >
+                            <i class="far fa-clipboard"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="mt-2 d-none" {{ stimulus_target('url--copy', 'successInfo') }}>
+                    <span class="text-success">
+                        <i class="fas fa-check"></i>
+                        {{ 'clipboard.copied.url'|trans }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

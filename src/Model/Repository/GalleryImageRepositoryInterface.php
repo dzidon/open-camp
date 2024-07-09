@@ -6,6 +6,7 @@ use App\Library\Data\Admin\GalleryImageSearchData;
 use App\Library\Search\Paginator\PaginatorInterface;
 use App\Model\Entity\GalleryImage;
 use App\Model\Entity\GalleryImageCategory;
+use App\Model\Library\GalleryImage\GalleryImageSurroundingsResultInterface;
 use Symfony\Component\Uid\UuidV4;
 
 interface GalleryImageRepositoryInterface
@@ -83,4 +84,21 @@ interface GalleryImageRepositoryInterface
     public function getUserPaginator(?GalleryImageCategory $galleryImageCategory,
                                      int                   $currentPage,
                                      int                   $pageSize): PaginatorInterface;
+
+    /**
+     * Returns the highest priority or null if there is no gallery image.
+     *
+     * @return int|null
+     */
+    public function getHighestPriority(): ?int;
+
+    /**
+     * Gets previous and next gallery images. Returns null if $galleryImage's category is not present among $fromGalleryImageCategory's descendents.
+     *
+     * @param GalleryImage $galleryImage
+     * @param GalleryImageCategory|null $fromGalleryImageCategory
+     * @return null|GalleryImageSurroundingsResultInterface
+     */
+    public function getGalleryImageSurroundings(GalleryImage          $galleryImage,
+                                                ?GalleryImageCategory $fromGalleryImageCategory = null): ?GalleryImageSurroundingsResultInterface;
 }

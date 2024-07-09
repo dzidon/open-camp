@@ -23,13 +23,21 @@
         <div class="col-12">
             {% if paginator.totalItems > 0 %}
                 <div class="row">
-                    {% for gallery_image in paginator.currentPageItems %}
-                        {% set image_url = gallery_image_url(gallery_image) %}
+                    {% set gallery_image_category_id = null %}
 
+                    {% if gallery_image_category is not null %}
+                        {% set gallery_image_category_id = gallery_image_category.id %}
+                    {% endif %}
+
+                    {% for gallery_image in paginator.currentPageItems %}
                         <div class="mb-3 col-6 col-sm-4 col-md-3 col-xl-2">
-                            <a href="{{ image_url }}">
+                            <a href="{{ path('user_gallery_image_read', {
+                                galleryImageId: gallery_image.id,
+                                fromGalleryImageCategoryId: gallery_image_category_id,
+                               }) }}"
+                            >
                                 <img class="image-cover-1-1 img-thumbnail"
-                                     src="{{ image_url }}"
+                                     src="{{ gallery_image_url(gallery_image) }}"
                                      alt="{{ 'entity.gallery_image.singular'|trans }}"
                                 >
                             </a>

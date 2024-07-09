@@ -3,6 +3,7 @@
 namespace App\Controller\User;
 
 use App\Controller\AbstractController;
+use App\Model\Entity\GalleryImage;
 use App\Model\Entity\GalleryImageCategory;
 use App\Model\Repository\GalleryImageCategoryRepositoryInterface;
 use App\Model\Repository\GalleryImageRepositoryInterface;
@@ -11,6 +12,7 @@ use App\Service\Routing\RouteNamerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Uid\UuidV4;
 
 class GalleryImageController extends AbstractController
 {
@@ -40,7 +42,7 @@ class GalleryImageController extends AbstractController
         }
         else
         {
-            $galleryImageCategory = $this->findGalleryImageCategoryOrThrow404($path);
+            $galleryImageCategory = $this->findGalleryImageCategoryByPathOrThrow404($path);
             $galleryImageCategoryName = $galleryImageCategory->getName();
             $this->routeNamer->setCurrentRouteName($galleryImageCategoryName);
             $galleryImageCategoryChildren = $galleryImageCategory->getChildren();
@@ -73,7 +75,39 @@ class GalleryImageController extends AbstractController
         ]);
     }
 
-    private function findGalleryImageCategoryOrThrow404(string $path): GalleryImageCategory
+    #[Route('/gallery-image/{galleryImageId}/{fromGalleryImageCategoryId}', name: 'user_gallery_image_read')]
+    public function read(UuidV4 $galleryImageId, ?UuidV4 $fromGalleryImageCategoryId = null): Response
+    {
+        $galleryImage = $this->findGalleryImageOrThrow404($galleryImageId);
+        $fromGalleryImageCategory = null;
+
+        if ($fromGalleryImageCategoryId !== null)
+        {
+            $fromGalleryImageCategory = $this->findGalleryImageCategoryByIdOrThrow404($fromGalleryImageCategoryId);
+        }
+
+        // load all gallery image categories so that the gallery image category path does not trigger additional queries
+        $this->galleryImageCategoryRepository->findAll();
+
+        $galleryImageSurroundings = $this->galleryImageRepository->getGalleryImageSurroundings($galleryImage, $fromGalleryImageCategory);
+
+        if ($galleryImageSurroundings === null)
+        {
+            throw $this->createNotFoundException();
+        }
+
+        return $this->render('user/gallery_image/read.html.twig', [
+            'gallery_image'               => $galleryImage,
+            'gallery_image_surroundings'  => $galleryImageSurroundings,
+            'from_gallery_image_category' => $fromGalleryImageCategory,
+            'breadcrumbs'                => $this->createBreadcrumbs([
+                'gallery_image'          => $galleryImage,
+                'gallery_image_category' => $fromGalleryImageCategory,
+            ]),
+        ]);
+    }
+
+    private function findGalleryImageCategoryByPathOrThrow404(string $path): GalleryImageCategory
     {
         $galleryImageCategory = $this->galleryImageCategoryRepository->findOneByPath($path);
         $hasGalleryImage = $this->galleryImageCategoryRepository->galleryImageCategoryHasGalleryImage($galleryImageCategory);
@@ -84,5 +118,29 @@ class GalleryImageController extends AbstractController
         }
 
         return $galleryImageCategory;
+    }
+
+    private function findGalleryImageCategoryByIdOrThrow404(UuidV4 $id): GalleryImageCategory
+    {
+        $galleryImageCategory = $this->galleryImageCategoryRepository->findOneById($id);
+
+        if ($galleryImageCategory === null)
+        {
+            throw $this->createNotFoundException();
+        }
+
+        return $galleryImageCategory;
+    }
+
+    private function findGalleryImageOrThrow404(UuidV4 $id): GalleryImage
+    {
+        $galleryImage = $this->galleryImageRepository->findOneById($id);
+
+        if ($galleryImage === null || $galleryImage->isHiddenInGallery())
+        {
+            throw $this->createNotFoundException();
+        }
+
+        return $galleryImage;
     }
 }

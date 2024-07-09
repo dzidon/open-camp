@@ -24,6 +24,9 @@ class GalleryImage
     #[ORM\Column(length: 8)]
     private string $extension;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    private int $priority;
+
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isHiddenInGallery = false;
 
@@ -44,10 +47,11 @@ class GalleryImage
     #[UpdatedAtProperty(dateTimeType: DateTimeImmutable::class)]
     private ?DateTimeImmutable $updatedAt = null;
 
-    public function __construct(string $extension)
+    public function __construct(string $extension, int $priority)
     {
         $this->id = Uuid::v4();
         $this->extension = $extension;
+        $this->priority = $priority;
         $this->createdAt = new DateTimeImmutable('now');
     }
 
@@ -59,6 +63,11 @@ class GalleryImage
     public function getExtension(): string
     {
         return $this->extension;
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 
     public function getFileName(): string

@@ -50,8 +50,8 @@ class GalleryImageSearchType extends AbstractType
                 'label'        => 'form.admin.gallery_image_search.sort_by.label',
                 'choice_label' => fn ($choice) => match ($choice)
                 {
-                    GalleryImageSortEnum::CREATED_AT_DESC => 'form.admin.gallery_image_search.sort_by.options.created_at_desc',
-                    GalleryImageSortEnum::CREATED_AT_ASC  => 'form.admin.gallery_image_search.sort_by.options.created_at_asc',
+                    GalleryImageSortEnum::PRIORITY_DESC => 'form.admin.gallery_image_search.sort_by.options.priority_desc',
+                    GalleryImageSortEnum::PRIORITY_ASC  => 'form.admin.gallery_image_search.sort_by.options.priority_asc',
                 },
             ])
             ->add('isHiddenInGallery', ChoiceType::class, [

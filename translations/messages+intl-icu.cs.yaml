@@ -27,6 +27,11 @@ we_are_not_tax_payers: 'Nejsme plátci DPH.'
 price_includes_tax: 'Zahrnuje {tax}% DPH.'
 prices_include_tax: 'Ceny zahrnují {tax}% DPH.'
 
+clipboard:
+    copy: 'Zkopírovat do schránky'
+    copied:
+        url: 'Odkaz zkopírován do schránky'
+
 bool:
     yes: 'Ano'
     no: 'Ne'
@@ -1256,6 +1261,7 @@ entity_attribute:
         is_in_carousel: 'Je v carouselu'
         carousel_priority: 'Priorita v carouselu'
         gallery_image_category: 'Kategorie'
+        url: 'Odkaz na obrázek'
         created_at: 'Datum vytvoření'
         updated_at: 'Datum editace'
 
@@ -2377,8 +2383,8 @@ form:
             sort_by:
                 label: 'Řazení'
                 options:
-                    created_at_desc: 'Od nejnovějších'
-                    created_at_asc: 'Od nejstarších'
+                    priority_desc: 'Od nejnovějších'
+                    priority_asc: 'Od nejstarších'
 
             is_hidden_in_gallery: 'Skrytý v galerii'
             is_in_carousel: 'Je v carouselu'
@@ -2779,6 +2785,7 @@ route:
     user_blog_post_list: 'Blog'
     user_blog_post_read: 'Příspěvek'
     user_gallery_image_list: 'Galerie'
+    user_gallery_image_read: 'Obrázek'
     user_page_read: 'Stránka'
     user_profile_billing: 'Fakturační údaje'
     user_profile_contact_list: 'Kontakty'

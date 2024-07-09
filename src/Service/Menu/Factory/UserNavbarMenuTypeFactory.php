@@ -128,7 +128,7 @@ class UserNavbarMenuTypeFactory extends AbstractMenuTypeFactory
             $text = $this->translator->trans('route.user_gallery_image_list');
             $url = $this->urlGenerator->generate('user_gallery_image_list');
             $itemGallery = new MenuType('user_gallery_image_list', 'navbar_user_item', $text, $url);
-            $itemGallery->setActive($route === 'user_gallery_image_list');
+            $itemGallery->setActive($route === 'user_gallery_image_list' || $route === 'user_gallery_image_read');
             $itemGallery->setPriority(600);
             $menu->addChild($itemGallery);
         }
