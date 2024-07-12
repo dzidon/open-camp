@@ -1,4 +1,5 @@
 {% set is_eu_business_data_enabled = application.euBusinessDataEnabled %}
+{% set application_full_deposit = application.fullDeposit %}
 {% set application_full_price = application.fullPrice %}
 {% set application_full_price_without_tax = application.fullPriceWithoutTax %}
 
@@ -59,7 +60,7 @@
         <tr>
             <td style="vertical-align: top; width: 50%;">
                 <h3>
-                    {{ 'application.invoice.seller'|trans }}:
+                    {{ 'application.invoice.seller'|trans }}
                 </h3>
 
                 <br>
@@ -133,7 +134,7 @@
 
             <td style="vertical-align: top; width: 50%;">
                 <h3>
-                    {{ 'application.invoice.buyer'|trans }}:
+                    {{ 'application.invoice.buyer'|trans }}
                 </h3>
 
                 <br>
@@ -211,6 +212,10 @@
                         <strong>
                             {{ application.depositUntil|date(date_format) }}
                         </strong>
+
+                        <em>
+                            ({{ application_full_deposit|format_currency(application.currency) }})
+                        </em>
                     </div>
                 {% endif %}
 
@@ -221,6 +226,10 @@
                         <strong>
                             {{ application.priceWithoutDepositUntil|date(date_format) }}
                         </strong>
+
+                        <em>
+                            ({{ application_full_price|format_currency(application.currency) }})
+                        </em>
                     </div>
                 {% endif %}
             </td>
