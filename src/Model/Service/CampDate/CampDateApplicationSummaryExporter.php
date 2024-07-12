@@ -90,6 +90,7 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
         $this->addApplicationCampersSheet($spreadsheet, $fmt, $applications);
         $this->addApplicationContactsSheet($spreadsheet, $applications);
         $this->addApplicationPurchasableItemsSheet($spreadsheet, $applications);
+        $this->addApplicationAdminAttachmentsSheet($spreadsheet, $applications);
 
         $spreadsheet->setActiveSheetIndex(0);
 
@@ -658,6 +659,72 @@ class CampDateApplicationSummaryExporter implements CampDateApplicationSummaryEx
 
         $purchasableItemsSheet->fromArray($purchasableItemsRowData);
         $this->setFirstCellAsSelected($purchasableItemsSheet);
+    }
+
+    /**
+     * @param Spreadsheet $spreadsheet
+     * @param Application[] $applications
+     * @return void
+     */
+    public function addApplicationAdminAttachmentsSheet(Spreadsheet $spreadsheet, array $applications): void
+    {
+        $adminAttachmentsRowData = [];
+        $insertedRows = 0;
+        $headerRows = [];
+
+        foreach ($applications as $application)
+        {
+            $applicationAdminAttachmentsRowData = [];
+
+            foreach ($application->getApplicationAdminAttachments() as $applicationAdminAttachment)
+            {
+                $applicationAdminAttachmentsRowData[] = [
+                    $applicationAdminAttachment->getLabel(),
+                    $this->urlGenerator->generate(
+                        'admin_application_admin_attachment_read',
+                        ['id' => $applicationAdminAttachment->getId()],
+                        UrlGeneratorInterface::ABSOLUTE_URL,
+                    )
+                ];
+            }
+
+            if (!empty($applicationAdminAttachmentsRowData))
+            {
+                $headerRows[] = $insertedRows + 1;
+                $applicationAdminAttachmentsRowData[] = []; // empty space after each application
+                $headerText = sprintf('%s %s (%s %s)',
+                    $this->translator->trans('entity.application.singular'),
+                    $application->getSimpleId(),
+                    $this->translator->trans('entity_attribute.application.customer'),
+                    $application->getNameFull()
+                );
+
+                array_unshift($applicationAdminAttachmentsRowData, [$headerText]);
+
+                foreach ($applicationAdminAttachmentsRowData as $applicationAdminAttachmentRowData)
+                {
+                    $adminAttachmentsRowData[] = $applicationAdminAttachmentRowData;
+                    $insertedRows++;
+                }
+            }
+        }
+
+        $adminAttachmentsSheet = $spreadsheet->createSheet();
+        $adminAttachmentsSheetTitle = $this->translator->trans('spreadsheet.camp_date_applications.title_admin_attachments');
+        $adminAttachmentsSheet->setTitle($adminAttachmentsSheetTitle);
+        $adminAttachmentsSheet->fromArray($adminAttachmentsRowData);
+        $this->convertUrlCellsToHyperlinks($adminAttachmentsSheet);
+
+        $highestColumn = $adminAttachmentsSheet->getHighestColumn();
+
+        foreach ($headerRows as $headerRow)
+        {
+            $cellRange = 'A' . $headerRow . ':' . $highestColumn . $headerRow;
+            $style = $adminAttachmentsSheet->getStyle($cellRange);
+            $this->applyHeaderStyle($style);
+        }
+
+        $this->setFirstCellAsSelected($adminAttachmentsSheet);
     }
 
     private function convertUrlCellsToHyperlinks(Worksheet $sheet): void

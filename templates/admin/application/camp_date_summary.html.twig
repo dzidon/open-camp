@@ -86,13 +86,15 @@
                     </div>
                 </div>
 
-                <div class="card-footer">
-                    <a href="{{ path('admin_application_camp_date_summary_export', {campDateId: camp_date.id}) }}"
-                       class="btn btn-secondary"
-                    >
-                        {{ 'route.admin_application_camp_date_summary_export'|trans }}
-                    </a>
-                </div>
+                {% if number_of_accepted_application_campers > 0 %}
+                    <div class="card-footer">
+                        <a href="{{ path('admin_application_camp_date_summary_export', {campDateId: camp_date.id}) }}"
+                           class="btn btn-secondary"
+                        >
+                            {{ 'route.admin_application_camp_date_summary_export'|trans }}
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

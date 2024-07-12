@@ -185,6 +185,7 @@ spreadsheet:
         title_application_campers: 'Táborníci'
         title_contacts: 'Kontakty'
         title_purchasable_items: 'Volitelné položky'
+        title_admin_attachments: 'Administrátorské přílohy'
 
 application:
     apply: 'Přihláška'
@@ -995,6 +996,10 @@ entity:
         singular: 'Přihláška'
         plural: 'Přihlášky'
 
+    application_admin_attachment:
+        singular: 'Administrátorská příloha'
+        plural: 'Administrátorské přílohy'
+
     application_attachment:
         singular: 'Příloha'
         plural: 'Přílohy'
@@ -1092,6 +1097,7 @@ entity_attribute:
         camp_date_description: 'Instrukce k termínu'
         camp_date: 'Termín'
         user: 'Uživatel'
+        customer: 'Zákazník'
         payment_method: 'Platení metoda'
         are_attachments_uploaded: 'Přílohy nahrány'
         is_awaiting_attachments_required_later: 'Očekává přílohy'
