@@ -27,10 +27,10 @@
 
         {% block body %}{% endblock %}
 
-        {% block javascripts %}{% endblock %}
-
         {% if app_asks_for_cookie_consent %}
             {{ include('_fragment/_modal/_cookie_consent.html.twig') }}
         {% endif %}
+
+        {% block javascripts %}{% endblock %}
     </body>
 </html>
