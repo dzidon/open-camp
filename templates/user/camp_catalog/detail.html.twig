@@ -96,7 +96,10 @@
                     <div>{{ country_name_for_code(camp.country) }}</div>
 
                     <div>
-                        <a href="#map" data-bs-toggle="modal" data-target="#map">{{ 'camp_catalog.show_map'|trans }}</a>
+                        <a href="#map" data-bs-toggle="modal" data-target="#map">
+                            <i class="fas fa-globe-americas"></i>
+                            {{ 'camp_catalog.show_map'|trans }}
+                        </a>
                     </div>
                 </div>
             {% endif %}
