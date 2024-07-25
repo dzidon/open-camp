@@ -17,6 +17,7 @@ export default class TinymceController extends Controller
         const selector = '#' + $(this.element).attr('id');
         const options = {
             selector: selector,
+            license_key: 'gpl',
             language: document.documentElement.lang,
             base_url: '/build/tinymce',
             branding: false,
