@@ -37,8 +37,8 @@
             <!-- Logo -->
             <div class="sidebar-brand">
                 <a class="brand-link" href="{{ path('admin_home') }}">
-                    <img src="{{ company_logo_url() }}" alt="{{ company_name }}" class="brand-image opacity-75 shadow">
-                    <span class="brand-text fw-light">{{ company_name }}</span>
+                    <img src="{{ company_logo_url() }}" alt="{{ site_name }}" class="brand-image opacity-75 shadow">
+                    <span class="brand-text fw-light">{{ site_name }}</span>
                 </a>
             </div>
 
@@ -93,7 +93,7 @@
         <footer class="app-footer">
             <div class="row align-items-center">
                 <div class="col-6">
-                    <strong>&copy; {{ 'now' | date('Y') }}, {{ company_name }}</strong>
+                    <strong>&copy; {{ 'now' | date('Y') }}, {{ site_name }}</strong>
                 </div>
 
                 <div class="col-6">

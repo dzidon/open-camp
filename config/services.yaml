@@ -3,7 +3,8 @@ parameters:
     app.tax: 21 # percent
 
     # Company info
-    app.company_name: 'Tábor'
+    app.site_name: 'Tábor'
+    app.company_name: 'CK Tábory'
     app.company_structure: 's.r.o.'
     app.company_cin: '12345678'
     app.company_vat_id: 'CZ12345678'

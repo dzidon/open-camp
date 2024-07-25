@@ -8,8 +8,9 @@ twig:
         - '_fragment/_form_theme/_user_whole_forms.html.twig'
 
     globals:
-        company_email: '%app.email%'
+        site_name: '%app.site_name%'
         company_name: '%app.company_name%'
+        company_email: '%app.email%'
         company_structure: '%app.company_structure%'
         company_cin: '%app.company_cin%'
         company_vat_id: '%app.company_vat_id%'
