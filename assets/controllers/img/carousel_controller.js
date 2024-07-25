@@ -9,6 +9,8 @@ export default class CarouselController extends Controller
 
     connect()
     {
+        this.activeIndicatorClass = 'border border-5 border-primary';
+
         this.carousel = $(this.carouselTarget).carousel();
         this.carousel.on('slid.bs.carousel', (event) =>
         {
@@ -26,11 +28,11 @@ export default class CarouselController extends Controller
         {
             if (index === indicatorNumber)
             {
-                $(element).removeClass('image-black-and-white');
+                $(element).addClass(this.activeIndicatorClass);
             }
             else
             {
-                $(element).addClass('image-black-and-white');
+                $(element).removeClass(this.activeIndicatorClass);
             }
         });
     }
