@@ -38,14 +38,14 @@
 
     <main role="main" class="flex-shrink-0">
         <div class="container pt-4">
-            <!-- Breadcrumbs -->
-            <div class="row mb-2">
-                <div class="col">
-                    {% if breadcrumbs is defined %}
+            {% if breadcrumbs is defined %}
+                <!-- Breadcrumbs -->
+                <div class="row mb-2">
+                    <div class="col">
                         {{ menu(breadcrumbs) }}
-                    {% endif %}
+                    </div>
                 </div>
-            </div>
+            {% endif %}
 
             <!-- Flash messages -->
             {% block flash %}
