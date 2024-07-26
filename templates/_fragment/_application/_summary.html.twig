@@ -2,7 +2,7 @@
     {% set is_application_fully_paid = application.isFullyPaid %}
     {% set is_application_deposit_paid = application.isDepositPaid %}
     {% set is_application_rest_paid = application.isRestPaid %}
-    {% set is_application_awaiting_payment = application.isAwaitingPayment and application.paymentMethod is not null %}
+    {% set is_application_awaiting_payment = application.isAwaitingPayment %}
 
     <div class="row">
         <div class="col-md-8 col-lg-6 col-xl-5">
@@ -36,7 +36,7 @@
                 </div>
             </div>
 
-            {% if is_application_awaiting_payment and application.paymentMethod is not null %}
+            {% if is_application_awaiting_payment %}
                 {% set payment_url_deposit = path('user_application_online_pay', {applicationId: application.id, type: 'deposit'}) %}
                 {% set payment_url_rest = path('user_application_online_pay', {applicationId: application.id, type: 'rest'}) %}
                 {% set payment_url_full = path('user_application_online_pay', {applicationId: application.id, type: 'full'}) %}
@@ -97,6 +97,12 @@
                                             </a>
                                         </div>
                                     {% endif %}
+                                {% elseif application.paymentMethod is null %}
+                                    <div>
+                                        <em>
+                                            {{ 'application.summary.no_payment_method'|trans }}
+                                        </em>
+                                    </div>
                                 {% else %}
                                     <div class="mb-3">
                                         {{ application_offline_payment_instructions(application)|raw }}

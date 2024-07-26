@@ -269,6 +269,7 @@ application:
         purchasable_item_total_price: 'Celkem za položky'
         total_price: 'Celkem'
         total_price_without_tax: 'Celkem bez DPH'
+        no_payment_method: 'Je nutné provést platbu, ale nemáte nastavenou platební metodu.'
 
     completed_screen:
         form_attachments_upload_later: 'Donahrání povinných příloh'
