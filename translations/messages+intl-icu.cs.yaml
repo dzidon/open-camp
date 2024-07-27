@@ -2507,6 +2507,7 @@ form:
             button: 'Pokračovat'
 
         application_step_three:
+            payment_help: 'Platbu provedete po dokončení přihlášky.'
             button: 'Dokončit'
 
         application_attachments:

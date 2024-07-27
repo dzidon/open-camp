@@ -523,9 +523,9 @@
     {{ form_row(form.applicationCampersData, {label: false}) }}
     {{ form_row(form.addCamperData) }}
 
-    {{ block('user_application_bottom') }}
-
     {{ form_rest(form) }}
+
+    {{ block('user_application_bottom') }}
 {% endblock %}
 
 {# Application step two edit #}
@@ -570,9 +570,9 @@
 
     {{ form_row(form.note) }}
 
-    {{ block('user_application_bottom') }}
-
     {{ form_rest(form) }}
+
+    {{ block('user_application_bottom') }}
 {% endblock %}
 
 {# Application step three edit #}
@@ -584,13 +584,26 @@
     {% endif %}
 
     {{ form_row(form.privacy) }}
+
     {{ form_row(form.terms) }}
 
-    {% with {'is_application_last_step': true} %}
-        {{ block('user_application_bottom') }}
-    {% endwith %}
-
     {{ form_rest(form) }}
+
+    <div>
+        <small>
+            <em>
+                <i class="fas fa-money-bill-wave me-1"></i>
+
+                {{ 'form.user.application_step_three.payment_help'|trans }}
+            </em>
+        </small>
+    </div>
+
+    <div class="mt-4">
+        {% with {'is_application_last_step': true} %}
+            {{ block('user_application_bottom') }}
+        {% endwith %}
+    </div>
 {% endblock %}
 
 {# Application bottom part #}
