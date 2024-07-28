@@ -2579,9 +2579,9 @@ form:
             button: 'Přihlásit se'
 
         contact_us:
-            name: 'Celé jméno'
-            email: 'E-mail'
-            phone_number: 'Telefonní číslo'
+            name: 'Vaše celé jméno'
+            email: 'Váš e-mail'
+            phone_number: 'Vaše telefonní číslo'
             message: 'Zpráva'
             button: 'Odeslat'
 
